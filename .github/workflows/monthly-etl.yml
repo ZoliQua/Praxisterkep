@@ -1,0 +1,41 @@
+name: monthly-etl
+on:
+  schedule:
+    - cron: "0 5 5 * *"   # 5th of month, 05:00 UTC
+    - cron: "0 5 15 * *"  # retry window on the 15th
+  workflow_dispatch: {}
+
+jobs:
+  etl:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r etl/requirements.txt
+      - name: Run pipeline
+        id: pipeline
+        run: python etl/run.py
+      - name: Commit snapshot
+        if: success()
+        run: |
+          git config user.name "Zoltan Dul"
+          git config user.email "zoltan@drdul.hu"
+          git add data/
+          git diff --cached --quiet || git commit -m "data: monthly NEAK snapshot"
+          git push
+      - name: Open issue on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `ETL failed: ${new Date().toISOString().slice(0,10)}`,
+              body: "Monthly pipeline failed validation. Check the run log; do not force-publish."
+            })
