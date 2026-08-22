@@ -1,0 +1,99 @@
+{
+  "site": {
+    "title": "Praxistérkép",
+    "subtitle": "Hol a fogorvos?",
+    "lead": "Interaktív térkép a betöltetlen fogorvosi körzetekről Magyarországon — havonta frissülő, hivatalos NEAK-adatokból. Később a háziorvosi körzetekkel bővül.",
+    "lastUpdate": "Utolsó adatfrissítés",
+    "firstMonthNote": "Az adatgyűjtés első hónapja — a havi változás a következő frissítéstől jelenik meg.",
+    "monthDelta": "az előző hónaphoz képest"
+  },
+  "nav": {
+    "map": "Térkép",
+    "mine": "Nálam",
+    "ranking": "Rangsor",
+    "methodology": "Módszertan",
+    "sources": "Források"
+  },
+  "hero": {
+    "vacant": "betöltetlen fogorvosi körzet",
+    "dissolved": "betöltetlen, megszűnt szerződésű körzet",
+    "vacancyRate": "a hazai fogorvosi körzetek aránya, ahol nincs szerződött fogorvos",
+    "populationAffected": "ember él betöltetlen fogorvosi körzetben",
+    "medianVacancy": "a betöltetlenség középideje (medián)",
+    "longestVacancy": "a legrégebb óta üres körzet",
+    "months": "hónap",
+    "years": "év",
+    "since": "óta",
+    "populationContext": "Ez nagyjából {count} Szombathelynyi ember.",
+    "vacantVsUnserved": "Fontos: a betöltetlen körzet nem feltétlenül ellátatlan — a lakosok többségét helyettesítő fogorvos látja el, jellemzően más településről, korlátozott rendelési időben."
+  },
+  "map": {
+    "heading": "Betöltetlenség a térképen",
+    "explain": "A színezés a vármegye betöltetlenségi arányát mutatja (betöltetlen + megszűnt körzetek az összes körzet arányában). A pontok az egyes betöltetlen körzetek rendelőit jelölik. Körzethatár-poligonok hivatalosan nem érhetők el, ezért a körzeteket pontként ábrázoljuk.",
+    "metricRate": "Betöltetlenségi arány",
+    "metricPopulation": "Érintett lakosság",
+    "typeAll": "Összes típus",
+    "typeAdult": "Felnőtt",
+    "typeChild": "Gyermek",
+    "typeMixed": "Vegyes",
+    "typeSchool": "Iskolai, ifjúsági",
+    "legendLow": "alacsony",
+    "legendHigh": "magas",
+    "pointVacant": "betöltetlen körzet rendelője",
+    "pointDissolved": "megszűnt szerződésű körzet székhelye",
+    "pointApprox": "hozzávetőleges (település-középpont)",
+    "popupVacantSince": "Betöltetlen",
+    "popupPopulation": "Ellátandó lakosság",
+    "popupType": "Típus",
+    "popupDistrict": "Járás",
+    "popupStatusVacant": "Betöltetlen",
+    "popupStatusDissolved": "Betöltetlen (megszűnt szerződés)",
+    "popupApproxNote": "A pont a település középpontját jelöli, mert a cím nem volt pontosan geokódolható.",
+    "popupHeadquarters": "fenntartói székhely",
+    "countyDistricts": "körzet",
+    "countyVacant": "betöltetlen",
+    "countyDissolved": "megszűnt",
+    "fő": "fő"
+  },
+  "search": {
+    "heading": "Mi a helyzet nálam?",
+    "explain": "Írd be a településed nevét: megmutatjuk az ott működő és betöltetlen fogorvosi körzeteket.",
+    "placeholder": "Település neve…",
+    "noResult": "Nincs találat. A lista azokat a településeket tartalmazza, ahol szerződött vagy betöltetlen fogorvosi körzet rendelője működik, vagy amelyeket megszűnt körzet látott el.",
+    "filled": "működő, betöltött körzet",
+    "filledPlural": "működő, betöltött körzet",
+    "vacantHere": "betöltetlen körzet",
+    "affectedByDissolved": "A települést (részben) olyan körzet látta el, amelynek szerződése megszűnt.",
+    "noVacant": "A településen minden nyilvántartott fogorvosi körzet betöltött.",
+    "county": "vármegye",
+    "reminder": "A betöltetlen körzet lakóit helyettesítő fogorvos látja el — az ellátás jellemzően más településen vagy szűkebb rendelési időben érhető el."
+  },
+  "ranking": {
+    "heading": "Vármegyei rangsor",
+    "explain": "A betöltetlen és megszűnt szerződésű körzetek aránya vármegyénként. A számok a sávok végén: betöltetlen + megszűnt / összes körzet.",
+    "national": "országos átlag"
+  },
+  "methodology": {
+    "heading": "Módszertan",
+    "p1": "Az adatok forrása a Nemzeti Egészségbiztosítási Alapkezelő (NEAK) havonta közzétett listái: a betöltetlen fogorvosi szolgálatok, a betöltetlen (megszűnt szerződésű) fogorvosi szolgálatok, valamint a szerződött fogorvosi szolgáltatók törzslistája. A NEAK adatai tájékoztató jellegűek, a havi finanszírozási szerződésállapotot tükrözik — nem valós idejű működési adatok.",
+    "p2": "\u201EBetöltetlen\u201D az a körzet, amelynek nincs szerződött fogorvosa. Ez nem azonos az \u201Eellátatlan\u201D fogalmával: a betöltetlen körzetek lakóit helyettesítő fogorvos látja el. A \u201Emegszűnt szerződésű\u201D kategória azokat a körzeteket jelöli, amelyeknél a finanszírozási szerződés is megszűnt. A tartósan betöltetlen körzet jogi kategória: a 313/2011. (XII. 23.) Korm. rendelet szerint az a körzet, ahol a szerződés megszűnése óta legalább 6 hónap eltelt.",
+    "p3": "A betöltetlenségi arány nevezője a NEAK szerződött szolgáltatói törzslistájában szereplő alapellátási fogorvosi szolgálatok (felnőtt, gyermek, vegyes, iskolai-ifjúsági) egyedi FIN-kódjainak száma, kiegészítve a megszűnt szerződésű körzetekkel. Az ügyeleti és egyetemi szolgálatok, valamint a szakellátás nem része a számításnak.",
+    "p4": "A rendelők koordinátáit az OpenStreetMap Nominatim szolgáltatásával határozzuk meg. Ahol a cím nem volt pontosan azonosítható, a település középpontját jelöljük, és ezt a térképen külön jelezzük. Körzethatárok hivatalosan nem publikáltak, ezért a térkép vármegyei szinten színez, a körzeteket pontként mutatja.",
+    "p5": "A teljes feldolgozó kód és minden havi nyers forrásfájl nyilvános a projekt tárhelyén — minden szám az eredeti forrásig visszakövethető. Személynevek (orvosok, helyettesítők) sem az adatokban, sem a felületen nem jelennek meg."
+  },
+  "footer": {
+    "sources": "Források",
+    "sourceNeak": "NEAK — Betöltetlen fogorvosi szolgálatok; Betöltetlen (megszűnt) fogorvosi szolgálatok; Szerződött szolgáltatók (fogorvosi rendelők)",
+    "sourceOsm": "Térképi alapadatok: © OpenStreetMap közreműködők (ODbL) — határok és geokódolás (Nominatim)",
+    "disclaimer": "A NEAK adatai tájékoztató jellegűek, a havi finanszírozási szerződésadatok alapján kerültek közzétételre.",
+    "license": "Kód: MIT licenc · Feldolgozott adatok: CC BY 4.0 · Forrásadatok az eredeti kibocsátó feltételei szerint",
+    "author": "Készítette: Dr. Dúl Zoltán",
+    "updated": "Adatállapot"
+  },
+  "praxisTypes": {
+    "adult": "felnőtt",
+    "child": "gyermek",
+    "mixed": "vegyes",
+    "school": "iskolai, ifjúsági"
+  }
+}
