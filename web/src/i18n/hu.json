@@ -1,11 +1,24 @@
 {
   "site": {
     "title": "Praxistérkép",
-    "subtitle": "Hol a fogorvos?",
-    "lead": "Interaktív térkép a betöltetlen fogorvosi körzetekről Magyarországon — havonta frissülő, hivatalos NEAK-adatokból. Később a háziorvosi körzetekkel bővül.",
+    "lead": "Interaktív térkép a betöltetlen fogorvosi és háziorvosi körzetekről Magyarországon — havonta frissülő, hivatalos NEAK-adatokból.",
     "lastUpdate": "Utolsó adatfrissítés",
     "firstMonthNote": "Az adatgyűjtés első hónapja — a havi változás a következő frissítéstől jelenik meg.",
     "monthDelta": "az előző hónaphoz képest"
+  },
+  "kinds": {
+    "dental": {
+      "label": "Fogorvosi",
+      "adj": "fogorvosi",
+      "question": "Hol a fogorvos?",
+      "doctor": "fogorvos"
+    },
+    "gp": {
+      "label": "Háziorvosi",
+      "adj": "háziorvosi",
+      "question": "Hol a háziorvos?",
+      "doctor": "háziorvos"
+    }
   },
   "nav": {
     "map": "Térkép",
@@ -15,21 +28,21 @@
     "sources": "Források"
   },
   "hero": {
-    "vacant": "betöltetlen fogorvosi körzet",
+    "vacant": "betöltetlen {kind} körzet",
     "dissolved": "betöltetlen, megszűnt szerződésű körzet",
-    "vacancyRate": "a hazai fogorvosi körzetek aránya, ahol nincs szerződött fogorvos",
-    "populationAffected": "ember él betöltetlen fogorvosi körzetben",
+    "vacancyRate": "a hazai {kind} körzetek aránya, ahol nincs szerződött {doctor}",
+    "populationAffected": "ember él betöltetlen {kind} körzetben",
     "medianVacancy": "a betöltetlenség középideje (medián)",
     "longestVacancy": "a legrégebb óta üres körzet",
     "months": "hónap",
     "years": "év",
     "since": "óta",
     "populationContext": "Ez nagyjából {count} Szombathelynyi ember.",
-    "vacantVsUnserved": "Fontos: a betöltetlen körzet nem feltétlenül ellátatlan — a lakosok többségét helyettesítő fogorvos látja el, jellemzően más településről, korlátozott rendelési időben."
+    "vacantVsUnserved": "Fontos: a betöltetlen körzet nem feltétlenül ellátatlan — a lakosok többségét helyettesítő orvos látja el, jellemzően más településről, korlátozott rendelési időben."
   },
   "map": {
     "heading": "Betöltetlenség a térképen",
-    "explain": "A színezés a vármegye betöltetlenségi arányát mutatja (betöltetlen + megszűnt körzetek az összes körzet arányában). A pontok az egyes betöltetlen körzetek rendelőit jelölik. Körzethatár-poligonok hivatalosan nem érhetők el, ezért a körzeteket pontként ábrázoljuk.",
+    "explain": "A színezés a vármegye betöltetlenségi arányát mutatja (betöltetlen — és fogorvosi ágon a megszűnt szerződésű — körzetek az összes körzet arányában). A pontok az egyes betöltetlen körzetek rendelőit jelölik. Körzethatár-poligonok hivatalosan nem érhetők el, ezért a körzeteket pontként ábrázoljuk.",
     "metricRate": "Betöltetlenségi arány",
     "metricPopulation": "Érintett lakosság",
     "typeAll": "Összes típus",
@@ -57,33 +70,35 @@
   },
   "search": {
     "heading": "Mi a helyzet nálam?",
-    "explain": "Írd be a településed nevét: megmutatjuk az ott működő és betöltetlen fogorvosi körzeteket.",
+    "explain": "Írd be a településed nevét: megmutatjuk az ott elérhető és a betöltetlen {kind} körzeteket.",
     "placeholder": "Település neve…",
-    "noResult": "Nincs találat. A lista azokat a településeket tartalmazza, ahol szerződött vagy betöltetlen fogorvosi körzet rendelője működik, vagy amelyeket megszűnt körzet látott el.",
-    "filled": "működő, betöltött körzet",
-    "filledPlural": "működő, betöltött körzet",
+    "noResult": "Nincs találat. A lista azokat a településeket tartalmazza, amelyekhez a nyilvántartás szerint {kind} körzet tartozik.",
+    "filledSeat": "működő, betöltött körzet rendel a településen",
+    "filledCoverage": "működő, betöltött körzet látja el a települést",
     "vacantHere": "betöltetlen körzet",
     "affectedByDissolved": "A települést (részben) olyan körzet látta el, amelynek szerződése megszűnt.",
-    "noVacant": "A településen minden nyilvántartott fogorvosi körzet betöltött.",
+    "noVacant": "A településhez tartozó összes nyilvántartott {kind} körzet betöltött.",
     "county": "vármegye",
-    "reminder": "A betöltetlen körzet lakóit helyettesítő fogorvos látja el — az ellátás jellemzően más településen vagy szűkebb rendelési időben érhető el."
+    "servedBy": "A körzethez tartozó települések",
+    "reminder": "A betöltetlen körzet lakóit helyettesítő orvos látja el — az ellátás jellemzően más településen vagy szűkebb rendelési időben érhető el."
   },
   "ranking": {
     "heading": "Vármegyei rangsor",
-    "explain": "A betöltetlen és megszűnt szerződésű körzetek aránya vármegyénként. A számok a sávok végén: betöltetlen + megszűnt / összes körzet.",
+    "explain": "A betöltetlen (fogorvosi ágon a megszűnt szerződésűekkel együtt számított) körzetek aránya vármegyénként. A számok a sávok végén: betöltetlen / összes körzet.",
     "national": "országos átlag"
   },
   "methodology": {
     "heading": "Módszertan",
-    "p1": "Az adatok forrása a Nemzeti Egészségbiztosítási Alapkezelő (NEAK) havonta közzétett listái: a betöltetlen fogorvosi szolgálatok, a betöltetlen (megszűnt szerződésű) fogorvosi szolgálatok, valamint a szerződött fogorvosi szolgáltatók törzslistája. A NEAK adatai tájékoztató jellegűek, a havi finanszírozási szerződésállapotot tükrözik — nem valós idejű működési adatok.",
-    "p2": "\u201EBetöltetlen\u201D az a körzet, amelynek nincs szerződött fogorvosa. Ez nem azonos az \u201Eellátatlan\u201D fogalmával: a betöltetlen körzetek lakóit helyettesítő fogorvos látja el. A \u201Emegszűnt szerződésű\u201D kategória azokat a körzeteket jelöli, amelyeknél a finanszírozási szerződés is megszűnt. A tartósan betöltetlen körzet jogi kategória: a 313/2011. (XII. 23.) Korm. rendelet szerint az a körzet, ahol a szerződés megszűnése óta legalább 6 hónap eltelt.",
-    "p3": "A betöltetlenségi arány nevezője a NEAK szerződött szolgáltatói törzslistájában szereplő alapellátási fogorvosi szolgálatok (felnőtt, gyermek, vegyes, iskolai-ifjúsági) egyedi FIN-kódjainak száma, kiegészítve a megszűnt szerződésű körzetekkel. Az ügyeleti és egyetemi szolgálatok, valamint a szakellátás nem része a számításnak.",
+    "p1": "Az adatok forrása a Nemzeti Egészségbiztosítási Alapkezelő (NEAK) havonta közzétett listái: a betöltetlen fogorvosi és háziorvosi szolgálatok, a betöltetlen (megszűnt szerződésű) fogorvosi szolgálatok, valamint a szerződött szolgáltatók törzslistái. A NEAK adatai tájékoztató jellegűek, a havi finanszírozási szerződésállapotot tükrözik — nem valós idejű működési adatok.",
+    "p2": "\u201EBetöltetlen\u201D az a körzet, amelynek nincs szerződött orvosa. Ez nem azonos az \u201Eellátatlan\u201D fogalmával: a betöltetlen körzetek lakóit helyettesítő orvos látja el. A \u201Emegszűnt szerződésű\u201D kategória azokat a fogorvosi körzeteket jelöli, amelyeknél a finanszírozási szerződés is megszűnt — háziorvosi ágon a NEAK ilyen listát nem publikál. A tartósan betöltetlen körzet jogi kategória: a 313/2011. (XII. 23.) Korm. rendelet szerint az a körzet, ahol a szerződés megszűnése óta legalább 6 hónap eltelt.",
+    "p3": "A betöltetlenségi arány nevezője a NEAK törzslistáiban szereplő alapellátási körzetek egyedi kódjainak (FIN, illetve HSZ) száma. Fogorvosi ágon a felnőtt, gyermek, vegyes és iskolai-ifjúsági szolgálatok számítanak (az ügyeleti és egyetemi szolgálatok, valamint a szakellátás nem); háziorvosi ágon a területi ellátási kötelezettségű (T) körzetek — a területi kötelezettség nélküli (TN) praxisok nem, mivel a betöltetlen listán sem szerepelhetnek.",
     "p4": "A rendelők koordinátáit az OpenStreetMap Nominatim szolgáltatásával határozzuk meg. Ahol a cím nem volt pontosan azonosítható, a település középpontját jelöljük, és ezt a térképen külön jelezzük. Körzethatárok hivatalosan nem publikáltak, ezért a térkép vármegyei szinten színez, a körzeteket pontként mutatja.",
-    "p5": "A teljes feldolgozó kód és minden havi nyers forrásfájl nyilvános a projekt tárhelyén — minden szám az eredeti forrásig visszakövethető. Személynevek (orvosok, helyettesítők) sem az adatokban, sem a felületen nem jelennek meg."
+    "p5": "A településkereső a háziorvosi ágon a körzethez tartozó (ellátott) települések hivatalos listáján alapul, így a kistelepülések is megtalálhatók; a fogorvosi ágon a nyilvántartás csak a rendelő székhelyét közli, ezért ott a keresés a rendelők településeire és a megszűnt körzetek ellátott településeire terjed ki.",
+    "p6": "A teljes feldolgozó kód és minden havi nyers forrásfájl nyilvános a projekt tárhelyén — minden szám az eredeti forrásig visszakövethető. Személynevek (orvosok, helyettesítők) sem az adatokban, sem a felületen nem jelennek meg."
   },
   "footer": {
     "sources": "Források",
-    "sourceNeak": "NEAK — Betöltetlen fogorvosi szolgálatok; Betöltetlen (megszűnt) fogorvosi szolgálatok; Szerződött szolgáltatók (fogorvosi rendelők)",
+    "sourceNeak": "NEAK — Betöltetlen fogorvosi szolgálatok; Betöltetlen (megszűnt) fogorvosi szolgálatok; Betöltetlen háziorvosi szolgálatok; Szerződött szolgáltatók (fogorvosi rendelők, háziorvosi szolgálatok)",
     "sourceOsm": "Térképi alapadatok: © OpenStreetMap közreműködők (ODbL) — határok és geokódolás (Nominatim)",
     "disclaimer": "A NEAK adatai tájékoztató jellegűek, a havi finanszírozási szerződésadatok alapján kerültek közzétételre.",
     "license": "Kód: MIT licenc · Feldolgozott adatok: CC BY 4.0 · Forrásadatok az eredeti kibocsátó feltételei szerint",

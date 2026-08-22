@@ -69,17 +69,22 @@ def geocode_site(postal: str, settlement: str, address: str, cache: dict) -> dic
     key = f"{postal} {settlement}, {address}"
     if key in cache:
         return cache[key]
+    # Nominatim doesn't know "Budapest XIV. kerület" as a city; the postal
+    # code already pins the district
+    query_city = "Budapest" if settlement.startswith("Budapest") else settlement
     result = _query({
         "street": normalize_street(address),
-        "city": settlement,
+        "city": query_city,
         "postalcode": postal,
     })
     if result is None:  # retry without postal code (NEAK postal data is imperfect)
-        result = _query({"street": normalize_street(address), "city": settlement})
+        result = _query({"street": normalize_street(address), "city": query_city})
     if result is not None:
         result["geoApprox"] = False
     else:  # settlement centroid fallback, flagged as approximate
-        result = _query({"city": settlement})
+        result = _query({"city": query_city, "postalcode": postal})
+        if result is None:
+            result = _query({"city": query_city})
         if result is not None:
             result["geoApprox"] = True
     cache[key] = result

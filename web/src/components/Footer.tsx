@@ -1,9 +1,9 @@
 import { t } from '../lib/i18n';
 import { formatMonth } from '../lib/format';
-import { useAppStore } from '../store/useAppStore';
+import { useSnapshot } from '../store/useAppStore';
 
 export function Footer() {
-  const snapshot = useAppStore((s) => s.snapshot)!;
+  const snapshot = useSnapshot()!;
   return (
     <footer className="footer" id="forrasok">
       <div className="container">

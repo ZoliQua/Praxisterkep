@@ -1,16 +1,18 @@
 import { create } from 'zustand';
-import type { Snapshot, Timeseries } from '../types';
+import type { LatestFile, PraxisKind, Snapshot, Timeseries, TimeseriesMonth } from '../types';
 import type { TypeFilter } from '../lib/selectors';
 
 export type MapMetric = 'rate' | 'population';
 
 interface AppState {
-  snapshot: Snapshot | null;
+  latest: LatestFile | null;
   timeseries: Timeseries | null;
   loadError: string | null;
+  kind: PraxisKind;
   typeFilter: TypeFilter;
   mapMetric: MapMetric;
   selectedCounty: string | null;
+  setKind: (k: PraxisKind) => void;
   setTypeFilter: (t: TypeFilter) => void;
   setMapMetric: (m: MapMetric) => void;
   setSelectedCounty: (name: string | null) => void;
@@ -18,29 +20,43 @@ interface AppState {
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
-  snapshot: null,
+  latest: null,
   timeseries: null,
   loadError: null,
+  kind: 'dental',
   typeFilter: 'all',
   mapMetric: 'rate',
   selectedCounty: null,
+  // switching kind resets kind-specific view state
+  setKind: (kind) => set({ kind, typeFilter: 'all', selectedCounty: null }),
   setTypeFilter: (typeFilter) => set({ typeFilter }),
   setMapMetric: (mapMetric) => set({ mapMetric }),
   setSelectedCounty: (selectedCounty) => set({ selectedCounty }),
   loadData: async () => {
-    if (get().snapshot) return;
+    if (get().latest) return;
     try {
       const base = import.meta.env.BASE_URL;
-      const [snapshot, timeseries] = await Promise.all([
-        fetch(`${base}data/latest.json`).then(assertOk<Snapshot>),
+      const [latest, timeseries] = await Promise.all([
+        fetch(`${base}data/latest.json`).then(assertOk<LatestFile>),
         fetch(`${base}data/timeseries.json`).then(assertOk<Timeseries>),
       ]);
-      set({ snapshot, timeseries });
+      set({ latest, timeseries });
     } catch (err) {
       set({ loadError: err instanceof Error ? err.message : String(err) });
     }
   },
 }));
+
+/** Snapshot of the active kind — null until data is loaded. */
+export function useSnapshot(): Snapshot | null {
+  return useAppStore((s) => s.latest?.kinds[s.kind] ?? null);
+}
+
+export function useTimeseriesMonths(): TimeseriesMonth[] {
+  return useAppStore((s) => s.timeseries?.kinds[s.kind] ?? EMPTY_MONTHS);
+}
+
+const EMPTY_MONTHS: TimeseriesMonth[] = [];
 
 async function assertOk<T>(resp: Response): Promise<T> {
   if (!resp.ok) throw new Error(`${resp.url}: HTTP ${resp.status}`);

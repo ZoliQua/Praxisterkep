@@ -22,16 +22,18 @@ class ValidationError(Exception):
     pass
 
 
-def previous_month_count(month: str) -> int | None:
+def previous_month_count(month: str, kind: str = "dental") -> int | None:
     """Vacant+dissolved count from the newest archived month before `month`."""
     older = sorted(
         d.name for d in DATA_DIR.iterdir()
         if d.is_dir() and MONTH_RE.match(d.name) and d.name < month
-        and (d / "dental.json").exists()
+        and (d / f"{kind}.json").exists()
     )
     if not older:
         return None
-    snap = json.loads((DATA_DIR / older[-1] / "dental.json").read_text(encoding="utf-8"))
+    snap = json.loads(
+        (DATA_DIR / older[-1] / f"{kind}.json").read_text(encoding="utf-8")
+    )
     return snap["national"]["vacant"] + snap["national"]["dissolved"]
 
 

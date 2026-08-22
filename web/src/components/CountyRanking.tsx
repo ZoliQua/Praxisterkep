@@ -3,7 +3,7 @@ import { scaleLinear } from 'd3';
 import { t } from '../lib/i18n';
 import { formatPercent } from '../lib/format';
 import { countyRanking } from '../lib/selectors';
-import { useAppStore } from '../store/useAppStore';
+import { useSnapshot } from '../store/useAppStore';
 
 const ROW_H = 26;
 const LABEL_W = 190;
@@ -11,7 +11,7 @@ const VALUE_W = 120;
 const WIDTH = 900;
 
 export function CountyRanking() {
-  const snapshot = useAppStore((s) => s.snapshot)!;
+  const snapshot = useSnapshot()!;
   const rows = useMemo(() => countyRanking(snapshot), [snapshot]);
   const nationalRate = snapshot.national.vacancyRate;
 

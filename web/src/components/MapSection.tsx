@@ -5,20 +5,27 @@ import type { ExpressionSpecification, GeoJSONSource, MapLayerMouseEvent } from 
 import { t } from '../lib/i18n';
 import { formatMonth, formatNumber, formatPercent } from '../lib/format';
 import { filterPraxes, type TypeFilter } from '../lib/selectors';
-import { useAppStore, type MapMetric } from '../store/useAppStore';
-import type { Praxis, Snapshot } from '../types';
+import { useAppStore, useSnapshot, type MapMetric } from '../store/useAppStore';
+import type { Praxis, PraxisType, Snapshot } from '../types';
 
 const HUNGARY_BOUNDS: [number, number, number, number] = [16.0, 45.6, 23.0, 48.7];
 // dark-friendly sequential ramp (low -> high vacancy)
 const RAMP = ['#152438', '#1f3a52', '#3d5a6c', '#8a7a55', '#d99a3d', '#ff7a59'];
 
-const TYPE_OPTIONS: { value: TypeFilter; label: string }[] = [
-  { value: 'all', label: t('map.typeAll') },
-  { value: 'adult', label: t('map.typeAdult') },
-  { value: 'child', label: t('map.typeChild') },
-  { value: 'mixed', label: t('map.typeMixed') },
-  { value: 'school', label: t('map.typeSchool') },
-];
+const TYPE_LABELS: Record<PraxisType, string> = {
+  adult: t('map.typeAdult'),
+  child: t('map.typeChild'),
+  mixed: t('map.typeMixed'),
+  school: t('map.typeSchool'),
+};
+
+function typeOptions(snapshot: Snapshot): { value: TypeFilter; label: string }[] {
+  const present = Object.keys(snapshot.national.byType) as PraxisType[];
+  return [
+    { value: 'all' as TypeFilter, label: t('map.typeAll') },
+    ...present.map((v) => ({ value: v as TypeFilter, label: TYPE_LABELS[v] })),
+  ];
+}
 
 function countyMetric(snapshot: Snapshot, name: string, metric: MapMetric): number {
   const c = snapshot.counties.find((x) => x.name === name);
@@ -93,7 +100,7 @@ function popupHtml(props: Record<string, unknown>): string {
 }
 
 export function MapSection() {
-  const snapshot = useAppStore((s) => s.snapshot)!;
+  const snapshot = useSnapshot()!;
   const typeFilter = useAppStore((s) => s.typeFilter);
   const mapMetric = useAppStore((s) => s.mapMetric);
   const selectedCounty = useAppStore((s) => s.selectedCounty);
@@ -102,6 +109,8 @@ export function MapSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MLMap | null>(null);
   const readyRef = useRef(false);
+  const snapshotRef = useRef(snapshot);
+  snapshotRef.current = snapshot;
 
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
@@ -134,7 +143,7 @@ export function MapSection() {
         type: 'fill',
         source: 'counties',
         paint: {
-          'fill-color': fillColorExpression(snapshot, useAppStore.getState().mapMetric),
+          'fill-color': fillColorExpression(snapshotRef.current, useAppStore.getState().mapMetric),
           'fill-opacity': 0.85,
         },
       });
@@ -146,7 +155,9 @@ export function MapSection() {
       });
       map.addSource('praxes', {
         type: 'geojson',
-        data: praxesToGeoJSON(filterPraxes(snapshot.praxes, useAppStore.getState().typeFilter)),
+        data: praxesToGeoJSON(
+          filterPraxes(snapshotRef.current.praxes, useAppStore.getState().typeFilter),
+        ),
       });
       map.addLayer({
         id: 'praxis-points',
@@ -221,7 +232,7 @@ export function MapSection() {
           ))}
         </div>
         <div className="seg" role="group">
-          {TYPE_OPTIONS.map((o) => (
+          {typeOptions(snapshot).map((o) => (
             <button
               key={o.value}
               aria-pressed={typeFilter === o.value}

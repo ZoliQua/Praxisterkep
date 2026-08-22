@@ -1,14 +1,21 @@
 """Build monthly JSON snapshots consumed by the web app.
 
-Inputs: parsed vacant list (A), dissolved list (A'), registry (C), geocode cache.
+Inputs per kind: parsed vacant list, dissolved list (dental only — GP has no
+published dissolved list), registry (denominator), geocode cache.
 Outputs:
-  data/YYYY-MM/dental.json  — full monthly snapshot (praxes + aggregates)
-  data/latest.json          — copy of the newest monthly snapshot
-  data/timeseries.json      — one aggregate entry per archived month
+  data/YYYY-MM/{kind}.json  — full monthly snapshot (praxes + aggregates)
+  data/latest.json          — {"month", "kinds": {kind: snapshot}}
+  data/timeseries.json      — {"kinds": {kind: [monthly aggregate entries]}}
 
 Terminology guard (CLAUDE.md rule 4): "vacant" (betöltetlen) never implies
 "unserved" (ellátatlan) — substitution service is not visible in these sources,
 so the output only ever speaks of vacancy, and the UI copy must do the same.
+
+Settlement indexing: the GP registry lists every praxis's served settlements
+(with KSH codes), so GP settlement entries are coverage-based (a settlement
+belongs to every praxis that serves it). The dental registry only gives the
+surgery seat, so dental entries are seat-based, except dissolved districts
+whose served-settlement lists are published.
 """
 from __future__ import annotations
 
@@ -17,7 +24,19 @@ from collections import defaultdict
 from pathlib import Path
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
+
+SOURCE_NAMES = {
+    "dental": [
+        "NEAK Betöltetlen fogorvosi szolgálatok (PDF)",
+        "NEAK Betöltetlen (megszűnt) fogorvosi szolgálatok (PDF)",
+        "NEAK Fogorvosi rendelők / szerződött szolgáltatók (XLS)",
+    ],
+    "gp": [
+        "NEAK Betöltetlen háziorvosi szolgálatok (PDF)",
+        "NEAK Háziorvosi szolgálatok / szerződött szolgáltatók (XLS)",
+    ],
+}
 
 
 def _praxis_key(p: dict) -> tuple:
@@ -34,18 +53,32 @@ def attach_geocodes(records: list[dict], cache: dict) -> None:
                 s["geoApprox"] = hit.get("geoApprox", False)
 
 
+def _served_names(entry: dict) -> list[str]:
+    return [s["name"] for s in entry.get("servedSettlements", [])]
+
+
 def build_snapshot(
     month: str,
+    kind: str,
     vacant: list[dict],
     dissolved: list[dict],
     registry: list[dict],
 ) -> dict:
     reg_by_fin = {e["id"]: e for e in registry}
-    # dissolved services fall out of the contract registry; their type comes
-    # from the registry when still listed, else stays as parsed
-    for r in dissolved:
-        if r["id"] in reg_by_fin:
-            r["type"] = reg_by_fin[r["id"]]["type"]
+    # enrich from the registry where the vacant lists are thinner
+    for r in vacant + dissolved:
+        reg = reg_by_fin.get(r["id"])
+        if not reg:
+            continue
+        if r["status"] == "dissolved":
+            # the dissolved list carries no type column; the registry does
+            r["type"] = reg["type"]
+        if reg.get("district"):
+            for s in r["sites"]:
+                if not s["district"]:
+                    s["district"] = reg["district"]
+        if reg.get("servedSettlements") and not r.get("servedSettlements"):
+            r["servedSettlements"] = _served_names(reg)
 
     all_fins = set(reg_by_fin) | {r["id"] for r in dissolved}
     vacant_fins = {r["id"] for r in vacant}
@@ -82,32 +115,8 @@ def build_snapshot(
         c["vacancyRate"] = round((c["vacant"] + c["dissolved"]) / c["total"], 4)
         county_list.append(c)
 
-    # settlement index for the search feature
-    settlements: dict[tuple, dict] = {}
-
-    def _settlement(name: str, county: str) -> dict:
-        return settlements.setdefault((name, county), {
-            "name": name, "county": county,
-            "filled": 0, "vacantPraxisIds": [], "dissolvedPraxisIds": [],
-            "affectedByDissolved": False,
-        })
-
-    filled_fins = set(reg_by_fin) - vacant_fins - dissolved_fins
-    for fin in filled_fins:
-        e = reg_by_fin[fin]
-        _settlement(e["settlement"], e["county"])["filled"] += 1
-    for r in vacant:
-        for s in r["sites"]:
-            if not s["isHeadquarters"] or len(r["sites"]) == 1:
-                entry = _settlement(s["settlement"], r["county"])
-                if r["id"] not in entry["vacantPraxisIds"]:
-                    entry["vacantPraxisIds"].append(r["id"])
-    for r in dissolved:
-        for name in r.get("servedSettlements", []):
-            entry = _settlement(name, r["county"])
-            entry["affectedByDissolved"] = True
-            if r["id"] not in entry["dissolvedPraxisIds"]:
-                entry["dissolvedPraxisIds"].append(r["id"])
+    settlements = _build_settlement_index(vacant, dissolved, reg_by_fin,
+                                          vacant_fins, dissolved_fins)
 
     national = {
         "totalDistricts": len(all_fins),
@@ -121,19 +130,51 @@ def build_snapshot(
 
     return {
         "schemaVersion": SCHEMA_VERSION,
-        "kind": "dental",
+        "kind": kind,
         "month": month,
         "disclaimer": "A NEAK adatai tájékoztató jellegűek.",
-        "sources": [
-            "NEAK Betöltetlen fogorvosi szolgálatok (PDF)",
-            "NEAK Betöltetlen (megszűnt) fogorvosi szolgálatok (PDF)",
-            "NEAK Fogorvosi rendelők / szerződött szolgáltatók (XLS)",
-        ],
+        "sources": SOURCE_NAMES[kind],
         "national": national,
         "counties": county_list,
         "praxes": sorted(vacant + dissolved, key=_praxis_key),
-        "settlements": sorted(settlements.values(), key=lambda s: s["name"]),
+        "settlements": sorted(settlements, key=lambda s: s["name"]),
     }
+
+
+def _build_settlement_index(vacant, dissolved, reg_by_fin,
+                            vacant_fins, dissolved_fins) -> list[dict]:
+    settlements: dict[tuple, dict] = {}
+
+    def entry(name: str, county: str) -> dict:
+        return settlements.setdefault((name, county), {
+            "name": name, "county": county,
+            "filled": 0, "vacantPraxisIds": [], "dissolvedPraxisIds": [],
+            "affectedByDissolved": False,
+        })
+
+    filled_fins = set(reg_by_fin) - vacant_fins - dissolved_fins
+    for fin in filled_fins:
+        e = reg_by_fin[fin]
+        # coverage-based when the registry lists served settlements (GP),
+        # seat-based otherwise (dental)
+        for name in _served_names(e) or [e["settlement"]]:
+            entry(name, e["county"])["filled"] += 1
+    for r in vacant:
+        names = r.get("servedSettlements") or [
+            s["settlement"] for s in r["sites"]
+            if not s["isHeadquarters"] or len(r["sites"]) == 1
+        ]
+        for name in names:
+            e = entry(name, r["county"])
+            if r["id"] not in e["vacantPraxisIds"]:
+                e["vacantPraxisIds"].append(r["id"])
+    for r in dissolved:
+        for name in r.get("servedSettlements", []):
+            e = entry(name, r["county"])
+            e["affectedByDissolved"] = True
+            if r["id"] not in e["dissolvedPraxisIds"]:
+                e["dissolvedPraxisIds"].append(r["id"])
+    return list(settlements.values())
 
 
 def _county_of(record: dict, reg_by_fin: dict) -> str:
@@ -151,19 +192,9 @@ def _national_by_type(reg_by_fin: dict, vacant_all: set) -> dict:
     return dict(sorted(out.items()))
 
 
-def write_outputs(snapshot: dict) -> list[Path]:
-    month = snapshot["month"]
-    month_dir = DATA_DIR / month
-    month_dir.mkdir(parents=True, exist_ok=True)
-    month_file = month_dir / "dental.json"
-    _dump(month_file, snapshot)
-    _dump(DATA_DIR / "latest.json", snapshot)
-    ts_file = DATA_DIR / "timeseries.json"
-    ts = json.loads(ts_file.read_text(encoding="utf-8")) if ts_file.exists() else {
-        "kind": "dental", "months": [],
-    }
-    entry = {
-        "month": month,
+def timeseries_entry(snapshot: dict) -> dict:
+    return {
+        "month": snapshot["month"],
         "totalDistricts": snapshot["national"]["totalDistricts"],
         "vacant": snapshot["national"]["vacant"],
         "dissolved": snapshot["national"]["dissolved"],
@@ -174,10 +205,49 @@ def write_outputs(snapshot: dict) -> list[Path]:
             for c in snapshot["counties"]
         },
     }
-    ts["months"] = [m for m in ts["months"] if m["month"] != month] + [entry]
-    ts["months"].sort(key=lambda m: m["month"])
+
+
+def write_outputs(snapshots: dict[str, dict], month: str) -> list[Path]:
+    """Write per-kind month files plus the combined latest and timeseries."""
+    written: list[Path] = []
+    month_dir = DATA_DIR / month
+    month_dir.mkdir(parents=True, exist_ok=True)
+    for kind, snap in snapshots.items():
+        path = month_dir / f"{kind}.json"
+        _dump(path, snap)
+        written.append(path)
+
+    # a partial (single-kind) run must not drop the other kind from latest.json
+    latest_path = DATA_DIR / "latest.json"
+    kinds: dict[str, dict] = {}
+    if latest_path.exists():
+        old = json.loads(latest_path.read_text(encoding="utf-8"))
+        if old.get("month") == month and "kinds" in old:
+            kinds = old["kinds"]
+    kinds.update(snapshots)
+    _dump(latest_path, {"month": month, "kinds": kinds})
+    written.append(DATA_DIR / "latest.json")
+
+    ts_file = DATA_DIR / "timeseries.json"
+    ts = _load_timeseries(ts_file)
+    for kind, snap in snapshots.items():
+        months = [m for m in ts["kinds"].get(kind, []) if m["month"] != month]
+        months.append(timeseries_entry(snap))
+        months.sort(key=lambda m: m["month"])
+        ts["kinds"][kind] = months
     _dump(ts_file, ts)
-    return [month_file, DATA_DIR / "latest.json", ts_file]
+    written.append(ts_file)
+    return written
+
+
+def _load_timeseries(path: Path) -> dict:
+    if not path.exists():
+        return {"kinds": {}}
+    old = json.loads(path.read_text(encoding="utf-8"))
+    if "kinds" in old:
+        return old
+    # migrate schema v1 ({"kind": ..., "months": [...]})
+    return {"kinds": {old["kind"]: old["months"]}}
 
 
 def _dump(path: Path, obj: dict) -> None:

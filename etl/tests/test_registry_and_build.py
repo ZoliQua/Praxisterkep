@@ -47,7 +47,7 @@ def _sample_data():
 
 def test_build_snapshot_aggregates():
     vacant, dissolved, registry = _sample_data()
-    snap = build_snapshot("2026-08", vacant, dissolved, registry)
+    snap = build_snapshot("2026-08", "dental", vacant, dissolved, registry)
     # dissolved FIN missing from registry still counts in the denominator
     assert snap["national"]["totalDistricts"] == 4
     assert snap["national"]["vacant"] == 1
@@ -73,7 +73,7 @@ def test_validate_records_rejects_bad():
 
 def test_validate_snapshot_catches_name_leak():
     vacant, dissolved, registry = _sample_data()
-    snap = build_snapshot("2026-08", vacant, dissolved, registry)
+    snap = build_snapshot("2026-08", "dental", vacant, dissolved, registry)
     snap["praxes"][0]["doctor"] = "Dr. X"
     with pytest.raises(ValidationError):
         validate_snapshot(snap)
