@@ -1,8 +1,8 @@
 # Magyar-Alapellatas · Praxistérkép
 
 Interaktív térkép a magyar alapellátási körzetekről: betöltetlenség, időtartam,
-érintett lakosság, trendek — havonta frissülő NEAK-adatokból. Első ütemben
-fogorvosi alapellátás, később háziorvosi.
+érintett lakosság, trendek — havonta frissülő NEAK-adatokból. Fogorvosi és
+háziorvosi alapellátás egyaránt.
 
 - Terv: [`docs/PLAN.md`](docs/PLAN.md)
 - Fejlesztési szabályok: [`CLAUDE.md`](CLAUDE.md)
@@ -30,8 +30,8 @@ A megyehatár-réteg (`data/geo/counties.geojson`) OSM-ből származik
 ## Adatfolyam
 
 - Nyers források (audit): `data/raw/YYYY-MM/` — a git-történet maga az adattörténet.
-- Havi snapshot: `data/YYYY-MM/dental.json`, plusz `data/latest.json` és
-  `data/timeseries.json`.
+- Havi snapshot: `data/YYYY-MM/dental.json` és `data/YYYY-MM/gp.json`, plusz
+  `data/latest.json` (mindkét kassza) és `data/timeseries.json`.
 - A pipeline validálási hibánál nem publikál (a havi GitHub Actions futás
   ilyenkor issue-t nyit).
 

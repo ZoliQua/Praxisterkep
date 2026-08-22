@@ -1,12 +1,13 @@
 import { useMemo, useState } from 'react';
-import { t } from '../lib/i18n';
+import { t, tKind } from '../lib/i18n';
 import { formatDuration, formatMonth, formatNumber, monthsBetween } from '../lib/format';
 import { praxesById, primarySite, searchSettlements } from '../lib/selectors';
-import { useAppStore } from '../store/useAppStore';
+import { useAppStore, useSnapshot } from '../store/useAppStore';
 import type { Praxis, SettlementEntry } from '../types';
 
 function PraxisRow({ praxis, month }: { praxis: Praxis; month: string }) {
   const site = primarySite(praxis);
+  const served = praxis.servedSettlements ?? [];
   return (
     <div className="settlement-card__row">
       <span className={`badge ${praxis.status === 'dissolved' ? 'badge--dissolved' : 'badge--vacant'}`}>
@@ -22,13 +23,20 @@ function PraxisRow({ praxis, month }: { praxis: Praxis; month: string }) {
             {t('map.popupPopulation')}: <strong>{formatNumber(praxis.population)}</strong> {t('map.fő')}
           </>
         ) : null}
+        {served.length > 1 && (
+          <>
+            <br />
+            {t('search.servedBy')}: {served.join(', ')}
+          </>
+        )}
       </span>
     </div>
   );
 }
 
 export function SearchSection() {
-  const snapshot = useAppStore((s) => s.snapshot)!;
+  const snapshot = useSnapshot()!;
+  const kind = useAppStore((s) => s.kind);
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState<SettlementEntry | null>(null);
 
@@ -44,10 +52,13 @@ export function SearchSection() {
         .filter((p): p is Praxis => p !== undefined)
     : [];
 
+  // GP settlement entries are coverage-based, dental ones are seat-based
+  const filledLabel = kind === 'gp' ? t('search.filledCoverage') : t('search.filledSeat');
+
   return (
     <section className="section container" id="nalam">
       <h2 className="section__heading">{t('search.heading')}</h2>
-      <p className="section__explain">{t('search.explain')}</p>
+      <p className="section__explain">{tKind('search.explain', kind)}</p>
 
       <div className="search-box">
         <input
@@ -73,7 +84,9 @@ export function SearchSection() {
           </ul>
         )}
         {query.length >= 2 && hits.length === 0 && !selected && (
-          <p className="section__explain" style={{ marginTop: 12 }}>{t('search.noResult')}</p>
+          <p className="section__explain" style={{ marginTop: 12 }}>
+            {tKind('search.noResult', kind)}
+          </p>
         )}
       </div>
 
@@ -85,7 +98,7 @@ export function SearchSection() {
           </h3>
           <div className="settlement-card__row">
             <span className="badge badge--ok">{selected.filled}</span>
-            <span className="praxis-line">{t('search.filled')}</span>
+            <span className="praxis-line">{filledLabel}</span>
           </div>
           {vacantHere.map((p) => (
             <PraxisRow key={p.id} praxis={p} month={snapshot.month} />
@@ -97,7 +110,7 @@ export function SearchSection() {
           )}
           {vacantHere.length === 0 && !selected.affectedByDissolved && (
             <div className="settlement-card__row">
-              <span className="praxis-line">{t('search.noVacant')}</span>
+              <span className="praxis-line">{tKind('search.noVacant', kind)}</span>
             </div>
           )}
           {vacantHere.length > 0 && (

@@ -5,6 +5,15 @@ type Dict = { [key: string]: string | Dict };
 const dict: Dict = hu as Dict;
 
 /** Look up a dot-separated key in the active locale (hu only in MVP). */
+/** t() with the active kind's adjective/noun pre-filled ({kind}, {doctor}). */
+export function tKind(key: string, kind: string, params?: Record<string, string | number>): string {
+  return t(key, {
+    kind: t(`kinds.${kind}.adj`),
+    doctor: t(`kinds.${kind}.doctor`),
+    ...params,
+  });
+}
+
 export function t(key: string, params?: Record<string, string | number>): string {
   let node: string | Dict | undefined = dict;
   for (const part of key.split('.')) {

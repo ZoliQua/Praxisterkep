@@ -86,6 +86,10 @@ export interface TimeseriesMonth {
 }
 
 export interface Timeseries {
-  kind: PraxisKind;
-  months: TimeseriesMonth[];
+  kinds: Partial<Record<PraxisKind, TimeseriesMonth[]>>;
+}
+
+export interface LatestFile {
+  month: string;
+  kinds: Partial<Record<PraxisKind, Snapshot>>;
 }
