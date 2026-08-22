@@ -17,6 +17,8 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -r etl/requirements.txt
+      - name: Run ETL tests
+        run: cd etl && python -m pytest -q
       - name: Run pipeline
         id: pipeline
         run: python etl/run.py
