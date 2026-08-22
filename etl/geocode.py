@@ -1,11 +1,13 @@
 """Nominatim geocoding with a git-tracked cache. Max 1 request/second.
 
 Only addresses absent from geocode_cache.json are queried.
-Failed geocode -> settlement centroid fallback with geoApprox=True.
+Failed street-level geocode -> settlement centroid fallback with geoApprox=True.
+Cache entry: {"lat": .., "lon": .., "geoApprox": bool} or null (both levels failed).
 """
 from __future__ import annotations
 
 import json
+import re
 import time
 from pathlib import Path
 
@@ -13,7 +15,16 @@ import requests
 
 CACHE_PATH = Path(__file__).resolve().parent / "geocode_cache.json"
 NOMINATIM = "https://nominatim.openstreetmap.org/search"
-USER_AGENT = "Magyar-Alapellatas/0.1 (zoltan@drdul.hu)"
+USER_AGENT = "Magyar-Alapellatas/0.1 (github.com/ZoliQua)"
+
+# common Hungarian address abbreviations Nominatim tends to miss
+_ABBREV = [
+    (re.compile(r"\bu\.(?=\s|\d|$)", re.IGNORECASE), "utca"),
+    (re.compile(r"\bút\.", re.IGNORECASE), "út"),
+    (re.compile(r"\bkrt\.", re.IGNORECASE), "körút"),
+    (re.compile(r"\bltp\.?", re.IGNORECASE), "lakótelep"),
+    (re.compile(r"\bszt\.", re.IGNORECASE), "Szent"),
+]
 
 
 def load_cache() -> dict:
@@ -29,20 +40,48 @@ def save_cache(cache: dict) -> None:
     )
 
 
-def geocode(address: str, cache: dict) -> dict | None:
-    if address in cache:
-        return cache[address]
+def normalize_street(address: str) -> str:
+    out = address
+    for pat, repl in _ABBREV:
+        out = pat.sub(repl, out)
+    # strip floor/door suffixes ("fsz.1.", "I/2.") that break matching
+    out = re.sub(r"\b(fsz|em|ajtó)\.?.*$", "", out, flags=re.IGNORECASE).strip(" ,.")
+    return out
+
+
+def _query(params: dict) -> dict | None:
     resp = requests.get(
         NOMINATIM,
-        params={"q": address, "countrycodes": "hu", "format": "json", "limit": 1},
+        params={"countrycodes": "hu", "format": "json", "limit": 1, **params},
         headers={"User-Agent": USER_AGENT},
         timeout=30,
     )
     resp.raise_for_status()
+    time.sleep(1.1)  # Nominatim usage policy: max 1 req/s
     hits = resp.json()
-    result = (
-        {"lat": float(hits[0]["lat"]), "lon": float(hits[0]["lon"])} if hits else None
-    )
-    cache[address] = result
-    time.sleep(1.0)  # Nominatim usage policy
+    if not hits:
+        return None
+    return {"lat": round(float(hits[0]["lat"]), 6), "lon": round(float(hits[0]["lon"]), 6)}
+
+
+def geocode_site(postal: str, settlement: str, address: str, cache: dict) -> dict | None:
+    """Geocode one surgery site. Returns {lat, lon, geoApprox} or None."""
+    key = f"{postal} {settlement}, {address}"
+    if key in cache:
+        return cache[key]
+    result = _query({
+        "street": normalize_street(address),
+        "city": settlement,
+        "postalcode": postal,
+    })
+    if result is None:  # retry without postal code (NEAK postal data is imperfect)
+        result = _query({"street": normalize_street(address), "city": settlement})
+    if result is not None:
+        result["geoApprox"] = False
+    else:  # settlement centroid fallback, flagged as approximate
+        result = _query({"city": settlement})
+        if result is not None:
+            result["geoApprox"] = True
+    cache[key] = result
+    save_cache(cache)  # persist incrementally: an aborted run keeps its progress
     return result
