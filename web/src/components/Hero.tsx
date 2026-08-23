@@ -52,7 +52,9 @@ export function Hero() {
           <div className="stat__label">{tKind('hero.vacancyRate', kind)}</div>
         </div>
         <div className="stat">
-          <div className="stat__value">{formatNumber(populationAll)}</div>
+          <div className={`stat__value ${populationAll >= 1_000_000 ? 'stat__value--long' : ''}`}>
+            {formatNumber(populationAll)}
+          </div>
           <div className="stat__label">{tKind('hero.populationAffected', kind)}</div>
           <div className="stat__context">
             {t('hero.populationContext', {

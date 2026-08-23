@@ -9,6 +9,8 @@ import { StatsSection } from './components/StatsSection';
 import { WhySection } from './components/WhySection';
 import { Methodology } from './components/Methodology';
 import { Footer } from './components/Footer';
+import { IconStethoscope, IconTooth } from './components/icons';
+import type { PraxisKind } from './types';
 
 const NAV = [
   ['#terkep', 'nav.map'],
@@ -17,12 +19,12 @@ const NAV = [
   ['#rangsor', 'nav.ranking'],
   ['#statisztika', 'nav.stats'],
   ['#modszertan', 'nav.methodology'],
-  ['#forrasok', 'nav.sources'],
 ] as const;
 
 export default function App() {
   const snapshot = useSnapshot();
   const kind = useAppStore((s) => s.kind);
+  const setKind = useAppStore((s) => s.setKind);
   const loadError = useAppStore((s) => s.loadError);
   const loadData = useAppStore((s) => s.loadData);
 
@@ -42,9 +44,19 @@ export default function App() {
     <>
       <nav className="topnav">
         <div className="topnav__inner">
-          <span className="topnav__brand">
-            {t('site.title')} <em>·</em> {t(`kinds.${kind}.question`)}
-          </span>
+          <span className="topnav__brand">{t('site.title')}</span>
+          <div className="topnav__kind" role="group">
+            <button aria-pressed={kind === 'dental'}
+              title={t('kinds.dental.label')} aria-label={t('kinds.dental.label')}
+              onClick={() => setKind('dental' as PraxisKind)}>
+              <IconTooth />
+            </button>
+            <button aria-pressed={kind === 'gp'}
+              title={t('kinds.gp.label')} aria-label={t('kinds.gp.label')}
+              onClick={() => setKind('gp' as PraxisKind)}>
+              <IconStethoscope />
+            </button>
+          </div>
           <div className="topnav__links">
             {NAV.map(([href, key]) => (
               <a key={href} href={href}>{t(key)}</a>
@@ -55,8 +67,7 @@ export default function App() {
       <Hero />
       <MapSection />
       <WhySection />
-      {/* key remounts the search on kind toggle: its selection belongs to one snapshot */}
-      <SearchSection key={kind} />
+      <SearchSection />
       <CountyRanking />
       <StatsSection />
       <Methodology />
