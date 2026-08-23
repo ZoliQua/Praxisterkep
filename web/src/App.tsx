@@ -5,6 +5,7 @@ import { Hero } from './components/Hero';
 import { MapSection } from './components/MapSection';
 import { SearchSection } from './components/SearchSection';
 import { CountyRanking } from './components/CountyRanking';
+import { StatsSection } from './components/StatsSection';
 import { Methodology } from './components/Methodology';
 import { Footer } from './components/Footer';
 
@@ -12,6 +13,7 @@ const NAV = [
   ['#terkep', 'nav.map'],
   ['#nalam', 'nav.mine'],
   ['#rangsor', 'nav.ranking'],
+  ['#statisztika', 'nav.stats'],
   ['#modszertan', 'nav.methodology'],
   ['#forrasok', 'nav.sources'],
 ] as const;
@@ -53,6 +55,7 @@ export default function App() {
       {/* key remounts the search on kind toggle: its selection belongs to one snapshot */}
       <SearchSection key={kind} />
       <CountyRanking />
+      <StatsSection />
       <Methodology />
       <Footer />
     </>

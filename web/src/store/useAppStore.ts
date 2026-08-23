@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import type { LatestFile, PraxisKind, Snapshot, Timeseries, TimeseriesMonth } from '../types';
+import type { History, HistoryEntry } from '../lib/statsSelectors';
 import type { TypeFilter } from '../lib/selectors';
 
 export type MapMetric = 'rate' | 'population';
@@ -7,6 +8,7 @@ export type MapMetric = 'rate' | 'population';
 interface AppState {
   latest: LatestFile | null;
   timeseries: Timeseries | null;
+  history: History | null;
   loadError: string | null;
   kind: PraxisKind;
   typeFilter: TypeFilter;
@@ -22,6 +24,7 @@ interface AppState {
 export const useAppStore = create<AppState>((set, get) => ({
   latest: null,
   timeseries: null,
+  history: null,
   loadError: null,
   kind: 'dental',
   typeFilter: 'all',
@@ -36,11 +39,12 @@ export const useAppStore = create<AppState>((set, get) => ({
     if (get().latest) return;
     try {
       const base = import.meta.env.BASE_URL;
-      const [latest, timeseries] = await Promise.all([
+      const [latest, timeseries, history] = await Promise.all([
         fetch(`${base}data/latest.json`).then(assertOk<LatestFile>),
         fetch(`${base}data/timeseries.json`).then(assertOk<Timeseries>),
+        fetch(`${base}data/history.json`).then(assertOk<History>),
       ]);
-      set({ latest, timeseries });
+      set({ latest, timeseries, history });
     } catch (err) {
       set({ loadError: err instanceof Error ? err.message : String(err) });
     }
@@ -56,7 +60,12 @@ export function useTimeseriesMonths(): TimeseriesMonth[] {
   return useAppStore((s) => s.timeseries?.kinds[s.kind] ?? EMPTY_MONTHS);
 }
 
+export function useHistoryEntries(): HistoryEntry[] {
+  return useAppStore((s) => s.history?.kinds[s.kind] ?? EMPTY_HISTORY);
+}
+
 const EMPTY_MONTHS: TimeseriesMonth[] = [];
+const EMPTY_HISTORY: HistoryEntry[] = [];
 
 async function assertOk<T>(resp: Response): Promise<T> {
   if (!resp.ok) throw new Error(`${resp.url}: HTTP ${resp.status}`);

@@ -25,7 +25,8 @@
     "mine": "Nálam",
     "ranking": "Rangsor",
     "methodology": "Módszertan",
-    "sources": "Források"
+    "sources": "Források",
+    "stats": "Statisztika"
   },
   "hero": {
     "vacant": "betöltetlen {kind} körzet",
@@ -110,5 +111,41 @@
     "child": "gyermek",
     "mixed": "vegyes",
     "school": "iskolai, ifjúsági"
+  },
+  "stats": {
+    "heading": "Statisztikai elemzés",
+    "explain": "Több évre visszanyúló saját gyűjtésű NEAK-listákból épített idősorok a {kind} körzetekről. Minden pont egy ténylegesen archivált havi lista — a hiányzó hónapok hiányzó pontok, nem interpolálunk.",
+    "coverage": "Archivált hónapok: {n} · {first} – {last}",
+    "changeSince": "betöltetlen {kind} körzet változása {month} óta",
+    "medianNow": "a betöltetlenség középideje most (medián)",
+    "populationNow": "ember él betöltetlen {kind} körzetben most",
+    "vacantTitle": "Betöltetlen körzetek száma",
+    "vacantExplain": "A betöltetlen körzetek száma az archivált hónapokban. A megszűnt szerződésű körzetek számát a hónapra mutatva jelezzük, ahol volt ilyen lista.",
+    "dissolvedNote": "megszűnt szerződésű körzet",
+    "rateTitle": "Betöltetlenségi arány",
+    "rateExplain": "Betöltetlen (és megszűnt) körzetek az összes körzet arányában. Csak azoknál a hónapoknál, ahol az adott havi törzslista (nevező) is megvan.",
+    "typesTitle": "Betöltetlen körzetek típus szerint",
+    "typesExplain": "Felnőtt, gyermek, vegyes (és iskolai) körzetek betöltetlensége külön-külön.",
+    "flowTitle": "Ki-be áramlás",
+    "flowExplain": "Az előző archivált hónaphoz képest újonnan megüresedett, illetve a listáról lekerült (betöltött vagy megszűnt) körzetek száma. Ahol az archívumban kimaradtak hónapok, az összevetés a legutóbbi elérhető hónappal történik — ezt a buborék jelzi.",
+    "flowEntered": "megüresedett",
+    "flowLeft": "lekerült a listáról",
+    "countyTitle": "Vármegyei idősor",
+    "countyExplain": "A kiválasztott vármegye betöltetlen körzeteinek száma az archivált hónapokban.",
+    "countySelect": "Vármegye:",
+    "medianTitle": "Medián betöltetlenségi idő",
+    "medianExplain": "Az adott hónapban betöltetlen körzetek betöltetlenségi idejének mediánja.",
+    "populationTitle": "Érintett lakosság",
+    "populationExplain": "A betöltetlen (és megszűnt szerződésű) körzetek ellátandó lakosságszámának összege.",
+    "durationTitle": "Betöltetlenség hossza — {month}",
+    "durationExplain": "A jelenleg betöltetlen körzetek megoszlása aszerint, hogy mióta üresek.",
+    "bucket0": "1 évnél rövidebb",
+    "bucket1": "1–3 év",
+    "bucket2": "3–10 év",
+    "bucket3": "10+ év",
+    "tableToggle": "Adatok táblázatban",
+    "thMonth": "Hónap",
+    "thRate": "Arány",
+    "thMedian": "Medián (hónap)"
   }
 }
