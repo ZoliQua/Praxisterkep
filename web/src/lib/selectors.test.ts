@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
   countyRanking,
+  directoryRows,
+  filterDirectoryRows,
   filterPraxes,
   filterPraxisRows,
   longestVacant,
@@ -170,5 +172,31 @@ describe('filterPraxisRows', () => {
     expect(filterPraxisRows(rows, { query: 'sojtor' })).toHaveLength(1);
     expect(filterPraxisRows(rows, { query: 'zalaeger' })[0].id).toBe('1');
     expect(filterPraxisRows(rows, { query: '' })).toHaveLength(2);
+  });
+});
+
+describe('directoryRows + filterDirectoryRows', () => {
+  const snapshot = {
+    month: '2026-08',
+    praxes: [praxis({ id: '1', county: 'Zala', vacantSince: '2020-01' })],
+    filledPraxes: [{
+      id: '2', type: 'mixed', county: 'Vas', settlement: 'Vasvár',
+      postalCode: '9800', address: 'Fő u. 1.', district: 'Vasvári',
+      doctor: 'Dr. Minta Elek',
+    }],
+  } as never;
+  const rows = directoryRows(snapshot);
+  it('combines vacant and filled praxes', () => {
+    expect(rows).toHaveLength(2);
+    const filled = rows.find((r) => r.id === '2')!;
+    expect(filled.status).toBe('filled');
+    expect(filled.doctor).toBe('Dr. Minta Elek');
+    expect(filled.address).toBe('9800 Vasvár, Fő u. 1.');
+    expect(rows.find((r) => r.id === '1')!.status).toBe('vacant');
+  });
+  it('filters by status', () => {
+    expect(filterDirectoryRows(rows, { status: 'filled' })).toHaveLength(1);
+    expect(filterDirectoryRows(rows, { status: 'vacant' })[0].id).toBe('1');
+    expect(filterDirectoryRows(rows, { county: 'Vas', status: 'vacant' })).toHaveLength(0);
   });
 });

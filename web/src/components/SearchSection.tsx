@@ -3,6 +3,7 @@ import { t, tKind } from '../lib/i18n';
 import { formatDuration, formatMonth, formatNumber, monthsBetween } from '../lib/format';
 import { praxesById, primarySite, searchSettlements } from '../lib/selectors';
 import { useAppStore, useSnapshot } from '../store/useAppStore';
+import { DirectoryTableModal } from './DirectoryTableModal';
 import type { FilledPraxis, Praxis, SettlementEntry } from '../types';
 
 const FILLED_LIMIT = 10;
@@ -61,6 +62,7 @@ export function SearchSection() {
   const setQuery = (q: string) => setState({ kind, query: q, selected: null });
   const setSelected = (s2: SettlementEntry | null) =>
     setState({ kind, query, selected: s2 });
+  const [directoryOpen, setDirectoryOpen] = useState(false);
 
   const byId = useMemo(() => praxesById(snapshot), [snapshot]);
   const hits = useMemo(
@@ -87,7 +89,19 @@ export function SearchSection() {
 
   return (
     <section className="section container" id="nalam">
-      <h2 className="section__heading">{t('search.heading')}</h2>
+      <div className="section__heading-row">
+        <h2 className="section__heading">{t('search.heading')}</h2>
+        <button className="icon-button" title={t('search.openDirectory')}
+          aria-label={t('search.openDirectory')}
+          onClick={() => setDirectoryOpen(true)}>
+          <svg viewBox="0 0 20 20" aria-hidden="true">
+            <rect x="2.5" y="3.5" width="15" height="13" rx="1.5" fill="none"
+              stroke="currentColor" strokeWidth="1.6" />
+            <path d="M2.5 8h15M8 8v8.5M13 8v8.5" stroke="currentColor"
+              strokeWidth="1.6" />
+          </svg>
+        </button>
+      </div>
       <p className="section__explain">{tKind('search.explain', kind)}</p>
 
       <div className="search-box">
@@ -170,6 +184,9 @@ export function SearchSection() {
           )}
         </div>
       )}
+
+      <DirectoryTableModal snapshot={snapshot} open={directoryOpen}
+        onClose={() => setDirectoryOpen(false)} />
     </section>
   );
 }
