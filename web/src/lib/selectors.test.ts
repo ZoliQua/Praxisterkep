@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   countyRanking,
   filterPraxes,
+  filterPraxisRows,
   longestVacant,
   medianVacancyMonths,
   praxisTableRows,
@@ -146,5 +147,28 @@ describe('sortPraxisRows', () => {
     expect(sortPraxisRows(rows, 'settlement', 'asc')[0].settlement).toBe('Ács');
     expect(sortPraxisRows(rows, 'population', 'desc')[0].population).toBe(2000);
     expect(sortPraxisRows(rows, 'vacantSince', 'asc')[0].vacantSince).toBe('2020-01');
+  });
+});
+
+describe('filterPraxisRows', () => {
+  const snapshot = {
+    month: '2026-08',
+    praxes: [
+      praxis({ id: '1', county: 'Zala', type: 'mixed',
+        sites: [{ postalCode: '1', settlement: 'Söjtör', address: 'x', district: 'Zalaegerszegi', isHeadquarters: false }] }),
+      praxis({ id: '2', county: 'Vas', type: 'child',
+        sites: [{ postalCode: '2', settlement: 'Vasvár', address: 'y', district: 'Vasvári', isHeadquarters: false }] }),
+    ],
+  } as never;
+  const rows = praxisTableRows(snapshot);
+  it('filters by county and type', () => {
+    expect(filterPraxisRows(rows, { county: 'Zala' })).toHaveLength(1);
+    expect(filterPraxisRows(rows, { type: 'child' })[0].id).toBe('2');
+    expect(filterPraxisRows(rows, { county: 'Zala', type: 'child' })).toHaveLength(0);
+  });
+  it('matches settlement or district, accent-insensitive', () => {
+    expect(filterPraxisRows(rows, { query: 'sojtor' })).toHaveLength(1);
+    expect(filterPraxisRows(rows, { query: 'zalaeger' })[0].id).toBe('1');
+    expect(filterPraxisRows(rows, { query: '' })).toHaveLength(2);
   });
 });

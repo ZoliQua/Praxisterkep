@@ -4,11 +4,12 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { t } from '../lib/i18n';
 import { formatDuration, formatMonth, formatNumber } from '../lib/format';
 import {
+  filterPraxisRows,
   praxisTableRows,
   sortPraxisRows,
   type PraxisSortKey,
 } from '../lib/selectors';
-import type { Snapshot } from '../types';
+import type { PraxisType, Snapshot } from '../types';
 
 const COLUMNS: { key: PraxisSortKey; labelKey: string; numeric?: boolean }[] = [
   { key: 'settlement', labelKey: 'stats.thSettlement' },
@@ -27,6 +28,9 @@ export function VacancyTableModal({ snapshot, open, onClose }: {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [sortKey, setSortKey] = useState<PraxisSortKey>('vacantSince');
   const [dir, setDir] = useState<'asc' | 'desc'>('asc');
+  const [county, setCounty] = useState('');
+  const [type, setType] = useState('');
+  const [query, setQuery] = useState('');
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -35,9 +39,18 @@ export function VacancyTableModal({ snapshot, open, onClose }: {
     if (!open && dialog.open) dialog.close();
   }, [open]);
 
+  const allRows = useMemo(() => praxisTableRows(snapshot), [snapshot]);
   const rows = useMemo(
-    () => sortPraxisRows(praxisTableRows(snapshot), sortKey, dir),
-    [snapshot, sortKey, dir],
+    () => sortPraxisRows(filterPraxisRows(allRows, { county, type, query }), sortKey, dir),
+    [allRows, county, type, query, sortKey, dir],
+  );
+  const counties = useMemo(
+    () => [...new Set(allRows.map((r) => r.county))].sort((a, b) => a.localeCompare(b, 'hu')),
+    [allRows],
+  );
+  const types = useMemo(
+    () => [...new Set(allRows.map((r) => r.type))] as PraxisType[],
+    [allRows],
   );
 
   function onSort(key: PraxisSortKey) {
@@ -66,7 +79,13 @@ export function VacancyTableModal({ snapshot, open, onClose }: {
           <div>
             <h3>{t('stats.tableTitle', { month: formatMonth(snapshot.month) })}</h3>
             <p>
-              {t('stats.tableCount', { n: formatNumber(rows.length) })} · {t('stats.sortHint')}
+              {rows.length === allRows.length
+                ? t('stats.tableCount', { n: formatNumber(allRows.length) })
+                : t('stats.tableCountFiltered', {
+                    n: formatNumber(rows.length),
+                    total: formatNumber(allRows.length),
+                  })}
+              {' · '}{t('stats.sortHint')}
             </p>
           </div>
           <button className="vacancy-dialog__close" onClick={onClose}
@@ -74,6 +93,22 @@ export function VacancyTableModal({ snapshot, open, onClose }: {
             ×
           </button>
         </header>
+        <div className="vacancy-dialog__filters">
+          <select value={county} onChange={(e) => setCounty(e.target.value)}>
+            <option value="">{t('stats.filterCountyAll')}</option>
+            {counties.map((c) => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
+          <select value={type} onChange={(e) => setType(e.target.value)}>
+            <option value="">{t('stats.filterTypeAll')}</option>
+            {types.map((ty) => (
+              <option key={ty} value={ty}>{t(`praxisTypes.${ty}`)}</option>
+            ))}
+          </select>
+          <input type="search" value={query} placeholder={t('stats.filterSearch')}
+            onChange={(e) => setQuery(e.target.value)} />
+        </div>
         <div className="vacancy-dialog__scroll">
           <table>
             <thead>

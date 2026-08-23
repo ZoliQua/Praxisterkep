@@ -545,3 +545,17 @@ a:hover { text-decoration: underline; }
 .vacancy-dialog thead th button:hover { color: var(--accent); }
 .vacancy-dialog thead th[aria-sort] button { color: var(--ink); font-weight: 600; }
 .vacancy-dialog tbody tr:hover { background: color-mix(in srgb, var(--accent) 5%, transparent); }
+
+.vacancy-dialog__filters {
+  display: flex; gap: 10px; flex-wrap: wrap;
+  padding: 12px 22px; border-bottom: 1px solid var(--line);
+}
+.vacancy-dialog__filters select,
+.vacancy-dialog__filters input {
+  background: var(--bg-panel); color: var(--ink);
+  border: 1px solid var(--line-strong); border-radius: 8px;
+  font: 13px var(--font-body); padding: 7px 10px;
+}
+.vacancy-dialog__filters input { flex: 1; min-width: 160px; }
+.vacancy-dialog__filters select:focus,
+.vacancy-dialog__filters input:focus { outline: none; border-color: var(--accent); }
