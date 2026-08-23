@@ -120,3 +120,23 @@ export function praxesById(snapshot: Snapshot): Map<string, Praxis> {
 export function primarySite(praxis: Praxis) {
   return praxis.sites.find((s) => !s.isHeadquarters) ?? praxis.sites[0];
 }
+
+export interface PraxisRowFilter {
+  county?: string;   // exact match; '' = all
+  type?: string;     // exact match; '' = all
+  query?: string;    // settlement/district substring, accent-insensitive
+}
+
+export function filterPraxisRows(
+  rows: PraxisTableRow[], filter: PraxisRowFilter,
+): PraxisTableRow[] {
+  const q = normalize(filter.query ?? '');
+  return rows.filter((r) => {
+    if (filter.county && r.county !== filter.county) return false;
+    if (filter.type && r.type !== filter.type) return false;
+    if (q && !normalize(r.settlement).includes(q) && !normalize(r.district).includes(q)) {
+      return false;
+    }
+    return true;
+  });
+}

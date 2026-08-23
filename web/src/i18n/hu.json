@@ -184,7 +184,11 @@
     "thDuration": "Időtartam",
     "thPopulation": "Lakosság",
     "thStatus": "Státusz",
-    "sortHint": "Kattints az oszlopfejlécre a rendezéshez."
+    "sortHint": "Kattints az oszlopfejlécre a rendezéshez.",
+    "tableCountFiltered": "{n} / {total} körzet",
+    "filterCountyAll": "Minden vármegye",
+    "filterTypeAll": "Minden típus",
+    "filterSearch": "Település vagy járás…"
   },
   "why": {
     "heading": "Miért számít az alapellátás?",
