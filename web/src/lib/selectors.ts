@@ -77,9 +77,9 @@ export function praxisTableRows(snapshot: Snapshot) {
 
 export type PraxisTableRow = ReturnType<typeof praxisTableRows>[number];
 
-export function sortPraxisRows(
-  rows: PraxisTableRow[], key: PraxisSortKey, dir: 'asc' | 'desc',
-): PraxisTableRow[] {
+export function sortRows<T extends Record<string, unknown>>(
+  rows: T[], key: keyof T & string, dir: 'asc' | 'desc',
+): T[] {
   const sign = dir === 'asc' ? 1 : -1;
   return [...rows].sort((a, b) => {
     const av = a[key] ?? '';
@@ -90,6 +90,8 @@ export function sortPraxisRows(
     return sign * String(av).localeCompare(String(bv), 'hu');
   });
 }
+
+export const sortPraxisRows = sortRows<PraxisTableRow>;
 
 export function searchSettlements(
   settlements: SettlementEntry[],
@@ -134,6 +136,67 @@ export function filterPraxisRows(
   return rows.filter((r) => {
     if (filter.county && r.county !== filter.county) return false;
     if (filter.type && r.type !== filter.type) return false;
+    if (q && !normalize(r.settlement).includes(q) && !normalize(r.district).includes(q)) {
+      return false;
+    }
+    return true;
+  });
+}
+
+export interface DirectoryRow extends Record<string, unknown> {
+  id: string;
+  settlement: string;
+  county: string;
+  district: string;
+  type: string;
+  status: 'filled' | 'vacant' | 'dissolved';
+  doctor: string;
+  address: string;
+  vacantSince: string; // '' for filled praxes
+}
+
+/** Filled + vacant/dissolved praxes in one table (the full directory). */
+export function directoryRows(snapshot: Snapshot): DirectoryRow[] {
+  const rows: DirectoryRow[] = [];
+  for (const p of snapshot.praxes) {
+    const site = primarySite(p);
+    rows.push({
+      id: p.id,
+      settlement: site?.settlement ?? '',
+      county: p.county,
+      district: site?.district ?? '',
+      type: p.type,
+      status: p.status === 'dissolved' ? 'dissolved' : 'vacant',
+      doctor: '',
+      address: site ? `${site.postalCode} ${site.settlement}, ${site.address}` : '',
+      vacantSince: p.vacantSince,
+    });
+  }
+  for (const f of snapshot.filledPraxes) {
+    rows.push({
+      id: f.id,
+      settlement: f.settlement,
+      county: f.county,
+      district: f.district ?? '',
+      type: f.type,
+      status: 'filled',
+      doctor: f.doctor ?? '',
+      address: `${f.postalCode} ${f.settlement}, ${f.address}`,
+      vacantSince: '',
+    });
+  }
+  return rows;
+}
+
+export function filterDirectoryRows(
+  rows: DirectoryRow[],
+  filter: PraxisRowFilter & { status?: string },
+): DirectoryRow[] {
+  const q = normalize(filter.query ?? '');
+  return rows.filter((r) => {
+    if (filter.county && r.county !== filter.county) return false;
+    if (filter.type && r.type !== filter.type) return false;
+    if (filter.status && r.status !== filter.status) return false;
     if (q && !normalize(r.settlement).includes(q) && !normalize(r.district).includes(q)) {
       return false;
     }

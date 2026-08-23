@@ -91,7 +91,8 @@
     "filledListTitle": "Betöltött körzetek a településen",
     "filledListTitleCoverage": "A települést ellátó betöltött körzetek",
     "filledMore": "és további {n} körzet",
-    "doctorNote": "Az orvosok neve a NEAK nyilvános szerződött-szolgáltatói adatbázisából származik."
+    "doctorNote": "Az orvosok neve a NEAK nyilvános szerződött-szolgáltatói adatbázisából származik.",
+    "openDirectory": "Összesített körzet-táblázat"
   },
   "ranking": {
     "heading": "Vármegyei rangsor",
@@ -188,7 +189,15 @@
     "tableCountFiltered": "{n} / {total} körzet",
     "filterCountyAll": "Minden vármegye",
     "filterTypeAll": "Minden típus",
-    "filterSearch": "Település vagy járás…"
+    "filterSearch": "Település vagy járás…",
+    "directoryTitle": "Összes körzet — {month}",
+    "filterStatusAll": "Minden státusz",
+    "statusFilled": "Betöltött",
+    "statusVacant": "Betöltetlen",
+    "statusDissolved": "Megszűnt",
+    "thDoctor": "Orvos",
+    "thAddress": "Rendelő címe",
+    "rowsCapped": "A lista az első {cap} sort mutatja — szűkítsd a szűrőkkel ({n} találat összesen)."
   },
   "why": {
     "heading": "Miért számít az alapellátás?",

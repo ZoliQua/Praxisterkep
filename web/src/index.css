@@ -559,3 +559,12 @@ a:hover { text-decoration: underline; }
 .vacancy-dialog__filters input { flex: 1; min-width: 160px; }
 .vacancy-dialog__filters select:focus,
 .vacancy-dialog__filters input:focus { outline: none; border-color: var(--accent); }
+
+.section__heading-row {
+  display: flex; align-items: center; gap: 14px;
+}
+.section__heading-row .section__heading { margin-bottom: 0.5em; }
+.section__heading-row .icon-button { margin-top: -6px; }
+.vacancy-dialog__cap {
+  margin: 0; padding: 12px 22px; color: var(--alert-soft); font-size: 12.5px;
+}
