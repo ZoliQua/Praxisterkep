@@ -1,9 +1,10 @@
 """Parse the NEAK contracted-dental-services registry XLS/XLSX (source C).
 
 This is the denominator for vacancy rates. The sheet lists every contracted
-service (filled and vacant) with provider, site and service-type columns —
-and a physician-name column, which is never read into the output (CLAUDE.md
-rule 3: no personal names, ever).
+service (filled and vacant) with provider, site and service-type columns.
+The physician-name column is kept ONLY for filled praxes (the contracted
+physician's name as published by NEAK on its own public search) — vacancy
+markers and substitutes are never treated as names (CLAUDE.md rule 3).
 
 Columns are located by header name, so all format generations parse with the
 same code (2019-2021: 9 columns without provider code; 2022-: 10 columns).
@@ -19,7 +20,7 @@ from typing import TypedDict
 
 import pandas as pd
 
-from parse_dental import TYPE_MAP, ParseError, _clean
+from parse_dental import TYPE_MAP, ParseError, _clean, canonical_county
 
 # header substrings (case-insensitive) -> canonical field
 HEADER_MAP = {
@@ -29,16 +30,28 @@ HEADER_MAP = {
     "level": ("ellátási szint",),
     "settlement": ("székhelye",),
     "postal": ("irányítószám",),
+    "address": ("rendelő címe",),
+    "doctor": ("orvos neve",),
 }
 
+NOT_A_NAME = {"", "betöltetlen"}
 
-class RegistryEntry(TypedDict):
+
+def clean_doctor(raw) -> str | None:
+    """A physician name, or None for empty cells and vacancy markers."""
+    name = _clean(raw)
+    return name if name.lower() not in NOT_A_NAME else None
+
+
+class RegistryEntry(TypedDict, total=False):
     id: str          # FIN code
     kind: str
     type: str        # adult | child | mixed | school
     county: str
     settlement: str
     postalCode: str
+    address: str
+    doctor: str | None  # contracted physician (filled praxes only)
 
 
 def _locate_columns(header_row: list) -> dict[str, int]:
@@ -84,9 +97,11 @@ def parse(xls_path: Path) -> list[RegistryEntry]:
             id=fin,
             kind="dental",
             type=TYPE_MAP[type_hu],
-            county=_clean(row[cols["county"]]),
+            county=canonical_county(row[cols["county"]]),
             settlement=_clean(row[cols["settlement"]]),
             postalCode=_clean(row[cols["postal"]]).removesuffix(".0"),
+            address=_clean(row[cols["address"]]),
+            doctor=clean_doctor(row[cols["doctor"]]),
         ))
     if not entries:
         raise ParseError(f"no registry entries parsed from {xls_path.name}")

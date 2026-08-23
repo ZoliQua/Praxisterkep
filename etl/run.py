@@ -82,7 +82,8 @@ def main() -> None:
         attach_geocodes(vacant + dissolved, cache)
 
         print(f"[4/5] validate {kind}")
-        validate_records(vacant + dissolved, previous_month_count(month, kind))
+        validate_records(vacant + dissolved, previous_month_count(month, kind),
+                         vacant_count=len(vacant))
         snapshot = build_snapshot(month, kind, vacant, dissolved, registry)
         validate_snapshot(snapshot)
         snapshots[kind] = snapshot

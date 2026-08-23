@@ -55,5 +55,9 @@ def test_parse_registry_filters_and_shape():
         {"kshId": "17464", "name": "Kásád"},
         {"kshId": "31927", "name": "Beremend"},
     ]
+    by_id = {e["id"]: e for e in entries}
+    # BETÖLTETLEN marker is not a name; real names stay on filled praxes
+    assert by_id["020090006"]["doctor"] is None
+    assert by_id["120090001"]["doctor"] == "Dr. Minta Elek"
     for e in entries:
-        assert "doctor" not in e and "provider" not in e and "phone" not in e
+        assert "provider" not in e and "phone" not in e

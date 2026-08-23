@@ -37,6 +37,43 @@ TYPE_MAP = {
     "Iskolai, ifjúsági": "school",
 }
 
+COUNTY_CANONICAL = {
+    "BARANYA": "Baranya",
+    "BÁCS-KISKUN": "Bács-Kiskun",
+    "BÉKÉS": "Békés",
+    "BORSOD-ABAUJ-ZEMPLÉN": "Borsod-Abaúj-Zemplén",
+    "BORSOD-ABAÚJ-ZEMPLÉN": "Borsod-Abaúj-Zemplén",
+    "BUDAPEST": "Budapest",
+    "CSONGRÁD-CSANÁD": "Csongrád-Csanád",
+    "CSONGRÁD": "Csongrád-Csanád",  # pre-2020 county name
+    "FEJÉR": "Fejér",
+    "GYŐR-MOSON-SOPRON": "Győr-Moson-Sopron",
+    "HAJDU-BIHAR": "Hajdú-Bihar",
+    "HAJDÚ-BIHAR": "Hajdú-Bihar",
+    "HEVES": "Heves",
+    "JÁSZ-NAGYKUN-SZOLNOK": "Jász-Nagykun-Szolnok",
+    "KOMÁROM-ESZTERGOM": "Komárom-Esztergom",
+    "NOGRÁD": "Nógrád",
+    "NÓGRÁD": "Nógrád",
+    "PEST": "Pest",
+    "SOMOGY": "Somogy",
+    "SZABOLCS-SZATMÁR-BEREG": "Szabolcs-Szatmár-Bereg",
+    "TOLNA": "Tolna",
+    "VAS": "Vas",
+    "VESZPRÉM": "Veszprém",
+    "ZALA": "Zala",
+}
+
+
+def canonical_county(raw: str) -> str:
+    """Normalize county names across generations (case, accents, the 2020
+    Csongrád -> Csongrád-Csanád rename)."""
+    name = _clean(raw).upper()
+    if name not in COUNTY_CANONICAL:
+        raise ParseError(f"unknown county name {raw!r}")
+    return COUNTY_CANONICAL[name]
+
+
 HU_MONTHS = {
     "január": 1, "február": 2, "március": 3, "április": 4,
     "május": 5, "június": 6, "július": 7, "augusztus": 8,
@@ -169,7 +206,7 @@ def _rows_to_vacant(rows: list[list], source_name: str) -> list[VacantPraxis]:
             kind="dental",
             type=TYPE_MAP[type_hu],
             status="vacant",
-            county=_clean(row[1]),
+            county=canonical_county(row[1]),
             countyCode=_clean(row[0]),
             sites=sites,
             vacantSince=_parse_date(row[5]),
@@ -194,7 +231,7 @@ def parse_dissolved(pdf_path: Path) -> list[VacantPraxis]:
             kind="dental",
             type="mixed",  # list carries no type column; the registry overrides
             status="dissolved",
-            county=_clean(row[1]),
+            county=canonical_county(row[1]),
             countyCode=_clean(row[0]),
             sites=[Site(
                 postalCode=_clean(row[3]),
