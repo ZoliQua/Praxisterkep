@@ -37,9 +37,9 @@ export function countyRanking(snapshot: Snapshot): CountyRankingRow[] {
   return snapshot.counties
     .map((c) => ({
       name: c.name,
-      rate: c.vacancyRate,
+      rate: c.vacancyRate ?? 0,
       vacantAll: c.vacant + c.dissolved,
-      total: c.total,
+      total: c.total ?? 0,
     }))
     .sort((a, b) => b.rate - a.rate);
 }

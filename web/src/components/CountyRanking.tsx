@@ -13,7 +13,7 @@ const WIDTH = 900;
 export function CountyRanking() {
   const snapshot = useSnapshot()!;
   const rows = useMemo(() => countyRanking(snapshot), [snapshot]);
-  const nationalRate = snapshot.national.vacancyRate;
+  const nationalRate = snapshot.national.vacancyRate ?? 0;
 
   const maxRate = rows[0]?.rate ?? 0;
   const x = scaleLinear()

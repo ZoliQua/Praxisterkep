@@ -29,26 +29,26 @@ export interface Praxis {
 }
 
 export interface TypeCount {
-  total: number;
+  total: number | null;
   vacant: number;
 }
 
 export interface CountyAggregate {
   name: string;
-  total: number;
+  total: number | null;
   vacant: number;
   dissolved: number;
   populationVacant: number;
   populationDissolved: number;
-  vacancyRate: number;
+  vacancyRate: number | null;
   byType: Record<string, TypeCount>;
 }
 
 export interface NationalAggregate {
-  totalDistricts: number;
+  totalDistricts: number | null;
   vacant: number;
   dissolved: number;
-  vacancyRate: number;
+  vacancyRate: number | null;
   populationVacant: number;
   populationDissolved: number;
   byType: Record<string, TypeCount>;
@@ -63,6 +63,19 @@ export interface SettlementEntry {
   affectedByDissolved: boolean;
 }
 
+export interface FilledPraxis {
+  id: string;
+  type: PraxisType;
+  county: string;
+  settlement: string;
+  postalCode: string;
+  address: string;
+  district?: string;
+  servedSettlements?: string[];
+  /** contracted physician as published by NEAK (filled praxes only) */
+  doctor?: string;
+}
+
 export interface Snapshot {
   schemaVersion: number;
   kind: PraxisKind;
@@ -72,12 +85,13 @@ export interface Snapshot {
   national: NationalAggregate;
   counties: CountyAggregate[];
   praxes: Praxis[];
+  filledPraxes: FilledPraxis[];
   settlements: SettlementEntry[];
 }
 
 export interface TimeseriesMonth {
   month: string;
-  totalDistricts: number;
+  totalDistricts: number | null;
   vacant: number;
   dissolved: number;
   populationVacant: number;

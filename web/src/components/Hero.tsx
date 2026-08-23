@@ -48,7 +48,7 @@ export function Hero() {
           </div>
         )}
         <div className="stat">
-          <div className="stat__value stat__value--accent">{formatPercent(national.vacancyRate)}</div>
+          <div className="stat__value stat__value--accent">{formatPercent(national.vacancyRate ?? 0)}</div>
           <div className="stat__label">{tKind('hero.vacancyRate', kind)}</div>
         </div>
         <div className="stat">

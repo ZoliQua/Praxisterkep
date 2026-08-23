@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import type { LatestFile, PraxisKind, Snapshot, Timeseries, TimeseriesMonth } from '../types';
-import type { History, HistoryEntry } from '../lib/statsSelectors';
+import type { History, HistoryEntry, Persistence } from '../lib/statsSelectors';
 import type { TypeFilter } from '../lib/selectors';
 
 export type MapMetric = 'rate' | 'population';
@@ -61,7 +61,11 @@ export function useTimeseriesMonths(): TimeseriesMonth[] {
 }
 
 export function useHistoryEntries(): HistoryEntry[] {
-  return useAppStore((s) => s.history?.kinds[s.kind] ?? EMPTY_HISTORY);
+  return useAppStore((s) => s.history?.kinds[s.kind]?.months ?? EMPTY_HISTORY);
+}
+
+export function usePersistence(): Persistence | null {
+  return useAppStore((s) => s.history?.kinds[s.kind]?.persistence ?? null);
 }
 
 const EMPTY_MONTHS: TimeseriesMonth[] = [];

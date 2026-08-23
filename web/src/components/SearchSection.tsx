@@ -3,7 +3,22 @@ import { t, tKind } from '../lib/i18n';
 import { formatDuration, formatMonth, formatNumber, monthsBetween } from '../lib/format';
 import { praxesById, primarySite, searchSettlements } from '../lib/selectors';
 import { useAppStore, useSnapshot } from '../store/useAppStore';
-import type { Praxis, SettlementEntry } from '../types';
+import type { FilledPraxis, Praxis, SettlementEntry } from '../types';
+
+const FILLED_LIMIT = 10;
+
+function FilledRow({ praxis }: { praxis: FilledPraxis }) {
+  return (
+    <div className="settlement-card__row">
+      <span className="badge badge--ok">{t(`praxisTypes.${praxis.type}`)}</span>
+      <span className="praxis-line">
+        {praxis.doctor && <strong>{praxis.doctor}</strong>}
+        {praxis.doctor && ' · '}
+        {praxis.postalCode} {praxis.settlement}, {praxis.address}
+      </span>
+    </div>
+  );
+}
 
 function PraxisRow({ praxis, month }: { praxis: Praxis; month: string }) {
   const site = primarySite(praxis);
@@ -54,6 +69,14 @@ export function SearchSection() {
 
   // GP settlement entries are coverage-based, dental ones are seat-based
   const filledLabel = kind === 'gp' ? t('search.filledCoverage') : t('search.filledSeat');
+  const filledHere = useMemo(() => {
+    if (!selected) return [];
+    return snapshot.filledPraxes.filter((p) =>
+      kind === 'gp'
+        ? (p.servedSettlements ?? [p.settlement]).includes(selected.name)
+        : p.settlement === selected.name,
+    );
+  }, [snapshot, selected, kind]);
 
   return (
     <section className="section container" id="nalam">
@@ -117,6 +140,26 @@ export function SearchSection() {
             <div className="settlement-card__row">
               <span className="praxis-line">{t('search.reminder')}</span>
             </div>
+          )}
+          {filledHere.length > 0 && (
+            <>
+              <h4 className="settlement-card__subhead">
+                {kind === 'gp' ? t('search.filledListTitleCoverage') : t('search.filledListTitle')}
+              </h4>
+              {filledHere.slice(0, FILLED_LIMIT).map((p) => (
+                <FilledRow key={p.id} praxis={p} />
+              ))}
+              {filledHere.length > FILLED_LIMIT && (
+                <div className="settlement-card__row">
+                  <span className="praxis-line">
+                    {t('search.filledMore', { n: filledHere.length - FILLED_LIMIT })}
+                  </span>
+                </div>
+              )}
+              <div className="settlement-card__row">
+                <span className="praxis-line praxis-line--faint">{t('search.doctorNote')}</span>
+              </div>
+            </>
           )}
         </div>
       )}
