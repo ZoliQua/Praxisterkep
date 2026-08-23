@@ -96,7 +96,10 @@
   "ranking": {
     "heading": "Vármegyei rangsor",
     "explain": "A betöltetlen (fogorvosi ágon a megszűnt szerződésűekkel együtt számított) körzetek aránya vármegyénként. A számok a sávok végén: betöltetlen / összes körzet.",
-    "national": "országos átlag"
+    "national": "országos átlag",
+    "filterAll": "Összesen",
+    "filterYears": "{n}+ éve",
+    "filterNote": "Csak a legalább {n} éve betöltetlen körzetekkel számolva."
   },
   "methodology": {
     "heading": "Módszertan",
@@ -165,7 +168,23 @@
     "longestTitle": "A legrégebb óta üres körzetek",
     "longestExplain": "A jelenleg betöltetlen körzetek közül a leghosszabb ideje üresek — a betöltetlenség kezdete a NEAK-lista szerint.",
     "longestSince": "óta",
-    "longestPop": "fő"
+    "longestPop": "fő",
+    "pagePrev": "Előző oldal",
+    "pageNext": "Következő oldal",
+    "pageOf": "{from}–{to} / {n}",
+    "openTable": "Teljes betöltetlenségi táblázat",
+    "tableTitle": "Betöltetlen körzetek — {month}",
+    "tableCount": "{n} körzet",
+    "tableClose": "Bezárás",
+    "thSettlement": "Település",
+    "thCounty": "Vármegye",
+    "thDistrict": "Járás",
+    "thType": "Típus",
+    "thSince": "Betöltetlen kezdete",
+    "thDuration": "Időtartam",
+    "thPopulation": "Lakosság",
+    "thStatus": "Státusz",
+    "sortHint": "Kattints az oszlopfejlécre a rendezéshez."
   },
   "why": {
     "heading": "Miért számít az alapellátás?",

@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { scaleLinear } from 'd3';
 import { t } from '../lib/i18n';
 import { formatPercent } from '../lib/format';
@@ -9,22 +9,45 @@ const ROW_H = 26;
 const LABEL_W = 190;
 const VALUE_W = 120;
 const WIDTH = 900;
+const YEAR_OPTIONS = [0, 1, 2, 3, 5, 10];
 
 export function CountyRanking() {
   const snapshot = useSnapshot()!;
-  const rows = useMemo(() => countyRanking(snapshot), [snapshot]);
-  const nationalRate = snapshot.national.vacancyRate ?? 0;
+  const [minYears, setMinYears] = useState(0);
+  const rows = useMemo(
+    () => countyRanking(snapshot, minYears * 12),
+    [snapshot, minYears],
+  );
+  // the national reference line follows the same duration filter
+  const nationalRate = useMemo(() => {
+    const total = snapshot.national.totalDistricts;
+    if (!total) return 0;
+    return rows.reduce((sum, r) => sum + r.vacantAll, 0) / total;
+  }, [snapshot, rows]);
 
   const maxRate = rows[0]?.rate ?? 0;
   const x = scaleLinear()
-    .domain([0, maxRate])
+    .domain([0, Math.max(maxRate, 1e-9)])
     .range([0, WIDTH - LABEL_W - VALUE_W]);
   const height = rows.length * ROW_H + 20;
 
   return (
     <section className="section container" id="rangsor">
       <h2 className="section__heading">{t('ranking.heading')}</h2>
-      <p className="section__explain">{t('ranking.explain')}</p>
+      <p className="section__explain">
+        {t('ranking.explain')}{' '}
+        {minYears > 0 && t('ranking.filterNote', { n: minYears })}
+      </p>
+      <div className="map-controls">
+        <div className="seg" role="group">
+          {YEAR_OPTIONS.map((y) => (
+            <button key={y} aria-pressed={minYears === y}
+              onClick={() => setMinYears(y)}>
+              {y === 0 ? t('ranking.filterAll') : t('ranking.filterYears', { n: y })}
+            </button>
+          ))}
+        </div>
+      </div>
       <div className="ranking-chart">
         <svg viewBox={`0 0 ${WIDTH} ${height}`} role="img" aria-label={t('ranking.heading')}>
           {rows.map((r, i) => {

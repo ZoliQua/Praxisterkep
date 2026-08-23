@@ -106,6 +106,17 @@ def validate_snapshot(snapshot: dict) -> None:
             f"praxis list length {praxis_count} != vacant+dissolved "
             f"{nat['vacant'] + nat['dissolved']}"
         )
+    # per-county praxis counts must match the aggregates (frontend derives
+    # duration-filtered rankings from the praxis list)
+    per_county: dict[str, int] = {}
+    for p in snapshot["praxes"]:
+        per_county[p["county"]] = per_county.get(p["county"], 0) + 1
+    for c in counties:
+        if per_county.get(c["name"], 0) != c["vacant"] + c["dissolved"]:
+            raise ValidationError(
+                f"county {c['name']}: praxis count {per_county.get(c['name'], 0)} "
+                f"!= aggregate {c['vacant'] + c['dissolved']}"
+            )
     # names are allowed ONLY on filled praxes (NEAK-published contracted
     # physician); vacant/dissolved records and everything else stay name-free
     guarded = {k: v for k, v in snapshot.items() if k != "filledPraxes"}
