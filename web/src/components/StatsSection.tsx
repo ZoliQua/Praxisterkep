@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { t, tKind } from '../lib/i18n';
 import { formatDuration, formatMonth, formatNumber, formatPercent } from '../lib/format';
 import {
+  countyChange,
   countyNames,
   countySeries,
   flowPoints,
@@ -13,10 +14,13 @@ import {
   vacantSeries,
   type HistoryEntry,
 } from '../lib/statsSelectors';
-import { useAppStore, useHistoryEntries } from '../store/useAppStore';
+import { useAppStore, useHistoryEntries, usePersistence, useSnapshot } from '../store/useAppStore';
+import { primarySite } from '../lib/selectors';
 import { TimeSeriesChart, type ChartSeries } from './charts/TimeSeriesChart';
 import { FlowChart } from './charts/FlowChart';
 import { DurationHistogram } from './charts/DurationHistogram';
+import { CountyChangeChart } from './charts/CountyChangeChart';
+import { monthsBetween } from '../lib/format';
 
 // validated categorical palette (dark surface #101823) — fixed assignment
 const TYPE_COLORS: Record<string, string> = {
@@ -48,10 +52,20 @@ function formatCompactAxis(v: number): string {
 export function StatsSection() {
   const kind = useAppStore((s) => s.kind);
   const entries = useHistoryEntries();
+  const persistence = usePersistence();
+  const snapshot = useSnapshot();
   const [county, setCounty] = useState<string>('');
 
   const counties = useMemo(() => countyNames(entries), [entries]);
   const change = useMemo(() => overallChange(entries), [entries]);
+  const changeRows = useMemo(() => countyChange(entries), [entries]);
+  const longest = useMemo(() => {
+    if (!snapshot) return [];
+    return [...snapshot.praxes]
+      .filter((p) => p.status === 'vacant')
+      .sort((a, b) => a.vacantSince.localeCompare(b.vacantSince))
+      .slice(0, 10);
+  }, [snapshot]);
   const lineColor = KIND_LINE[kind];
 
   if (entries.length === 0) return null;
@@ -104,6 +118,20 @@ export function StatsSection() {
             </div>
             <div className="stat__label">{tKind('stats.populationNow', kind)}</div>
           </div>
+          {persistence && (
+            <div className="stat">
+              <div className="stat__value stat__value--soft">
+                {formatPercent(persistence.stillVacant / persistence.firstVacant, 0)}
+              </div>
+              <div className="stat__label">
+                {t('stats.persistence', {
+                  month: formatMonth(persistence.firstMonth),
+                  still: persistence.stillVacant,
+                  first: persistence.firstVacant,
+                })}
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -198,6 +226,48 @@ export function StatsSection() {
           </figcaption>
           <DurationHistogram buckets={latest.durationBuckets} color={lineColor} />
         </figure>
+        {changeRows.length > 0 && change && (
+          <figure className="chart-card chart-card--tall">
+            <figcaption>
+              <h3>{t('stats.countyChangeTitle', {
+                first: formatMonth(change.firstMonth),
+                last: formatMonth(change.lastMonth),
+              })}</h3>
+              <p>{t('stats.countyChangeExplain')}</p>
+            </figcaption>
+            <CountyChangeChart rows={changeRows} color={lineColor}
+              firstMonth={change.firstMonth} lastMonth={change.lastMonth} />
+          </figure>
+        )}
+
+        {snapshot && longest.length > 0 && (
+          <figure className="chart-card chart-card--tall">
+            <figcaption>
+              <h3>{t('stats.longestTitle')}</h3>
+              <p>{t('stats.longestExplain')}</p>
+            </figcaption>
+            <ol className="longest-list">
+              {longest.map((p) => {
+                const site = primarySite(p);
+                return (
+                  <li key={p.id}>
+                    <span className="longest-list__place">
+                      <strong>{site?.settlement}</strong>
+                      <span>{p.county} · {t(`praxisTypes.${p.type}`)}</span>
+                    </span>
+                    <span className="longest-list__time">
+                      <strong>{formatDuration(monthsBetween(p.vacantSince, snapshot.month))}</strong>
+                      <span>
+                        {formatMonth(p.vacantSince)} {t('stats.longestSince')}
+                        {p.population ? ` · ${formatNumber(p.population)} ${t('stats.longestPop')}` : ''}
+                      </span>
+                    </span>
+                  </li>
+                );
+              })}
+            </ol>
+          </figure>
+        )}
       </div>
 
       <details className="stats-table">

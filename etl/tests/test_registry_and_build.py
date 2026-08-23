@@ -9,12 +9,16 @@ from validate import ValidationError, validate_records, validate_snapshot
 FIXTURES = Path(__file__).parent / "fixtures"
 
 
-def test_registry_drops_names_and_filters():
+def test_registry_filters_and_doctor_policy():
     entries = parse_registry(FIXTURES / "dental_registry_sample.xlsx")
     # Szakellátás and Ügyelet rows excluded, duplicate FIN collapsed
     assert {e["id"] for e in entries} == {"020066098", "020066020", "200066001"}
+    by_id = {e["id"]: e for e in entries}
+    # filled praxis keeps the NEAK-published contracted physician...
+    assert by_id["020066098"]["doctor"] == "Dr. Minta Aladár"
+    # ...a vacant one (empty cell) never yields a name
+    assert by_id["020066020"]["doctor"] is None
     for e in entries:
-        assert "doctor" not in e
         assert e["type"] in ("adult", "child", "mixed", "school")
 
 

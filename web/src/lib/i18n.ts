@@ -1,8 +1,8 @@
 import hu from '../i18n/hu.json';
 
-type Dict = { [key: string]: string | Dict };
+type Dict = { [key: string]: string | string[] | Dict };
 
-const dict: Dict = hu as Dict;
+const dict: Dict = hu as unknown as Dict;
 
 /** Look up a dot-separated key in the active locale (hu only in MVP). */
 /** t() with the active kind's adjective/noun pre-filled ({kind}, {doctor}). */
@@ -15,10 +15,10 @@ export function tKind(key: string, kind: string, params?: Record<string, string 
 }
 
 export function t(key: string, params?: Record<string, string | number>): string {
-  let node: string | Dict | undefined = dict;
+  let node: string | string[] | Dict | undefined = dict;
   for (const part of key.split('.')) {
     if (typeof node !== 'object' || node === undefined) break;
-    node = node[part];
+    node = Array.isArray(node) ? node[Number(part)] : node[part];
   }
   if (typeof node !== 'string') return key; // visible fallback: the key itself
   if (!params) return node;

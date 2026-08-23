@@ -23,7 +23,11 @@ class ValidationError(Exception):
 
 
 def previous_month_count(month: str, kind: str = "dental") -> int | None:
-    """Vacant+dissolved count from the newest archived month before `month`."""
+    """Vacant count from the newest archived month before `month`.
+
+    Vacant-only on purpose: the dissolved list is not published every month,
+    so including it would trip the ratio guard whenever availability changes.
+    """
     older = sorted(
         d.name for d in DATA_DIR.iterdir()
         if d.is_dir() and MONTH_RE.match(d.name) and d.name < month
@@ -34,7 +38,7 @@ def previous_month_count(month: str, kind: str = "dental") -> int | None:
     snap = json.loads(
         (DATA_DIR / older[-1] / f"{kind}.json").read_text(encoding="utf-8")
     )
-    return snap["national"]["vacant"] + snap["national"]["dissolved"]
+    return snap["national"]["vacant"]
 
 
 def validate_statement_month(statement_month: str, requested_month: str) -> None:
@@ -45,11 +49,14 @@ def validate_statement_month(statement_month: str, requested_month: str) -> None
         )
 
 
-def validate_records(records: list[dict], previous_count: int | None) -> None:
+def validate_records(records: list[dict], previous_count: int | None,
+                     vacant_count: int | None = None) -> None:
+    """Schema checks on all records; the row-count ratio compares vacant-only
+    counts when `vacant_count` is given (see previous_month_count)."""
     if not records:
         raise ValidationError("empty snapshot")
     if previous_count:
-        ratio = len(records) / previous_count
+        ratio = (vacant_count if vacant_count is not None else len(records)) / previous_count
         if not 0.85 <= ratio <= 1.15:
             raise ValidationError(
                 f"row count changed {ratio:.0%} vs previous month ({previous_count} "
@@ -99,7 +106,14 @@ def validate_snapshot(snapshot: dict) -> None:
             f"praxis list length {praxis_count} != vacant+dissolved "
             f"{nat['vacant'] + nat['dissolved']}"
         )
-    _assert_no_name_fields(snapshot)
+    # names are allowed ONLY on filled praxes (NEAK-published contracted
+    # physician); vacant/dissolved records and everything else stay name-free
+    guarded = {k: v for k, v in snapshot.items() if k != "filledPraxes"}
+    _assert_no_name_fields(guarded)
+    for f in snapshot.get("filledPraxes", []):
+        doc = f.get("doctor")
+        if doc is not None and (not doc or doc.strip().lower() == "betöltetlen"):
+            raise ValidationError(f"filled praxis {f['id']}: bad doctor value {doc!r}")
 
 
 def _assert_no_name_fields(obj, path="$") -> None:

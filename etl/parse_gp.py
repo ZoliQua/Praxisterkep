@@ -11,9 +11,10 @@ C' (gp_registry.xls) — 13 columns, one row per praxis:
    postal | settlement | address | phone | served settlements (KSH code+name
    pairs) | district (járás) name | physician name
 
-The registry's physician column (which also carries a BETÖLTETLEN marker) is
-dropped at parse time — the vacant PDF is the authoritative status source and
-names must never leave this module (CLAUDE.md rule 3).
+The registry's physician column carries a BETÖLTETLEN marker for vacant
+praxes; real names are kept only for filled praxes (as NEAK publishes them on
+its own public search). The vacant PDF stays the authoritative status source;
+vacant/dissolved records never carry a name (CLAUDE.md rule 3).
 
 County names in the GP files are uppercase and partially accent-deficient
 (NOGRÁD, HAJDU-BIHAR); they are normalized to the canonical forms used by the
@@ -35,45 +36,12 @@ from parse_dental import (
     _iter_rows,
     _parse_date,
     _parse_population,
+    canonical_county,
 )
 
 GP_TYPE_MAP = {"F": "adult", "G": "child", "V": "mixed"}
 
-COUNTY_CANONICAL = {
-    "BARANYA": "Baranya",
-    "BÁCS-KISKUN": "Bács-Kiskun",
-    "BÉKÉS": "Békés",
-    "BORSOD-ABAUJ-ZEMPLÉN": "Borsod-Abaúj-Zemplén",
-    "BORSOD-ABAÚJ-ZEMPLÉN": "Borsod-Abaúj-Zemplén",
-    "BUDAPEST": "Budapest",
-    "CSONGRÁD-CSANÁD": "Csongrád-Csanád",
-    "CSONGRÁD": "Csongrád-Csanád",  # pre-2020 county name
-    "FEJÉR": "Fejér",
-    "GYŐR-MOSON-SOPRON": "Győr-Moson-Sopron",
-    "HAJDU-BIHAR": "Hajdú-Bihar",
-    "HAJDÚ-BIHAR": "Hajdú-Bihar",
-    "HEVES": "Heves",
-    "JÁSZ-NAGYKUN-SZOLNOK": "Jász-Nagykun-Szolnok",
-    "KOMÁROM-ESZTERGOM": "Komárom-Esztergom",
-    "NOGRÁD": "Nógrád",
-    "NÓGRÁD": "Nógrád",
-    "PEST": "Pest",
-    "SOMOGY": "Somogy",
-    "SZABOLCS-SZATMÁR-BEREG": "Szabolcs-Szatmár-Bereg",
-    "TOLNA": "Tolna",
-    "VAS": "Vas",
-    "VESZPRÉM": "Veszprém",
-    "ZALA": "Zala",
-}
-
 _SERVED_ITEM = re.compile(r"^(\d{5})\s+(.+)$")
-
-
-def canonical_county(raw: str) -> str:
-    name = _clean(raw).upper()
-    if name not in COUNTY_CANONICAL:
-        raise ParseError(f"unknown county name {raw!r}")
-    return COUNTY_CANONICAL[name]
 
 
 def parse_vacant(pdf_path: Path) -> list[VacantPraxis]:
@@ -124,6 +92,8 @@ def parse_registry(xls_path: Path) -> list[dict]:
 
     from parse_dental import _cell
 
+    from parse_registry import clean_doctor
+
     header_map = {
         "county": ("megye", "vármegye"),
         "hsz": ("hsz kód",),
@@ -131,8 +101,10 @@ def parse_registry(xls_path: Path) -> list[dict]:
         "form": ("ellátási formája",),
         "postal": ("irányítószám",),
         "settlement": ("székhelye",),
+        "address": ("rendelő címe",),
         "served": ("ellátandó települések",),
         "district": ("járás neve",),
+        "doctor": ("háziorvos neve", "szolgálat orvosa"),
     }
     df = pd.read_excel(xls_path, header=None, dtype=object)
     header_idx = next(
@@ -179,8 +151,10 @@ def parse_registry(xls_path: Path) -> list[dict]:
             "county": canonical_county(_cell(row[cols["county"]])),
             "settlement": _clean(row[cols["settlement"]]),
             "postalCode": _clean(row[cols["postal"]]).removesuffix(".0"),
+            "address": _clean(row[cols["address"]]),
             "district": _clean(row[cols["district"]]).removesuffix(" járás"),
             "servedSettlements": served,
+            "doctor": clean_doctor(row[cols["doctor"]]),
         })
     if not entries:
         raise ParseError(f"no registry entries parsed from {xls_path.name}")

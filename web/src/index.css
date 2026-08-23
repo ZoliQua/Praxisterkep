@@ -355,3 +355,100 @@ a:hover { text-decoration: underline; }
 }
 .stats-table th:first-child, .stats-table td:first-child { text-align: left; }
 .stats-table th { color: var(--ink-faint); font-weight: 500; }
+
+/* ---------- county markers (labels + column view) ---------- */
+.county-marker {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  pointer-events: auto; cursor: pointer; text-align: center;
+}
+.county-marker__bar {
+  width: 14px; border-radius: 4px 4px 0 0;
+  background: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--bg) 55%, transparent);
+}
+.county-marker__value {
+  font: 600 11.5px var(--font-body); color: var(--ink);
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  border-radius: 6px; padding: 1px 6px; white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.county-marker__name {
+  font: 500 10.5px var(--font-body); letter-spacing: 0.04em;
+  color: var(--ink-dim); text-transform: uppercase;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.8); white-space: nowrap;
+}
+.map-check {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 13px; color: var(--ink-dim); cursor: pointer; user-select: none;
+}
+.map-check input { accent-color: var(--accent); width: 15px; height: 15px; }
+
+/* ---------- why (alapellátás) section ---------- */
+.why__lead { max-width: 72ch; color: var(--ink-dim); font-size: 16.5px; line-height: 1.65; }
+.why__pillars {
+  display: grid; gap: 18px; margin: 30px 0 10px;
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+}
+.why-pillar {
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--bg-raised); padding: 22px;
+}
+.why-pillar__icon { width: 44px; height: 44px; color: var(--accent); margin-bottom: 12px; }
+.why-pillar__icon svg { width: 100%; height: 100%; }
+.why-pillar h3 { font-size: 18px; font-stretch: 108%; }
+.why-pillar p { margin: 0; color: var(--ink-dim); font-size: 14px; line-height: 1.6; }
+.why__chain-title {
+  font-size: 20px; font-stretch: 108%; margin-top: 36px;
+}
+.why-chain {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+  margin: 14px 0;
+}
+.why-chain__step { display: flex; align-items: center; gap: 8px; }
+.why-chain__node {
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--line));
+  color: var(--ink); background: color-mix(in srgb, var(--accent) 10%, var(--bg-raised));
+  border-radius: 999px; padding: 7px 16px; font-size: 13.5px; white-space: nowrap;
+}
+.why-chain__arrow { width: 32px; height: 12px; color: var(--accent); flex: none; }
+.why-chain--broken .why-chain__node {
+  border-color: color-mix(in srgb, var(--alert) 45%, var(--line));
+  background: color-mix(in srgb, var(--alert) 9%, var(--bg-raised));
+  color: var(--ink-dim);
+}
+.why-chain--broken .why-chain__node:first-child { color: var(--alert); font-weight: 600; }
+.why-chain--broken .why-chain__arrow { color: var(--alert); }
+.why__disclaimer { color: var(--ink-faint); font-size: 12.5px; max-width: 70ch; }
+
+/* ---------- stats additions ---------- */
+.chart__dot {
+  display: inline-block; width: 10px; height: 10px; border-radius: 50%;
+}
+.chart__dot--hollow {
+  background: var(--bg-raised); border: 2px solid var(--ink-faint);
+  width: 8px; height: 8px;
+}
+.longest-list {
+  list-style: none; margin: 4px 0 8px; padding: 0;
+  counter-reset: longest;
+}
+.longest-list li {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+  padding: 8px 0 8px 30px; border-top: 1px solid var(--line);
+  position: relative; counter-increment: longest; font-size: 13.5px;
+}
+.longest-list li::before {
+  content: counter(longest) '.';
+  position: absolute; left: 4px; color: var(--ink-faint);
+  font-family: var(--font-display); font-weight: 700;
+}
+.longest-list li:first-child { border-top: 0; }
+.longest-list__place, .longest-list__time { display: flex; flex-direction: column; }
+.longest-list__place span, .longest-list__time span { color: var(--ink-faint); font-size: 12px; }
+.longest-list__time { text-align: right; }
+.longest-list__time strong { color: var(--alert-soft); font-variant-numeric: tabular-nums; }
+.settlement-card__subhead {
+  margin: 18px 0 4px; font-size: 13px; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--ink-faint); font-family: var(--font-body); font-weight: 600;
+}
+.praxis-line--faint { color: var(--ink-faint); font-size: 12px; }

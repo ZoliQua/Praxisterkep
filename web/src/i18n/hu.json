@@ -26,7 +26,8 @@
     "ranking": "Rangsor",
     "methodology": "Módszertan",
     "sources": "Források",
-    "stats": "Statisztika"
+    "stats": "Statisztika",
+    "why": "Miért fontos?"
   },
   "hero": {
     "vacant": "betöltetlen {kind} körzet",
@@ -67,7 +68,12 @@
     "countyDistricts": "körzet",
     "countyVacant": "betöltetlen",
     "countyDissolved": "megszűnt",
-    "fő": "fő"
+    "fő": "fő",
+    "viewPoints": "Pontok",
+    "viewColumns": "Oszlopok",
+    "toggleNames": "Megyenevek",
+    "toggleDissolved": "Megszűnt körzetek",
+    "columnExplain": "Oszlop nézetben minden vármegyén a betöltetlen (+ megszűnt) körzetek száma és aránya olvasható; az oszlop magassága a darabszámmal arányos."
   },
   "search": {
     "heading": "Mi a helyzet nálam?",
@@ -81,7 +87,11 @@
     "noVacant": "A településhez tartozó összes nyilvántartott {kind} körzet betöltött.",
     "county": "vármegye",
     "servedBy": "A körzethez tartozó települések",
-    "reminder": "A betöltetlen körzet lakóit helyettesítő orvos látja el — az ellátás jellemzően más településen vagy szűkebb rendelési időben érhető el."
+    "reminder": "A betöltetlen körzet lakóit helyettesítő orvos látja el — az ellátás jellemzően más településen vagy szűkebb rendelési időben érhető el.",
+    "filledListTitle": "Betöltött körzetek a településen",
+    "filledListTitleCoverage": "A települést ellátó betöltött körzetek",
+    "filledMore": "és további {n} körzet",
+    "doctorNote": "Az orvosok neve a NEAK nyilvános szerződött-szolgáltatói adatbázisából származik."
   },
   "ranking": {
     "heading": "Vármegyei rangsor",
@@ -95,7 +105,7 @@
     "p3": "A betöltetlenségi arány nevezője a NEAK törzslistáiban szereplő alapellátási körzetek egyedi kódjainak (FIN, illetve HSZ) száma. Fogorvosi ágon a felnőtt, gyermek, vegyes és iskolai-ifjúsági szolgálatok számítanak (az ügyeleti és egyetemi szolgálatok, valamint a szakellátás nem); háziorvosi ágon a területi ellátási kötelezettségű (T) körzetek — a területi kötelezettség nélküli (TN) praxisok nem, mivel a betöltetlen listán sem szerepelhetnek.",
     "p4": "A rendelők koordinátáit az OpenStreetMap Nominatim szolgáltatásával határozzuk meg. Ahol a cím nem volt pontosan azonosítható, a település középpontját jelöljük, és ezt a térképen külön jelezzük. Körzethatárok hivatalosan nem publikáltak, ezért a térkép vármegyei szinten színez, a körzeteket pontként mutatja.",
     "p5": "A településkereső a háziorvosi ágon a körzethez tartozó (ellátott) települések hivatalos listáján alapul, így a kistelepülések is megtalálhatók; a fogorvosi ágon a nyilvántartás csak a rendelő székhelyét közli, ezért ott a keresés a rendelők településeire és a megszűnt körzetek ellátott településeire terjed ki.",
-    "p6": "A teljes feldolgozó kód és minden havi nyers forrásfájl nyilvános a projekt tárhelyén — minden szám az eredeti forrásig visszakövethető. Személynevek (orvosok, helyettesítők) sem az adatokban, sem a felületen nem jelennek meg."
+    "p6": "A teljes feldolgozó kód és minden havi nyers forrásfájl nyilvános a projekt tárhelyén — minden szám az eredeti forrásig visszakövethető. A betöltött praxisok szerződött orvosának nevét a NEAK nyilvános szerződött-szolgáltatói adatbázisa alapján jelenítjük meg; betöltetlen vagy megszűnt körzetnél, illetve helyettesítő orvosról személynevet soha nem közlünk."
   },
   "footer": {
     "sources": "Források",
@@ -146,6 +156,48 @@
     "tableToggle": "Adatok táblázatban",
     "thMonth": "Hónap",
     "thRate": "Arány",
-    "thMedian": "Medián (hónap)"
+    "thMedian": "Medián (hónap)",
+    "persistence": "a {month} óta üres körzetek aránya, amelyek ma is üresek ({still}/{first})",
+    "countyChangeTitle": "Vármegyék: {first} vs {last}",
+    "countyChangeExplain": "Betöltetlen körzetek száma vármegyénként az első és a legutóbbi archivált hónapban. A vonal a változás irányát mutatja.",
+    "countyChangeFirst": "első hónap",
+    "countyChangeLast": "most",
+    "longestTitle": "A legrégebb óta üres körzetek",
+    "longestExplain": "A jelenleg betöltetlen körzetek közül a leghosszabb ideje üresek — a betöltetlenség kezdete a NEAK-lista szerint.",
+    "longestSince": "óta",
+    "longestPop": "fő"
+  },
+  "why": {
+    "heading": "Miért számít az alapellátás?",
+    "lead": "A háziorvos, a házi gyermekorvos és a fogorvos az egészségügy kapuja: ők találkoznak először a panasszal, ők ismerik a családot, a kórtörténetet, a település mindennapjait. Az alapellátás nem \u201Ekis orvoslás\u201D — hanem az a szint, ahol a betegségek jelentős része megelőzhető vagy időben elkapható.",
+    "gp": {
+      "title": "Háziorvos",
+      "text": "Krónikus betegségek — magas vérnyomás, cukorbetegség — gondozása, szűrések szervezése, védőoltások, és az első vizsgálat, ami eldönti: kell-e szakellátás. Ahol nincs betöltött körzet, ott a helyettesítés szűkebb rendelési idejébe szorul mindez."
+    },
+    "ped": {
+      "title": "Házi gyermekorvos",
+      "text": "Az életkorhoz kötött státuszvizsgálatok, a védőoltási rend és a fejlődés követése a gyermekkori betegségek korai felismerésének alapja. A gyermekkörzetek betöltetlensége a legfiatalabbakat érinti — ezt a térképen a \u201Egyermek\u201D típusszűrővel nézheted meg.",
+      "linkNote": ""
+    },
+    "dental": {
+      "title": "Fogorvos",
+      "text": "A szuvasodás és a fogágybetegség megelőzhető, a szájüregi daganat korai felismerése életet menthet — mindez a rendszeres fogorvosi szűrésen múlik. Betöltetlen körzetben a lakosság jellemzően csak sürgősségi ellátást ér el helyben: a megelőzés marad el legelőször."
+    },
+    "chainTitle": "A prevenciós lánc",
+    "chainIntro": "Működő körzetben a lánc végigér — betöltetlenben az első szemnél elszakad:",
+    "chainOk": [
+      "Elérhető orvos",
+      "Szűrés, korai felismerés",
+      "Időben kezdett kezelés",
+      "Elkerült szövődmény"
+    ],
+    "chainBroken": [
+      "Betöltetlen körzet",
+      "Kimaradó szűrések",
+      "Későn felismert betegség",
+      "Súlyosabb, költségesebb ellátás"
+    ],
+    "dataTie": "Ma Magyarországon {gpPop} ember él betöltetlen háziorvosi és {dentalPop} ember betöltetlen fogorvosi körzetben — nekik ez a lánc nem magától értetődő.",
+    "disclaimer": "A fenti összefüggések általános népegészségügyi ismeretek; számszerű állítást csak a saját, forrásolt adatainkból teszünk."
   }
 }

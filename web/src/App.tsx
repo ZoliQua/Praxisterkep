@@ -6,11 +6,13 @@ import { MapSection } from './components/MapSection';
 import { SearchSection } from './components/SearchSection';
 import { CountyRanking } from './components/CountyRanking';
 import { StatsSection } from './components/StatsSection';
+import { WhySection } from './components/WhySection';
 import { Methodology } from './components/Methodology';
 import { Footer } from './components/Footer';
 
 const NAV = [
   ['#terkep', 'nav.map'],
+  ['#alapellatas', 'nav.why'],
   ['#nalam', 'nav.mine'],
   ['#rangsor', 'nav.ranking'],
   ['#statisztika', 'nav.stats'],
@@ -52,6 +54,7 @@ export default function App() {
       </nav>
       <Hero />
       <MapSection />
+      <WhySection />
       {/* key remounts the search on kind toggle: its selection belongs to one snapshot */}
       <SearchSection key={kind} />
       <CountyRanking />

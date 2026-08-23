@@ -20,9 +20,21 @@ export interface HistoryEntry {
   flow: { sincePrevMonth: string; entered: number; left: number } | null;
 }
 
+export interface Persistence {
+  firstMonth: string;
+  lastMonth: string;
+  firstVacant: number;
+  stillVacant: number;
+}
+
+export interface KindHistory {
+  months: HistoryEntry[];
+  persistence: Persistence | null;
+}
+
 export interface History {
   schemaVersion: number;
-  kinds: Partial<Record<'dental' | 'gp', HistoryEntry[]>>;
+  kinds: Partial<Record<'dental' | 'gp', KindHistory>>;
 }
 
 /** '2026-08' -> Date(2026, 7, 1) — chart x-positions on a true time axis */
@@ -115,4 +127,25 @@ export function overallChange(entries: HistoryEntry[]) {
     delta: last.vacant - first.vacant,
     ratio: first.vacant === 0 ? null : (last.vacant - first.vacant) / first.vacant,
   };
+}
+
+export interface CountyChangeRow {
+  county: string;
+  firstValue: number;
+  lastValue: number;
+}
+
+/** First vs latest archived month per county, sorted by latest desc. */
+export function countyChange(entries: HistoryEntry[]): CountyChangeRow[] {
+  if (entries.length < 2) return [];
+  const first = entries[0];
+  const last = entries[entries.length - 1];
+  const names = new Set([...Object.keys(first.byCounty), ...Object.keys(last.byCounty)]);
+  return [...names]
+    .map((county) => ({
+      county,
+      firstValue: first.byCounty[county]?.vacant ?? 0,
+      lastValue: last.byCounty[county]?.vacant ?? 0,
+    }))
+    .sort((a, b) => b.lastValue - a.lastValue);
 }

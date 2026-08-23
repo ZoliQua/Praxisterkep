@@ -154,6 +154,26 @@ def build_snapshot(
         ),
     }
 
+    filled = []
+    for fin in sorted(set(reg_by_fin) - vacant_fins - dissolved_fins):
+        e = reg_by_fin[fin]
+        entry = {
+            "id": fin,
+            "type": e["type"],
+            "county": e["county"],
+            "settlement": e["settlement"],
+            "postalCode": e.get("postalCode", ""),
+            "address": e.get("address", ""),
+        }
+        if e.get("district"):
+            entry["district"] = e["district"]
+        if e.get("servedSettlements"):
+            entry["servedSettlements"] = _served_names(e)
+        # contracted physician as published by NEAK — filled praxes only
+        if e.get("doctor"):
+            entry["doctor"] = e["doctor"]
+        filled.append(entry)
+
     return {
         "schemaVersion": SCHEMA_VERSION,
         "kind": kind,
@@ -163,6 +183,7 @@ def build_snapshot(
         "national": national,
         "counties": county_list,
         "praxes": sorted(vacant + dissolved, key=_praxis_key),
+        "filledPraxes": filled,
         "settlements": sorted(settlements, key=lambda s: s["name"]),
     }
 
@@ -373,18 +394,38 @@ def _iter_month_snapshots(kind: str):
 
 def build_history() -> Path:
     """Regenerate data/history.json from every archived monthly snapshot."""
-    out: dict = {"schemaVersion": 1, "kinds": {}}
+    out: dict = {"schemaVersion": 2, "kinds": {}}
     for kind in ("dental", "gp"):
         entries = []
+        snapshots = list(_iter_month_snapshots(kind))
         previous = None
-        for snap in _iter_month_snapshots(kind):
+        for snap in snapshots:
             entries.append(history_entry(snap, previous))
             previous = snap
         if entries:
-            out["kinds"][kind] = entries
+            out["kinds"][kind] = {
+                "months": entries,
+                "persistence": _persistence(snapshots),
+            }
     path = DATA_DIR / "history.json"
     _dump(path, out)
     return path
+
+
+def _persistence(snapshots: list[dict]) -> dict | None:
+    """Of the districts vacant in the first archived month, how many are
+    still vacant in the latest one? (Same FIN on both vacant lists.)"""
+    if len(snapshots) < 2:
+        return None
+    first, last = snapshots[0], snapshots[-1]
+    first_ids = {p["id"] for p in first["praxes"] if p["status"] == "vacant"}
+    last_ids = {p["id"] for p in last["praxes"] if p["status"] == "vacant"}
+    return {
+        "firstMonth": first["month"],
+        "lastMonth": last["month"],
+        "firstVacant": len(first_ids),
+        "stillVacant": len(first_ids & last_ids),
+    }
 
 
 def rebuild_timeseries() -> Path:
