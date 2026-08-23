@@ -17,6 +17,9 @@ python etl/run.py --month 2026-08
 # ETL tesztek
 cd etl && python -m pytest
 
+# Történeti visszatöltés saját gyűjtésből (audit-archívumba másol + snapshotot épít)
+python etl/backfill.py --source-dir "/path/to/gyujtes" [--dry-run]
+
 # Web (React + Vite + TS) — az ETL kimenetét fogyasztja
 cd web && npm install && npm run dev
 
@@ -31,7 +34,11 @@ A megyehatár-réteg (`data/geo/counties.geojson`) OSM-ből származik
 
 - Nyers források (audit): `data/raw/YYYY-MM/` — a git-történet maga az adattörténet.
 - Havi snapshot: `data/YYYY-MM/dental.json` és `data/YYYY-MM/gp.json`, plusz
-  `data/latest.json` (mindkét kassza) és `data/timeseries.json`.
+  `data/latest.json` (mindkét kassza), `data/timeseries.json` és a statisztikai
+  oldalt tápláló `data/history.json` (ki-be áramlás, medián, eloszlások).
+- Történeti hónapok geokódolás nélkül épülnek (csak cache-találat), a nevező
+  (betöltetlenségi arány) pedig csak ott szerepel, ahol az adott havi
+  törzslista is megvan — hiányzó adatot sosem becslünk.
 - A pipeline validálási hibánál nem publikál (a havi GitHub Actions futás
   ilyenkor issue-t nyit).
 

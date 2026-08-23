@@ -80,52 +80,78 @@ def build_snapshot(
         if reg.get("servedSettlements") and not r.get("servedSettlements"):
             r["servedSettlements"] = _served_names(reg)
 
+    # a snapshot without a same-month registry (historical backfill) has no
+    # denominator: totals and rates stay null rather than being guessed
+    denominator_known = bool(registry)
     all_fins = set(reg_by_fin) | {r["id"] for r in dissolved}
     vacant_fins = {r["id"] for r in vacant}
     dissolved_fins = {r["id"] for r in dissolved}
 
     counties: dict[str, dict] = {}
-    for fin in sorted(all_fins):
-        county = (
-            reg_by_fin[fin]["county"]
-            if fin in reg_by_fin
-            else next(r for r in dissolved if r["id"] == fin)["county"]
-        )
-        c = counties.setdefault(county, {
-            "name": county, "total": 0, "vacant": 0, "dissolved": 0,
+
+    def county_entry(name: str) -> dict:
+        return counties.setdefault(name, {
+            "name": name, "total": 0 if denominator_known else None,
+            "vacant": 0, "dissolved": 0,
             "populationVacant": 0, "populationDissolved": 0,
-            "byType": defaultdict(lambda: {"total": 0, "vacant": 0}),
+            "byType": defaultdict(lambda: {
+                "total": 0 if denominator_known else None, "vacant": 0,
+            }),
         })
-        c["total"] += 1
-        ptype = (reg_by_fin.get(fin) or {}).get("type")
-        if ptype:
-            c["byType"][ptype]["total"] += 1
-            if fin in vacant_fins or fin in dissolved_fins:
-                c["byType"][ptype]["vacant"] += 1
+
+    if denominator_known:
+        for fin in sorted(all_fins):
+            county = (
+                reg_by_fin[fin]["county"]
+                if fin in reg_by_fin
+                else next(r for r in dissolved if r["id"] == fin)["county"]
+            )
+            c = county_entry(county)
+            c["total"] += 1
+            ptype = (reg_by_fin.get(fin) or {}).get("type")
+            if ptype:
+                c["byType"][ptype]["total"] += 1
+                if fin in vacant_fins or fin in dissolved_fins:
+                    c["byType"][ptype]["vacant"] += 1
+    else:
+        for r in vacant + dissolved:
+            county_entry(r["county"])["byType"][r["type"]]["vacant"] += 1
     for r in vacant:
-        counties[_county_of(r, reg_by_fin)]["vacant"] += 1
-        counties[_county_of(r, reg_by_fin)]["populationVacant"] += r["population"] or 0
+        c = county_entry(_county_of(r, reg_by_fin))
+        c["vacant"] += 1
+        c["populationVacant"] += r["population"] or 0
     for r in dissolved:
-        counties[_county_of(r, reg_by_fin)]["dissolved"] += 1
-        counties[_county_of(r, reg_by_fin)]["populationDissolved"] += r["population"] or 0
+        c = county_entry(_county_of(r, reg_by_fin))
+        c["dissolved"] += 1
+        c["populationDissolved"] += r["population"] or 0
 
     county_list = []
     for c in sorted(counties.values(), key=lambda c: c["name"]):
         c["byType"] = {k: dict(v) for k, v in sorted(c["byType"].items())}
-        c["vacancyRate"] = round((c["vacant"] + c["dissolved"]) / c["total"], 4)
+        c["vacancyRate"] = (
+            round((c["vacant"] + c["dissolved"]) / c["total"], 4)
+            if denominator_known else None
+        )
         county_list.append(c)
 
     settlements = _build_settlement_index(vacant, dissolved, reg_by_fin,
                                           vacant_fins, dissolved_fins)
 
     national = {
-        "totalDistricts": len(all_fins),
+        "totalDistricts": len(all_fins) if denominator_known else None,
         "vacant": len(vacant),
         "dissolved": len(dissolved),
-        "vacancyRate": round((len(vacant) + len(dissolved)) / len(all_fins), 4),
+        "vacancyRate": (
+            round((len(vacant) + len(dissolved)) / len(all_fins), 4)
+            if denominator_known else None
+        ),
         "populationVacant": sum(r["population"] or 0 for r in vacant),
         "populationDissolved": sum(r["population"] or 0 for r in dissolved),
-        "byType": _national_by_type(reg_by_fin, vacant_fins | dissolved_fins),
+        "byType": (
+            _national_by_type(reg_by_fin, vacant_fins | dissolved_fins)
+            if denominator_known
+            else _praxes_by_type(vacant + dissolved)
+        ),
     }
 
     return {
@@ -180,6 +206,14 @@ def _build_settlement_index(vacant, dissolved, reg_by_fin,
 def _county_of(record: dict, reg_by_fin: dict) -> str:
     # registry county naming is canonical when the FIN is listed there
     return (reg_by_fin.get(record["id"]) or record)["county"]
+
+
+def _praxes_by_type(praxes: list[dict]) -> dict:
+    out: dict[str, dict] = {}
+    for p in praxes:
+        t = out.setdefault(p["type"], {"total": None, "vacant": 0})
+        t["vacant"] += 1
+    return dict(sorted(out.items()))
 
 
 def _national_by_type(reg_by_fin: dict, vacant_all: set) -> dict:
@@ -255,3 +289,111 @@ def _dump(path: Path, obj: dict) -> None:
         json.dumps(obj, ensure_ascii=False, separators=(",", ":")),
         encoding="utf-8",
     )
+
+
+# ---------------------------------------------------------------------------
+# History aggregation: one compact file for the statistics page, computed
+# from every archived monthly snapshot (data/YYYY-MM/{kind}.json).
+
+DURATION_BUCKETS = [("0-11", 0, 11), ("12-35", 12, 35), ("36-119", 36, 119), ("120+", 120, 10**6)]
+
+
+def _months_between(since: str, until: str) -> int:
+    sy, sm = map(int, since.split("-"))
+    uy, um = map(int, until.split("-"))
+    return (uy - sy) * 12 + (um - sm)
+
+
+def _median(values: list[int]) -> int | None:
+    if not values:
+        return None
+    values = sorted(values)
+    mid = len(values) // 2
+    if len(values) % 2:
+        return values[mid]
+    return round((values[mid - 1] + values[mid]) / 2)
+
+
+def history_entry(snapshot: dict, previous: dict | None) -> dict:
+    """One month's row in history.json. `previous` is the snapshot of the
+    previous ARCHIVED month (may be more than one calendar month earlier —
+    the flow numbers always name the month they compare against)."""
+    month = snapshot["month"]
+    vacant = [p for p in snapshot["praxes"] if p["status"] == "vacant"]
+    durations = [
+        _months_between(p["vacantSince"], month)
+        for p in vacant if p.get("vacantSince")
+    ]
+    buckets = {name: 0 for name, _, _ in DURATION_BUCKETS}
+    for d in durations:
+        for name, lo, hi in DURATION_BUCKETS:
+            if lo <= d <= hi:
+                buckets[name] += 1
+                break
+    flow = None
+    if previous is not None:
+        prev_ids = {p["id"] for p in previous["praxes"] if p["status"] == "vacant"}
+        cur_ids = {p["id"] for p in vacant}
+        flow = {
+            "sincePrevMonth": previous["month"],
+            "entered": len(cur_ids - prev_ids),
+            "left": len(prev_ids - cur_ids),
+        }
+    nat = snapshot["national"]
+    return {
+        "month": month,
+        "totalDistricts": nat["totalDistricts"],
+        "vacant": nat["vacant"],
+        "dissolved": nat["dissolved"],
+        "vacancyRate": nat["vacancyRate"],
+        "populationVacant": nat["populationVacant"],
+        "populationDissolved": nat["populationDissolved"],
+        "medianVacancyMonths": _median(durations),
+        "durationBuckets": buckets,
+        "byType": nat["byType"],
+        "byCounty": {
+            c["name"]: {
+                "vacant": c["vacant"], "dissolved": c["dissolved"],
+                "populationVacant": c["populationVacant"], "total": c["total"],
+            }
+            for c in snapshot["counties"]
+        },
+        "flow": flow,
+    }
+
+
+def _iter_month_snapshots(kind: str):
+    import re as _re
+    for d in sorted(DATA_DIR.iterdir()):
+        if d.is_dir() and _re.match(r"^\d{4}-\d{2}$", d.name):
+            f = d / f"{kind}.json"
+            if f.exists():
+                yield json.loads(f.read_text(encoding="utf-8"))
+
+
+def build_history() -> Path:
+    """Regenerate data/history.json from every archived monthly snapshot."""
+    out: dict = {"schemaVersion": 1, "kinds": {}}
+    for kind in ("dental", "gp"):
+        entries = []
+        previous = None
+        for snap in _iter_month_snapshots(kind):
+            entries.append(history_entry(snap, previous))
+            previous = snap
+        if entries:
+            out["kinds"][kind] = entries
+    path = DATA_DIR / "history.json"
+    _dump(path, out)
+    return path
+
+
+def rebuild_timeseries() -> Path:
+    """Regenerate data/timeseries.json from every archived monthly snapshot."""
+    ts = {"kinds": {}}
+    for kind in ("dental", "gp"):
+        months = [timeseries_entry(snap) for snap in _iter_month_snapshots(kind)]
+        if months:
+            ts["kinds"][kind] = months
+    path = DATA_DIR / "timeseries.json"
+    _dump(path, ts)
+    return path

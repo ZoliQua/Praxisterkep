@@ -12,6 +12,7 @@ const out = resolve(here, '..', 'public', 'data');
 const files = [
   [join(repo, 'data', 'latest.json'), join(out, 'latest.json')],
   [join(repo, 'data', 'timeseries.json'), join(out, 'timeseries.json')],
+  [join(repo, 'data', 'history.json'), join(out, 'history.json')],
   [join(repo, 'data', 'geo', 'counties.geojson'), join(out, 'counties.geojson')],
 ];
 
