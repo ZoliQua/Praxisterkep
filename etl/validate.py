@@ -76,7 +76,6 @@ def validate_snapshot(snapshot: dict) -> None:
     nat = snapshot["national"]
     counties = snapshot["counties"]
     checks = [
-        ("total", sum(c["total"] for c in counties), nat["totalDistricts"]),
         ("vacant", sum(c["vacant"] for c in counties), nat["vacant"]),
         ("dissolved", sum(c["dissolved"] for c in counties), nat["dissolved"]),
         ("populationVacant", sum(c["populationVacant"] for c in counties),
@@ -84,6 +83,10 @@ def validate_snapshot(snapshot: dict) -> None:
         ("populationDissolved", sum(c["populationDissolved"] for c in counties),
          nat["populationDissolved"]),
     ]
+    if nat["totalDistricts"] is not None:
+        checks.append((
+            "total", sum(c["total"] for c in counties), nat["totalDistricts"],
+        ))
     for name, county_sum, national in checks:
         if county_sum != national:
             raise ValidationError(

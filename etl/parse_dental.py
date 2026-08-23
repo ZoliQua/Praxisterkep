@@ -18,7 +18,9 @@ printed inside the PDF is extracted and must match the requested month.
 """
 from __future__ import annotations
 
+import math
 import re
+from datetime import datetime
 from pathlib import Path
 from typing import TypedDict
 
@@ -70,19 +72,33 @@ class ParseError(Exception):
     pass
 
 
-def _clean(cell: str | None) -> str:
-    return re.sub(r"\s+", " ", cell or "").strip()
+def _cell(value) -> str:
+    """Normalize a raw cell (PDF string or XLSX-native type) to text."""
+    if value is None:
+        return ""
+    if isinstance(value, datetime):
+        return value.strftime("%Y.%m.%d")
+    if isinstance(value, float):
+        if math.isnan(value):
+            return ""
+        if value.is_integer():
+            return str(int(value))
+    return str(value)
 
 
-def _parse_date(raw: str) -> str:
+def _clean(cell) -> str:
+    return re.sub(r"\s+", " ", _cell(cell)).strip()
+
+
+def _parse_date(raw) -> str:
     m = DATE_RE.match(_clean(raw))
     if not m:
         raise ParseError(f"unparseable vacant-since date: {raw!r}")
     return f"{m.group(1)}-{m.group(2)}"
 
 
-def _parse_population(raw: str) -> int | None:
-    digits = re.sub(r"\D", "", raw or "")
+def _parse_population(raw) -> int | None:
+    digits = re.sub(r"\D", "", _cell(raw))
     return int(digits) if digits else None
 
 
@@ -104,9 +120,25 @@ def _iter_rows(pdf_path: Path):
 
 
 def parse_vacant(pdf_path: Path) -> list[VacantPraxis]:
-    """Parse source A (vacant dental services)."""
+    """Parse source A (vacant dental services) from the monthly PDF."""
+    return _rows_to_vacant(list(_iter_rows(pdf_path)), pdf_path.name)
+
+
+def parse_vacant_xlsx(xlsx_path: Path) -> list[VacantPraxis]:
+    """Parse a historical vacant-dental XLSX (2017-2021 era, same 19 columns)."""
+    import pandas as pd
+
+    df = pd.read_excel(xlsx_path, header=None, dtype=object)
+    if len(df.columns) != 19:
+        raise ParseError(
+            f"{xlsx_path.name}: expected 19 columns, got {len(df.columns)}"
+        )
+    return _rows_to_vacant(df.values.tolist(), xlsx_path.name)
+
+
+def _rows_to_vacant(rows: list[list], source_name: str) -> list[VacantPraxis]:
     records: list[VacantPraxis] = []
-    for row in _iter_rows(pdf_path):
+    for row in rows:
         if len(row) < 11 or not FIN_RE.match(_clean(row[2])):
             continue  # header / layout rows
         if len(row) != 19:
@@ -144,7 +176,7 @@ def parse_vacant(pdf_path: Path) -> list[VacantPraxis]:
             population=_parse_population(row[4]),
         ))
     if not records:
-        raise ParseError(f"no records parsed from {pdf_path.name}")
+        raise ParseError(f"no records parsed from {source_name}")
     return records
 
 
