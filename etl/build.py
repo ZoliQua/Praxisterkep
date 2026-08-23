@@ -225,8 +225,10 @@ def _build_settlement_index(vacant, dissolved, reg_by_fin,
 
 
 def _county_of(record: dict, reg_by_fin: dict) -> str:
-    # registry county naming is canonical when the FIN is listed there
-    return (reg_by_fin.get(record["id"]) or record)["county"]
+    # the vacant/dissolved list's own county column is the district's official
+    # assignment; the registry county (surgery seat) can differ across county
+    # borders, so it is only a fallback for records without one
+    return record.get("county") or reg_by_fin[record["id"]]["county"]
 
 
 def _praxes_by_type(praxes: list[dict]) -> dict:

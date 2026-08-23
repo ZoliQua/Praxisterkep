@@ -20,6 +20,7 @@ import { TimeSeriesChart, type ChartSeries } from './charts/TimeSeriesChart';
 import { FlowChart } from './charts/FlowChart';
 import { DurationHistogram } from './charts/DurationHistogram';
 import { CountyChangeChart } from './charts/CountyChangeChart';
+import { VacancyTableModal } from './VacancyTableModal';
 import { monthsBetween } from '../lib/format';
 
 // validated categorical palette (dark surface #101823) — fixed assignment
@@ -55,6 +56,11 @@ export function StatsSection() {
   const persistence = usePersistence();
   const snapshot = useSnapshot();
   const [county, setCounty] = useState<string>('');
+  // page resets when the kind toggles (derived, no effect needed)
+  const [pageState, setPageState] = useState({ kind, page: 0 });
+  const page = pageState.kind === kind ? pageState.page : 0;
+  const setPage = (p: number) => setPageState({ kind, page: p });
+  const [tableOpen, setTableOpen] = useState(false);
 
   const counties = useMemo(() => countyNames(entries), [entries]);
   const change = useMemo(() => overallChange(entries), [entries]);
@@ -63,9 +69,12 @@ export function StatsSection() {
     if (!snapshot) return [];
     return [...snapshot.praxes]
       .filter((p) => p.status === 'vacant')
-      .sort((a, b) => a.vacantSince.localeCompare(b.vacantSince))
-      .slice(0, 10);
+      .sort((a, b) => a.vacantSince.localeCompare(b.vacantSince));
   }, [snapshot]);
+  const PAGE_SIZE = 10;
+  const pageCount = Math.max(1, Math.ceil(longest.length / PAGE_SIZE));
+  const pageStart = Math.min(page, pageCount - 1) * PAGE_SIZE;
+  const pageRows = longest.slice(pageStart, pageStart + PAGE_SIZE);
   const lineColor = KIND_LINE[kind];
 
   if (entries.length === 0) return null;
@@ -242,12 +251,25 @@ export function StatsSection() {
 
         {snapshot && longest.length > 0 && (
           <figure className="chart-card chart-card--tall">
-            <figcaption>
-              <h3>{t('stats.longestTitle')}</h3>
-              <p>{t('stats.longestExplain')}</p>
+            <figcaption className="chart-card__head">
+              <div>
+                <h3>{t('stats.longestTitle')}</h3>
+                <p>{t('stats.longestExplain')}</p>
+              </div>
+              <button className="icon-button" title={t('stats.openTable')}
+                aria-label={t('stats.openTable')}
+                onClick={() => setTableOpen(true)}>
+                <svg viewBox="0 0 20 20" aria-hidden="true">
+                  <rect x="2.5" y="3.5" width="15" height="13" rx="1.5" fill="none"
+                    stroke="currentColor" strokeWidth="1.6" />
+                  <path d="M2.5 8h15M8 8v8.5M13 8v8.5" stroke="currentColor"
+                    strokeWidth="1.6" />
+                </svg>
+              </button>
             </figcaption>
-            <ol className="longest-list">
-              {longest.map((p) => {
+            <ol className="longest-list" start={pageStart + 1}
+              style={{ counterReset: `longest ${pageStart}` }}>
+              {pageRows.map((p) => {
                 const site = primarySite(p);
                 return (
                   <li key={p.id}>
@@ -266,9 +288,34 @@ export function StatsSection() {
                 );
               })}
             </ol>
+            {pageCount > 1 && (
+              <div className="pager">
+                <button onClick={() => setPage(Math.max(0, page - 1))}
+                  disabled={pageStart === 0} aria-label={t('stats.pagePrev')}>
+                  ‹
+                </button>
+                <span>
+                  {t('stats.pageOf', {
+                    from: pageStart + 1,
+                    to: Math.min(pageStart + PAGE_SIZE, longest.length),
+                    n: longest.length,
+                  })}
+                </span>
+                <button onClick={() => setPage(Math.min(pageCount - 1, page + 1))}
+                  disabled={pageStart + PAGE_SIZE >= longest.length}
+                  aria-label={t('stats.pageNext')}>
+                  ›
+                </button>
+              </div>
+            )}
           </figure>
         )}
       </div>
+
+      {snapshot && (
+        <VacancyTableModal snapshot={snapshot} open={tableOpen}
+          onClose={() => setTableOpen(false)} />
+      )}
 
       <details className="stats-table">
         <summary>{t('stats.tableToggle')}</summary>

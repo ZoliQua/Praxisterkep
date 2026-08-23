@@ -1,10 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import {
+  countyRanking,
   filterPraxes,
   longestVacant,
   medianVacancyMonths,
+  praxisTableRows,
   primarySite,
   searchSettlements,
+  sortPraxisRows,
 } from './selectors';
 import type { Praxis, SettlementEntry } from '../types';
 
@@ -96,5 +99,52 @@ describe('searchSettlements', () => {
   it('is accent- and case-insensitive, prefix matches first', () => {
     const hits = searchSettlements(entries, 'szo');
     expect(hits.map((h) => h.name)).toEqual(['Szombathely', 'Szolnok', 'Ószombat']);
+  });
+});
+
+describe('countyRanking duration filter', () => {
+  const snapshot = {
+    month: '2026-08',
+    national: { totalDistricts: 10 },
+    counties: [
+      { name: 'Zala', total: 6, vacant: 2, dissolved: 0 },
+      { name: 'Vas', total: 4, vacant: 1, dissolved: 0 },
+    ],
+    praxes: [
+      praxis({ id: '1', county: 'Zala', vacantSince: '2025-09' }), // 11 months
+      praxis({ id: '2', county: 'Zala', vacantSince: '2020-08' }), // 6 years
+      praxis({ id: '3', county: 'Vas', vacantSince: '2014-08' }),  // 12 years
+    ],
+  } as never;
+  it('minMonths=0 counts every vacant praxis', () => {
+    const rows = countyRanking(snapshot);
+    expect(rows.map((r) => [r.name, r.vacantAll])).toEqual([
+      ['Zala', 2], ['Vas', 1],
+    ]);
+  });
+  it('filters by vacancy duration', () => {
+    const rows = countyRanking(snapshot, 5 * 12);
+    expect(rows.map((r) => [r.name, r.vacantAll])).toEqual([
+      ['Vas', 1], ['Zala', 1],
+    ]);
+    expect(rows[0].rate).toBeCloseTo(0.25);
+  });
+});
+
+describe('sortPraxisRows', () => {
+  const snapshot = {
+    month: '2026-08',
+    praxes: [
+      praxis({ id: '1', vacantSince: '2020-01', population: 500,
+        sites: [{ postalCode: '1', settlement: 'Bér', address: 'x', district: '', isHeadquarters: false }] }),
+      praxis({ id: '2', vacantSince: '2024-01', population: 2000,
+        sites: [{ postalCode: '2', settlement: 'Ács', address: 'y', district: '', isHeadquarters: false }] }),
+    ],
+  } as never;
+  it('sorts strings with Hungarian collation and numbers numerically', () => {
+    const rows = praxisTableRows(snapshot);
+    expect(sortPraxisRows(rows, 'settlement', 'asc')[0].settlement).toBe('Ács');
+    expect(sortPraxisRows(rows, 'population', 'desc')[0].population).toBe(2000);
+    expect(sortPraxisRows(rows, 'vacantSince', 'asc')[0].vacantSince).toBe('2020-01');
   });
 });
