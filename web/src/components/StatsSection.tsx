@@ -122,7 +122,7 @@ export function StatsSection() {
             </div>
           )}
           <div className="stat">
-            <div className="stat__value">
+            <div className={`stat__value ${latest.populationVacant + latest.populationDissolved >= 1_000_000 ? 'stat__value--long' : ''}`}>
               {formatNumber(latest.populationVacant + latest.populationDissolved)}
             </div>
             <div className="stat__label">{tKind('stats.populationNow', kind)}</div>

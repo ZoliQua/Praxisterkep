@@ -52,8 +52,15 @@ function PraxisRow({ praxis, month }: { praxis: Praxis; month: string }) {
 export function SearchSection() {
   const snapshot = useSnapshot()!;
   const kind = useAppStore((s) => s.kind);
-  const [query, setQuery] = useState('');
-  const [selected, setSelected] = useState<SettlementEntry | null>(null);
+  // selection/query belong to one kind's snapshot; reset derives on toggle
+  const [state, setState] = useState<{
+    kind: string; query: string; selected: SettlementEntry | null;
+  }>({ kind, query: '', selected: null });
+  const query = state.kind === kind ? state.query : '';
+  const selected = state.kind === kind ? state.selected : null;
+  const setQuery = (q: string) => setState({ kind, query: q, selected: null });
+  const setSelected = (s2: SettlementEntry | null) =>
+    setState({ kind, query, selected: s2 });
 
   const byId = useMemo(() => praxesById(snapshot), [snapshot]);
   const hits = useMemo(
