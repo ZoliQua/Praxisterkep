@@ -593,6 +593,7 @@ a:hover { text-decoration: underline; }
 .story--broken .story__switch button[aria-pressed='true'] { color: #14060a; }
 
 .story__stage {
+  position: relative;
   border: 1px solid var(--line); border-radius: var(--radius);
   background: var(--bg-raised); overflow: hidden;
 }
@@ -602,15 +603,25 @@ a:hover { text-decoration: underline; }
 .ps-scene.is-active { opacity: 1; }
 .ps-scene text { font: 700 30px var(--font-display); }
 
-.story__caption { padding: 14px 4px 0; animation: rise 0.5s ease backwards; }
+.story__caption {
+  position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+  width: min(92%, 620px); text-align: center; pointer-events: none;
+  animation: rise 0.5s ease backwards;
+}
 .story__caption h4 {
-  font-family: var(--font-display); font-size: 17px; font-stretch: 106%;
-  margin: 10px 0 4px;
+  font-family: var(--font-display); font-size: clamp(15px, 2vw, 19px);
+  font-stretch: 106%; margin: 0 0 3px;
 }
 .story--broken .story__caption h4 { color: var(--alert); }
 .story:not(.story--broken) .story__caption h4 { color: var(--accent); }
-.story__caption p { margin: 0; color: var(--ink-dim); font-size: 14px; max-width: 64ch; }
-.story__steps { display: flex; gap: 8px; }
+.story__caption p {
+  margin: 0 auto; color: var(--ink-dim); font-size: clamp(12px, 1.6vw, 14px);
+  line-height: 1.45; max-width: 62ch;
+}
+.story__steps {
+  position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 8px;
+}
 .story__steps button {
   appearance: none; cursor: pointer; width: 26px; height: 26px;
   border-radius: 50%; border: 1px solid var(--line-strong);
