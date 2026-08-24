@@ -44,7 +44,7 @@
   },
   "map": {
     "heading": "Betöltetlenség a térképen",
-    "explain": "A színezés a vármegye betöltetlenségi arányát mutatja (betöltetlen — és fogorvosi ágon a megszűnt szerződésű — körzetek az összes körzet arányában). A pontok az egyes betöltetlen körzetek rendelőit jelölik. Körzethatár-poligonok hivatalosan nem érhetők el, ezért a körzeteket pontként ábrázoljuk.",
+    "explain": "A színezés a megye betöltetlenségi arányát mutatja (betöltetlen — és fogorvosi ágon a megszűnt szerződésű — körzetek az összes körzet arányában). A pontok az egyes betöltetlen körzetek rendelőit jelölik. Körzethatár-poligonok hivatalosan nem érhetők el, ezért a körzeteket pontként ábrázoljuk.",
     "metricRate": "Betöltetlenségi arány",
     "metricPopulation": "Érintett lakosság",
     "typeAll": "Összes típus",
@@ -73,7 +73,7 @@
     "viewColumns": "Oszlopok",
     "toggleNames": "Megyenevek",
     "toggleDissolved": "Megszűnt körzetek",
-    "columnExplain": "Oszlop nézetben minden vármegyén a betöltetlen (+ megszűnt) körzetek száma és aránya olvasható; az oszlop magassága a darabszámmal arányos."
+    "columnExplain": "Oszlop nézetben minden megyén a betöltetlen (+ megszűnt) körzetek száma és aránya olvasható; az oszlop magassága a darabszámmal arányos."
   },
   "search": {
     "heading": "Mi a helyzet nálam?",
@@ -85,7 +85,7 @@
     "vacantHere": "betöltetlen körzet",
     "affectedByDissolved": "A települést (részben) olyan körzet látta el, amelynek szerződése megszűnt.",
     "noVacant": "A településhez tartozó összes nyilvántartott {kind} körzet betöltött.",
-    "county": "vármegye",
+    "county": "megye",
     "servedBy": "A körzethez tartozó települések",
     "reminder": "A betöltetlen körzet lakóit helyettesítő orvos látja el — az ellátás jellemzően más településen vagy szűkebb rendelési időben érhető el.",
     "filledListTitle": "Betöltött körzetek a településen",
@@ -95,8 +95,8 @@
     "openDirectory": "Összesített körzet-táblázat"
   },
   "ranking": {
-    "heading": "Vármegyei rangsor",
-    "explain": "A betöltetlen (fogorvosi ágon a megszűnt szerződésűekkel együtt számított) körzetek aránya vármegyénként. A számok a sávok végén: betöltetlen / összes körzet.",
+    "heading": "Megyei rangsor",
+    "explain": "A betöltetlen (fogorvosi ágon a megszűnt szerződésűekkel együtt számított) körzetek aránya megyénként. A számok a sávok végén: betöltetlen / összes körzet.",
     "national": "országos átlag",
     "filterAll": "Összesen",
     "filterYears": "{n}+ éve",
@@ -107,7 +107,7 @@
     "p1": "Az adatok forrása a Nemzeti Egészségbiztosítási Alapkezelő (NEAK) havonta közzétett listái: a betöltetlen fogorvosi és háziorvosi szolgálatok, a betöltetlen (megszűnt szerződésű) fogorvosi szolgálatok, valamint a szerződött szolgáltatók törzslistái. A NEAK adatai tájékoztató jellegűek, a havi finanszírozási szerződésállapotot tükrözik — nem valós idejű működési adatok.",
     "p2": "\u201EBetöltetlen\u201D az a körzet, amelynek nincs szerződött orvosa. Ez nem azonos az \u201Eellátatlan\u201D fogalmával: a betöltetlen körzetek lakóit helyettesítő orvos látja el. A \u201Emegszűnt szerződésű\u201D kategória azokat a fogorvosi körzeteket jelöli, amelyeknél a finanszírozási szerződés is megszűnt — háziorvosi ágon a NEAK ilyen listát nem publikál. A tartósan betöltetlen körzet jogi kategória: a 313/2011. (XII. 23.) Korm. rendelet szerint az a körzet, ahol a szerződés megszűnése óta legalább 6 hónap eltelt.",
     "p3": "A betöltetlenségi arány nevezője a NEAK törzslistáiban szereplő alapellátási körzetek egyedi kódjainak (FIN, illetve HSZ) száma. Fogorvosi ágon a felnőtt, gyermek, vegyes és iskolai-ifjúsági szolgálatok számítanak (az ügyeleti és egyetemi szolgálatok, valamint a szakellátás nem); háziorvosi ágon a területi ellátási kötelezettségű (T) körzetek — a területi kötelezettség nélküli (TN) praxisok nem, mivel a betöltetlen listán sem szerepelhetnek.",
-    "p4": "A rendelők koordinátáit az OpenStreetMap Nominatim szolgáltatásával határozzuk meg. Ahol a cím nem volt pontosan azonosítható, a település középpontját jelöljük, és ezt a térképen külön jelezzük. Körzethatárok hivatalosan nem publikáltak, ezért a térkép vármegyei szinten színez, a körzeteket pontként mutatja.",
+    "p4": "A rendelők koordinátáit az OpenStreetMap Nominatim szolgáltatásával határozzuk meg. Ahol a cím nem volt pontosan azonosítható, a település középpontját jelöljük, és ezt a térképen külön jelezzük. Körzethatárok hivatalosan nem publikáltak, ezért a térkép megyei szinten színez, a körzeteket pontként mutatja.",
     "p5": "A településkereső a háziorvosi ágon a körzethez tartozó (ellátott) települések hivatalos listáján alapul, így a kistelepülések is megtalálhatók; a fogorvosi ágon a nyilvántartás csak a rendelő székhelyét közli, ezért ott a keresés a rendelők településeire és a megszűnt körzetek ellátott településeire terjed ki.",
     "p6": "A teljes feldolgozó kód és minden havi nyers forrásfájl nyilvános a projekt tárhelyén — minden szám az eredeti forrásig visszakövethető. A betöltött praxisok szerződött orvosának nevét a NEAK nyilvános szerződött-szolgáltatói adatbázisa alapján jelenítjük meg; betöltetlen vagy megszűnt körzetnél, illetve helyettesítő orvosról személynevet soha nem közlünk."
   },
@@ -144,9 +144,9 @@
     "flowExplain": "Az előző archivált hónaphoz képest újonnan megüresedett, illetve a listáról lekerült (betöltött vagy megszűnt) körzetek száma. Ahol az archívumban kimaradtak hónapok, az összevetés a legutóbbi elérhető hónappal történik — ezt a buborék jelzi.",
     "flowEntered": "megüresedett",
     "flowLeft": "lekerült a listáról",
-    "countyTitle": "Vármegyei idősor",
-    "countyExplain": "A kiválasztott vármegye betöltetlen körzeteinek száma az archivált hónapokban.",
-    "countySelect": "Vármegye:",
+    "countyTitle": "Megyei idősor",
+    "countyExplain": "A kiválasztott megye betöltetlen körzeteinek száma az archivált hónapokban.",
+    "countySelect": "Megye:",
     "medianTitle": "Medián betöltetlenségi idő",
     "medianExplain": "Az adott hónapban betöltetlen körzetek betöltetlenségi idejének mediánja.",
     "populationTitle": "Érintett lakosság",
@@ -162,8 +162,8 @@
     "thRate": "Arány",
     "thMedian": "Medián (hónap)",
     "persistence": "a {month} óta üres körzetek aránya, amelyek ma is üresek ({still}/{first})",
-    "countyChangeTitle": "Vármegyék: {first} vs {last}",
-    "countyChangeExplain": "Betöltetlen körzetek száma vármegyénként az első és a legutóbbi archivált hónapban. A vonal a változás irányát mutatja.",
+    "countyChangeTitle": "Megyék: {first} vs {last}",
+    "countyChangeExplain": "Betöltetlen körzetek száma megyénként az első és a legutóbbi archivált hónapban. A vonal a változás irányát mutatja.",
     "countyChangeFirst": "első hónap",
     "countyChangeLast": "most",
     "longestTitle": "A legrégebb óta üres körzetek",
@@ -178,7 +178,7 @@
     "tableCount": "{n} körzet",
     "tableClose": "Bezárás",
     "thSettlement": "Település",
-    "thCounty": "Vármegye",
+    "thCounty": "Megye",
     "thDistrict": "Járás",
     "thType": "Típus",
     "thSince": "Betöltetlen kezdete",
@@ -187,7 +187,7 @@
     "thStatus": "Státusz",
     "sortHint": "Kattints az oszlopfejlécre a rendezéshez.",
     "tableCountFiltered": "{n} / {total} körzet",
-    "filterCountyAll": "Minden vármegye",
+    "filterCountyAll": "Minden megye",
     "filterTypeAll": "Minden típus",
     "filterSearch": "Település vagy járás…",
     "directoryTitle": "Összes körzet — {month}",
@@ -216,7 +216,7 @@
       "text": "A szuvasodás és a fogágybetegség megelőzhető, a szájüregi daganat korai felismerése életet menthet — mindez a rendszeres fogorvosi szűrésen múlik. Betöltetlen körzetben a lakosság jellemzően csak sürgősségi ellátást ér el helyben: a megelőzés marad el legelőször."
     },
     "chainTitle": "A prevenciós lánc",
-    "chainIntro": "Működő körzetben a lánc végigér — betöltetlenben az első szemnél elszakad:",
+    "chainIntro": "Kapcsold át, mi történik ugyanazzal a beteggel, ha van, és ha nincs betöltött körzet:",
     "chainOk": [
       "Elérhető orvos",
       "Szűrés, korai felismerés",
@@ -230,6 +230,20 @@
       "Súlyosabb, költségesebb ellátás"
     ],
     "dataTie": "Ma Magyarországon {gpPop} ember él betöltetlen háziorvosi és {dentalPop} ember betöltetlen fogorvosi körzetben — nekik ez a lánc nem magától értetődő.",
-    "disclaimer": "A fenti összefüggések általános népegészségügyi ismeretek; számszerű állítást csak a saját, forrásolt adatainkból teszünk."
+    "disclaimer": "A fenti összefüggések általános népegészségügyi ismeretek; számszerű állítást csak a saját, forrásolt adatainkból teszünk.",
+    "storyToggleOk": "Van háziorvos",
+    "storyToggleBroken": "Nincs háziorvos",
+    "chainOkDesc": [
+      "A körzetnek van orvosa: a panasz nem marad megválaszolatlan, a vizsgálat elérhető, helyben.",
+      "A rendszeres szűrésen a még tünetmentes elváltozás is időben szem elé kerül.",
+      "A korán felismert betegség kezelése egyszerűbb: gyógyszer, gondozás, kontroll.",
+      "A szövődmény elmarad — a beteg éli az életét, a kórház ki sem kerül a képbe."
+    ],
+    "chainBrokenDesc": [
+      "A körzetnek nincs orvosa: a rendelő zárva, a helyettesítés máshol és ritkábban érhető el.",
+      "A szűrések kimaradnak — aki nem jut el orvoshoz, annál senki nem keres semmit.",
+      "A tünetmentes elváltozás csendben növekszik, és csak későn, panaszokkal kerül elő.",
+      "A késői diagnózis súlyosabb beavatkozást, hosszabb és költségesebb ellátást jelent."
+    ]
   }
 }

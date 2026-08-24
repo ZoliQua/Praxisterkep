@@ -568,3 +568,197 @@ a:hover { text-decoration: underline; }
 .vacancy-dialog__cap {
   margin: 0; padding: 12px 22px; color: var(--alert-soft); font-size: 12.5px;
 }
+
+/* ---------- prevention story (animated) ---------- */
+.story { margin: 18px 0 8px; }
+
+.story__switch {
+  position: relative; display: inline-grid; grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--line-strong); border-radius: 999px;
+  background: var(--bg-raised); overflow: hidden; margin-bottom: 18px;
+}
+.story__switch button {
+  appearance: none; border: 0; background: transparent; cursor: pointer;
+  font: 600 14px var(--font-body); padding: 10px 26px;
+  color: var(--ink-dim); position: relative; z-index: 1;
+  transition: color 0.25s; white-space: nowrap;
+}
+.story__switch button[aria-pressed='true'] { color: var(--accent-ink); }
+.story__thumb {
+  position: absolute; top: 3px; bottom: 3px; left: 3px; width: calc(50% - 3px);
+  border-radius: 999px; background: var(--accent);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s;
+}
+.story__thumb.is-right { transform: translateX(calc(100% + 0px)); background: var(--alert); }
+.story--broken .story__switch button[aria-pressed='true'] { color: #14060a; }
+
+.story__stage {
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--bg-raised); overflow: hidden;
+}
+.story__stage svg { width: 100%; height: auto; display: block; }
+
+.ps-scene { opacity: 0; transition: opacity 0.9s ease; pointer-events: none; }
+.ps-scene.is-active { opacity: 1; }
+.ps-scene text { font: 700 30px var(--font-display); }
+
+.story__caption { padding: 14px 4px 0; animation: rise 0.5s ease backwards; }
+.story__caption h4 {
+  font-family: var(--font-display); font-size: 17px; font-stretch: 106%;
+  margin: 10px 0 4px;
+}
+.story--broken .story__caption h4 { color: var(--alert); }
+.story:not(.story--broken) .story__caption h4 { color: var(--accent); }
+.story__caption p { margin: 0; color: var(--ink-dim); font-size: 14px; max-width: 64ch; }
+.story__steps { display: flex; gap: 8px; }
+.story__steps button {
+  appearance: none; cursor: pointer; width: 26px; height: 26px;
+  border-radius: 50%; border: 1px solid var(--line-strong);
+  background: var(--bg-raised); color: var(--ink-faint);
+  font: 600 12px var(--font-body); display: grid; place-items: center;
+}
+.story__steps button.is-active {
+  background: var(--accent); border-color: var(--accent); color: var(--accent-ink);
+}
+.story--broken .story__steps button.is-active { background: var(--alert); border-color: var(--alert); color: #14060a; }
+
+/* scene element animations — transform-box so origins follow the element */
+.ps-scene * { transform-box: fill-box; }
+
+.ps-breathe { animation: ps-breathe 3.2s ease-in-out infinite; transform-origin: 50% 100%; }
+@keyframes ps-breathe { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(1.035); } }
+
+.ps-listen { animation: ps-listen 3.4s ease-in-out infinite; transform-origin: 0% 50%; }
+@keyframes ps-listen {
+  0%, 18% { transform: translateY(0); }
+  32%, 58% { transform: translateY(16px); }
+  72%, 100% { transform: translateY(0); }
+}
+
+.ps-pulse { animation: ps-pulse 1.7s ease-out infinite; transform-origin: center; }
+.ps-pulse--late { animation-delay: 0.85s; }
+@keyframes ps-pulse {
+  0% { transform: scale(0.5); opacity: 0.9; }
+  80%, 100% { transform: scale(2.4); opacity: 0; }
+}
+
+.ps-ecg { stroke-dasharray: 230; animation: ps-ecg 3s linear infinite; }
+@keyframes ps-ecg { from { stroke-dashoffset: 460; } to { stroke-dashoffset: 0; } }
+
+.ps-mag { animation: ps-mag 6.2s ease-in-out infinite; }
+@keyframes ps-mag {
+  0% { transform: translate(-190px, -70px); opacity: 0; }
+  10% { opacity: 1; }
+  28% { transform: translate(-60px, 40px); }
+  46%, 88% { transform: translate(0, 0); }
+  100% { transform: translate(0, 0); opacity: 1; }
+}
+.ps-spot { animation: ps-spot 6.2s ease infinite; transform-origin: center; }
+@keyframes ps-spot {
+  0%, 40% { opacity: 0.35; transform: scale(0.8); }
+  52%, 100% { opacity: 1; transform: scale(1.15); }
+}
+.ps-spot-ring { animation: ps-spot-ring 1.6s ease-out infinite 3s; transform-origin: center; opacity: 0; }
+@keyframes ps-spot-ring {
+  0% { transform: scale(0.6); opacity: 0.9; }
+  90%, 100% { transform: scale(1.8); opacity: 0; }
+}
+
+.ps-arm { animation: ps-arm 3.6s ease-in-out infinite; transform-origin: 0% 0%; }
+@keyframes ps-arm {
+  0%, 12% { transform: rotate(0deg); }
+  38%, 60% { transform: rotate(-98deg); }
+  86%, 100% { transform: rotate(0deg); }
+}
+.ps-pill { animation: ps-pill 3.6s ease-in-out infinite; }
+@keyframes ps-pill {
+  0%, 12% { transform: translate(0, 0); opacity: 1; }
+  38% { transform: translate(-16px, -46px); opacity: 1; }
+  52% { transform: translate(-16px, -46px); opacity: 0; }
+  98%, 100% { transform: translate(0, 0); opacity: 0; }
+}
+.ps-heart { animation: ps-heart 1.5s ease-in-out infinite; transform-origin: center; }
+@keyframes ps-heart {
+  0%, 100% { transform: scale(0.9); opacity: 0.75; }
+  30% { transform: scale(1.12); opacity: 1; }
+}
+
+.ps-sun { animation: ps-sun 26s linear infinite; transform-origin: center; }
+@keyframes ps-sun { to { transform: rotate(360deg); } }
+.ps-hop { animation: ps-hop 1.9s cubic-bezier(0.4, 0, 0.3, 1) infinite; }
+@keyframes ps-hop {
+  0%, 100% { transform: translateY(0); }
+  35% { transform: translateY(-13px); }
+  55% { transform: translateY(0); }
+  70% { transform: translateY(-5px); }
+  82% { transform: translateY(0); }
+}
+.ps-bird { animation: ps-bird 9s linear infinite; }
+.ps-bird--late { animation-delay: 3.5s; }
+@keyframes ps-bird {
+  0% { transform: translate(60px, 12px); opacity: 0; }
+  15% { opacity: 0.9; }
+  85% { opacity: 0.9; }
+  100% { transform: translate(-120px, -18px); opacity: 0; }
+}
+
+.ps-flicker { animation: ps-flicker 4.4s steps(1) infinite; }
+@keyframes ps-flicker {
+  0%, 100% { opacity: 1; }
+  8% { opacity: 0.25; } 12% { opacity: 1; }
+  47% { opacity: 0.15; } 52% { opacity: 0.8; } 56% { opacity: 1; }
+}
+.ps-swing { animation: ps-swing 3.6s ease-in-out infinite; transform-origin: 50% 0%; }
+@keyframes ps-swing {
+  0%, 100% { transform: rotate(-5deg); }
+  50% { transform: rotate(5deg); }
+}
+.ps-q { animation: ps-q 4.2s ease-out infinite; opacity: 0; }
+.ps-q--d1 { animation-delay: 1.4s; }
+.ps-q--d2 { animation-delay: 2.8s; }
+@keyframes ps-q {
+  0% { transform: translateY(14px); opacity: 0; }
+  20% { opacity: 0.95; }
+  70%, 100% { transform: translateY(-26px); opacity: 0; }
+}
+
+.ps-wander { animation: ps-wander 9s ease-in-out infinite; }
+.ps-wander--late { animation-duration: 12s; animation-delay: 2s; }
+@keyframes ps-wander {
+  0%, 100% { transform: translateX(-46px); }
+  50% { transform: translateX(46px); }
+}
+
+.ps-grow { animation: ps-grow 6.2s ease-in infinite; transform-origin: center; }
+@keyframes ps-grow {
+  0% { transform: scale(0.3); }
+  85%, 100% { transform: scale(1.25); }
+}
+.ps-grow-ring { animation: ps-grow-ring 1.8s ease-out infinite 3.4s; transform-origin: center; opacity: 0; }
+@keyframes ps-grow-ring {
+  0% { transform: scale(0.7); opacity: 0.8; }
+  95%, 100% { transform: scale(1.9); opacity: 0; }
+}
+.ps-alarm { animation: ps-alarm 6.2s ease infinite; opacity: 0; }
+@keyframes ps-alarm {
+  0%, 55% { opacity: 0; }
+  62%, 70% { opacity: 1; }
+  74%, 78% { opacity: 0.3; }
+  82%, 100% { opacity: 1; }
+}
+.ps-cal-x1 { animation: ps-calx 6.2s steps(1) infinite; opacity: 0; }
+.ps-cal-x2 { animation: ps-calx 6.2s steps(1) infinite 1.6s; opacity: 0; }
+.ps-cal-x3 { animation: ps-calx 6.2s steps(1) infinite 3.2s; opacity: 0; }
+@keyframes ps-calx { 0% { opacity: 0; } 20%, 100% { opacity: 1; } }
+
+.ps-drip { animation: ps-drip 2.2s ease-in infinite; }
+@keyframes ps-drip {
+  0%, 20% { transform: translate(0, 0); opacity: 1; }
+  70% { transform: translate(-16px, 42px); opacity: 1; }
+  78%, 100% { transform: translate(-16px, 42px); opacity: 0; }
+}
+.ps-ecg-slow { stroke-dasharray: 130; animation: ps-ecg 6s linear infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ps-scene *, .story__thumb { animation: none !important; transition: none !important; }
+}
