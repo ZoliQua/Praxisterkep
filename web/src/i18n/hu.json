@@ -245,5 +245,13 @@
       "A tünetmentes elváltozás csendben növekszik, és csak későn, panaszokkal kerül elő.",
       "A késői diagnózis súlyosabb beavatkozást, hosszabb és költségesebb ellátást jelent."
     ]
+  },
+  "showcase": {
+    "sparkNote": "az archivált hónapok alapján ({first} – {last})",
+    "dissolvedNote": "minden pont egy megszűnt szerződésű körzet",
+    "rateNote": "a {total} nyilvántartott körzetből",
+    "cityNote": "egy piktogram ≈ egy Szombathelynyi (75 ezer) ember",
+    "longestNote": "{settlement} ({county}) — {type} körzet",
+    "sinceYear": "óta"
   }
 }

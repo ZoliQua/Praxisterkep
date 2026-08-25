@@ -773,3 +773,81 @@ a:hover { text-decoration: underline; }
 @media (prefers-reduced-motion: reduce) {
   .ps-scene *, .story__thumb { animation: none !important; transition: none !important; }
 }
+
+/* ---------- hero stat showcase ---------- */
+.showcase {
+  display: grid; grid-template-columns: minmax(240px, 300px) 1fr;
+  gap: 1px; background: var(--line);
+  border: 1px solid var(--line); border-radius: var(--radius);
+  overflow: hidden; margin: 40px 0 8px;
+}
+.showcase__rail { display: flex; flex-direction: column; background: var(--bg-raised); }
+.showcase__rail button {
+  appearance: none; border: 0; text-align: left; cursor: pointer;
+  background: transparent; padding: 13px 18px; position: relative;
+  border-left: 3px solid transparent; border-bottom: 1px solid var(--line);
+  transition: background 0.2s; flex: 1;
+}
+.showcase__rail button:last-child { border-bottom: 0; }
+.showcase__rail button:hover { background: color-mix(in srgb, var(--accent) 4%, transparent); }
+.showcase__rail button.is-active {
+  background: var(--bg-panel); border-left-color: var(--accent);
+}
+.showcase__rail strong {
+  display: block; font-family: var(--font-display); font-weight: 800;
+  font-stretch: 106%; font-size: 19px; font-variant-numeric: tabular-nums;
+}
+.showcase__rail span {
+  display: block; color: var(--ink-faint); font-size: 11.5px; line-height: 1.35;
+  margin-top: 2px;
+}
+.showcase__rail button.is-active span { color: var(--ink-dim); }
+.showcase__progress {
+  position: absolute; left: 0; bottom: -1px; height: 2px;
+  background: var(--accent); animation: sc-progress linear forwards;
+}
+@keyframes sc-progress { from { width: 0; } to { width: 100%; } }
+
+.showcase__panel {
+  background: var(--bg-raised); padding: 26px 30px 18px;
+  animation: rise 0.45s ease backwards;
+  display: flex; flex-direction: column;
+}
+.showcase__value {
+  font-family: var(--font-display); font-weight: 850; font-stretch: 108%;
+  font-size: clamp(38px, 4.6vw, 58px); line-height: 1;
+  letter-spacing: -0.02em; font-variant-numeric: tabular-nums;
+}
+.showcase__label { color: var(--ink-dim); font-size: 14px; margin: 8px 0 4px; max-width: 52ch; }
+.showcase__note { color: var(--ink-faint); font-size: 12px; margin-top: 2px; }
+.sc-visual { width: 100%; max-width: 560px; height: auto; margin-top: 4px; }
+.sc-visual text { font-family: var(--font-body); }
+
+.sc-draw {
+  stroke-dasharray: 1; stroke-dashoffset: 1;
+  animation: sc-draw 1.4s ease forwards 0.15s;
+}
+@keyframes sc-draw { to { stroke-dashoffset: 0; } }
+.sc-fade { opacity: 0; animation: sc-fade 0.8s ease forwards 0.3s; }
+.sc-fade--late { animation-delay: 1.3s; }
+@keyframes sc-fade { to { opacity: 1; } }
+.sc-visual path.sc-fade { animation-name: sc-fade-area; }
+@keyframes sc-fade-area { to { opacity: 0.1; } }
+.sc-pop {
+  opacity: 0; transform-box: fill-box; transform-origin: center;
+  animation: sc-pop 0.45s cubic-bezier(0.34, 1.4, 0.64, 1) forwards;
+}
+@keyframes sc-pop {
+  from { opacity: 0; transform: scale(0.2); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@media (max-width: 720px) {
+  .showcase { grid-template-columns: 1fr; }
+  .showcase__rail { flex-direction: row; overflow-x: auto; }
+  .showcase__rail button { min-width: 150px; border-bottom: 0; border-left: 0; }
+  .showcase__rail button.is-active { box-shadow: inset 0 -3px 0 var(--accent); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sc-draw, .sc-fade, .sc-pop, .showcase__progress { animation: none !important; opacity: 1; stroke-dashoffset: 0; }
+}
