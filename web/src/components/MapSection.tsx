@@ -1,22 +1,32 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Map as MLMap, Marker, NavigationControl, Popup } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import type { ExpressionSpecification, GeoJSONSource, MapLayerMouseEvent } from 'maplibre-gl';
+import type {
+  ExpressionSpecification, GeoJSONSource, MapLayerMouseEvent,
+} from 'maplibre-gl';
 import { t } from '../lib/i18n';
-import { formatMonth, formatNumber, formatPercent } from '../lib/format';
-import { filterPraxes, type TypeFilter } from '../lib/selectors';
-import { useAppStore, useSnapshot, type MapMetric } from '../store/useAppStore';
+import { formatMonth, formatNumber, formatPercent, monthsBetween } from '../lib/format';
+import { countyRanking, filterPraxes, type TypeFilter } from '../lib/selectors';
+import { readMapState, writeMapState } from '../lib/mapState';
+import {
+  useAppStore, useHistoryEntries, useMapSnapshot, type MapMetric,
+} from '../store/useAppStore';
 import type { Praxis, PraxisType, Snapshot } from '../types';
 
 const HUNGARY_BOUNDS: [number, number, number, number] = [16.0, 45.6, 23.0, 48.7];
 // dark-friendly sequential ramp (low -> high vacancy)
 const RAMP = ['#152438', '#1f3a52', '#3d5a6c', '#8a7a55', '#d99a3d', '#ff7a59'];
-// hand-tuned label offsets where the geometric centroid is misleading
+// vacancy-age steps: <1y, 1-5y, 5-10y, 10+y
+const AGE_COLORS = ['#f5c96b', '#ffb454', '#ff7a59', '#e34948'];
 const LABEL_OFFSET: Record<string, [number, number]> = {
   Pest: [0.28, -0.42], // its centroid falls on Budapest
 };
+const PLAY_MS = 850;
 
 type MapView = 'points' | 'columns';
+type ColorMode = 'status' | 'age';
+
+const initialUrl = readMapState(window.location.search);
 
 const TYPE_LABELS: Record<PraxisType, string> = {
   adult: t('map.typeAdult'),
@@ -54,10 +64,34 @@ function fillColorExpression(snapshot: Snapshot, metric: MapMetric): ExpressionS
   return match as ExpressionSpecification;
 }
 
-function praxesToGeoJSON(praxes: Praxis[], showDissolved: boolean): GeoJSON.FeatureCollection {
+function fillOpacityExpression(focus: string | null): ExpressionSpecification | number {
+  if (!focus) return 0.85;
+  return ['case', ['==', ['get', 'name'], focus], 0.92, 0.25] as ExpressionSpecification;
+}
+
+function pointColorExpression(mode: ColorMode): ExpressionSpecification {
+  if (mode === 'age') {
+    return ['step', ['get', 'months'],
+      AGE_COLORS[0], 12, AGE_COLORS[1], 60, AGE_COLORS[2], 120, AGE_COLORS[3],
+    ] as ExpressionSpecification;
+  }
+  return ['match', ['get', 'status'], 'dissolved', '#ffb454', '#ff7a59'] as ExpressionSpecification;
+}
+
+function pointOpacityExpression(focus: string | null): ExpressionSpecification {
+  const base: unknown = ['case', ['get', 'geoApprox'], 0.55, 0.9];
+  if (!focus) return base as ExpressionSpecification;
+  return ['case', ['==', ['get', 'county'], focus], base, 0.12] as ExpressionSpecification;
+}
+
+function praxesToGeoJSON(
+  praxes: Praxis[], month: string, showDissolved: boolean, minYears: number,
+): GeoJSON.FeatureCollection {
   const features: GeoJSON.Feature[] = [];
   for (const p of praxes) {
     if (!showDissolved && p.status === 'dissolved') continue;
+    const months = monthsBetween(p.vacantSince, month);
+    if (months < minYears * 12) continue;
     for (const s of p.sites) {
       if (s.lat === undefined || s.lon === undefined) continue;
       features.push({
@@ -72,6 +106,7 @@ function praxesToGeoJSON(praxes: Praxis[], showDissolved: boolean): GeoJSON.Feat
           address: s.address,
           district: s.district,
           vacantSince: p.vacantSince,
+          months,
           population: p.population,
           geoApprox: s.geoApprox === true,
           isHeadquarters: s.isHeadquarters,
@@ -103,25 +138,41 @@ function popupHtml(props: Record<string, unknown>): string {
   if (props.geoApprox === true) {
     lines.push(`<div class="flag">${t('map.popupApproxNote')}</div>`);
   }
+  lines.push(
+    `<a class="map-popup__link" href="#nalam" data-settlement="${esc(props.settlement)}">${t('map.popupToSearch')}</a>`,
+  );
   return lines.join('');
 }
 
-// counties.geojson is fetched once for centroid computation (module cache)
-let centroidsPromise: Promise<Map<string, [number, number]>> | null = null;
+interface CountyGeom {
+  centroid: [number, number];
+  bbox: [[number, number], [number, number]];
+}
 
-function loadCentroids(): Promise<Map<string, [number, number]>> {
-  centroidsPromise ??= fetch(`${import.meta.env.BASE_URL}data/counties.geojson`)
+let geomPromise: Promise<Map<string, CountyGeom>> | null = null;
+
+function loadCountyGeoms(): Promise<Map<string, CountyGeom>> {
+  geomPromise ??= fetch(`${import.meta.env.BASE_URL}data/counties.geojson`)
     .then((r) => r.json())
     .then((fc: GeoJSON.FeatureCollection) => {
-      const out = new Map<string, [number, number]>();
+      const out = new Map<string, CountyGeom>();
       for (const f of fc.features) {
         const name = (f.properties as { name: string }).name;
         const ring = outerRing(f.geometry);
-        if (ring) out.set(name, ringCentroid(ring));
+        if (!ring) continue;
+        let minX = 180, minY = 90, maxX = -180, maxY = -90;
+        for (const [x, y] of ring) {
+          minX = Math.min(minX, x); maxX = Math.max(maxX, x);
+          minY = Math.min(minY, y); maxY = Math.max(maxY, y);
+        }
+        out.set(name, {
+          centroid: ringCentroid(ring),
+          bbox: [[minX, minY], [maxX, maxY]],
+        });
       }
       return out;
     });
-  return centroidsPromise;
+  return geomPromise;
 }
 
 function outerRing(geom: GeoJSON.Geometry): number[][] | null {
@@ -136,7 +187,6 @@ function outerRing(geom: GeoJSON.Geometry): number[][] | null {
   return null;
 }
 
-/** shoelace centroid of a closed ring */
 function ringCentroid(ring: number[][]): [number, number] {
   let a = 0, cx = 0, cy = 0;
   for (let i = 0; i < ring.length - 1; i++) {
@@ -148,17 +198,46 @@ function ringCentroid(ring: number[][]): [number, number] {
   return [cx / (3 * a), cy / (3 * a)];
 }
 
+/** tiny sparkline for the county panel */
+function PanelSpark({ values, color }: { values: number[]; color: string }) {
+  if (values.length < 2) return null;
+  const W = 224, H = 44;
+  const max = Math.max(...values, 1);
+  const min = Math.min(...values);
+  const x = (i: number) => 4 + (i / (values.length - 1)) * (W - 8);
+  const y = (v: number) => H - 6 - ((v - min) / Math.max(1, max - min)) * (H - 14);
+  const d = values.map((v, i) => `${i ? 'L' : 'M'}${x(i)},${y(v)}`).join('');
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} className="county-panel__spark" aria-hidden="true">
+      <path d={d} fill="none" stroke={color} strokeWidth={2} strokeLinejoin="round" />
+      <circle cx={x(values.length - 1)} cy={y(values[values.length - 1])} r={3.2}
+        fill={color} stroke="var(--bg-raised)" strokeWidth={1.5} />
+    </svg>
+  );
+}
+
 export function MapSection() {
-  const snapshot = useSnapshot()!;
+  const snapshot = useMapSnapshot()!;
+  const latestMonth = useAppStore((s) => s.latest?.month ?? snapshot.month);
+  const kind = useAppStore((s) => s.kind);
   const typeFilter = useAppStore((s) => s.typeFilter);
   const mapMetric = useAppStore((s) => s.mapMetric);
   const selectedCounty = useAppStore((s) => s.selectedCounty);
-  const { setTypeFilter, setMapMetric, setSelectedCounty } = useAppStore.getState();
+  const selectedMonth = useAppStore((s) => s.selectedMonth);
+  const entries = useHistoryEntries();
+  const {
+    setTypeFilter, setMapMetric, setSelectedCounty, selectMonth, ensureMonth,
+    requestSearch,
+  } = useAppStore.getState();
 
-  const [view, setView] = useState<MapView>('points');
+  const [view, setView] = useState<MapView>(initialUrl.view ?? 'points');
+  const [colorMode, setColorMode] = useState<ColorMode>(initialUrl.colorMode ?? 'status');
+  const [minYears, setMinYears] = useState(initialUrl.minYears ?? 0);
   const [showNames, setShowNames] = useState(true);
   const [showDissolved, setShowDissolved] = useState(true);
-  const [centroids, setCentroids] = useState<Map<string, [number, number]> | null>(null);
+  const [playing, setPlaying] = useState(false);
+  const [hover, setHover] = useState<{ name: string; x: number; y: number } | null>(null);
+  const [geoms, setGeoms] = useState<Map<string, CountyGeom> | null>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MLMap | null>(null);
@@ -166,11 +245,65 @@ export function MapSection() {
   const markersRef = useRef<Marker[]>([]);
   const snapshotRef = useRef(snapshot);
   snapshotRef.current = snapshot;
+  const urlMonthApplied = useRef(false);
+
+  const months = useMemo(() => entries.map((e) => e.month), [entries]);
+  const monthIdx = selectedMonth ? months.indexOf(selectedMonth) : months.length - 1;
 
   useEffect(() => {
-    void loadCentroids().then(setCentroids);
+    void loadCountyGeoms().then(setGeoms);
   }, []);
 
+  /* apply ?ho= archive month from the URL once history is known */
+  useEffect(() => {
+    if (urlMonthApplied.current || !initialUrl.month || months.length === 0) return;
+    urlMonthApplied.current = true;
+    if (months.includes(initialUrl.month) && initialUrl.month !== latestMonth) {
+      void selectMonth(initialUrl.month);
+    }
+  }, [months, latestMonth, selectMonth]);
+
+  /* shareable URL (replaceState, foreign params preserved) */
+  useEffect(() => {
+    const q = writeMapState(window.location.search, {
+      kind,
+      county: selectedCounty ?? undefined,
+      type: typeFilter,
+      view,
+      metric: mapMetric,
+      month: selectedMonth ?? undefined,
+      minYears: minYears || undefined,
+      colorMode,
+    });
+    window.history.replaceState(
+      null, '', `${window.location.pathname}${q}${window.location.hash}`,
+    );
+  }, [kind, selectedCounty, typeFilter, view, mapMetric, selectedMonth, minYears, colorMode]);
+
+  /* time-travel playback */
+  useEffect(() => {
+    if (!playing) return;
+    const id = window.setInterval(() => {
+      const cur = useAppStore.getState().selectedMonth;
+      const i = cur ? months.indexOf(cur) : months.length - 1;
+      const next = i + 1;
+      if (next >= months.length - 1 || next >= months.length) {
+        setPlaying(false);
+        void selectMonth(null);
+      } else {
+        void selectMonth(months[next]);
+      }
+    }, PLAY_MS);
+    return () => window.clearInterval(id);
+  }, [playing, months, selectMonth]);
+
+  function startPlayback() {
+    months.forEach((m) => void ensureMonth(m)); // prefetch for smooth playback
+    void selectMonth(months[0]);
+    setPlaying(true);
+  }
+
+  /* ---------------- map lifecycle ---------------- */
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
     const map = new MLMap({
@@ -209,25 +342,15 @@ export function MapSection() {
         source: 'counties',
         paint: { 'line-color': '#2a3b52', 'line-width': 1 },
       });
-      map.addSource('praxes', {
-        type: 'geojson',
-        data: praxesToGeoJSON(
-          filterPraxes(snapshotRef.current.praxes, useAppStore.getState().typeFilter),
-          true,
-        ),
-      });
+      map.addSource('praxes', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
       map.addLayer({
         id: 'praxis-points',
         type: 'circle',
         source: 'praxes',
         paint: {
           'circle-radius': ['case', ['get', 'geoApprox'], 3.5, 5],
-          'circle-color': [
-            'match', ['get', 'status'],
-            'dissolved', '#ffb454',
-            '#ff7a59',
-          ],
-          'circle-opacity': ['case', ['get', 'geoApprox'], 0.55, 0.9],
+          'circle-color': pointColorExpression('status'),
+          'circle-opacity': pointOpacityExpression(null),
           'circle-stroke-width': 1,
           'circle-stroke-color': '#0b1016',
         },
@@ -246,13 +369,38 @@ export function MapSection() {
         const name = e.features?.[0]?.properties?.name as string | undefined;
         setSelectedCounty(name ?? null);
       });
+      let hoverRaf = 0;
+      map.on('mousemove', 'county-fill', (e: MapLayerMouseEvent) => {
+        const name = e.features?.[0]?.properties?.name as string | undefined;
+        if (!name) return;
+        cancelAnimationFrame(hoverRaf);
+        const { x, y } = e.point;
+        hoverRaf = requestAnimationFrame(() => setHover({ name, x, y }));
+      });
+      map.on('mouseleave', 'county-fill', () => {
+        cancelAnimationFrame(hoverRaf);
+        setHover(null);
+      });
       for (const layer of ['praxis-points', 'county-fill']) {
         map.on('mouseenter', layer, () => (map.getCanvas().style.cursor = 'pointer'));
         map.on('mouseleave', layer, () => (map.getCanvas().style.cursor = ''));
       }
       readyRef.current = true;
+      map.fire('praxisterkep:ready');
     });
+
+    // popup "open in search" links (popup DOM lives inside the map container)
+    const onContainerClick = (ev: MouseEvent) => {
+      const a = (ev.target as HTMLElement).closest?.('a[data-settlement]');
+      if (a instanceof HTMLElement && a.dataset.settlement) {
+        requestSearch(a.dataset.settlement);
+      }
+    };
+    const container = containerRef.current;
+    container.addEventListener('click', onContainerClick);
+
     return () => {
+      container.removeEventListener('click', onContainerClick);
       markersRef.current.forEach((m) => m.remove());
       markersRef.current = [];
       map.remove();
@@ -262,33 +410,63 @@ export function MapSection() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /* choropleth + focus dimming */
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || !readyRef.current) return;
-    map.setPaintProperty('county-fill', 'fill-color', fillColorExpression(snapshot, mapMetric));
-  }, [snapshot, mapMetric]);
+    if (!map) return;
+    const apply = () => {
+      map.setPaintProperty('county-fill', 'fill-color', fillColorExpression(snapshot, mapMetric));
+      map.setPaintProperty('county-fill', 'fill-opacity', fillOpacityExpression(selectedCounty));
+      map.setPaintProperty('praxis-points', 'circle-opacity', pointOpacityExpression(selectedCounty));
+      map.setPaintProperty('praxis-points', 'circle-color', pointColorExpression(colorMode));
+    };
+    if (readyRef.current) apply();
+    else map.once('praxisterkep:ready', apply);
+  }, [snapshot, mapMetric, selectedCounty, colorMode]);
 
+  /* point data */
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || !readyRef.current) return;
-    const src = map.getSource('praxes') as GeoJSONSource | undefined;
-    src?.setData(praxesToGeoJSON(filterPraxes(snapshot.praxes, typeFilter), showDissolved));
-    map.setLayoutProperty(
-      'praxis-points', 'visibility', view === 'points' ? 'visible' : 'none',
-    );
-  }, [snapshot, typeFilter, showDissolved, view]);
+    if (!map) return;
+    const apply = () => {
+      const src = map.getSource('praxes') as GeoJSONSource | undefined;
+      src?.setData(praxesToGeoJSON(
+        filterPraxes(snapshot.praxes, typeFilter), snapshot.month, showDissolved, minYears,
+      ));
+      map.setLayoutProperty(
+        'praxis-points', 'visibility', view === 'points' ? 'visible' : 'none',
+      );
+    };
+    if (readyRef.current) apply();
+    else map.once('praxisterkep:ready', apply);
+  }, [snapshot, typeFilter, showDissolved, view, minYears]);
 
-  // county labels / columns as HTML markers (no glyph server needed)
+  /* county focus zoom */
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || !centroids) return;
+    if (!map || !geoms) return;
+    const apply = () => {
+      if (selectedCounty && geoms.has(selectedCounty)) {
+        map.fitBounds(geoms.get(selectedCounty)!.bbox, { padding: 56, duration: 800 });
+      } else {
+        map.fitBounds(HUNGARY_BOUNDS, { padding: 24, duration: 800 });
+      }
+    };
+    if (readyRef.current) apply();
+    else map.once('praxisterkep:ready', apply);
+  }, [selectedCounty, geoms]);
+
+  /* county labels / columns as HTML markers */
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !geoms) return;
     markersRef.current.forEach((m) => m.remove());
     markersRef.current = [];
     if (!showNames && view !== 'columns') return;
     const maxCount = Math.max(...snapshot.counties.map((c) => c.vacant + c.dissolved), 1);
     for (const c of snapshot.counties) {
-      const pos = centroids.get(c.name);
-      if (!pos) continue;
+      const g = geoms.get(c.name);
+      if (!g) continue;
       const [dx, dy] = LABEL_OFFSET[c.name] ?? [0, 0];
       const el = document.createElement('div');
       el.className = 'county-marker';
@@ -313,13 +491,27 @@ export function MapSection() {
       }
       el.addEventListener('click', () => setSelectedCounty(c.name));
       const marker = new Marker({ element: el, anchor: view === 'columns' ? 'bottom' : 'center' })
-        .setLngLat([pos[0] + dx, pos[1] + dy])
+        .setLngLat([g.centroid[0] + dx, g.centroid[1] + dy])
         .addTo(map);
       markersRef.current.push(marker);
     }
-  }, [snapshot, centroids, showNames, view, setSelectedCounty]);
+  }, [snapshot, geoms, showNames, view, setSelectedCounty]);
 
   const county = snapshot.counties.find((c) => c.name === selectedCounty);
+  const hoverCounty = hover ? snapshot.counties.find((c) => c.name === hover.name) : null;
+  const countyHistory = useMemo(() => {
+    if (!selectedCounty) return null;
+    const values = entries.map((e) => e.byCounty[selectedCounty]?.vacant ?? 0);
+    return values.some((v) => v > 0) ? values : null;
+  }, [entries, selectedCounty]);
+  const countyRank = useMemo(() => {
+    if (!selectedCounty) return null;
+    const rows = countyRanking(snapshot);
+    const i = rows.findIndex((r) => r.name === selectedCounty);
+    return i >= 0 ? i + 1 : null;
+  }, [snapshot, selectedCounty]);
+  const isArchive = snapshot.month !== latestMonth;
+  const monthLoading = selectedMonth !== null && snapshot.month !== selectedMonth;
 
   return (
     <section className="section container" id="terkep">
@@ -367,9 +559,44 @@ export function MapSection() {
           </label>
         )}
       </div>
+      {view === 'points' && (
+        <div className="map-controls">
+          <div className="seg" role="group">
+            {(['status', 'age'] as ColorMode[]).map((m) => (
+              <button key={m} aria-pressed={colorMode === m} onClick={() => setColorMode(m)}>
+                {m === 'status' ? t('map.colorStatus') : t('map.colorAge')}
+              </button>
+            ))}
+          </div>
+          <div className="seg" role="group">
+            {[0, 1, 5, 10].map((y2) => (
+              <button key={y2} aria-pressed={minYears === y2} onClick={() => setMinYears(y2)}>
+                {y2 === 0 ? t('map.durationAll') : t('map.durationYears', { n: y2 })}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="map-wrap">
         <div ref={containerRef} className="map-canvas" />
+        {hover && hoverCounty && !county && (
+          <div className="map-tooltip" style={{ left: hover.x, top: hover.y }}>
+            <strong>{hoverCounty.name}</strong>
+            <span>
+              {formatNumber(hoverCounty.vacant + hoverCounty.dissolved)} / {hoverCounty.total !== null ? formatNumber(hoverCounty.total) : '–'} {t('map.countyDistricts')}
+              {hoverCounty.vacancyRate !== null && ` · ${formatPercent(hoverCounty.vacancyRate)}`}
+            </span>
+          </div>
+        )}
+        {isArchive && (
+          <div className="map-archive">
+            {t('map.archiveMonth')}: <strong>{formatMonth(snapshot.month)}</strong>
+            {snapshot.national.totalDistricts === null && (
+              <span className="map-archive__note">{t('map.noDenomNote')}</span>
+            )}
+          </div>
+        )}
         <div className="map-legend">
           <div>{mapMetric === 'rate' ? t('map.metricRate') : t('map.metricPopulation')}</div>
           <div className="map-legend__ramp">
@@ -381,13 +608,23 @@ export function MapSection() {
             <span>{t('map.legendLow')}</span>
             <span>{t('map.legendHigh')}</span>
           </div>
-          {view === 'points' && (
+          {view === 'points' && colorMode === 'status' && (
             <div style={{ marginTop: 8 }}>
               <div><span className="map-legend__dot" style={{ background: '#ff7a59' }} />{t('map.pointVacant')}</div>
               {showDissolved && snapshot.national.dissolved > 0 && (
                 <div><span className="map-legend__dot" style={{ background: '#ffb454' }} />{t('map.pointDissolved')}</div>
               )}
               <div><span className="map-legend__dot" style={{ background: '#8b98ab', opacity: 0.55 }} />{t('map.pointApprox')}</div>
+            </div>
+          )}
+          {view === 'points' && colorMode === 'age' && (
+            <div style={{ marginTop: 8 }}>
+              {[t('map.ageFresh'), t('map.age1'), t('map.age5'), t('map.age10')].map((label, i) => (
+                <div key={label}>
+                  <span className="map-legend__dot" style={{ background: AGE_COLORS[i] }} />
+                  {label}
+                </div>
+              ))}
             </div>
           )}
         </div>
@@ -400,18 +637,70 @@ export function MapSection() {
               <dd>{county.total !== null ? formatNumber(county.total) : '–'}</dd>
               <dt>{t('map.countyVacant')}</dt>
               <dd>{formatNumber(county.vacant)}</dd>
-              <dt>{t('map.countyDissolved')}</dt>
-              <dd>{formatNumber(county.dissolved)}</dd>
+              {county.dissolved > 0 && (
+                <>
+                  <dt>{t('map.countyDissolved')}</dt>
+                  <dd>{formatNumber(county.dissolved)}</dd>
+                </>
+              )}
               <dt>{t('map.metricRate')}</dt>
               <dd>{county.vacancyRate !== null ? formatPercent(county.vacancyRate) : '–'}</dd>
               <dt>{t('map.metricPopulation')}</dt>
               <dd>
                 {formatNumber(county.populationVacant + county.populationDissolved)} {t('map.fő')}
               </dd>
+              {countyRank !== null && (
+                <>
+                  <dt>{t('map.countyRank')}</dt>
+                  <dd>{countyRank}. / {snapshot.counties.length}</dd>
+                </>
+              )}
+              {countyHistory && entries.length > 1 && (
+                <>
+                  <dt>{t('map.countyChangeSince', { month: formatMonth(entries[0].month) })}</dt>
+                  <dd>
+                    {countyHistory[0]} → {countyHistory[countyHistory.length - 1]}
+                  </dd>
+                </>
+              )}
             </dl>
+            {countyHistory && <PanelSpark values={countyHistory} color="var(--accent)" />}
+            <button className="county-panel__back" onClick={() => setSelectedCounty(null)}>
+              {t('map.backNational')}
+            </button>
           </aside>
         )}
       </div>
+
+      {months.length > 1 && (
+        <div className="timeline">
+          <button className="timeline__play"
+            aria-label={playing ? t('map.pause') : t('map.play')}
+            onClick={() => (playing ? setPlaying(false) : startPlayback())}>
+            {playing ? (
+              <svg viewBox="0 0 16 16"><path d="M4 2.5h3v11H4zM9 2.5h3v11H9z" fill="currentColor" /></svg>
+            ) : (
+              <svg viewBox="0 0 16 16"><path d="M4.5 2.5l9 5.5-9 5.5z" fill="currentColor" /></svg>
+            )}
+          </button>
+          <span className="timeline__title">{t('map.timeTravel')}</span>
+          <input type="range" min={0} max={months.length - 1} value={Math.max(0, monthIdx)}
+            onChange={(e) => {
+              setPlaying(false);
+              const i = Number(e.target.value);
+              void selectMonth(i >= months.length - 1 ? null : months[i]);
+            }}
+            aria-label={t('map.timeTravel')} />
+          <span className="timeline__month">
+            {monthLoading
+              ? t('map.loadingMonth')
+              : formatMonth(selectedMonth ?? latestMonth)}
+            {!selectedMonth && !monthLoading && (
+              <em> · {t('map.live')}</em>
+            )}
+          </span>
+        </div>
+      )}
     </section>
   );
 }

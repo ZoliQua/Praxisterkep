@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { t, tKind } from '../lib/i18n';
 import { formatDuration, formatMonth, formatNumber, monthsBetween } from '../lib/format';
 import { praxesById, primarySite, searchSettlements } from '../lib/selectors';
@@ -63,6 +63,18 @@ export function SearchSection() {
   const setSelected = (s2: SettlementEntry | null) =>
     setState({ kind, query, selected: s2 });
   const [directoryOpen, setDirectoryOpen] = useState(false);
+  const searchReq = useAppStore((s2) => s2.searchRequest);
+
+  // map popup link -> select that settlement here (async to avoid a
+  // synchronous setState inside the effect)
+  useEffect(() => {
+    if (!searchReq) return;
+    const entry = snapshot.settlements.find((x) => x.name === searchReq.name);
+    if (!entry) return;
+    const raf = requestAnimationFrame(() => setSelected(entry));
+    return () => cancelAnimationFrame(raf);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchReq?.n, snapshot]);
 
   const byId = useMemo(() => praxesById(snapshot), [snapshot]);
   const hits = useMemo(
