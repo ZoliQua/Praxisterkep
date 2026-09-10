@@ -14,7 +14,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import parse_dental
 import parse_gp
 import parse_registry
-from build import attach_geocodes, build_snapshot, write_outputs
+from build import attach_geocodes, build_history, build_snapshot, write_outputs
 from fetch_neak import fetch_month
 from geocode import geocode_site, load_cache
 from validate import (
@@ -91,6 +91,7 @@ def main() -> None:
     print("[5/5] build")
     for path in write_outputs(snapshots, month):
         print(f"      wrote {path}")
+    print(f"      wrote {build_history()}")
     print("done")
 
 

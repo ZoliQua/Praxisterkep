@@ -14,6 +14,9 @@ from sources import SOURCES
 
 RAW_DIR = Path(__file__).resolve().parent.parent / "data" / "raw"
 
+# NEAK resets connections without a browser-like User-Agent
+HEADERS = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Praxisterkep/1.0"}
+
 
 def fetch_month(month: str, only_kind: str | None = "dental") -> list[Path]:
     """Fetch all sources for a month (YYYY-MM). Returns saved paths."""
@@ -28,7 +31,7 @@ def fetch_month(month: str, only_kind: str | None = "dental") -> list[Path]:
             print(f"skip (exists): {target}")
             saved.append(target)
             continue
-        resp = requests.get(src["url"], timeout=60)
+        resp = requests.get(src["url"], timeout=60, headers=HEADERS)
         resp.raise_for_status()
         target.write_bytes(resp.content)
         print(f"saved: {target} ({len(resp.content)} bytes)")
