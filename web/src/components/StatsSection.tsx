@@ -127,6 +127,22 @@ export function StatsSection() {
             </div>
             <div className="stat__label">{tKind('stats.populationNow', kind)}</div>
           </div>
+          {snapshot?.national.populationShare !== undefined && (
+            <div className="stat">
+              <div className="stat__value stat__value--accent">
+                {formatPercent(snapshot.national.populationShare)}
+              </div>
+              <div className="stat__label">{tKind('stats.shareNow', kind)}</div>
+            </div>
+          )}
+          {snapshot?.national.praxesPer10k != null && (
+            <div className="stat">
+              <div className="stat__value">
+                {String(snapshot.national.praxesPer10k).replace('.', ',')}
+              </div>
+              <div className="stat__label">{t('stats.per10kNow')}</div>
+            </div>
+          )}
           {persistence && (
             <div className="stat">
               <div className="stat__value stat__value--soft">

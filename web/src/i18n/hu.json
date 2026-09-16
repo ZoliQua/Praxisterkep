@@ -92,7 +92,11 @@
     "backNational": "Országos nézet",
     "countyRank": "Rangsorhely",
     "countyChangeSince": "Változás {month} óta",
-    "popupToSearch": "Részletek a településnél →"
+    "popupToSearch": "Részletek a településnél →",
+    "metricPopShare": "Lakosság aránya",
+    "countyPopShare": "Lakosság-arány",
+    "countyPer10k": "Körzet / 10 000 fő",
+    "popShareExplain": "Lakosság-arány nézetben a színezés azt mutatja, hogy a megye lakosságának mekkora hányada él betöltetlen körzetben (KSH lakónépesség, 2025. január 1.)."
   },
   "search": {
     "heading": "Mi a helyzet nálam?",
@@ -111,7 +115,8 @@
     "filledListTitleCoverage": "A települést ellátó betöltött körzetek",
     "filledMore": "és további {n} körzet",
     "doctorNote": "Az orvosok neve a NEAK nyilvános szerződött-szolgáltatói adatbázisából származik.",
-    "openDirectory": "Összesített körzet-táblázat"
+    "openDirectory": "Összesített körzet-táblázat",
+    "populationLine": "lakos (KSH, 2025)"
   },
   "ranking": {
     "heading": "Megyei rangsor",
@@ -128,7 +133,8 @@
     "p3": "A betöltetlenségi arány nevezője a NEAK törzslistáiban szereplő alapellátási körzetek egyedi kódjainak (FIN, illetve HSZ) száma. Fogorvosi ágon a felnőtt, gyermek, vegyes és iskolai-ifjúsági szolgálatok számítanak (az ügyeleti és egyetemi szolgálatok, valamint a szakellátás nem); háziorvosi ágon a területi ellátási kötelezettségű (T) körzetek — a területi kötelezettség nélküli (TN) praxisok nem, mivel a betöltetlen listán sem szerepelhetnek.",
     "p4": "A rendelők koordinátáit az OpenStreetMap Nominatim szolgáltatásával határozzuk meg. Ahol a cím nem volt pontosan azonosítható, a település középpontját jelöljük, és ezt a térképen külön jelezzük. Körzethatárok hivatalosan nem publikáltak, ezért a térkép megyei szinten színez, a körzeteket pontként mutatja.",
     "p5": "A településkereső a háziorvosi ágon a körzethez tartozó (ellátott) települések hivatalos listáján alapul, így a kistelepülések is megtalálhatók; a fogorvosi ágon a nyilvántartás csak a rendelő székhelyét közli, ezért ott a keresés a rendelők településeire és a megszűnt körzetek ellátott településeire terjed ki.",
-    "p6": "A teljes feldolgozó kód és minden havi nyers forrásfájl nyilvános a projekt tárhelyén — minden szám az eredeti forrásig visszakövethető. A betöltött praxisok szerződött orvosának nevét a NEAK nyilvános szerződött-szolgáltatói adatbázisa alapján jelenítjük meg; betöltetlen vagy megszűnt körzetnél, illetve helyettesítő orvosról személynevet soha nem közlünk."
+    "p6": "A teljes feldolgozó kód és minden havi nyers forrásfájl nyilvános a projekt tárhelyén — minden szám az eredeti forrásig visszakövethető. A betöltött praxisok szerződött orvosának nevét a NEAK nyilvános szerződött-szolgáltatói adatbázisa alapján jelenítjük meg; betöltetlen vagy megszűnt körzetnél, illetve helyettesítő orvosról személynevet soha nem közlünk.",
+    "p7": "A lakossági fajlagos mutatók (a lakosság hány százaléka él betöltetlen körzetben; 10 000 főre jutó körzetszám; a települések lakónépessége) nevezője a KSH Helységnévtár 2025. január 1-jei lakónépesség-adata. Ezt az egy kiadást alkalmazzuk minden archivált hónapra — a történeti hónapoknál ez közelítés, amit itt jelzünk. A települések azonosítása a KSH-törzsszám és a településnév alapján történik; Budapest kerületei külön egységként szerepelnek."
   },
   "footer": {
     "sources": "Források",
@@ -137,7 +143,8 @@
     "disclaimer": "A NEAK adatai tájékoztató jellegűek, a havi finanszírozási szerződésadatok alapján kerültek közzétételre.",
     "license": "Kód: MIT licenc · Feldolgozott adatok: CC BY 4.0 · Forrásadatok az eredeti kibocsátó feltételei szerint",
     "author": "Készítette: Dr. Dúl Zoltán",
-    "updated": "Adatállapot"
+    "updated": "Adatállapot",
+    "sourceKsh": "Lakónépesség: KSH Helységnévtár, 2025. január 1. (www.ksh.hu/apps/hntr.egyeb)"
   },
   "praxisTypes": {
     "adult": "felnőtt",
@@ -216,7 +223,9 @@
     "statusDissolved": "Megszűnt",
     "thDoctor": "Orvos",
     "thAddress": "Rendelő címe",
-    "rowsCapped": "A lista az első {cap} sort mutatja — szűkítsd a szűrőkkel ({n} találat összesen)."
+    "rowsCapped": "A lista az első {cap} sort mutatja — szűkítsd a szűrőkkel ({n} találat összesen).",
+    "per10kNow": "körzet jut 10 000 lakosra országosan",
+    "shareNow": "a lakosság aránya, aki betöltetlen {kind} körzetben él"
   },
   "why": {
     "heading": "Miért számít az alapellátás?",
@@ -271,6 +280,7 @@
     "rateNote": "a {total} nyilvántartott körzetből",
     "cityNote": "egy piktogram ≈ egy Szombathelynyi (75 ezer) ember",
     "longestNote": "{settlement} ({county}) — {type} körzet",
-    "sinceYear": "óta"
+    "sinceYear": "óta",
+    "popShare": "Ez az ország lakosságának {pct}-a."
   }
 }

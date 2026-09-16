@@ -6,7 +6,7 @@ import { readMapState } from '../lib/mapState';
 
 const initialUrl = readMapState(window.location.search);
 
-export type MapMetric = 'rate' | 'population';
+export type MapMetric = 'rate' | 'population' | 'popshare';
 
 interface AppState {
   latest: LatestFile | null;

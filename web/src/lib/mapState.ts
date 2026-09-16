@@ -7,7 +7,7 @@ export interface MapUrlState {
   county?: string;
   type?: PraxisType | 'all';
   view?: 'points' | 'columns';
-  metric?: 'rate' | 'population';
+  metric?: 'rate' | 'population' | 'popshare';
   month?: string;      // YYYY-MM (archive month)
   minYears?: number;   // duration filter
   colorMode?: 'status' | 'age';
@@ -30,7 +30,8 @@ export function readMapState(search: string): MapUrlState {
     out.type = type as PraxisType;
   }
   if (p.get(KEYS.view) === 'columns') out.view = 'columns';
-  if (p.get(KEYS.metric) === 'population') out.metric = 'population';
+  const metric = p.get(KEYS.metric);
+  if (metric === 'population' || metric === 'popshare') out.metric = metric;
   const month = p.get(KEYS.month);
   if (month && /^\d{4}-\d{2}$/.test(month)) out.month = month;
   const years = Number(p.get(KEYS.minYears));
@@ -49,7 +50,7 @@ export function writeMapState(search: string, s: MapUrlState): string {
   setOr(KEYS.county, s.county);
   setOr(KEYS.type, s.type && s.type !== 'all' ? s.type : undefined);
   setOr(KEYS.view, s.view === 'columns' ? 'columns' : undefined);
-  setOr(KEYS.metric, s.metric === 'population' ? 'population' : undefined);
+  setOr(KEYS.metric, s.metric && s.metric !== 'rate' ? s.metric : undefined);
   setOr(KEYS.month, s.month);
   setOr(KEYS.minYears, s.minYears ? String(s.minYears) : undefined);
   setOr(KEYS.colorMode, s.colorMode === 'age' ? 'age' : undefined);

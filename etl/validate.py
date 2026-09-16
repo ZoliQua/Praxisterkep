@@ -121,6 +121,23 @@ def validate_snapshot(snapshot: dict) -> None:
     # physician); vacant/dissolved records and everything else stay name-free
     guarded = {k: v for k, v in snapshot.items() if k != "filledPraxes"}
     _assert_no_name_fields(guarded)
+    # KSH-derived fields, when present, must be internally consistent
+    if nat.get("populationTotal"):
+        share = nat.get("populationShare")
+        if share is None or not 0 <= share <= 1:
+            raise ValidationError(f"national populationShare out of range: {share!r}")
+        county_pop = sum(c.get("populationTotal") or 0 for c in counties)
+        if county_pop > nat["populationTotal"]:
+            raise ValidationError(
+                f"county population sum {county_pop} > national {nat['populationTotal']}")
+        # equality only holds when every county appears in the snapshot
+        if len(counties) >= 20 and county_pop and county_pop != nat["populationTotal"]:
+            raise ValidationError(
+                f"county population sum {county_pop} != national {nat['populationTotal']}")
+        for c in counties:
+            cs = c.get("populationShare")
+            if cs is not None and not 0 <= cs <= 1:
+                raise ValidationError(f"county {c['name']} populationShare {cs!r}")
     for f in snapshot.get("filledPraxes", []):
         doc = f.get("doctor")
         if doc is not None and (not doc or doc.strip().lower() == "betöltetlen"):
