@@ -24,7 +24,7 @@ from collections import defaultdict
 from pathlib import Path
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 
 SOURCE_NAMES = {
     "dental": [
@@ -136,6 +136,7 @@ def build_snapshot(
 
     settlements = _build_settlement_index(vacant, dissolved, reg_by_fin,
                                           vacant_fins, dissolved_fins)
+    _apply_ksh(settlements, county_list)
 
     national = {
         "totalDistricts": len(all_fins) if denominator_known else None,
@@ -153,6 +154,7 @@ def build_snapshot(
             else _praxes_by_type(vacant + dissolved)
         ),
     }
+    _apply_ksh_national(national)
 
     filled = []
     for fin in sorted(set(reg_by_fin) - vacant_fins - dissolved_fins):
@@ -186,6 +188,49 @@ def build_snapshot(
         "filledPraxes": filled,
         "settlements": sorted(settlements, key=lambda s: s["name"]),
     }
+
+
+def _apply_ksh(settlements: list[dict], county_list: list[dict]) -> None:
+    """Attach KSH gazetteer data (resident population of the latest archived
+    edition) to settlement entries and per-capita fields to counties. All
+    fields stay absent/None when no gazetteer is archived — never guessed."""
+    from parse_ksh import load_reference
+
+    ref = load_reference()
+    if ref is None:
+        return
+    for s in settlements:
+        # settlement names are nationally unique in the gazetteer, and a
+        # cross-county praxis can list a settlement under the praxis's county,
+        # so the name alone is the join key
+        hit = ref.lookup(s["name"])
+        if hit:
+            s["kshId"] = hit["kshId"]
+            s["population"] = hit["population"]
+    for c in county_list:
+        pop = ref.county_population.get(c["name"])
+        if not pop:
+            continue
+        c["populationTotal"] = pop
+        c["populationShare"] = round(
+            (c["populationVacant"] + c["populationDissolved"]) / pop, 4)
+        c["praxesPer10k"] = (
+            round(c["total"] * 10000 / pop, 2) if c["total"] else None)
+
+
+def _apply_ksh_national(national: dict) -> None:
+    from parse_ksh import load_reference
+
+    ref = load_reference()
+    if ref is None:
+        return
+    pop = ref.country_population
+    national["populationTotal"] = pop
+    national["populationShare"] = round(
+        (national["populationVacant"] + national["populationDissolved"]) / pop, 4)
+    national["praxesPer10k"] = (
+        round(national["totalDistricts"] * 10000 / pop, 2)
+        if national["totalDistricts"] else None)
 
 
 def _build_settlement_index(vacant, dissolved, reg_by_fin,

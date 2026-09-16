@@ -46,10 +46,16 @@ function typeOptions(snapshot: Snapshot): { value: TypeFilter; label: string }[]
 function countyMetric(snapshot: Snapshot, name: string, metric: MapMetric): number {
   const c = snapshot.counties.find((x) => x.name === name);
   if (!c) return 0;
-  return metric === 'rate'
-    ? c.vacancyRate ?? 0
-    : c.populationVacant + c.populationDissolved;
+  if (metric === 'rate') return c.vacancyRate ?? 0;
+  if (metric === 'popshare') return c.populationShare ?? 0;
+  return c.populationVacant + c.populationDissolved;
 }
+
+const METRIC_LABEL_KEYS: Record<MapMetric, string> = {
+  rate: 'map.metricRate',
+  population: 'map.metricPopulation',
+  popshare: 'map.metricPopShare',
+};
 
 function fillColorExpression(snapshot: Snapshot, metric: MapMetric): ExpressionSpecification {
   const values = snapshot.counties.map((c) => countyMetric(snapshot, c.name, metric));
@@ -517,7 +523,8 @@ export function MapSection() {
     <section className="section container" id="terkep">
       <h2 className="section__heading">{t('map.heading')}</h2>
       <p className="section__explain">
-        {t('map.explain')} {view === 'columns' && t('map.columnExplain')}
+        {t('map.explain')} {view === 'columns' && t('map.columnExplain')}{' '}
+        {mapMetric === 'popshare' && t('map.popShareExplain')}
       </p>
 
       <div className="map-controls">
@@ -529,9 +536,9 @@ export function MapSection() {
           ))}
         </div>
         <div className="seg" role="group">
-          {(['rate', 'population'] as MapMetric[]).map((m) => (
+          {(['rate', 'population', 'popshare'] as MapMetric[]).map((m) => (
             <button key={m} aria-pressed={mapMetric === m} onClick={() => setMapMetric(m)}>
-              {m === 'rate' ? t('map.metricRate') : t('map.metricPopulation')}
+              {t(METRIC_LABEL_KEYS[m])}
             </button>
           ))}
         </div>
@@ -586,6 +593,8 @@ export function MapSection() {
             <span>
               {formatNumber(hoverCounty.vacant + hoverCounty.dissolved)} / {hoverCounty.total !== null ? formatNumber(hoverCounty.total) : '–'} {t('map.countyDistricts')}
               {hoverCounty.vacancyRate !== null && ` · ${formatPercent(hoverCounty.vacancyRate)}`}
+              {hoverCounty.populationShare !== undefined
+                && ` · ${t('map.countyPopShare')}: ${formatPercent(hoverCounty.populationShare)}`}
             </span>
           </div>
         )}
@@ -598,7 +607,7 @@ export function MapSection() {
           </div>
         )}
         <div className="map-legend">
-          <div>{mapMetric === 'rate' ? t('map.metricRate') : t('map.metricPopulation')}</div>
+          <div>{t(METRIC_LABEL_KEYS[mapMetric])}</div>
           <div className="map-legend__ramp">
             {RAMP.map((c) => (
               <span key={c} style={{ background: c }} />
@@ -649,6 +658,18 @@ export function MapSection() {
               <dd>
                 {formatNumber(county.populationVacant + county.populationDissolved)} {t('map.fő')}
               </dd>
+              {county.populationShare !== undefined && (
+                <>
+                  <dt>{t('map.countyPopShare')}</dt>
+                  <dd>{formatPercent(county.populationShare)}</dd>
+                </>
+              )}
+              {county.praxesPer10k != null && (
+                <>
+                  <dt>{t('map.countyPer10k')}</dt>
+                  <dd>{String(county.praxesPer10k).replace('.', ',')}</dd>
+                </>
+              )}
               {countyRank !== null && (
                 <>
                   <dt>{t('map.countyRank')}</dt>

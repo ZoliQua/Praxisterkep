@@ -150,7 +150,11 @@ export function SearchSection() {
         <div className="settlement-card">
           <h3>
             {selected.name}
-            <small>{selected.county} {t('search.county')}</small>
+            <small>
+              {selected.county} {t('search.county')}
+              {selected.population !== undefined
+                && ` · ${formatNumber(selected.population)} ${t('search.populationLine')}`}
+            </small>
           </h3>
           <div className="settlement-card__row">
             <span className="badge badge--ok">{selected.filled}</span>

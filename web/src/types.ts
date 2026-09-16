@@ -42,6 +42,10 @@ export interface CountyAggregate {
   populationDissolved: number;
   vacancyRate: number | null;
   byType: Record<string, TypeCount>;
+  /** KSH gazetteer fields (latest edition; absent when not archived) */
+  populationTotal?: number;
+  populationShare?: number;
+  praxesPer10k?: number | null;
 }
 
 export interface NationalAggregate {
@@ -52,12 +56,17 @@ export interface NationalAggregate {
   populationVacant: number;
   populationDissolved: number;
   byType: Record<string, TypeCount>;
+  populationTotal?: number;
+  populationShare?: number;
+  praxesPer10k?: number | null;
 }
 
 export interface SettlementEntry {
   name: string;
   county: string;
   filled: number;
+  kshId?: string;
+  population?: number;
   vacantPraxisIds: string[];
   dissolvedPraxisIds: string[];
   affectedByDissolved: boolean;

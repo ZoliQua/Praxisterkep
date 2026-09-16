@@ -289,7 +289,11 @@ export function HeroShowcase() {
         color: 'var(--accent)',
         finalText: formatNumber(popAll),
         animText: (p) => formatNumber(Math.round(popAll * p)),
-        note: t('showcase.cityNote'),
+        note: national.populationShare !== undefined
+          ? `${t('showcase.cityNote')} ${t('showcase.popShare', {
+              pct: formatPercent(national.populationShare),
+            })}`
+          : t('showcase.cityNote'),
         visual: (p) => (
           <CityRow count={popAll / SZOMBATHELY_POPULATION} progress={p} color="var(--accent)" />
         ),
