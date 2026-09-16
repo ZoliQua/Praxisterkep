@@ -127,6 +127,20 @@ export function StatsSection() {
             </div>
             <div className="stat__label">{tKind('stats.populationNow', kind)}</div>
           </div>
+          {snapshot?.national.longTerm ? (
+            <div className="stat">
+              <div className="stat__value stat__value--alert">
+                {formatNumber(snapshot.national.longTerm)}
+              </div>
+              <div className="stat__label">
+                {tKind('stats.longTermNow', kind, {
+                  pct: formatPercent(
+                    snapshot.national.longTerm
+                      / (snapshot.national.vacant + snapshot.national.dissolved), 0),
+                })}
+              </div>
+            </div>
+          ) : null}
           {snapshot?.national.populationShare !== undefined && (
             <div className="stat">
               <div className="stat__value stat__value--accent">

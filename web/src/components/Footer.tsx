@@ -10,6 +10,7 @@ export function Footer() {
         <h3>{t('footer.sources')}</h3>
         <ul>
           <li>{t('footer.sourceNeak')}</li>
+          <li>{t('footer.sourceOkfo')}</li>
           <li>{t('footer.sourceKsh')}</li>
           <li>{t('footer.sourceOsm')}</li>
         </ul>

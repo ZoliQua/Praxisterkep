@@ -55,7 +55,8 @@ export function countyRanking(snapshot: Snapshot, minMonths = 0): CountyRankingR
 }
 
 export type PraxisSortKey =
-  | 'settlement' | 'county' | 'district' | 'type' | 'vacantSince' | 'population';
+  | 'settlement' | 'county' | 'district' | 'type' | 'vacantSince' | 'population'
+  | 'longTermSince';
 
 /** Sortable rows for the full vacancy table (one row per praxis). */
 export function praxisTableRows(snapshot: Snapshot) {
@@ -71,6 +72,7 @@ export function praxisTableRows(snapshot: Snapshot) {
       vacantSince: p.vacantSince,
       months: monthsBetween(p.vacantSince, snapshot.month),
       population: p.population,
+      longTermSince: p.longTermSince ?? '',
     };
   });
 }

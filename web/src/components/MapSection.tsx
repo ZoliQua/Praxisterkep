@@ -113,6 +113,8 @@ function praxesToGeoJSON(
           district: s.district,
           vacantSince: p.vacantSince,
           months,
+          longTerm: p.longTerm === true,
+          longTermSince: p.longTermSince ?? '',
           population: p.population,
           geoApprox: s.geoApprox === true,
           isHeadquarters: s.isHeadquarters,
@@ -140,6 +142,11 @@ function popupHtml(props: Record<string, unknown>): string {
   }
   if (props.district) {
     lines.push(`<div class="muted">${t('map.popupDistrict')}: ${esc(props.district)}</div>`);
+  }
+  if (props.longTerm === true && props.longTermSince) {
+    lines.push(`<div class="flag">${t('map.popupLongTerm', {
+      month: formatMonth(String(props.longTermSince)),
+    })}</div>`);
   }
   if (props.geoApprox === true) {
     lines.push(`<div class="flag">${t('map.popupApproxNote')}</div>`);

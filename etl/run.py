@@ -13,6 +13,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import parse_dental
 import parse_gp
+import parse_okfo
 import parse_registry
 from build import attach_geocodes, build_history, build_snapshot, write_outputs
 from fetch_neak import fetch_month
@@ -81,10 +82,30 @@ def main() -> None:
                     geocode_site(s["postalCode"], s["settlement"], s["address"], cache)
         attach_geocodes(vacant + dissolved, cache)
 
+        # OKFŐ long-term flags (supplementary: a failure must not block the
+        # NEAK pipeline — it is reported and the month builds without flags)
+        long_term_as_of = None
+        try:
+            okfo_path = parse_okfo.fetch(month, kind)
+            as_of, rows = parse_okfo.parse(okfo_path, kind)
+            drift = abs((int(month[:4]) * 12 + int(month[5:7]))
+                        - (int(as_of[:4]) * 12 + int(as_of[5:7])))
+            if drift > 2:
+                print(f"      WARNING: OKFŐ list as-of {as_of} too far from "
+                      f"{month}; skipping long-term flags")
+            else:
+                matched, unmatched = parse_okfo.apply_longterm(vacant + dissolved, rows)
+                long_term_as_of = as_of
+                print(f"      okfő: {len(rows)} rows, {matched} matched"
+                      + (f", {unmatched} UNMATCHED" if unmatched else ""))
+        except Exception as exc:
+            print(f"      WARNING: OKFŐ long-term list unavailable: {exc}")
+
         print(f"[4/5] validate {kind}")
         validate_records(vacant + dissolved, previous_month_count(month, kind),
                          vacant_count=len(vacant))
-        snapshot = build_snapshot(month, kind, vacant, dissolved, registry)
+        snapshot = build_snapshot(month, kind, vacant, dissolved, registry,
+                                  long_term_as_of=long_term_as_of)
         validate_snapshot(snapshot)
         snapshots[kind] = snapshot
 
