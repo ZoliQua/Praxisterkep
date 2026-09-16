@@ -40,7 +40,8 @@
     "years": "év",
     "since": "óta",
     "populationContext": "Ez nagyjából {count} Szombathelynyi ember.",
-    "vacantVsUnserved": "Fontos: a betöltetlen körzet nem feltétlenül ellátatlan — a lakosok többségét helyettesítő orvos látja el, jellemzően más településről, korlátozott rendelési időben."
+    "vacantVsUnserved": "Fontos: a betöltetlen körzet nem feltétlenül ellátatlan — a lakosok többségét helyettesítő orvos látja el, jellemzően más településről, korlátozott rendelési időben.",
+    "longTerm": "jogilag tartósan betöltetlen {kind} körzet"
   },
   "map": {
     "heading": "Betöltetlenség a térképen",
@@ -96,7 +97,8 @@
     "metricPopShare": "Lakosság aránya",
     "countyPopShare": "Lakosság-arány",
     "countyPer10k": "Körzet / 10 000 fő",
-    "popShareExplain": "Lakosság-arány nézetben a színezés azt mutatja, hogy a megye lakosságának mekkora hányada él betöltetlen körzetben (KSH lakónépesség, 2025. január 1.)."
+    "popShareExplain": "Lakosság-arány nézetben a színezés azt mutatja, hogy a megye lakosságának mekkora hányada él betöltetlen körzetben (KSH lakónépesség, 2025. január 1.).",
+    "popupLongTerm": "Tartósan betöltetlen (313/2011. Korm. r.): {month} óta"
   },
   "search": {
     "heading": "Mi a helyzet nálam?",
@@ -134,7 +136,8 @@
     "p4": "A rendelők koordinátáit az OpenStreetMap Nominatim szolgáltatásával határozzuk meg. Ahol a cím nem volt pontosan azonosítható, a település középpontját jelöljük, és ezt a térképen külön jelezzük. Körzethatárok hivatalosan nem publikáltak, ezért a térkép megyei szinten színez, a körzeteket pontként mutatja.",
     "p5": "A településkereső a háziorvosi ágon a körzethez tartozó (ellátott) települések hivatalos listáján alapul, így a kistelepülések is megtalálhatók; a fogorvosi ágon a nyilvántartás csak a rendelő székhelyét közli, ezért ott a keresés a rendelők településeire és a megszűnt körzetek ellátott településeire terjed ki.",
     "p6": "A teljes feldolgozó kód és minden havi nyers forrásfájl nyilvános a projekt tárhelyén — minden szám az eredeti forrásig visszakövethető. A betöltött praxisok szerződött orvosának nevét a NEAK nyilvános szerződött-szolgáltatói adatbázisa alapján jelenítjük meg; betöltetlen vagy megszűnt körzetnél, illetve helyettesítő orvosról személynevet soha nem közlünk.",
-    "p7": "A lakossági fajlagos mutatók (a lakosság hány százaléka él betöltetlen körzetben; 10 000 főre jutó körzetszám; a települések lakónépessége) nevezője a KSH Helységnévtár 2025. január 1-jei lakónépesség-adata. Ezt az egy kiadást alkalmazzuk minden archivált hónapra — a történeti hónapoknál ez közelítés, amit itt jelzünk. A települések azonosítása a KSH-törzsszám és a településnév alapján történik; Budapest kerületei külön egységként szerepelnek."
+    "p7": "A lakossági fajlagos mutatók (a lakosság hány százaléka él betöltetlen körzetben; 10 000 főre jutó körzetszám; a települések lakónépessége) nevezője a KSH Helységnévtár 2025. január 1-jei lakónépesség-adata. Ezt az egy kiadást alkalmazzuk minden archivált hónapra — a történeti hónapoknál ez közelítés, amit itt jelzünk. A települések azonosítása a KSH-törzsszám és a településnév alapján történik; Budapest kerületei külön egységként szerepelnek.",
+    "p8": "A tartósan betöltetlen körzetek jogi kategóriáját az OKFŐ Alapellátási Igazgatóság folyamatosan frissített listáiból vesszük át (alapellatas.okfo.gov.hu). A lista nem tartalmaz NEAK-kódot, ezért a párosítás a település, a szolgálattípus és a betöltetlenség kezdő hónapja alapján történik; a lista állapotdátumát a felületen jelezzük. A jelölés a mindenkori aktuális hónapra vonatkozik, a történeti hónapokra visszamenőleg nem alkalmazzuk."
   },
   "footer": {
     "sources": "Források",
@@ -144,7 +147,8 @@
     "license": "Kód: MIT licenc · Feldolgozott adatok: CC BY 4.0 · Forrásadatok az eredeti kibocsátó feltételei szerint",
     "author": "Készítette: Dr. Dúl Zoltán",
     "updated": "Adatállapot",
-    "sourceKsh": "Lakónépesség: KSH Helységnévtár, 2025. január 1. (www.ksh.hu/apps/hntr.egyeb)"
+    "sourceKsh": "Lakónépesség: KSH Helységnévtár, 2025. január 1. (www.ksh.hu/apps/hntr.egyeb)",
+    "sourceOkfo": "Tartósan betöltetlen körzetek: OKFŐ Alapellátási Igazgatóság (alapellatas.okfo.gov.hu)"
   },
   "praxisTypes": {
     "adult": "felnőtt",
@@ -225,7 +229,10 @@
     "thAddress": "Rendelő címe",
     "rowsCapped": "A lista az első {cap} sort mutatja — szűkítsd a szűrőkkel ({n} találat összesen).",
     "per10kNow": "körzet jut 10 000 lakosra országosan",
-    "shareNow": "a lakosság aránya, aki betöltetlen {kind} körzetben él"
+    "shareNow": "a lakosság aránya, aki betöltetlen {kind} körzetben él",
+    "thLongTerm": "Tartósan",
+    "statusLongTerm": "tartósan betöltetlen",
+    "longTermNow": "jogilag tartósan betöltetlen {kind} körzet — az üresek {pct}-a"
   },
   "why": {
     "heading": "Miért számít az alapellátás?",
@@ -281,6 +288,7 @@
     "cityNote": "egy piktogram ≈ egy Szombathelynyi (75 ezer) ember",
     "longestNote": "{settlement} ({county}) — {type} körzet",
     "sinceYear": "óta",
-    "popShare": "Ez az ország lakosságának {pct}-a."
+    "popShare": "Ez az ország lakosságának {pct}-a.",
+    "longTermNote": "A 313/2011. Korm. rendelet szerinti jogi kategória: a finanszírozási szerződés megszűnése óta legalább 6 hónap telt el. Forrás: OKFŐ, {asOf} állapot."
   }
 }

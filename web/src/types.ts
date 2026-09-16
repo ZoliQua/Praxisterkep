@@ -26,6 +26,9 @@ export interface Praxis {
   servedSettlements?: string[];
   vacantSince: string; // YYYY-MM
   population: number | null;
+  /** OKFŐ legal long-term-vacancy flag (313/2011. Korm. r.) */
+  longTerm?: boolean;
+  longTermSince?: string;
 }
 
 export interface TypeCount {
@@ -42,6 +45,7 @@ export interface CountyAggregate {
   populationDissolved: number;
   vacancyRate: number | null;
   byType: Record<string, TypeCount>;
+  longTerm?: number;
   /** KSH gazetteer fields (latest edition; absent when not archived) */
   populationTotal?: number;
   populationShare?: number;
@@ -56,6 +60,7 @@ export interface NationalAggregate {
   populationVacant: number;
   populationDissolved: number;
   byType: Record<string, TypeCount>;
+  longTerm?: number;
   populationTotal?: number;
   populationShare?: number;
   praxesPer10k?: number | null;
@@ -90,6 +95,7 @@ export interface Snapshot {
   kind: PraxisKind;
   month: string;
   disclaimer: string;
+  longTermAsOf?: string | null;
   sources: string[];
   national: NationalAggregate;
   counties: CountyAggregate[];

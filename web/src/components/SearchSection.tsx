@@ -29,6 +29,9 @@ function PraxisRow({ praxis, month }: { praxis: Praxis; month: string }) {
       <span className={`badge ${praxis.status === 'dissolved' ? 'badge--dissolved' : 'badge--vacant'}`}>
         {praxis.status === 'dissolved' ? t('map.popupStatusDissolved') : t('map.popupStatusVacant')}
       </span>
+      {praxis.longTerm && (
+        <span className="badge badge--longterm">{t('stats.statusLongTerm')}</span>
+      )}
       <span className="praxis-line">
         {t(`praxisTypes.${praxis.type}`)} · {site?.settlement}, {site?.address} ·{' '}
         {t('map.popupVacantSince')}: <strong>{formatMonth(praxis.vacantSince)}</strong> (

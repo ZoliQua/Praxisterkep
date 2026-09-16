@@ -85,6 +85,7 @@ def validate_snapshot(snapshot: dict) -> None:
     checks = [
         ("vacant", sum(c["vacant"] for c in counties), nat["vacant"]),
         ("dissolved", sum(c["dissolved"] for c in counties), nat["dissolved"]),
+        ("longTerm", sum(c.get("longTerm", 0) for c in counties), nat.get("longTerm", 0)),
         ("populationVacant", sum(c["populationVacant"] for c in counties),
          nat["populationVacant"]),
         ("populationDissolved", sum(c["populationDissolved"] for c in counties),
@@ -100,6 +101,8 @@ def validate_snapshot(snapshot: dict) -> None:
                 f"aggregate mismatch for {name}: counties sum {county_sum} "
                 f"!= national {national}"
             )
+    if nat.get("longTerm", 0) > nat["vacant"] + nat["dissolved"]:
+        raise ValidationError("longTerm count exceeds vacant+dissolved")
     praxis_count = len(snapshot["praxes"])
     if praxis_count != nat["vacant"] + nat["dissolved"]:
         raise ValidationError(

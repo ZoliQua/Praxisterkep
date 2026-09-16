@@ -63,6 +63,7 @@ def build_snapshot(
     vacant: list[dict],
     dissolved: list[dict],
     registry: list[dict],
+    long_term_as_of: str | None = None,
 ) -> dict:
     reg_by_fin = {e["id"]: e for e in registry}
     # enrich from the registry where the vacant lists are thinner
@@ -124,6 +125,12 @@ def build_snapshot(
         c = county_entry(_county_of(r, reg_by_fin))
         c["dissolved"] += 1
         c["populationDissolved"] += r["population"] or 0
+    for r in vacant + dissolved:
+        if r.get("longTerm"):
+            c = county_entry(_county_of(r, reg_by_fin))
+            c["longTerm"] = c.get("longTerm", 0) + 1
+    for c in counties.values():
+        c.setdefault("longTerm", 0)
 
     county_list = []
     for c in sorted(counties.values(), key=lambda c: c["name"]):
@@ -148,6 +155,7 @@ def build_snapshot(
         ),
         "populationVacant": sum(r["population"] or 0 for r in vacant),
         "populationDissolved": sum(r["population"] or 0 for r in dissolved),
+        "longTerm": sum(1 for r in vacant + dissolved if r.get("longTerm")),
         "byType": (
             _national_by_type(reg_by_fin, vacant_fins | dissolved_fins)
             if denominator_known
@@ -181,6 +189,7 @@ def build_snapshot(
         "kind": kind,
         "month": month,
         "disclaimer": "A NEAK adatai tájékoztató jellegűek.",
+        "longTermAsOf": long_term_as_of,
         "sources": SOURCE_NAMES[kind],
         "national": national,
         "counties": county_list,

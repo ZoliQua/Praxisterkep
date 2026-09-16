@@ -18,6 +18,7 @@ const COLUMNS: { key: PraxisSortKey; labelKey: string; numeric?: boolean }[] = [
   { key: 'type', labelKey: 'stats.thType' },
   { key: 'vacantSince', labelKey: 'stats.thSince' },
   { key: 'population', labelKey: 'stats.thPopulation', numeric: true },
+  { key: 'longTermSince', labelKey: 'stats.thLongTerm' },
 ];
 
 export function VacancyTableModal({ snapshot, open, onClose }: {
@@ -140,6 +141,7 @@ export function VacancyTableModal({ snapshot, open, onClose }: {
                   <td className="is-num">
                     {r.population !== null ? formatNumber(r.population) : '–'}
                   </td>
+                  <td>{r.longTermSince ? formatMonth(r.longTermSince) : '–'}</td>
                   <td className="is-num">{formatDuration(r.months)}</td>
                   {hasDissolved && (
                     <td>

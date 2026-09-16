@@ -260,6 +260,23 @@ export function HeroShowcase() {
         visual: () => <Spark points={vSeries} color="var(--alert)" yFormat={formatNumber} />,
       },
     ];
+    const vacantAll = national.vacant + national.dissolved;
+    if (national.longTerm && vacantAll > 0) {
+      const ltShare = national.longTerm / vacantAll;
+      out.push({
+        key: 'longterm',
+        label: tKind('hero.longTerm', kind),
+        color: 'var(--alert)',
+        finalText: formatNumber(national.longTerm),
+        animText: (p) => formatNumber(Math.round(national.longTerm! * p)),
+        note: t('showcase.longTermNote', {
+          asOf: snapshot.longTermAsOf ? formatMonth(snapshot.longTermAsOf) : '',
+        }),
+        visual: (p) => (
+          <Donut value={ltShare * p} shown={ltShare * p} color="var(--alert)" />
+        ),
+      });
+    }
     if (national.dissolved > 0) {
       out.push({
         key: 'dissolved',
