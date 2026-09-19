@@ -70,6 +70,24 @@ function fillColorExpression(snapshot: Snapshot, metric: MapMetric): ExpressionS
   return match as ExpressionSpecification;
 }
 
+function jarasFillExpression(
+  values: Map<string, { count: number; population: number }>,
+): ExpressionSpecification {
+  // sqrt scale: one outlier (Budapest) must not flatten everything else
+  // into the darkest ramp step; any district with data gets >= RAMP[1]
+  const max = Math.max(1, ...[...values.values()].map((v) => v.count));
+  const match: unknown[] = ['match', ['get', 'name']];
+  for (const [name, v] of values) {
+    const idx = Math.max(1, Math.min(
+      RAMP.length - 1,
+      Math.round(Math.sqrt(v.count / max) * (RAMP.length - 1)),
+    ));
+    match.push(name, RAMP[idx]);
+  }
+  match.push(RAMP[0]);
+  return match as ExpressionSpecification;
+}
+
 function fillOpacityExpression(focus: string | null): ExpressionSpecification | number {
   if (!focus) return 0.85;
   return ['case', ['==', ['get', 'name'], focus], 0.92, 0.25] as ExpressionSpecification;
@@ -153,6 +171,7 @@ function popupHtml(props: Record<string, unknown>): string {
   }
   lines.push(
     `<a class="map-popup__link" href="#nalam" data-settlement="${esc(props.settlement)}">${t('map.popupToSearch')}</a>`,
+    `<a class="map-popup__link" href="#terkep" data-copylink="${esc(props.id)}">${t('map.popupCopyLink')}</a>`,
   );
   return lines.join('');
 }
@@ -246,6 +265,7 @@ export function MapSection() {
   const [view, setView] = useState<MapView>(initialUrl.view ?? 'points');
   const [colorMode, setColorMode] = useState<ColorMode>(initialUrl.colorMode ?? 'status');
   const [minYears, setMinYears] = useState(initialUrl.minYears ?? 0);
+  const [level, setLevel] = useState<'county' | 'jaras'>('county');
   const [showNames, setShowNames] = useState(true);
   const [showDissolved, setShowDissolved] = useState(true);
   const [playing, setPlaying] = useState(false);
@@ -263,6 +283,22 @@ export function MapSection() {
   const months = useMemo(() => entries.map((e) => e.month), [entries]);
   const monthIdx = selectedMonth ? months.indexOf(selectedMonth) : months.length - 1;
 
+  // járás-level aggregation: a praxis counts at its first district-bearing
+  // site; Budapest kerület districts roll up onto the one Budapest polygon
+  const districtValues = useMemo(() => {
+    const m = new Map<string, { count: number; population: number }>();
+    for (const p of snapshot.praxes) {
+      const d0 = p.sites.find((s) => s.district)?.district;
+      if (!d0) continue;
+      const key = d0.startsWith('Budapest') ? 'Budapest' : d0;
+      const cur = m.get(key) ?? { count: 0, population: 0 };
+      cur.count += 1;
+      cur.population += p.population ?? 0;
+      m.set(key, cur);
+    }
+    return m;
+  }, [snapshot]);
+
   useEffect(() => {
     void loadCountyGeoms().then(setGeoms);
   }, []);
@@ -275,6 +311,52 @@ export function MapSection() {
       void selectMonth(initialUrl.month);
     }
   }, [months, latestMonth, selectMonth]);
+
+  /* apply ?p=FIN praxis deep link once: zoom to the praxis + open popup */
+  const urlPraxisApplied = useRef(false);
+  useEffect(() => {
+    if (urlPraxisApplied.current || !initialUrl.praxis) return;
+    const praxis = snapshot.praxes.find((p) => p.id === initialUrl.praxis);
+    const site = praxis?.sites.find((s) => s.lat !== undefined && s.lon !== undefined);
+    if (!praxis || !site) return;
+    const open = () => {
+      const map = mapRef.current;
+      if (!map) return;
+      map.flyTo({ center: [site.lon!, site.lat!], zoom: 11, duration: 1400 });
+      new Popup({ className: 'map-popup', closeButton: false, maxWidth: 'none' })
+        .setLngLat([site.lon!, site.lat!])
+        .setHTML(popupHtml({
+          id: praxis.id,
+          status: praxis.status,
+          type: praxis.type,
+          settlement: site.settlement,
+          address: site.address,
+          district: site.district,
+          vacantSince: praxis.vacantSince,
+          longTerm: praxis.longTerm === true,
+          longTermSince: praxis.longTermSince ?? '',
+          population: praxis.population,
+          geoApprox: site.geoApprox === true,
+          isHeadquarters: site.isHeadquarters,
+        }))
+        .addTo(map);
+      // twice: late-mounting sections above the map shift the layout
+      const scroll = () =>
+        document.getElementById('terkep')?.scrollIntoView({ block: 'start' });
+      scroll();
+      setTimeout(scroll, 900);
+    };
+    // deferred: the map-creating effect is declared later in this component,
+    // so mapRef is still null when this effect first runs
+    const timer = setTimeout(() => {
+      const map = mapRef.current;
+      if (!map) return;
+      urlPraxisApplied.current = true;
+      if (readyRef.current) open();
+      else map.once('praxisterkep:ready', open);
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [snapshot]);
 
   /* shareable URL (replaceState, foreign params preserved) */
   useEffect(() => {
@@ -332,6 +414,9 @@ export function MapSection() {
       dragRotate: false,
     });
     mapRef.current = map;
+    if (import.meta.env.DEV) {
+      (window as unknown as Record<string, unknown>).__map = map;
+    }
     map.addControl(new NavigationControl({ showCompass: false }), 'top-left');
 
     map.on('load', () => {
@@ -354,6 +439,26 @@ export function MapSection() {
         type: 'line',
         source: 'counties',
         paint: { 'line-color': '#2a3b52', 'line-width': 1 },
+      });
+      // járás layer starts empty; the geojson is only fetched on first use
+      map.addSource('jaras', {
+        type: 'geojson',
+        data: { type: 'FeatureCollection', features: [] },
+        attribution: '© OpenStreetMap contributors',
+      });
+      map.addLayer({
+        id: 'jaras-fill',
+        type: 'fill',
+        source: 'jaras',
+        layout: { visibility: 'none' },
+        paint: { 'fill-color': RAMP[0], 'fill-opacity': 0.85 },
+      });
+      map.addLayer({
+        id: 'jaras-line',
+        type: 'line',
+        source: 'jaras',
+        layout: { visibility: 'none' },
+        paint: { 'line-color': '#2a3b52', 'line-width': 0.8 },
       });
       map.addSource('praxes', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
       map.addLayer({
@@ -383,17 +488,19 @@ export function MapSection() {
         setSelectedCounty(name ?? null);
       });
       let hoverRaf = 0;
-      map.on('mousemove', 'county-fill', (e: MapLayerMouseEvent) => {
-        const name = e.features?.[0]?.properties?.name as string | undefined;
-        if (!name) return;
-        cancelAnimationFrame(hoverRaf);
-        const { x, y } = e.point;
-        hoverRaf = requestAnimationFrame(() => setHover({ name, x, y }));
-      });
-      map.on('mouseleave', 'county-fill', () => {
-        cancelAnimationFrame(hoverRaf);
-        setHover(null);
-      });
+      for (const fillLayer of ['county-fill', 'jaras-fill']) {
+        map.on('mousemove', fillLayer, (e: MapLayerMouseEvent) => {
+          const name = e.features?.[0]?.properties?.name as string | undefined;
+          if (!name) return;
+          cancelAnimationFrame(hoverRaf);
+          const { x, y } = e.point;
+          hoverRaf = requestAnimationFrame(() => setHover({ name, x, y }));
+        });
+        map.on('mouseleave', fillLayer, () => {
+          cancelAnimationFrame(hoverRaf);
+          setHover(null);
+        });
+      }
       for (const layer of ['praxis-points', 'county-fill']) {
         map.on('mouseenter', layer, () => (map.getCanvas().style.cursor = 'pointer'));
         map.on('mouseleave', layer, () => (map.getCanvas().style.cursor = ''));
@@ -402,11 +509,24 @@ export function MapSection() {
       map.fire('praxisterkep:ready');
     });
 
-    // popup "open in search" links (popup DOM lives inside the map container)
+    // popup "open in search" + "copy deep link" (popup DOM lives inside
+    // the map container)
     const onContainerClick = (ev: MouseEvent) => {
-      const a = (ev.target as HTMLElement).closest?.('a[data-settlement]');
+      const target = ev.target as HTMLElement;
+      const a = target.closest?.('a[data-settlement]');
       if (a instanceof HTMLElement && a.dataset.settlement) {
         requestSearch(a.dataset.settlement);
+        return;
+      }
+      const c = target.closest?.('a[data-copylink]');
+      if (c instanceof HTMLElement && c.dataset.copylink) {
+        ev.preventDefault();
+        const url = new URL(window.location.href);
+        url.searchParams.set('p', c.dataset.copylink);
+        url.hash = '#terkep';
+        void navigator.clipboard?.writeText(url.toString()).then(() => {
+          c.textContent = t('map.popupCopied');
+        });
       }
     };
     const container = containerRef.current;
@@ -454,6 +574,35 @@ export function MapSection() {
     else map.once('praxisterkep:ready', apply);
   }, [snapshot, typeFilter, showDissolved, view, minYears]);
 
+  /* county <-> járás level: swap the fill layers, lazy-load the polygons */
+  const jarasLoaded = useRef(false);
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    const apply = () => {
+      if (level === 'jaras' && !jarasLoaded.current) {
+        jarasLoaded.current = true;
+        void fetch(`${import.meta.env.BASE_URL}data/jaras.geojson`)
+          .then((r) => r.json())
+          .then((fc: GeoJSON.GeoJSON) => {
+            (mapRef.current?.getSource('jaras') as GeoJSONSource | undefined)
+              ?.setData(fc);
+          });
+      }
+      const showJ = level === 'jaras' ? 'visible' : 'none';
+      const showC = level === 'jaras' ? 'none' : 'visible';
+      map.setLayoutProperty('jaras-fill', 'visibility', showJ);
+      map.setLayoutProperty('jaras-line', 'visibility', showJ);
+      map.setLayoutProperty('county-fill', 'visibility', showC);
+      map.setLayoutProperty('county-line', 'visibility', showC);
+      if (level === 'jaras') {
+        map.setPaintProperty('jaras-fill', 'fill-color', jarasFillExpression(districtValues));
+      }
+    };
+    if (readyRef.current) apply();
+    else map.once('praxisterkep:ready', apply);
+  }, [level, districtValues]);
+
   /* county focus zoom */
   useEffect(() => {
     const map = mapRef.current;
@@ -475,6 +624,7 @@ export function MapSection() {
     if (!map || !geoms) return;
     markersRef.current.forEach((m) => m.remove());
     markersRef.current = [];
+    if (level === 'jaras') return; // county labels would clutter the járás view
     if (!showNames && view !== 'columns') return;
     const maxCount = Math.max(...snapshot.counties.map((c) => c.vacant + c.dissolved), 1);
     for (const c of snapshot.counties) {
@@ -508,7 +658,7 @@ export function MapSection() {
         .addTo(map);
       markersRef.current.push(marker);
     }
-  }, [snapshot, geoms, showNames, view, setSelectedCounty]);
+  }, [snapshot, geoms, showNames, view, level, setSelectedCounty]);
 
   const county = snapshot.counties.find((c) => c.name === selectedCounty);
   const hoverCounty = hover ? snapshot.counties.find((c) => c.name === hover.name) : null;
@@ -536,19 +686,28 @@ export function MapSection() {
 
       <div className="map-controls">
         <div className="seg" role="group">
+          {(['county', 'jaras'] as const).map((l) => (
+            <button key={l} aria-pressed={level === l} onClick={() => setLevel(l)}>
+              {l === 'county' ? t('map.levelCounty') : t('map.levelJaras')}
+            </button>
+          ))}
+        </div>
+        <div className="seg" role="group">
           {(['points', 'columns'] as MapView[]).map((v) => (
             <button key={v} aria-pressed={view === v} onClick={() => setView(v)}>
               {v === 'points' ? t('map.viewPoints') : t('map.viewColumns')}
             </button>
           ))}
         </div>
-        <div className="seg" role="group">
-          {(['rate', 'population', 'popshare'] as MapMetric[]).map((m) => (
-            <button key={m} aria-pressed={mapMetric === m} onClick={() => setMapMetric(m)}>
-              {t(METRIC_LABEL_KEYS[m])}
-            </button>
-          ))}
-        </div>
+        {level === 'county' && (
+          <div className="seg" role="group">
+            {(['rate', 'population', 'popshare'] as MapMetric[]).map((m) => (
+              <button key={m} aria-pressed={mapMetric === m} onClick={() => setMapMetric(m)}>
+                {t(METRIC_LABEL_KEYS[m])}
+              </button>
+            ))}
+          </div>
+        )}
         <div className="seg" role="group">
           {typeOptions(snapshot).map((o) => (
             <button
@@ -594,7 +753,7 @@ export function MapSection() {
 
       <div className="map-wrap">
         <div ref={containerRef} className="map-canvas" />
-        {hover && hoverCounty && !county && (
+        {hover && level === 'county' && hoverCounty && !county && (
           <div className="map-tooltip" style={{ left: hover.x, top: hover.y }}>
             <strong>{hoverCounty.name}</strong>
             <span>
@@ -602,6 +761,16 @@ export function MapSection() {
               {hoverCounty.vacancyRate !== null && ` · ${formatPercent(hoverCounty.vacancyRate)}`}
               {hoverCounty.populationShare !== undefined
                 && ` · ${t('map.countyPopShare')}: ${formatPercent(hoverCounty.populationShare)}`}
+            </span>
+          </div>
+        )}
+        {hover && level === 'jaras' && (
+          <div className="map-tooltip" style={{ left: hover.x, top: hover.y }}>
+            <strong>{hover.name}</strong>
+            <span>
+              {formatNumber(districtValues.get(hover.name)?.count ?? 0)} {t('map.jarasCount')}
+              {(districtValues.get(hover.name)?.population ?? 0) > 0
+                && ` · ${formatNumber(districtValues.get(hover.name)!.population)} ${t('map.fő')}`}
             </span>
           </div>
         )}
@@ -614,7 +783,7 @@ export function MapSection() {
           </div>
         )}
         <div className="map-legend">
-          <div>{t(METRIC_LABEL_KEYS[mapMetric])}</div>
+          <div>{t(level === 'jaras' ? 'map.jarasLegend' : METRIC_LABEL_KEYS[mapMetric])}</div>
           <div className="map-legend__ramp">
             {RAMP.map((c) => (
               <span key={c} style={{ background: c }} />

@@ -4,6 +4,7 @@ import { formatDuration, formatMonth, formatNumber, monthsBetween } from '../lib
 import { praxesById, primarySite, searchSettlements } from '../lib/selectors';
 import { useAppStore, useSnapshot } from '../store/useAppStore';
 import { DirectoryTableModal } from './DirectoryTableModal';
+import { SettlementTimeline } from './SettlementTimeline';
 import type { FilledPraxis, Praxis, SettlementEntry } from '../types';
 
 const FILLED_LIMIT = 10;
@@ -181,6 +182,7 @@ export function SearchSection() {
               <span className="praxis-line">{t('search.reminder')}</span>
             </div>
           )}
+          <SettlementTimeline praxes={vacantHere} month={snapshot.month} />
           {filledHere.length > 0 && (
             <>
               <h4 className="settlement-card__subhead">

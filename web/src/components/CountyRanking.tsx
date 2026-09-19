@@ -4,6 +4,8 @@ import { t } from '../lib/i18n';
 import { formatPercent } from '../lib/format';
 import { countyRanking } from '../lib/selectors';
 import { useSnapshot } from '../store/useAppStore';
+import { CountyCompare } from './CountyCompare';
+import { GuessGame } from './GuessGame';
 
 const ROW_H = 26;
 const LABEL_W = 190;
@@ -85,6 +87,8 @@ export function CountyRanking() {
           </text>
         </svg>
       </div>
+      <CountyCompare />
+      <GuessGame />
     </section>
   );
 }

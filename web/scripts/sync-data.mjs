@@ -14,6 +14,7 @@ const files = [
   [join(repo, 'data', 'timeseries.json'), join(out, 'timeseries.json')],
   [join(repo, 'data', 'history.json'), join(out, 'history.json')],
   [join(repo, 'data', 'geo', 'counties.geojson'), join(out, 'counties.geojson')],
+  [join(repo, 'data', 'geo', 'jaras.geojson'), join(out, 'jaras.geojson')],
 ];
 
 mkdirSync(out, { recursive: true });

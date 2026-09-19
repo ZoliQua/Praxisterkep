@@ -5,6 +5,25 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.1.0] — 2026-09-19
+
+### Hozzáadva
+- Fogászati prevenciós történet (Van/Nincs fogorvos) kurátori illusztrációkkal.
+- Görgetésre épülő országos bevezető adatvezérelt ország- és megyesziluettekkel
+  (legrosszabb megye, leghosszabb ideje üres körzet településjelölővel,
+  megyeszékhelyekkel).
+- Megye-összehasonlító és Tippelj!-játék a rangsor szekcióban.
+- Település-szintű betöltetlenség-idővonal a keresőben.
+- Járás-szintű kartogram (OSM-határok, `etl/fetch_geo.py`).
+- Szinkronizált statisztikai diagramok, PNG- és CSV-export.
+- Beágyazható mini-térkép (`embed.html`) és beágyazókód a módszertanban.
+- Megosztható körzet-mélylinkek (`?p=FIN`).
+
+### Javítva
+- A bevezető első száma a betöltetlen körzeteket mutatja (a megszűnt
+  szerződésűek nélkül); a kézi jelenetválasztást nem írja felül az
+  automatikus léptetés; feliratpozíció-ugrás a prevenciós láncban.
+
 ## [1.0.0] — 2026-09-19
 
 Első nyilvános kiadás a GitHubon.
@@ -93,6 +112,7 @@ Első nyilvános kiadás a GitHubon.
   validálás → snapshot), sötét témájú egyoldalas SPA térképpel,
   keresővel, rangsorral és módszertannal; havi GitHub Actions workflow.
 
+[1.1.0]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v1.1.0
 [1.0.0]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v1.0.0
 [0.9.1]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v0.9.1
 [0.9.0]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v0.9.0

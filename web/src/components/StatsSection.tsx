@@ -22,6 +22,7 @@ import { DurationHistogram } from './charts/DurationHistogram';
 import { CountyChangeChart } from './charts/CountyChangeChart';
 import { VacancyTableModal } from './VacancyTableModal';
 import { monthsBetween } from '../lib/format';
+import { downloadCsv } from '../lib/exportChart';
 
 // validated categorical palette (dark surface #101823) — fixed assignment
 const TYPE_COLORS: Record<string, string> = {
@@ -349,6 +350,22 @@ export function StatsSection() {
 
       <details className="stats-table">
         <summary>{t('stats.tableToggle')}</summary>
+        <button className="guess__btn guess__btn--again stats-table__csv"
+          onClick={() => downloadCsv(
+            [
+              ['month', 'vacant', 'dissolved', 'rate', 'population', 'medianMonths',
+                'entered', 'left'],
+              ...entries.map((e) => [
+                e.month, e.vacant, e.dissolved, e.vacancyRate,
+                e.populationVacant + e.populationDissolved,
+                e.medianVacancyMonths,
+                e.flow?.entered ?? null, e.flow?.left ?? null,
+              ]),
+            ],
+            `praxisterkep-${kind}-idosor.csv`,
+          )}>
+          {t('stats.exportCsv')}
+        </button>
         <div className="stats-table__scroll">
           <table>
             <thead>

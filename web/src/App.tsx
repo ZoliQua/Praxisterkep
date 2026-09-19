@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { t } from './lib/i18n';
 import { useAppStore, useSnapshot } from './store/useAppStore';
 import { Hero } from './components/Hero';
+import { ScrollyIntro } from './components/ScrollyIntro';
 import { MapSection } from './components/MapSection';
 import { SearchSection } from './components/SearchSection';
 import { CountyRanking } from './components/CountyRanking';
@@ -65,6 +66,7 @@ export default function App() {
         </div>
       </nav>
       <Hero />
+      <ScrollyIntro />
       <MapSection />
       <WhySection />
       <SearchSection />

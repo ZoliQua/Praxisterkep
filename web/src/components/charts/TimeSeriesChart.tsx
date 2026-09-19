@@ -2,10 +2,13 @@
 // sampling stays visible: markers on every data point, gaps stay gaps).
 // Mark specs follow the dataviz method: 2px lines, r=4 markers with a 2px
 // surface ring, hairline grid, crosshair + single tooltip listing all series.
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useRef } from 'react';
 import { bisector, extent, max, scaleLinear, scaleTime } from 'd3';
 import { formatMonth } from '../../lib/format';
 import { monthToDate, type SeriesPoint } from '../../lib/statsSelectors';
+import { setSyncMonth, useSyncMonth } from '../../lib/chartSync';
+import { exportSvgToPng } from '../../lib/exportChart';
+import { t } from '../../lib/i18n';
 
 export interface ChartSeries {
   key: string;
@@ -27,13 +30,16 @@ const WIDTH = 640;
 
 export function TimeSeriesChart({ series, height = 240, yFormat, tooltipExtra }: Props) {
   const wrapRef = useRef<HTMLDivElement>(null);
-  const [hoverMonth, setHoverMonth] = useState<string | null>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
+  // hover month is shared: every stats chart shows the same crosshair
+  const syncMonth = useSyncMonth();
 
   const months = useMemo(() => {
     const set = new Set<string>();
     for (const s of series) for (const p of s.points) set.add(p.month);
     return [...set].sort();
   }, [series]);
+  const hoverMonth = syncMonth !== null && months.includes(syncMonth) ? syncMonth : null;
 
   const fmt = yFormat ?? ((v: number) => new Intl.NumberFormat('hu-HU').format(v));
 
@@ -54,8 +60,8 @@ export function TimeSeriesChart({ series, height = 240, yFormat, tooltipExtra }:
   function onMove(e: React.PointerEvent<SVGSVGElement>) {
     const rect = e.currentTarget.getBoundingClientRect();
     const px = ((e.clientX - rect.left) / rect.width) * WIDTH;
-    const t = x.invert(px).getTime();
-    setHoverMonth(months[bisect(months, t)] ?? null);
+    const time = x.invert(px).getTime();
+    setSyncMonth(months[bisect(months, time)] ?? null);
   }
 
   const hover = hoverMonth
@@ -74,10 +80,20 @@ export function TimeSeriesChart({ series, height = 240, yFormat, tooltipExtra }:
 
   return (
     <div className="chart" ref={wrapRef}>
+      <button className="chart__export" title={t('stats.exportPng')}
+        aria-label={t('stats.exportPng')}
+        onClick={() => {
+          if (svgRef.current) {
+            exportSvgToPng(svgRef.current, `praxisterkep-${series[0]?.key ?? 'chart'}.png`);
+          }
+        }}>
+        ⤓
+      </button>
       <svg
+        ref={svgRef}
         viewBox={`0 0 ${WIDTH} ${height}`}
         onPointerMove={onMove}
-        onPointerLeave={() => setHoverMonth(null)}
+        onPointerLeave={() => setSyncMonth(null)}
         role="img"
       >
         {ticksY.map((t) => (

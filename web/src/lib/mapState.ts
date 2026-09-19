@@ -11,11 +11,13 @@ export interface MapUrlState {
   month?: string;      // YYYY-MM (archive month)
   minYears?: number;   // duration filter
   colorMode?: 'status' | 'age';
+  praxis?: string;     // FIN code deep link (one-shot: zoom + popup)
 }
 
 const KEYS = {
   kind: 'k', county: 'm', type: 't', view: 'v',
   metric: 'mt', month: 'ho', minYears: 'kor', colorMode: 'szin',
+  praxis: 'p',
 } as const;
 
 export function readMapState(search: string): MapUrlState {
@@ -37,6 +39,8 @@ export function readMapState(search: string): MapUrlState {
   const years = Number(p.get(KEYS.minYears));
   if (Number.isInteger(years) && years > 0) out.minYears = years;
   if (p.get(KEYS.colorMode) === 'age') out.colorMode = 'age';
+  const praxis = p.get(KEYS.praxis);
+  if (praxis && /^\d{9}$/.test(praxis)) out.praxis = praxis;
   return out;
 }
 
@@ -54,6 +58,7 @@ export function writeMapState(search: string, s: MapUrlState): string {
   setOr(KEYS.month, s.month);
   setOr(KEYS.minYears, s.minYears ? String(s.minYears) : undefined);
   setOr(KEYS.colorMode, s.colorMode === 'age' ? 'age' : undefined);
+  setOr(KEYS.praxis, s.praxis);
   const q = p.toString();
   return q ? `?${q}` : '';
 }
