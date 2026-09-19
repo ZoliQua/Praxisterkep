@@ -15,7 +15,7 @@ import requests
 
 CACHE_PATH = Path(__file__).resolve().parent / "geocode_cache.json"
 NOMINATIM = "https://nominatim.openstreetmap.org/search"
-USER_AGENT = "Magyar-Alapellatas/0.1 (github.com/ZoliQua)"
+USER_AGENT = "OEP-Alapellatas/1.0 (+https://github.com/ZoliQua/OEP-Alapellatas)"
 
 # common Hungarian address abbreviations Nominatim tends to miss
 _ABBREV = [

@@ -1,0 +1,106 @@
+# Changelog
+
+A projekt nevezetes változásai. A formátum a
+[Keep a Changelog](https://keepachangelog.com/hu/) ajánlását követi, a
+verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
+történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
+
+## [1.0.0] — 2026-09-19
+
+Első nyilvános kiadás a GitHubon.
+
+### Hozzáadva
+- Magyar README jelvényekkel, magatartási kódex (Contributor Covenant 2.1
+  magyar adaptáció), MIT licenc a kódra — a `data/` tartalma a forrás-
+  intézmények (NEAK/OEP, OKFŐ, KSH, OpenStreetMap) saját feltételei alatt.
+- CHANGELOG és verziókövetés (git-címkék).
+
+### Módosítva
+- Kapcsolattartás GitHub-profilon keresztül (@ZoliQua); a Nominatim
+  user-agent a repó URL-jét adja meg elérhetőségként.
+
+## [0.9.1] — 2026-09-17
+
+### Javítva
+- A két sérült háziorvosi hónap (2023-12, 2024-03) helyreállítása a Wayback
+  Machine csonka mentéseiből (lineárizált PDF-rekonstrukció, hiánytalan
+  30/30 és 29/29 oldal, ellenőrzött adatközlési hónapokkal). A háziorvosi
+  idősor 26 archivált hónapra bővült.
+
+## [0.9.0] — 2026-09-16
+
+### Hozzáadva
+- OKFŐ tartósan betöltetlen körzetek (E forrás): település + típus +
+  betöltetlenség-kezdet szerinti párosítás, `longTerm`/`longTermSince`
+  mezők, megyei/országos darabszámok; jelvény a keresőben, oszlop a
+  táblázatban, csempe a statisztikában, fánkdiagram a nyitóoldalon.
+
+## [0.8.0] — 2026-09-16
+
+### Hozzáadva
+- KSH Helységnévtár integráció (F forrás): településszintű lakónépesség,
+  lakossághányad- és 10 000 lakosra vetített mutatók, új térképi metrika.
+- 2026. szeptemberi NEAK-adatok.
+
+## [0.7.0] — 2026-08-25
+
+### Hozzáadva
+- Interaktív térkép: havi idő-csúszka lejátszással, megyefókusz
+  panellel, üresedési idő szerinti színezés és szűrés, hover-tooltip,
+  felugró→kereső hidak, megosztható URL-állapot.
+
+## [0.6.0] — 2026-08-25
+
+### Hozzáadva
+- Nyitóoldali statisztika-vitrin: egymás után megjelenő, animált
+  mutatók számfelfutással és mutatónkénti vizualizációval.
+
+## [0.5.0] — 2026-08-24
+
+### Hozzáadva
+- Animált prevenciós történet („Van háziorvos / Nincs háziorvos"),
+  flat-illusztrációs karakterekkel, 2×4 jelenettel.
+
+### Módosítva
+- „Vármegye" → „megye" szóhasználat az egész felületen.
+
+## [0.4.0] — 2026-08-23
+
+### Hozzáadva
+- Térképi megyecímkék és oszlopnézet, alapellátás-magyarázó szekció,
+  betöltött praxisok orvosneve és címe a keresőben, összesített
+  körzet-táblázat, rendezhető-szűrhető betöltetlenségi táblázat,
+  megyei rangsor időtartam-szűrővel, navbar ágváltó ikonok.
+
+## [0.3.0] — 2026-08-23
+
+### Hozzáadva
+- Történeti archívum saját gyűjtésből (2017-10-től) `etl/backfill.py`
+  visszatöltővel, generáció-felismerő parserekkel.
+- Statisztikai elemzés oldal: idősorok, ki-be áramlás, medián üresedési
+  idő, eloszlások, tartósság.
+
+## [0.2.0] — 2026-08-23
+
+### Hozzáadva
+- Háziorvosi (GP) ág: kettős kazettás ETL és felület, lefedettség-alapú
+  településkereső a körzeti törzslistából.
+
+## [0.1.0] — 2026-08-23
+
+### Hozzáadva
+- Fogorvosi MVP: teljes ETL-csővezeték (letöltés → parse → geokódolás →
+  validálás → snapshot), sötét témájú egyoldalas SPA térképpel,
+  keresővel, rangsorral és módszertannal; havi GitHub Actions workflow.
+
+[1.0.0]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v1.0.0
+[0.9.1]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v0.9.1
+[0.9.0]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v0.9.0
+[0.8.0]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v0.8.0
+[0.7.0]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v0.7.0
+[0.6.0]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v0.6.0
+[0.5.0]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v0.5.0
+[0.4.0]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v0.4.0
+[0.3.0]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v0.3.0
+[0.2.0]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v0.2.0
+[0.1.0]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v0.1.0

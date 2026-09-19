@@ -36,9 +36,9 @@ az érintett betegek és orvosok méltóságát tiszteletben tartjuk.
 ## Hatály és jelentés
 
 Ez a kódex a projekt minden felületére (issue-k, pull requestek,
-levelezés) vonatkozik. Visszaélést a fenntartónak lehet jelezni:
-**github.com/ZoliQua**. Minden bejelentést bizalmasan és érdemben
-kivizsgálunk.
+levelezés) vonatkozik. Visszaélést a fenntartónak lehet jelezni a
+GitHubon: [**@ZoliQua**](https://github.com/ZoliQua). Minden bejelentést
+bizalmasan és érdemben kivizsgálunk.
 
 ## Következmények
 
