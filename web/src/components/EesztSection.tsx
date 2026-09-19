@@ -7,15 +7,13 @@ import { t, tKind } from '../lib/i18n';
 import { formatNumber, formatPercent } from '../lib/format';
 import { eesztLink, useEeszt } from '../lib/eeszt';
 import {
-  COLUMNS, UNMATCHED_COLUMNS, buildRows, buildUnmatchedRows, cellText, sortRows,
+  COLUMNS, UNMATCHED_COLUMNS, buildRows, buildUnmatchedRows, sortRows,
   type ColDef, type Row,
 } from '../lib/eesztTable';
 import { useAppStore, useSnapshot } from '../store/useAppStore';
 import { DataTableModal } from './DataTableModal';
 import { EesztMap } from './EesztMap';
 import { EesztInfoModal } from './EesztInfoModal';
-
-const PREVIEW = 20;
 
 function statusBadge(status: string) {
   const cls = status === t('stats.statusFilled') ? 'badge--ok'
@@ -84,7 +82,6 @@ export function EesztSection() {
     [t('eeszt.covSettlement'), st.settlementMatch ?? 0],
     [t('eeszt.covProvider'), st.providerMatch ?? 0],
   ];
-  const previewCols = COLUMNS.filter((c) => c.visible);
 
   return (
     <section className="section container" id="eeszt">
@@ -139,22 +136,6 @@ export function EesztSection() {
 
       <EesztMap rows={rows} />
 
-      <div className="stats-table__scroll eeszt-table">
-        <table>
-          <thead>
-            <tr>{previewCols.map((c) => <th key={c.key}>{t(c.labelKey)}</th>)}</tr>
-          </thead>
-          <tbody>
-            {rows.slice(0, PREVIEW).map((r) => (
-              <tr key={r.fin}>
-                {previewCols.map((c) => (
-                  <td key={c.key}>{renderCell(c, r) ?? (cellText(r[c.key as keyof typeof r]) || '–')}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
       <div className="eeszt-actions">
         <button className="data-btn data-btn--accent" onClick={() => setOpenTable('all')}>
           {t('eeszt.openAll', { n: formatNumber(rows.length) })}

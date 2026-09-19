@@ -490,7 +490,9 @@
     "noRows": "No rows match the filters.",
     "pageSize": "Rows per page:",
     "all": "all",
-    "pageOf": "page {page} of {pages}"
+    "pageOf": "page {page} of {pages}",
+    "rowCount": "{n} rows",
+    "rowCountFiltered": "{n} / {total} rows"
   },
   "eesztInfo": {
     "title": "How we matched the EESZT data",
@@ -557,6 +559,10 @@
     "l1": "EESZT data reflects the day of download, NEAK data the month; the two may differ (e.g. a freshly filled district).",
     "l2": "The licensed premises are not necessarily the actual consulting place, and one licence may cover several districts (see the \"Shared organisational unit\" column).",
     "l3": "The district number appears only where the official name contains it unambiguously.",
-    "l4": "Points at a settlement centre indicate an approximate location only."
+    "l4": "Points at a settlement centre indicate an approximate location only.",
+    "drillOpen": "Open the detailed table",
+    "drillSubtitle": "The {kind} districts concerned — filterable, sortable, exportable",
+    "drillSubtitleLicences": "every candidate licence of the {n} affected {kind} districts, row by row",
+    "p9b": "Click the highlighted numbers to open a detailed, filterable and exportable table of the districts concerned. For ambiguous cases every candidate licence is listed; for other-profession cases you see what the licence is actually for."
   }
 }

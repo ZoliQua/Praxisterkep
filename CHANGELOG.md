@@ -5,6 +5,28 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.7.0] — 2026-09-20
+
+### Hozzáadva
+- Az info-ablak „9. Eredmények” szakaszában a négy illesztési indok
+  száma kattintható: a „Nincs működési engedély”, „Kétértelmű
+  telephely”, „Nincs az EESZT-ben” és „Más szakmájú engedély” sorokból
+  részletes, szűrhető, rendezhető és CSV/TSV-be exportálható
+  táblázat nyílik — ágazatonként (fogorvosi / háziorvosi) külön.
+- A kétértelmű eseteknél a táblázat a körzet minden szóba jövő
+  engedélyét felsorolja soronként (engedély-azonosító, szervezeti
+  egység, telephely, szakma, közfinanszírozottság), így látszik, miért
+  nem lehetett egyértelműen választani. A más szakmájú engedélyeknél
+  az derül ki, mire szól ténylegesen az engedély (pl. fogászati
+  röntgen).
+- Az ETL a nem illesztett körzetek engedélysorait is exportálja
+  (`unmatchedDetails`), névadatok nélkül, ETL-őrrel ellenőrizve.
+
+### Módosítva
+- Az EESZT-szekcióból eltűnt a 20 soros előnézeti táblázat: a teljes,
+  szűrhető táblázat a táblázat-ikonnal nyílik meg.
+- Az engedélysoros táblázatok fejléce sorban, nem körzetben számol.
+
 ## [1.6.0] — 2026-09-19
 
 ### Hozzáadva

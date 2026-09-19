@@ -1399,3 +1399,9 @@ a:hover { text-decoration: underline; }
 .info-dialog .info-table td, .info-dialog .info-table th { white-space: normal; overflow-wrap: anywhere; }
 .info-dialog .info-table th:first-child { width: 30%; }
 .info-dialog .info-table .is-num { width: 16%; }
+.info-drill {
+  appearance: none; border: 0; background: transparent; cursor: pointer; padding: 0;
+  font: 700 13px var(--font-body); color: var(--accent); font-variant-numeric: tabular-nums;
+  border-bottom: 1px dashed color-mix(in srgb, var(--accent) 55%, transparent);
+}
+.info-drill:hover { filter: brightness(1.15); }

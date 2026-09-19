@@ -279,3 +279,86 @@ export function serialize(rows: Row[], cols: ColDef[], format: 'csv' | 'tsv'): s
   for (const r of rows) lines.push(cols.map((c) => esc(cellText(r[c.key]))).join(sep));
   return lines.join('\r\n') + '\r\n';
 }
+
+/* ---------------- one reason, row by row ---------------- */
+
+export type ReasonSimpleRow = BaseRow & {
+  unitCode: string | null;
+  detail: string;
+};
+
+export type ReasonLicenceRow = BaseRow & {
+  unitCode: string;
+  licenceId: string;
+  licPostal: string;
+  licSettlement: string;
+  licAddress: string;
+  profession: string;
+  publicFunded: boolean;
+  onCall: string;
+};
+
+export const REASON_SIMPLE_COLUMNS: ColDef[] = [
+  { key: 'fin', labelKey: 'eeszt.colFin', type: 'text', visible: true },
+  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+  { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: true },
+  { key: 'type', labelKey: 'stats.thType', type: 'enum', visible: true },
+  { key: 'status', labelKey: 'stats.thStatus', type: 'enum', visible: true },
+  { key: 'unitCode', labelKey: 'eeszt.colUnit', type: 'text', visible: true },
+  { key: 'detail', labelKey: 'eeszt.colReasonDetail', type: 'text', visible: true },
+];
+
+export const REASON_LICENCE_COLUMNS: ColDef[] = [
+  { key: 'fin', labelKey: 'eeszt.colFin', type: 'text', visible: true },
+  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+  { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: false },
+  { key: 'type', labelKey: 'stats.thType', type: 'enum', visible: false },
+  { key: 'status', labelKey: 'stats.thStatus', type: 'enum', visible: true },
+  { key: 'unitCode', labelKey: 'eeszt.colUnit', type: 'text', visible: true },
+  { key: 'licenceId', labelKey: 'eeszt.colLicenceId', type: 'text', visible: true },
+  { key: 'licPostal', labelKey: 'eeszt.colPostal', type: 'text', visible: false },
+  { key: 'licSettlement', labelKey: 'eeszt.colLicSettlement', type: 'text', visible: true },
+  { key: 'licAddress', labelKey: 'eeszt.colLicAddress', type: 'text', visible: true },
+  { key: 'profession', labelKey: 'eeszt.colProfession', type: 'enum', visible: true },
+  { key: 'publicFunded', labelKey: 'eeszt.thFunded', type: 'bool', visible: true },
+  { key: 'onCall', labelKey: 'eeszt.onCall', type: 'enum', visible: false },
+];
+
+/** districts of one reason; "ambiguous" and "otherProfession" are expanded
+ *  to one row per licence so the problem itself is readable */
+export function buildReasonRows(
+  snapshot: Snapshot, data: EesztRaw | null, reason: string,
+): { rows: Row[]; columns: ColDef[]; expanded: boolean; districts: number } {
+  const unmatched = data?.unmatched ?? {};
+  const details = data?.unmatchedDetails ?? {};
+  const base = baseRows(snapshot).filter((b) => unmatched[b.fin]?.[1] === reason);
+  const expanded = reason === 'ambiguous' || reason === 'otherProfession';
+  if (!expanded) {
+    const rows: ReasonSimpleRow[] = base.map((b) => {
+      const [, code, detail] = unmatched[b.fin];
+      return {
+        ...b,
+        unitCode: eesztPraxis(data, b.fin)?.trace?.units.join(', ') || null,
+        detail: reasonDetail(code, detail),
+      };
+    });
+    return { rows, columns: REASON_SIMPLE_COLUMNS, expanded, districts: base.length };
+  }
+  const rows: ReasonLicenceRow[] = [];
+  for (const b of base) {
+    for (const d of details[b.fin] ?? []) {
+      rows.push({
+        ...b,
+        licenceId: d[0],
+        unitCode: d[1],
+        licPostal: d[2],
+        licSettlement: d[3],
+        licAddress: d[4],
+        profession: data?.professions[d[5]] ?? d[5],
+        publicFunded: d[6] === 1,
+        onCall: data?.onCall[d[7]] ?? '',
+      });
+    }
+  }
+  return { rows, columns: REASON_LICENCE_COLUMNS, expanded, districts: base.length };
+}

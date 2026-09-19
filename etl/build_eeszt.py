@@ -128,6 +128,9 @@ def build(date: str) -> dict:
     # FIN -> [kind initial, reason code, detail] for every district with no
     # usable licence; details are codes/profession names only, never names
     unmatched: dict[str, list] = {}
+    # FIN -> [[licence id, unit, postal, settlement, address, professionCode,
+    #          publicFunded, onCallIdx], …] for the ambiguous / other-profession cases
+    unmatched_details: dict[str, list] = {}
     stats: dict[str, collections.Counter] = {}
     unit_users: collections.Counter = collections.Counter()
 
@@ -184,14 +187,17 @@ def build(date: str) -> dict:
                        re.sub(r"\W+", "", (x[ex["TELEPHELY_CIM"]] or "").lower())[:12])
                       for x in lics}
             reason: list | None = None
+            detail_lics: list = []
             if lics and len(units) > 1 and len(places) > 1:
                 # the FIN points at several units whose licences disagree on
                 # the premises — refuse to pick one
                 reason = ["ambiguous", f"{len(units)}|{len(places)}"]
+                detail_lics = lics
                 lics = []
             elif not lics:
                 unit_lics = [x for u in units for x in lic_by_unit.get(u, [])]
                 if unit_lics:
+                    detail_lics = unit_lics
                     other_prof = sorted({x[ex["SZAKMA_NEV"]] for x in unit_lics})
                     reason = ["otherProfession", "; ".join(other_prof[:3])
                               + ("; …" if len(other_prof) > 3 else "")]
@@ -240,6 +246,23 @@ def build(date: str) -> dict:
                 st[reason[0]] += 1
                 unmatched[fid] = [kind[0], *reason]
                 entry["t"] = [",".join(units), "", ""]
+                if detail_lics:
+                    # every licence behind the problem, so the reason can be
+                    # inspected row by row in the UI (codes and premises only)
+                    rows_out = []
+                    for x in detail_lics:
+                        professions[x[ex["SZAKMA_KOD"]]] = x[ex["SZAKMA_NEV"]]
+                        rows_out.append([
+                            x[ex["ENGEDELY_AZONOSITO"]] or "",
+                            x[ex["SZERVEZETI_EGYSEG_KOD"]] or "",
+                            x[ex["TELEPHELY_IRSZAM"]] or "",
+                            x[ex["TELEPHELY_TELEPULES"]] or "",
+                            x[ex["TELEPHELY_CIM"]] or "",
+                            x[ex["SZAKMA_KOD"]] or "",
+                            1 if x[ex["KOZFINANSZIROZOTT"]] == "I" else 0,
+                            on_call_idx(x[ex["UGYELET_KESZENLET"]]),
+                        ])
+                    unmatched_details[fid] = rows_out
             entry["k"] = "g" if kind == "gp" else "d"
             praxes[fid] = entry
 
@@ -300,6 +323,7 @@ def build(date: str) -> dict:
         "onCall": on_call,
         "praxes": praxes,
         "unmatched": unmatched,
+        "unmatchedDetails": unmatched_details,
         "settlements": dict(settlements),
     }
     guard(out, latest)
@@ -332,6 +356,12 @@ def guard(out: dict, latest: dict) -> None:
             raise EesztError(f"{fid}: malformed unmatched record {u!r}")
         if NAME_MARKER_RE.search(u[2]):
             raise EesztError(f"{fid}: name marker in unmatched detail")
+    for fid, rows_out in out.get("unmatchedDetails", {}).items():
+        if fid not in out.get("unmatched", {}):
+            raise EesztError(f"{fid}: licence details without an unmatched reason")
+        for r in rows_out:
+            if len(r) != 8:
+                raise EesztError(f"{fid}: licence detail row has unexpected shape")
     for row in (r for rows in out["settlements"].values() for r in rows):
         if len(row) != 6:
             raise EesztError("settlement directory row has unexpected shape")

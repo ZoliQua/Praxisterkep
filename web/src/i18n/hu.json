@@ -490,7 +490,9 @@
     "noRows": "Nincs a szűrésnek megfelelő sor.",
     "pageSize": "Sorok oldalanként:",
     "all": "összes",
-    "pageOf": "{page}. / {pages} oldal"
+    "pageOf": "{page}. / {pages} oldal",
+    "rowCount": "{n} sor",
+    "rowCountFiltered": "{n} / {total} sor"
   },
   "eesztInfo": {
     "title": "Hogyan illesztettük az EESZT-adatokat?",
@@ -557,6 +559,10 @@
     "l1": "Az EESZT-adat a letöltés napjának állapotát tükrözi, a NEAK-adat a hónapét; a kettő között eltérés lehet (pl. frissen betöltött körzet).",
     "l2": "Az engedély telephelye nem feltétlenül azonos a tényleges rendelési hellyel, és egy engedély több körzetet is lefedhet (ezt a „Közös szervezeti egység” oszlop jelzi).",
     "l3": "A körzetszám csak ott jelenik meg, ahol a hivatalos név egyértelműen tartalmazza.",
-    "l4": "A település-középpontra eső pontok csak tájékoztató jellegű helyet jelölnek."
+    "l4": "A település-középpontra eső pontok csak tájékoztató jellegű helyet jelölnek.",
+    "drillOpen": "Részletes táblázat megnyitása",
+    "drillSubtitle": "Az érintett {kind} körzetek — szűrhető, rendezhető, exportálható",
+    "drillSubtitleLicences": "{n} érintett {kind} körzet minden szóba jövő engedélye, soronként",
+    "p9b": "A vastagon jelölt számokra kattintva az érintett körzetek részletes, szűrhető és exportálható táblázata nyílik meg. A kétértelmű eseteknél minden szóba jövő engedélyt felsorolunk, a más szakmájú engedélyeknél pedig azt, mire szól az engedély."
   }
 }

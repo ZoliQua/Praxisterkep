@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import {
-  COLUMNS, filterRows, serialize, sortRows, type EesztRow,
+  COLUMNS, buildReasonRows, filterRows, serialize, sortRows, type EesztRow,
 } from './eesztTable';
+import type { EesztRaw } from './eeszt';
+import type { Snapshot } from '../types';
 
 function row(over: Partial<EesztRow>): EesztRow {
   return {
@@ -65,5 +67,58 @@ describe('serialize', () => {
   it('writes TSV with tab separators and flattened tabs', () => {
     const tsv = serialize([row({ fin: '9', provider: 'a\tb' })], cols, 'tsv');
     expect(tsv.split('\r\n')[1]).toBe('9\ta b');
+  });
+});
+
+describe('buildReasonRows', () => {
+  const snapshot = {
+    praxes: [
+      { id: 'A', county: 'Baranya', type: 'mixed', status: 'vacant', sites: [{ settlement: 'Komló' }] },
+      { id: 'B', county: 'Vas', type: 'adult', status: 'vacant', sites: [{ settlement: 'Vasvár' }] },
+    ],
+    filledPraxes: [{ id: 'C', county: 'Zala', type: 'adult', settlement: 'Zalalövő' }],
+  } as unknown as Snapshot;
+
+  const data = {
+    schemaVersion: 1, asOf: '2026-09-19', dataMonth: '2026-09', stats: {},
+    professions: { '1300': 'fogászati ellátás', '1306': 'fogászati röntgen' },
+    onCall: ['nem vesz részt ügyeletben'],
+    praxes: {},
+    settlements: {},
+    unmatched: {
+      A: ['d', 'ambiguous', '2|2'],
+      B: ['d', 'noUnitLicence', '000000042'],
+      C: ['d', 'otherProfession', 'fogászati röntgen'],
+    },
+    unmatchedDetails: {
+      A: [
+        ['L1', 'U1', '7300', 'Komló', 'Fő utca 1.', '1300', 1, 0],
+        ['L2', 'U2', '7396', 'Magyarszék', 'Hársfa utca 2.', '1300', 1, 0],
+      ],
+      C: [['L3', 'U3', '8999', 'Zalalövő', 'Kert utca 3.', '1306', 0, 0]],
+    },
+  } as unknown as EesztRaw;
+
+  it('lists one row per candidate licence for the ambiguous districts', () => {
+    const { rows, expanded, districts } = buildReasonRows(snapshot, data, 'ambiguous');
+    expect(expanded).toBe(true);
+    expect(districts).toBe(1);
+    expect(rows).toHaveLength(2);
+    expect(rows.map((r) => r.licSettlement)).toEqual(['Komló', 'Magyarszék']);
+  });
+
+  it('names the profession an other-profession licence was issued for', () => {
+    const { rows } = buildReasonRows(snapshot, data, 'otherProfession');
+    expect(rows).toHaveLength(1);
+    expect(rows[0].profession).toBe('fogászati röntgen');
+    expect(rows[0].status).toBe('Betöltött');
+  });
+
+  it('gives the other reasons one filterable row per district', () => {
+    const { rows, expanded, districts } = buildReasonRows(snapshot, data, 'noUnitLicence');
+    expect(expanded).toBe(false);
+    expect(districts).toBe(1);
+    expect(rows[0].fin).toBe('B');
+    expect(String(rows[0].detail)).toContain('000000042');
   });
 });

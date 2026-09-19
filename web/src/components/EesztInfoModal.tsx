@@ -3,10 +3,13 @@
 // download, the code chain step by step, every check, the name policy,
 // geocoding, results (live numbers from eeszt.json), a worked example with
 // deep links, and how anyone can re-verify it.
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { t } from '../lib/i18n';
 import { formatNumber, formatPercent } from '../lib/format';
 import { eesztLink, eesztPraxis, type EesztRaw } from '../lib/eeszt';
+import { buildReasonRows } from '../lib/eesztTable';
+import { useAppStore } from '../store/useAppStore';
+import { DataTableModal } from './DataTableModal';
 
 const REPO = 'https://github.com/ZoliQua/OEP-Alapellatas/blob/main';
 const EXAMPLE_FIN = '020066099'; // Sásd, dental — also a vacant district
@@ -19,6 +22,9 @@ export function EesztInfoModal({ open, onClose, data }: {
   open: boolean; onClose: () => void; data: EesztRaw;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
+  const latest = useAppStore((s) => s.latest);
+  // which reason's districts are being inspected, for which branch
+  const [drill, setDrill] = useState<{ reason: string; kind: 'dental' | 'gp' } | null>(null);
   useEffect(() => {
     const d = ref.current;
     if (!d) return;
@@ -38,11 +44,20 @@ export function EesztInfoModal({ open, onClose, data }: {
   const exTrace = ex?.trace;
 
   const kinds: ('dental' | 'gp')[] = ['dental', 'gp'];
-  const statRow = (key: string) => kinds.map((k) => {
+  const statCell = (k: 'dental' | 'gp', key: string) => {
     const st = data.stats[k] ?? {};
     const n = st[key] ?? 0;
-    return `${formatNumber(n)} (${st.total ? formatPercent(n / st.total) : '–'})`;
-  });
+    return { n, text: `${formatNumber(n)} (${st.total ? formatPercent(n / st.total) : '–'})` };
+  };
+  // the four reasons can be opened row by row
+  const DRILLABLE = new Set(['noUnitLicence', 'ambiguous', 'noFin', 'otherProfession']);
+
+  const drillData = useMemo(() => {
+    if (!drill || !latest) return null;
+    const snap = latest.kinds[drill.kind];
+    if (!snap) return null;
+    return buildReasonRows(snap, data, drill.reason);
+  }, [drill, latest, data]);
 
   return (
     <dialog ref={ref} className="vacancy-dialog info-dialog" onClose={onClose}
@@ -157,12 +172,22 @@ export function EesztInfoModal({ open, onClose, data }: {
               ] as const).map(([key, label]) => (
                 <tr key={key}>
                   <td>{t(label)}</td>
-                  {statRow(key).map((v, i) => <td key={i} className="is-num">{v}</td>)}
+                  {kinds.map((k) => {
+                    const { n, text } = statCell(k, key);
+                    return (
+                      <td key={k} className="is-num">
+                        {DRILLABLE.has(key) && n > 0 ? (
+                          <button className="info-drill" onClick={() => setDrill({ reason: key, kind: k })}
+                            title={t('eesztInfo.drillOpen')}>{text}</button>
+                        ) : text}
+                      </td>
+                    );
+                  })}
                 </tr>
               ))}
             </tbody>
           </table>
-          <p>{t('eesztInfo.p9')}</p>
+          <p>{t('eesztInfo.p9')} {t('eesztInfo.p9b')}</p>
 
           {exLic && exTrace && (
             <>
@@ -211,6 +236,22 @@ export function EesztInfoModal({ open, onClose, data }: {
           </ul>
         </div>
       </div>
+
+      {drill && drillData && (
+        <DataTableModal
+          open
+          onClose={() => setDrill(null)}
+          title={t(`eeszt.reason.${drill.reason}`)}
+          subtitle={t(drillData.expanded ? 'eesztInfo.drillSubtitleLicences' : 'eesztInfo.drillSubtitle', {
+            kind: t(`kinds.${drill.kind}.adj`),
+            n: formatNumber(drillData.districts),
+          })}
+          countUnit={drillData.expanded ? 'rows' : 'districts'}
+          rows={drillData.rows}
+          columns={drillData.columns}
+          filename={`praxisterkep-eeszt-${drill.kind}-${drill.reason}`}
+        />
+      )}
     </dialog>
   );
 }

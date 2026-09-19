@@ -26,6 +26,9 @@ export interface EesztRaw {
   sources?: Record<string, { entityId: string; rows: number; date: string; file: string }>;
   /** FIN -> [kind initial, reason code, detail] for districts with no usable licence */
   unmatched?: Record<string, ['d' | 'g', string, string]>;
+  /** FIN -> every licence behind an ambiguous / other-profession case:
+   *  [licence id, unit, postal, settlement, address, professionCode, funded, onCallIdx] */
+  unmatchedDetails?: Record<string, [string, string, string, string, string, string, number, number][]>;
   /** our settlement name -> [kind, postal, address, professionCode, publicFunded, onCallIdx][] */
   settlements: Record<string, ['d' | 'g', string, string, string, number, number][]>;
 }

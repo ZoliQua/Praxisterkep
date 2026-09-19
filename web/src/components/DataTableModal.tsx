@@ -15,11 +15,14 @@ const PAGE_SIZES = [25, 50, 100, 500, 0]; // 0 = all
 
 export function DataTableModal<R extends Row>({
   open, onClose, title, subtitle, rows, columns, filename, renderCell, above,
+  countUnit = 'districts',
 }: {
   open: boolean;
   onClose: () => void;
   title: string;
   subtitle?: string;
+  /** what one row is: a district (default) or a plain row (e.g. one licence) */
+  countUnit?: 'districts' | 'rows';
   rows: R[];
   columns: ColDef[];
   filename: string;
@@ -112,8 +115,9 @@ export function DataTableModal<R extends Row>({
             <h3>{title}</h3>
             <p>
               {result.length === rows.length
-                ? t('stats.tableCount', { n: formatNumber(rows.length) })
-                : t('stats.tableCountFiltered', {
+                ? t(countUnit === 'rows' ? 'dataTable.rowCount' : 'stats.tableCount',
+                  { n: formatNumber(rows.length) })
+                : t(countUnit === 'rows' ? 'dataTable.rowCountFiltered' : 'stats.tableCountFiltered', {
                   n: formatNumber(result.length), total: formatNumber(rows.length),
                 })}
               {subtitle ? ` · ${subtitle}` : ''}
