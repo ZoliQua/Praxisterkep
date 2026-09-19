@@ -15,6 +15,18 @@ jobs:
     #   CLOUDFLARE_API_TOKEN  — API token with the "Cloudflare Pages: Edit" permission
     #   CLOUDFLARE_ACCOUNT_ID — account id from the Cloudflare dashboard URL
     steps:
+      - name: Check Cloudflare secrets
+        env:
+          TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -z "$TOKEN" ] || [ -z "$ACCOUNT" ]; then
+            echo "::error::CLOUDFLARE_API_TOKEN and/or CLOUDFLARE_ACCOUNT_ID repo secrets are missing."
+            echo "Add them under Settings -> Secrets and variables -> Actions, or locally:"
+            echo "  gh secret set CLOUDFLARE_API_TOKEN"
+            echo "  gh secret set CLOUDFLARE_ACCOUNT_ID"
+            exit 1
+          fi
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
