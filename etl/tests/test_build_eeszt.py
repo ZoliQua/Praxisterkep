@@ -68,3 +68,16 @@ def test_guard_rejects_name_in_unmatched_detail():
            "unmatched": {"000000002": ["d", "otherProfession", "Dr. Kiss rendelője"]}}
     with pytest.raises(EesztError):
         guard(out, _latest([], ["000000002"]))
+
+
+def test_guard_rejects_provider_id_in_trace_of_vacant_district():
+    out = {"praxes": {"000000002": {"k": "d", "t": ["001", "001/A1/1300", "018201"]}},
+           "settlements": {}}
+    with pytest.raises(EesztError):
+        guard(out, _latest([], ["000000002"]))
+
+
+def test_guard_allows_codes_only_trace_on_vacant_district():
+    out = {"praxes": {"000000002": {"k": "d", "t": ["001", "001/A1/1300", ""]}},
+           "settlements": {}}
+    guard(out, _latest([], ["000000002"]))

@@ -35,8 +35,9 @@ def main() -> None:
     data = json.loads((ROOT / "data" / "eeszt.json").read_text(encoding="utf-8"))
     premises: dict[str, tuple[str, str, str]] = {}
     for e in data["praxes"].values():
-        if "l" in e:
-            postal, sett, addr = e["l"][0], e["l"][1], e["l"][2]
+        if "l" in e and e["l"][1] and e["l"][2]:
+            # a licence without premises (EESZT has one) cannot be geocoded
+            postal, sett, addr = e["l"][0] or "", e["l"][1], e["l"][2]
             premises[f"{postal} {sett}, {addr}"] = (postal, sett, addr)
 
     cache = load_cache()

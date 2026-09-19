@@ -10,6 +10,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { t } from '../lib/i18n';
 import { formatNumber } from '../lib/format';
 import { cellText, type EesztRow } from '../lib/eesztTable';
+import { eesztLink } from '../lib/eeszt';
 import { useAppStore } from '../store/useAppStore';
 
 const HUNGARY: [[number, number], [number, number]] = [[16.0, 45.7], [23.0, 48.65]];
@@ -264,6 +265,38 @@ export function EesztMap({
                 <div key={k}><dt>{k}</dt><dd>{v}</dd></div>
               ))}
             </dl>
+            <div className="eeszt-trace">
+              <h5>{t('eeszt.traceTitle')}</h5>
+              <ul>
+                <li>
+                  <span>{t('eeszt.traceFin')}</span>
+                  <a href={eesztLink('finszolg', 'FINKOD', selected.fin)} target="_blank" rel="noopener">
+                    {selected.fin} ↗</a>
+                </li>
+                {selected.unitCode && (
+                  <li>
+                    <span>{t('eeszt.traceUnit')}</span>
+                    <a href={eesztLink('engedely', 'SZERVEZETI_EGYSEG_KOD', selected.unitCode.split(', ')[0])}
+                      target="_blank" rel="noopener">{selected.unitCode} ↗</a>
+                  </li>
+                )}
+                {selected.licenceId && (
+                  <li>
+                    <span>{t('eeszt.traceLicence')}</span>
+                    <a href={eesztLink('engedely', 'ENGEDELY_AZONOSITO', selected.licenceId)}
+                      target="_blank" rel="noopener">{selected.licenceId} ↗</a>
+                  </li>
+                )}
+                {/* provider id is only present for filled districts (ETL guard) */}
+                {selected.providerId && (
+                  <li>
+                    <span>{t('eeszt.traceProvider')}</span>
+                    <a href={eesztLink('euszolg', 'EUSZOLG_AZONOSITO', selected.providerId)}
+                      target="_blank" rel="noopener">{selected.providerId} ↗</a>
+                  </li>
+                )}
+              </ul>
+            </div>
             {selected.geoApprox && (
               <p className="praxis-line praxis-line--faint">{t('eeszt.approxNote')}</p>
             )}

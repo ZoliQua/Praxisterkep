@@ -175,7 +175,7 @@ function popupHtml(props: Record<string, unknown>): string {
   if (ee && (ee.districtNo || ee.licence)) {
     const parts: string[] = [];
     if (ee.districtNo) parts.push(esc(ee.districtNo));
-    if (ee.licence) {
+    if (ee.licence && ee.licence.address) {
       const l = ee.licence;
       parts.push(`${t('eeszt.licence')}: ${esc(`${l.postalCode} ${l.settlement}, ${l.address}`)}`
         + (l.settlementMatch ? '' : ` <em>(${t('eeszt.licenceMismatch')})</em>`));

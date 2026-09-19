@@ -16,7 +16,7 @@ export function EesztLine({ fin }: { fin: string }) {
     <span className="eeszt-line">
       <span className="eeszt-tag">{t('eeszt.tag')}</span>
       {e.districtNo && <span>{e.districtNo}</span>}
-      {lic && (
+      {lic && lic.address && (
         <span>
           {t('eeszt.licence')}: {lic.postalCode} {lic.settlement}, {lic.address}
           {!lic.settlementMatch && (

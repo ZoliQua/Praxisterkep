@@ -5,6 +5,27 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.6.0] — 2026-09-19
+
+### Hozzáadva
+- „Hogyan illesztettük?” info-ablak (ⓘ) az EESZT-szekcióban: a három
+  forrás élő portál-linkkel, sorszámmal és archivált nyers fájllal; a
+  letöltés módja és ellenőrzései; az illesztés lépésről lépésre a valódi
+  mezőnevekkel; döntési szabályok; névvédelem; körzetszám-kinyerés;
+  geokódolás; élő eredménytábla; kidolgozott példa (Sásd) élő
+  EESZT-linkekkel; önellenőrzési útmutató; korlátok.
+- Visszakövetés: körzetenként exportált kódlánc (szervezeti egység,
+  engedély-azonosító, betöltött körzetnél szolgáltató-azonosító). A
+  térkép oldalpanelén és a táblázat új oszlopaiban mindegyik kód az
+  EESZT nyilvános portálján pontosan a forrássort nyitja meg.
+- A névvédelem miatt rejtett esetek száma az ETL-ben számolva jelenik
+  meg (nem beégetett érték).
+
+### Javítva
+- A geokódoló nem áll le a telephely nélküli EESZT-engedélyen; az ETL
+  ilyenkor címmel rendelkező engedélyt választ; üres telephely nem
+  jelenik meg a felületen.
+
 ## [1.5.0] — 2026-09-19
 
 ### Hozzáadva
@@ -191,6 +212,7 @@ Első nyilvános kiadás a GitHubon.
   validálás → snapshot), sötét témájú egyoldalas SPA térképpel,
   keresővel, rangsorral és módszertannal; havi GitHub Actions workflow.
 
+[1.6.0]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v1.6.0
 [1.5.0]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v1.5.0
 [1.4.0]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v1.4.0
 [1.3.0]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v1.3.0

@@ -5,7 +5,7 @@
 import { useMemo, useState } from 'react';
 import { t, tKind } from '../lib/i18n';
 import { formatNumber, formatPercent } from '../lib/format';
-import { useEeszt } from '../lib/eeszt';
+import { eesztLink, useEeszt } from '../lib/eeszt';
 import {
   COLUMNS, UNMATCHED_COLUMNS, buildRows, buildUnmatchedRows, cellText, sortRows,
   type ColDef, type Row,
@@ -13,6 +13,7 @@ import {
 import { useAppStore, useSnapshot } from '../store/useAppStore';
 import { DataTableModal } from './DataTableModal';
 import { EesztMap } from './EesztMap';
+import { EesztInfoModal } from './EesztInfoModal';
 
 const PREVIEW = 20;
 
@@ -22,8 +23,26 @@ function statusBadge(status: string) {
   return <span className={`badge ${cls}`}>{status}</span>;
 }
 
+function codeLink(href: string, text: string) {
+  return <a className="eeszt-code" href={href} target="_blank" rel="noopener">{text}</a>;
+}
+
 function renderCell(col: ColDef, row: Row) {
   if (col.key === 'status') return statusBadge(String(row.status));
+  // trace columns open the exact source row on the public EESZT portal
+  if (col.key === 'fin' && row.fin) {
+    return codeLink(eesztLink('finszolg', 'FINKOD', String(row.fin)), String(row.fin));
+  }
+  if (col.key === 'unitCode' && row.unitCode) {
+    const first = String(row.unitCode).split(', ')[0];
+    return codeLink(eesztLink('engedely', 'SZERVEZETI_EGYSEG_KOD', first), String(row.unitCode));
+  }
+  if (col.key === 'licenceId' && row.licenceId) {
+    return codeLink(eesztLink('engedely', 'ENGEDELY_AZONOSITO', String(row.licenceId)), String(row.licenceId));
+  }
+  if (col.key === 'providerId' && row.providerId) {
+    return codeLink(eesztLink('euszolg', 'EUSZOLG_AZONOSITO', String(row.providerId)), String(row.providerId));
+  }
   if (col.key === 'settlementMatch' && row.settlementMatch === false) {
     return <em className="eeszt-warn">{t('eeszt.no')}</em>;
   }
@@ -45,7 +64,7 @@ export function EesztSection() {
   const data = useEeszt();
   const snapshot = useSnapshot()!;
   const kind = useAppStore((s) => s.kind);
-  const [openTable, setOpenTable] = useState<'all' | 'unmatched' | null>(null);
+  const [openTable, setOpenTable] = useState<'all' | 'unmatched' | 'info' | null>(null);
 
   const rows = useMemo(
     () => sortRows(buildRows(snapshot, data), 'settlement', 'asc'),
@@ -81,8 +100,21 @@ export function EesztSection() {
           onClick={() => setOpenTable('unmatched')}>
           <TableIcon warn />
         </button>
+        <button className="icon-button" title={t('eeszt.infoOpen')}
+          aria-label={t('eeszt.infoOpen')} onClick={() => setOpenTable('info')}>
+          <svg viewBox="0 0 20 20" aria-hidden="true">
+            <circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" strokeWidth="1.6" />
+            <path d="M10 9v5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+            <circle cx="10" cy="6.3" r="1.1" fill="currentColor" />
+          </svg>
+        </button>
       </div>
-      <p className="section__explain">{tKind('eeszt.explain', kind, { asOf: data.asOf })}</p>
+      <p className="section__explain">
+        {tKind('eeszt.explain', kind, { asOf: data.asOf })}{' '}
+        <button className="eeszt-coverage__unmatched" onClick={() => setOpenTable('info')}>
+          {t('eeszt.infoOpen')} →
+        </button>
+      </p>
 
       <div className="eeszt-coverage">
         <div className="eeszt-coverage__total">
@@ -148,6 +180,11 @@ export function EesztSection() {
               fitToRows searchLink={false} />
           ),
         }}
+      />
+      <EesztInfoModal
+        open={openTable === 'info'}
+        onClose={() => setOpenTable((cur) => (cur === 'info' ? null : cur))}
+        data={data}
       />
       <DataTableModal
         open={openTable === 'unmatched'}

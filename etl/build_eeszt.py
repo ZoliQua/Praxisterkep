@@ -175,6 +175,11 @@ def build(date: str) -> dict:
             units = sorted({c[fx["NNGYK9_KOD"]] for c in cands})
             lics = [x for u in units for x in lic_by_unit.get(u, [])
                     if x[ex["SZAKMA_KOD"]] in PROFESSIONS[kind]]
+            if status != "filled" and any(
+                    NAME_MARKER_RE.search(x[ex["SZERVEZETI_EGYSEG_NEV"]] or "")
+                    or NAME_MARKER_RE.search(x[ex["TELEPHELY_NEV"]] or "") for x in lics):
+                # counted only to document the name policy; never exported
+                st["nameHidden"] += 1
             places = {(normalize_settlement(x[ex["TELEPHELY_TELEPULES"]] or ""),
                        re.sub(r"\W+", "", (x[ex["TELEPHELY_CIM"]] or "").lower())[:12])
                       for x in lics}
@@ -199,7 +204,10 @@ def build(date: str) -> dict:
                          or [p.get("settlement", "")])
                 matching = [x for x in lics
                             if any(same_place(s, x[ex["TELEPHELY_TELEPULES"]] or "") for s in sites)]
-                best = (matching or lics)[0]
+                # prefer a licence that actually names its premises
+                pool = matching or lics
+                best = next((x for x in pool if x[ex["TELEPHELY_TELEPULES"]]
+                             and x[ex["TELEPHELY_CIM"]]), pool[0])
                 fin_tax = (r[fx["ADOIGSZ_8"]] or "")[:8]
                 lic_tax = tax_by_provider.get(best[ex["EUSZOLG_AZONOSITO"]], "")
                 provider_match = bool(fin_tax) and fin_tax == lic_tax
@@ -207,6 +215,12 @@ def build(date: str) -> dict:
                          | (2 if provider_match else 0)
                          | (4 if best[ex["KOZFINANSZIROZOTT"]] == "I" else 0)
                          | (8 if unit_users[unit] > 1 else 0))
+                # trace: [unit code(s), licence id, provider id] — codes only; the
+                # provider id (which resolves to a name at EESZT) only for filled
+                entry["t"] = [
+                    ",".join(units), best[ex["ENGEDELY_AZONOSITO"]] or "",
+                    (best[ex["EUSZOLG_AZONOSITO"]] or "") if status == "filled" else "",
+                ]
                 # [postal, settlement, address, professionCode, onCallIdx, flags, licenceCount]
                 entry["l"] = [
                     best[ex["TELEPHELY_IRSZAM"]], best[ex["TELEPHELY_TELEPULES"]],
@@ -225,6 +239,7 @@ def build(date: str) -> dict:
             else:
                 st[reason[0]] += 1
                 unmatched[fid] = [kind[0], *reason]
+                entry["t"] = [",".join(units), "", ""]
             entry["k"] = "g" if kind == "gp" else "d"
             praxes[fid] = entry
 
@@ -267,8 +282,16 @@ def build(date: str) -> dict:
             if rows:
                 settlements[sett["name"]] = rows
 
+    sources = {}
+    for name in ("neak_finszolg", "euszolg", "euszolg_engedely"):
+        meta = json.loads((RAW / f"{name}_{date}.meta.json").read_text(encoding="utf-8"))
+        sources[name] = {"entityId": meta["entityId"], "rows": meta["totalRowCount"],
+                         "date": meta["date"],
+                         "file": f"data/raw/eeszt/{name}_{date}.jsonl.gz"}
+
     out = {
         "schemaVersion": 1,
+        "sources": sources,
         "source": "EESZT törzspublikáció (NEAK_FINSZOLG, EUSZOLG_PUBLIKUS, EUSZOLG_ENGEDELY_PUBLIKUS)",
         "asOf": date,
         "dataMonth": latest["month"],
@@ -295,10 +318,12 @@ def guard(out: dict, latest: dict) -> None:
             raise EesztError(f"{fid}: provider data on a non-filled district")
         if "d" in e and NAME_MARKER_RE.search(e["d"]):
             raise EesztError(f"{fid}: name marker in district number {e['d']!r}")
-        if set(e) - {"k", "d", "p", "i", "l", "g"}:
+        if set(e) - {"k", "d", "p", "i", "l", "g", "t"}:
             raise EesztError(f"{fid}: unexpected fields {set(e)}")
         if "l" in e and len(e["l"]) != 7:
             raise EesztError(f"{fid}: licence block has unexpected shape")
+        if "t" in e and (len(e["t"]) != 3 or (fid not in filled and e["t"][2])):
+            raise EesztError(f"{fid}: bad trace block (provider id on a non-filled district?)")
         if "g" in e and not (45.5 < e["g"][0] < 48.7 and 16.0 < e["g"][1] < 23.0):
             raise EesztError(f"{fid}: coordinates outside Hungary {e['g']}")
     reasons = {"noFin", "otherTip", "ambiguous", "otherProfession", "noUnitLicence"}

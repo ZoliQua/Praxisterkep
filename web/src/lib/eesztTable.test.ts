@@ -11,6 +11,7 @@ function row(over: Partial<EesztRow>): EesztRow {
     settlementMatch: null, providerMatch: null, onCall: null, onCallDuty: null,
     publicFunded: null, profession: null, provider: null, institutionCode: null,
     sharedUnit: null, licenceCount: null, geoApprox: null, lat: null, lon: null,
+    unitCode: null, licenceId: null, providerId: null,
     ...over,
   };
 }

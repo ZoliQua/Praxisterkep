@@ -44,6 +44,9 @@ export type EesztRow = {
   geoApprox: boolean | null;
   lat: number | null;
   lon: number | null;
+  unitCode: string | null;
+  licenceId: string | null;
+  providerId: string | null;
 };
 
 export const COLUMNS: ColDef[] = [
@@ -68,6 +71,9 @@ export const COLUMNS: ColDef[] = [
   { key: 'sharedUnit', labelKey: 'eeszt.colSharedUnit', type: 'bool', visible: false },
   { key: 'licenceCount', labelKey: 'eeszt.colLicenceCount', type: 'number', visible: false },
   { key: 'geoApprox', labelKey: 'eeszt.colGeoApprox', type: 'bool', visible: false },
+  { key: 'unitCode', labelKey: 'eeszt.colUnit', type: 'text', visible: false },
+  { key: 'licenceId', labelKey: 'eeszt.colLicenceId', type: 'text', visible: false },
+  { key: 'providerId', labelKey: 'eeszt.colProviderId', type: 'text', visible: false },
 ];
 
 // type alias (not interface) so rows stay assignable to Record<string, Cell>
@@ -108,9 +114,9 @@ export function buildRows(snapshot: Snapshot, data: EesztRaw | null): EesztRow[]
       ...b,
       eesztState: lic ? t('eeszt.stateLicence') : t('eeszt.noLicence'),
       districtNo: e?.districtNo ?? null,
-      licPostal: lic?.postalCode ?? null,
-      licSettlement: lic?.settlement ?? null,
-      licAddress: lic?.address ?? null,
+      licPostal: lic?.postalCode || null,
+      licSettlement: lic?.settlement || null,
+      licAddress: lic?.address || null,
       settlementMatch: lic ? lic.settlementMatch : null,
       providerMatch: lic ? lic.providerMatch : null,
       onCall: lic?.onCall || null,
@@ -125,6 +131,9 @@ export function buildRows(snapshot: Snapshot, data: EesztRaw | null): EesztRow[]
       geoApprox: e?.geo ? e.geo.approx : null,
       lat: e?.geo?.lat ?? null,
       lon: e?.geo?.lon ?? null,
+      unitCode: e?.trace?.units.join(', ') || null,
+      licenceId: e?.trace?.licenceId || null,
+      providerId: e?.trace?.providerId || null,
     };
   });
 }

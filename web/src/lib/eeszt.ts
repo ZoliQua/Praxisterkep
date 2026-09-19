@@ -16,10 +16,14 @@ export interface EesztRaw {
     d?: string;
     p?: string;
     i?: string;
-    l?: [string, string, string, string, number, number, number];
+    l?: [string | null, string | null, string | null, string, number, number, number];
     /** licensed premises coordinates: [lat, lon, approx (settlement centroid) 0|1] */
     g?: [number, number, number];
+    /** trace codes: [unit code(s) comma-joined, licence id, provider id (filled only)] */
+    t?: [string, string, string];
   }>;
+  /** per-register download metadata (for the transparency panel) */
+  sources?: Record<string, { entityId: string; rows: number; date: string; file: string }>;
   /** FIN -> [kind initial, reason code, detail] for districts with no usable licence */
   unmatched?: Record<string, ['d' | 'g', string, string]>;
   /** our settlement name -> [kind, postal, address, professionCode, publicFunded, onCallIdx][] */
@@ -39,8 +43,15 @@ export interface EesztLicence {
   licenceCount: number;
 }
 
+export interface EesztTrace {
+  units: string[];
+  licenceId: string;
+  providerId: string;
+}
+
 export interface EesztPraxis {
   geo?: { lat: number; lon: number; approx: boolean };
+  trace?: EesztTrace;
   districtNo?: string;
   provider?: string;
   institutionCode?: string;
@@ -95,15 +106,18 @@ export function eesztPraxis(data: EesztRaw | null, fin: string): EesztPraxis | n
   if (!data || !e) return null;
   const out: EesztPraxis = {};
   if (e.g) out.geo = { lat: e.g[0], lon: e.g[1], approx: e.g[2] === 1 };
+  if (e.t) {
+    out.trace = { units: e.t[0] ? e.t[0].split(',') : [], licenceId: e.t[1], providerId: e.t[2] };
+  }
   if (e.d) out.districtNo = e.d;
   if (e.p) out.provider = e.p;
   if (e.i) out.institutionCode = e.i;
   if (e.l) {
     const [postalCode, settlement, address, prof, onCallIdx, flags, licenceCount] = e.l;
     out.licence = {
-      postalCode,
-      settlement,
-      address,
+      postalCode: postalCode ?? '',
+      settlement: settlement ?? '',
+      address: address ?? '',
       profession: data.professions[prof] ?? prof,
       onCall: data.onCall[onCallIdx] ?? '',
       settlementMatch: (flags & 1) !== 0,
@@ -136,4 +150,22 @@ export function eesztSettlement(
 /** 'nem vesz részt' variants read as "no on-call duty" */
 export function takesOnCall(onCall: string): boolean {
   return !!onCall && !/^nem vesz részt/i.test(onCall);
+}
+
+/** EESZT registers used by the supplement (entityId as the portal names them) */
+export const EESZT_ENTITIES = {
+  finszolg: 'NEAK_FINSZOLG.NEAK_FINSZOLG.K',
+  euszolg: 'EUSZOLG_PUBLIKUS.EUSZOLG_PUBLIKUS.M',
+  engedely: 'EUSZOLG_ENGEDELY_PUBLIKUS.EUSZOLG_ENGEDELY_PUBLIKUS.M',
+} as const;
+
+/** deep link into the public EESZT portal, filtered to one key value —
+ *  opens exactly the source row a value was taken from */
+export function eesztLink(entity: keyof typeof EESZT_ENTITIES, key?: string, value?: string): string {
+  const params = [
+    `entityId=${EESZT_ENTITIES[entity]}`, 'page=1', 'size=20',
+    `searchKeys=${key ?? ''}`, `searchValues=${value ? encodeURIComponent(value) : ''}`,
+    'snapshotDate=', 'tortenetStartDate=', 'tortenetEndDate=',
+  ];
+  return `https://www.eeszt.gov.hu/hu/torzspublikacio#${params.join('&')}`;
 }
