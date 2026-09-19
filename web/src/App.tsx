@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { t } from './lib/i18n';
+import { locale, t } from './lib/i18n';
 import { useAppStore, useSnapshot } from './store/useAppStore';
 import { Hero } from './components/Hero';
 import { ScrollyIntro } from './components/ScrollyIntro';
@@ -7,6 +7,7 @@ import { MapSection } from './components/MapSection';
 import { SearchSection } from './components/SearchSection';
 import { CountyRanking } from './components/CountyRanking';
 import { StatsSection } from './components/StatsSection';
+import { VersusSection } from './components/VersusSection';
 import { WhySection } from './components/WhySection';
 import { Methodology } from './components/Methodology';
 import { Footer } from './components/Footer';
@@ -19,6 +20,7 @@ const NAV = [
   ['#nalam', 'nav.mine'],
   ['#rangsor', 'nav.ranking'],
   ['#statisztika', 'nav.stats'],
+  ['#osszevetes', 'nav.versus'],
   ['#modszertan', 'nav.methodology'],
 ] as const;
 
@@ -37,6 +39,16 @@ export default function App() {
     // drives the per-kind accent color (see index.css [data-kind='gp'])
     document.documentElement.dataset.kind = kind;
   }, [kind]);
+
+  useEffect(() => {
+    document.documentElement.lang = locale;
+  }, []);
+
+  function switchLocale() {
+    const url = new URL(window.location.href);
+    url.searchParams.set('lang', locale === 'hu' ? 'en' : 'hu');
+    window.location.href = url.toString();
+  }
 
   if (loadError) return <div className="error">{loadError}</div>;
   if (!snapshot) return <div className="loading">…</div>;
@@ -58,6 +70,10 @@ export default function App() {
               <IconStethoscope />
             </button>
           </div>
+          <button className="topnav__lang" onClick={switchLocale}
+            aria-label={locale === 'hu' ? 'Switch to English' : 'Váltás magyarra'}>
+            {locale === 'hu' ? 'EN' : 'HU'}
+          </button>
           <div className="topnav__links">
             {NAV.map(([href, key]) => (
               <a key={href} href={href}>{t(key)}</a>
@@ -72,6 +88,7 @@ export default function App() {
       <SearchSection />
       <CountyRanking />
       <StatsSection />
+      <VersusSection />
       <Methodology />
       <Footer />
     </>

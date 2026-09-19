@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { t, tKind } from '../lib/i18n';
-import { formatDuration, formatMonth, formatNumber, formatPercent } from '../lib/format';
+import { formatDecimal, formatDuration, formatMonth, formatNumber, formatPercent } from '../lib/format';
 import {
   countyChange,
   countyNames,
@@ -15,12 +15,14 @@ import {
   type HistoryEntry,
 } from '../lib/statsSelectors';
 import { useAppStore, useHistoryEntries, usePersistence, useSnapshot } from '../store/useAppStore';
+import { locale } from '../lib/i18n';
 import { primarySite } from '../lib/selectors';
 import { TimeSeriesChart, type ChartSeries } from './charts/TimeSeriesChart';
 import { FlowChart } from './charts/FlowChart';
 import { DurationHistogram } from './charts/DurationHistogram';
 import { CountyChangeChart } from './charts/CountyChangeChart';
 import { VacancyTableModal } from './VacancyTableModal';
+import { DelistedList } from './DelistedList';
 import { monthsBetween } from '../lib/format';
 import { downloadCsv } from '../lib/exportChart';
 
@@ -40,14 +42,18 @@ function single(key: string, label: string, color: string, points: ChartSeries['
 /** axis-friendly duration: whole years above a year, months below */
 function formatMonthsAxis(v: number): string {
   if (v === 0) return '0';
+  if (locale === 'en') return v >= 12 ? `${Math.round(v / 12)} y` : `${Math.round(v)} mo`;
   return v >= 12 ? `${Math.round(v / 12)} év` : `${Math.round(v)} hó`;
 }
 
 /** compact Hungarian magnitude labels for population axes */
 function formatCompactAxis(v: number): string {
   if (v === 0) return '0';
-  if (v >= 1_000_000) return `${(v / 1_000_000).toFixed(1).replace('.', ',')} M`;
-  if (v >= 1_000) return `${Math.round(v / 1_000)} ezer`;
+  if (v >= 1_000_000) {
+    const t2 = (v / 1_000_000).toFixed(1);
+    return `${locale === 'en' ? t2 : t2.replace('.', ',')} M`;
+  }
+  if (v >= 1_000) return `${Math.round(v / 1_000)}${locale === 'en' ? 'k' : ' ezer'}`;
   return formatNumber(v);
 }
 
@@ -153,7 +159,7 @@ export function StatsSection() {
           {snapshot?.national.praxesPer10k != null && (
             <div className="stat">
               <div className="stat__value">
-                {String(snapshot.national.praxesPer10k).replace('.', ',')}
+                {formatDecimal(snapshot.national.praxesPer10k)}
               </div>
               <div className="stat__label">{t('stats.per10kNow')}</div>
             </div>
@@ -341,6 +347,7 @@ export function StatsSection() {
             )}
           </figure>
         )}
+        <DelistedList />
       </div>
 
       {snapshot && (

@@ -1,0 +1,39 @@
+name: deploy
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/**"
+      - "web/**"
+      - ".github/workflows/deploy.yml"
+  workflow_dispatch: {}
+
+jobs:
+  pages:
+    runs-on: ubuntu-latest
+    # requires two repo secrets (Settings -> Secrets and variables -> Actions):
+    #   CLOUDFLARE_API_TOKEN  — API token with the "Cloudflare Pages: Edit" permission
+    #   CLOUDFLARE_ACCOUNT_ID — account id from the Cloudflare dashboard URL
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci
+        working-directory: web
+      - run: npm run build
+        working-directory: web
+      - name: Create Pages project (first run only)
+        run: npx wrangler pages project create praxisterkep --production-branch=main || true
+        working-directory: web
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Deploy to Cloudflare Pages
+        run: npx wrangler pages deploy dist --project-name=praxisterkep
+        working-directory: web
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

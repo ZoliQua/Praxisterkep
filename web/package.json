@@ -1,13 +1,14 @@
 {
   "name": "praxisterkep-web",
   "private": true,
-  "version": "1.1.0",
+  "version": "1.2.0",
   "type": "module",
   "scripts": {
     "predev": "node scripts/sync-data.mjs",
     "dev": "vite",
-    "prebuild": "node scripts/sync-data.mjs",
+    "prebuild": "node scripts/sync-data.mjs && node scripts/og-image.mjs",
     "build": "tsc -b && vite build",
+    "postbuild": "node scripts/share-pages.mjs",
     "test": "vitest run",
     "lint": "oxlint",
     "preview": "vite preview"
@@ -26,6 +27,7 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.4",
     "oxlint": "^1.75.0",
+    "sharp": "^0.35.4",
     "typescript": "~6.0.2",
     "vite": "^8.2.0",
     "vitest": "^4.1.11"

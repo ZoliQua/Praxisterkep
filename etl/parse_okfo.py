@@ -31,7 +31,9 @@ URLS = {
 }
 HEADERS = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Praxisterkep/1.0"}
 RAW_DIR = Path(__file__).resolve().parent.parent / "data" / "raw"
-DATE_RE = re.compile(r"^(\d{4})\.(\d{2})\.\d{2}\.?$")
+# dotted ("2014.04.01.") in the current markup, dashed ("2014-04-01")
+# in the 2024-era pages recovered from the Wayback Machine
+DATE_RE = re.compile(r"^(\d{4})[.-](\d{2})[.-]\d{2}\.?$")
 
 
 def fetch(month: str, kind: str) -> Path:
@@ -47,11 +49,16 @@ def fetch(month: str, kind: str) -> Path:
 
 
 def extract_as_of(html: str) -> str:
-    """The page's "Aktuális: 2026. szeptember 1." stamp as YYYY-MM."""
+    """The page's "Aktuális: …" stamp as YYYY-MM. Two generations exist:
+    month-name ("2026. szeptember 1.") and numeric ("2022. 06. 01." /
+    "2023.11.01.", used until late 2024)."""
     m = re.search(
         r"Aktu[áa]lis:?\s*(\d{4})\.\s*([a-záéíóöőúüű]+)", html, re.IGNORECASE)
     if m and m.group(2).lower() in HU_MONTHS:
         return f"{m.group(1)}-{HU_MONTHS[m.group(2).lower()]:02d}"
+    m = re.search(r"Aktu[áa]lis:?\s*(\d{4})\.\s*(\d{1,2})\.", html, re.IGNORECASE)
+    if m and 1 <= int(m.group(2)) <= 12:
+        return f"{m.group(1)}-{int(m.group(2)):02d}"
     raise ParseError("OKFŐ as-of stamp not found")
 
 
@@ -72,21 +79,31 @@ def parse(html_path: Path, kind: str) -> tuple[str, list[dict]]:
         raise ParseError(f"no table found in {html_path.name}")
     type_map = TYPE_MAP if kind == "dental" else GP_TYPE_MAP
     rows: list[dict] = []
+    broken = 0
     for r in tables[0].itertuples(index=False):
         cells = [_clean(c) for c in r]
         if len(cells) < 6 or not DATE_RE.match(cells[4]):
             continue  # header / stamp rows
-        type_raw = cells[1]
+        # capitalization varies between page generations ("Vegyes"/"vegyes")
+        type_raw = cells[1] if cells[1] in type_map else cells[1].capitalize()
         if type_raw not in type_map:
-            raise ParseError(f"unknown OKFŐ service type {type_raw!r}")
-        rows.append({
-            "county": canonical_county(cells[0]),
-            "type": type_map[type_raw],
-            "postalCode": cells[2],
-            "settlement": cells[3],
-            "vacantSince": _month(cells[4]),
-            "longTermSince": _month(cells[5]),
-        })
+            raise ParseError(f"unknown OKFŐ service type {cells[1]!r}")
+        try:
+            rows.append({
+                "county": canonical_county(cells[0]),
+                "type": type_map[type_raw],
+                "postalCode": cells[2],
+                "settlement": cells[3],
+                "vacantSince": _month(cells[4]),
+                "longTermSince": _month(cells[5]),
+            })
+        except ParseError as exc:
+            # the source page contains the odd typo (e.g. "204.11.01");
+            # skip the row, but never silently accept a broken table
+            broken += 1
+            print(f"  WARNING skipped OKFŐ row: {exc}")
+    if broken > 5:
+        raise ParseError(f"{broken} unparseable rows in {html_path.name}")
     if not rows:
         raise ParseError(f"no rows parsed from {html_path.name}")
     return as_of, rows

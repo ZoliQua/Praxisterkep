@@ -2,7 +2,7 @@
 // current snapshot plus overlaid vacancy-count timelines from the archive.
 import { useMemo, useState } from 'react';
 import { t } from '../lib/i18n';
-import { formatNumber, formatPercent } from '../lib/format';
+import { formatDecimal, formatNumber, formatPercent } from '../lib/format';
 import { useAppStore, useHistoryEntries, useSnapshot } from '../store/useAppStore';
 import type { CountyAggregate } from '../types';
 
@@ -23,7 +23,7 @@ function CountyCard({ county, color }: { county: CountyAggregate; color: string 
     rows.push([t('ranking.comparePopShare'), formatPercent(county.populationShare)]);
   }
   if (county.praxesPer10k != null) {
-    rows.push([t('ranking.comparePer10k'), county.praxesPer10k.toFixed(2)]);
+    rows.push([t('ranking.comparePer10k'), formatDecimal(county.praxesPer10k.toFixed(2))]);
   }
   if (county.longTerm != null) {
     rows.push([t('ranking.compareLongTerm'), String(county.longTerm)]);

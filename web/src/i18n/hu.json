@@ -27,7 +27,8 @@
     "methodology": "Módszertan",
     "sources": "Források",
     "stats": "Statisztika",
-    "why": "Miért fontos?"
+    "why": "Miért fontos?",
+    "versus": "Összevetés"
   },
   "hero": {
     "vacant": "betöltetlen {kind} körzet",
@@ -267,7 +268,14 @@
     "statusLongTerm": "tartósan betöltetlen",
     "longTermNow": "jogilag tartósan betöltetlen {kind} körzet — az üresek {pct}-a",
     "exportPng": "Diagram letöltése (PNG)",
-    "exportCsv": "Idősor letöltése (CSV)"
+    "exportCsv": "Idősor letöltése (CSV)",
+    "delistedTitle": "Lekerültek a betöltetlen listáról",
+    "delistedExplain": "{from} → {to}: ezek a {kind} körzetek az előző archivált havi listán még szerepeltek, a legfrissebben már nem.",
+    "delistedFilled": "betöltve",
+    "delistedGone": "nincs a listán",
+    "delistedNone": "A két legutóbbi archivált hónap között nem került le körzet a listáról.",
+    "delistedMore": "… és további {n} körzet",
+    "delistedNote": "A „betöltve” jelölés a NEAK törzslistája alapján készül, a szerződött orvos NEAK által közölt nevével. Ahol nincs jelölés, a körzet a friss betöltetlen listán és a törzslistán sem szerepel."
   },
   "why": {
     "heading": "Miért számít az alapellátás?",
@@ -368,5 +376,24 @@
   "embed": {
     "vacantSuffix": "betöltetlen körzet",
     "backlink": "Praxistérkép"
+  },
+  "versus": {
+    "heading": "Fogorvos és háziorvos összevetve",
+    "explain": "A két ellátási ág ugyanazon mutatói egymás mellett a legfrissebb ({month}) adatokból — az eltérés léptéke önmagában beszédes.",
+    "thMetric": "Mutató",
+    "metricVacant": "Betöltetlen körzet (megszűnttel együtt)",
+    "metricRate": "Betöltetlenségi arány",
+    "metricPop": "Érintett lakosság",
+    "metricPopShare": "A lakosság aránya betöltetlen körzetben",
+    "metricPer10k": "Betöltetlen körzet 10 000 lakosra",
+    "metricLongTerm": "Jogilag tartósan betöltetlen (OKFŐ)",
+    "metricMedian": "Medián üresedési idő",
+    "metricLongest": "Leghosszabb üresedés",
+    "chartRate": "Betöltetlenségi arány ágak szerint",
+    "chartRateExplain": "A betöltetlen (és megszűnt) körzetek aránya az összes körzethez képest, az archivált hónapokban.",
+    "chartMedian": "Medián üresedési idő ágak szerint",
+    "chartMedianExplain": "Az adott hónapban betöltetlen körzetek üresedési idejének mediánja.",
+    "dumbbellTitle": "Megyei arányok ág szerint",
+    "dumbbellExplain": "Megyénként a fogorvosi (zöld) és a háziorvosi (kék) betöltetlenségi arány, a háziorvosi arány szerint rendezve. A hosszú összekötő vonal nagy eltérést jelez a két ág között."
   }
 }

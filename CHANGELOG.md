@@ -5,6 +5,25 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.2.0] — 2026-09-19
+
+### Hozzáadva
+- Új „Összevetés” szekció: a fogorvosi és háziorvosi ág mutatói egymás
+  mellett, közös arány- és medián-idősorral és megyénkénti
+  dumbbell-diagrammal.
+- „Lekerültek a betöltetlen listáról” kártya a statisztikában: a két
+  legutóbbi archivált hónap közti változás körzetenként, a betöltött
+  körzeteknél a NEAK által közölt szerződött orvos nevével.
+- Angol nyelvű felület (navbar HU/EN váltó, ?lang= paraméter,
+  honosított szám- és dátumformátumok).
+- OKFŐ-historikum: a tartósan-betöltetlen jelölés visszamenőleges
+  feltöltése az archivált hónapokra a Wayback Machine mentéseiből
+  (`etl/backfill_okfo.py`).
+- Megyénkénti megosztó-oldalak (`/megye/<megye>/`) OG-metaadatokkal és
+  buildkor generált közösségi előnézeti kép (og.png).
+- Cloudflare Pages deploy-workflow (`.github/workflows/deploy.yml`).
+- A Tippelj!-játék megyeválasztójában az összes körzet száma.
+
 ## [1.1.0] — 2026-09-19
 
 ### Hozzáadva
@@ -112,6 +131,7 @@ Első nyilvános kiadás a GitHubon.
   validálás → snapshot), sötét témájú egyoldalas SPA térképpel,
   keresővel, rangsorral és módszertannal; havi GitHub Actions workflow.
 
+[1.2.0]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v1.2.0
 [1.1.0]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v1.1.0
 [1.0.0]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v1.0.0
 [0.9.1]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v0.9.1
