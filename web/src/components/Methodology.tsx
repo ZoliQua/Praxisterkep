@@ -6,7 +6,7 @@ export function Methodology() {
   return (
     <section className="section container method" id="modszertan">
       <h2 className="section__heading">{t('methodology.heading')}</h2>
-      {(['p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8'] as const).map((k) => (
+      {(['p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8', 'p9'] as const).map((k) => (
         <p key={k}>{t(`methodology.${k}`)}</p>
       ))}
       <h3 className="why__chain-title">{t('methodology.embedTitle')}</h3>

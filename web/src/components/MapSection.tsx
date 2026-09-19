@@ -8,6 +8,7 @@ import { t } from '../lib/i18n';
 import { formatMonth, formatNumber, formatPercent, monthsBetween } from '../lib/format';
 import { countyRanking, filterPraxes, type TypeFilter } from '../lib/selectors';
 import { readMapState, writeMapState } from '../lib/mapState';
+import { eesztNow, eesztPraxis, loadEeszt, takesOnCall } from '../lib/eeszt';
 import {
   useAppStore, useHistoryEntries, useMapSnapshot, type MapMetric,
 } from '../store/useAppStore';
@@ -169,6 +170,19 @@ function popupHtml(props: Record<string, unknown>): string {
   if (props.geoApprox === true) {
     lines.push(`<div class="flag">${t('map.popupApproxNote')}</div>`);
   }
+  // EESZT supplement (loaded lazily; vacant districts carry no names)
+  const ee = eesztPraxis(eesztNow(), String(props.id));
+  if (ee && (ee.districtNo || ee.licence)) {
+    const parts: string[] = [];
+    if (ee.districtNo) parts.push(esc(ee.districtNo));
+    if (ee.licence) {
+      const l = ee.licence;
+      parts.push(`${t('eeszt.licence')}: ${esc(`${l.postalCode} ${l.settlement}, ${l.address}`)}`
+        + (l.settlementMatch ? '' : ` <em>(${t('eeszt.licenceMismatch')})</em>`));
+      if (takesOnCall(l.onCall)) parts.push(`${t('eeszt.onCall')}: ${esc(l.onCall)}`);
+    }
+    lines.push(`<div class="map-popup__eeszt"><span class="eeszt-tag">${t('eeszt.tag')}</span> ${parts.join(' · ')}</div>`);
+  }
   lines.push(
     `<a class="map-popup__link" href="#nalam" data-settlement="${esc(props.settlement)}">${t('map.popupToSearch')}</a>`,
     `<a class="map-popup__link" href="#terkep" data-copylink="${esc(props.id)}">${t('map.popupCopyLink')}</a>`,
@@ -301,6 +315,7 @@ export function MapSection() {
 
   useEffect(() => {
     void loadCountyGeoms().then(setGeoms);
+    void loadEeszt();
   }, []);
 
   /* apply ?ho= archive month from the URL once history is known */

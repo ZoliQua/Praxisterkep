@@ -16,6 +16,10 @@ const files = [
   [join(repo, 'data', 'geo', 'counties.geojson'), join(out, 'counties.geojson')],
   [join(repo, 'data', 'geo', 'jaras.geojson'), join(out, 'jaras.geojson')],
 ];
+// optional supplement (EESZT, source H) — copied only when present
+const optional = [
+  [join(repo, 'data', 'eeszt.json'), join(out, 'eeszt.json')],
+];
 
 mkdirSync(out, { recursive: true });
 // monthly snapshots for the map time slider
@@ -36,6 +40,11 @@ for (const [src, dst] of files) {
     console.error(`missing ${src} — run the ETL first: python etl/run.py --month YYYY-MM`);
     process.exit(1);
   }
+  copyFileSync(src, dst);
+  console.log(`synced ${dst}`);
+}
+for (const [src, dst] of optional) {
+  if (!existsSync(src)) continue;
   copyFileSync(src, dst);
   console.log(`synced ${dst}`);
 }

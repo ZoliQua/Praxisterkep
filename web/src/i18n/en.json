@@ -28,7 +28,8 @@
     "sources": "Sources",
     "stats": "Statistics",
     "why": "Why it matters",
-    "versus": "Comparison"
+    "versus": "Comparison",
+    "eeszt": "EESZT"
   },
   "hero": {
     "vacant": "vacant {kind} districts",
@@ -171,7 +172,8 @@
     "p7": "The per-capita indicators (share of population living in a vacant district; districts per 10,000 residents; settlement populations) use the resident population of the HCSO Gazetteer as of 1 January 2025. This single edition is applied to every archived month — for historical months this is an approximation, noted here. Settlements are identified by HCSO code and settlement name; Budapest's districts are counted separately.",
     "p8": "The legal category of long-term vacant districts is taken from the continuously updated lists of the OKFŐ Primary Care Directorate (alapellatas.okfo.gov.hu). The list carries no NEAK code, so matching uses the settlement, the service type and the starting month of the vacancy; the list's as-of date is shown in the interface. The flag applies to the current month and is not applied retroactively to historical months.",
     "embedTitle": "Embedding",
-    "embedText": "The map can be embedded in any page with the code below (parameter k: dental or gp; optional parameter m: county name):"
+    "embedText": "The map can be embedded in any page with the code below (parameter k: dental or gp; optional parameter m: county name):",
+    "p9": "The EESZT supplement (source H) is built from three public registers of the EESZT master-data publication: NEAK_FINSZOLG (financed services), EUSZOLG_PUBLIKUS (healthcare providers) and EUSZOLG_ENGEDELY_PUBLIKUS (operating licences). Matching uses official codes only: from the NEAK FIN code through the organisational-unit code to the licence of the district's own profession (GP 6301–6303, dental 1300/1304/1305). We check whether the licensed premises lie in the district's settlement and whether the licensee's tax number matches the financed provider; differences are flagged, and where a FIN points to several licences at different premises no premises are shown. The district number is extracted from the official service name with a strict pattern. The provider name is shown only for filled districts; for vacant districts no free-text name field is taken over, as organisational-unit names often carry the former physician's name."
   },
   "footer": {
     "sources": "Sources",
@@ -182,7 +184,8 @@
     "author": "Created by Dr. Zoltan Dul",
     "updated": "Data as of",
     "sourceKsh": "Resident population: HCSO Gazetteer, 1 January 2025 (www.ksh.hu/apps/hntr.egyeb)",
-    "sourceOkfo": "Long-term vacant districts: OKFŐ Primary Care Directorate (alapellatas.okfo.gov.hu)"
+    "sourceOkfo": "Long-term vacant districts: OKFŐ Primary Care Directorate (alapellatas.okfo.gov.hu)",
+    "sourceEeszt": "Supplementary data: EESZT master-data publication — NEAK_FINSZOLG, EUSZOLG_PUBLIKUS, EUSZOLG_ENGEDELY_PUBLIKUS (www.eeszt.gov.hu)"
   },
   "praxisTypes": {
     "adult": "adult",
@@ -395,5 +398,34 @@
     "chartMedianExplain": "The median vacancy duration of districts vacant in the given month.",
     "dumbbellTitle": "County rates by branch",
     "dumbbellExplain": "The dental (green) and GP (blue) vacancy rate per county, sorted by the GP rate. A long connecting line marks a large gap between the two branches."
+  },
+  "eeszt": {
+    "heading": "EESZT supplement",
+    "explain": "We link public data from the EESZT master-data publication to the NEAK districts using official codes only (FIN code → organisational unit → operating licence): the district number, the licensed premises, on-call participation and public funding. Every match is cross-checked; where the sources contradict each other, we do not pick one. Data as of {asOf}.",
+    "tag": "EESZT",
+    "licence": "Licensed premises",
+    "licenceMismatch": "differs from the district's NEAK seat",
+    "onCall": "On-call",
+    "noOnCall": "none",
+    "publicFunded": "publicly funded",
+    "notPublicFunded": "not publicly funded",
+    "provider": "Financed provider",
+    "institutionCode": "institution code",
+    "settlementListTitle": "Licensed {kind} practices in this settlement",
+    "noSettlementLicence": "The EESZT licence register has no {kind} primary-care practice in this settlement — residents are served from another settlement.",
+    "settlementListNote": "Source: EESZT operating licences ({asOf}). The list shows every primary-care practice in the settlement regardless of district; personal and company names are not shown here.",
+    "covTotal": "{kind} districts in the latest NEAK data",
+    "covFin": "FIN code found in EESZT",
+    "covLicence": "operating licence matched",
+    "covSettlement": "licensed premises in the district's settlement",
+    "covProvider": "licensee's tax number matches the financed provider",
+    "covAmbiguous": "For {n} districts the FIN code links to several licences at different premises — no premises are shown for these.",
+    "onlyMismatch": "Only differing premises",
+    "thDistrictNo": "District",
+    "thFunded": "Public",
+    "noLicence": "no matching licence",
+    "noFin": "not in EESZT",
+    "yes": "yes",
+    "no": "no"
   }
 }

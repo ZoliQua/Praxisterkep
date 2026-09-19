@@ -28,7 +28,8 @@
     "sources": "Források",
     "stats": "Statisztika",
     "why": "Miért fontos?",
-    "versus": "Összevetés"
+    "versus": "Összevetés",
+    "eeszt": "EESZT"
   },
   "hero": {
     "vacant": "betöltetlen {kind} körzet",
@@ -171,7 +172,8 @@
     "p7": "A lakossági fajlagos mutatók (a lakosság hány százaléka él betöltetlen körzetben; 10 000 főre jutó körzetszám; a települések lakónépessége) nevezője a KSH Helységnévtár 2025. január 1-jei lakónépesség-adata. Ezt az egy kiadást alkalmazzuk minden archivált hónapra — a történeti hónapoknál ez közelítés, amit itt jelzünk. A települések azonosítása a KSH-törzsszám és a településnév alapján történik; Budapest kerületei külön egységként szerepelnek.",
     "p8": "A tartósan betöltetlen körzetek jogi kategóriáját az OKFŐ Alapellátási Igazgatóság folyamatosan frissített listáiból vesszük át (alapellatas.okfo.gov.hu). A lista nem tartalmaz NEAK-kódot, ezért a párosítás a település, a szolgálattípus és a betöltetlenség kezdő hónapja alapján történik; a lista állapotdátumát a felületen jelezzük. A jelölés a mindenkori aktuális hónapra vonatkozik, a történeti hónapokra visszamenőleg nem alkalmazzuk.",
     "embedTitle": "Beágyazás",
-    "embedText": "A térkép beágyazható bármely oldalba az alábbi kóddal (a k paraméter: dental vagy gp; opcionális m paraméter: megyenév):"
+    "embedText": "A térkép beágyazható bármely oldalba az alábbi kóddal (a k paraméter: dental vagy gp; opcionális m paraméter: megyenév):",
+    "p9": "Az EESZT-kiegészítés (H forrás) az EESZT törzspublikáció három nyilvános törzséből épül: NEAK_FINSZOLG (finanszírozott szolgálatok), EUSZOLG_PUBLIKUS (egészségügyi szolgáltatók) és EUSZOLG_ENGEDELY_PUBLIKUS (működési engedélyek). Az illesztés kizárólag hivatalos kódokkal történik: a NEAK FIN-kódból a szervezeti egység kódján át a körzet saját szakmájú (háziorvosi 6301–6303, fogorvosi 1300/1304/1305) engedélyéhez. Ellenőrizzük, hogy az engedély telephelye a körzet településén van-e, és hogy az engedélyes adószáma egyezik-e a finanszírozott szolgáltatóéval; az eltéréseket jelöljük, az ellentmondó (több telephelyre mutató) eseteknél nem mutatunk telephelyet. A körzet sorszámát szigorú mintával nyerjük ki a hivatalos szolgálatnévből. A szolgáltató nevét csak betöltött körzetnél közöljük; betöltetlen körzetnél semmilyen szabad szöveges névmezőt nem veszünk át, mert a szervezeti egységek neve gyakran a korábbi orvos nevét hordozza."
   },
   "footer": {
     "sources": "Források",
@@ -182,7 +184,8 @@
     "author": "Készítette: Dr. Dul Zoltán",
     "updated": "Adatállapot",
     "sourceKsh": "Lakónépesség: KSH Helységnévtár, 2025. január 1. (www.ksh.hu/apps/hntr.egyeb)",
-    "sourceOkfo": "Tartósan betöltetlen körzetek: OKFŐ Alapellátási Igazgatóság (alapellatas.okfo.gov.hu)"
+    "sourceOkfo": "Tartósan betöltetlen körzetek: OKFŐ Alapellátási Igazgatóság (alapellatas.okfo.gov.hu)",
+    "sourceEeszt": "Kiegészítő adatok: EESZT törzspublikáció — NEAK_FINSZOLG, EUSZOLG_PUBLIKUS, EUSZOLG_ENGEDELY_PUBLIKUS (www.eeszt.gov.hu)"
   },
   "praxisTypes": {
     "adult": "felnőtt",
@@ -395,5 +398,34 @@
     "chartMedianExplain": "Az adott hónapban betöltetlen körzetek üresedési idejének mediánja.",
     "dumbbellTitle": "Megyei arányok ág szerint",
     "dumbbellExplain": "Megyénként a fogorvosi (zöld) és a háziorvosi (kék) betöltetlenségi arány, a háziorvosi arány szerint rendezve. A hosszú összekötő vonal nagy eltérést jelez a két ág között."
+  },
+  "eeszt": {
+    "heading": "EESZT-kiegészítés",
+    "explain": "A NEAK-körzetekhez az EESZT törzspublikáció nyilvános adatait kapcsoljuk, kizárólag hivatalos kódok alapján (FIN-kód → szervezeti egység → működési engedély): a körzet sorszámát, az engedély szerinti telephelyet, az ügyeleti részvételt és a közfinanszírozást. Az egyezéseket forrásonként ellenőrizzük; ahol az adatok ellentmondanak, nem választunk közülük. Adatállapot: {asOf}.",
+    "tag": "EESZT",
+    "licence": "Engedélyezett telephely",
+    "licenceMismatch": "eltér a körzet NEAK-székhelyétől",
+    "onCall": "Ügyelet",
+    "noOnCall": "nem vesz részt",
+    "publicFunded": "közfinanszírozott",
+    "notPublicFunded": "nem közfinanszírozott",
+    "provider": "Finanszírozott szolgáltató",
+    "institutionCode": "intézménykód",
+    "settlementListTitle": "Működési engedéllyel rendelkező {kind} rendelők a településen",
+    "noSettlementLicence": "Az EESZT engedélytörzsében nincs {kind} alapellátási rendelő ezen a településen — a lakosokat más település rendelője látja el.",
+    "settlementListNote": "Forrás: EESZT működési engedélyek ({asOf}). A lista a település összes alapellátási rendelőjét mutatja a körzetektől függetlenül; személy- és cégneveket itt nem közlünk.",
+    "covTotal": "{kind} körzet a legfrissebb NEAK-adatokban",
+    "covFin": "FIN-kód megtalálható az EESZT-ben",
+    "covLicence": "működési engedély illesztve",
+    "covSettlement": "az engedély telephelye a körzet településén",
+    "covProvider": "az engedélyes adószáma egyezik a finanszírozottéval",
+    "covAmbiguous": "{n} körzetnél a FIN-kód több, eltérő telephelyű engedélyhez is kapcsolódik — ezeknél nem mutatunk telephelyet.",
+    "onlyMismatch": "Csak eltérő telephelyűek",
+    "thDistrictNo": "Körzet",
+    "thFunded": "Közfin.",
+    "noLicence": "nincs illeszthető engedély",
+    "noFin": "nincs az EESZT-ben",
+    "yes": "igen",
+    "no": "nem"
   }
 }

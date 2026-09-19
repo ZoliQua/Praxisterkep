@@ -1,7 +1,7 @@
 # Praxistérkép · OEP-Alapellatas
 
 [![Havi ETL](https://github.com/ZoliQua/OEP-Alapellatas/actions/workflows/monthly-etl.yml/badge.svg)](https://github.com/ZoliQua/OEP-Alapellatas/actions/workflows/monthly-etl.yml)
-[![Verzió](https://img.shields.io/badge/verzi%C3%B3-1.2.0-blue)](CHANGELOG.md)
+[![Verzió](https://img.shields.io/badge/verzi%C3%B3-1.3.0-blue)](CHANGELOG.md)
 [![Licenc: MIT](https://img.shields.io/badge/licenc-MIT-green.svg)](LICENSE)
 [![Python 3.13](https://img.shields.io/badge/Python-3.13-3776ab?logo=python&logoColor=white)](etl/)
 [![React 19](https://img.shields.io/badge/React-19-61dafb?logo=react&logoColor=black)](web/)
@@ -42,6 +42,7 @@ viseli), kiegészítve OKFŐ-, KSH- és OpenStreetMap-forrásokkal.
 | E | OKFŐ — Tartósan betöltetlen körzetek | HTML | havi |
 | F | KSH — Helységnévtár, lakónépesség | XLSX | évi |
 | G | Település-/megyehatárok (OpenStreetMap) | GeoJSON | statikus |
+| H | EESZT törzspublikáció — finanszírozott szolgálatok, szolgáltatók, működési engedélyek | REST JSON | havi (kiegészítő) |
 
 A NEAK adatai tájékoztató jellegűek. A forrás-URL-ek az
 [`etl/sources.py`](etl/sources.py) fájlban vannak; minden nyers forrásfájl

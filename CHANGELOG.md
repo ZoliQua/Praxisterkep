@@ -5,6 +5,28 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.3.0] — 2026-09-19
+
+### Hozzáadva
+- EESZT-kiegészítés (H forrás): az EESZT törzspublikáció három nyilvános
+  törzse (NEAK_FINSZOLG, EUSZOLG_PUBLIKUS, EUSZOLG_ENGEDELY_PUBLIKUS)
+  teljes letöltése a portál REST-végpontjáról (`etl/fetch_eeszt.py`,
+  archívum: `data/raw/eeszt/`), és illesztése a körzetekhez kizárólag
+  hivatalos kódokkal: FIN-kód → szervezeti egység → működési engedély
+  (`etl/build_eeszt.py` → `data/eeszt.json`).
+- A körzetekhez: hivatalos körzetsorszám, engedélyezett telephely,
+  ügyeleti részvétel, közfinanszírozás; betöltött körzetnél a
+  finanszírozott szolgáltató és intézménykód. Megjelenik a
+  térkép-popupban, a keresőkártyán és új „EESZT” szekcióban
+  (illesztési lefedettség + szűrhető táblázat, eltérés-szűrővel).
+- A keresőkártyán a település összes működési engedélyes
+  alapellátási rendelője (nevek nélkül).
+- Pontossági ellenőrzések: telephely–település egyezés, az engedélyes
+  és a finanszírozott szolgáltató adószámának egyezése; az ellentmondó
+  (több telephelyre mutató) esetekben nem mutatunk telephelyet.
+  Névvédelmi őr a buildben és tesztekben: betöltetlen körzetnél soha
+  nem kerül ki szolgáltató- vagy szervezeti egység-név.
+
 ## [1.2.0] — 2026-09-19
 
 ### Hozzáadva
@@ -131,6 +153,7 @@ Első nyilvános kiadás a GitHubon.
   validálás → snapshot), sötét témájú egyoldalas SPA térképpel,
   keresővel, rangsorral és módszertannal; havi GitHub Actions workflow.
 
+[1.3.0]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v1.3.0
 [1.2.0]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v1.2.0
 [1.1.0]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v1.1.0
 [1.0.0]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v1.0.0

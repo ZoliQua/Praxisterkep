@@ -5,6 +5,7 @@ import { praxesById, primarySite, searchSettlements } from '../lib/selectors';
 import { useAppStore, useSnapshot } from '../store/useAppStore';
 import { DirectoryTableModal } from './DirectoryTableModal';
 import { SettlementTimeline } from './SettlementTimeline';
+import { EesztLine, EesztSettlementList } from './EesztBits';
 import type { FilledPraxis, Praxis, SettlementEntry } from '../types';
 
 const FILLED_LIMIT = 10;
@@ -17,6 +18,7 @@ function FilledRow({ praxis }: { praxis: FilledPraxis }) {
         {praxis.doctor && <strong>{praxis.doctor}</strong>}
         {praxis.doctor && ' · '}
         {praxis.postalCode} {praxis.settlement}, {praxis.address}
+        <EesztLine fin={praxis.id} />
       </span>
     </div>
   );
@@ -49,6 +51,7 @@ function PraxisRow({ praxis, month }: { praxis: Praxis; month: string }) {
             {t('search.servedBy')}: {served.join(', ')}
           </>
         )}
+        <EesztLine fin={praxis.id} />
       </span>
     </div>
   );
@@ -203,6 +206,7 @@ export function SearchSection() {
               </div>
             </>
           )}
+          <EesztSettlementList settlement={selected.name} kind={kind} />
         </div>
       )}
 

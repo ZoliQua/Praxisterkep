@@ -1,0 +1,14 @@
+{
+  "entityId": "EUSZOLG_PUBLIKUS.EUSZOLG_PUBLIKUS.M",
+  "date": "2026-09-19",
+  "fields": [
+    "EUSZOLG_AZONOSITO",
+    "KOZPONTITORZS_NEV",
+    "ADOSZAM",
+    "SZEKHELY_MEGYE",
+    "SZEKHELY_IRSZ",
+    "SZEKHELY_TELEPULES",
+    "SZEKHELY_CIM"
+  ],
+  "totalRowCount": 40896
+}

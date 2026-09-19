@@ -5,6 +5,7 @@ Usage: python etl/run.py --month 2026-08 [--kind dental|gp|all] [--skip-geocode]
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from datetime import date
 from pathlib import Path
@@ -113,6 +114,21 @@ def main() -> None:
     for path in write_outputs(snapshots, month):
         print(f"      wrote {path}")
     print(f"      wrote {build_history()}")
+
+    # EESZT supplement (source H) — optional: a failed download or guard
+    # keeps the previous data/eeszt.json and never blocks the NEAK release
+    print("[+] EESZT supplement")
+    try:
+        import build_eeszt
+        import fetch_eeszt
+        for name, entity in fetch_eeszt.ENTITIES.items():
+            fetch_eeszt.download(name, entity, size=500, sleep=1.0)
+        out = build_eeszt.build(build_eeszt.latest_date())
+        build_eeszt.OUT.write_text(
+            json.dumps(out, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+        print(f"      wrote {build_eeszt.OUT}")
+    except Exception as exc:  # noqa: BLE001 — supplement must not block release
+        print(f"      WARNING: EESZT supplement skipped: {exc}")
     print("done")
 
 
