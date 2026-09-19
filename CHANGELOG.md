@@ -5,6 +5,23 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.5.0] — 2026-09-19
+
+### Hozzáadva
+- EESZT-térkép: minden illesztett körzet az engedélyezett telephelyén;
+  nagyítható, megyére szűrhető (ráközelítéssel), a pontokra kattintva
+  oldalpanel mutatja a körzet EESZT-adatait. Színek: betöltött /
+  betöltetlen / megszűnt; gyűrű: a telephely másik településen van;
+  halvány pont: hozzávetőleges (település-középponti) hely.
+- A teljes EESZT-táblázat felett ki/be kapcsolható térkép, amely mindig
+  a táblázat aktuális szűrését követi, és a szűrt pontokra közelít.
+- Az engedélyezett telephelyek geokódolása (`etl/geocode_eeszt.py`,
+  Nominatim, 1 kérés/mp, közös cache); új „hozzávetőleges hely” oszlop.
+
+### Javítva
+- A geokódoló cache írása atomi (párhuzamos olvasó nem kaphat félig
+  kiírt fájlt).
+
 ## [1.4.0] — 2026-09-19
 
 ### Hozzáadva
@@ -174,6 +191,7 @@ Első nyilvános kiadás a GitHubon.
   validálás → snapshot), sötét témájú egyoldalas SPA térképpel,
   keresővel, rangsorral és módszertannal; havi GitHub Actions workflow.
 
+[1.5.0]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v1.5.0
 [1.4.0]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v1.4.0
 [1.3.0]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v1.3.0
 [1.2.0]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v1.2.0

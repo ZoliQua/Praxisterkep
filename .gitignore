@@ -8,3 +8,4 @@ web/public/data/
 data/geo/jaras_overpass_cache.json
 web/public/og.png
 data/raw/okfo_wayback/
+etl/geocode_cache.json.tmp

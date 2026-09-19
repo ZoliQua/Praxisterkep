@@ -1337,3 +1337,41 @@ a:hover { text-decoration: underline; }
 }
 .eeszt-coverage__unmatched:hover { text-decoration: underline; }
 .data-dialog tbody td { white-space: normal; max-width: 460px; }
+
+/* ---------- EESZT map ---------- */
+.eeszt-map { margin: 18px 0 22px; }
+.eeszt-map__bar {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px;
+  margin-bottom: 8px; font-size: 12.5px; color: var(--ink-dim);
+}
+.eeszt-map__bar select {
+  background: var(--bg-raised); color: var(--ink); border: 1px solid var(--line-strong);
+  border-radius: 8px; padding: 6px 10px; font: 600 13px var(--font-body);
+}
+.eeszt-map__count { font-weight: 600; color: var(--ink); }
+.eeszt-map__legend { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; }
+.eeszt-map__legend i {
+  display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: -5px;
+}
+.eeszt-map__legend i.is-ring { background: transparent; border: 2px solid; width: 10px; height: 10px; }
+.eeszt-map__stage {
+  position: relative; border: 1px solid var(--line); border-radius: var(--radius);
+  overflow: hidden; background: var(--bg-raised);
+}
+.eeszt-map__canvas { width: 100%; height: 100%; }
+.eeszt-map__panel {
+  position: absolute; top: 10px; right: 10px; bottom: 10px; z-index: 5;
+  width: min(320px, 70%); overflow: auto; padding: 14px 16px;
+  background: color-mix(in srgb, var(--bg-panel) 96%, transparent);
+  border: 1px solid var(--line-strong); border-radius: 10px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
+  animation: rise 0.25s ease backwards;
+}
+.eeszt-map__panel h4 { margin: 0; font: 800 17px var(--font-display); padding-right: 24px; }
+.eeszt-map__panel-sub { margin: 2px 0 10px; color: var(--ink-faint); font-size: 12.5px; }
+.eeszt-map__panel dl { margin: 0 0 10px; display: grid; gap: 6px; }
+.eeszt-map__panel dl div { display: grid; grid-template-columns: 110px 1fr; gap: 8px; font-size: 12.5px; }
+.eeszt-map__panel dt { color: var(--ink-faint); }
+.eeszt-map__panel dd { margin: 0; color: var(--ink); overflow-wrap: anywhere; }
+.data-dialog__above { padding: 10px 22px 0; }
+.data-dialog__above .eeszt-map { margin: 0 0 10px; }

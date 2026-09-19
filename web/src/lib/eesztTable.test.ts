@@ -10,7 +10,7 @@ function row(over: Partial<EesztRow>): EesztRow {
     districtNo: null, licPostal: null, licSettlement: null, licAddress: null,
     settlementMatch: null, providerMatch: null, onCall: null, onCallDuty: null,
     publicFunded: null, profession: null, provider: null, institutionCode: null,
-    sharedUnit: null, licenceCount: null,
+    sharedUnit: null, licenceCount: null, geoApprox: null, lat: null, lon: null,
     ...over,
   };
 }

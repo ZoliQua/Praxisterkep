@@ -12,6 +12,7 @@ import {
 } from '../lib/eesztTable';
 import { useAppStore, useSnapshot } from '../store/useAppStore';
 import { DataTableModal } from './DataTableModal';
+import { EesztMap } from './EesztMap';
 
 const PREVIEW = 20;
 
@@ -104,6 +105,8 @@ export function EesztSection() {
         </button>
       </div>
 
+      <EesztMap rows={rows} />
+
       <div className="stats-table__scroll eeszt-table">
         <table>
           <thead>
@@ -138,6 +141,13 @@ export function EesztSection() {
         columns={COLUMNS}
         filename={`praxisterkep-eeszt-${kind}`}
         renderCell={renderCell}
+        above={{
+          label: t('eeszt.mapToggle'),
+          render: (filtered) => (
+            <EesztMap rows={filtered} height={320} countyFilter={false}
+              fitToRows searchLink={false} />
+          ),
+        }}
       />
       <DataTableModal
         open={openTable === 'unmatched'}

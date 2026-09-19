@@ -17,6 +17,8 @@ export interface EesztRaw {
     p?: string;
     i?: string;
     l?: [string, string, string, string, number, number, number];
+    /** licensed premises coordinates: [lat, lon, approx (settlement centroid) 0|1] */
+    g?: [number, number, number];
   }>;
   /** FIN -> [kind initial, reason code, detail] for districts with no usable licence */
   unmatched?: Record<string, ['d' | 'g', string, string]>;
@@ -38,6 +40,7 @@ export interface EesztLicence {
 }
 
 export interface EesztPraxis {
+  geo?: { lat: number; lon: number; approx: boolean };
   districtNo?: string;
   provider?: string;
   institutionCode?: string;
@@ -91,6 +94,7 @@ export function eesztPraxis(data: EesztRaw | null, fin: string): EesztPraxis | n
   const e = data?.praxes[fin];
   if (!data || !e) return null;
   const out: EesztPraxis = {};
+  if (e.g) out.geo = { lat: e.g[0], lon: e.g[1], approx: e.g[2] === 1 };
   if (e.d) out.districtNo = e.d;
   if (e.p) out.provider = e.p;
   if (e.i) out.institutionCode = e.i;

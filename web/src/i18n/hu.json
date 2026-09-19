@@ -173,7 +173,7 @@
     "p8": "A tartósan betöltetlen körzetek jogi kategóriáját az OKFŐ Alapellátási Igazgatóság folyamatosan frissített listáiból vesszük át (alapellatas.okfo.gov.hu). A lista nem tartalmaz NEAK-kódot, ezért a párosítás a település, a szolgálattípus és a betöltetlenség kezdő hónapja alapján történik; a lista állapotdátumát a felületen jelezzük. A jelölés a mindenkori aktuális hónapra vonatkozik, a történeti hónapokra visszamenőleg nem alkalmazzuk.",
     "embedTitle": "Beágyazás",
     "embedText": "A térkép beágyazható bármely oldalba az alábbi kóddal (a k paraméter: dental vagy gp; opcionális m paraméter: megyenév):",
-    "p9": "Az EESZT-kiegészítés (H forrás) az EESZT törzspublikáció három nyilvános törzséből épül: NEAK_FINSZOLG (finanszírozott szolgálatok), EUSZOLG_PUBLIKUS (egészségügyi szolgáltatók) és EUSZOLG_ENGEDELY_PUBLIKUS (működési engedélyek). Az illesztés kizárólag hivatalos kódokkal történik: a NEAK FIN-kódból a szervezeti egység kódján át a körzet saját szakmájú (háziorvosi 6301–6303, fogorvosi 1300/1304/1305) engedélyéhez. Ellenőrizzük, hogy az engedély telephelye a körzet településén van-e, és hogy az engedélyes adószáma egyezik-e a finanszírozott szolgáltatóéval; az eltéréseket jelöljük, az ellentmondó (több telephelyre mutató) eseteknél nem mutatunk telephelyet. A körzet sorszámát szigorú mintával nyerjük ki a hivatalos szolgálatnévből. A szolgáltató nevét csak betöltött körzetnél közöljük; betöltetlen körzetnél semmilyen szabad szöveges névmezőt nem veszünk át, mert a szervezeti egységek neve gyakran a korábbi orvos nevét hordozza."
+    "p9": "Az EESZT-kiegészítés (H forrás) az EESZT törzspublikáció három nyilvános törzséből épül: NEAK_FINSZOLG (finanszírozott szolgálatok), EUSZOLG_PUBLIKUS (egészségügyi szolgáltatók) és EUSZOLG_ENGEDELY_PUBLIKUS (működési engedélyek). Az illesztés kizárólag hivatalos kódokkal történik: a NEAK FIN-kódból a szervezeti egység kódján át a körzet saját szakmájú (háziorvosi 6301–6303, fogorvosi 1300/1304/1305) engedélyéhez. Ellenőrizzük, hogy az engedély telephelye a körzet településén van-e, és hogy az engedélyes adószáma egyezik-e a finanszírozott szolgáltatóéval; az eltéréseket jelöljük, az ellentmondó (több telephelyre mutató) eseteknél nem mutatunk telephelyet. A körzet sorszámát szigorú mintával nyerjük ki a hivatalos szolgálatnévből. A szolgáltató nevét csak betöltött körzetnél közöljük; betöltetlen körzetnél semmilyen szabad szöveges névmezőt nem veszünk át, mert a szervezeti egységek neve gyakran a korábbi orvos nevét hordozza. Az EESZT-térképen minden körzet az engedélyezett telephelyén jelenik meg; a címeket az OpenStreetMap Nominatim szolgáltatásával geokódoljuk (legfeljebb 1 kérés/másodperc, gyorsítótárral). Ahol a cím utcaszinten nem azonosítható, a település középpontját használjuk, és ezt a térképen halványabb ponttal, a táblázatban „hozzávetőleges hely” oszloppal jelöljük; koordináta nélküli körzet nem kerül a térképre."
   },
   "footer": {
     "sources": "Források",
@@ -460,7 +460,13 @@
     "tableTitle": "EESZT-adatok — {kind} körzetek",
     "tableSubtitle": "EESZT adatállapot: {asOf}",
     "unmatchedTitle": "Nem illeszthető {kind} körzetek",
-    "unmatchedSubtitle": "Körzetenként az ok, amiért nem kapcsolható hozzá működési engedély"
+    "unmatchedSubtitle": "Körzetenként az ok, amiért nem kapcsolható hozzá működési engedély",
+    "colGeoApprox": "Hozzávetőleges hely",
+    "mapCount": "{n} / {total} körzet a térképen",
+    "legendMismatch": "telephely másik településen",
+    "legendApprox": "hozzávetőleges hely (település-középpont)",
+    "approxNote": "A pont a település középpontját jelöli, mert az engedélyezett telephely címe nem volt utcaszinten geokódolható.",
+    "mapToggle": "Térkép"
   },
   "dataTable": {
     "searchAll": "Keresés minden oszlopban…",

@@ -114,6 +114,7 @@ def build(date: str) -> dict:
     tax_by_provider = {r[px["EUSZOLG_AZONOSITO"]]: (r[px["ADOSZAM"]] or "")[:8] for r in prov}
 
     latest = json.loads((ROOT / "data" / "latest.json").read_text(encoding="utf-8"))
+    geocache = json.loads((ROOT / "etl" / "geocode_cache.json").read_text(encoding="utf-8"))
     professions: dict[str, str] = {}
     on_call: list[str] = []
 
@@ -213,6 +214,12 @@ def build(date: str) -> dict:
                     on_call_idx(best[ex["UGYELET_KESZENLET"]]), flags, len(lics),
                 ]
                 professions[best[ex["SZAKMA_KOD"]]] = best[ex["SZAKMA_NEV"]]
+                # coordinates of the licensed premises from the shared geocode
+                # cache (filled by geocode_eeszt.py; no network here)
+                geo = geocache.get(f"{best[ex['TELEPHELY_IRSZAM']]} "
+                                   f"{best[ex['TELEPHELY_TELEPULES']]}, {best[ex['TELEPHELY_CIM']]}")
+                if geo:
+                    entry["g"] = [geo["lat"], geo["lon"], 1 if geo.get("geoApprox") else 0]
                 st["settlementMatch" if matching else "settlementMismatch"] += 1
                 st["providerMatch" if provider_match else "providerMismatch"] += 1
             else:
@@ -288,10 +295,12 @@ def guard(out: dict, latest: dict) -> None:
             raise EesztError(f"{fid}: provider data on a non-filled district")
         if "d" in e and NAME_MARKER_RE.search(e["d"]):
             raise EesztError(f"{fid}: name marker in district number {e['d']!r}")
-        if set(e) - {"k", "d", "p", "i", "l"}:
+        if set(e) - {"k", "d", "p", "i", "l", "g"}:
             raise EesztError(f"{fid}: unexpected fields {set(e)}")
         if "l" in e and len(e["l"]) != 7:
             raise EesztError(f"{fid}: licence block has unexpected shape")
+        if "g" in e and not (45.5 < e["g"][0] < 48.7 and 16.0 < e["g"][1] < 23.0):
+            raise EesztError(f"{fid}: coordinates outside Hungary {e['g']}")
     reasons = {"noFin", "otherTip", "ambiguous", "otherProfession", "noUnitLicence"}
     for fid, u in out.get("unmatched", {}).items():
         if fid not in known or len(u) != 3 or u[1] not in reasons:

@@ -41,6 +41,9 @@ export type EesztRow = {
   institutionCode: string | null;
   sharedUnit: boolean | null;
   licenceCount: number | null;
+  geoApprox: boolean | null;
+  lat: number | null;
+  lon: number | null;
 };
 
 export const COLUMNS: ColDef[] = [
@@ -64,6 +67,7 @@ export const COLUMNS: ColDef[] = [
   { key: 'institutionCode', labelKey: 'eeszt.institutionCode', type: 'text', visible: false },
   { key: 'sharedUnit', labelKey: 'eeszt.colSharedUnit', type: 'bool', visible: false },
   { key: 'licenceCount', labelKey: 'eeszt.colLicenceCount', type: 'number', visible: false },
+  { key: 'geoApprox', labelKey: 'eeszt.colGeoApprox', type: 'bool', visible: false },
 ];
 
 // type alias (not interface) so rows stay assignable to Record<string, Cell>
@@ -118,6 +122,9 @@ export function buildRows(snapshot: Snapshot, data: EesztRaw | null): EesztRow[]
       institutionCode: e?.institutionCode ?? null,
       sharedUnit: lic ? lic.sharedUnit : null,
       licenceCount: lic ? lic.licenceCount : null,
+      geoApprox: e?.geo ? e.geo.approx : null,
+      lat: e?.geo?.lat ?? null,
+      lon: e?.geo?.lon ?? null,
     };
   });
 }

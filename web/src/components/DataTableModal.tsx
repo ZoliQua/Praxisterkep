@@ -14,7 +14,7 @@ import { downloadBlob } from '../lib/exportChart';
 const PAGE_SIZES = [25, 50, 100, 500, 0]; // 0 = all
 
 export function DataTableModal<R extends Row>({
-  open, onClose, title, subtitle, rows, columns, filename, renderCell,
+  open, onClose, title, subtitle, rows, columns, filename, renderCell, above,
 }: {
   open: boolean;
   onClose: () => void;
@@ -25,6 +25,8 @@ export function DataTableModal<R extends Row>({
   filename: string;
   /** optional custom cell rendering (e.g. status badges) */
   renderCell?: (col: ColDef, row: R) => React.ReactNode | undefined;
+  /** optional toggleable panel above the table, fed the filtered rows */
+  above?: { label: string; render: (rows: R[]) => React.ReactNode; defaultOn?: boolean };
 }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [visible, setVisible] = useState<Set<string>>(
@@ -36,6 +38,7 @@ export function DataTableModal<R extends Row>({
   const [pageSize, setPageSize] = useState(50);
   const [page, setPage] = useState(0);
   const [chooserOpen, setChooserOpen] = useState(false);
+  const [showAbove, setShowAbove] = useState(above?.defaultOn ?? true);
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -154,6 +157,12 @@ export function DataTableModal<R extends Row>({
             onClick={() => { setFilters({}); setGlobal(''); setPage(0); }}>
             {t('dataTable.clearFilters')}{activeFilters ? ` (${activeFilters})` : ''}
           </button>
+          {above && (
+            <button className="data-btn" aria-pressed={showAbove}
+              onClick={() => setShowAbove((v) => !v)}>
+              {showAbove ? '◉' : '○'} {above.label}
+            </button>
+          )}
           <span className="data-dialog__spacer" />
           <button className="data-btn data-btn--accent" onClick={() => exportAs('csv')}
             disabled={result.length === 0}>{t('dataTable.exportCsv')}</button>
@@ -161,6 +170,9 @@ export function DataTableModal<R extends Row>({
             disabled={result.length === 0}>{t('dataTable.exportTsv')}</button>
         </div>
 
+        {above && showAbove && open && (
+          <div className="data-dialog__above">{above.render(result)}</div>
+        )}
         <div className="vacancy-dialog__scroll">
           <table>
             <thead>

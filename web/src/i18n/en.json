@@ -173,7 +173,7 @@
     "p8": "The legal category of long-term vacant districts is taken from the continuously updated lists of the OKFŐ Primary Care Directorate (alapellatas.okfo.gov.hu). The list carries no NEAK code, so matching uses the settlement, the service type and the starting month of the vacancy; the list's as-of date is shown in the interface. The flag applies to the current month and is not applied retroactively to historical months.",
     "embedTitle": "Embedding",
     "embedText": "The map can be embedded in any page with the code below (parameter k: dental or gp; optional parameter m: county name):",
-    "p9": "The EESZT supplement (source H) is built from three public registers of the EESZT master-data publication: NEAK_FINSZOLG (financed services), EUSZOLG_PUBLIKUS (healthcare providers) and EUSZOLG_ENGEDELY_PUBLIKUS (operating licences). Matching uses official codes only: from the NEAK FIN code through the organisational-unit code to the licence of the district's own profession (GP 6301–6303, dental 1300/1304/1305). We check whether the licensed premises lie in the district's settlement and whether the licensee's tax number matches the financed provider; differences are flagged, and where a FIN points to several licences at different premises no premises are shown. The district number is extracted from the official service name with a strict pattern. The provider name is shown only for filled districts; for vacant districts no free-text name field is taken over, as organisational-unit names often carry the former physician's name."
+    "p9": "The EESZT supplement (source H) is built from three public registers of the EESZT master-data publication: NEAK_FINSZOLG (financed services), EUSZOLG_PUBLIKUS (healthcare providers) and EUSZOLG_ENGEDELY_PUBLIKUS (operating licences). Matching uses official codes only: from the NEAK FIN code through the organisational-unit code to the licence of the district's own profession (GP 6301–6303, dental 1300/1304/1305). We check whether the licensed premises lie in the district's settlement and whether the licensee's tax number matches the financed provider; differences are flagged, and where a FIN points to several licences at different premises no premises are shown. The district number is extracted from the official service name with a strict pattern. The provider name is shown only for filled districts; for vacant districts no free-text name field is taken over, as organisational-unit names often carry the former physician's name. On the EESZT map each district is drawn at its licensed premises; addresses are geocoded with OpenStreetMap Nominatim (at most 1 request per second, cached). Where an address cannot be resolved at street level, the settlement centre is used — shown as a fainter point on the map and in the \"approximate location\" column; districts without coordinates are not drawn."
   },
   "footer": {
     "sources": "Sources",
@@ -460,7 +460,13 @@
     "tableTitle": "EESZT data — {kind} districts",
     "tableSubtitle": "EESZT data as of {asOf}",
     "unmatchedTitle": "Unmatched {kind} districts",
-    "unmatchedSubtitle": "Per district, the reason no operating licence could be linked"
+    "unmatchedSubtitle": "Per district, the reason no operating licence could be linked",
+    "colGeoApprox": "Approximate location",
+    "mapCount": "{n} districts on the map / {total}",
+    "legendMismatch": "premises in another settlement",
+    "legendApprox": "approximate (settlement centre)",
+    "approxNote": "The point marks the settlement centre because the licensed premises address could not be geocoded at street level.",
+    "mapToggle": "Map"
   },
   "dataTable": {
     "searchAll": "Search all columns…",

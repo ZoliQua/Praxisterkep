@@ -34,10 +34,13 @@ def load_cache() -> dict:
 
 
 def save_cache(cache: dict) -> None:
-    CACHE_PATH.write_text(
+    # atomic replace: a concurrent reader never sees a half-written file
+    tmp = CACHE_PATH.with_suffix(".json.tmp")
+    tmp.write_text(
         json.dumps(cache, ensure_ascii=False, indent=1, sort_keys=True),
         encoding="utf-8",
     )
+    tmp.replace(CACHE_PATH)
 
 
 def normalize_street(address: str) -> str:
