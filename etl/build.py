@@ -179,7 +179,12 @@ def build_snapshot(
             entry["district"] = e["district"]
         if e.get("servedSettlements"):
             entry["servedSettlements"] = _served_names(e)
-        # contracted physician as published by NEAK — filled praxes only
+        # registry fields NEAK publishes about the contracted service; the
+        # provider organisation and the physician are names, so they stay on
+        # filled praxes only (CLAUDE.md rule 3, enforced by validate.py)
+        for field in ("neakCode", "level", "provider"):
+            if e.get(field):
+                entry[field] = e[field]
         if e.get("doctor"):
             entry["doctor"] = e["doctor"]
         filled.append(entry)

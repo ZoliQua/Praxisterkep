@@ -1,0 +1,17 @@
+{
+  "entityId": "NEAK_FINSZOLG.NEAK_FINSZOLG.K",
+  "date": "2026-09-20",
+  "fields": [
+    "SORSZAM",
+    "MEGYE_KOD",
+    "MEGYE",
+    "INTKOD",
+    "INEV",
+    "FINKOD",
+    "FINNEV",
+    "NNGYK9_KOD",
+    "TIP",
+    "ADOIGSZ_8"
+  ],
+  "totalRowCount": 33962
+}

@@ -59,5 +59,9 @@ def test_parse_registry_filters_and_shape():
     # BETÖLTETLEN marker is not a name; real names stay on filled praxes
     assert by_id["020090006"]["doctor"] is None
     assert by_id["120090001"]["doctor"] == "Dr. Minta Elek"
+    # the provider organisation and its NEAK code follow the physician: a
+    # district with no contracted physician carries neither
+    assert "provider" not in by_id["020090006"]
+    assert "neakCode" not in by_id["020090006"]
     for e in entries:
-        assert "provider" not in e and "phone" not in e
+        assert "phone" not in e

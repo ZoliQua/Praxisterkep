@@ -10,6 +10,8 @@ import { eesztLink, eesztPraxis, type EesztRaw } from '../lib/eeszt';
 import { buildReasonRows } from '../lib/eesztTable';
 import { useAppStore } from '../store/useAppStore';
 import { DataTableModal } from './DataTableModal';
+import { makeCellRenderer } from './EesztCells';
+import { NeakDetailModal } from './NeakDetailModal';
 
 const REPO = 'https://github.com/ZoliQua/OEP-Alapellatas/blob/main';
 const EXAMPLE_FIN = '020066099'; // Sásd, dental — also a vacant district
@@ -25,6 +27,9 @@ export function EesztInfoModal({ open, onClose, data }: {
   const latest = useAppStore((s) => s.latest);
   // which reason's districts are being inspected, for which branch
   const [drill, setDrill] = useState<{ reason: string; kind: 'dental' | 'gp' } | null>(null);
+  // a filled district in a drill-down table opens its NEAK record
+  const [neakFin, setNeakFin] = useState<string | null>(null);
+  const renderCell = useMemo(() => makeCellRenderer(setNeakFin), []);
   useEffect(() => {
     const d = ref.current;
     if (!d) return;
@@ -237,6 +242,10 @@ export function EesztInfoModal({ open, onClose, data }: {
         </div>
       </div>
 
+      {drill && (
+        <NeakDetailModal fin={neakFin} kind={drill.kind}
+          onClose={() => setNeakFin(null)} />
+      )}
       {drill && drillData && (
         <DataTableModal
           open
@@ -250,6 +259,7 @@ export function EesztInfoModal({ open, onClose, data }: {
           rows={drillData.rows}
           columns={drillData.columns}
           filename={`praxisterkep-eeszt-${drill.kind}-${drill.reason}`}
+          renderCell={renderCell}
         />
       )}
     </dialog>

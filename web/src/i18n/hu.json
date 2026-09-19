@@ -475,7 +475,9 @@
     "traceUnit": "Szervezeti egység",
     "traceLicence": "Működési engedély",
     "traceProvider": "Szolgáltató",
-    "infoOpen": "Hogyan illesztettük? — részletes, visszakövethető leírás"
+    "infoOpen": "Hogyan illesztettük? — részletes, visszakövethető leírás",
+    "colDoctor": "Betöltő orvos",
+    "colNeakCode": "NEAK kód"
   },
   "dataTable": {
     "searchAll": "Keresés minden oszlopban…",
@@ -564,5 +566,23 @@
     "drillSubtitle": "Az érintett {kind} körzetek — szűrhető, rendezhető, exportálható",
     "drillSubtitleLicences": "{n} érintett {kind} körzet minden szóba jövő engedélye, soronként",
     "p9b": "A vastagon jelölt számokra kattintva az érintett körzetek részletes, szűrhető és exportálható táblázata nyílik meg. A kétértelmű eseteknél minden szóba jövő engedélyt felsorolunk, a más szakmájú engedélyeknél pedig azt, mire szól az engedély."
+  },
+  "neak": {
+    "title": "A körzet a NEAK nyilvántartásában",
+    "open": "NEAK-adatlap megnyitása",
+    "notFound": "Ehhez a körzethez nincs betöltött rekord a NEAK listájában.",
+    "fin": {
+      "dental": "Szervezeti egység kódja (FIN)",
+      "gp": "Szervezeti egység kódja (HSZ)"
+    },
+    "neakCode": "NEAK kód (szolgáltató)",
+    "provider": "Szolgáltató neve",
+    "level": "Ellátási szint",
+    "unitType": "Szervezeti egység típusa",
+    "site": "Körzet helye (rendelő)",
+    "district": "Járás",
+    "served": "Ellátandó települések",
+    "doctor": "Betöltő orvos",
+    "source": "Forrás: NEAK szerződött szolgáltatói listája, {month}. Az adat tájékoztató jellegű."
   }
 }

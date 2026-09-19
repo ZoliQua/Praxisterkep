@@ -148,7 +148,7 @@ def validate_snapshot(snapshot: dict) -> None:
 
 
 def _assert_no_name_fields(obj, path="$") -> None:
-    banned = {"doctor", "physician", "orvos", "name_of_doctor"}
+    banned = {"doctor", "physician", "orvos", "name_of_doctor", "provider"}
     if isinstance(obj, dict):
         for k, v in obj.items():
             if k.lower() in banned:

@@ -81,8 +81,9 @@ def parse_registry(xls_path: Path) -> list[dict]:
     """Parse source C' (contracted GP registry) — the denominator.
 
     Columns are located by header name, so all format generations parse with
-    the same code (2019: 12 columns, 2021-: 13 columns). Physician, provider
-    and phone columns are never read into the output.
+    the same code (2019: 12 columns, 2021-: 13 columns). The physician and
+    provider columns are kept for filled praxes only (build.py attaches them
+    to filledPraxes); the phone column is never read.
 
     Only territorial (form == 'T') praxes are kept: TN praxes have no district
     obligation and never appear on the vacant list, so including them would
@@ -92,7 +93,7 @@ def parse_registry(xls_path: Path) -> list[dict]:
 
     from parse_dental import _cell
 
-    from parse_registry import clean_doctor
+    from parse_registry import attach_provider, clean_doctor, locate_columns
 
     header_map = {
         "county": ("megye", "vármegye"),
@@ -106,6 +107,10 @@ def parse_registry(xls_path: Path) -> list[dict]:
         "district": ("járás neve",),
         "doctor": ("háziorvos neve", "szolgálat orvosa"),
     }
+    optional_map = {
+        "neakCode": ("neak kód",),
+        "provider": ("szolgáltató neve",),
+    }
     df = pd.read_excel(xls_path, header=None, dtype=object)
     header_idx = next(
         (i for i, row in enumerate(df.head(5).values.tolist())
@@ -115,15 +120,7 @@ def parse_registry(xls_path: Path) -> list[dict]:
     if header_idx is None:
         raise ParseError(f"{xls_path.name}: GP registry header row not found")
     header_row = df.iloc[header_idx].tolist()
-    cols: dict[str, int] = {}
-    for field, needles in header_map.items():
-        for i, cell in enumerate(header_row):
-            name = _clean(cell).lower()
-            if name and any(n in name for n in needles) and i not in cols.values():
-                cols[field] = i
-                break
-        else:
-            raise ParseError(f"GP registry: column {field!r} not found in header")
+    cols = locate_columns(header_row, header_map, optional_map, "GP registry")
 
     entries: list[dict] = []
     seen: set[str] = set()
@@ -144,7 +141,7 @@ def parse_registry(xls_path: Path) -> list[dict]:
             m = _SERVED_ITEM.match(_clean(item))
             if m:
                 served.append({"kshId": m.group(1), "name": m.group(2)})
-        entries.append({
+        entry = {
             "id": hsz,
             "kind": "gp",
             "type": GP_TYPE_MAP[type_letter],
@@ -155,7 +152,9 @@ def parse_registry(xls_path: Path) -> list[dict]:
             "district": _clean(row[cols["district"]]).removesuffix(" járás"),
             "servedSettlements": served,
             "doctor": clean_doctor(row[cols["doctor"]]),
-        })
+        }
+        attach_provider(entry, row, cols)
+        entries.append(entry)
     if not entries:
         raise ParseError(f"no registry entries parsed from {xls_path.name}")
     return entries

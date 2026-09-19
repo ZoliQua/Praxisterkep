@@ -1,51 +1,20 @@
-// "EESZT-kiegészítés": how well the public EESZT master data could be
-// joined (per branch, fully transparent), a 20-row preview, and two full
-// data browsers in modals — every district with its EESZT fields, and the
-// districts that could not be matched, each with the reason.
+// "EESZT-kiegészítés": how well the public EESZT master data could be joined
+// (per branch, fully transparent), the map, and two full data browsers in
+// modals — every district with its EESZT fields, and the districts that could
+// not be matched, each with the reason.
 import { useMemo, useState } from 'react';
 import { t, tKind } from '../lib/i18n';
 import { formatNumber, formatPercent } from '../lib/format';
-import { eesztLink, useEeszt } from '../lib/eeszt';
+import { useEeszt } from '../lib/eeszt';
 import {
   COLUMNS, UNMATCHED_COLUMNS, buildRows, buildUnmatchedRows, sortRows,
-  type ColDef, type Row,
 } from '../lib/eesztTable';
 import { useAppStore, useSnapshot } from '../store/useAppStore';
 import { DataTableModal } from './DataTableModal';
 import { EesztMap } from './EesztMap';
 import { EesztInfoModal } from './EesztInfoModal';
-
-function statusBadge(status: string) {
-  const cls = status === t('stats.statusFilled') ? 'badge--ok'
-    : status === t('stats.statusDissolved') ? 'badge--dissolved' : 'badge--vacant';
-  return <span className={`badge ${cls}`}>{status}</span>;
-}
-
-function codeLink(href: string, text: string) {
-  return <a className="eeszt-code" href={href} target="_blank" rel="noopener">{text}</a>;
-}
-
-function renderCell(col: ColDef, row: Row) {
-  if (col.key === 'status') return statusBadge(String(row.status));
-  // trace columns open the exact source row on the public EESZT portal
-  if (col.key === 'fin' && row.fin) {
-    return codeLink(eesztLink('finszolg', 'FINKOD', String(row.fin)), String(row.fin));
-  }
-  if (col.key === 'unitCode' && row.unitCode) {
-    const first = String(row.unitCode).split(', ')[0];
-    return codeLink(eesztLink('engedely', 'SZERVEZETI_EGYSEG_KOD', first), String(row.unitCode));
-  }
-  if (col.key === 'licenceId' && row.licenceId) {
-    return codeLink(eesztLink('engedely', 'ENGEDELY_AZONOSITO', String(row.licenceId)), String(row.licenceId));
-  }
-  if (col.key === 'providerId' && row.providerId) {
-    return codeLink(eesztLink('euszolg', 'EUSZOLG_AZONOSITO', String(row.providerId)), String(row.providerId));
-  }
-  if (col.key === 'settlementMatch' && row.settlementMatch === false) {
-    return <em className="eeszt-warn">{t('eeszt.no')}</em>;
-  }
-  return undefined;
-}
+import { makeCellRenderer } from './EesztCells';
+import { NeakDetailModal } from './NeakDetailModal';
 
 function TableIcon({ warn = false }: { warn?: boolean }) {
   return (
@@ -63,6 +32,9 @@ export function EesztSection() {
   const snapshot = useSnapshot()!;
   const kind = useAppStore((s) => s.kind);
   const [openTable, setOpenTable] = useState<'all' | 'unmatched' | 'info' | null>(null);
+  // the NEAK record of a filled district, opened from its status badge
+  const [neakFin, setNeakFin] = useState<string | null>(null);
+  const renderCell = useMemo(() => makeCellRenderer(setNeakFin), []);
 
   const rows = useMemo(
     () => sortRows(buildRows(snapshot, data), 'settlement', 'asc'),
@@ -162,6 +134,7 @@ export function EesztSection() {
           ),
         }}
       />
+      <NeakDetailModal fin={neakFin} kind={kind} onClose={() => setNeakFin(null)} />
       <EesztInfoModal
         open={openTable === 'info'}
         onClose={() => setOpenTable((cur) => (cur === 'info' ? null : cur))}

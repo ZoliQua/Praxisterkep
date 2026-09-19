@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
-  COLUMNS, buildReasonRows, filterRows, serialize, sortRows, type EesztRow,
+  COLUMNS, buildReasonRows, buildRows, filterRows, serialize, sortRows, type EesztRow,
 } from './eesztTable';
 import type { EesztRaw } from './eeszt';
 import type { Snapshot } from '../types';
@@ -8,7 +8,7 @@ import type { Snapshot } from '../types';
 function row(over: Partial<EesztRow>): EesztRow {
   return {
     fin: '000000000', settlement: 'X', county: 'Vas', type: 'vegyes',
-    status: 'Betöltetlen', eesztState: 'engedély',
+    status: 'Betöltetlen', doctor: null, neakCode: null, eesztState: 'engedély',
     districtNo: null, licPostal: null, licSettlement: null, licAddress: null,
     settlementMatch: null, providerMatch: null, onCall: null, onCallDuty: null,
     publicFunded: null, profession: null, provider: null, institutionCode: null,
@@ -120,5 +120,28 @@ describe('buildReasonRows', () => {
     expect(districts).toBe(1);
     expect(rows[0].fin).toBe('B');
     expect(String(rows[0].detail)).toContain('000000042');
+  });
+});
+
+describe('buildRows registry columns', () => {
+  const snapshot = {
+    praxes: [{
+      id: 'V1', county: 'Vas', type: 'adult', status: 'vacant',
+      sites: [{ settlement: 'Vasvár' }],
+    }],
+    filledPraxes: [{
+      id: 'F1', county: 'Zala', type: 'adult', settlement: 'Zalalövő',
+      doctor: 'Dr. Minta Elek', neakCode: '5229',
+    }],
+  } as unknown as Snapshot;
+
+  it('shows the contracted physician and NEAK code of filled districts only', () => {
+    const rows = buildRows(snapshot, null);
+    const vacant = rows.find((r) => r.fin === 'V1')!;
+    const filled = rows.find((r) => r.fin === 'F1')!;
+    expect(vacant.doctor).toBeNull();
+    expect(vacant.neakCode).toBeNull();
+    expect(filled.doctor).toBe('Dr. Minta Elek');
+    expect(filled.neakCode).toBe('5229');
   });
 });

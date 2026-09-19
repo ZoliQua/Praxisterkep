@@ -5,6 +5,32 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.8.0] — 2026-09-20
+
+### Hozzáadva
+- Két új oszlop az EESZT-táblázatban a NEAK nyilvántartásából: **betöltő
+  orvos neve** és **NEAK kód** (a szerződött szolgáltató kódja). Mindkettő
+  kizárólag betöltött körzetnél jelenik meg; betöltetlen és megszűnt
+  körzetnél soha (CLAUDE.md 3. szabály).
+- A Státusz oszlop „Betöltött” jelvénye kattintható, és felugró
+  NEAK-adatlapot nyit a körzetről: szervezeti egység kódja (FIN/HSZ),
+  NEAK kód, szolgáltató neve, ellátási szint, szervezeti egység típusa,
+  rendelő címe, megye, járás, ellátandó települések, betöltő orvos —
+  forrásmegjelöléssel együtt.
+- Színes jelvények a Típus, EESZT-illesztés, Telephely a körzet
+  településén, Ügyelet és Közfin. oszlopokban is, a Státusz mintájára; a
+  típusok a diagramokon használt színeket viszik tovább.
+- Az ETL átveszi a regiszter eddig eldobott mezőit (NEAK kód, szolgáltató
+  neve, ellátási szint). A szolgáltató neve és kódja csak ott kerül be,
+  ahol a NEAK szerződőtt orvost is közöl — egy betöltetlen körzetnél a
+  szolgáltató neve a helyettesítőt azonosítaná.
+
+### Javítva
+- A névvédő ellenőrzés a `provider` mezőre is kiterjed: a snapshot minden
+  olyan részében hibát dob, ami nem betöltött körzet.
+- Friss EESZT-törzsadatok (2026-09-20) és minden engedélyezett telephely
+  geokódolva: 8496 körzet látszik a térképen.
+
 ## [1.7.0] — 2026-09-20
 
 ### Hozzáadva

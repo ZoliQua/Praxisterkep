@@ -86,6 +86,12 @@ export interface FilledPraxis {
   address: string;
   district?: string;
   servedSettlements?: string[];
+  /** care level as published by NEAK ("Alapellátás") */
+  level?: string;
+  /** NEAK code of the contracted provider, e.g. "0278" */
+  neakCode?: string;
+  /** contracted provider organisation (filled praxes only) */
+  provider?: string;
   /** contracted physician as published by NEAK (filled praxes only) */
   doctor?: string;
 }

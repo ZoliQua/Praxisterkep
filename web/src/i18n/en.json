@@ -475,7 +475,9 @@
     "traceUnit": "Organisational unit",
     "traceLicence": "Operating licence",
     "traceProvider": "Provider",
-    "infoOpen": "How we matched it — full, traceable description"
+    "infoOpen": "How we matched it — full, traceable description",
+    "colDoctor": "Contracted physician",
+    "colNeakCode": "NEAK code"
   },
   "dataTable": {
     "searchAll": "Search all columns…",
@@ -564,5 +566,23 @@
     "drillSubtitle": "The {kind} districts concerned — filterable, sortable, exportable",
     "drillSubtitleLicences": "every candidate licence of the {n} affected {kind} districts, row by row",
     "p9b": "Click the highlighted numbers to open a detailed, filterable and exportable table of the districts concerned. For ambiguous cases every candidate licence is listed; for other-profession cases you see what the licence is actually for."
+  },
+  "neak": {
+    "title": "The district in the NEAK registry",
+    "open": "Open the NEAK record",
+    "notFound": "No filled record for this district in the NEAK list.",
+    "fin": {
+      "dental": "Organisational unit code (FIN)",
+      "gp": "Organisational unit code (HSZ)"
+    },
+    "neakCode": "NEAK code (provider)",
+    "provider": "Provider name",
+    "level": "Care level",
+    "unitType": "Organisational unit type",
+    "site": "Surgery address",
+    "district": "District (járás)",
+    "served": "Served settlements",
+    "doctor": "Contracted physician",
+    "source": "Source: NEAK contracted-provider list, {month}. The data is indicative."
   }
 }

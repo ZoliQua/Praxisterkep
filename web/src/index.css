@@ -1337,6 +1337,29 @@ a:hover { text-decoration: underline; }
 }
 .eeszt-coverage__unmatched:hover { text-decoration: underline; }
 .data-dialog tbody td { white-space: normal; max-width: 460px; }
+.data-dialog tbody .badge { white-space: nowrap; }
+.cell-empty { color: var(--ink-faint); }
+/* a status badge that opens the district's NEAK record */
+.badge--button {
+  appearance: none; border: 0; cursor: pointer; font-family: var(--font-body);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, currentColor 35%, transparent);
+}
+.badge--button:hover { box-shadow: inset 0 0 0 1px currentColor; }
+
+/* ---------- NEAK record ---------- */
+.neak-dialog__panel { width: min(680px, 94vw); }
+.neak-facts { margin: 0; padding: 4px 22px 0; }
+.neak-facts__row {
+  display: grid; grid-template-columns: 210px 1fr; gap: 14px;
+  padding: 9px 0; border-top: 1px solid var(--line); font-size: 14px;
+}
+.neak-facts__row:first-child { border-top: 0; }
+.neak-facts dt { color: var(--ink-dim); }
+.neak-facts dd { margin: 0; color: var(--ink); }
+.neak-dialog__note { padding: 14px 22px 20px; margin: 0; color: var(--ink-faint); font-size: 12.5px; }
+@media (max-width: 560px) {
+  .neak-facts__row { grid-template-columns: 1fr; gap: 2px; }
+}
 
 /* ---------- EESZT map ---------- */
 .eeszt-map { margin: 18px 0 22px; }

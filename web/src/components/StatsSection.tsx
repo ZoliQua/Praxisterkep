@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { KIND_LINE, TYPE_COLORS } from '../lib/palette';
 import { t, tKind } from '../lib/i18n';
 import { formatDecimal, formatDuration, formatMonth, formatNumber, formatPercent } from '../lib/format';
 import {
@@ -26,14 +27,6 @@ import { DelistedList } from './DelistedList';
 import { monthsBetween } from '../lib/format';
 import { downloadCsv } from '../lib/exportChart';
 
-// validated categorical palette (dark surface #101823) — fixed assignment
-const TYPE_COLORS: Record<string, string> = {
-  adult: '#3d87e0',
-  child: '#c98500',
-  mixed: '#17a08c',
-  school: '#9085e9',
-};
-const KIND_LINE = { dental: '#17a08c', gp: '#3d87e0' } as const;
 
 function single(key: string, label: string, color: string, points: ChartSeries['points']): ChartSeries[] {
   return [{ key, label, color, points }];

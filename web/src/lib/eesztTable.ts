@@ -26,6 +26,8 @@ export type EesztRow = {
   county: string;
   type: string;
   status: string;
+  doctor: string | null;
+  neakCode: string | null;
   eesztState: string;
   districtNo: string | null;
   licPostal: string | null;
@@ -55,6 +57,8 @@ export const COLUMNS: ColDef[] = [
   { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: true },
   { key: 'type', labelKey: 'stats.thType', type: 'enum', visible: true },
   { key: 'status', labelKey: 'stats.thStatus', type: 'enum', visible: true },
+  { key: 'doctor', labelKey: 'eeszt.colDoctor', type: 'text', visible: true },
+  { key: 'neakCode', labelKey: 'eeszt.colNeakCode', type: 'text', visible: true },
   { key: 'eesztState', labelKey: 'eeszt.colState', type: 'enum', visible: false },
   { key: 'districtNo', labelKey: 'eeszt.thDistrictNo', type: 'text', visible: true },
   { key: 'licPostal', labelKey: 'eeszt.colPostal', type: 'text', visible: false },
@@ -83,6 +87,9 @@ type BaseRow = {
   county: string;
   type: string;
   status: string;
+  /** NEAK registry fields — filled praxes only (CLAUDE.md rule 3) */
+  doctor: string | null;
+  neakCode: string | null;
 };
 
 function baseRows(snapshot: Snapshot): BaseRow[] {
@@ -95,6 +102,8 @@ function baseRows(snapshot: Snapshot): BaseRow[] {
       county: p.county,
       type: t(`praxisTypes.${p.type}`),
       status: statusLabel(p.status),
+      doctor: null,
+      neakCode: null,
     })),
     ...snapshot.filledPraxes.map((f) => ({
       fin: f.id,
@@ -102,6 +111,8 @@ function baseRows(snapshot: Snapshot): BaseRow[] {
       county: f.county,
       type: t(`praxisTypes.${f.type}`),
       status: statusLabel('filled'),
+      doctor: f.doctor ?? null,
+      neakCode: f.neakCode ?? null,
     })),
   ];
 }
