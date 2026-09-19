@@ -18,6 +18,8 @@ export interface EesztRaw {
     i?: string;
     l?: [string, string, string, string, number, number, number];
   }>;
+  /** FIN -> [kind initial, reason code, detail] for districts with no usable licence */
+  unmatched?: Record<string, ['d' | 'g', string, string]>;
   /** our settlement name -> [kind, postal, address, professionCode, publicFunded, onCallIdx][] */
   settlements: Record<string, ['d' | 'g', string, string, string, number, number][]>;
 }

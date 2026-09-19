@@ -54,3 +54,17 @@ def test_guard_rejects_unknown_fields():
            "settlements": {}}
     with pytest.raises(EesztError):
         guard(out, _latest([], ["000000002"]))
+
+
+def test_guard_rejects_malformed_unmatched_reason():
+    out = {"praxes": {}, "settlements": {},
+           "unmatched": {"000000002": ["d", "becauseISaySo", ""]}}
+    with pytest.raises(EesztError):
+        guard(out, _latest([], ["000000002"]))
+
+
+def test_guard_rejects_name_in_unmatched_detail():
+    out = {"praxes": {}, "settlements": {},
+           "unmatched": {"000000002": ["d", "otherProfession", "Dr. Kiss rendelője"]}}
+    with pytest.raises(EesztError):
+        guard(out, _latest([], ["000000002"]))

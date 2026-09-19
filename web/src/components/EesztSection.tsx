@@ -1,59 +1,59 @@
-// "EESZT-kiegészítés": the supplement as its own section — how well the
-// public EESZT master data could be joined (per branch, fully transparent),
-// and a filterable table of every district of the active branch with the
-// EESZT fields. Vacant/dissolved rows never carry a provider name.
+// "EESZT-kiegészítés": how well the public EESZT master data could be
+// joined (per branch, fully transparent), a 20-row preview, and two full
+// data browsers in modals — every district with its EESZT fields, and the
+// districts that could not be matched, each with the reason.
 import { useMemo, useState } from 'react';
 import { t, tKind } from '../lib/i18n';
 import { formatNumber, formatPercent } from '../lib/format';
-import { primarySite } from '../lib/selectors';
-import { eesztPraxis, takesOnCall, useEeszt } from '../lib/eeszt';
+import { useEeszt } from '../lib/eeszt';
+import {
+  COLUMNS, UNMATCHED_COLUMNS, buildRows, buildUnmatchedRows, cellText, sortRows,
+  type ColDef, type Row,
+} from '../lib/eesztTable';
 import { useAppStore, useSnapshot } from '../store/useAppStore';
+import { DataTableModal } from './DataTableModal';
 
-const ROW_CAP = 200;
-type Status = 'filled' | 'vacant' | 'dissolved';
+const PREVIEW = 20;
+
+function statusBadge(status: string) {
+  const cls = status === t('stats.statusFilled') ? 'badge--ok'
+    : status === t('stats.statusDissolved') ? 'badge--dissolved' : 'badge--vacant';
+  return <span className={`badge ${cls}`}>{status}</span>;
+}
+
+function renderCell(col: ColDef, row: Row) {
+  if (col.key === 'status') return statusBadge(String(row.status));
+  if (col.key === 'settlementMatch' && row.settlementMatch === false) {
+    return <em className="eeszt-warn">{t('eeszt.no')}</em>;
+  }
+  return undefined;
+}
+
+function TableIcon({ warn = false }: { warn?: boolean }) {
+  return (
+    <svg viewBox="0 0 20 20" aria-hidden="true">
+      <rect x="2.5" y="3.5" width="15" height="13" rx="1.5" fill="none"
+        stroke="currentColor" strokeWidth="1.6" />
+      <path d="M2.5 8h15M8 8v8.5M13 8v8.5" stroke="currentColor" strokeWidth="1.6" />
+      {warn && <circle cx="16" cy="4.5" r="3.6" fill="var(--alert-soft)" stroke="var(--bg-raised)" strokeWidth="1.2" />}
+    </svg>
+  );
+}
 
 export function EesztSection() {
   const data = useEeszt();
   const snapshot = useSnapshot()!;
   const kind = useAppStore((s) => s.kind);
-  const [county, setCounty] = useState('');
-  const [status, setStatus] = useState<'' | Status>('');
-  const [query, setQuery] = useState('');
-  const [onlyMismatch, setOnlyMismatch] = useState(false);
+  const [openTable, setOpenTable] = useState<'all' | 'unmatched' | null>(null);
 
-  const rows = useMemo(() => {
-    const all: { id: string; settlement: string; county: string; status: Status }[] = [
-      ...snapshot.praxes.map((p) => ({
-        id: p.id,
-        settlement: primarySite(p)?.settlement ?? '',
-        county: p.county,
-        status: p.status as Status,
-      })),
-      ...snapshot.filledPraxes.map((f) => ({
-        id: f.id, settlement: f.settlement, county: f.county, status: 'filled' as Status,
-      })),
-    ];
-    return all.sort((a, b) => a.settlement.localeCompare(b.settlement, 'hu'));
-  }, [snapshot]);
-
-  const counties = useMemo(
-    () => [...new Set(rows.map((r) => r.county))].sort((a, b) => a.localeCompare(b, 'hu')),
-    [rows],
+  const rows = useMemo(
+    () => sortRows(buildRows(snapshot, data), 'settlement', 'asc'),
+    [snapshot, data],
   );
-
-  const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    return rows.filter((r) => {
-      if (county && r.county !== county) return false;
-      if (status && r.status !== status) return false;
-      if (q && !r.settlement.toLowerCase().includes(q)) return false;
-      if (onlyMismatch) {
-        const lic = eesztPraxis(data, r.id)?.licence;
-        if (!lic || lic.settlementMatch) return false;
-      }
-      return true;
-    });
-  }, [rows, county, status, query, onlyMismatch, data]);
+  const unmatchedRows = useMemo(
+    () => sortRows(buildUnmatchedRows(snapshot, data), 'settlement', 'asc'),
+    [snapshot, data],
+  );
 
   if (!data) return null;
   const st = data.stats[kind] ?? {};
@@ -64,10 +64,23 @@ export function EesztSection() {
     [t('eeszt.covSettlement'), st.settlementMatch ?? 0],
     [t('eeszt.covProvider'), st.providerMatch ?? 0],
   ];
+  const previewCols = COLUMNS.filter((c) => c.visible);
 
   return (
     <section className="section container" id="eeszt">
-      <h2 className="section__heading">{t('eeszt.heading')}</h2>
+      <div className="section__heading-row">
+        <h2 className="section__heading">{t('eeszt.heading')}</h2>
+        <button className="icon-button" title={t('eeszt.openAll', { n: rows.length })}
+          aria-label={t('eeszt.openAll', { n: rows.length })}
+          onClick={() => setOpenTable('all')}>
+          <TableIcon />
+        </button>
+        <button className="icon-button" title={t('eeszt.openUnmatched', { n: unmatchedRows.length })}
+          aria-label={t('eeszt.openUnmatched', { n: unmatchedRows.length })}
+          onClick={() => setOpenTable('unmatched')}>
+          <TableIcon warn />
+        </button>
+      </div>
       <p className="section__explain">{tKind('eeszt.explain', kind, { asOf: data.asOf })}</p>
 
       <div className="eeszt-coverage">
@@ -86,87 +99,56 @@ export function EesztSection() {
             </span>
           </div>
         ))}
-        {(st.ambiguous ?? 0) > 0 && (
-          <p className="praxis-line praxis-line--faint">
-            {t('eeszt.covAmbiguous', { n: st.ambiguous })}
-          </p>
-        )}
-      </div>
-
-      <div className="vacancy-dialog__filters eeszt-filters">
-        <select value={county} onChange={(e) => setCounty(e.target.value)}>
-          <option value="">{t('stats.filterCountyAll')}</option>
-          {counties.map((c) => <option key={c} value={c}>{c}</option>)}
-        </select>
-        <select value={status} onChange={(e) => setStatus(e.target.value as '' | Status)}>
-          <option value="">{t('stats.filterStatusAll')}</option>
-          <option value="filled">{t('stats.statusFilled')}</option>
-          <option value="vacant">{t('stats.statusVacant')}</option>
-          {kind === 'dental' && <option value="dissolved">{t('stats.statusDissolved')}</option>}
-        </select>
-        <input type="search" value={query} placeholder={t('search.placeholder')}
-          onChange={(e) => setQuery(e.target.value)} />
-        <label className="map-check">
-          <input type="checkbox" checked={onlyMismatch}
-            onChange={(e) => setOnlyMismatch(e.target.checked)} />
-          {t('eeszt.onlyMismatch')}
-        </label>
+        <button className="eeszt-coverage__unmatched" onClick={() => setOpenTable('unmatched')}>
+          {tKind('eeszt.unmatchedLine', kind, { n: formatNumber(unmatchedRows.length) })} →
+        </button>
       </div>
 
       <div className="stats-table__scroll eeszt-table">
         <table>
           <thead>
-            <tr>
-              <th>{t('stats.thSettlement')}</th>
-              <th>{t('stats.thStatus')}</th>
-              <th>{t('eeszt.thDistrictNo')}</th>
-              <th>{t('eeszt.licence')}</th>
-              <th>{t('eeszt.onCall')}</th>
-              <th>{t('eeszt.thFunded')}</th>
-              <th>{t('eeszt.provider')}</th>
-            </tr>
+            <tr>{previewCols.map((c) => <th key={c.key}>{t(c.labelKey)}</th>)}</tr>
           </thead>
           <tbody>
-            {filtered.slice(0, ROW_CAP).map((r) => {
-              const e = eesztPraxis(data, r.id);
-              const lic = e?.licence;
-              return (
-                <tr key={`${r.status}-${r.id}`}>
-                  <td>{r.settlement}<small>{r.county}</small></td>
-                  <td>
-                    <span className={`badge ${r.status === 'filled' ? 'badge--ok'
-                      : r.status === 'dissolved' ? 'badge--dissolved' : 'badge--vacant'}`}>
-                      {r.status === 'filled' ? t('stats.statusFilled')
-                        : r.status === 'dissolved' ? t('stats.statusDissolved')
-                          : t('stats.statusVacant')}
-                    </span>
-                  </td>
-                  <td>{e?.districtNo ?? '–'}</td>
-                  <td>
-                    {lic ? (
-                      <>
-                        {lic.postalCode} {lic.settlement}, {lic.address}
-                        {!lic.settlementMatch && (
-                          <em className="eeszt-warn"> · {t('eeszt.licenceMismatch')}</em>
-                        )}
-                      </>
-                    ) : e ? t('eeszt.noLicence') : t('eeszt.noFin')}
-                  </td>
-                  <td>{lic ? (takesOnCall(lic.onCall) ? lic.onCall : t('eeszt.noOnCall')) : '–'}</td>
-                  <td>{lic ? (lic.publicFunded ? t('eeszt.yes') : t('eeszt.no')) : '–'}</td>
-                  {/* provider only exists for filled praxes (ETL guard) */}
-                  <td>{e?.provider ?? '–'}</td>
-                </tr>
-              );
-            })}
+            {rows.slice(0, PREVIEW).map((r) => (
+              <tr key={r.fin}>
+                {previewCols.map((c) => (
+                  <td key={c.key}>{renderCell(c, r) ?? (cellText(r[c.key as keyof typeof r]) || '–')}</td>
+                ))}
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
-      <p className="praxis-line praxis-line--faint">
-        {filtered.length > ROW_CAP
-          ? t('stats.rowsCapped', { cap: ROW_CAP, n: formatNumber(filtered.length) })
-          : t('stats.tableCountFiltered', { n: filtered.length, total: rows.length })}
-      </p>
+      <div className="eeszt-actions">
+        <button className="data-btn data-btn--accent" onClick={() => setOpenTable('all')}>
+          {t('eeszt.openAll', { n: formatNumber(rows.length) })}
+        </button>
+        <button className="data-btn" onClick={() => setOpenTable('unmatched')}>
+          {t('eeszt.openUnmatched', { n: formatNumber(unmatchedRows.length) })}
+        </button>
+      </div>
+
+      <DataTableModal
+        open={openTable === 'all'}
+        onClose={() => setOpenTable((cur) => (cur === 'all' ? null : cur))}
+        title={tKind('eeszt.tableTitle', kind)}
+        subtitle={t('eeszt.tableSubtitle', { asOf: data.asOf })}
+        rows={rows}
+        columns={COLUMNS}
+        filename={`praxisterkep-eeszt-${kind}`}
+        renderCell={renderCell}
+      />
+      <DataTableModal
+        open={openTable === 'unmatched'}
+        onClose={() => setOpenTable((cur) => (cur === 'unmatched' ? null : cur))}
+        title={tKind('eeszt.unmatchedTitle', kind)}
+        subtitle={t('eeszt.unmatchedSubtitle')}
+        rows={unmatchedRows}
+        columns={UNMATCHED_COLUMNS}
+        filename={`praxisterkep-eeszt-${kind}-nem-illesztheto`}
+        renderCell={renderCell}
+      />
     </section>
   );
 }

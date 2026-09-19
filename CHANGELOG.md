@@ -5,6 +5,27 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.4.0] — 2026-09-19
+
+### Hozzáadva
+- Általános adattábla-böngésző: minden oszlop szerint rendezhető
+  (növekvő/csökkenő/ki), oszloponkénti szűrés (szöveg, választó,
+  igen/nem/üres, szám-összehasonlítás pl. `>=2`), globális keresés,
+  oszlopok ki-be kapcsolása, lapméret-választás, valamint a szűrt és
+  rendezett adatok exportja CSV (RFC 4180) és TSV formátumban.
+- Az EESZT-szekcióban alapból 20 soros előnézet; a teljes adat
+  (20 oszlop) a táblázat-ikonnal nyílik.
+- Külön táblázat a nem illeszthető körzetekről, körzetenkénti indokkal
+  és részletes magyarázattal (nincs az EESZT-ben; más szolgálattípus;
+  kétértelmű telephely; más szakmájú engedély; nincs működési engedély).
+
+### Javítva
+- EESZT-statisztika: a kétértelmű eseteket korábban „nincs engedély”-
+  ként is számoltuk; most minden körzet pontosan egy kategóriába esik,
+  és a build ellenőrzi, hogy illesztett + nem illesztett = összes.
+- Két modal egymás utáni nyitásakor a korábbi ablak késleltetett
+  bezárás-eseménye nem zárhatja be az újonnan megnyitottat.
+
 ## [1.3.0] — 2026-09-19
 
 ### Hozzáadva
@@ -153,6 +174,7 @@ Első nyilvános kiadás a GitHubon.
   validálás → snapshot), sötét témájú egyoldalas SPA térképpel,
   keresővel, rangsorral és módszertannal; havi GitHub Actions workflow.
 
+[1.4.0]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v1.4.0
 [1.3.0]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v1.3.0
 [1.2.0]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v1.2.0
 [1.1.0]: https://github.com/ZoliQua/OEP-Alapellatas/releases/tag/v1.1.0
