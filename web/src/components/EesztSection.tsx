@@ -15,6 +15,7 @@ import { EesztMap } from './EesztMap';
 import { EesztInfoModal } from './EesztInfoModal';
 import { makeCellRenderer } from './EesztCells';
 import { NeakDetailModal } from './NeakDetailModal';
+import { DentalExtraBlocks } from './DentalExtraBlocks';
 
 function TableIcon({ warn = false }: { warn?: boolean }) {
   return (
@@ -85,6 +86,10 @@ export function EesztSection() {
         </button>
       </p>
 
+      {kind === 'dental' && (
+        <h3 className="section__subheading">{t('extra.part1')}</h3>
+      )}
+
       <div className="eeszt-coverage">
         <div className="eeszt-coverage__total">
           <strong>{formatNumber(total)}</strong>
@@ -116,6 +121,8 @@ export function EesztSection() {
           {t('eeszt.openUnmatched', { n: formatNumber(unmatchedRows.length) })}
         </button>
       </div>
+
+      {kind === 'dental' && <DentalExtraBlocks />}
 
       <DataTableModal
         open={openTable === 'all'}

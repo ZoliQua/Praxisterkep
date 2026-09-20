@@ -127,6 +127,16 @@ def main() -> None:
         build_eeszt.OUT.write_text(
             json.dumps(out, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
         print(f"      wrote {build_eeszt.OUT}")
+
+        # the dental services outside the district map (on-call, university,
+        # every Szakellátás service), joined to the same EESZT registers
+        import build_dental_extra
+        extra = build_dental_extra.build(month, build_eeszt.latest_date())
+        build_dental_extra.OUT.write_text(
+            json.dumps(extra, ensure_ascii=False, separators=(",", ":")) + "\n",
+            encoding="utf-8")
+        counts = " ".join(f"{g}={st['services']}" for g, st in extra["stats"].items())
+        print(f"      wrote {build_dental_extra.OUT} ({counts})")
     except Exception as exc:  # noqa: BLE001 — supplement must not block release
         print(f"      WARNING: EESZT supplement skipped: {exc}")
     print("done")

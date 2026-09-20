@@ -3,13 +3,13 @@
 // faded). Zoomable, county focus, clickable points with a side panel.
 // Used standalone in the EESZT section and above the data browser, where
 // it follows the table's filters (it simply renders the rows it is given).
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { Map as MLMap, NavigationControl } from 'maplibre-gl';
 import type { GeoJSONSource, MapLayerMouseEvent } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { t } from '../lib/i18n';
 import { formatNumber } from '../lib/format';
-import { cellText, type EesztRow } from '../lib/eesztTable';
+import { cellText, type Row } from '../lib/eesztTable';
 import { eesztLink } from '../lib/eeszt';
 import { useAppStore } from '../store/useAppStore';
 
@@ -18,6 +18,25 @@ const COLOR_FILLED = '#4fd6c2';
 const COLOR_VACANT = '#ff7a59';
 const COLOR_DISSOLVED = '#ffb454';
 const COLOR_MISMATCH = '#b8b0f5';
+
+/** what the map needs from a row; both data browsers' rows satisfy it */
+export type MapRow = Row & {
+  fin: string;
+  settlement: string;
+  county: string;
+  type: string;
+  status: string;
+  lat: number | null;
+  lon: number | null;
+  geoApprox: boolean | null;
+  settlementMatch: boolean | null;
+  unitCode: string | null;
+  licenceId: string | null;
+  providerId: string | null;
+};
+
+/** colour-by-category mode: one colour per distinct row.type */
+export interface MapCategory { key: string; label: string; color: string }
 
 type Bbox = [[number, number], [number, number]];
 let bboxPromise: Promise<Map<string, Bbox>> | null = null;
@@ -44,7 +63,7 @@ function loadCountyBboxes(): Promise<Map<string, Bbox>> {
   return bboxPromise;
 }
 
-function toGeoJSON(rows: EesztRow[], statusFilled: string, statusDissolved: string) {
+function toGeoJSON(rows: MapRow[], statusFilled: string, statusDissolved: string) {
   const features: GeoJSON.Feature[] = [];
   rows.forEach((r, i) => {
     if (r.lat === null || r.lon === null) return;
@@ -53,6 +72,7 @@ function toGeoJSON(rows: EesztRow[], statusFilled: string, statusDissolved: stri
       geometry: { type: 'Point', coordinates: [r.lon, r.lat] },
       properties: {
         i,
+        c: String(r.type ?? ''),
         s: r.status === statusFilled ? 'f' : r.status === statusDissolved ? 'd' : 'v',
         approx: r.geoApprox === true,
         mismatch: r.settlementMatch === false,
@@ -64,8 +84,9 @@ function toGeoJSON(rows: EesztRow[], statusFilled: string, statusDissolved: stri
 
 export function EesztMap({
   rows, height = 460, countyFilter = true, fitToRows = false, searchLink = true,
+  categories, detailRows, countKey = 'eeszt.mapCount',
 }: {
-  rows: EesztRow[];
+  rows: MapRow[];
   height?: number;
   /** show the county selector (off inside the data browser, whose own
    *  county filter already drives the rows) */
@@ -74,12 +95,18 @@ export function EesztMap({
   fitToRows?: boolean;
   /** show the "details in the search" link in the side panel */
   searchLink?: boolean;
+  /** colour the points by row.type instead of by status, with this legend */
+  categories?: MapCategory[];
+  /** replace the side panel's field list (the districts' own list by default) */
+  detailRows?: (row: MapRow) => [string, string][];
+  /** i18n key of the "n / total on the map" line (districts by default) */
+  countKey?: string;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MLMap | null>(null);
   const readyRef = useRef(false);
   const [county, setCounty] = useState('');
-  const [selected, setSelected] = useState<EesztRow | null>(null);
+  const [selected, setSelected] = useState<MapRow | null>(null);
   const requestSearch = useAppStore((s) => s.requestSearch);
 
   const shown = useMemo(
@@ -96,6 +123,14 @@ export function EesztMap({
 
   const statusFilled = t('stats.statusFilled');
   const statusDissolved = t('stats.statusDissolved');
+
+  const color = useMemo(() => (categories?.length
+    ? ['match', ['get', 'c'],
+      ...categories.flatMap((c) => [c.key, c.color]), COLOR_VACANT]
+    : ['match', ['get', 's'],
+      'f', COLOR_FILLED, 'd', COLOR_DISSOLVED, COLOR_VACANT]), [categories]);
+  const colorRef = useRef(color);
+  colorRef.current = color;
 
   // create the map once
   useEffect(() => {
@@ -135,8 +170,7 @@ export function EesztMap({
         id: 'pts', type: 'circle', source: 'pts',
         paint: {
           'circle-radius': ['interpolate', ['linear'], ['zoom'], 6, 2.6, 9, 4.5, 12, 7],
-          'circle-color': ['match', ['get', 's'],
-            'f', COLOR_FILLED, 'd', COLOR_DISSOLVED, COLOR_VACANT],
+          'circle-color': colorRef.current as never,
           'circle-opacity': ['case', ['get', 'approx'], 0.4, 0.9],
           'circle-stroke-width': ['case', ['get', 'mismatch'], 1.6, 0.6],
           'circle-stroke-color': ['case', ['get', 'mismatch'], COLOR_MISMATCH, '#0b1016'],
@@ -202,6 +236,13 @@ export function EesztMap({
     };
   }, [shown, statusFilled, statusDissolved, fitToRows]);
 
+  useEffect(() => {
+    const map = mapRef.current;
+    if (map?.getLayer('pts')) {
+      map.setPaintProperty('pts', 'circle-color', color as never);
+    }
+  }, [color]);
+
   // county focus (standalone mode)
   useEffect(() => {
     if (fitToRows) return;
@@ -213,23 +254,26 @@ export function EesztMap({
     });
   }, [county, fitToRows]);
 
-  const detail: [string, string][] = selected ? [
-    [t('stats.thStatus'), selected.status],
-    [t('stats.thType'), selected.type],
-    [t('eeszt.thDistrictNo'), selected.districtNo ?? '–'],
-    [t('eeszt.licence'), selected.licAddress
-      ? `${selected.licPostal ?? ''} ${selected.licSettlement ?? ''}, ${selected.licAddress}` : '–'],
-    [t('eeszt.colSettlementMatch'), cellText(selected.settlementMatch) || '–'],
-    [t('eeszt.colProviderMatch'), cellText(selected.providerMatch) || '–'],
-    [t('eeszt.onCall'), selected.onCall ?? '–'],
-    [t('eeszt.thFunded'), cellText(selected.publicFunded) || '–'],
-    [t('eeszt.colProfession'), selected.profession ?? '–'],
-    // provider/institution exist only for filled districts (ETL guard)
-    ...(selected.provider ? [[t('eeszt.provider'), selected.provider] as [string, string]] : []),
-    ...(selected.institutionCode
-      ? [[t('eeszt.institutionCode'), selected.institutionCode] as [string, string]] : []),
-    [t('eeszt.colFin'), selected.fin],
-  ] : [];
+  const text = (v: unknown) => cellText((v ?? null) as never) || '–';
+  const detail: [string, string][] = !selected ? []
+    : detailRows ? detailRows(selected) : [
+      [t('stats.thStatus'), text(selected.status)],
+      [t('stats.thType'), text(selected.type)],
+      [t('eeszt.thDistrictNo'), text(selected.districtNo)],
+      [t('eeszt.licence'), selected.licAddress
+        ? `${selected.licPostal ?? ''} ${selected.licSettlement ?? ''}, ${selected.licAddress}`
+        : '–'],
+      [t('eeszt.colSettlementMatch'), text(selected.settlementMatch)],
+      [t('eeszt.colProviderMatch'), text(selected.providerMatch)],
+      [t('eeszt.onCall'), text(selected.onCall)],
+      [t('eeszt.thFunded'), text(selected.publicFunded)],
+      [t('eeszt.colProfession'), text(selected.profession)],
+      // provider/institution exist only for filled districts (ETL guard)
+      ...(selected.provider ? [[t('eeszt.provider'), text(selected.provider)] as [string, string]] : []),
+      ...(selected.institutionCode
+        ? [[t('eeszt.institutionCode'), text(selected.institutionCode)] as [string, string]] : []),
+      [t('eeszt.colFin'), selected.fin],
+    ];
 
   return (
     <div className="eeszt-map">
@@ -242,12 +286,20 @@ export function EesztMap({
           </select>
         )}
         <span className="eeszt-map__count">
-          {t('eeszt.mapCount', { n: formatNumber(located), total: formatNumber(shown.length) })}
+          {t(countKey, { n: formatNumber(located), total: formatNumber(shown.length) })}
         </span>
         <span className="eeszt-map__legend">
-          <i style={{ background: COLOR_FILLED }} />{t('stats.statusFilled')}
-          <i style={{ background: COLOR_VACANT }} />{t('stats.statusVacant')}
-          <i style={{ background: COLOR_DISSOLVED }} />{t('stats.statusDissolved')}
+          {categories?.length ? categories.map((c) => (
+            <Fragment key={c.key}>
+              <i style={{ background: c.color }} />{c.label}
+            </Fragment>
+          )) : (
+            <>
+              <i style={{ background: COLOR_FILLED }} />{t('stats.statusFilled')}
+              <i style={{ background: COLOR_VACANT }} />{t('stats.statusVacant')}
+              <i style={{ background: COLOR_DISSOLVED }} />{t('stats.statusDissolved')}
+            </>
+          )}
           <i className="is-ring" style={{ borderColor: COLOR_MISMATCH }} />{t('eeszt.legendMismatch')}
           <i style={{ background: '#9aa8bb', opacity: 0.45 }} />{t('eeszt.legendApprox')}
         </span>

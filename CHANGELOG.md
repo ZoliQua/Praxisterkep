@@ -5,6 +5,41 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.9.0] — 2026-09-20
+
+### Hozzáadva
+- Az EESZT-szekció két részre tagolódik. **1. Alapellátás** a körzetek eddigi
+  elemzése, alatta két új blokk: a **fogorvosi ügyelet** (34 szolgálat,
+  376 regisztersor) és az **egyetemi alapellátás** (19 szolgálat) —
+  összegző számokkal és teljes értékű, szűrhető táblázattal (térkép
+  nélkül).
+- **2. Szakellátás**: a fogászati szakellátás mind az 560 szerződött
+  szolgálata (fogszabályozás 158, röntgen 128, egyetemi szakellátás 127,
+  szájsebészet 108, fogyatékkal élők ellátása 24, parodontológia 9,
+  gyermek szakellátás 6) típusonkénti bontással, típus szerint színezett
+  térképpel és ugyanazzal a szűrhető, rendezhető, CSV/TSV-be exportálható
+  táblázattal, amit a körzeteknél is használunk. A táblázat feletti térkép
+  követi a szűrést.
+- Az ETL új kimenete: `data/dental_extra.json` (`etl/build_dental_extra.py`).
+  A szolgálatokat ugyanazzal a kódlánccal illesztjük az EESZT-hez, mint a
+  körzeteket, de a szolgáltatás típusához tartozó szakmakóddal (röntgen →
+  1306, fogszabályozás → 1302, szájsebészet → 1301, parodontológia → 1303).
+  Mind a 613 szolgálat a térképen van: ahol van EESZT-engedély, annak
+  telephelyén, egyébként a NEAK rendelőcímén (a táblázat oszlopban mutatja,
+  melyik).
+- A szakellátási szervezeti egység kódja betűt is tartalmazhat
+  (`02006A425`), ezért a parser 9 karakteres alfanumerikus kódot vár — így
+  a 832 szakellátási sorból egy sem vész el; formátumváltáskor a build
+  hangosan elhasal.
+
+### Módosítva
+- `CLAUDE.md`: rögzítve, mi számít körzetnek (fogorvosi: `Ellátási szint =
+  Alapellátás` + körzeti típus; háziorvosi: `ellátási forma = T`), és hogy
+  minden más szolgálat a kiegészítő fájlba kerül, nem a betöltetlenségi
+  arányba.
+- A táblázatfejléc mostantól a megfelelő egységben számol (körzet, sor vagy
+  szolgálat).
+
 ## [1.8.0] — 2026-09-20
 
 ### Hozzáadva

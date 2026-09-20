@@ -494,7 +494,9 @@
     "all": "összes",
     "pageOf": "{page}. / {pages} oldal",
     "rowCount": "{n} sor",
-    "rowCountFiltered": "{n} / {total} sor"
+    "rowCountFiltered": "{n} / {total} sor",
+    "serviceCount": "{n} szolgálat",
+    "serviceCountFiltered": "{n} / {total} szolgálat"
   },
   "eesztInfo": {
     "title": "Hogyan illesztettük az EESZT-adatokat?",
@@ -584,5 +586,37 @@
     "served": "Ellátandó települések",
     "doctor": "Betöltő orvos",
     "source": "Forrás: NEAK szerződött szolgáltatói listája, {month}. Az adat tájékoztató jellegű."
+  },
+  "extra": {
+    "part1": "1. Alapellátás",
+    "part2": "2. Szakellátás",
+    "oncallTitle": "Fogorvosi ügyelet",
+    "oncallExplain": "Alapellátási szinten szerződött fogorvosi ügyeleti szolgálatok. A NEAK listája az ügyeletben dolgozó orvosokat soronként sorolja fel, ezért egy szolgálathoz több regisztersor tartozik. Ezek nem körzetek, így a betöltetlenségi arányban sem szerepelnek.",
+    "universityTitle": "Egyetemi alapellátás",
+    "universityExplain": "Az egyetemi klinikákon működő fogorvosi alapellátás. Területi ellátási kötelezettség nélkül működnek, ezért a körzetszámlálóból kimaradnak.",
+    "specialistExplain": "A fogászati szakellátás összes szerződött szolgálata: szájsebészet, fogszabályozás, röntgen, parodontológia, gyermek- és egyetemi szakellátás, valamint a fogyatékkal élők ellátása. Az illesztés ugyanaz, mint fent, csak a szolgáltatás típusához tartozó EESZT-szakmakóddal (például röntgen → 1306).",
+    "specialistTotal": "szakellátási szolgálat",
+    "statServices": "szolgálat",
+    "statRows": "regisztersor",
+    "statLicence": "EESZT-engedéllyel",
+    "statCounties": "vármegyében",
+    "statLocated": "a térképen",
+    "statNamed": "megnevezett orvossal",
+    "openTable": "Táblázat ({n} sor)",
+    "tableSubtitle": "NEAK szerződött szolgáltatói lista, {month} · EESZT adatállapot: {asOf}",
+    "note": "Forrás: a NEAK szerződött fogorvosi szolgáltatói listája ({month}) és az EESZT törzspublikáció ({asOf}). Ezek a szolgálatok nem körzetek: sem a körzetszámba, sem a betöltetlenségi arányba nem számítanak bele.",
+    "colCode": "Szervezeti egység kódja",
+    "colUnitType": "Szolgáltatás típusa",
+    "colLevel": "Ellátási szint",
+    "colAddress": "Rendelő címe",
+    "colDoctorCount": "Orvosok száma",
+    "colDoctors": "Orvosok",
+    "colGeoFrom": "A térképi hely forrása",
+    "geoFrom": {
+      "licence": "EESZT engedély telephelye",
+      "registry": "NEAK rendelőcím"
+    },
+    "mapCount": "{n} / {total} szolgálat a térképen",
+    "specialistTitle": "Fogászati szakellátás"
   }
 }

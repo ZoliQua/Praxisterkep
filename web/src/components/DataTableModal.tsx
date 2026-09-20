@@ -13,6 +13,12 @@ import { downloadBlob } from '../lib/exportChart';
 
 const PAGE_SIZES = [25, 50, 100, 500, 0]; // 0 = all
 
+const COUNT_KEY = {
+  districts: ['stats.tableCount', 'stats.tableCountFiltered'],
+  rows: ['dataTable.rowCount', 'dataTable.rowCountFiltered'],
+  services: ['dataTable.serviceCount', 'dataTable.serviceCountFiltered'],
+} as const;
+
 export function DataTableModal<R extends Row>({
   open, onClose, title, subtitle, rows, columns, filename, renderCell, above,
   countUnit = 'districts',
@@ -22,7 +28,7 @@ export function DataTableModal<R extends Row>({
   title: string;
   subtitle?: string;
   /** what one row is: a district (default) or a plain row (e.g. one licence) */
-  countUnit?: 'districts' | 'rows';
+  countUnit?: 'districts' | 'rows' | 'services';
   rows: R[];
   columns: ColDef[];
   filename: string;
@@ -115,9 +121,8 @@ export function DataTableModal<R extends Row>({
             <h3>{title}</h3>
             <p>
               {result.length === rows.length
-                ? t(countUnit === 'rows' ? 'dataTable.rowCount' : 'stats.tableCount',
-                  { n: formatNumber(rows.length) })
-                : t(countUnit === 'rows' ? 'dataTable.rowCountFiltered' : 'stats.tableCountFiltered', {
+                ? t(COUNT_KEY[countUnit][0], { n: formatNumber(rows.length) })
+                : t(COUNT_KEY[countUnit][1], {
                   n: formatNumber(result.length), total: formatNumber(rows.length),
                 })}
               {subtitle ? ` · ${subtitle}` : ''}

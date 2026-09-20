@@ -32,13 +32,31 @@ def main() -> None:
     parser.add_argument("--limit", type=int, default=0)
     args = parser.parse_args()
 
-    data = json.loads((ROOT / "data" / "eeszt.json").read_text(encoding="utf-8"))
     premises: dict[str, tuple[str, str, str]] = {}
+
+    def want(postal, settlement, address) -> None:
+        postal, settlement, address = postal or "", settlement or "", address or ""
+        if settlement and address:  # a licence without premises cannot be geocoded
+            premises[f"{postal} {settlement}, {address}"] = (postal, settlement, address)
+
+    data = json.loads((ROOT / "data" / "eeszt.json").read_text(encoding="utf-8"))
     for e in data["praxes"].values():
-        if "l" in e and e["l"][1] and e["l"][2]:
-            # a licence without premises (EESZT has one) cannot be geocoded
-            postal, sett, addr = e["l"][0] or "", e["l"][1], e["l"][2]
-            premises[f"{postal} {sett}, {addr}"] = (postal, sett, addr)
+        if "l" in e:
+            want(e["l"][0], e["l"][1], e["l"][2])
+
+    # the non-district dental services (source C): licensed premises where the
+    # EESZT match succeeded, and the registry's own surgery address otherwise
+    extra_path = ROOT / "data" / "dental_extra.json"
+    if extra_path.exists():
+        extra = json.loads(extra_path.read_text(encoding="utf-8"))
+        for s in extra["services"]:
+            lic = s.get("licence")
+            if lic:
+                want(lic["postalCode"], lic["settlement"], lic["address"])
+            for site in s.get("sites", [{"postalCode": s["postalCode"],
+                                         "settlement": s["settlement"],
+                                         "address": s["address"]}]):
+                want(site["postalCode"], site["settlement"], site["address"])
 
     cache = load_cache()
     todo = [k for k in premises if k not in cache]

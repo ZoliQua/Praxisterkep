@@ -15,6 +15,7 @@ the denominator matches the population of the vacant lists.
 """
 from __future__ import annotations
 
+import re
 from pathlib import Path
 from typing import TypedDict
 
@@ -42,6 +43,12 @@ OPTIONAL_HEADER_MAP = {
 }
 
 NOT_A_NAME = {"", "betöltetlen"}
+
+# non-district services: on-call and university care stay on the
+# "Alapellátás" level, everything else in parse_extra() is Szakellátás
+EXTRA_GROUPS = {"Ügyelet": "oncall", "Egyetemi alapellátás": "university"}
+# specialist units carry a letter ("02006A425"), districts do not
+UNIT_CODE_RE = re.compile(r"^[0-9A-Z]{9}$")
 
 
 def clean_doctor(raw) -> str | None:
@@ -106,7 +113,8 @@ def attach_provider(entry: dict, row: list, cols: dict) -> None:
                 entry[field] = value
 
 
-def parse(xls_path: Path) -> list[RegistryEntry]:
+def _open(xls_path: Path):
+    """The sheet's data rows and the located column indexes."""
     df = pd.read_excel(xls_path, header=None, dtype=object)
     # the header row is the one containing the FIN column label
     header_idx = next(
@@ -117,10 +125,65 @@ def parse(xls_path: Path) -> list[RegistryEntry]:
     if header_idx is None:
         raise ParseError(f"{xls_path.name}: registry header row not found")
     cols = _locate_columns(df.iloc[header_idx].tolist())
+    return df.iloc[header_idx + 1:].values.tolist(), cols
+
+
+def parse_extra(xls_path: Path) -> list[dict]:
+    """Every other contracted dental service in the same registry.
+
+    The district pipeline keeps Alapellátás rows of district-type services
+    (parse() above); this returns what it leaves out, in three groups:
+
+      oncall      — Alapellátás / Ügyelet (one row per physician on the
+                    duty roster, so a service has many rows)
+      university  — Alapellátás / Egyetemi alapellátás
+      specialist  — every Szakellátás row (szájsebészet, fogszabályozás,
+                    röntgen, parodontológia, egyetemi és a fogyatékkal
+                    élők szakellátása)
+
+    Specialist unit codes are not FIN codes: they carry a letter
+    ("02006A425"), so the code is validated as 9 alphanumeric characters.
+    One row = one registry row; grouping into services is the builder's job.
+    """
+    rows, cols = _open(xls_path)
+    entries: list[dict] = []
+    for row in rows:
+        level = _clean(row[cols["level"]])
+        if not level:
+            continue  # blank/footer rows
+        type_hu = _clean(row[cols["type"]])
+        if level == "Alapellátás" and type_hu in TYPE_MAP:
+            continue  # the district services, handled by parse()
+        code = _clean(row[cols["fin"]])
+        if not UNIT_CODE_RE.match(code):
+            raise ParseError(
+                f"{xls_path.name}: unusable unit code {code!r} on a "
+                f"{level} / {type_hu} row")
+        entry = {
+            "id": code,
+            "kind": "dental",
+            "group": EXTRA_GROUPS.get(type_hu, "specialist"),
+            "level": level,
+            "unitType": type_hu,
+            "county": canonical_county(row[cols["county"]]),
+            "settlement": _clean(row[cols["settlement"]]),
+            "postalCode": _clean(row[cols["postal"]]).removesuffix(".0"),
+            "address": _clean(row[cols["address"]]),
+            "doctor": clean_doctor(row[cols["doctor"]]),
+        }
+        attach_provider(entry, row, cols)
+        entries.append(entry)
+    if not entries:
+        raise ParseError(f"no non-district services parsed from {xls_path.name}")
+    return entries
+
+
+def parse(xls_path: Path) -> list[RegistryEntry]:
+    rows, cols = _open(xls_path)
 
     entries: list[RegistryEntry] = []
     seen: set[str] = set()
-    for row in df.iloc[header_idx + 1:].values.tolist():
+    for row in rows:
         fin = _clean(row[cols["fin"]])
         if len(fin) != 9 or not fin.isdigit():
             continue  # blank/footer rows

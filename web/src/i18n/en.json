@@ -494,7 +494,9 @@
     "all": "all",
     "pageOf": "page {page} of {pages}",
     "rowCount": "{n} rows",
-    "rowCountFiltered": "{n} / {total} rows"
+    "rowCountFiltered": "{n} / {total} rows",
+    "serviceCount": "{n} services",
+    "serviceCountFiltered": "{n} / {total} services"
   },
   "eesztInfo": {
     "title": "How we matched the EESZT data",
@@ -584,5 +586,37 @@
     "served": "Served settlements",
     "doctor": "Contracted physician",
     "source": "Source: NEAK contracted-provider list, {month}. The data is indicative."
+  },
+  "extra": {
+    "part1": "1. Primary care",
+    "part2": "2. Specialist care",
+    "oncallTitle": "Dental on-call services",
+    "oncallExplain": "Contracted dental on-call services on the primary-care level. The NEAK list names every physician on the duty roster on its own row, so one service has several registry rows. These are not districts and never enter the vacancy rate.",
+    "universityTitle": "University primary care",
+    "universityExplain": "Dental primary care run by the university clinics. They carry no territorial obligation, so they stay out of the district denominator.",
+    "specialistExplain": "Every contracted dental specialist service: oral surgery, orthodontics, radiology, periodontology, paediatric and university specialist care, and care for people with disabilities. The join is the one used above, with the EESZT profession code that belongs to the service type (radiology → 1306, for example).",
+    "specialistTotal": "specialist services",
+    "statServices": "services",
+    "statRows": "registry rows",
+    "statLicence": "with an EESZT licence",
+    "statCounties": "counties",
+    "statLocated": "on the map",
+    "statNamed": "with a named physician",
+    "openTable": "Table ({n} rows)",
+    "tableSubtitle": "NEAK contracted-provider list, {month} · EESZT as of {asOf}",
+    "note": "Source: the NEAK contracted dental provider list ({month}) and the EESZT master publication ({asOf}). These services are not districts: they count towards neither the district total nor the vacancy rate.",
+    "colCode": "Organisational unit code",
+    "colUnitType": "Service type",
+    "colLevel": "Care level",
+    "colAddress": "Surgery address",
+    "colDoctorCount": "Physicians",
+    "colDoctors": "Physician names",
+    "colGeoFrom": "Source of the map location",
+    "geoFrom": {
+      "licence": "EESZT licensed premises",
+      "registry": "NEAK surgery address"
+    },
+    "mapCount": "{n} / {total} services on the map",
+    "specialistTitle": "Dental specialist care"
   }
 }

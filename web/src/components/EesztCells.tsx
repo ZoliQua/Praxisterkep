@@ -4,7 +4,7 @@
 // record of the district.
 import { t } from '../lib/i18n';
 import { eesztLink, takesOnCall } from '../lib/eeszt';
-import { TYPE_COLORS } from '../lib/palette';
+import { TYPE_COLORS, serviceTypeColor } from '../lib/palette';
 import type { ColDef, Row } from '../lib/eesztTable';
 import type { PraxisType } from '../types';
 
@@ -37,6 +37,28 @@ function boolBadge(value: boolean | null, falseClass: string) {
 
 function codeLink(href: string, text: string) {
   return <a className="eeszt-code" href={href} target="_blank" rel="noopener">{text}</a>;
+}
+
+const baseRenderer = makeCellRenderer();
+
+/** the non-district services: the service type carries the colour, the care
+ *  level is plain text (it is not a district status) */
+export function renderExtraCell(col: ColDef, row: Row): React.ReactNode | undefined {
+  switch (col.key) {
+    case 'unitType':
+    case 'type': {
+      if (!row[col.key]) return undefined;
+      const label = String(row[col.key]);
+      const color = serviceTypeColor(label);
+      return <span className="badge" style={{ background: `${color}2e`, color }}>{label}</span>;
+    }
+    case 'status':
+      return undefined; // the care level reads better unstyled
+    case 'reason':
+      return row.reason ? badge(String(row.reason), 'badge--muted') : undefined;
+    default:
+      return baseRenderer(col, row);
+  }
 }
 
 /** `onFilled` makes the "Betöltött" status open that district's NEAK record */

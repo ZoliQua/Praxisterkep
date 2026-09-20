@@ -16,9 +16,10 @@ const files = [
   [join(repo, 'data', 'geo', 'counties.geojson'), join(out, 'counties.geojson')],
   [join(repo, 'data', 'geo', 'jaras.geojson'), join(out, 'jaras.geojson')],
 ];
-// optional supplement (EESZT, source H) — copied only when present
+// optional supplements — copied only when present
 const optional = [
   [join(repo, 'data', 'eeszt.json'), join(out, 'eeszt.json')],
+  [join(repo, 'data', 'dental_extra.json'), join(out, 'dental_extra.json')],
 ];
 
 mkdirSync(out, { recursive: true });
