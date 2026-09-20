@@ -572,7 +572,8 @@
     "tab": {
       "districts": "Körzetek (alapellátás)",
       "primary": "Ügyelet és egyetemi alapellátás",
-      "specialist": "Szakellátás"
+      "specialist": "Szakellátás",
+      "crosscheck": "Keresztellenőrzés"
     },
     "svc": {
       "missing": "A kiegészítő adat még nem töltődött be.",
@@ -627,6 +628,30 @@
       "rLicence": "Működési engedély illesztve",
       "rSettlement": "Az engedély telephelye a NEAK szerinti településen",
       "rProvider": "Az engedélyes adószáma egyezik a finanszírozottéval"
+    },
+    "xc": {
+      "s1": "Fogjuk azokat a NEAK-rekordokat, amelyeket a kódlánc nem tudott EESZT-engedéllyel párosítani — körzeteket és szolgálatokat egyaránt.",
+      "s2": "A NEAK szerinti rendelőcímet normáljuk (ékezetek elhagyása, rövidítések feloldása: u. → utca, krt → körút, házszám kiemelése, Budapest kerületek egységesítése), és ugyanígy normáljuk az EESZT engedélytörzsének összes telephelycímét.",
+      "s3": "Megnézzük, van-e a NEAK szerinti címen olyan EESZT-engedély, amely a rekord saját szakmacsaládjába tartozik (fogorvosi 13xx, háziorvosi 63xx). Ha igen, megnézzük, hogy az engedély a rekord saját szervezeti egysége alatt van-e, vagy egy másik alatt.",
+      "s4": "Ha a címen nincs találat, gyengébb bizonyítékokat keresünk: ugyanaz az utca más házszámon, majd — ha a NEAK szolgáltatót is megnevez — a szolgáltató nevének egyezése az EESZT szolgáltatói törzsével (legalább 3 karakteres szavak alapján, 50%-os átfedéstől).",
+      "s5": "A másik irányt is megnézzük: mely fogorvosi és háziorvosi szolgálatok szerepelnek az EESZT finanszírozási törzsében úgy, hogy a NEAK közzétett listáiban nincsenek benne.",
+      "p4": "A kód, ami ezt csinálja:",
+      "c1t": "A javaslat nem megfeleltetés",
+      "c1": "A keresztellenőrzés eredménye sehol nem kerül be a körzetek adataiba: nem módosítja az illesztést, nem számít bele a lefedettségi számokba. Külön táblázat, külön indoklással.",
+      "c2t": "Szakmacsalád szerinti szűrés",
+      "c2": "Egy fogorvosi körzethez csak fogászati (13xx), háziorvosihoz csak háziorvosi (63xx) engedély számít találatnak. Ha a címen csak más szakma engedélye van, azt külön eredményként írjuk ki.",
+      "c3t": "Minden sornál látszik az alap",
+      "c3": "A táblázat külön oszlopban mondja meg, hogy telephelycím, utcanév vagy szolgáltatónév alapján jött a találat, és egy teljes mondatban indokolja.",
+      "c4t": "Névvédelem itt is",
+      "c4": "Szabad szöveges nevet csak ott írunk ki, ahol a NEAK maga is szerződött orvost közöl; minden más esetben csak kódok, címek és szakmanevek szerepelnek.",
+      "names": "A keresztellenőrzés ugyanazokat a névszabályokat követi, mint a többi rész: a szervezeti egységek és telephelyek szabad szöveges nevét egyszer sem exportáljuk, mert azok gyakran orvosnevet hordoznak. A javaslatok kódokra, címekre és szakmanevekre épülnek.",
+      "rTotal": "Nem illeszthető rekord összesen",
+      "rEesztOnly": "Csak az EESZT-ben szereplő szolgálat",
+      "p9": "A számokra kattintva soronként megjelenik az összes jelölt (szervezeti egység, engedély-azonosító, telephely, szakma), szűrhető és exportálható formában.",
+      "l1": "A címegyezés nem bizonyíték: egy épületben több szolgálat is működhet, és a téves címírás is hozhat véletlen egyezést.",
+      "l2": "A szolgáltatónév-egyezés a leggyengébb bizonyíték: cégnév-változás vagy hasonló nevű cég félrevihet.",
+      "l3": "A „csak az EESZT-ben szerepel” lista nem feltétlenül hiányzó körzet: lehet ügyeleti, iskolai vagy más, a közzétett NEAK-listákban nem szereplő szolgálat is.",
+      "drillSubtitle": "Minden jelölt soronként — {kind} rekordok"
     }
   },
   "neak": {
@@ -687,6 +712,62 @@
     "why": {
       "noUnitLicence": "A szolgálat szervezeti egységéhez ({units}) nem tartozik a szakmájának megfelelő működési engedély az EESZT engedélytörzsében.",
       "noFin": "A szolgálat kódja nem szerepel az EESZT finanszírozott szolgálatok törzsében fogorvosi (FOG) típussal."
+    }
+  },
+  "crosscheck": {
+    "part": "{n}. Keresztellenőrzés",
+    "explain": "Ahol a kódlánc (FIN → szervezeti egység → engedély) nem vezetett eredményre, ott másik oldalról is megnézzük: szerepel-e ugyanaz a rendelő vagy ugyanaz a szolgáltató az EESZT-ben — esetleg másik szervezeti egység alatt. A címeket és a neveket normálva hasonlítjuk össze (ékezetek, rövidítések, házszám), és minden sornál kiírjuk, mi alapján jött a találat. Ezek javaslatok, nem hivatalos megfeleltetések.",
+    "total": "nem illeszthető {kind} rekord",
+    "summary": "{n} rekordra ({share}) találtunk értelmezhető megfeleltetési javaslatot a(z) {total}-ből.",
+    "note": "Az összehasonlítás a NEAK szerződött szolgáltatói listája, az EESZT finanszírozott szolgálatok törzse, a szolgáltatói törzs és az engedélytörzs között fut, a {asOf} állapot szerint.",
+    "openTable": "Keresztellenőrzés táblázata ({n} sor)",
+    "openEesztOnly": "Csak az EESZT-ben szerepel ({n})",
+    "tableTitle": "Keresztellenőrzés — {kind} rekordok",
+    "tableSubtitle": "Rekordonként a legjobb javaslat, indoklással · EESZT adatállapot: {asOf}",
+    "eesztOnlyTitle": "Csak az EESZT-ben szerepel",
+    "eesztOnlySubtitle": "Az EESZT finanszírozott {kind} szolgálatai, amelyek a NEAK közzétett listáiban nem szerepelnek · {asOf}",
+    "noUnit": "nincs szervezeti egysége az EESZT-ben",
+    "colCode": "NEAK kód (FIN / szervezeti egység)",
+    "colSource": "Adatkör",
+    "colNeakAddress": "NEAK szerinti rendelőcím",
+    "colReason": "Miért nem illeszthető kód alapján",
+    "colVerdict": "Keresztellenőrzés eredménye",
+    "colSuggestedUnit": "Javasolt szervezeti egység",
+    "colLicAddress": "EESZT telephely címe",
+    "colBasis": "Egyezés alapja",
+    "colOwnUnit": "Saját szervezeti egysége",
+    "colMore": "További jelöltek",
+    "colSettlementLicences": "Azonos szakmájú engedély a településen",
+    "colExplanation": "Indoklás",
+    "colOtherUnit": "Másik szervezeti egység",
+    "colTip": "Szolgálat típusa",
+    "srcDentalDistrict": "Fogorvosi körzet",
+    "srcGpDistrict": "Háziorvosi körzet",
+    "tip": {
+      "FOG": "fogorvosi",
+      "HSZ": "háziorvosi"
+    },
+    "verdict": {
+      "otherUnitSameProfession": "Ugyanaz a cím, másik szervezeti egység",
+      "ownUnitSameProfession": "Ugyanaz a cím, saját szervezeti egység",
+      "otherProfessionAtAddress": "A címen csak más szakma engedélye van",
+      "streetSameProfession": "Ugyanaz az utca, eltérő házszám",
+      "providerName": "A szolgáltató neve egyezik",
+      "none": "Nincs értelmezhető javaslat"
+    },
+    "basis": {
+      "address": "telephelycím",
+      "street": "utcanév",
+      "provider": "szolgáltatónév"
+    },
+    "why": {
+      "otherUnit": "A NEAK szerinti rendelő címén az EESZT-ben van {profession} engedély ({place}), de a(z) {unit} szervezeti egység alatt — nem a rekord saját egysége ({own}) alatt. Valószínű, hogy ugyanarról a rendelőről van szó, csak más egységhez sorolva.",
+      "ownUnit": "Ugyanezen a címen a saját szervezeti egysége ({unit}) rendelkezik {profession} engedéllyel; az automatikus illesztés a(z) „{reason}” miatt nem vette át — érdemes kézzel ellenőrizni.",
+      "otherProfession": "A címen van EESZT-engedély, de más szakmára ({professions}); {kind} ellátásra szóló engedélyt ezen a címen nem találtunk.",
+      "street": "Ugyanebben az utcában van {profession} engedély ({place}), de más házszámon — eltérő címírás vagy szomszédos épület lehet.",
+      "provider": "A NEAK szerinti szolgáltató neve {overlap}-ban egyezik egy EESZT-szolgáltatóval, akinek a településen van {profession} engedélye ({unit}) — a címek viszont nem egyeznek.",
+      "noneInSettlement": "A településen {n} azonos szakmájú EESZT-engedély van, de egyik sem a NEAK szerinti címen vagy utcában; a szolgáltató neve sem hozott találatot.",
+      "noneAtAll": "A településen egyetlen azonos szakmájú EESZT-engedély sincs — a rendelő sem cím, sem név alapján nem azonosítható."
     }
   }
 }

@@ -13,6 +13,10 @@ import {
   EXTRA_REASONS, extraReasonRows, reasonCount, useDentalExtra,
   type DentalExtraRaw, type ExtraGroup, type ExtraService,
 } from '../lib/dentalExtra';
+import {
+  CANDIDATE_COLUMNS, candidateRows, useCrosscheck, verdictBreakdown,
+  type CrosscheckRaw,
+} from '../lib/crosscheck';
 import { useAppStore } from '../store/useAppStore';
 import { DataTableModal } from './DataTableModal';
 import { makeCellRenderer, renderExtraCell } from './EesztCells';
@@ -21,16 +25,17 @@ import { NeakDetailModal } from './NeakDetailModal';
 const REPO = 'https://github.com/ZoliQua/OEP-Alapellatas/blob/main';
 const EXAMPLE_FIN = '020066099'; // Sásd, dental — also a vacant district
 
-type Tab = 'districts' | 'primary' | 'specialist';
-const TABS: Tab[] = ['districts', 'primary', 'specialist'];
-const TAB_GROUPS: Record<Exclude<Tab, 'districts'>, ExtraGroup[]> = {
+type Tab = 'districts' | 'primary' | 'specialist' | 'crosscheck';
+const TABS: Tab[] = ['districts', 'primary', 'specialist', 'crosscheck'];
+const TAB_GROUPS: Record<'primary' | 'specialist', ExtraGroup[]> = {
   primary: ['oncall', 'university'],
   specialist: ['specialist'],
 };
 
 type Drill =
   | { scope: 'districts'; reason: string; kind: 'dental' | 'gp' }
-  | { scope: 'services'; reason: string; group: ExtraGroup };
+  | { scope: 'services'; reason: string; group: ExtraGroup }
+  | { scope: 'crosscheck'; reason: string; family: 'dental' | 'gp' };
 
 function Ext({ href, children }: { href: string; children: React.ReactNode }) {
   return <a href={href} target="_blank" rel="noopener">{children}</a>;
@@ -190,7 +195,7 @@ function example(extra: DentalExtraRaw, groups: ExtraGroup[]): ExtraService | un
 }
 
 function ServicesTab({ tab, extra, onDrill }: {
-  tab: Exclude<Tab, 'districts'>; extra: DentalExtraRaw | null;
+  tab: 'primary' | 'specialist'; extra: DentalExtraRaw | null;
   onDrill: (d: Drill) => void;
 }) {
   if (!extra) return <p>{t('eesztInfo.svc.missing')}</p>;
@@ -336,6 +341,89 @@ function ServicesTab({ tab, extra, onDrill }: {
   );
 }
 
+/* ---------------- cross-check ---------------- */
+
+function CrosscheckTab({ data, onDrill }: {
+  data: CrosscheckRaw | null; onDrill: (d: Drill) => void;
+}) {
+  if (!data) return <p>{t('eesztInfo.svc.missing')}</p>;
+  const families: ('dental' | 'gp')[] = ['dental', 'gp'];
+  const totals = Object.fromEntries(families.map((f) => [
+    f, data.records.filter((r) => r.family === f).length,
+  ])) as Record<'dental' | 'gp', number>;
+  const counts = Object.fromEntries(families.map((f) => [
+    f, Object.fromEntries(verdictBreakdown(data, f).map((b) => [b.verdict, b.n])),
+  ])) as Record<'dental' | 'gp', Record<string, number>>;
+
+  return (
+    <>
+      <h4>4. {t('eesztInfo.h4')}</h4>
+      <ol className="info-steps">
+        {['s1', 's2', 's3', 's4', 's5'].map((k) => (
+          <li key={k}>{t(`eesztInfo.xc.${k}`)}</li>
+        ))}
+      </ol>
+      <p>{t('eesztInfo.xc.p4')}{' '}
+        <Ext href={`${REPO}/etl/crosscheck.py`}><code>etl/crosscheck.py</code></Ext>
+      </p>
+
+      <h4>5. {t('eesztInfo.h5')}</h4>
+      <ul className="info-list">
+        {['c1', 'c2', 'c3', 'c4'].map((k) => (
+          <li key={k}><strong>{t(`eesztInfo.xc.${k}t`)}</strong> — {t(`eesztInfo.xc.${k}`)}</li>
+        ))}
+      </ul>
+
+      <h4>6. {t('eesztInfo.h6')}</h4>
+      <p>{t('eesztInfo.xc.names')}</p>
+
+      <h4>9. {t('eesztInfo.h9')}</h4>
+      <table className="info-table">
+        <thead>
+          <tr>
+            <th />
+            <th className="is-num">{t('kinds.dental.label')}</th>
+            <th className="is-num">{t('kinds.gp.label')}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{t('eesztInfo.xc.rTotal')}</td>
+            {families.map((f) => (
+              <td key={f} className="is-num">{formatNumber(totals[f])}</td>
+            ))}
+          </tr>
+          {data.verdicts.map((verdict) => (
+            <tr key={verdict}>
+              <td>{t(`crosscheck.verdict.${verdict}`)}</td>
+              {families.map((f) => (
+                <StatCell key={f} n={counts[f][verdict] ?? 0} total={totals[f]}
+                  onOpen={verdict === 'none' ? undefined
+                    : () => onDrill({ scope: 'crosscheck', reason: verdict, family: f })} />
+              ))}
+            </tr>
+          ))}
+          <tr>
+            <td>{t('eesztInfo.xc.rEesztOnly')}</td>
+            {families.map((f) => (
+              <td key={f} className="is-num">
+                {formatNumber(data.eesztOnly.filter(
+                  (r) => r.tip === (f === 'dental' ? 'FOG' : 'HSZ')).length)}
+              </td>
+            ))}
+          </tr>
+        </tbody>
+      </table>
+      <p>{t('eesztInfo.xc.p9')}</p>
+
+      <h4>12. {t('eesztInfo.h12')}</h4>
+      <ul className="info-list">
+        {['l1', 'l2', 'l3'].map((k) => <li key={k}>{t(`eesztInfo.xc.${k}`)}</li>)}
+      </ul>
+    </>
+  );
+}
+
 /* ---------------- the dialog ---------------- */
 
 export function EesztInfoModal({ open, onClose, data }: {
@@ -344,6 +432,7 @@ export function EesztInfoModal({ open, onClose, data }: {
   const ref = useRef<HTMLDialogElement>(null);
   const latest = useAppStore((s) => s.latest);
   const extra = useDentalExtra();
+  const xcheck = useCrosscheck();
   const [tab, setTab] = useState<Tab>('districts');
   const [drill, setDrill] = useState<Drill | null>(null);
   // a filled district in a drill-down table opens its NEAK record
@@ -370,8 +459,15 @@ export function EesztInfoModal({ open, onClose, data }: {
       const snap = latest?.kinds[drill.kind];
       return snap ? buildReasonRows(snap, data, drill.reason) : null;
     }
+    if (drill.scope === 'crosscheck') {
+      return {
+        rows: candidateRows(xcheck, drill.family, drill.reason),
+        columns: CANDIDATE_COLUMNS,
+        expanded: true,
+      };
+    }
     return extraReasonRows(extra, drill.group, drill.reason);
-  }, [drill, latest, data, extra]);
+  }, [drill, latest, data, extra, xcheck]);
 
   return (
     <dialog ref={ref} className="vacancy-dialog info-dialog" onClose={onClose}
@@ -434,9 +530,9 @@ export function EesztInfoModal({ open, onClose, data }: {
           </div>
 
           <div className="info-tabs__panel" role="tabpanel">
-            {tab === 'districts'
-              ? <DistrictsTab data={data} onDrill={setDrill} />
-              : <ServicesTab tab={tab} extra={extra} onDrill={setDrill} />}
+            {tab === 'districts' ? <DistrictsTab data={data} onDrill={setDrill} />
+              : tab === 'crosscheck' ? <CrosscheckTab data={xcheck} onDrill={setDrill} />
+                : <ServicesTab tab={tab} extra={extra} onDrill={setDrill} />}
           </div>
         </div>
       </div>
@@ -449,8 +545,12 @@ export function EesztInfoModal({ open, onClose, data }: {
         <DataTableModal
           open
           onClose={() => setDrill(null)}
-          title={t(`eeszt.reason.${drill.reason}`)}
-          subtitle={drill.scope === 'districts'
+          title={drill.scope === 'crosscheck'
+            ? t(`crosscheck.verdict.${drill.reason}`)
+            : t(`eeszt.reason.${drill.reason}`)}
+          subtitle={drill.scope === 'crosscheck'
+            ? t('eesztInfo.xc.drillSubtitle', { kind: t(`kinds.${drill.family}.adj`) })
+            : drill.scope === 'districts'
             ? t(drillData.expanded ? 'eesztInfo.drillSubtitleLicences' : 'eesztInfo.drillSubtitle', {
               kind: t(`kinds.${drill.kind}.adj`),
               n: formatNumber('districts' in drillData ? drillData.districts : 0),
@@ -459,12 +559,15 @@ export function EesztInfoModal({ open, onClose, data }: {
               group: t(`extra.${drill.group}Title`),
               n: formatNumber('services' in drillData ? drillData.services : 0),
             })}
-          countUnit={drillData.expanded ? 'rows' : drill.scope === 'districts' ? 'districts' : 'services'}
+          countUnit={drillData.expanded ? 'rows'
+            : drill.scope === 'districts' ? 'districts' : 'services'}
           rows={drillData.rows}
           columns={drillData.columns}
           filename={drill.scope === 'districts'
             ? `praxisterkep-eeszt-${drill.kind}-${drill.reason}`
-            : `praxisterkep-fogaszat-${drill.group}-${drill.reason}`}
+            : drill.scope === 'crosscheck'
+              ? `praxisterkep-keresztellenorzes-${drill.family}-${drill.reason}`
+              : `praxisterkep-fogaszat-${drill.group}-${drill.reason}`}
           renderCell={drill.scope === 'districts' ? renderCell : renderExtraCell}
         />
       )}

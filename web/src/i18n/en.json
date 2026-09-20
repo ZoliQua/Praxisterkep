@@ -572,7 +572,8 @@
     "tab": {
       "districts": "Districts (primary care)",
       "primary": "On-call and university primary care",
-      "specialist": "Specialist care"
+      "specialist": "Specialist care",
+      "crosscheck": "Cross-check"
     },
     "svc": {
       "missing": "The supplement has not loaded yet.",
@@ -627,6 +628,30 @@
       "rLicence": "Operating licence matched",
       "rSettlement": "Licensed premises in the settlement NEAK gives",
       "rProvider": "The licensee's tax number matches the financed provider's"
+    },
+    "xc": {
+      "s1": "We take the NEAK records the code chain could not pair with an EESZT licence — districts and services alike.",
+      "s2": "The NEAK surgery address is normalized (accents folded, abbreviations expanded: u. → utca, krt → körút, house number extracted, Budapest districts unified), and every premises address in the EESZT licence register is normalized the same way.",
+      "s3": "We check whether the NEAK address holds an EESZT licence in the record's own profession family (dental 13xx, GP 63xx). If it does, we check whether that licence sits under the record's own organisational unit or a different one.",
+      "s4": "With no hit at the address we look for weaker evidence: the same street at another house number, then — where NEAK also names a provider — a provider-name match against the EESZT provider register (words of 3+ characters, from 50% overlap).",
+      "s5": "The other direction is checked too: which dental and GP services appear in the EESZT financed-services register while the published NEAK lists do not contain them.",
+      "p4": "The code that does this:",
+      "c1t": "A suggestion is not a pairing",
+      "c1": "Nothing from the cross-check enters the district data: it never changes a match and never counts towards the coverage numbers. It is a separate table with its own reasoning.",
+      "c2t": "Filtering by profession family",
+      "c2": "A dental district only matches a dental licence (13xx), a GP district a GP one (63xx). If the address holds only another profession's licence, that is reported as its own result.",
+      "c3t": "Every row shows its basis",
+      "c3": "A column states whether the hit came from the premises address, the street name or the provider name, and a full sentence explains it.",
+      "c4t": "The name policy holds here too",
+      "c4": "Free-text names appear only where NEAK itself publishes a contracted physician; everywhere else the output carries codes, addresses and profession names only.",
+      "names": "The cross-check follows the same name rules as the rest: the free-text names of organisational units and premises are never exported, because they often carry a physician's name. The suggestions rest on codes, addresses and profession names.",
+      "rTotal": "Unmatched records in total",
+      "rEesztOnly": "Services that exist in EESZT only",
+      "p9": "Clicking a number lists every candidate row by row (unit, licence id, premises, profession), filterable and exportable.",
+      "l1": "An address match is not proof: several services can share a building, and a mistyped address can produce an accidental hit.",
+      "l2": "A provider-name match is the weakest evidence: a rename or a similarly named company can mislead.",
+      "l3": "The “in EESZT only” list is not necessarily a missing district: it can be an on-call, school or other service the published NEAK lists do not carry.",
+      "drillSubtitle": "Every candidate row by row — {kind} records"
     }
   },
   "neak": {
@@ -687,6 +712,62 @@
     "why": {
       "noUnitLicence": "The service's organisational unit ({units}) holds no licence for its own profession in the EESZT licence register.",
       "noFin": "The service's code does not appear in the EESZT financed-services register as a dental (FOG) service."
+    }
+  },
+  "crosscheck": {
+    "part": "{n}. Cross-check",
+    "explain": "Where the code chain (FIN → organisational unit → licence) found nothing, we look from the other side: is the same surgery or the same provider in EESZT after all — possibly under a different organisational unit? Addresses and names are compared in normalized form (accents, abbreviations, house number), and every row states what the hit is based on. These are suggestions, not official pairings.",
+    "total": "unmatched {kind} records",
+    "summary": "{n} of {total} records ({share}) got a usable pairing suggestion.",
+    "note": "The comparison runs between the NEAK contracted-provider list, the EESZT financed-services register, the provider register and the licence register, as of {asOf}.",
+    "openTable": "Cross-check table ({n} rows)",
+    "openEesztOnly": "In EESZT only ({n})",
+    "tableTitle": "Cross-check — {kind} records",
+    "tableSubtitle": "The best suggestion per record, with its reasoning · EESZT as of {asOf}",
+    "eesztOnlyTitle": "In EESZT only",
+    "eesztOnlySubtitle": "Financed {kind} services in EESZT that the published NEAK lists do not contain · {asOf}",
+    "noUnit": "no organisational unit in EESZT",
+    "colCode": "NEAK code (FIN / unit)",
+    "colSource": "Data set",
+    "colNeakAddress": "Surgery address per NEAK",
+    "colReason": "Why the code chain failed",
+    "colVerdict": "Cross-check result",
+    "colSuggestedUnit": "Suggested organisational unit",
+    "colLicAddress": "EESZT premises address",
+    "colBasis": "Basis of the match",
+    "colOwnUnit": "Its own organisational unit",
+    "colMore": "Further candidates",
+    "colSettlementLicences": "Same-profession licences in the settlement",
+    "colExplanation": "Reasoning",
+    "colOtherUnit": "Different organisational unit",
+    "colTip": "Service type",
+    "srcDentalDistrict": "Dental district",
+    "srcGpDistrict": "GP district",
+    "tip": {
+      "FOG": "dental",
+      "HSZ": "GP"
+    },
+    "verdict": {
+      "otherUnitSameProfession": "Same address, different unit",
+      "ownUnitSameProfession": "Same address, its own unit",
+      "otherProfessionAtAddress": "Only another profession at the address",
+      "streetSameProfession": "Same street, different house number",
+      "providerName": "The provider name matches",
+      "none": "No usable suggestion"
+    },
+    "basis": {
+      "address": "premises address",
+      "street": "street name",
+      "provider": "provider name"
+    },
+    "why": {
+      "otherUnit": "At the surgery address NEAK gives, EESZT holds a {profession} licence ({place}) — but under organisational unit {unit}, not the record's own ({own}). Most likely the same surgery, filed under a different unit.",
+      "ownUnit": "At this address the record's own unit ({unit}) does hold a {profession} licence; the automatic join rejected it because of “{reason}” — worth checking by hand.",
+      "otherProfession": "There is an EESZT licence at the address, but for another profession ({professions}); no {kind} licence was found there.",
+      "street": "The same street has a {profession} licence ({place}) at a different house number — a spelling difference or the neighbouring building.",
+      "provider": "The provider name matches an EESZT provider by {overlap}, and that provider holds a {profession} licence in the settlement ({unit}) — but the addresses differ.",
+      "noneInSettlement": "The settlement has {n} same-profession EESZT licences, none of them at the NEAK address or street; the provider name gave no hit either.",
+      "noneAtAll": "The settlement has no same-profession EESZT licence at all — the surgery cannot be identified by address or by name."
     }
   }
 }

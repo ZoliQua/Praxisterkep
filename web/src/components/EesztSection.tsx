@@ -16,6 +16,7 @@ import { EesztInfoModal } from './EesztInfoModal';
 import { makeCellRenderer } from './EesztCells';
 import { NeakDetailModal } from './NeakDetailModal';
 import { DentalExtraBlocks } from './DentalExtraBlocks';
+import { CrosscheckSection } from './CrosscheckSection';
 
 function TableIcon({ warn = false }: { warn?: boolean }) {
   return (
@@ -86,9 +87,7 @@ export function EesztSection() {
         </button>
       </p>
 
-      {kind === 'dental' && (
-        <h3 className="section__subheading">{t('extra.part1')}</h3>
-      )}
+      <h3 className="section__subheading">{t('extra.part1')}</h3>
 
       <div className="eeszt-coverage">
         <div className="eeszt-coverage__total">
@@ -123,6 +122,10 @@ export function EesztSection() {
       </div>
 
       {kind === 'dental' && <DentalExtraBlocks />}
+
+      {/* the cross-check closes the section: part 3 for dental (which has the
+          specialist part), part 2 for GP */}
+      <CrosscheckSection kind={kind} part={kind === 'dental' ? 3 : 2} />
 
       <DataTableModal
         open={openTable === 'all'}

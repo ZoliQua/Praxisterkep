@@ -137,6 +137,16 @@ def main() -> None:
             encoding="utf-8")
         counts = " ".join(f"{g}={st['services']}" for g, st in extra["stats"].items())
         print(f"      wrote {build_dental_extra.OUT} ({counts})")
+
+        # cross-check: what the addresses and provider names say about the
+        # records the code chain could not pair
+        import crosscheck
+        xcheck = crosscheck.build(build_eeszt.latest_date())
+        crosscheck.OUT.write_text(
+            json.dumps(xcheck, ensure_ascii=False, separators=(",", ":")) + "\n",
+            encoding="utf-8")
+        print(f"      wrote {crosscheck.OUT} ({len(xcheck['records'])} records, "
+              f"{len(xcheck['eesztOnly'])} EESZT-only)")
     except Exception as exc:  # noqa: BLE001 — supplement must not block release
         print(f"      WARNING: EESZT supplement skipped: {exc}")
     print("done")

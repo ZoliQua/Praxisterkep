@@ -5,6 +5,28 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.11.0] — 2026-09-20
+
+### Hozzáadva
+- **3. Keresztellenőrzés** (háziorvosi ágon 2.): ahol a kódlánc nem talált
+  EESZT-engedélyt, ott a rendelő címe és a szolgáltató neve alapján
+  keressük meg, hogy ugyanaz a rendelő vagy szolgáltató szerepel-e az
+  EESZT-ben — esetleg másik szervezeti egység alatt. 605 rekordból 481-re
+  van értelmezhető javaslat; 379 esetben ugyanazon a címen van azonos
+  szakmájú engedély, csak más szervezeti egység alatt.
+- A táblázat rekordonként kiírja a javasolt szervezeti egységet, az
+  engedély-azonosítót, az EESZT telephelyet, a szakmát, az egyezés alapját
+  (telephelycím / utcanév / szolgáltatónév) és egy teljes mondatos
+  indoklást; szűrhető, rendezhető, CSV/TSV-be exportálható.
+- „Csak az EESZT-ben szerepel” táblázat: 7 fogorvosi és 84 háziorvosi
+  finanszírozott szolgálat, amely a NEAK közzétett listáiban nem szerepel.
+- Az info-panel negyedik füle a keresztellenőrzés módszerét írja le
+  (cím- és névnormalizálás, szakmacsalád-szűrés, bizonyítékszintek,
+  korlátok), élő eredménytáblával; a számokra kattintva minden jelölt
+  soronként megjelenik.
+- Új ETL-lépés: `etl/crosscheck.py` → `data/crosscheck.json`. A javaslatok
+  sehol nem módosítják a körzetadatokat és a lefedettségi számokat.
+
 ## [1.10.0] — 2026-09-20
 
 ### Hozzáadva

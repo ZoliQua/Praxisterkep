@@ -20,6 +20,7 @@ const files = [
 const optional = [
   [join(repo, 'data', 'eeszt.json'), join(out, 'eeszt.json')],
   [join(repo, 'data', 'dental_extra.json'), join(out, 'dental_extra.json')],
+  [join(repo, 'data', 'crosscheck.json'), join(out, 'crosscheck.json')],
 ];
 
 mkdirSync(out, { recursive: true });
