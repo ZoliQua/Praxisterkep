@@ -6,6 +6,7 @@ import type {
 } from 'maplibre-gl';
 import { LAYER_KEYS, setLayer } from '../lib/mapLayers';
 import { useOrientationLayers } from './useOrientationLayers';
+import { exportMapPng } from '../lib/mapExport';
 import { t } from '../lib/i18n';
 import { formatMonth, formatNumber, formatPercent, monthsBetween } from '../lib/format';
 import { countyRanking, filterPraxes, type TypeFilter } from '../lib/selectors';
@@ -433,6 +434,8 @@ export function MapSection() {
       fitBoundsOptions: { padding: 24 },
       attributionControl: { compact: true },
       dragRotate: false,
+      // the PNG export reads the canvas back after the frame
+      canvasContextAttributes: { preserveDrawingBuffer: true },
     });
     mapRef.current = map;
     if (import.meta.env.DEV) {
@@ -747,6 +750,10 @@ export function MapSection() {
             {t('map.toggleDissolved')}
           </label>
         )}
+        <button type="button" className="eeszt-map__save"
+          onClick={() => mapRef.current && exportMapPng(mapRef.current, `praxisterkep-terkep-${kind}`)}>
+          ⤓ {t('eeszt.mapSavePng')}
+        </button>
         <span className="eeszt-map__layers">
           {LAYER_KEYS.map((key) => (
             <button key={key} type="button" aria-pressed={layers[key]}

@@ -488,7 +488,9 @@
     "traceProvider": "Szolgáltató",
     "infoOpen": "Hogyan illesztettük? — részletes, visszakövethető leírás",
     "colDoctor": "Betöltő orvos",
-    "colNeakCode": "NEAK kód"
+    "colNeakCode": "NEAK kód",
+    "mapDistrictNames": "Körzetnevek",
+    "mapSavePng": "Térkép mentése (PNG)"
   },
   "dataTable": {
     "searchAll": "Keresés minden oszlopban…",
@@ -845,7 +847,18 @@
     "colNearestId": "Legközelebbi körzet FIN-kódja",
     "colSameSettlement": "Ugyanabban a településben",
     "colPopulation": "Érintett lakosság",
-    "note": "A számítás alapja {operating} működő (szerződött orvossal rendelkező) rendelő a(z) {month} havi listából; {missing} betöltött körzethez nem volt koordináta, ezek kimaradtak — emiatt a távolságok inkább felülbecslések. A távolság légvonal, nem útvonal; a helyettesítést a nyilvános adatok nem mutatják."
+    "note": "A számítás alapja {operating} működő (szerződött orvossal rendelkező) rendelő a(z) {month} havi listából; {missing} betöltött körzethez nem volt koordináta, ezek kimaradtak — emiatt a távolságok inkább felülbecslések. A távolság légvonal, nem útvonal; a helyettesítést a nyilvános adatok nem mutatják.",
+    "openCounties": "Vármegyei összefoglaló",
+    "countyTableTitle": "Vármegyei távolságok — {kind} körzetek",
+    "countyTableSubtitle": "Átlagos és medián távolság a legközelebbi működő rendelőig, vármegyénként · szűrhető, exportálható",
+    "countyLine": "{county}: {districts} szerződött orvos nélküli körzet · átlag {mean} km · medián {median} km · legnagyobb {max} km · {within5} körzet 5 km-en belül, {beyond10} 10 km-nél távolabb ({people} lakos).",
+    "colDistricts": "Körzetek száma",
+    "colMeanKm": "Átlagos távolság (km)",
+    "colMedianKm": "Medián távolság (km)",
+    "colMaxKm": "Legnagyobb távolság (km)",
+    "colWithin5": "5 km-en belül",
+    "colBeyond10": "10 km felett",
+    "colPopBeyond10": "Lakos 10 km felett"
   },
   "data": {
     "heading": "Adatok és letöltés",

@@ -5,6 +5,26 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.19.0] — 2026-09-20
+
+### Hozzáadva
+- **Térkép mentése PNG-be** minden térképen (főtérkép, EESZT, szakellátás,
+  távolság, és a táblázatok feletti térképek is): az aktuális nézet
+  mentődik, a városnevekkel és megyenevekkel együtt, forrásmegjelöléssel.
+- **Körzetnevek** kapcsoló a térképen: vármegye kiválasztásakor jelenik
+  meg (alapból bekapcsolva), országos nézetben nincs, mert átláthatatlan
+  lenne.
+- **Vármegyei összefoglaló a távolságokról**: táblázat-ikon a szekció
+  fejlécében — vármegyénként átlag, medián és legnagyobb távolság, hány
+  körzet van 5 km-en belül, hány 10 km felett és mennyi lakost érint.
+  Vármegye kiválasztásakor ugyanez egy mondatban a térkép alatt is megjelenik.
+
+### Javítva
+- A táblázatok megnyitásakor a háttér (és vele a térkép) elcsúszott
+  oldalra, mert a modál elrejtette a gördítősávot. Az oldal mostantól
+  állandóan fenntartja a sáv helyét (`scrollbar-gutter: stable`), így
+  sehol nem ugrik.
+
 ## [1.18.0] — 2026-09-20
 
 ### Hozzáadva

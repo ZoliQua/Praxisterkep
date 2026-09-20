@@ -7,8 +7,8 @@ import { t, tKind } from '../lib/i18n';
 import { formatNumber, formatPercent } from '../lib/format';
 import { sortRows } from '../lib/eesztTable';
 import {
-  ACCESS_COLUMNS, BAND_COLORS, accessRows, bandBreakdown, bandLabel,
-  populationBeyond, useAccess,
+  ACCESS_COLUMNS, BAND_COLORS, COUNTY_ACCESS_COLUMNS, accessRows, bandBreakdown,
+  bandLabel, countyAccess, countyAccessRows, populationBeyond, useAccess,
 } from '../lib/access';
 import { useAppStore } from '../store/useAppStore';
 import { DataTableModal } from './DataTableModal';
@@ -31,10 +31,13 @@ function detailRows(row: MapRow): [string, string][] {
 export function AccessSection() {
   const data = useAccess();
   const kind = useAppStore((s) => s.kind);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<'districts' | 'counties' | null>(null);
+  const [county, setCounty] = useState('');
 
   const rows = useMemo(() => sortRows(accessRows(data, kind), 'km', 'desc'), [data, kind]);
   const bands = useMemo(() => bandBreakdown(data, kind), [data, kind]);
+  const counties = useMemo(() => countyAccess(data, kind), [data, kind]);
+  const countyRows = useMemo(() => countyAccessRows(data, kind), [data, kind]);
   const categories = useMemo(
     () => bands.map((b) => ({
       key: bandLabel(b.band), label: bandLabel(b.band), color: BAND_COLORS[b.band],
@@ -46,12 +49,21 @@ export function AccessSection() {
   const st = data.stats[kind];
   const measured = st?.measured ?? 0;
   const beyond10 = populationBeyond(data, kind, 10);
+  const selected = counties.find((c) => c.county === county) ?? null;
   const sameShare = measured ? (st?.sameSettlement ?? 0) / measured : 0;
 
   return (
     <section className="section container" id="tavolsag">
       <div className="section__heading-row">
         <h2 className="section__heading">{t('access.heading')}</h2>
+        <button className="icon-button" title={t('access.openCounties')}
+          aria-label={t('access.openCounties')} onClick={() => setOpen('counties')}>
+          <svg viewBox="0 0 20 20" aria-hidden="true">
+            <rect x="2.5" y="3.5" width="15" height="13" rx="1.5" fill="none"
+              stroke="currentColor" strokeWidth="1.6" />
+            <path d="M2.5 8h15M8 8v8.5M13 8v8.5" stroke="currentColor" strokeWidth="1.6" />
+          </svg>
+        </button>
       </div>
       <p className="section__explain">{tKind('access.explain', kind)}</p>
 
@@ -93,11 +105,30 @@ export function AccessSection() {
       </div>
 
       <EesztMap rows={rows as MapRow[]} categories={categories} detailRows={detailRows}
-        searchLink={false} countKey="access.mapCount" />
+        searchLink={false} countKey="access.mapCount" onCounty={setCounty}
+        exportName={`praxisterkep-tavolsag-${kind}`} />
+
+      {selected && (
+        <p className="access-county">
+          {t('access.countyLine', {
+            county: selected.county,
+            districts: formatNumber(selected.districts),
+            mean: formatNumber(selected.meanKm),
+            median: formatNumber(selected.medianKm),
+            max: formatNumber(selected.maxKm),
+            within5: formatNumber(selected.within5),
+            beyond10: formatNumber(selected.beyond10),
+            people: formatNumber(selected.populationBeyond10),
+          })}
+        </p>
+      )}
 
       <div className="eeszt-actions">
-        <button className="data-btn data-btn--accent" onClick={() => setOpen(true)}>
+        <button className="data-btn data-btn--accent" onClick={() => setOpen('districts')}>
           {t('access.openTable', { n: formatNumber(rows.length) })}
+        </button>
+        <button className="data-btn" onClick={() => setOpen('counties')}>
+          {t('access.openCounties')}
         </button>
       </div>
       <p className="extra-note">
@@ -109,8 +140,18 @@ export function AccessSection() {
       </p>
 
       <DataTableModal
-        open={open}
-        onClose={() => setOpen(false)}
+        open={open === 'counties'}
+        onClose={() => setOpen((cur) => (cur === 'counties' ? null : cur))}
+        title={tKind('access.countyTableTitle', kind)}
+        subtitle={t('access.countyTableSubtitle')}
+        rows={countyRows}
+        columns={COUNTY_ACCESS_COLUMNS}
+        filename={`praxisterkep-tavolsag-megyek-${kind}`}
+        countUnit="rows"
+      />
+      <DataTableModal
+        open={open === 'districts'}
+        onClose={() => setOpen((cur) => (cur === 'districts' ? null : cur))}
         title={tKind('access.tableTitle', kind)}
         subtitle={t('access.tableSubtitle')}
         rows={rows}
@@ -122,7 +163,8 @@ export function AccessSection() {
           render: (filtered) => (
             <EesztMap rows={filtered as MapRow[]} height={320} countyFilter={false}
               fitToRows searchLink={false} categories={categories}
-              detailRows={detailRows} countKey="access.mapCount" />
+              detailRows={detailRows} countKey="access.mapCount"
+              exportName={`praxisterkep-tavolsag-${kind}`} />
           ),
         }}
       />

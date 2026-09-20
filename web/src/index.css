@@ -31,7 +31,12 @@
 
 * { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  /* a modal locks body scrolling; without a reserved gutter the page (and the
+     map underneath) jumps sideways when the scrollbar disappears */
+  scrollbar-gutter: stable;
+}
 
 body {
   margin: 0;
@@ -1511,3 +1516,18 @@ a:hover { text-decoration: underline; }
 .data-files__table { table-layout: auto; min-width: 640px; }
 .data-files__table td { vertical-align: top; }
 .data-files__table code { font-size: 12.5px; }
+
+/* map: save + label controls */
+.eeszt-map__save {
+  appearance: none; cursor: pointer; border: 1px solid var(--line-strong);
+  background: var(--bg); color: var(--ink-dim); border-radius: 999px;
+  padding: 3px 10px; font: 600 11.5px var(--font-body); white-space: nowrap;
+}
+.eeszt-map__save:hover { color: var(--ink); border-color: var(--ink-faint); }
+.map-city--district i { width: 4px; height: 4px; background: var(--alert); }
+.map-city--district span { font-size: 11px; color: var(--ink-dim); }
+.access-county {
+  margin: -6px 0 14px; padding: 10px 14px; border-left: 3px solid var(--accent);
+  background: var(--bg-raised); border-radius: 0 var(--radius) var(--radius) 0;
+  font-size: 13.5px; color: var(--ink-dim);
+}

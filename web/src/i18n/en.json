@@ -488,7 +488,9 @@
     "traceProvider": "Provider",
     "infoOpen": "How we matched it — full, traceable description",
     "colDoctor": "Contracted physician",
-    "colNeakCode": "NEAK code"
+    "colNeakCode": "NEAK code",
+    "mapDistrictNames": "District names",
+    "mapSavePng": "Save map (PNG)"
   },
   "dataTable": {
     "searchAll": "Search all columns…",
@@ -845,7 +847,18 @@
     "colNearestId": "FIN code of the nearest district",
     "colSameSettlement": "In the same settlement",
     "colPopulation": "Affected population",
-    "note": "The calculation rests on {operating} operating surgeries from the {month} list; {missing} filled districts had no coordinates and were left out, so the distances err on the high side. The distance is a straight line, not a route; substitution does not appear in the published data."
+    "note": "The calculation rests on {operating} operating surgeries from the {month} list; {missing} filled districts had no coordinates and were left out, so the distances err on the high side. The distance is a straight line, not a route; substitution does not appear in the published data.",
+    "openCounties": "County summary",
+    "countyTableTitle": "Distances by county — {kind} districts",
+    "countyTableSubtitle": "Mean and median distance to the nearest operating surgery, per county · filterable, exportable",
+    "countyLine": "{county}: {districts} districts without a contracted physician · mean {mean} km · median {median} km · longest {max} km · {within5} within 5 km, {beyond10} beyond 10 km ({people} residents).",
+    "colDistricts": "Districts",
+    "colMeanKm": "Mean distance (km)",
+    "colMedianKm": "Median distance (km)",
+    "colMaxKm": "Longest distance (km)",
+    "colWithin5": "Within 5 km",
+    "colBeyond10": "Beyond 10 km",
+    "colPopBeyond10": "Residents beyond 10 km"
   },
   "data": {
     "heading": "Data and downloads",

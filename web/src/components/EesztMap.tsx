@@ -4,7 +4,7 @@
 // Used standalone in the EESZT section and above the data browser, where
 // it follows the table's filters (it simply renders the rows it is given).
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
-import { Map as MLMap, NavigationControl } from 'maplibre-gl';
+import { Map as MLMap, Marker, NavigationControl } from 'maplibre-gl';
 import type { GeoJSONSource, MapLayerMouseEvent } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { t } from '../lib/i18n';
@@ -12,6 +12,7 @@ import { formatNumber } from '../lib/format';
 import { cellText, type Row } from '../lib/eesztTable';
 import { eesztLink } from '../lib/eeszt';
 import { useAppStore } from '../store/useAppStore';
+import { exportMapPng } from '../lib/mapExport';
 import { LAYER_KEYS, setLayer } from '../lib/mapLayers';
 import { useOrientationLayers } from './useOrientationLayers';
 
@@ -86,7 +87,7 @@ function toGeoJSON(rows: MapRow[], statusFilled: string, statusDissolved: string
 
 export function EesztMap({
   rows, height = 460, countyFilter = true, fitToRows = false, searchLink = true,
-  categories, detailRows, countKey = 'eeszt.mapCount',
+  categories, detailRows, countKey = 'eeszt.mapCount', onCounty, exportName = 'terkep',
 }: {
   rows: MapRow[];
   height?: number;
@@ -103,6 +104,10 @@ export function EesztMap({
   detailRows?: (row: MapRow) => [string, string][];
   /** i18n key of the "n / total on the map" line (districts by default) */
   countKey?: string;
+  /** told whenever the county focus changes ('' = the whole country) */
+  onCounty?: (county: string) => void;
+  /** file name stem for the PNG export */
+  exportName?: string;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MLMap | null>(null);
@@ -148,6 +153,8 @@ export function EesztMap({
       fitBoundsOptions: { padding: 16 },
       attributionControl: { compact: true },
       dragRotate: false,
+      // the PNG export reads the canvas back after the frame
+      canvasContextAttributes: { preserveDrawingBuffer: true },
     });
     mapRef.current = map;
     map.addControl(new NavigationControl({ showCompass: false }), 'top-left');
@@ -246,6 +253,34 @@ export function EesztMap({
   }, [color]);
 
   const layers = useOrientationLayers(mapRef);
+  const [showDistricts, setShowDistricts] = useState(true);
+  const districtMarkersRef = useRef<Marker[]>([]);
+
+  // district names only make sense once a county is in focus
+  useEffect(() => {
+    districtMarkersRef.current.forEach((m) => m.remove());
+    districtMarkersRef.current = [];
+    const map = mapRef.current;
+    if (!map || !county || !showDistricts) return;
+    districtMarkersRef.current = shown
+      .filter((r) => r.lat !== null && r.lon !== null)
+      .slice(0, 400)
+      .map((r) => {
+        const el = document.createElement('div');
+        el.className = 'map-city map-city--district';
+        const dot = document.createElement('i');
+        const label = document.createElement('span');
+        label.textContent = String(r.settlement ?? '');
+        el.append(dot, label);
+        return new Marker({ element: el, anchor: 'left' })
+          .setLngLat([r.lon as number, r.lat as number])
+          .addTo(map);
+      });
+    return () => {
+      districtMarkersRef.current.forEach((m) => m.remove());
+      districtMarkersRef.current = [];
+    };
+  }, [county, showDistricts, shown]);
 
   // county focus (standalone mode)
   useEffect(() => {
@@ -283,7 +318,8 @@ export function EesztMap({
     <div className="eeszt-map">
       <div className="eeszt-map__bar">
         {countyFilter && (
-          <select value={county} onChange={(e) => { setCounty(e.target.value); setSelected(null); }}
+          <select value={county}
+            onChange={(e) => { setCounty(e.target.value); setSelected(null); onCounty?.(e.target.value); }}
             aria-label={t('stats.thCounty')}>
             <option value="">{t('stats.filterCountyAll')}</option>
             {counties.map((c) => <option key={c} value={c}>{c}</option>)}
@@ -298,6 +334,16 @@ export function EesztMap({
             </button>
           ))}
         </span>
+        {county && (
+          <button type="button" className={`map-layer${showDistricts ? ' is-on' : ''}`}
+            aria-pressed={showDistricts} onClick={() => setShowDistricts((v) => !v)}>
+            {showDistricts ? '◉' : '○'} {t('eeszt.mapDistrictNames')}
+          </button>
+        )}
+        <button type="button" className="eeszt-map__save"
+          onClick={() => mapRef.current && exportMapPng(mapRef.current, exportName)}>
+          ⤓ {t('eeszt.mapSavePng')}
+        </button>
         <span className="eeszt-map__count">
           {t(countKey, { n: formatNumber(located), total: formatNumber(shown.length) })}
         </span>

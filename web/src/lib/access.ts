@@ -141,3 +141,70 @@ export function populationBeyond(
     .filter((d) => d.kind === kind && d.km >= km)
     .reduce((sum, d) => sum + (d.population ?? 0), 0);
 }
+
+/* ---------------- county summary ---------------- */
+
+export interface CountyAccess {
+  county: string;
+  districts: number;
+  medianKm: number;
+  meanKm: number;
+  maxKm: number;
+  within5: number;
+  beyond10: number;
+  population: number;
+  populationBeyond10: number;
+}
+
+function median(values: number[]): number {
+  if (!values.length) return 0;
+  const sorted = [...values].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+}
+
+/** per-county distances of the districts without a contracted physician */
+export function countyAccess(data: AccessRaw | null, kind: PraxisKind): CountyAccess[] {
+  if (!data) return [];
+  const byCounty = new Map<string, AccessDistrict[]>();
+  for (const d of data.districts) {
+    if (d.kind !== kind) continue;
+    const list = byCounty.get(d.county) ?? [];
+    list.push(d);
+    byCounty.set(d.county, list);
+  }
+  return [...byCounty.entries()]
+    .map(([county, list]) => {
+      const km = list.map((d) => d.km);
+      return {
+        county,
+        districts: list.length,
+        medianKm: Math.round(median(km) * 10) / 10,
+        meanKm: Math.round((km.reduce((a, b) => a + b, 0) / km.length) * 10) / 10,
+        maxKm: Math.round(Math.max(...km) * 10) / 10,
+        within5: list.filter((d) => d.km < 5).length,
+        beyond10: list.filter((d) => d.km >= 10).length,
+        population: list.reduce((a, d) => a + (d.population ?? 0), 0),
+        populationBeyond10: list
+          .filter((d) => d.km >= 10)
+          .reduce((a, d) => a + (d.population ?? 0), 0),
+      };
+    })
+    .sort((a, b) => b.meanKm - a.meanKm);
+}
+
+export const COUNTY_ACCESS_COLUMNS: ColDef[] = [
+  { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: true },
+  { key: 'districts', labelKey: 'access.colDistricts', type: 'number', visible: true },
+  { key: 'meanKm', labelKey: 'access.colMeanKm', type: 'number', visible: true },
+  { key: 'medianKm', labelKey: 'access.colMedianKm', type: 'number', visible: true },
+  { key: 'maxKm', labelKey: 'access.colMaxKm', type: 'number', visible: true },
+  { key: 'within5', labelKey: 'access.colWithin5', type: 'number', visible: true },
+  { key: 'beyond10', labelKey: 'access.colBeyond10', type: 'number', visible: true },
+  { key: 'population', labelKey: 'access.colPopulation', type: 'number', visible: false },
+  { key: 'populationBeyond10', labelKey: 'access.colPopBeyond10', type: 'number', visible: true },
+];
+
+export function countyAccessRows(data: AccessRaw | null, kind: PraxisKind): Row[] {
+  return countyAccess(data, kind).map((c) => ({ ...c }));
+}
