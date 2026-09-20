@@ -5,6 +5,21 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.13.0] — 2026-09-20
+
+### Hozzáadva
+- Tájékozódási rétegek minden térképen, kapcsolhatóan: **megyeszékhelyek**
+  (19), **megyei jogú városok** (további 5), **nagyobb városok** (20 000 fő
+  felett, 36 település) és **Budapest kerülethatárai** (23 kerület). A
+  választott rétegeket minden térkép követi (főtérkép, EESZT-térkép,
+  szakellátási térkép, táblázatok feletti térképek), és a böngésző
+  megjegyzi őket.
+- Új geo-adatok OpenStreetMapből (`etl/fetch_geo.py --what cities|budapest`):
+  `data/geo/cities.geojson` (városrang szerint bélyegezve) és
+  `data/geo/budapest.geojson`. A városfeliratok DOM-jelölők, így nem kell
+  hozzájuk külső betűtípus-szolgáltatás, és nem fogják el a térképi
+  kattintásokat.
+
 ## [1.12.0] — 2026-09-20
 
 ### Hozzáadva

@@ -4,6 +4,8 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import type {
   ExpressionSpecification, GeoJSONSource, MapLayerMouseEvent,
 } from 'maplibre-gl';
+import { LAYER_KEYS, toggleLayer, useMapLayers } from '../lib/mapLayers';
+import { useOrientationLayers } from './useOrientationLayers';
 import { t } from '../lib/i18n';
 import { formatMonth, formatNumber, formatPercent, monthsBetween } from '../lib/format';
 import { countyRanking, filterPraxes, type TypeFilter } from '../lib/selectors';
@@ -288,6 +290,7 @@ export function MapSection() {
 
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MLMap | null>(null);
+  const layers = useMapLayers();
   const readyRef = useRef(false);
   const markersRef = useRef<Marker[]>([]);
   const snapshotRef = useRef(snapshot);
@@ -412,6 +415,8 @@ export function MapSection() {
     void selectMonth(months[0]);
     setPlaying(true);
   }
+
+  useOrientationLayers(mapRef);
 
   /* ---------------- map lifecycle ---------------- */
   useEffect(() => {
@@ -746,6 +751,15 @@ export function MapSection() {
             {t('map.toggleDissolved')}
           </label>
         )}
+        <span className="eeszt-map__layers">
+          {LAYER_KEYS.map((key) => (
+            <button key={key} type="button" aria-pressed={layers[key]}
+              className={`map-layer${layers[key] ? ' is-on' : ''}`}
+              onClick={() => toggleLayer(key)}>
+              {layers[key] ? '◉' : '○'} {t(`map.layer.${key}`)}
+            </button>
+          ))}
+        </span>
       </div>
       {view === 'points' && (
         <div className="map-controls">

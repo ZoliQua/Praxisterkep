@@ -5,7 +5,7 @@ __pycache__/
 .venv/
 .DS_Store
 web/public/data/
-data/geo/jaras_overpass_cache.json
+data/geo/*_overpass_cache.json
 web/public/og.png
 data/raw/okfo_wayback/
 etl/geocode_cache.json.tmp

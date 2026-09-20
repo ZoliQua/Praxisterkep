@@ -12,6 +12,8 @@ import { formatNumber } from '../lib/format';
 import { cellText, type Row } from '../lib/eesztTable';
 import { eesztLink } from '../lib/eeszt';
 import { useAppStore } from '../store/useAppStore';
+import { LAYER_KEYS, toggleLayer, useMapLayers } from '../lib/mapLayers';
+import { useOrientationLayers } from './useOrientationLayers';
 
 const HUNGARY: [[number, number], [number, number]] = [[16.0, 45.7], [23.0, 48.65]];
 const COLOR_FILLED = '#4fd6c2';
@@ -107,6 +109,7 @@ export function EesztMap({
   const readyRef = useRef(false);
   const [county, setCounty] = useState('');
   const [selected, setSelected] = useState<MapRow | null>(null);
+  const layers = useMapLayers();
   const requestSearch = useAppStore((s) => s.requestSearch);
 
   const shown = useMemo(
@@ -243,6 +246,8 @@ export function EesztMap({
     }
   }, [color]);
 
+  useOrientationLayers(mapRef);
+
   // county focus (standalone mode)
   useEffect(() => {
     if (fitToRows) return;
@@ -285,6 +290,15 @@ export function EesztMap({
             {counties.map((c) => <option key={c} value={c}>{c}</option>)}
           </select>
         )}
+        <span className="eeszt-map__layers">
+          {LAYER_KEYS.map((key) => (
+            <button key={key} type="button" aria-pressed={layers[key]}
+              className={`map-layer${layers[key] ? ' is-on' : ''}`}
+              onClick={() => toggleLayer(key)}>
+              {layers[key] ? '◉' : '○'} {t(`map.layer.${key}`)}
+            </button>
+          ))}
+        </span>
         <span className="eeszt-map__count">
           {t(countKey, { n: formatNumber(located), total: formatNumber(shown.length) })}
         </span>

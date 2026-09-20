@@ -106,7 +106,13 @@
     "levelCounty": "Megye",
     "levelJaras": "Járás",
     "jarasCount": "betöltetlen körzet",
-    "jarasLegend": "Betöltetlen körzetek száma járásonként"
+    "jarasLegend": "Betöltetlen körzetek száma járásonként",
+    "layer": {
+      "seats": "Megyeszékhelyek",
+      "county": "Megyei jogú városok",
+      "towns": "Nagyobb városok",
+      "budapest": "Budapest kerületei"
+    }
   },
   "search": {
     "heading": "Mi a helyzet nálam?",

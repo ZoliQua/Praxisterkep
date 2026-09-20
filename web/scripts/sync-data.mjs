@@ -15,6 +15,8 @@ const files = [
   [join(repo, 'data', 'history.json'), join(out, 'history.json')],
   [join(repo, 'data', 'geo', 'counties.geojson'), join(out, 'counties.geojson')],
   [join(repo, 'data', 'geo', 'jaras.geojson'), join(out, 'jaras.geojson')],
+  [join(repo, 'data', 'geo', 'cities.geojson'), join(out, 'cities.geojson')],
+  [join(repo, 'data', 'geo', 'budapest.geojson'), join(out, 'budapest.geojson')],
 ];
 // optional supplements — copied only when present
 const optional = [

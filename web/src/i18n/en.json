@@ -106,7 +106,13 @@
     "levelCounty": "County",
     "levelJaras": "Subregion",
     "jarasCount": "vacant districts",
-    "jarasLegend": "Number of vacant districts by subregion"
+    "jarasLegend": "Number of vacant districts by subregion",
+    "layer": {
+      "seats": "County seats",
+      "county": "County-rank cities",
+      "towns": "Larger towns",
+      "budapest": "Budapest districts"
+    }
   },
   "search": {
     "heading": "What about my town?",
