@@ -5,6 +5,24 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.14.0] — 2026-09-20
+
+### Hozzáadva
+- Három új kapcsolható térképréteg: **járásszékhelyek** (151 pont, az OSM
+  járás-relációk `admin_centre` tagjaiból, így egyetlen nevet sem kell a
+  járás nevéből kitalálni), **járáshatárok** (a meglévő
+  `jaras.geojson`-ból) és **megyenevek**. Mindhárom alapból kikapcsolva.
+- A megyenevek kapcsolója minden térképen ott van, és a fő „Betöltetlenség
+  a térképen” térképen marad alapból bekapcsolva — a rétegek térképenkénti
+  alapértelmezést kaptak, a látogató választása pedig felülírja azt minden
+  térképen.
+- A „nagyobb városok” réteg méret szerint működik (20 000 fő felett, 60
+  település), függetlenül attól, hogy a település járásszékhely-e.
+
+### Módosítva
+- A havi ETL-workflow commit-azonossága a GitHub noreply címére váltott
+  (a repóban nem marad e-mail cím).
+
 ## [1.13.0] — 2026-09-20
 
 ### Hozzáadva

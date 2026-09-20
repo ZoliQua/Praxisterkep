@@ -43,7 +43,14 @@ out geom;
 CITY_QUERY = """
 [out:json][timeout:300];
 area["ISO3166-1"="HU"][admin_level=2]->.hu;
-node(area.hu)["place"~"^(city|town)$"];
+node(area.hu)["place"~"^(city|town|village)$"]["name"];
+out body;
+"""
+JARAS_SEAT_QUERY = """
+[out:json][timeout:300];
+area["ISO3166-1"="HU"][admin_level=2]->.hu;
+rel(area.hu)["admin_level"="7"]["boundary"="administrative"];
+node(r:"admin_centre");
 out body;
 """
 BUDAPEST_QUERY = """
@@ -93,6 +100,13 @@ def build_cities(cache: Path) -> None:
     """City points for the map: county seats, county-rank cities and every
     other town of at least TOWN_MIN_POPULATION residents."""
     data = fetch(cache, CITY_QUERY)
+    # the járás seats come from the admin_centre members of the district
+    # relations, so no name has to be guessed from the járás name
+    seats = fetch(cache.with_name("jaras_seat_overpass_cache.json"), JARAS_SEAT_QUERY)
+    jaras_seats = {el["tags"]["name"] for el in seats.get("elements", [])
+                   if el.get("tags", {}).get("name")}
+    if len(jaras_seats) < 150:
+        sys.exit(f"only {len(jaras_seats)} járás seats returned — refusing to publish")
     features = []
     for el in data.get("elements", []):
         tags = el.get("tags", {})
@@ -107,13 +121,22 @@ def build_cities(cache: Path) -> None:
             rank = "seat"
         elif name in COUNTY_RANK:
             rank = "county"
+        elif name in jaras_seats:
+            rank = "jarasSeat"
         elif population >= TOWN_MIN_POPULATION:
             rank = "town"
         else:
             continue
+        props = {"name": name, "rank": rank}
+        if population:
+            props["population"] = population
+        if population >= TOWN_MIN_POPULATION:
+            # the "larger towns" layer is about size, not administrative rank,
+            # so a járás seat above the threshold belongs to both
+            props["big"] = True
         features.append({
             "type": "Feature",
-            "properties": {"name": name, "rank": rank, "population": population or None},
+            "properties": props,
             "geometry": {"type": "Point", "coordinates": [round(el["lon"], 5),
                                                           round(el["lat"], 5)]},
         })
@@ -127,8 +150,9 @@ def build_cities(cache: Path) -> None:
                               ensure_ascii=False, separators=(",", ":")),
                    encoding="utf-8")
     ranks = collections.Counter(f["properties"]["rank"] for f in features)
-    print(f"wrote {out} — {len(features)} points {dict(ranks)}, "
-          f"{out.stat().st_size / 1024:.0f} KiB")
+    big = sum(1 for f in features if f["properties"].get("big"))
+    print(f"wrote {out} — {len(features)} points {dict(ranks)}, {big} above "
+          f"{TOWN_MIN_POPULATION} residents, {out.stat().st_size / 1024:.0f} KiB")
 
 
 def build_budapest(cache: Path) -> None:

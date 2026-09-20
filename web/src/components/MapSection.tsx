@@ -4,7 +4,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import type {
   ExpressionSpecification, GeoJSONSource, MapLayerMouseEvent,
 } from 'maplibre-gl';
-import { LAYER_KEYS, toggleLayer, useMapLayers } from '../lib/mapLayers';
+import { LAYER_KEYS, setLayer } from '../lib/mapLayers';
 import { useOrientationLayers } from './useOrientationLayers';
 import { t } from '../lib/i18n';
 import { formatMonth, formatNumber, formatPercent, monthsBetween } from '../lib/format';
@@ -282,7 +282,6 @@ export function MapSection() {
   const [colorMode, setColorMode] = useState<ColorMode>(initialUrl.colorMode ?? 'status');
   const [minYears, setMinYears] = useState(initialUrl.minYears ?? 0);
   const [level, setLevel] = useState<'county' | 'jaras'>('county');
-  const [showNames, setShowNames] = useState(true);
   const [showDissolved, setShowDissolved] = useState(true);
   const [playing, setPlaying] = useState(false);
   const [hover, setHover] = useState<{ name: string; x: number; y: number } | null>(null);
@@ -290,7 +289,7 @@ export function MapSection() {
 
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MLMap | null>(null);
-  const layers = useMapLayers();
+
   const readyRef = useRef(false);
   const markersRef = useRef<Marker[]>([]);
   const snapshotRef = useRef(snapshot);
@@ -416,7 +415,9 @@ export function MapSection() {
     setPlaying(true);
   }
 
-  useOrientationLayers(mapRef);
+  // this map draws its own county markers, so the hook leaves them alone
+  const layers = useOrientationLayers(mapRef, { counties: true }, false);
+  const showNames = layers.counties;
 
   /* ---------------- map lifecycle ---------------- */
   useEffect(() => {
@@ -739,11 +740,6 @@ export function MapSection() {
             </button>
           ))}
         </div>
-        <label className="map-check">
-          <input type="checkbox" checked={showNames}
-            onChange={(e) => setShowNames(e.target.checked)} />
-          {t('map.toggleNames')}
-        </label>
         {snapshot.national.dissolved > 0 && view === 'points' && (
           <label className="map-check">
             <input type="checkbox" checked={showDissolved}
@@ -755,7 +751,7 @@ export function MapSection() {
           {LAYER_KEYS.map((key) => (
             <button key={key} type="button" aria-pressed={layers[key]}
               className={`map-layer${layers[key] ? ' is-on' : ''}`}
-              onClick={() => toggleLayer(key)}>
+              onClick={() => setLayer(key, !layers[key])}>
               {layers[key] ? '◉' : '○'} {t(`map.layer.${key}`)}
             </button>
           ))}

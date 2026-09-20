@@ -108,9 +108,12 @@
     "jarasCount": "betöltetlen körzet",
     "jarasLegend": "Betöltetlen körzetek száma járásonként",
     "layer": {
+      "counties": "Megyenevek",
       "seats": "Megyeszékhelyek",
       "county": "Megyei jogú városok",
+      "jarasSeats": "Járásszékhelyek",
       "towns": "Nagyobb városok",
+      "jaras": "Járáshatárok",
       "budapest": "Budapest kerületei"
     }
   },
