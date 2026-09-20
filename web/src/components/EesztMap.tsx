@@ -76,6 +76,7 @@ function toGeoJSON(rows: MapRow[], statusFilled: string, statusDissolved: string
       properties: {
         i,
         c: String(r.type ?? ''),
+        benefit: r.benefit === true,
         s: r.status === statusFilled ? 'f' : r.status === statusDissolved ? 'd' : 'v',
         approx: r.geoApprox === true,
         mismatch: r.settlementMatch === false,
@@ -175,6 +176,20 @@ export function EesztMap({
         type: 'geojson',
         data: toGeoJSON(shownRef.current, statusFilled, statusDissolved),
       });
+      // settlements the decree lists get a halo, under the points themselves
+      map.addLayer({
+        id: 'benefit-ring', type: 'circle', source: 'pts',
+        filter: ['==', ['get', 'benefit'], true],
+        layout: { visibility: 'none' },
+        paint: {
+          'circle-radius': ['interpolate', ['linear'], ['zoom'], 6, 6, 9, 9, 12, 13],
+          'circle-color': '#ffb454',
+          'circle-opacity': 0.22,
+          'circle-stroke-width': 1,
+          'circle-stroke-color': '#ffb454',
+          'circle-stroke-opacity': 0.5,
+        },
+      });
       map.addLayer({
         id: 'pts', type: 'circle', source: 'pts',
         paint: {
@@ -254,6 +269,15 @@ export function EesztMap({
 
   const layers = useOrientationLayers(mapRef);
   const [showDistricts, setShowDistricts] = useState(true);
+
+  // the halo around points in settlements the decree lists
+  useEffect(() => {
+    const map = mapRef.current;
+    if (map?.getLayer('benefit-ring')) {
+      map.setLayoutProperty('benefit-ring', 'visibility',
+        layers.benefit ? 'visible' : 'none');
+    }
+  }, [layers.benefit, rows]);
   const districtMarkersRef = useRef<Marker[]>([]);
 
   // district names only make sense once a county is in focus

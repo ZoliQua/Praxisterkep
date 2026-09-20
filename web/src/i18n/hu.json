@@ -116,7 +116,8 @@
       "jarasSeats": "Járásszékhelyek",
       "towns": "Nagyobb városok",
       "jaras": "Járáshatárok",
-      "budapest": "Budapest kerületei"
+      "budapest": "Budapest kerületei",
+      "benefit": "Kedvezményezett települések"
     }
   },
   "search": {
@@ -881,7 +882,10 @@
       "counties_geojson": "Megyehatárok (OpenStreetMap).",
       "jaras_geojson": "Járáshatárok (OpenStreetMap).",
       "cities_geojson": "Várospontok ranggal: megyeszékhely, megyei jogú város, járásszékhely, 20 000 fő feletti város.",
-      "budapest_geojson": "Budapesti kerülethatárok (OpenStreetMap)."
+      "budapest_geojson": "Budapesti kerülethatárok (OpenStreetMap).",
+      "providers_json": "Egységes szolgáltatói lista: NEAK kód és név, hivatalos cégnév, adószám, székhely és a szolgáltató teljes portfóliója.",
+      "operating_json": "Működési szint: praxisonként a működési engedély, a szervezeti egység és a telephely.",
+      "kedvezmenyezett_json": "Kedvezményezett települések a 105/2015. (IV. 23.) Korm. rendelet 2. és 3. melléklete szerint (társadalmi-gazdasági és infrastrukturális, munkanélküliségi és átmeneti státusz)."
     },
     "useHeading": "Hogyan használd",
     "use1": "A fájlok statikusak és verziózottak: a hónap végleges állapota a months/ könyvtárban marad, a latest.json mindig az aktuális hónapra mutat.",
@@ -969,5 +973,20 @@
       "crosscheck": "keresztellenőrzés",
       "none": "nincs találat"
     }
+  },
+  "benefit": {
+    "socio": "társadalmi-gazdasági és infrastrukturális szempontból kedvezményezett",
+    "unemployment": "jelentős munkanélküliséggel sújtott",
+    "temporary": "átmenetileg kedvezményezett",
+    "column": "Kedvezményezett település",
+    "columnDetail": "Kedvezményezettség jogcíme",
+    "layer": "Kedvezményezett települések",
+    "compareTitle": "Kedvezményezett települések összevetése",
+    "compareExplain": "Ugyanazok a körzetek két csoportban: amelyek székhelye a 105/2015. (IV. 23.) Korm. rendelet szerint kedvezményezett település, és amelyeké nem. A távolság ugyanaz a mutató, mint fent: légvonal a legközelebbi működő rendelőig.",
+    "group": {
+      "benefit": "kedvezményezett településen",
+      "other": "egyéb településen"
+    },
+    "source": "Forrás: 105/2015. (IV. 23.) Korm. rendelet 2. és 3. melléklete (Nemzeti Jogszabálytár), a rendelet szerinti településnév és vármegye alapján párosítva."
   }
 }

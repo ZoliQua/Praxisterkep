@@ -25,8 +25,9 @@ const REPO = 'https://github.com/ZoliQua/OEP-Alapellatas';
 /** the files we can describe; anything else is listed without a description */
 const DESCRIBED = new Set([
   'latest.json', 'timeseries.json', 'history.json', 'months/', 'eeszt.json',
-  'dental_extra.json', 'crosscheck.json', 'access.json', 'counties.geojson',
-  'jaras.geojson', 'cities.geojson', 'budapest.geojson',
+  'dental_extra.json', 'crosscheck.json', 'access.json', 'providers.json',
+  'operating.json', 'kedvezmenyezett.json', 'counties.geojson', 'jaras.geojson',
+  'cities.geojson', 'budapest.geojson',
 ]);
 
 /** "access.json" -> "access_json", "months/" -> "months" (t() splits on dots) */

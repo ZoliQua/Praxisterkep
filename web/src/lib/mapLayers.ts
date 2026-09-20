@@ -6,16 +6,17 @@
 import { useSyncExternalStore } from 'react';
 
 export type LayerKey =
-  | 'counties' | 'seats' | 'county' | 'jarasSeats' | 'towns' | 'jaras' | 'budapest';
+  | 'counties' | 'seats' | 'county' | 'jarasSeats' | 'towns' | 'jaras' | 'budapest'
+  | 'benefit';
 
 export const LAYER_KEYS: LayerKey[] = [
-  'counties', 'seats', 'county', 'jarasSeats', 'towns', 'jaras', 'budapest',
+  'counties', 'seats', 'county', 'jarasSeats', 'towns', 'jaras', 'budapest', 'benefit',
 ];
 
 /** what a layer does when neither the visitor nor the map says otherwise */
 const DEFAULTS: Record<LayerKey, boolean> = {
   counties: false, seats: true, county: false, jarasSeats: false,
-  towns: false, jaras: false, budapest: false,
+  towns: false, jaras: false, budapest: false, benefit: false,
 };
 
 export type LayerChoice = Partial<Record<LayerKey, boolean>>;

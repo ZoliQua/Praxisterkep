@@ -5,6 +5,25 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.20.0] — 2026-09-21
+
+### Hozzáadva
+- **Kedvezményezett települések réteg**: a 105/2015. (IV. 23.) Korm.
+  rendelet 2. és 3. melléklete alapján 1623 település státusza (1053
+  társadalmi-gazdasági és infrastrukturális szempontból kedvezményezett,
+  839 jelentős munkanélküliséggel sújtott, 394 átmenetileg
+  kedvezményezett). A térképeken kapcsolható réteg: az ilyen településen
+  lévő körzetek glóriát kapnak.
+- **Összevetés a távolság-szekcióban**: a kedvezményezett települések
+  körzeteiben a legközelebbi működő fogorvosi rendelő átlagosan 6,0
+  km-re van, másutt 3,0 km-re; a medián 6,2 km, illetve 0,8 km. A
+  távolságtáblázat új oszlopokat kapott (kedvezményezett-e, és milyen
+  jogcímen), így szűrhető és exportálható.
+- Új ETL-lépés: `etl/kedvezmenyezett.py` → `data/kedvezmenyezett.json`.
+  A rendelet egységes szerkezetű szövegét a Nemzeti Jogszabálytárból
+  tölti le, archiválja dátummal, és formátumváltáskor (túl kevés sor,
+  hiányzó melléklet) hangosan elhasal.
+
 ## [1.19.0] — 2026-09-20
 
 ### Hozzáadva

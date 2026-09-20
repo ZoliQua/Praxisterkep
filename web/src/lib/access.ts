@@ -5,6 +5,7 @@
 import { useEffect, useState } from 'react';
 import { t } from './i18n';
 import type { ColDef, Row } from './eesztTable';
+import { benefitLabel, benefitOf, type BenefitRaw } from './kedvezmenyezett';
 import type { PraxisKind } from '../types';
 
 export interface AccessDistrict {
@@ -92,11 +93,15 @@ export const ACCESS_COLUMNS: ColDef[] = [
   { key: 'nearestSettlement', labelKey: 'access.colNearest', type: 'text', visible: true },
   { key: 'sameSettlement', labelKey: 'access.colSameSettlement', type: 'bool', visible: true },
   { key: 'nearestId', labelKey: 'access.colNearestId', type: 'text', visible: false },
+  { key: 'benefit', labelKey: 'benefit.column', type: 'bool', visible: true },
+  { key: 'benefitDetail', labelKey: 'benefit.columnDetail', type: 'text', visible: false },
   { key: 'geoApprox', labelKey: 'eeszt.colGeoApprox', type: 'bool', visible: false },
 ];
 
 /** rows for the table and the map (the map colours by `type`) */
-export function accessRows(data: AccessRaw | null, kind: PraxisKind): Row[] {
+export function accessRows(
+  data: AccessRaw | null, kind: PraxisKind, benefit: BenefitRaw | null = null,
+): Row[] {
   if (!data) return [];
   return data.districts.filter((d) => d.kind === kind).map((d) => ({
     fin: d.id,
@@ -112,6 +117,8 @@ export function accessRows(data: AccessRaw | null, kind: PraxisKind): Row[] {
     sameSettlement: d.sameSettlement,
     nearestId: d.nearestId,
     geoApprox: d.geoApprox,
+    benefit: benefit ? Boolean(benefitOf(benefit, d.settlement, d.county)) : null,
+    benefitDetail: benefitLabel(benefitOf(benefit, d.settlement, d.county)) || null,
     lat: d.lat,
     lon: d.lon,
     unitCode: null,
@@ -207,4 +214,42 @@ export const COUNTY_ACCESS_COLUMNS: ColDef[] = [
 
 export function countyAccessRows(data: AccessRaw | null, kind: PraxisKind): Row[] {
   return countyAccess(data, kind).map((c) => ({ ...c }));
+}
+
+
+/* ---------------- beneficiary settlements ---------------- */
+
+export interface BenefitCompare {
+  group: 'benefit' | 'other';
+  districts: number;
+  meanKm: number;
+  medianKm: number;
+  beyond10: number;
+  population: number;
+}
+
+/** the same districts split by whether the decree lists their settlement */
+export function benefitCompare(
+  data: AccessRaw | null, kind: PraxisKind, benefit: BenefitRaw | null,
+): BenefitCompare[] {
+  if (!data || !benefit) return [];
+  const buckets: Record<'benefit' | 'other', AccessDistrict[]> = { benefit: [], other: [] };
+  for (const d of data.districts) {
+    if (d.kind !== kind) continue;
+    buckets[benefitOf(benefit, d.settlement, d.county) ? 'benefit' : 'other'].push(d);
+  }
+  return (['benefit', 'other'] as const)
+    .filter((key) => buckets[key].length)
+    .map((key) => {
+      const list = buckets[key];
+      const km = list.map((d) => d.km);
+      return {
+        group: key,
+        districts: list.length,
+        meanKm: Math.round((km.reduce((a, b) => a + b, 0) / km.length) * 10) / 10,
+        medianKm: Math.round(median(km) * 10) / 10,
+        beyond10: list.filter((d) => d.km >= 10).length,
+        population: list.reduce((a, d) => a + (d.population ?? 0), 0),
+      };
+    });
 }

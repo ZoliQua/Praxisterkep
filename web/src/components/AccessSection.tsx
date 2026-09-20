@@ -10,6 +10,8 @@ import {
   ACCESS_COLUMNS, BAND_COLORS, COUNTY_ACCESS_COLUMNS, accessRows, bandBreakdown,
   bandLabel, countyAccess, countyAccessRows, populationBeyond, useAccess,
 } from '../lib/access';
+import { benefitCompare } from '../lib/access';
+import { useBenefit } from '../lib/kedvezmenyezett';
 import { useAppStore } from '../store/useAppStore';
 import { DataTableModal } from './DataTableModal';
 import { EesztMap, type MapRow } from './EesztMap';
@@ -30,11 +32,16 @@ function detailRows(row: MapRow): [string, string][] {
 
 export function AccessSection() {
   const data = useAccess();
+  const benefit = useBenefit();
   const kind = useAppStore((s) => s.kind);
   const [open, setOpen] = useState<'districts' | 'counties' | null>(null);
   const [county, setCounty] = useState('');
 
-  const rows = useMemo(() => sortRows(accessRows(data, kind), 'km', 'desc'), [data, kind]);
+  const rows = useMemo(
+    () => sortRows(accessRows(data, kind, benefit), 'km', 'desc'),
+    [data, kind, benefit],
+  );
+  const compare = useMemo(() => benefitCompare(data, kind, benefit), [data, kind, benefit]);
   const bands = useMemo(() => bandBreakdown(data, kind), [data, kind]);
   const counties = useMemo(() => countyAccess(data, kind), [data, kind]);
   const countyRows = useMemo(() => countyAccessRows(data, kind), [data, kind]);
@@ -121,6 +128,38 @@ export function AccessSection() {
             people: formatNumber(selected.populationBeyond10),
           })}
         </p>
+      )}
+
+      {compare.length === 2 && (
+        <div className="benefit-compare">
+          <h4 className="extra-block__title">{t('benefit.compareTitle')}</h4>
+          <p className="section__explain">{t('benefit.compareExplain')}</p>
+          <table className="info-table">
+            <thead>
+              <tr>
+                <th />
+                <th className="is-num">{t('access.colDistricts')}</th>
+                <th className="is-num">{t('access.colMeanKm')}</th>
+                <th className="is-num">{t('access.colMedianKm')}</th>
+                <th className="is-num">{t('access.colBeyond10')}</th>
+                <th className="is-num">{t('access.colPopulation')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {compare.map((c) => (
+                <tr key={c.group}>
+                  <td>{t(`benefit.group.${c.group}`)}</td>
+                  <td className="is-num">{formatNumber(c.districts)}</td>
+                  <td className="is-num">{formatNumber(c.meanKm)} km</td>
+                  <td className="is-num">{formatNumber(c.medianKm)} km</td>
+                  <td className="is-num">{formatNumber(c.beyond10)}</td>
+                  <td className="is-num">{formatNumber(c.population)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p className="extra-note">{t('benefit.source')}</p>
+        </div>
       )}
 
       <div className="eeszt-actions">

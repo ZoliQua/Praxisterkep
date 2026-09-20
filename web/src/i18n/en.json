@@ -116,7 +116,8 @@
       "jarasSeats": "District seats",
       "towns": "Larger towns",
       "jaras": "District borders",
-      "budapest": "Budapest districts"
+      "budapest": "Budapest districts",
+      "benefit": "Beneficiary settlements"
     }
   },
   "search": {
@@ -881,7 +882,10 @@
       "counties_geojson": "County boundaries (OpenStreetMap).",
       "jaras_geojson": "District (járás) boundaries (OpenStreetMap).",
       "cities_geojson": "City points by rank: county seat, county-rank city, district seat, town above 20 000 residents.",
-      "budapest_geojson": "Budapest district boundaries (OpenStreetMap)."
+      "budapest_geojson": "Budapest district boundaries (OpenStreetMap).",
+      "providers_json": "Unified provider list: NEAK code and name, official company name, tax number, seat and the provider's whole portfolio.",
+      "operating_json": "Operating level: the licence, organisational unit and premises per praxis.",
+      "kedvezmenyezett_json": "Beneficiary settlements under annexes 2 and 3 of 105/2015. (IV. 23.) Korm. rendelet (socio-economic, unemployment and temporary status)."
     },
     "useHeading": "How to use them",
     "use1": "The files are static and versioned: a finished month stays in months/, while latest.json always points at the current one.",
@@ -969,5 +973,20 @@
       "crosscheck": "cross-check",
       "none": "no match"
     }
+  },
+  "benefit": {
+    "socio": "socio-economically and infrastructurally beneficiary",
+    "unemployment": "hit by significant unemployment",
+    "temporary": "beneficiary for the time being",
+    "column": "Beneficiary settlement",
+    "columnDetail": "Grounds of the status",
+    "layer": "Beneficiary settlements",
+    "compareTitle": "Beneficiary settlements compared",
+    "compareExplain": "The same districts in two groups: those whose seat is a beneficiary settlement under 105/2015. (IV. 23.) Korm. rendelet, and those whose is not. The distance is the same measure as above: a straight line to the nearest operating surgery.",
+    "group": {
+      "benefit": "in a beneficiary settlement",
+      "other": "in other settlements"
+    },
+    "source": "Source: annexes 2 and 3 of 105/2015. (IV. 23.) Korm. rendelet (Nemzeti Jogszabálytár), matched by the settlement name and county the decree uses."
   }
 }

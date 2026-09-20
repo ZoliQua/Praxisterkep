@@ -1531,3 +1531,5 @@ a:hover { text-decoration: underline; }
   background: var(--bg-raised); border-radius: 0 var(--radius) var(--radius) 0;
   font-size: 13.5px; color: var(--ink-dim);
 }
+.benefit-compare { margin: 18px 0; }
+.benefit-compare .info-table { margin-top: 8px; }
