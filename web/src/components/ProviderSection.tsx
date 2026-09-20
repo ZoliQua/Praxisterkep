@@ -8,6 +8,7 @@ import { sortRows } from '../lib/eesztTable';
 import {
   PROVIDER_COLUMNS, biggestProviders, portfolioSpread, providerRows, useProviders,
 } from '../lib/providers';
+import { OPERATING_COLUMNS, operatingRows, useOperating } from '../lib/operating';
 import { DataTableModal } from './DataTableModal';
 import { renderExtraCell } from './EesztCells';
 
@@ -17,11 +18,16 @@ const SPREAD_COLOR: Record<string, string> = {
 
 export function ProviderSection({ part }: { part: number }) {
   const data = useProviders();
-  const [open, setOpen] = useState(false);
+  const operating = useOperating();
+  const [open, setOpen] = useState<'providers' | 'operating' | null>(null);
 
   const rows = useMemo(() => sortRows(providerRows(data), 'total', 'desc'), [data]);
   const spread = useMemo(() => portfolioSpread(data), [data]);
   const biggest = useMemo(() => biggestProviders(data, 5), [data]);
+  const opRows = useMemo(
+    () => sortRows(operatingRows(operating), 'settlement', 'asc'),
+    [operating],
+  );
 
   if (!data || rows.length === 0) return null;
   const st = data.stats;
@@ -31,6 +37,7 @@ export function ProviderSection({ part }: { part: number }) {
       <h3 className="section__subheading" id="eeszt-providers">
         {t('providers.part', { n: part })}
       </h3>
+      <h4 className="extra-block__title">{t('providers.levelProvider')}</h4>
       <p className="section__explain">{t('providers.explain')}</p>
 
       <div className="eeszt-coverage">
@@ -70,15 +77,61 @@ export function ProviderSection({ part }: { part: number }) {
       </div>
 
       <div className="eeszt-actions">
-        <button className="data-btn data-btn--accent" onClick={() => setOpen(true)}>
+        <button className="data-btn data-btn--accent" onClick={() => setOpen('providers')}>
           {t('providers.openTable', { n: formatNumber(rows.length) })}
         </button>
       </div>
       <p className="extra-note">{t('providers.note', { asOf: data.asOf })}</p>
 
+      {operating && opRows.length > 0 && (
+        <>
+          <h4 className="extra-block__title" id="eeszt-operating">
+            {t('operating.level')}
+          </h4>
+          <p className="section__explain">{t('operating.explain')}</p>
+          <div className="extra-stats">
+            <span className="extra-stats__item">
+              <strong>{formatNumber(operating.stats.praxes)}</strong> {t('operating.praxes')}
+            </span>
+            <span className="extra-stats__item">
+              <strong>{formatNumber(operating.stats.fromCode)}</strong> {t('operating.fromCode')}
+            </span>
+            <span className="extra-stats__item">
+              <strong>{formatNumber(operating.stats.fromCrosscheck)}</strong>
+              {' '}{t('operating.fromCrosscheck')}
+            </span>
+            <span className="extra-stats__item">
+              <strong>{formatNumber(operating.stats.multiSite)}</strong>
+              {' '}{t('operating.multiSite')}
+            </span>
+            <span className="extra-stats__item">
+              <strong>{formatNumber(operating.stats.noLicence)}</strong>
+              {' '}{t('operating.noLicenceCount')}
+            </span>
+          </div>
+          <div className="eeszt-actions">
+            <button className="data-btn data-btn--accent" onClick={() => setOpen('operating')}>
+              {t('operating.openTable', { n: formatNumber(opRows.length) })}
+            </button>
+          </div>
+          <p className="extra-note">{t('operating.note')}</p>
+          <DataTableModal
+            open={open === 'operating'}
+            onClose={() => setOpen((cur) => (cur === 'operating' ? null : cur))}
+            title={t('operating.tableTitle')}
+            subtitle={t('operating.tableSubtitle', { asOf: operating.asOf })}
+            rows={opRows}
+            columns={OPERATING_COLUMNS}
+            filename="praxisterkep-mukodesi-szint"
+            renderCell={renderExtraCell}
+            countUnit="rows"
+          />
+        </>
+      )}
+
       <DataTableModal
-        open={open}
-        onClose={() => setOpen(false)}
+        open={open === 'providers'}
+        onClose={() => setOpen((cur) => (cur === 'providers' ? null : cur))}
         title={t('providers.tableTitle')}
         subtitle={t('providers.tableSubtitle', { asOf: data.asOf })}
         rows={rows}

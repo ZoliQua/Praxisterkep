@@ -916,6 +916,45 @@
       "name": "company name",
       "none": "not identified"
     },
-    "note": "The list holds only providers NEAK itself publishes (through a service where the registry names the contracted physician). The official name and the seat come from the EESZT provider register ({asOf}); company officers appear in none of the registers used here, so they are not shown."
+    "note": "The list holds only providers NEAK itself publishes (through a service where the registry names the contracted physician). The official name and the seat come from the EESZT provider register ({asOf}); company officers appear in none of the registers used here, so they are not shown.",
+    "levelProvider": "1. Provider level"
+  },
+  "operating": {
+    "level": "2. Operating level",
+    "explain": "One row per praxis: the operating licence it works under, in which organisational unit and at which premises. The licence comes from the code chain where that worked; where it did not, the cross-check's accepted suggestion fills in (including the eleven districts whose own unit holds the licence at their headquarters address). Dissolved and vacant districts are absent: with no contracted physician there is no operating licence to assign.",
+    "praxes": "praxes with a contracted physician",
+    "fromCode": "licence from the code chain",
+    "fromCrosscheck": "from the cross-check",
+    "multiSite": "praxes with premises in more than one place",
+    "noLicenceCount": "without a licence (NO MATCH)",
+    "openTable": "Operating-level table ({n} rows)",
+    "tableTitle": "Operating level — praxes and their operating licences",
+    "tableSubtitle": "Only praxes with a contracted physician · EESZT as of {asOf}",
+    "note": "Dissolved and vacant districts are left out on purpose. Where a praxis has several organisational units and premises, every NNGYK9 is printed with its own address. Where no usable licence was found the field reads “NINCS TALÁLAT”.",
+    "noMatch": "NINCS TALÁLAT",
+    "colFin": "FIN code (9 digits)",
+    "colGroup": "Type of care",
+    "colProvider": "Healthcare provider (name in the company register)",
+    "colTax": "Tax number",
+    "colNeakCode": "NEAK identifier (4 characters)",
+    "colEuszolgId": "EESZT provider id (6 digits)",
+    "colUnitCount": "Number of NNGYK9 ids",
+    "colUnits": "NNGYK9 ids",
+    "colLicences": "Operating licence: NNGYK9 → premises",
+    "colLicenceCount": "Licences",
+    "colNeakSettlement": "Settlement per NEAK",
+    "colSource": "Source of the licence",
+    "group": {
+      "dental": "dental district",
+      "gp": "GP district",
+      "oncall": "dental on-call",
+      "university": "university primary care",
+      "specialist": "dental specialist care"
+    },
+    "source": {
+      "code": "code chain",
+      "crosscheck": "cross-check",
+      "none": "no match"
+    }
   }
 }

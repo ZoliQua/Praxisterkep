@@ -5,6 +5,22 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.18.0] — 2026-09-20
+
+### Hozzáadva
+- Az „Egységes NEAK lista” két részre bomlott: **1. Szolgáltató szint**
+  (a korábbi tábla) és **2. Működési szint** (új).
+- A működési szint praxisonként egy sor: 9 jegyű FIN-kód, a szolgáltató
+  cégjegyzék szerinti neve, törzsszám/adószám, a NEAK 4 jegyű és az EESZT
+  6 jegyű azonosítója, az NNGYK9 azonosítók száma, és a működési
+  engedély NNGYK9-enként, saját telephellyel és címmel. 8291 praxis: 7873
+  engedély a kódláncból, 412 a keresztellenőrzés elfogadott javaslataiból
+  (beleértve a 11 kézi esetet), 6 sornál „NINCS TALÁLAT”. 34 praxis több
+  telephelyen működik — ott minden NNGYK9-hez külön cím tartozik.
+- A megszűnt és betöltetlen körzetek szándékosan nem szerepelnek a
+  működési szinten; ezt a szekció leírása is kiírja.
+- Új ETL-lépés: `etl/operating.py` → `data/operating.json`.
+
 ## [1.17.0] — 2026-09-20
 
 ### Hozzáadva

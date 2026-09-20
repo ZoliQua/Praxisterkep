@@ -25,6 +25,7 @@ const optional = [
   [join(repo, 'data', 'crosscheck.json'), join(out, 'crosscheck.json')],
   [join(repo, 'data', 'access.json'), join(out, 'access.json')],
   [join(repo, 'data', 'providers.json'), join(out, 'providers.json')],
+  [join(repo, 'data', 'operating.json'), join(out, 'operating.json')],
 ];
 
 mkdirSync(out, { recursive: true });

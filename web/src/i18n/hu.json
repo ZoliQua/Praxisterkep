@@ -916,6 +916,45 @@
       "name": "cégnév",
       "none": "nem azonosított"
     },
-    "note": "A lista csak olyan szolgáltatót tartalmaz, amelyet a NEAK maga is közöl (szerződött orvost megnevező szolgálatnál). A hivatalos cégnév és a székhely az EESZT szolgáltatói törzséből származik ({asOf}); cégjegyzéki ügyvezető egyik felhasznált nyilvántartásban sincs benne, ezért itt nem szerepel."
+    "note": "A lista csak olyan szolgáltatót tartalmaz, amelyet a NEAK maga is közöl (szerződött orvost megnevező szolgálatnál). A hivatalos cégnév és a székhely az EESZT szolgáltatói törzséből származik ({asOf}); cégjegyzéki ügyvezető egyik felhasznált nyilvántartásban sincs benne, ezért itt nem szerepel.",
+    "levelProvider": "1. Szolgáltató szint"
+  },
+  "operating": {
+    "level": "2. Működési szint",
+    "explain": "Praxisonként egy sor: melyik működési engedély alatt, melyik szervezeti egységben és melyik telephelyen dolgozik. Az engedélyt ott vesszük a kódláncból, ahol az működött; ahol nem, ott a keresztellenőrzés elfogadott javaslatát használjuk (beleértve azt a 11 körzetet, ahol a saját egységének van engedélye a székhelycímen). A megszűnt és betöltetlen körzetek nem szerepelnek: ahol nincs szerződött orvos, ott működési engedélyt sem rendelünk hozzá.",
+    "praxes": "praxis szerződött orvossal",
+    "fromCode": "engedély kódláncból",
+    "fromCrosscheck": "keresztellenőrzésből",
+    "multiSite": "praxis több telephelyen",
+    "noLicenceCount": "engedély nélkül (NINCS TALÁLAT)",
+    "openTable": "Működési szint táblázat ({n} sor)",
+    "tableTitle": "Működési szint — praxisok és működési engedélyeik",
+    "tableSubtitle": "Csak szerződött orvossal működő praxisok · EESZT adatállapot: {asOf}",
+    "note": "A megszűnt és betöltetlen körzetek szándékosan hiányoznak. Ahol egy praxishoz több szervezeti egység és több telephely tartozik, mindegyik NNGYK9-hez a saját címe van kiírva. Ahol nincs értelmezhető engedély, a mező „NINCS TALÁLAT”.",
+    "noMatch": "NINCS TALÁLAT",
+    "colFin": "FIN-kód (9 jegyű)",
+    "colGroup": "Ellátás típusa",
+    "colProvider": "Egészségügyi szolgáltató (cégjegyzék szerinti név)",
+    "colTax": "Törzsszám / adószám",
+    "colNeakCode": "NEAK azonosító (4 jegyű)",
+    "colEuszolgId": "EESZT szolgáltató-azonosító (6 jegyű)",
+    "colUnitCount": "NNGYK9 azonosítók száma",
+    "colUnits": "NNGYK9 azonosítók",
+    "colLicences": "Működési engedély: NNGYK9 → telephely",
+    "colLicenceCount": "Engedélyek száma",
+    "colNeakSettlement": "NEAK szerinti település",
+    "colSource": "Engedély forrása",
+    "group": {
+      "dental": "fogorvosi körzet",
+      "gp": "háziorvosi körzet",
+      "oncall": "fogorvosi ügyelet",
+      "university": "egyetemi alapellátás",
+      "specialist": "fogászati szakellátás"
+    },
+    "source": {
+      "code": "kódlánc",
+      "crosscheck": "keresztellenőrzés",
+      "none": "nincs találat"
+    }
   }
 }
