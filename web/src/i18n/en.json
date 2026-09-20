@@ -877,5 +877,45 @@
     "sources": "Sources and change history:",
     "rawArchive": "raw source files in the repository",
     "changelog": "changelog"
+  },
+  "providers": {
+    "part": "{n}. Unified NEAK provider list",
+    "explain": "One row per contracted provider. The NEAK list identifies them by a short trade name and a NEAK code; the official company name, the tax number and the registered seat come from the EESZT provider register, and the tax number in the financing register links the two. The result shows in one place who runs what: how many dental and GP districts, on-call and specialist services, in how many settlements.",
+    "total": "contracted providers",
+    "spread": {
+      "1": "runs one service",
+      "2": "two",
+      "3-5": "three to five",
+      "6+": "six or more"
+    },
+    "identified": "providers identified in the EESZT provider register",
+    "byTax": "of those by tax number (deterministically)",
+    "services": "services in total",
+    "biggest": "services at the largest provider",
+    "openTable": "Provider table ({n} rows)",
+    "tableTitle": "Unified NEAK provider list",
+    "tableSubtitle": "NEAK code and name, official company name, tax number, seat and portfolio · EESZT as of {asOf}",
+    "colNeakName": "Name per NEAK",
+    "colOfficialName": "Official company name (EESZT)",
+    "colTax": "Tax number (8 digits)",
+    "colSeat": "Registered seat",
+    "colSeatCounty": "County of the seat",
+    "colTotal": "Services in total",
+    "colDental": "Dental districts",
+    "colGp": "GP districts",
+    "colSpecialist": "Specialist services",
+    "colOncall": "On-call services",
+    "colUniversity": "University primary care",
+    "colCounties": "Counties",
+    "colSettlements": "Settlements",
+    "colEuszolgId": "EESZT provider id",
+    "colBasis": "Identified by",
+    "basis": {
+      "tax": "tax number",
+      "taxAndName": "tax number and company name",
+      "name": "company name",
+      "none": "not identified"
+    },
+    "note": "The list holds only providers NEAK itself publishes (through a service where the registry names the contracted physician). The official name and the seat come from the EESZT provider register ({asOf}); company officers appear in none of the registers used here, so they are not shown."
   }
 }

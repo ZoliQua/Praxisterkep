@@ -5,6 +5,26 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.17.0] — 2026-09-20
+
+### Hozzáadva
+- **4. Egységes NEAK lista** (háziorvosi ágon 3.): egy sor = egy szerződött
+  szolgáltató. A NEAK rövid neve és kódja mellé odakerül a **hivatalos
+  cégnév, az adószám és a székhely** az EESZT szolgáltatói törzséből,
+  valamint a teljes portfólió: hány fogorvosi és háziorvosi körzet,
+  ügyelet, egyetemi alapellátás és szakellátás, hány vármegyében és
+  településen. 6990 szolgáltatóból 6979 azonosított (6908 adószám
+  alapján, determinisztikusan; 71 cégnév alapján).
+- Új ETL-lépés: `etl/providers.py` → `data/providers.json`, saját őrrel
+  (nincs duplikált NEAK kód, a portfólió számai összeadódnak, azonosítás
+  csak szolgáltató-azonosítóval, és a táblázat nem fogad be ismeretlen
+  mezőt — például cégjegyzéki tisztségviselőt).
+
+### Megjegyzés
+- A cégjegyzéki **ügyvezető** egyik felhasznált nyilvántartásban sem
+  szerepel (sem a NEAK-listákban, sem az EESZT törzsekben, sem az EU
+  adóalany-ellenőrzőben), így ez a mező egyelőre nincs a listában.
+
 ## [1.16.0] — 2026-09-20
 
 ### Javítva

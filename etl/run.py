@@ -147,6 +147,15 @@ def main() -> None:
             encoding="utf-8")
         print(f"      wrote {crosscheck.OUT} ({len(xcheck['records'])} records, "
               f"{len(xcheck['eesztOnly'])} EESZT-only)")
+
+        # one row per contracted provider, with its official name and seat
+        import providers
+        prov_out = providers.build(build_eeszt.latest_date())
+        providers.OUT.write_text(
+            json.dumps(prov_out, ensure_ascii=False, separators=(",", ":")) + "\n",
+            encoding="utf-8")
+        print(f"      wrote {providers.OUT} ({prov_out['stats']['providers']} providers, "
+              f"{prov_out['stats']['identified']} identified)")
     except Exception as exc:  # noqa: BLE001 — supplement must not block release
         print(f"      WARNING: EESZT supplement skipped: {exc}")
 

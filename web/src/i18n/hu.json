@@ -877,5 +877,45 @@
     "sources": "Források és változástörténet:",
     "rawArchive": "nyers forrásfájlok a repóban",
     "changelog": "változásnapló"
+  },
+  "providers": {
+    "part": "{n}. Egységes NEAK lista",
+    "explain": "Egy sor = egy szerződött szolgáltató. A NEAK listája rövid névvel és NEAK kóddal azonosítja őket; a hivatalos cégnevet, az adószámot és a székhelyet az EESZT szolgáltatói törzséből vesszük, a kettőt pedig a finanszírozási törzsben szereplő adószám köti össze. Így egy helyen látszik, ki mit üzemeltet: hány fogorvosi és háziorvosi körzetet, ügyeletet és szakellátást, hány településen.",
+    "total": "szerződött szolgáltató",
+    "spread": {
+      "1": "egy szolgálatot üzemeltet",
+      "2": "kettőt",
+      "3-5": "hármat–ötöt",
+      "6+": "hatot vagy többet"
+    },
+    "identified": "szolgáltatót azonosítottunk az EESZT szolgáltatói törzsében",
+    "byTax": "ebből adószám alapján (determinisztikusan)",
+    "services": "szolgálat összesen",
+    "biggest": "szolgálat a legnagyobb szolgáltatónál",
+    "openTable": "Szolgáltatói táblázat ({n} sor)",
+    "tableTitle": "Egységes NEAK szolgáltatói lista",
+    "tableSubtitle": "NEAK kód és név, hivatalos cégnév, adószám, székhely és portfólió · EESZT adatállapot: {asOf}",
+    "colNeakName": "NEAK szerinti név",
+    "colOfficialName": "Hivatalos cégnév (EESZT)",
+    "colTax": "Adószám (8 jegy)",
+    "colSeat": "Székhely",
+    "colSeatCounty": "Székhely vármegyéje",
+    "colTotal": "Szolgálat összesen",
+    "colDental": "Fogorvosi körzet",
+    "colGp": "Háziorvosi körzet",
+    "colSpecialist": "Szakellátás",
+    "colOncall": "Ügyelet",
+    "colUniversity": "Egyetemi alapellátás",
+    "colCounties": "Vármegyék száma",
+    "colSettlements": "Települések száma",
+    "colEuszolgId": "EESZT szolgáltató-azonosító",
+    "colBasis": "Azonosítás alapja",
+    "basis": {
+      "tax": "adószám",
+      "taxAndName": "adószám és cégnév",
+      "name": "cégnév",
+      "none": "nem azonosított"
+    },
+    "note": "A lista csak olyan szolgáltatót tartalmaz, amelyet a NEAK maga is közöl (szerződött orvost megnevező szolgálatnál). A hivatalos cégnév és a székhely az EESZT szolgáltatói törzséből származik ({asOf}); cégjegyzéki ügyvezető egyik felhasznált nyilvántartásban sincs benne, ezért itt nem szerepel."
   }
 }
