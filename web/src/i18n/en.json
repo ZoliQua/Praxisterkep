@@ -768,6 +768,35 @@
       "provider": "The provider name matches an EESZT provider by {overlap}, and that provider holds a {profession} licence in the settlement ({unit}) — but the addresses differ.",
       "noneInSettlement": "The settlement has {n} same-profession EESZT licences, none of them at the NEAK address or street; the provider name gave no hit either.",
       "noneAtAll": "The settlement has no same-profession EESZT licence at all — the surgery cannot be identified by address or by name."
+    },
+    "openManual": "Needs a human decision ({n})",
+    "manualTitle": "Districts that need a human decision",
+    "manualSubtitle": "Their own organisational unit does hold a licence at the NEAK address, yet no automatic pairing was made",
+    "colLicenceCount": "Candidate licences",
+    "colWhy": "Why the automation did not choose",
+    "colSuggestedLicence": "Suggested licence",
+    "colOtherSites": "The other premises",
+    "colSuggestion": "Recommendation",
+    "colInArchive": "Was in an earlier NEAK list",
+    "colLastMonth": "Last seen (month)",
+    "colLastStatus": "Last status",
+    "colArchiveSettlement": "Settlement per the archive",
+    "colArchiveMonths": "Archived months",
+    "colHistory": "NEAK history",
+    "status": {
+      "vacant": "vacant",
+      "dissolved": "dissolved",
+      "filled": "filled",
+      "vacant_longterm": "long-term vacant"
+    },
+    "manual": {
+      "why": "The code belongs to {units} organisational units with {places} different premises, so the ambiguity rule made the automatic join pick none of them.",
+      "pick": "At the district's headquarters address ({address}) its own unit {unit} holds a {profession} licence: {licence}. The other {n} licences are the same service's surgeries in other settlements. Recommended pairing: {licence}.",
+      "decide": "Several licences sit at the NEAK address — a human decision is needed."
+    },
+    "history": {
+      "found": "It was in earlier NEAK lists: {months} archived months between {first} and {last}, last seen as “{status}” ({settlement}). Most likely the remnant of a discontinued district that EESZT still lists as financed.",
+      "never": "It has never appeared in an archived NEAK list since {from} — probably not a territorial district (it may be an on-call, school or institutional service)."
     }
   }
 }

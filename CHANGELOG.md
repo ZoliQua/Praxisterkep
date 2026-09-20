@@ -5,6 +5,23 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.12.0] — 2026-09-20
+
+### Hozzáadva
+- „Kézi ellenőrzésre javasolt” táblázat a keresztellenőrzésben: az a 11
+  fogorvosi körzet, ahol a saját szervezeti egységének van engedélye a NEAK
+  szerinti címen, mégsem született automatikus párosítás. Soronként
+  megmutatja az összes szóba jövő engedélyt, hogy miért nem választott az
+  automatika, és konkrét javaslatot ad: mindegyiknél a székhelycímen lévő
+  engedély a helyes pár, a többi ugyanannak a körzetnek a másik
+  településen lévő rendelője.
+- A „Csak az EESZT-ben szerepel” táblázat összeveti a kódokat a 38
+  archivált havi NEAK-pillanatképpel (2017-10 óta): új oszlopok mondják meg,
+  szerepelt-e korábban a listában, mikor láttuk utoljára, milyen
+  állapotban és melyik településen. 91 szolgálatból 10 ilyen
+  „maradány” (7 betöltetlen, 3 betöltött körzet volt), 81-et pedig
+  egyetlen archivált NEAK-lista sem tartalmazott.
+
 ## [1.11.0] — 2026-09-20
 
 ### Hozzáadva

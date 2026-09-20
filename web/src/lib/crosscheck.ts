@@ -22,6 +22,10 @@ export interface Candidate {
   nameOverlap?: number;
 }
 
+export interface OwnLicence extends Candidate {
+  atNeakSite: boolean;
+}
+
 export interface CrosscheckRecord {
   id: string;
   source: string;           // district-dental | district-gp | service-<group>
@@ -37,6 +41,9 @@ export interface CrosscheckRecord {
   candidateCount: number;
   settlementLicences: number;
   provider?: string;
+  /** only on the manual-review records: every licence of its own units */
+  ownLicences?: OwnLicence[];
+  suggestion?: string;
 }
 
 export interface EesztOnlyRow {
@@ -49,6 +56,12 @@ export interface EesztOnlyRow {
   address: string;
   profession: string;
   licenceId: string;
+  /** where the code shows up in the archived NEAK snapshots, if at all */
+  neakFirstMonth?: string;
+  neakLastMonth?: string;
+  neakMonths?: number;
+  neakLastStatus?: string;
+  neakSettlement?: string;
 }
 
 export interface CrosscheckRaw {
@@ -58,6 +71,7 @@ export interface CrosscheckRaw {
   professions: Record<string, string>;
   verdicts: Verdict[];
   stats: Record<string, Record<string, number>>;
+  archive: { from: string; to: string; months: number };
   records: CrosscheckRecord[];
   eesztOnly: EesztOnlyRow[];
 }
@@ -255,6 +269,12 @@ export const EESZT_ONLY_COLUMNS: ColDef[] = [
   { key: 'unitCode', labelKey: 'eeszt.colUnit', type: 'text', visible: true },
   { key: 'licenceId', labelKey: 'eeszt.colLicenceId', type: 'text', visible: false },
   { key: 'institution', labelKey: 'eeszt.institutionCode', type: 'text', visible: false },
+  { key: 'inNeakArchive', labelKey: 'crosscheck.colInArchive', type: 'bool', visible: true },
+  { key: 'neakLastMonth', labelKey: 'crosscheck.colLastMonth', type: 'text', visible: true },
+  { key: 'neakLastStatus', labelKey: 'crosscheck.colLastStatus', type: 'enum', visible: true },
+  { key: 'neakSettlement', labelKey: 'crosscheck.colArchiveSettlement', type: 'text', visible: false },
+  { key: 'neakMonths', labelKey: 'crosscheck.colArchiveMonths', type: 'number', visible: false },
+  { key: 'history', labelKey: 'crosscheck.colHistory', type: 'text', visible: true },
 ];
 
 export function eesztOnlyRows(data: CrosscheckRaw | null, family: 'dental' | 'gp'): Row[] {
@@ -270,6 +290,12 @@ export function eesztOnlyRows(data: CrosscheckRaw | null, family: 'dental' | 'gp
     unitCode: r.unit || null,
     licenceId: r.licenceId || null,
     institution: r.institution || null,
+    inNeakArchive: Boolean(r.neakLastMonth),
+    neakLastMonth: r.neakLastMonth ?? null,
+    neakLastStatus: r.neakLastStatus ? t(`crosscheck.status.${r.neakLastStatus}`) : null,
+    neakSettlement: r.neakSettlement ?? null,
+    neakMonths: r.neakMonths ?? null,
+    history: historyText(data, r),
   }));
 }
 
@@ -286,4 +312,76 @@ export function verdictBreakdown(
   return data.verdicts
     .filter((v) => counts.has(v))
     .map((v) => ({ verdict: v, n: counts.get(v) ?? 0 }));
+}
+
+/* ---------------- the records that need a human decision ---------------- */
+
+export const MANUAL_COLUMNS: ColDef[] = [
+  { key: 'fin', labelKey: 'crosscheck.colCode', type: 'text', visible: true },
+  { key: 'source', labelKey: 'crosscheck.colSource', type: 'enum', visible: true },
+  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+  { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: false },
+  { key: 'address', labelKey: 'crosscheck.colNeakAddress', type: 'text', visible: true },
+  { key: 'units', labelKey: 'crosscheck.colOwnUnit', type: 'text', visible: true },
+  { key: 'licenceCount', labelKey: 'crosscheck.colLicenceCount', type: 'number', visible: true },
+  { key: 'why', labelKey: 'crosscheck.colWhy', type: 'text', visible: true },
+  { key: 'licenceId', labelKey: 'crosscheck.colSuggestedLicence', type: 'text', visible: true },
+  { key: 'unitCode', labelKey: 'crosscheck.colSuggestedUnit', type: 'text', visible: true },
+  { key: 'otherSites', labelKey: 'crosscheck.colOtherSites', type: 'text', visible: true },
+  { key: 'suggestion', labelKey: 'crosscheck.colSuggestion', type: 'text', visible: true },
+];
+
+/** the records where the automation had a licence of its own unit in hand but
+ *  refused to choose — one row each, with what to decide */
+export function manualReviewRows(
+  data: CrosscheckRaw | null, family: 'dental' | 'gp',
+): Row[] {
+  if (!data) return [];
+  return data.records
+    .filter((r) => r.family === family && r.verdict === 'ownUnitSameProfession')
+    .map((rec) => {
+      const own = rec.ownLicences ?? [];
+      const best = own.find((l) => l.licenceId === rec.suggestion) ?? own.find((l) => l.atNeakSite);
+      const others = own.filter((l) => l !== best);
+      const places = [...new Set(others.map((l) => `${l.settlement}, ${l.address}`))];
+      return {
+        fin: rec.id,
+        source: sourceLabel(rec.source),
+        settlement: rec.settlement,
+        county: rec.county,
+        address: rec.address,
+        units: rec.units,
+        licenceCount: own.length,
+        why: t('crosscheck.manual.why', {
+          units: rec.units.split(',').length,
+          places: new Set(own.map((l) => `${l.settlement}|${l.address}`)).size,
+        }),
+        licenceId: best?.licenceId ?? null,
+        unitCode: best?.unit ?? null,
+        otherSites: places.join(' · ') || null,
+        suggestion: best
+          ? t('crosscheck.manual.pick', {
+            licence: best.licenceId,
+            unit: best.unit,
+            profession: profession(data, best.profession),
+            address: `${best.settlement}, ${best.address}`,
+            n: others.length,
+          })
+          : t('crosscheck.manual.decide'),
+      };
+    });
+}
+
+/** the sentence about what the NEAK archive knows of an EESZT-only service */
+export function historyText(data: CrosscheckRaw, row: EesztOnlyRow): string {
+  if (!row.neakLastMonth) {
+    return t('crosscheck.history.never', { from: data.archive.from });
+  }
+  return t('crosscheck.history.found', {
+    months: row.neakMonths ?? 0,
+    first: row.neakFirstMonth ?? '',
+    last: row.neakLastMonth ?? '',
+    status: t(`crosscheck.status.${row.neakLastStatus}`),
+    settlement: row.neakSettlement ?? '',
+  });
 }

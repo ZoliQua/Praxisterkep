@@ -768,6 +768,35 @@
       "provider": "A NEAK szerinti szolgáltató neve {overlap}-ban egyezik egy EESZT-szolgáltatóval, akinek a településen van {profession} engedélye ({unit}) — a címek viszont nem egyeznek.",
       "noneInSettlement": "A településen {n} azonos szakmájú EESZT-engedély van, de egyik sem a NEAK szerinti címen vagy utcában; a szolgáltató neve sem hozott találatot.",
       "noneAtAll": "A településen egyetlen azonos szakmájú EESZT-engedély sincs — a rendelő sem cím, sem név alapján nem azonosítható."
+    },
+    "openManual": "Kézi ellenőrzésre javasolt ({n})",
+    "manualTitle": "Kézi ellenőrzésre javasolt körzetek",
+    "manualSubtitle": "Ahol a saját szervezeti egységének van engedélye a NEAK szerinti címen, mégsem született automatikus párosítás",
+    "colLicenceCount": "Szóba jövő engedély",
+    "colWhy": "Miért nem választott az automatika",
+    "colSuggestedLicence": "Javasolt engedély",
+    "colOtherSites": "A többi telephely",
+    "colSuggestion": "Javaslat",
+    "colInArchive": "Szerepelt korábbi NEAK-listában",
+    "colLastMonth": "Utoljára (hónap)",
+    "colLastStatus": "Utolsó állapot",
+    "colArchiveSettlement": "Archívum szerinti település",
+    "colArchiveMonths": "Hány archivált hónapban",
+    "colHistory": "NEAK-előzmény",
+    "status": {
+      "vacant": "betöltetlen",
+      "dissolved": "megszűnt",
+      "filled": "betöltött",
+      "vacant_longterm": "tartósan betöltetlen"
+    },
+    "manual": {
+      "why": "A kódhoz {units} szervezeti egység tartozik, {places} különböző telephellyel, ezért az automatikus illesztés — a kétértelműségi szabály miatt — egyiket sem választotta.",
+      "pick": "A körzet székhelycímén ({address}) a saját {unit} szervezeti egységének van {profession} engedélye: {licence}. A további {n} engedély ugyanennek a szolgálatnak a másik településen lévő rendelője. Javasolt párosítás: {licence}.",
+      "decide": "Több engedély is a NEAK szerinti címen van — kézi döntés szükséges."
+    },
+    "history": {
+      "found": "Szerepelt a NEAK korábbi listáiban: {months} archivált hónapban, {first} és {last} között, utoljára „{status}” állapotban ({settlement}). Valószínűleg kivezetett körzet maradánya, amit az EESZT még finanszírozottként tart nyilván.",
+      "never": "Egyetlen archivált NEAK-listában sem szerepelt {from} óta — feltehően nem területi körzet (ügyeleti, iskolai vagy intézményi szolgálat lehet)."
     }
   }
 }

@@ -79,6 +79,42 @@ def name_tokens(name: str) -> set[str]:
     return {w for w in re.split(r"[^a-z0-9]+", fold(name)) if len(w) >= 3}
 
 
+def neak_history(codes: set[str]) -> dict[str, dict]:
+    """Where a code shows up in the archived monthly NEAK snapshots.
+
+    A service EESZT still finances but the current NEAK list no longer
+    carries may be the remnant of a district that went vacant or was
+    dissolved — the archive says whether it was ever published, when it was
+    last seen and with what status.
+    """
+    seen: dict[str, dict] = {}
+    months = sorted({p.parent.name for p in (ROOT / "data").glob("20*/*.json")})
+    for month in months:
+        for kind in ("dental", "gp"):
+            path = ROOT / "data" / month / f"{kind}.json"
+            if not path.exists():
+                continue
+            snap = json.loads(path.read_text(encoding="utf-8"))
+            rows = [(p["id"], p.get("status", "vacant"),
+                     (p.get("sites") or [{}])[0].get("settlement", ""))
+                    for p in snap.get("praxes", [])]
+            rows += [(p["id"], "filled", p.get("settlement", ""))
+                     for p in snap.get("filledPraxes", [])]
+            for code, status, settlement in rows:
+                if code not in codes:
+                    continue
+                entry = seen.setdefault(code, {
+                    "firstMonth": month, "lastMonth": month, "months": 0,
+                    "lastStatus": status, "settlement": settlement, "kind": kind,
+                })
+                entry["lastMonth"] = month
+                entry["lastStatus"] = status
+                entry["months"] += 1
+                if settlement:
+                    entry["settlement"] = settlement
+    return seen
+
+
 def build(date: str) -> dict:
     ex, eng = load("euszolg_engedely", date)
     fx, fin = load("neak_finszolg", date)
@@ -93,8 +129,10 @@ def build(date: str) -> dict:
         by_street[(key[0], key[1])].append(r)
         by_settlement[(key[0], (r[ex["SZAKMA_KOD"]] or "")[:2])] += 1
     lic_by_provider: dict[str, list] = collections.defaultdict(list)
+    lic_by_unit: dict[str, list] = collections.defaultdict(list)
     for r in eng:
         lic_by_provider[r[ex["EUSZOLG_AZONOSITO"]]].append(r)
+        lic_by_unit[r[ex["SZERVEZETI_EGYSEG_KOD"]]].append(r)
 
     # provider names, indexed by their tokens so a rename or a suffix change
     # does not hide the provider
@@ -201,6 +239,21 @@ def build(date: str) -> dict:
         }
         if entry["named"] and entry.get("provider"):
             record["provider"] = entry["provider"]
+        if verdict == "ownUnitSameProfession":
+            # the automation refused to choose; list what it had to choose
+            # between, and mark the premises that is the NEAK headquarters
+            own_lics = []
+            for unit in sorted(own):
+                for lic in lic_by_unit.get(unit, []):
+                    if not (lic[ex["SZAKMA_KOD"]] or "").startswith(family):
+                        continue
+                    same_site = address_key(lic[ex["TELEPHELY_TELEPULES"]],
+                                            lic[ex["TELEPHELY_CIM"]]) == key
+                    own_lics.append({**candidate(lic, "address", ex),
+                                     "atNeakSite": same_site})
+            record["ownLicences"] = own_lics
+            at_site = [x for x in own_lics if x["atNeakSite"]]
+            record["suggestion"] = at_site[0]["licenceId"] if len(at_site) == 1 else ""
         return record
 
     # ---- districts (source A/B/C + H) ----
@@ -252,9 +305,6 @@ def build(date: str) -> dict:
              for p in latest["kinds"][k]["praxes"] + latest["kinds"][k]["filledPraxes"]}
     if extra:
         known |= {s["id"] for s in extra["services"]}
-    lic_by_unit: dict[str, list] = collections.defaultdict(list)
-    for r in eng:
-        lic_by_unit[r[ex["SZERVEZETI_EGYSEG_KOD"]]].append(r)
     eeszt_only: list[dict] = []
     seen: set[str] = set()
     for r in fin:
@@ -280,6 +330,18 @@ def build(date: str) -> dict:
         eeszt_only.append(row)
         stats["eesztOnly"][tip] += 1
 
+    archive_months = sorted({q.parent.name for q in (ROOT / "data").glob("20*/*.json")})
+    history = neak_history({r["fin"] for r in eeszt_only})
+    for row in eeszt_only:
+        past = history.get(row["fin"])
+        if past:
+            row["neakFirstMonth"] = past["firstMonth"]
+            row["neakLastMonth"] = past["lastMonth"]
+            row["neakMonths"] = past["months"]
+            row["neakLastStatus"] = past["lastStatus"]
+            row["neakSettlement"] = past["settlement"]
+        stats["eesztOnlyHistory"]["found" if past else "never"] += 1
+
     professions = {}
     for r in eng:
         code = r[ex["SZAKMA_KOD"]]
@@ -292,6 +354,9 @@ def build(date: str) -> dict:
         "dataMonth": eeszt.get("dataMonth", ""),
         "professions": professions,
         "verdicts": list(VERDICTS),
+        "archive": {"from": archive_months[0] if archive_months else "",
+                    "to": archive_months[-1] if archive_months else "",
+                    "months": len(archive_months)},
         "stats": {k: dict(sorted(v.items())) for k, v in stats.items()},
         "records": records,
         "eesztOnly": eeszt_only,
@@ -304,7 +369,7 @@ def guard(out: dict) -> None:
     """A suggestion may never leak a name or invent a code."""
     allowed = {"id", "source", "family", "reason", "named", "settlement", "county",
                "address", "units", "verdict", "candidates", "candidateCount",
-               "settlementLicences", "provider"}
+               "settlementLicences", "provider", "ownLicences", "suggestion"}
     for rec in out["records"]:
         unknown = set(rec) - allowed
         if unknown:
@@ -313,6 +378,8 @@ def guard(out: dict) -> None:
             raise EesztError(f"{rec['id']}: provider name without a named physician")
         if rec["verdict"] not in VERDICTS:
             raise EesztError(f"{rec['id']}: unknown verdict {rec['verdict']!r}")
+        if rec["verdict"] == "ownUnitSameProfession" and not rec.get("ownLicences"):
+            raise EesztError(f"{rec['id']}: manual-review record without its licences")
         if rec["verdict"] == "none" and rec["candidates"]:
             raise EesztError(f"{rec['id']}: candidates under a 'none' verdict")
         if rec["verdict"] != "none" and not rec["candidates"]:
@@ -328,7 +395,9 @@ def guard(out: dict) -> None:
                 pass
     for row in out["eesztOnly"]:
         if set(row) - {"fin", "tip", "county", "unit", "institution", "settlement",
-                       "address", "profession", "licenceId"}:
+                       "address", "profession", "licenceId", "neakFirstMonth",
+                       "neakLastMonth", "neakMonths", "neakLastStatus",
+                       "neakSettlement"}:
             raise EesztError(f"{row['fin']}: unexpected fields in the EESZT-only row")
 
 

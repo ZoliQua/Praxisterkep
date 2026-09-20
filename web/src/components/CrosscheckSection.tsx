@@ -7,8 +7,8 @@ import { t, tKind } from '../lib/i18n';
 import { formatNumber, formatPercent } from '../lib/format';
 import { sortRows } from '../lib/eesztTable';
 import {
-  CROSSCHECK_COLUMNS, EESZT_ONLY_COLUMNS, crosscheckRows, eesztOnlyRows,
-  useCrosscheck, verdictBreakdown,
+  CROSSCHECK_COLUMNS, EESZT_ONLY_COLUMNS, MANUAL_COLUMNS, crosscheckRows,
+  eesztOnlyRows, manualReviewRows, useCrosscheck, verdictBreakdown,
 } from '../lib/crosscheck';
 import { DataTableModal } from './DataTableModal';
 import { renderExtraCell } from './EesztCells';
@@ -25,7 +25,7 @@ const VERDICT_COLOR: Record<string, string> = {
 
 export function CrosscheckSection({ kind, part }: { kind: PraxisKind; part: number }) {
   const data = useCrosscheck();
-  const [open, setOpen] = useState<'records' | 'eesztOnly' | null>(null);
+  const [open, setOpen] = useState<'records' | 'manual' | 'eesztOnly' | null>(null);
 
   const family = kind === 'gp' ? 'gp' : 'dental';
   const rows = useMemo(
@@ -34,6 +34,10 @@ export function CrosscheckSection({ kind, part }: { kind: PraxisKind; part: numb
   );
   const missing = useMemo(
     () => sortRows(eesztOnlyRows(data, family), 'settlement', 'asc'),
+    [data, family],
+  );
+  const manual = useMemo(
+    () => sortRows(manualReviewRows(data, family), 'settlement', 'asc'),
     [data, family],
   );
   const breakdown = useMemo(() => verdictBreakdown(data, family), [data, family]);
@@ -83,6 +87,11 @@ export function CrosscheckSection({ kind, part }: { kind: PraxisKind; part: numb
         <button className="data-btn data-btn--accent" onClick={() => setOpen('records')}>
           {t('crosscheck.openTable', { n: formatNumber(total) })}
         </button>
+        {manual.length > 0 && (
+          <button className="data-btn" onClick={() => setOpen('manual')}>
+            {t('crosscheck.openManual', { n: formatNumber(manual.length) })}
+          </button>
+        )}
         {missing.length > 0 && (
           <button className="data-btn data-btn--warn" onClick={() => setOpen('eesztOnly')}>
             {t('crosscheck.openEesztOnly', { n: formatNumber(missing.length) })}
@@ -101,6 +110,17 @@ export function CrosscheckSection({ kind, part }: { kind: PraxisKind; part: numb
         filename={`praxisterkep-keresztellenorzes-${family}`}
         renderCell={renderExtraCell}
         countUnit="services"
+      />
+      <DataTableModal
+        open={open === 'manual'}
+        onClose={() => setOpen((cur) => (cur === 'manual' ? null : cur))}
+        title={t('crosscheck.manualTitle')}
+        subtitle={t('crosscheck.manualSubtitle')}
+        rows={manual}
+        columns={MANUAL_COLUMNS}
+        filename={`praxisterkep-kezi-ellenorzes-${family}`}
+        renderCell={renderExtraCell}
+        countUnit="districts"
       />
       <DataTableModal
         open={open === 'eesztOnly'}
