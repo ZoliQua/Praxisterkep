@@ -29,7 +29,9 @@
     "stats": "Statisztika",
     "why": "Miért fontos?",
     "versus": "Összevetés",
-    "eeszt": "EESZT"
+    "eeszt": "EESZT",
+    "access": "Távolság",
+    "data": "Adatok"
   },
   "hero": {
     "vacant": "betöltetlen {kind} körzet",
@@ -807,5 +809,63 @@
       "found": "Szerepelt a NEAK korábbi listáiban: {months} archivált hónapban, {first} és {last} között, utoljára „{status}” állapotban ({settlement}). Valószínűleg kivezetett körzet maradánya, amit az EESZT még finanszírozottként tart nyilván.",
       "never": "Egyetlen archivált NEAK-listában sem szerepelt {from} óta — feltehően nem területi körzet (ügyeleti, iskolai vagy intézményi szolgálat lehet)."
     }
+  },
+  "access": {
+    "heading": "Milyen messze a legközelebbi rendelő?",
+    "explain": "Minden {kind} körzetre, ahol nincs szerződött orvos, megmérjük, milyen messze van a legközelebbi olyan rendelő, ahol van szerződött orvos (légvonalban, a körzet székhelycímétől). Ez a távolság az elérhetőséget közelíti: **nem** azt mondja, hogy a körzet ellátatlan — a helyettesítés a nyilvános adatokból nem látszik, és a légvonal nem menetidő.",
+    "median": "a legközelebbi működő rendelő medián távolsága a szerződött orvos nélküli {kind} körzetekből",
+    "band": {
+      "0-5": "0–5 km-en belül",
+      "5-10": "5–10 km",
+      "10-20": "10–20 km",
+      "20+": "20 km felett"
+    },
+    "people": "lakos",
+    "sameSettlementShare": "a körzetek közül ugyanabban a településben talál működő rendelőt",
+    "beyond10": "ember él olyan körzetben, ahol 10 km-nél távolabb a legközelebbi",
+    "max": "a legnagyobb távolság",
+    "operating": "működő rendelő a számítás alapja",
+    "mapCount": "{n} / {total} körzet a térképen",
+    "openTable": "Távolságtáblázat ({n} körzet)",
+    "tableTitle": "Távolság a legközelebbi működő rendelőig — {kind} körzetek",
+    "tableSubtitle": "Szerződött orvos nélküli körzetek, légvonalbeli távolsággal · szűrhető, exportálható",
+    "colKm": "Távolság (km)",
+    "colBand": "Távolságsáv",
+    "colNearest": "Legközelebbi működő rendelő települése",
+    "colNearestId": "Legközelebbi körzet FIN-kódja",
+    "colSameSettlement": "Ugyanabban a településben",
+    "colPopulation": "Érintett lakosság",
+    "note": "A számítás alapja {operating} működő (szerződött orvossal rendelkező) rendelő a(z) {month} havi listából; {missing} betöltött körzethez nem volt koordináta, ezek kimaradtak — emiatt a távolságok inkább felülbecslések. A távolság légvonal, nem útvonal; a helyettesítést a nyilvános adatok nem mutatják."
+  },
+  "data": {
+    "heading": "Adatok és letöltés",
+    "explain": "Az oldal minden száma ezekből a fájlokból jön, és mindegyik letölthető. Szabadon felhasználhatóak; a forrásadatok a NEAK, az EESZT, a KSH és az OpenStreetMap nyilvános közzétételei, a feldolgozó kód MIT licencű.",
+    "thFile": "Fájl",
+    "thContent": "Mit tartalmaz",
+    "thSize": "Méret",
+    "thUpdated": "Frissítve",
+    "months": "hónap",
+    "fileOther": "Kiszolgált adatfájl.",
+    "file": {
+      "latest_json": "A legfrissebb havi pillanatkép mindkét ágra: betöltetlen és megszűnt körzetek címmel, koordinátával, lakossággal, és a betöltött körzetek a NEAK regiszterből.",
+      "timeseries_json": "Havi idősor 2017-től: betöltetlen és megszűnt körzetek, érintett lakosság, megyei bontásban.",
+      "history_json": "Körzetenkénti előzmény az archivált hónapokból (mikor volt betöltetlen).",
+      "months": "Az összes archivált havi pillanatkép külön-külön, áganként.",
+      "eeszt_json": "Az EESZT-illesztés körzetenként: működési engedély, telephely, szakma, közfinanszírozás, ügyelet, visszakövetési kódok, koordináták és a nem illeszthető esetek indokkal.",
+      "dental_extra_json": "A nem körzeti fogorvosi szolgálatok: ügyelet, egyetemi alapellátás és a teljes szakellátás, EESZT-illesztéssel.",
+      "crosscheck_json": "Keresztellenőrzés: a kód alapján nem illeszthető rekordokhoz cím- és névalapú javaslatok, valamint a csak az EESZT-ben szereplő szolgálatok.",
+      "access_json": "A legközelebbi működő rendelő távolsága minden szerződött orvos nélküli körzetből.",
+      "counties_geojson": "Megyehatárok (OpenStreetMap).",
+      "jaras_geojson": "Járáshatárok (OpenStreetMap).",
+      "cities_geojson": "Várospontok ranggal: megyeszékhely, megyei jogú város, járásszékhely, 20 000 fő feletti város.",
+      "budapest_geojson": "Budapesti kerülethatárok (OpenStreetMap)."
+    },
+    "useHeading": "Hogyan használd",
+    "use1": "A fájlok statikusak és verziózottak: a hónap végleges állapota a months/ könyvtárban marad, a latest.json mindig az aktuális hónapra mutat.",
+    "use2": "Minden szám visszavezethető egy nyers forrásfájlra, amely a repóban dátummal archiválva van — a git-történet maga az audit napló.",
+    "use3": "Ha hivatkozol rá, kérlek tüntesd fel az eredeti forrást is (NEAK / EESZT közzététel, adatállapot dátuma), és azt, hogy az adatok tájékoztató jellegűek.",
+    "sources": "Források és változástörténet:",
+    "rawArchive": "nyers forrásfájlok a repóban",
+    "changelog": "változásnapló"
   }
 }

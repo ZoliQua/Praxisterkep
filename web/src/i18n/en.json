@@ -29,7 +29,9 @@
     "stats": "Statistics",
     "why": "Why it matters",
     "versus": "Comparison",
-    "eeszt": "EESZT"
+    "eeszt": "EESZT",
+    "access": "Distance",
+    "data": "Data"
   },
   "hero": {
     "vacant": "vacant {kind} districts",
@@ -807,5 +809,63 @@
       "found": "It was in earlier NEAK lists: {months} archived months between {first} and {last}, last seen as “{status}” ({settlement}). Most likely the remnant of a discontinued district that EESZT still lists as financed.",
       "never": "It has never appeared in an archived NEAK list since {from} — probably not a territorial district (it may be an on-call, school or institutional service)."
     }
+  },
+  "access": {
+    "heading": "How far is the nearest surgery?",
+    "explain": "For every {kind} district with no contracted physician we measure how far the nearest surgery with a contracted physician is (as the crow flies, from the district's headquarters address). The distance approximates access: it does **not** say the district is unserved — substitution is invisible in the published data, and a straight line is not travel time.",
+    "median": "median distance to the nearest operating surgery from {kind} districts without a contracted physician",
+    "band": {
+      "0-5": "within 0–5 km",
+      "5-10": "5–10 km",
+      "10-20": "10–20 km",
+      "20+": "beyond 20 km"
+    },
+    "people": "residents",
+    "sameSettlementShare": "of the districts find an operating surgery in the same settlement",
+    "beyond10": "people live in a district whose nearest surgery is beyond 10 km",
+    "max": "the largest distance",
+    "operating": "operating surgeries behind the calculation",
+    "mapCount": "{n} / {total} districts on the map",
+    "openTable": "Distance table ({n} districts)",
+    "tableTitle": "Distance to the nearest operating surgery — {kind} districts",
+    "tableSubtitle": "Districts without a contracted physician, with crow-flies distance · filterable, exportable",
+    "colKm": "Distance (km)",
+    "colBand": "Distance band",
+    "colNearest": "Settlement of the nearest operating surgery",
+    "colNearestId": "FIN code of the nearest district",
+    "colSameSettlement": "In the same settlement",
+    "colPopulation": "Affected population",
+    "note": "The calculation rests on {operating} operating surgeries from the {month} list; {missing} filled districts had no coordinates and were left out, so the distances err on the high side. The distance is a straight line, not a route; substitution does not appear in the published data."
+  },
+  "data": {
+    "heading": "Data and downloads",
+    "explain": "Every number on this site comes from these files, and all of them are downloadable. Use them freely; the source data is published by NEAK, EESZT, KSH and OpenStreetMap, and the processing code is MIT-licensed.",
+    "thFile": "File",
+    "thContent": "Contents",
+    "thSize": "Size",
+    "thUpdated": "Updated",
+    "months": "months",
+    "fileOther": "Served data file.",
+    "file": {
+      "latest_json": "The latest monthly snapshot for both branches: vacant and dissolved districts with address, coordinates and population, plus the filled districts from the NEAK registry.",
+      "timeseries_json": "Monthly series from 2017: vacant and dissolved districts and affected population, by county.",
+      "history_json": "Per-district history from the archived months (when it was vacant).",
+      "months": "Every archived monthly snapshot, per branch.",
+      "eeszt_json": "The EESZT match per district: operating licence, premises, profession, public funding, on-call, trace codes, coordinates, and the unmatched cases with their reason.",
+      "dental_extra_json": "The dental services that are not districts: on-call, university primary care and all specialist care, with their EESZT match.",
+      "crosscheck_json": "Cross-check: address- and name-based suggestions for the records the code chain could not pair, plus the services that exist in EESZT only.",
+      "access_json": "Distance to the nearest operating surgery from every district without a contracted physician.",
+      "counties_geojson": "County boundaries (OpenStreetMap).",
+      "jaras_geojson": "District (járás) boundaries (OpenStreetMap).",
+      "cities_geojson": "City points by rank: county seat, county-rank city, district seat, town above 20 000 residents.",
+      "budapest_geojson": "Budapest district boundaries (OpenStreetMap)."
+    },
+    "useHeading": "How to use them",
+    "use1": "The files are static and versioned: a finished month stays in months/, while latest.json always points at the current one.",
+    "use2": "Every number traces back to a raw source file archived in the repository with its date — the git history is the audit trail.",
+    "use3": "When you cite it, please name the original source (NEAK / EESZT publication, as-of date) and note that the data is indicative.",
+    "sources": "Sources and change history:",
+    "rawArchive": "raw source files in the repository",
+    "changelog": "changelog"
   }
 }

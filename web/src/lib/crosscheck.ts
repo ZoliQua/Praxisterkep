@@ -375,7 +375,8 @@ export function manualReviewRows(
 /** the sentence about what the NEAK archive knows of an EESZT-only service */
 export function historyText(data: CrosscheckRaw, row: EesztOnlyRow): string {
   if (!row.neakLastMonth) {
-    return t('crosscheck.history.never', { from: data.archive.from });
+    // an older cached file may predate the archive block
+    return t('crosscheck.history.never', { from: data.archive?.from ?? '2017-10' });
   }
   return t('crosscheck.history.found', {
     months: row.neakMonths ?? 0,

@@ -149,6 +149,18 @@ def main() -> None:
               f"{len(xcheck['eesztOnly'])} EESZT-only)")
     except Exception as exc:  # noqa: BLE001 — supplement must not block release
         print(f"      WARNING: EESZT supplement skipped: {exc}")
+
+    # accessibility: how far the nearest operating surgery is (needs only the
+    # NEAK snapshot, so it runs even when the EESZT step failed)
+    try:
+        import access
+        acc = access.build()
+        access.OUT.write_text(
+            json.dumps(acc, ensure_ascii=False, separators=(",", ":")) + "\n",
+            encoding="utf-8")
+        print(f"      wrote {access.OUT} ({len(acc['districts'])} districts)")
+    except Exception as exc:  # noqa: BLE001 — supplement must not block release
+        print(f"      WARNING: accessibility analysis skipped: {exc}")
     print("done")
 
 

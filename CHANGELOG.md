@@ -5,6 +5,29 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.15.0] — 2026-09-20
+
+### Hozzáadva
+- **Távolság-elemzés** (új „Távolság” szekció): minden szerződött orvos
+  nélküli körzetre megmérjük, milyen messze van a legközelebbi működő
+  rendelő (légvonalban, a betöltött körzetek EESZT-telephelyétől).
+  Fogorvosi: medián 3,7 km, 21 körzet 10 km-nél távolabb (67 137 lakos).
+  Háziorvosi: medián 0,3 km, 13 körzet 10 km felett. Távolságsáv szerint
+  színezett térkép, szűrhető táblázat, CSV/TSV export.
+  A szöveg végig külön tartja a „betöltetlen” és az „ellátatlan” fogalmat:
+  a távolság elérhetőségi közelítés, nem állítás az ellátatlanságról.
+- **„Adatok és letöltés” szekció**: minden kiszolgált adatfájl listája
+  tartalomleírással, mérettel, frissítési dátummal és közvetlen
+  letöltéssel. A lista a build által írt `manifest.json`-ból jön, így nem
+  hirdethet nem létező fájlt.
+- Új ETL-lépés: `etl/access.py` → `data/access.json`, saját őrrel
+  (sávhatárok, számok egyezése, 300 km feletti távolság tiltva).
+
+### Javítva
+- A keresztellenőrzés „csak az EESZT-ben” magyarázata régi, `archive`
+  blokk nélküli gyorsítótárazott fájllal is működik.
+- A felső menü tíz szekciónál görgethető lett a levágás helyett.
+
 ## [1.14.0] — 2026-09-20
 
 ### Hozzáadva

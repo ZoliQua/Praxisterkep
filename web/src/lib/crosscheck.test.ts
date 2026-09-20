@@ -8,6 +8,7 @@ const data = {
   schemaVersion: 1, asOf: '2026-09-20', dataMonth: '2026-09',
   professions: { '1300': 'fogászati ellátás', '6301': 'háziorvosi ellátás' },
   verdicts: ['otherUnitSameProfession', 'providerName', 'none'],
+  archive: { from: '2017-10', to: '2026-09', months: 38 },
   stats: {},
   records: [
     {
@@ -82,6 +83,11 @@ describe('candidateRows and eesztOnlyRows', () => {
   it('filters the EESZT-only services by branch', () => {
     expect(eesztOnlyRows(data, 'gp')).toHaveLength(1);
     expect(eesztOnlyRows(data, 'dental')).toHaveLength(0);
+  });
+
+  it('explains an EESZT-only service even without the archive block', () => {
+    const old = { ...data, archive: undefined } as unknown as typeof data;
+    expect(String(eesztOnlyRows(old, 'gp')[0].history)).toContain('2017-10');
   });
 });
 

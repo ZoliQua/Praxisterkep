@@ -9,7 +9,9 @@ import { CountyRanking } from './components/CountyRanking';
 import { StatsSection } from './components/StatsSection';
 import { VersusSection } from './components/VersusSection';
 import { EesztSection } from './components/EesztSection';
+import { AccessSection } from './components/AccessSection';
 import { WhySection } from './components/WhySection';
+import { DataSection } from './components/DataSection';
 import { Methodology } from './components/Methodology';
 import { Footer } from './components/Footer';
 import { IconStethoscope, IconTooth } from './components/icons';
@@ -22,7 +24,9 @@ const NAV = [
   ['#rangsor', 'nav.ranking'],
   ['#statisztika', 'nav.stats'],
   ['#osszevetes', 'nav.versus'],
+  ['#tavolsag', 'nav.access'],
   ['#eeszt', 'nav.eeszt'],
+  ['#adatok', 'nav.data'],
   ['#modszertan', 'nav.methodology'],
 ] as const;
 
@@ -91,7 +95,9 @@ export default function App() {
       <CountyRanking />
       <StatsSection />
       <VersusSection />
+      <AccessSection />
       <EesztSection />
+      <DataSection />
       <Methodology />
       <Footer />
     </>
