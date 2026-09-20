@@ -1305,6 +1305,8 @@ a:hover { text-decoration: underline; }
 .data-btn:disabled { opacity: 0.45; cursor: not-allowed; }
 .data-btn--accent { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
 .data-btn--accent:hover:not(:disabled) { color: var(--accent-ink); filter: brightness(1.08); }
+.data-btn--warn { border-color: color-mix(in srgb, var(--alert-soft) 55%, var(--line-strong)); color: var(--alert-soft); }
+.data-btn--warn:hover:not(:disabled) { border-color: var(--alert-soft); color: var(--alert-soft); }
 .data-dialog__chooser { position: relative; }
 .data-dialog__chooser-menu {
   position: absolute; z-index: 5; top: calc(100% + 6px); left: 0;
@@ -1447,3 +1449,21 @@ a:hover { text-decoration: underline; }
   font-variant-numeric: tabular-nums; margin-right: 4px;
 }
 .extra-note { margin: 10px 0 0; font-size: 12.5px; color: var(--ink-faint); }
+
+/* ---------- info dialog tabs ---------- */
+.info-tabs__lead { margin: 22px 0 8px; color: var(--ink-dim); font-size: 13.5px; }
+.info-tabs {
+  display: flex; flex-wrap: wrap; gap: 6px; position: sticky; top: 0; z-index: 2;
+  padding: 8px 0; background: var(--bg-raised); border-bottom: 1px solid var(--line);
+}
+.info-tabs__tab {
+  appearance: none; cursor: pointer; border: 1px solid var(--line-strong);
+  background: var(--bg); color: var(--ink-dim); border-radius: 999px;
+  padding: 6px 14px; font: 600 13px var(--font-body);
+}
+.info-tabs__tab:hover { color: var(--ink); }
+.info-tabs__tab.is-active {
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  border-color: var(--accent); color: var(--accent);
+}
+.info-tabs__panel { padding-top: 4px; }

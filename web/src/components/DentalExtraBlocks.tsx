@@ -8,8 +8,9 @@ import { t } from '../lib/i18n';
 import { formatNumber } from '../lib/format';
 import { sortRows } from '../lib/eesztTable';
 import {
-  countyBreakdown, extraColumns, extraRows, groupStat, typeBreakdown,
-  useDentalExtra, type ExtraGroup, type ExtraRow,
+  EXTRA_UNMATCHED_COLUMNS, countyBreakdown, extraColumns, extraRows, groupStat,
+  typeBreakdown, unmatchedExtraRows, useDentalExtra,
+  type ExtraGroup, type ExtraRow,
 } from '../lib/dentalExtra';
 import { serviceTypeColor } from '../lib/palette';
 import { DataTableModal } from './DataTableModal';
@@ -49,11 +50,18 @@ function detailRows(row: MapRow): [string, string][] {
 export function DentalExtraBlocks() {
   const data = useDentalExtra();
   const [open, setOpen] = useState<ExtraGroup | null>(null);
+  // the services of a group that carry no usable EESZT licence, with the reason
+  const [openUnmatched, setOpenUnmatched] = useState<ExtraGroup | null>(null);
 
   const rows = useMemo(() => ({
     oncall: sortRows(extraRows(data, 'oncall'), 'settlement', 'asc') as ExtraRow[],
     university: sortRows(extraRows(data, 'university'), 'settlement', 'asc') as ExtraRow[],
     specialist: sortRows(extraRows(data, 'specialist'), 'settlement', 'asc') as ExtraRow[],
+  }), [data]);
+  const unmatched = useMemo(() => ({
+    oncall: sortRows(unmatchedExtraRows(data, 'oncall'), 'settlement', 'asc'),
+    university: sortRows(unmatchedExtraRows(data, 'university'), 'settlement', 'asc'),
+    specialist: sortRows(unmatchedExtraRows(data, 'specialist'), 'settlement', 'asc'),
   }), [data]);
   const specialistTypes = useMemo(() => typeBreakdown(data, 'specialist'), [data]);
   const categories = useMemo(
@@ -79,9 +87,16 @@ export function DentalExtraBlocks() {
           <Stat n={groupStat(data, group, 'licence')} label={t('extra.statLicence')} />
           <Stat n={counties} label={t('extra.statCounties')} />
         </div>
-        <button className="data-btn" onClick={() => setOpen(group)}>
-          {t('extra.openTable', { n: formatNumber(n) })}
-        </button>
+        <div className="eeszt-actions">
+          <button className="data-btn" onClick={() => setOpen(group)}>
+            {t('extra.openTable', { n: formatNumber(n) })}
+          </button>
+          {unmatched[group].length > 0 && (
+            <button className="data-btn data-btn--warn" onClick={() => setOpenUnmatched(group)}>
+              {t('extra.openUnmatched', { n: formatNumber(unmatched[group].length) })}
+            </button>
+          )}
+        </div>
       </div>
     );
   };
@@ -127,8 +142,32 @@ export function DentalExtraBlocks() {
         <button className="data-btn data-btn--accent" onClick={() => setOpen('specialist')}>
           {t('extra.openTable', { n: formatNumber(rows.specialist.length) })}
         </button>
+        {unmatched.specialist.length > 0 && (
+          <button className="data-btn data-btn--warn"
+            onClick={() => setOpenUnmatched('specialist')}>
+            {t('extra.openUnmatchedSpecialist', { n: formatNumber(unmatched.specialist.length) })}
+          </button>
+        )}
       </div>
       <p className="extra-note">{t('extra.note', { month: data.dataMonth, asOf: data.asOf })}</p>
+
+      {(['oncall', 'university', 'specialist'] as ExtraGroup[]).map((group) => (
+        <DataTableModal
+          key={`unmatched-${group}`}
+          open={openUnmatched === group}
+          onClose={() => setOpenUnmatched((cur) => (cur === group ? null : cur))}
+          title={t(group === 'specialist'
+            ? 'extra.unmatchedTitleSpecialist' : 'extra.unmatchedTitle',
+          { group: t(`extra.${group}Title`) })}
+          subtitle={t('extra.unmatchedSubtitle')}
+          rows={unmatched[group]}
+          columns={EXTRA_UNMATCHED_COLUMNS.filter(
+            (c) => group === 'specialist' || c.key !== 'unitType')}
+          filename={`praxisterkep-fogaszat-${group}-nem-illesztheto`}
+          renderCell={renderExtraCell}
+          countUnit="services"
+        />
+      ))}
 
       {(['oncall', 'university', 'specialist'] as ExtraGroup[]).map((group) => (
         <DataTableModal

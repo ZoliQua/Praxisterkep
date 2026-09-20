@@ -3,7 +3,7 @@
 // its EESZT licence match. Loaded lazily — the districts never wait for it.
 import { useEffect, useState } from 'react';
 import { t } from './i18n';
-import type { Cell, ColDef, Row } from './eesztTable';
+import type { ColDef, Row } from './eesztTable';
 
 export type ExtraGroup = 'oncall' | 'university' | 'specialist';
 
@@ -215,6 +215,135 @@ export function countyBreakdown(data: DentalExtraRaw | null, group: ExtraGroup):
   return [...out.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'hu'));
 }
 
-export function cellOf(row: ExtraRow, key: string): Cell {
-  return row[key] ?? null;
+/* ---------------- unmatched services ---------------- */
+
+export const EXTRA_UNMATCHED_COLUMNS: ColDef[] = [
+  { key: 'fin', labelKey: 'extra.colCode', type: 'text', visible: true },
+  { key: 'unitType', labelKey: 'extra.colUnitType', type: 'enum', visible: true },
+  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+  { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: true },
+  { key: 'address', labelKey: 'extra.colAddress', type: 'text', visible: true },
+  { key: 'reason', labelKey: 'eeszt.colReason', type: 'enum', visible: true },
+  { key: 'detail', labelKey: 'eeszt.colReasonDetail', type: 'text', visible: true },
+  { key: 'candidates', labelKey: 'extra.colCandidates', type: 'text', visible: true },
+  { key: 'unitCode', labelKey: 'eeszt.colUnit', type: 'text', visible: false },
+];
+
+/** the licences behind an ambiguous / other-profession case, as one line each */
+function candidateText(data: DentalExtraRaw, id: string): string | null {
+  const rows = data.unmatchedDetails[id];
+  if (!rows?.length) return null;
+  return rows
+    .map((r) => {
+      const profession = data.professions[r[5]] ?? r[5];
+      const place = [r[3], r[4]].filter(Boolean).join(', ');
+      return `${r[0]} — ${profession}${place ? ` (${place})` : ''}`;
+    })
+    .join(' · ');
+}
+
+export function unmatchedExtraRows(
+  data: DentalExtraRaw | null, group: ExtraGroup, reasonCode?: string,
+): Row[] {
+  if (!data) return [];
+  return data.services
+    .filter((s) => s.group === group && data.unmatched[s.id]
+      && (!reasonCode || data.unmatched[s.id][0] === reasonCode))
+    .map((s) => {
+      const [code, detail] = data.unmatched[s.id];
+      return {
+        fin: s.id,
+        unitType: s.unitType,
+        settlement: s.settlement,
+        county: s.county,
+        address: s.address,
+        type: s.unitType,
+        status: s.level,
+        reason: t(`eeszt.reason.${code}`),
+        detail: extraReasonDetail(code, detail),
+        candidates: candidateText(data, s.id),
+        unitCode: s.trace?.units || null,
+      };
+    });
+}
+
+/** the same wording the districts use, with the service's own phrasing */
+export function extraReasonDetail(code: string, detail: string): string {
+  switch (code) {
+    case 'ambiguous': {
+      const [units, places] = detail.split('|');
+      return t('eeszt.why.ambiguous', { units, places });
+    }
+    case 'otherProfession':
+      return t('eeszt.why.otherProfession', { professions: detail });
+    case 'noUnitLicence':
+      return t('extra.why.noUnitLicence', { units: detail });
+    case 'otherTip':
+      return t('eeszt.why.otherTip', { tips: detail });
+    default:
+      return t('extra.why.noFin');
+  }
+}
+
+/** per-reason numbers for the info panel, in the order it lists them */
+export const EXTRA_REASONS = ['noUnitLicence', 'ambiguous', 'otherProfession',
+  'noFin', 'otherTip'] as const;
+
+export function reasonCount(
+  data: DentalExtraRaw | null, group: ExtraGroup, code: string,
+): number {
+  return data?.stats?.[group]?.[code] ?? 0;
+}
+
+export const EXTRA_REASON_LICENCE_COLUMNS: ColDef[] = [
+  { key: 'fin', labelKey: 'extra.colCode', type: 'text', visible: true },
+  { key: 'unitType', labelKey: 'extra.colUnitType', type: 'enum', visible: true },
+  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+  { key: 'unitCode', labelKey: 'eeszt.colUnit', type: 'text', visible: true },
+  { key: 'licenceId', labelKey: 'eeszt.colLicenceId', type: 'text', visible: true },
+  { key: 'licSettlement', labelKey: 'eeszt.colLicSettlement', type: 'text', visible: true },
+  { key: 'licAddress', labelKey: 'eeszt.colLicAddress', type: 'text', visible: true },
+  { key: 'profession', labelKey: 'eeszt.colProfession', type: 'enum', visible: true },
+  { key: 'publicFunded', labelKey: 'eeszt.thFunded', type: 'bool', visible: true },
+];
+
+/** one reason of one group, ready for the data browser: the affected services,
+ *  or one row per candidate licence where the licences are the explanation */
+export function extraReasonRows(
+  data: DentalExtraRaw | null, group: ExtraGroup, reason: string,
+): { rows: Row[]; columns: ColDef[]; expanded: boolean; services: number } {
+  const simple = unmatchedExtraRows(data, group, reason);
+  const expanded = reason === 'ambiguous' || reason === 'otherProfession';
+  if (!data || !expanded) {
+    return {
+      rows: simple,
+      columns: EXTRA_UNMATCHED_COLUMNS.filter((c) => c.key !== 'candidates'),
+      expanded: false,
+      services: simple.length,
+    };
+  }
+  const rows: Row[] = [];
+  for (const base of simple) {
+    for (const r of data.unmatchedDetails[String(base.fin)] ?? []) {
+      rows.push({
+        fin: base.fin,
+        unitType: base.unitType,
+        settlement: base.settlement,
+        type: base.type,
+        status: base.status,
+        licenceId: r[0],
+        unitCode: r[1],
+        licSettlement: r[3],
+        licAddress: r[4],
+        profession: data.professions[r[5]] ?? r[5],
+        publicFunded: r[6] === 1,
+      });
+    }
+  }
+  return {
+    rows,
+    columns: EXTRA_REASON_LICENCE_COLUMNS,
+    expanded: true,
+    services: simple.length,
+  };
 }

@@ -5,6 +5,24 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.10.0] — 2026-09-20
+
+### Hozzáadva
+- „Nem illeszthető” gomb a fogorvosi ügyeletnél (6 szolgálat) és
+  „Nem illeszthető szakellátások” a szakellátásnál (31) — minden sornál
+  a konkrét indokkal, a szóba jövő engedélyek felsorolásával, szűrhető
+  és CSV/TSV-be exportálható formában. Az egyetemi alapellátásnál nincs
+  ilyen eset, ott a gomb sem jelenik meg.
+- Az „Hogyan illesztettük az EESZT-adatokat?” panel füles lett. Az 1–3.
+  pont (mi ez, források, letöltés) közös, a 4–12. pont pedig adatkörönként
+  külön: **Körzetek (alapellátás)**, **Ügyelet és egyetemi alapellátás**,
+  **Szakellátás**. Minden fül a saját illesztési láncát, döntési szabályait,
+  névkezelését, helymeghatározását, élő eredménytábláját, kidolgozott
+  példáját és korlátait írja le.
+- A szolgálatos füleken is kattinthatóak az eredménytábla számai: a
+  kétértelmű eseteknél soronként megjelenik minden szóba jövő engedély
+  (szervezeti egység, engedély-azonosító, telephely, szakma, közfinanszírozás).
+
 ## [1.9.0] — 2026-09-20
 
 ### Hozzáadva

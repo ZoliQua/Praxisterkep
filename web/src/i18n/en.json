@@ -567,7 +567,67 @@
     "drillOpen": "Open the detailed table",
     "drillSubtitle": "The {kind} districts concerned — filterable, sortable, exportable",
     "drillSubtitleLicences": "every candidate licence of the {n} affected {kind} districts, row by row",
-    "p9b": "Click the highlighted numbers to open a detailed, filterable and exportable table of the districts concerned. For ambiguous cases every candidate licence is listed; for other-profession cases you see what the licence is actually for."
+    "p9b": "Click the highlighted numbers to open a detailed, filterable and exportable table of the districts concerned. For ambiguous cases every candidate licence is listed; for other-profession cases you see what the licence is actually for.",
+    "tabsLead": "The points below differ per data set — pick a tab:",
+    "tab": {
+      "districts": "Districts (primary care)",
+      "primary": "On-call and university primary care",
+      "specialist": "Specialist care"
+    },
+    "svc": {
+      "missing": "The supplement has not loaded yet.",
+      "what": {
+        "primary": "on-call and university primary-care services",
+        "specialist": "specialist services"
+      },
+      "professions": {
+        "primary": "1300 — dental care",
+        "specialist": "radiology → 1306, orthodontics → 1302, oral surgery → 1301, periodontology → 1303, paediatric specialist care → 1304, care for people with disabilities → 1300/1304, university specialist care → any dental profession"
+      },
+      "s1": "From the NEAK contracted dental provider list we take the {what}. District services are not included here — the other tab describes those.",
+      "s2": "The service's unit code is looked up in the EESZT financed-services register (NEAK_FINSZOLG), filtered to the FOG (dental) service type.",
+      "s3": "From that row we read the organisational unit's NNGYK9 code and use it to find the operating licences in the licence register (EUSZOLG_ENGEDELY_PUBLIKUS).",
+      "s4": "Of those licences we accept only the one issued for the service's own profession ({professions}).",
+      "s5": "From the licence we take the premises, the profession code, the public funding flag and the on-call participation; the provider's tax number is cross-checked against the financing register.",
+      "s6": "If the code points at several units whose licences disagree on the premises, we pick none: the service goes on the “unmatched” list with its reason.",
+      "p4": "The code that does this:",
+      "c1t": "Filtering by profession",
+      "c1": "A licence counts only with the profession code that belongs to the service type ({professions}). A licence for something else does not prove the service operates there.",
+      "c2t": "No pick when it is ambiguous",
+      "c2": "With several units and several different premises we assign none, and show what the candidates were instead.",
+      "c3t": "A licence that names its premises wins",
+      "c3": "Among candidate licences we take the one that names its premises and sits in the settlement NEAK gives.",
+      "c4t": "Provider cross-check",
+      "c4": "The licensee's tax number is compared with the financing register's; the result is a column of its own and never changes the match.",
+      "n1": "NEAK itself publishes the physicians in the contracted-provider list, so they are shown — for on-call services the whole roster, as the list gives it.",
+      "n2": "The provider name, NEAK code and EESZT provider id are carried only where the list also names a contracted physician; {n} services name none, and there these fields stay empty.",
+      "n3": "The build checks this automatically and stops on a violation; tests guard it too.",
+      "h7": "Identifying the service",
+      "p7": "A specialist unit code is not a FIN code: it can contain a letter (02006A425, for example), so a 9-character alphanumeric code is expected — nothing is dropped silently. For on-call services the list gives one row per physician, so one code has many rows; they are merged into one service and the row count is kept.",
+      "p8": "The map location is the EESZT licensed premises where there is a match, and the NEAK surgery address otherwise. The table's “source of the map location” column always says which. Geocoding is the same cached Nominatim process:",
+      "rTotal": "Services",
+      "rRows": "Registry rows",
+      "rGeo": "Shown on the map",
+      "p9": "The highlighted numbers open the affected services as a filterable, exportable table; for the ambiguous cases every candidate licence is listed row by row.",
+      "p10": "The full path of a real service ({type}), from the current data:",
+      "e1": "In the NEAK list, the {type} service with code {code} ({settlement}).",
+      "e2": "In the financing register it belongs to organisational unit {unit}.",
+      "e3": "That unit's licence for the profession: {licence} — {profession}, premises: {address}.",
+      "e4": "Does the premises settlement match NEAK's: {settlementMatch}. Does the provider tax number match: {providerMatch}.",
+      "v1": "Every code is a link: clicking it in the table opens exactly that row on the public EESZT portal.",
+      "v2": "The raw EESZT files and the NEAK provider list are both in the repository, with their dates — any number can be recomputed.",
+      "v3": "The ETL recomputes every number from the raw files; if the row counts disagree, or a service is neither matched nor explained, the build fails.",
+      "l1": "These services are not districts: they count towards neither the district total nor the vacancy rate.",
+      "l2": "The NEAK list is indicative and lags changes made during the month.",
+      "l3": "The licence register shows the operating licence, not opening hours: a licence does not mean the {what} are available right now.",
+      "drillSubtitle": "The affected services — {group} — filterable, sortable, exportable",
+      "drillSubtitleLicences": "every candidate licence of the {n} affected services ({group}), row by row",
+      "h10": "Worked example: the full path of one service",
+      "rFin": "The service's code is in EESZT",
+      "rLicence": "Operating licence matched",
+      "rSettlement": "Licensed premises in the settlement NEAK gives",
+      "rProvider": "The licensee's tax number matches the financed provider's"
+    }
   },
   "neak": {
     "title": "The district in the NEAK registry",
@@ -617,6 +677,16 @@
       "registry": "NEAK surgery address"
     },
     "mapCount": "{n} / {total} services on the map",
-    "specialistTitle": "Dental specialist care"
+    "specialistTitle": "Dental specialist care",
+    "openUnmatched": "Unmatched ({n})",
+    "openUnmatchedSpecialist": "Unmatched specialist services ({n})",
+    "unmatchedTitle": "{group} — unmatched services",
+    "unmatchedTitleSpecialist": "Unmatched specialist services",
+    "unmatchedSubtitle": "Services with no unambiguous EESZT licence — with the reason",
+    "colCandidates": "Candidate licences",
+    "why": {
+      "noUnitLicence": "The service's organisational unit ({units}) holds no licence for its own profession in the EESZT licence register.",
+      "noFin": "The service's code does not appear in the EESZT financed-services register as a dental (FOG) service."
+    }
   }
 }

@@ -567,7 +567,67 @@
     "drillOpen": "Részletes táblázat megnyitása",
     "drillSubtitle": "Az érintett {kind} körzetek — szűrhető, rendezhető, exportálható",
     "drillSubtitleLicences": "{n} érintett {kind} körzet minden szóba jövő engedélye, soronként",
-    "p9b": "A vastagon jelölt számokra kattintva az érintett körzetek részletes, szűrhető és exportálható táblázata nyílik meg. A kétértelmű eseteknél minden szóba jövő engedélyt felsorolunk, a más szakmájú engedélyeknél pedig azt, mire szól az engedély."
+    "p9b": "A vastagon jelölt számokra kattintva az érintett körzetek részletes, szűrhető és exportálható táblázata nyílik meg. A kétértelmű eseteknél minden szóba jövő engedélyt felsorolunk, a más szakmájú engedélyeknél pedig azt, mire szól az engedély.",
+    "tabsLead": "Az alábbi pontok adatkörönként eltérnek — válassz fület:",
+    "tab": {
+      "districts": "Körzetek (alapellátás)",
+      "primary": "Ügyelet és egyetemi alapellátás",
+      "specialist": "Szakellátás"
+    },
+    "svc": {
+      "missing": "A kiegészítő adat még nem töltődött be.",
+      "what": {
+        "primary": "ügyeleti és egyetemi alapellátási szolgálatok",
+        "specialist": "szakellátási szolgálatok"
+      },
+      "professions": {
+        "primary": "1300 — fogászati ellátás",
+        "specialist": "röntgen → 1306, fogszabályozás → 1302, szájsebészet → 1301, parodontológia → 1303, gyermek szakellátás → 1304, fogyatékkal élők ellátása → 1300/1304, egyetemi szakellátás → bármely fogászati szakma"
+      },
+      "s1": "A NEAK szerződött fogorvosi szolgáltatói listájából kiválasztjuk a(z) {what}. A körzeti szolgálatok ide nem tartoznak — azokat a másik fül írja le.",
+      "s2": "A szolgálat szervezeti egység kódját megkeressük az EESZT finanszírozott szolgálatok törzsében (NEAK_FINSZOLG), FOG (fogorvosi) típusra szűrve.",
+      "s3": "A találatból kiolvassuk a szervezeti egység NNGYK9 kódját, és ezzel keressük meg a működési engedélyeket az engedélytörzsben (EUSZOLG_ENGEDELY_PUBLIKUS).",
+      "s4": "Az engedélyek közül csak azt fogadjuk el, amelyik a szolgáltatás saját szakmájára szól ({professions}).",
+      "s5": "Az engedélyből átvesszük a telephelyet, a szakmakódot, a közfinanszírozottságot és az ügyeleti részvételt; a szolgáltató adószámát összevetjük a finanszírozási törzs adószámával.",
+      "s6": "Ha a kódhoz több szervezeti egység és több, egymástól eltérő telephelyű engedély tartozik, nem választunk: a szolgálat a „nem illeszthető” listára kerül, indokkal.",
+      "p4": "A kód, ami ezt csinálja:",
+      "c1t": "Szakma szerinti szűrés",
+      "c1": "Csak a szolgáltatás típusához tartozó szakmakóddal fogadunk el engedélyt ({professions}). Egy más szakmára szóló engedély nem bizonyítja, hogy a szolgálat ott működik.",
+      "c2t": "Kétértelműségnél nem választunk",
+      "c2": "Több szervezeti egység és több különböző telephely esetén egyiket sem rendeljük hozzá; inkább megmutatjuk, mi volt a választás.",
+      "c3t": "Címmel rendelkező engedély előnyben",
+      "c3": "Több szóba jövő engedélynél azt vesszük, amelyik megnevezi a telephelyét, és amelyik a NEAK szerinti településen van.",
+      "c4t": "Szolgáltatói kereszt-ellenőrzés",
+      "c4": "Az engedélyes szolgáltató adószámát összevetjük a finanszírozási törzsével; az eredmény külön oszlopban látszik, és nem befolyásolja az illesztést.",
+      "n1": "Az orvosok nevét a NEAK maga közli a szerződött szolgáltatói listában, ezért megjelenítjük — ügyeletnél a teljes névsort, ahogy a lista is felsorolja.",
+      "n2": "A szolgáltató nevét, NEAK kódját és EESZT-azonosítóját csak akkor vesszük át, ha a lista szerződött orvost is megnevez; {n} szolgálatnál nincs ilyen, ott ezek a mezők üresen maradnak.",
+      "n3": "Ezt a build automatikusan ellenőrzi, és szabálysértésnél leáll; tesztek is védik.",
+      "h7": "A szolgálat azonosítása",
+      "p7": "A szakellátási szervezeti egység kódja nem FIN-kód: betűt is tartalmazhat (például 02006A425), ezért 9 karakteres alfanumerikus kódot várunk — így egyetlen sor sem esik ki csendben. Az ügyeletnél a lista orvosonként ad egy sort, tehát egy kódhoz sok sor tartozik; ezeket egy szolgálattá vonjuk össze, és megtartjuk a sorok számát.",
+      "p8": "A térképi hely elsősorban az EESZT-engedély telephelye; ha nincs illeszthető engedély, a NEAK listájában szereplő rendelőcím. A táblázat „A térképi hely forrása” oszlopa mindig megmondja, melyikről van szó. A geokódolás ugyanaz a Nominatim-alapú, gyorsítótárazott folyamat:",
+      "rTotal": "Szolgálatok száma",
+      "rRows": "Regisztersorok száma",
+      "rGeo": "Megjelenik a térképen",
+      "p9": "A vastagon jelölt számokra kattintva az érintett szolgálatok részletes, szűrhető és exportálható táblázata nyílik meg; a kétértelmű eseteknél soronként felsoroljuk az összes szóba jövő engedélyt.",
+      "p10": "Egy valódi szolgálat ({type}) teljes útja, a mostani adatokból:",
+      "e1": "A NEAK listájában a {code} kódú {type} szolgálat ({settlement}).",
+      "e2": "A finanszírozási törzsben ehhez a(z) {unit} szervezeti egység tartozik.",
+      "e3": "Az egység szakmára szóló engedélye: {licence} — {profession}, telephely: {address}.",
+      "e4": "Egyezik-e a telephely települése a NEAK szerintivel: {settlementMatch}. Egyezik-e a szolgáltató adószáma: {providerMatch}.",
+      "v1": "Minden kód linkelve van: a táblázatban rákattintva az EESZT nyilvános portálján pontosan az a sor nyílik meg.",
+      "v2": "A nyers EESZT-fájlok és a NEAK szolgáltatói lista is a repóban vannak, dátummal — bármelyik szám újraszámolható.",
+      "v3": "Az ETL minden számot a nyers fájlokból számol újra; ha a sorok száma nem stimmel, vagy egy szolgálat se nem illesztett, se nem indokolt, a build hibával leáll.",
+      "l1": "Ezek a szolgálatok nem körzetek: sem a körzetszámba, sem a betöltetlenségi arányba nem számítanak bele.",
+      "l2": "A NEAK listája tájékoztató jellegű, és a hónap közbeni változásokat késve követi.",
+      "l3": "Az engedélytörzs a működési engedélyt mutatja, nem a nyitvatartást: attól, hogy van engedély, a(z) {what} nem biztos, hogy éppen elérhető.",
+      "drillSubtitle": "Az érintett szolgálatok — {group} — szűrhető, rendezhető, exportálható",
+      "drillSubtitleLicences": "{n} érintett szolgálat ({group}) minden szóba jövő engedélye, soronként",
+      "h10": "Kidolgozott példa: egy szolgálat teljes útja",
+      "rFin": "A szolgálat kódja megvan az EESZT-ben",
+      "rLicence": "Működési engedély illesztve",
+      "rSettlement": "Az engedély telephelye a NEAK szerinti településen",
+      "rProvider": "Az engedélyes adószáma egyezik a finanszírozottéval"
+    }
   },
   "neak": {
     "title": "A körzet a NEAK nyilvántartásában",
@@ -617,6 +677,16 @@
       "registry": "NEAK rendelőcím"
     },
     "mapCount": "{n} / {total} szolgálat a térképen",
-    "specialistTitle": "Fogászati szakellátás"
+    "specialistTitle": "Fogászati szakellátás",
+    "openUnmatched": "Nem illeszthető ({n})",
+    "openUnmatchedSpecialist": "Nem illeszthető szakellátások ({n})",
+    "unmatchedTitle": "{group} — nem illeszthető szolgálatok",
+    "unmatchedTitleSpecialist": "Nem illeszthető szakellátások",
+    "unmatchedSubtitle": "Amelyikhez nem találtunk egyértelmű EESZT működési engedélyt — indokkal",
+    "colCandidates": "Szóba jövő engedélyek",
+    "why": {
+      "noUnitLicence": "A szolgálat szervezeti egységéhez ({units}) nem tartozik a szakmájának megfelelő működési engedély az EESZT engedélytörzsében.",
+      "noFin": "A szolgálat kódja nem szerepel az EESZT finanszírozott szolgálatok törzsében fogorvosi (FOG) típussal."
+    }
   }
 }
