@@ -359,7 +359,7 @@ function CrosscheckTab({ data, onDrill }: {
     <>
       <h4>4. {t('eesztInfo.h4')}</h4>
       <ol className="info-steps">
-        {['s1', 's2', 's3', 's4', 's5'].map((k) => (
+        {['s1', 's2', 's3', 's4', 's5', 's6'].map((k) => (
           <li key={k}>{t(`eesztInfo.xc.${k}`)}</li>
         ))}
       </ol>
@@ -369,7 +369,7 @@ function CrosscheckTab({ data, onDrill }: {
 
       <h4>5. {t('eesztInfo.h5')}</h4>
       <ul className="info-list">
-        {['c1', 'c2', 'c3', 'c4'].map((k) => (
+        {['c1', 'c2', 'c3', 'c4', 'c5'].map((k) => (
           <li key={k}><strong>{t(`eesztInfo.xc.${k}t`)}</strong> — {t(`eesztInfo.xc.${k}`)}</li>
         ))}
       </ul>

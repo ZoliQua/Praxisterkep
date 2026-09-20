@@ -20,12 +20,12 @@ const data = {
         {
           unit: '000040249', licenceId: '000040249/A1/1300', profession: '1300',
           settlement: 'Pécs', address: 'Dr. Veress Endre utca 2', publicFunded: true,
-          match: 'address', otherUnit: true,
+          match: 'address', otherUnit: true, taxMatch: false,
         },
         {
           unit: '000040250', licenceId: '000040250/A1/1300', profession: '1300',
           settlement: 'Pécs', address: 'Dr. Veress Endre utca 2', publicFunded: false,
-          match: 'address', otherUnit: true,
+          match: 'address', otherUnit: true, taxMatch: false,
         },
       ],
     },
@@ -88,6 +88,31 @@ describe('candidateRows and eesztOnlyRows', () => {
   it('explains an EESZT-only service even without the archive block', () => {
     const old = { ...data, archive: undefined } as unknown as typeof data;
     expect(String(eesztOnlyRows(old, 'gp')[0].history)).toContain('2017-10');
+  });
+});
+
+describe('evidence strength', () => {
+  const withTax = {
+    ...data,
+    records: [{
+      ...data.records[0],
+      verdict: 'otherUnitSameProfession',
+      candidates: [{
+        ...data.records[0].candidates[0],
+        unit: '001293696', licenceId: '001293696/A1/6301', match: 'addressCore',
+        taxMatch: true,
+      }],
+    }, data.records[1]],
+  } as unknown as CrosscheckRaw;
+
+  it('says so when the provider tax number confirms the address', () => {
+    const text = explain(withTax, withTax.records[0]);
+    expect(text).toContain('adószám');
+    expect(text).toContain('001293696');
+  });
+
+  it('carries the tax agreement into the row', () => {
+    expect(crosscheckRows(withTax, 'dental')[0].taxMatch).toBe(true);
   });
 });
 

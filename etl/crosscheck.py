@@ -46,11 +46,12 @@ SCHEMA_VERSION = 1
 # profession families: a dental district is only "the same care" as a dental
 # licence (13xx), a GP district as a GP licence (63xx)
 FAMILY = {"dental": "13", "gp": "63"}
+TIP = {"dental": "FOG", "gp": "HSZ"}
 NAME_MARKER_RE = re.compile(r"\bdr\b\.?", re.IGNORECASE)
 # a suggestion is as good as its weakest link — strongest first
 VERDICTS = ("otherUnitSameProfession", "ownUnitSameProfession",
-            "otherProfessionAtAddress", "streetSameProfession",
-            "providerName", "none")
+            "providerTaxNumber", "otherProfessionAtAddress",
+            "streetSameProfession", "providerName", "none")
 MAX_CANDIDATES = 5
 
 
@@ -75,8 +76,60 @@ def address_key(settlement: str, address: str) -> tuple[str, str, str]:
     return settlement_key(settlement), street, number.group(1) if number else ""
 
 
-def name_tokens(name: str) -> set[str]:
-    return {w for w in re.split(r"[^a-z0-9]+", fold(name)) if len(w) >= 3}
+# legal form and generic words carry no identity: "DeveMed Kft." and "DeveMed
+# Korlátolt Felelősségű Társaság" are the same provider
+NAME_STOPWORDS = {
+    "kft", "bt", "zrt", "nyrt", "kkt", "kht", "eva", "ev",
+    "korlatolt", "felelossegu", "tarsasag", "beteti", "kozkereseti",
+    "reszvenytarsasag", "nonprofit", "kozhasznu", "tarsa", "tarsai",
+    "egeszsegugyi", "egeszsegügyi", "szolgaltato", "szolgaltatasi", "szolgalat",
+    "es", "kozpont", "orvosi", "haziorvosi", "fogorvosi", "praxis", "medical",
+    "mediclub", "kozossegi", "onkormanyzat", "onkormanyzata", "varos", "kozseg",
+}
+# street words that identify the kind of street, not the street itself
+STREET_TYPES = {
+    "utca", "ut", "ter", "korut", "setany", "park", "sor", "koz", "dulo",
+    "lakotelep", "rakpart", "fasor", "liget", "korond", "udvar", "telep",
+    "major", "puszta", "tanya", "sugarut", "allomas",
+}
+# a leading title or initial is not the street's name either
+STREET_SKIP = {"dr", "id", "ifj", "szt", "sz", "prof", "gr", "vitez"}
+
+
+def name_tokens(name: str, strip_legal: bool = False) -> set[str]:
+    words = {w for w in re.split(r"[^a-z0-9]+", fold(name)) if len(w) >= 2}
+    if not strip_legal:
+        return {w for w in words if len(w) >= 3}
+    core = {w for w in words if len(w) >= 3 and w not in NAME_STOPWORDS}
+    # "Orvosi Bt." is all stopwords — then the full name has to do
+    return core or {w for w in words if len(w) >= 3}
+
+
+def name_match(a: str, b: str) -> float:
+    """How much of the shorter distinctive name the other one contains."""
+    ta, tb = name_tokens(a, strip_legal=True), name_tokens(b, strip_legal=True)
+    if not ta or not tb:
+        return 0.0
+    shared = ta & tb
+    if not any(len(w) >= 4 for w in shared):
+        return 0.0  # agreeing on "bt" or "med" alone proves nothing
+    return len(shared) / min(len(ta), len(tb))
+
+
+def street_core(settlement: str, address: str) -> tuple[str, str, str, str]:
+    """(settlement, first real street word, street type, house number).
+
+    NEAK writes "Semmelweis I. u. 1.", the licence register "Semmelweis utca
+    1." — the same address with the forename abbreviated away. Matching on the
+    first distinctive word plus the street type and the house number bridges
+    that, while "Kossuth tér 1" still differs from "Kossuth utca 1".
+    """
+    sett, street, number = address_key(settlement, address)
+    words = [w for w in street.split() if w]
+    stype = words[-1] if words and words[-1] in STREET_TYPES else ""
+    body = [w for w in words if w != stype]
+    core = next((w for w in body if len(w) > 1 and w not in STREET_SKIP), "")
+    return sett, core, stype, number
 
 
 def neak_history(codes: set[str]) -> dict[str, dict]:
@@ -121,6 +174,7 @@ def build(date: str) -> dict:
     px, prov = load("euszolg", date)
 
     by_address: dict[tuple, list] = collections.defaultdict(list)
+    by_core: dict[tuple, list] = collections.defaultdict(list)
     by_street: dict[tuple, list] = collections.defaultdict(list)
     by_settlement: dict[tuple, int] = collections.Counter()
     for r in eng:
@@ -128,6 +182,9 @@ def build(date: str) -> dict:
         by_address[key].append(r)
         by_street[(key[0], key[1])].append(r)
         by_settlement[(key[0], (r[ex["SZAKMA_KOD"]] or "")[:2])] += 1
+        core = street_core(r[ex["TELEPHELY_TELEPULES"]], r[ex["TELEPHELY_CIM"]])
+        if core[1]:
+            by_core[core].append(r)
     lic_by_provider: dict[str, list] = collections.defaultdict(list)
     lic_by_unit: dict[str, list] = collections.defaultdict(list)
     for r in eng:
@@ -137,9 +194,16 @@ def build(date: str) -> dict:
     # provider names, indexed by their tokens so a rename or a suffix change
     # does not hide the provider
     providers = {r[px["EUSZOLG_AZONOSITO"]]: r for r in prov}
+    # the financing register carries the provider's tax number, the provider
+    # register carries it too: that is a deterministic link, not a guess
+    prov_by_tax: dict[str, list[str]] = collections.defaultdict(list)
+    for r in prov:
+        tax = (r[px["ADOSZAM"]] or "")[:8]
+        if tax:
+            prov_by_tax[tax].append(r[px["EUSZOLG_AZONOSITO"]])
     by_token: dict[str, set[str]] = collections.defaultdict(set)
     for r in prov:
-        for token in name_tokens(r[px["KOZPONTITORZS_NEV"]]):
+        for token in name_tokens(r[px["KOZPONTITORZS_NEV"]], strip_legal=True):
             by_token[token].add(r[px["EUSZOLG_AZONOSITO"]])
 
     eeszt = json.loads((ROOT / "data" / "eeszt.json").read_text(encoding="utf-8"))
@@ -147,12 +211,16 @@ def build(date: str) -> dict:
     extra_path = ROOT / "data" / "dental_extra.json"
     extra = json.loads(extra_path.read_text(encoding="utf-8")) if extra_path.exists() else None
 
+    fin_rows: dict[str, list] = collections.defaultdict(list)
+    for r in fin:
+        fin_rows[r[fx["FINKOD"]]].append(r)
+
     records: list[dict] = []
     stats: dict[str, collections.Counter] = collections.defaultdict(collections.Counter)
 
     def provider_candidates(name: str, settlement: str, family: str) -> list[dict]:
         """Providers whose name overlaps, with a licence in the settlement."""
-        tokens = name_tokens(name)
+        tokens = name_tokens(name, strip_legal=True)
         if not tokens:
             return []
         scores: collections.Counter = collections.Counter()
@@ -161,10 +229,9 @@ def build(date: str) -> dict:
                 scores[pid] += 1
         out: list[dict] = []
         skey = settlement_key(settlement)
-        for pid, hits in scores.most_common(20):
-            other = name_tokens(providers[pid][px["KOZPONTITORZS_NEV"]])
-            overlap = hits / max(len(tokens | other), 1)
-            if overlap < 0.5:
+        for pid, _ in scores.most_common(30):
+            overlap = name_match(name, providers[pid][px["KOZPONTITORZS_NEV"]])
+            if overlap < 0.6:
                 continue
             for lic in lic_by_provider.get(pid, []):
                 if settlement_key(lic[ex["TELEPHELY_TELEPULES"]]) != skey:
@@ -175,7 +242,8 @@ def build(date: str) -> dict:
                 break
         return out
 
-    def candidate(lic: list, match: str, ex: dict, overlap: float | None = None) -> dict:
+    def candidate(lic: list, match: str, ex: dict, overlap: float | None = None,
+                  tax_providers: frozenset[str] = frozenset()) -> dict:
         out = {
             "unit": lic[ex["SZERVEZETI_EGYSEG_KOD"]] or "",
             "licenceId": lic[ex["ENGEDELY_AZONOSITO"]] or "",
@@ -184,14 +252,35 @@ def build(date: str) -> dict:
             "address": lic[ex["TELEPHELY_CIM"]] or "",
             "publicFunded": lic[ex["KOZFINANSZIROZOTT"]] == "I",
             "match": match,
+            # the provider's tax number agrees with the financing register:
+            # among several surgeries at one address, this is the one
+            "taxMatch": lic[ex["EUSZOLG_AZONOSITO"]] in tax_providers,
         }
         if overlap is not None:
             out["nameOverlap"] = overlap
         return out
 
+    def tax_candidates(entry: dict, family: str) -> list[dict]:
+        """Licences of the provider the financing register's tax number names."""
+        tax = entry.get("tax") or ""
+        if not tax:
+            return []
+        skey = settlement_key(entry["settlement"])
+        out: list[dict] = []
+        for pid in prov_by_tax.get(tax, []):
+            for lic in lic_by_provider.get(pid, []):
+                if not (lic[ex["SZAKMA_KOD"]] or "").startswith(family):
+                    continue
+                if settlement_key(lic[ex["TELEPHELY_TELEPULES"]] or "") != skey:
+                    continue
+                out.append(candidate(lic, "tax", ex,
+                                     tax_providers=frozenset([pid])))
+        return out
+
     def inspect(entry: dict) -> dict:
         """One NEAK record against the EESZT registers."""
         family = FAMILY[entry["family"]]
+        tax_providers = frozenset(prov_by_tax.get(entry.get("tax") or "", []))
         key = address_key(entry["settlement"], entry["address"])
         at_address = by_address.get(key, [])
         same = [c for c in at_address if (c[ex["SZAKMA_KOD"]] or "").startswith(family)]
@@ -199,27 +288,49 @@ def build(date: str) -> dict:
         cands: list[dict] = []
         verdict = "none"
 
-        if same:
-            other = [c for c in same if c[ex["SZERVEZETI_EGYSEG_KOD"]] not in own]
+        # the same address written the other way round ("Semmelweis I. u. 1."
+        # vs "Semmelweis utca 1.") — same street word, type and house number
+        core_key = street_core(entry["settlement"], entry["address"])
+        at_core = [c for c in by_core.get(core_key, []) if c not in at_address] \
+            if core_key[1] else []
+        same_core = [c for c in at_core if (c[ex["SZAKMA_KOD"]] or "").startswith(family)]
+
+        if same or same_core:
+            hits = [(c, "address") for c in same] + [(c, "addressCore") for c in same_core]
+            other = [(c, m) for c, m in hits if c[ex["SZERVEZETI_EGYSEG_KOD"]] not in own]
             verdict = "otherUnitSameProfession" if other else "ownUnitSameProfession"
-            cands = [candidate(c, "address", ex) for c in (other or same)]
-        elif at_address:
-            verdict = "otherProfessionAtAddress"
-            cands = [candidate(c, "address", ex) for c in at_address]
+            cands = [candidate(c, m, ex, tax_providers=tax_providers)
+                     for c, m in (other or hits)]
         else:
-            street = [c for c in by_street.get((key[0], key[1]), [])
-                      if (c[ex["SZAKMA_KOD"]] or "").startswith(family)]
-            if street:
-                verdict = "streetSameProfession"
-                cands = [candidate(c, "street", ex) for c in street]
-            elif entry.get("provider"):
-                found = provider_candidates(entry["provider"], entry["settlement"], family)
-                if found:
-                    verdict = "providerName"
-                    cands = found
+            # the provider's tax number links the two registers with no guessing
+            tax_cands = tax_candidates(entry, family)
+            if tax_cands:
+                verdict = "providerTaxNumber"
+                cands = tax_cands
+            elif at_address or at_core:
+                verdict = "otherProfessionAtAddress"
+                cands = [candidate(c, "address", ex, tax_providers=tax_providers)
+                         for c in at_address] \
+                    + [candidate(c, "addressCore", ex, tax_providers=tax_providers)
+                       for c in at_core]
+            else:
+                street = [c for c in by_street.get((key[0], key[1]), [])
+                          if (c[ex["SZAKMA_KOD"]] or "").startswith(family)]
+                if street:
+                    verdict = "streetSameProfession"
+                    cands = [candidate(c, "street", ex, tax_providers=tax_providers)
+                             for c in street]
+                elif entry.get("provider"):
+                    found = provider_candidates(entry["provider"], entry["settlement"], family)
+                    if found:
+                        verdict = "providerName"
+                        cands = found
 
         for c in cands:
             c["otherUnit"] = c["unit"] not in own
+        order = {"tax": 0, "address": 1, "addressCore": 2, "street": 3, "provider": 4}
+        cands.sort(key=lambda c: (not c["taxMatch"], order.get(c["match"], 9),
+                                  c["licenceId"]))
         # keep the list short and stable: same-unit first would hide the point,
         # so keep source order and cap it
         record = {
@@ -277,9 +388,11 @@ def build(date: str) -> dict:
                 continue
             base = info[fid]
             units = [u for u in ((eeszt["praxes"].get(fid, {}).get("t") or [""])[0]).split(",") if u]
+            tax = next((r[fx["ADOIGSZ_8"]] for r in fin_rows.get(fid, [])
+                        if r[fx["TIP"]] == TIP[kind] and r[fx["ADOIGSZ_8"]]), "")
             rec = inspect({
                 "id": fid, "source": f"district-{kind}", "family": kind,
-                "reason": reason[1], "units": units, **base,
+                "reason": reason[1], "units": units, "tax": tax, **base,
             })
             records.append(rec)
             stats[f"district-{kind}"][rec["verdict"]] += 1
@@ -293,6 +406,8 @@ def build(date: str) -> dict:
                 "id": svc["id"], "source": f"service-{svc['group']}", "family": "dental",
                 "reason": extra["unmatched"][svc["id"]][0],
                 "units": [u for u in (svc.get("trace", {}).get("units") or "").split(",") if u],
+                "tax": next((r[fx["ADOIGSZ_8"]] for r in fin_rows.get(svc["id"], [])
+                             if r[fx["TIP"]] == "FOG" and r[fx["ADOIGSZ_8"]]), ""),
                 "settlement": svc["settlement"], "address": svc["address"],
                 "county": svc["county"], "named": bool(svc.get("doctors")),
                 "provider": svc.get("provider"),
@@ -385,9 +500,12 @@ def guard(out: dict) -> None:
         if rec["verdict"] != "none" and not rec["candidates"]:
             raise EesztError(f"{rec['id']}: verdict without a candidate")
         for c in rec["candidates"]:
-            for field in ("unit", "licenceId", "profession", "settlement", "address"):
+            for field in ("unit", "licenceId", "profession", "settlement",
+                          "address", "taxMatch"):
                 if field not in c:
                     raise EesztError(f"{rec['id']}: candidate without {field}")
+            if c["match"] not in {"address", "addressCore", "tax", "street", "provider"}:
+                raise EesztError(f"{rec['id']}: unknown match basis {c['match']!r}")
             if NAME_MARKER_RE.search(c["settlement"] + " " + c["address"]):
                 # an address may legitimately be "Dr. Veress Endre utca" — a
                 # street named after someone is not a physician's name, but a

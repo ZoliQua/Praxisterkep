@@ -17,6 +17,7 @@ import type { PraxisKind } from '../types';
 const VERDICT_COLOR: Record<string, string> = {
   otherUnitSameProfession: '#4fd6c2',
   ownUnitSameProfession: '#6ea8ff',
+  providerTaxNumber: '#17a08c',
   otherProfessionAtAddress: '#c98500',
   streetSameProfession: '#9085e9',
   providerName: '#17a08c',

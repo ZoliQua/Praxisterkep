@@ -7,8 +7,8 @@ import { t } from './i18n';
 import type { ColDef, Row } from './eesztTable';
 
 export type Verdict =
-  | 'otherUnitSameProfession' | 'ownUnitSameProfession' | 'otherProfessionAtAddress'
-  | 'streetSameProfession' | 'providerName' | 'none';
+  | 'otherUnitSameProfession' | 'ownUnitSameProfession' | 'providerTaxNumber'
+  | 'otherProfessionAtAddress' | 'streetSameProfession' | 'providerName' | 'none';
 
 export interface Candidate {
   unit: string;
@@ -17,7 +17,9 @@ export interface Candidate {
   settlement: string;
   address: string;
   publicFunded: boolean;
-  match: 'address' | 'street' | 'provider';
+  match: 'address' | 'addressCore' | 'tax' | 'street' | 'provider';
+  /** the provider's tax number agrees with the financing register */
+  taxMatch: boolean;
   otherUnit: boolean;
   nameOverlap?: number;
 }
@@ -121,11 +123,22 @@ export function explain(data: CrosscheckRaw, rec: CrosscheckRecord): string {
   const best = rec.candidates[0];
   const place = best ? `${best.settlement}, ${best.address}` : '';
   switch (rec.verdict) {
-    case 'otherUnitSameProfession':
-      return t('crosscheck.why.otherUnit', {
+    case 'otherUnitSameProfession': {
+      const key = best.taxMatch ? 'crosscheck.why.otherUnitTax'
+        : best.match === 'addressCore' ? 'crosscheck.why.otherUnitLoose'
+          : 'crosscheck.why.otherUnit';
+      return t(key, {
         profession: profession(data, best.profession),
         unit: best.unit,
         own: rec.units || t('crosscheck.noUnit'),
+        place,
+        neak: rec.address,
+      });
+    }
+    case 'providerTaxNumber':
+      return t('crosscheck.why.tax', {
+        profession: profession(data, best.profession),
+        unit: best.unit,
         place,
       });
     case 'ownUnitSameProfession':
@@ -174,6 +187,7 @@ export const CROSSCHECK_COLUMNS: ColDef[] = [
   { key: 'licAddress', labelKey: 'crosscheck.colLicAddress', type: 'text', visible: true },
   { key: 'profession', labelKey: 'eeszt.colProfession', type: 'enum', visible: true },
   { key: 'basis', labelKey: 'crosscheck.colBasis', type: 'enum', visible: true },
+  { key: 'taxMatch', labelKey: 'crosscheck.colTaxMatch', type: 'bool', visible: true },
   { key: 'ownUnits', labelKey: 'crosscheck.colOwnUnit', type: 'text', visible: false },
   { key: 'moreCandidates', labelKey: 'crosscheck.colMore', type: 'number', visible: false },
   { key: 'settlementLicences', labelKey: 'crosscheck.colSettlementLicences', type: 'number', visible: false },
@@ -197,6 +211,7 @@ function rowOf(data: CrosscheckRaw, rec: CrosscheckRecord): CrosscheckRow {
     licAddress: best?.address ?? null,
     profession: best ? profession(data, best.profession) : null,
     basis: best ? t(`crosscheck.basis.${best.match}`) : null,
+    taxMatch: best ? best.taxMatch : null,
     ownUnits: rec.units || null,
     moreCandidates: Math.max(0, rec.candidateCount - 1),
     settlementLicences: rec.settlementLicences,
@@ -228,6 +243,7 @@ export const CANDIDATE_COLUMNS: ColDef[] = [
   { key: 'profession', labelKey: 'eeszt.colProfession', type: 'enum', visible: true },
   { key: 'basis', labelKey: 'crosscheck.colBasis', type: 'enum', visible: true },
   { key: 'otherUnit', labelKey: 'crosscheck.colOtherUnit', type: 'bool', visible: true },
+  { key: 'taxMatch', labelKey: 'crosscheck.colTaxMatch', type: 'bool', visible: true },
   { key: 'publicFunded', labelKey: 'eeszt.thFunded', type: 'bool', visible: true },
 ];
 
@@ -250,6 +266,7 @@ export function candidateRows(
         profession: profession(data, c.profession),
         basis: t(`crosscheck.basis.${c.match}`),
         otherUnit: c.otherUnit,
+        taxMatch: c.taxMatch,
         publicFunded: c.publicFunded,
       });
     }

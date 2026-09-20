@@ -2,7 +2,9 @@
 import pytest
 
 from build_eeszt import EesztError
-from crosscheck import address_key, guard, name_tokens, settlement_key
+from crosscheck import (
+    address_key, guard, name_match, name_tokens, settlement_key, street_core,
+)
 
 
 def test_address_key_irons_out_the_spelling():
@@ -33,7 +35,7 @@ def _rec(**over):
         "candidates": [{
             "unit": "000040249", "licenceId": "000040249/A1/1300", "profession": "1300",
             "settlement": "Pécs", "address": "Dr. Veress Endre utca 2", "match": "address",
-            "publicFunded": True, "otherUnit": True,
+            "publicFunded": True, "otherUnit": True, "taxMatch": False,
         }],
     }
     base.update(over)
@@ -62,3 +64,27 @@ def test_guard_rejects_candidates_under_a_none_verdict():
 def test_guard_rejects_an_unknown_verdict():
     with pytest.raises(EesztError, match="unknown verdict"):
         guard(_rec(verdict="looksAboutRight"))
+
+
+def test_street_core_bridges_an_abbreviated_forename():
+    # NEAK writes the middle initial, the licence register leaves it out
+    assert street_core("Ajka", "Semmelweis I. u. 1.") == ("ajka", "semmelweis", "utca", "1")
+    assert street_core("Ajka", "Semmelweis utca 1.") == ("ajka", "semmelweis", "utca", "1")
+    # a title is not the street's name either
+    assert street_core("Pécs", "Dr. Veress Endre u. 2.")[1] == "veress"
+    # the street type still separates two different streets
+    assert street_core("X", "Kossuth tér 1") != street_core("X", "Kossuth utca 1")
+
+
+def test_name_match_ignores_the_legal_form():
+    assert name_match("DeveMed Kft.", "DeveMed Korlátolt Felelősségű Társaság") == 1.0
+    assert name_match("Minta Kft.", "Példa Korlátolt Felelősségű Társaság") == 0.0
+    # agreeing on nothing but the legal form proves nothing
+    assert name_match("Orvosi Bt.", "Fogorvosi Betéti Társaság") == 0.0
+
+
+def test_guard_rejects_an_unknown_match_basis():
+    out = _rec()
+    out["records"][0]["candidates"][0]["match"] = "vibes"
+    with pytest.raises(EesztError, match="unknown match basis"):
+        guard(out)

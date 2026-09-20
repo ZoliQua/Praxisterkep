@@ -5,6 +5,28 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.16.0] — 2026-09-20
+
+### Javítva
+- A keresztellenőrzés három új bizonyítékszintet kapott, mert változatlan
+  címeken is elbukott (bejelentés: a 190090001 ajkai háziorvosi körzet):
+  - **eltérő címírás**: az utcanév törzse + utcatípus + házszám alapján is
+    párosítunk, így a „Semmelweis I. u. 1.” ↔ „Semmelweis utca 1.” pár
+    összejön, a „Kossuth tér” és a „Kossuth utca” viszont továbbra is
+    különbözik;
+  - **szolgáltatói adószám**: a finanszírozási törzs adószámát összevetjük
+    a szolgáltatói törzzél — determinisztikus kapcsolat, nem hasonlóság;
+  - **szolgáltatónév jogi forma nélkül**: a „Kft.” ↔ „Korlátolt
+    Felelősségű Társaság” különbség már nem akadály, és a pontozás
+    tartalmazás alapú.
+- Egy címen több rendelő esetén (egészségházak) a jelölteket erősség
+  szerint rendezzük: elöl az, amelyiket a szolgáltató adószáma is
+  megerősít. Új oszlop mutatja az adószám-egyezést.
+- Az eredmény: 605 nem illeszthető rekordból már **574-re** van javaslat
+  (korábban 481), a „nincs javaslat” 124-ről 31-re csökkent. Az új
+  „A szolgáltató adószáma egyezik” verdikt 78 esetet fed le.
+- Az info-panel keresztellenőrzés füle a három új szintet is végigvezeti.
+
 ## [1.15.0] — 2026-09-20
 
 ### Hozzáadva
