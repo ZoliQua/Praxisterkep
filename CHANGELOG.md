@@ -5,6 +5,33 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.22.0] — 2026-09-21
+
+### Hozzáadva
+- **Kockázati előrejelzés külön oldalon** (`kockazat.html`, fogorvosi és
+  háziorvosi részre egyaránt): minden körzet, ahol ma van szerződött
+  orvos, rangsorolva aszerint, mekkora eséllyel válik betöltetlenné 12
+  hónapon belül. Fogorvosi: 2474 körzet, átlagos 12 havi esély 1,8%;
+  háziorvosi: 5263 körzet, 3,1%.
+- A modell az archivált havi NEAK-pillanatképekből tanul (fogorvosi 23
+  teljes hónap 2017-10 óta, háziorvosi 19 hónap 2019-03 óta): a jellemzők
+  (mióta ugyanaz az orvos, településméret, kedvezményezett státusz, volt-e
+  már üres, körzettípus, egyszolgálatos szolgáltató) melletti tényleges
+  átmeneti arányokat méri, nincs fekete doboz: minden sor megmondja, mi
+  vitte fel vagy le a saját számát, és a szorzók táblázatban is látszanak.
+- Az oldal a saját ellenőrzését is kiteszi: a modellt a 2023-01 előtti
+  hónapokon illesztjük, és a későbbi valódi üresedéseken mérjük
+  (fogorvosi 136 esemény, legkockázatosabb tized 3,5% vs. 2,0% — 1,79×,
+  AUC 0,682; háziorvosi 87 esemény, 5,2% vs. 3,2% — 1,62×, AUC 0,574).
+  Rangsorolásra való, egyedi jóslásra nem — a korlátok az oldalon.
+- Térkép kockázati sáv szerint színezve, körzetszintű és vármegyei
+  táblázat, minden eddigi szűrő-, export- és PNG-mentő segédlettel.
+- Új ETL-lépés: `etl/risk.py` → `data/risk.json`.
+
+### Adatvédelem
+- Orvosnév nem hagyja el a feldolgozót: a „ugyanaz az orvos” jellemző
+  csak időtartamként jelenik meg, a kimenetet őr járja át névmarkerért.
+
 ## [1.21.0] — 2026-09-21
 
 ### Javítva

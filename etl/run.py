@@ -179,6 +179,19 @@ def main() -> None:
         print(f"      wrote {access.OUT} ({len(acc['districts'])} districts)")
     except Exception as exc:  # noqa: BLE001 — supplement must not block release
         print(f"      WARNING: accessibility analysis skipped: {exc}")
+
+    # vacancy risk: learned from the archived monthly snapshots, so it needs
+    # the whole data/ history rather than this month alone
+    try:
+        import risk
+        rk = risk.build()
+        risk.OUT.write_text(
+            json.dumps(rk, ensure_ascii=False, separators=(",", ":")) + "\n",
+            encoding="utf-8")
+        print(f"      wrote {risk.OUT} ("
+              + ", ".join(f"{k}: {len(v['rows'])}" for k, v in rk["kinds"].items()) + ")")
+    except Exception as exc:  # noqa: BLE001 — supplement must not block release
+        print(f"      WARNING: risk model skipped: {exc}")
     print("done")
 
 

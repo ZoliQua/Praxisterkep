@@ -27,6 +27,7 @@ const NAV = [
   ['#tavolsag', 'nav.access'],
   ['#eeszt', 'nav.eeszt'],
   ['#adatok', 'nav.data'],
+  ['kockazat.html', 'nav.risk'],
   ['#modszertan', 'nav.methodology'],
 ] as const;
 
