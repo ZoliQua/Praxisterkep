@@ -1,10 +1,10 @@
-// Entry point of the risk page (kockazat.html).
+// Entry point of the analysis page (elemzo.html).
 import { StrictMode, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import { locale } from './lib/i18n';
 import { useAppStore } from './store/useAppStore';
-import { RiskPage } from './components/RiskPage';
+import { AnalysisPage } from './components/AnalysisPage';
 
 function Page() {
   const loadData = useAppStore((s) => s.loadData);
@@ -13,7 +13,7 @@ function Page() {
     document.documentElement.dataset.kind = 'dental';
     void loadData(); // the county bounds and labels come from the snapshot store
   }, [loadData]);
-  return <RiskPage />;
+  return <AnalysisPage />;
 }
 
 createRoot(document.getElementById('root')!).render(

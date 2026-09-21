@@ -8,14 +8,22 @@ import { SearchSection } from './components/SearchSection';
 import { CountyRanking } from './components/CountyRanking';
 import { StatsSection } from './components/StatsSection';
 import { VersusSection } from './components/VersusSection';
-import { EesztSection } from './components/EesztSection';
 import { AccessSection } from './components/AccessSection';
 import { WhySection } from './components/WhySection';
 import { DataSection } from './components/DataSection';
 import { Methodology } from './components/Methodology';
 import { Footer } from './components/Footer';
-import { IconStethoscope, IconTooth } from './components/icons';
+import { VedonoSection } from './components/VedonoSection';
+import { IconStethoscope, IconTooth, IconVedono } from './components/icons';
 import type { PraxisKind } from './types';
+
+const VEDONO_NAV = [
+  ['#vedono', 'nav.vedono'],
+  ['#adatok', 'nav.data'],
+  ['elemzo.html', 'nav.analysis'],
+  ['eeszt.html', 'nav.eeszt'],
+  ['#modszertan', 'nav.methodology'],
+] as const;
 
 const NAV = [
   ['#terkep', 'nav.map'],
@@ -25,9 +33,9 @@ const NAV = [
   ['#statisztika', 'nav.stats'],
   ['#osszevetes', 'nav.versus'],
   ['#tavolsag', 'nav.access'],
-  ['#eeszt', 'nav.eeszt'],
   ['#adatok', 'nav.data'],
-  ['kockazat.html', 'nav.risk'],
+  ['elemzo.html', 'nav.analysis'],
+  ['eeszt.html', 'nav.eeszt'],
   ['#modszertan', 'nav.methodology'],
 ] as const;
 
@@ -35,6 +43,8 @@ export default function App() {
   const snapshot = useSnapshot();
   const kind = useAppStore((s) => s.kind);
   const setKind = useAppStore((s) => s.setKind);
+  const view = useAppStore((s) => s.view);
+  const setView = useAppStore((s) => s.setView);
   const loadError = useAppStore((s) => s.loadError);
   const loadData = useAppStore((s) => s.loadData);
 
@@ -66,15 +76,20 @@ export default function App() {
         <div className="topnav__inner">
           <span className="topnav__brand">{t('site.title')}</span>
           <div className="topnav__kind" role="group">
-            <button aria-pressed={kind === 'dental'}
+            <button aria-pressed={view === 'praxis' && kind === 'dental'}
               title={t('kinds.dental.label')} aria-label={t('kinds.dental.label')}
               onClick={() => setKind('dental' as PraxisKind)}>
               <IconTooth />
             </button>
-            <button aria-pressed={kind === 'gp'}
+            <button aria-pressed={view === 'praxis' && kind === 'gp'}
               title={t('kinds.gp.label')} aria-label={t('kinds.gp.label')}
               onClick={() => setKind('gp' as PraxisKind)}>
               <IconStethoscope />
+            </button>
+            <button aria-pressed={view === 'vedono'}
+              title={t('vedono.label')} aria-label={t('vedono.label')}
+              onClick={() => setView('vedono')}>
+              <IconVedono />
             </button>
           </div>
           <button className="topnav__lang" onClick={switchLocale}
@@ -82,22 +97,25 @@ export default function App() {
             {locale === 'hu' ? 'EN' : 'HU'}
           </button>
           <div className="topnav__links">
-            {NAV.map(([href, key]) => (
+            {(view === 'vedono' ? VEDONO_NAV : NAV).map(([href, key]) => (
               <a key={href} href={href}>{t(key)}</a>
             ))}
           </div>
         </div>
       </nav>
-      <Hero />
-      <ScrollyIntro />
-      <MapSection />
-      <WhySection />
-      <SearchSection />
-      <CountyRanking />
-      <StatsSection />
-      <VersusSection />
-      <AccessSection />
-      <EesztSection />
+      {view === 'vedono' ? <VedonoSection /> : (
+        <>
+          <Hero />
+          <ScrollyIntro />
+          <MapSection />
+          <WhySection />
+          <SearchSection />
+          <CountyRanking />
+          <StatsSection />
+          <VersusSection />
+          <AccessSection />
+        </>
+      )}
       <DataSection />
       <Methodology />
       <Footer />

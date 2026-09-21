@@ -32,7 +32,10 @@
     "eeszt": "EESZT",
     "access": "Distance",
     "data": "Data",
-    "risk": "Risk"
+    "analysis": "Analysis",
+    "specialist": "Specialist care",
+    "home": "Home",
+    "vedono": "Health visitors"
   },
   "hero": {
     "vacant": "vacant {kind} districts",
@@ -1062,5 +1065,56 @@
     "l4": "Provider size and neighbouring vacancies are taken from today's state; every other characteristic uses only its own past in each month.",
     "note": "Data as of {month}. No physician's name leaves the pipeline — the tenure factor appears only as a duration.",
     "backToMap": "Back to the map"
+  },
+  "analysis": {
+    "heading": "Analysis",
+    "lead": "What lies beyond the monthly snapshot: which district may lose its doctor, how long districts have lasted so far, how much of the country is actually covered at settlement level, and where several problems meet at once."
+  },
+  "vedono": {
+    "label": "Health-visitor districts",
+    "heading": "Health-visitor districts",
+    "explain": "The third branch of primary care: {services} financed health-visitor services — {territorial} territorial and {school} school ones. Since the 2023 state takeover they are run mostly by county hospitals; this shows how many districts each operator holds and where the premises are.",
+    "noVacancy": "This section does not speak about vacancies: neither NEAK nor OKFŐ publishes a vacancy list for health-visitor districts — what is public is the EESZT master publication (financed services and operating licences). So what you see here is the number of services, their operators and premises, not whether a health visitor is currently working in a given district.",
+    "statTerritorial": "territorial services",
+    "statSchool": "school services",
+    "statPerService": "residents per territorial service",
+    "statProviders": "operators",
+    "coverageLead": "of settlements host health-visitor premises ({with} / {total})",
+    "withPremises": "Has premises in the settlement",
+    "withoutPremises": "No premises in the settlement",
+    "mapCount": "{n} / {total} services on the map",
+    "loadTitle": "How much load falls on one territorial district?",
+    "loadExplain": "Under decree 49/2004. (V. 21.) ESZCSM a territorial health-visitor district is built around some 250 children under seven, which is roughly {reference} residents. The breakdown below shows how many counties fall below, around or above that — resident count only approximates the number of children, it does not replace it.",
+    "bandUnder": "Below the reference (−10%)",
+    "bandNear": "Around the reference (±10%)",
+    "bandOver": "Above the reference (+10%)",
+    "openTable": "Health-visitor services ({n})",
+    "openCounties": "Counties compared",
+    "openProviders": "Operators ({n})",
+    "tableTitle": "Health-visitor services",
+    "tableSubtitle": "Every financed territorial and school health-visitor service · filterable, exportable",
+    "countyTitle": "Health-visitor care by county",
+    "countySubtitle": "Service counts and residents per territorial service",
+    "providerTitle": "Operators of the health-visitor services",
+    "providerSubtitle": "How many districts each provider holds",
+    "uncoveredTitle": "Settlements without health-visitor premises",
+    "uncoveredSubtitle": "No registered health-visitor premises here — which does not mean no health visitor comes",
+    "coveredTitle": "Settlements with health-visitor premises",
+    "coveredSubtitle": "At least one health-visitor service has registered premises here",
+    "colBranch": "Type",
+    "colProvider": "Operator",
+    "colDistrict": "District (járás)",
+    "colTerritorial": "Territorial",
+    "colSchool": "School",
+    "colServices": "Services",
+    "colSettlements": "Settlements",
+    "colProviders": "Operators",
+    "colCounties": "Counties",
+    "colPerService": "Residents / territorial service",
+    "branch": {
+      "territorial": "Territorial",
+      "school": "School"
+    },
+    "note": "Source: EESZT master publication, {asOf}. An operating licence was found for {licence} services and not for {missing}. Geocoded premises: {geocoded}. No health visitor's name appears anywhere."
   }
 }

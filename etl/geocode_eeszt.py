@@ -58,6 +58,13 @@ def main() -> None:
                                          "address": s["address"]}]):
                 want(site["postalCode"], site["settlement"], site["address"])
 
+    # the health-visitor premises (source H as well) share the same cache
+    vedono_path = ROOT / "data" / "vedono.json"
+    if vedono_path.exists():
+        vedono = json.loads(vedono_path.read_text(encoding="utf-8"))
+        for r in vedono["rows"]:
+            want(r.get("postalCode", ""), r["settlement"], r["address"])
+
     cache = load_cache()
     todo = [k for k in premises if k not in cache]
     if args.limit:

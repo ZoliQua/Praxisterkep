@@ -1,7 +1,7 @@
-// "Kockázati előrejelzés" (kockazat.html): every district that has a doctor
-// today, ranked by how likely it is to lose one within a year. The page shows
-// the model's out-of-sample check next to its output, because a ranking that
-// cannot say how well it worked is not worth acting on.
+// "Kockázati előrejelzés": every district that has a doctor today, ranked by
+// how likely it is to lose one within a year. The block shows the model's
+// out-of-sample check next to its output, because a ranking that cannot say
+// how well it worked is not worth acting on. One block of the analysis page.
 import { useMemo, useState } from 'react';
 import { t, tKind } from '../lib/i18n';
 import { formatNumber, formatPercent } from '../lib/format';
@@ -36,10 +36,9 @@ function detailRows(row: MapRow): [string, string][] {
   ];
 }
 
-export function RiskPage() {
+export function RiskSection({ kind }: { kind: PraxisKind }) {
   const data = useRisk();
   const eeszt = useEeszt();
-  const [kind, setKind] = useState<PraxisKind>('dental');
   const [open, setOpen] = useState<'districts' | 'counties' | null>(null);
 
   const rows = useMemo<MapRow[]>(() => {
@@ -86,24 +85,8 @@ export function RiskPage() {
 
   return (
     <>
-      <nav className="topnav">
-        <div className="container topnav__inner">
-          <a className="topnav__brand" href={`${import.meta.env.BASE_URL}`}>PRAXISTÉRKÉP</a>
-          <div className="seg seg--kind" role="group">
-            {(['dental', 'gp'] as PraxisKind[]).map((k) => (
-              <button key={k} aria-pressed={kind === k} onClick={() => setKind(k)}>
-                {t(`kinds.${k}.label`)}
-              </button>
-            ))}
-          </div>
-          <div className="topnav__links">
-            <a href={`${import.meta.env.BASE_URL}`}>{t('risk.backToMap')}</a>
-          </div>
-        </div>
-      </nav>
-
-      <header className="section container">
-        <h1 className="section__heading">{t('risk.heading')}</h1>
+      <header className="section container" id="kockazat">
+        <h2 className="section__heading">{t('risk.heading')}</h2>
         <p className="section__explain">{tKind('risk.explain', kind, {
           months: String(model.months.length),
           from: model.months[0],

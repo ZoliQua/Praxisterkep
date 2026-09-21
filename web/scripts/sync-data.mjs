@@ -28,6 +28,7 @@ const optional = [
   [join(repo, 'data', 'operating.json'), join(out, 'operating.json')],
   [join(repo, 'data', 'kedvezmenyezett.json'), join(out, 'kedvezmenyezett.json')],
   [join(repo, 'data', 'risk.json'), join(out, 'risk.json')],
+  [join(repo, 'data', 'vedono.json'), join(out, 'vedono.json')],
 ];
 
 mkdirSync(out, { recursive: true });

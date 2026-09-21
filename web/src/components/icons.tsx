@@ -25,6 +25,23 @@ export function IconChild() {
   );
 }
 
+/** health visitors: an infant over a cradling arc */
+export function IconVedono() {
+  return (
+    <svg viewBox="0 0 48 48" aria-hidden="true">
+      <circle cx="24" cy="15" r="8.5" fill="none" stroke="currentColor" strokeWidth="2.5" />
+      <circle cx="21" cy="14" r="1.3" fill="currentColor" />
+      <circle cx="27" cy="14" r="1.3" fill="currentColor" />
+      <path d="M21.5 18.5c1.5 1.2 3.5 1.2 5 0" fill="none" stroke="currentColor"
+        strokeWidth="2" strokeLinecap="round" />
+      <path d="M8 30c2.5 8.5 8.5 13 16 13s13.5-4.5 16-13" fill="none"
+        stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+      <path d="M6 29.5h9M33 29.5h9" stroke="currentColor" strokeWidth="2.5"
+        strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export function IconTooth() {
   return (
     <svg viewBox="0 0 48 48" aria-hidden="true">

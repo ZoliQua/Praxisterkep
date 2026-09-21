@@ -168,6 +168,17 @@ def main() -> None:
     except Exception as exc:  # noqa: BLE001 — supplement must not block release
         print(f"      WARNING: EESZT supplement skipped: {exc}")
 
+    # health visitors: the third branch, EESZT-only (no NEAK vacancy list)
+    try:
+        import vedono
+        vd = vedono.build()
+        vedono.OUT.write_text(
+            json.dumps(vd, ensure_ascii=False, separators=(",", ":")) + "\n",
+            encoding="utf-8")
+        print(f"      wrote {vedono.OUT} ({vd['stats']['services']} services)")
+    except Exception as exc:  # noqa: BLE001 — supplement must not block release
+        print(f"      WARNING: health-visitor supplement skipped: {exc}")
+
     # accessibility: how far the nearest operating surgery is (needs only the
     # NEAK snapshot, so it runs even when the EESZT step failed)
     try:

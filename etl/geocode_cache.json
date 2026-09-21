@@ -23099,6 +23099,11 @@
   "lat": 46.861465,
   "lon": 19.610289
  },
+ "6034 Helvécia, Óvoda utca 1/b": {
+  "geoApprox": false,
+  "lat": 46.861465,
+  "lon": 19.610289
+ },
  "6035 Ballószög, Rákóczi  út 2.": {
   "geoApprox": false,
   "lat": 46.859456,
@@ -23108,6 +23113,11 @@
   "geoApprox": true,
   "lat": 46.860552,
   "lon": 19.569577
+ },
+ "6035 Ballószög, Rákóczi út 2.": {
+  "geoApprox": false,
+  "lat": 46.859456,
+  "lon": 19.567426
  },
  "6041 Kerekegyháza, Fő utca 47/C.": {
   "geoApprox": false,
@@ -23339,6 +23349,11 @@
   "lat": 46.876519,
   "lon": 19.220203
  },
+ "6085 Fülöpszállás, Kossuth L.  utca 1-3.": {
+  "geoApprox": true,
+  "lat": 46.820143,
+  "lon": 19.239556
+ },
  "6085 Fülöpszállás, Kossuth Lajos  1-3.": {
   "geoApprox": false,
   "lat": 46.818765,
@@ -23539,6 +23554,11 @@
   "lat": 46.620962,
   "lon": 19.862418
  },
+ "6114 Bugac, Szabadság tér 2/A": {
+  "geoApprox": false,
+  "lat": 46.688115,
+  "lon": 19.680646
+ },
  "6114 Bugac, Szabadság tér 2/A.": {
   "geoApprox": false,
   "lat": 46.688115,
@@ -23639,10 +23659,20 @@
   "lat": 46.419727,
   "lon": 19.841566
  },
+ "6135 Csólyospálos, Korona utca 2": {
+  "geoApprox": false,
+  "lat": 46.419727,
+  "lon": 19.841566
+ },
  "6135 Csólyospálos, Kossuth Lajos  utca 57": {
   "geoApprox": false,
   "lat": 46.415187,
   "lon": 19.845568
+ },
+ "6136 Harkakötöny, Bem J.  utca 2": {
+  "geoApprox": true,
+  "lat": 46.463433,
+  "lon": 19.6075
  },
  "6136 Harkakötöny, Bem J. u. 2.": {
   "geoApprox": true,
@@ -23739,6 +23769,11 @@
   "lat": 46.691391,
   "lon": 19.203933
  },
+ "6221 Akasztó, Szent István  utca 1.": {
+  "geoApprox": false,
+  "lat": 46.691391,
+  "lon": 19.203933
+ },
  "6221 Akasztó, Szent István 1": {
   "geoApprox": false,
   "lat": 46.691391,
@@ -23753,6 +23788,11 @@
   "geoApprox": false,
   "lat": 46.714115,
   "lon": 19.263295
+ },
+ "6222 Csengőd, Dózsa Gy.  utca 35.": {
+  "geoApprox": true,
+  "lat": 46.716091,
+  "lon": 19.267574
  },
  "6222 Csengőd, Dózsa Gy.  utca 65.": {
   "geoApprox": true,
@@ -23819,6 +23859,11 @@
   "lat": 46.615049,
   "lon": 19.480811
  },
+ "6235 Bócsa, Rákóczi utca 32.": {
+  "geoApprox": false,
+  "lat": 46.615049,
+  "lon": 19.480811
+ },
  "6236 Tázlár, Dobó u. 3.": {
   "geoApprox": false,
   "lat": 46.550527,
@@ -23848,6 +23893,11 @@
   "geoApprox": false,
   "lat": 46.523251,
   "lon": 19.24653
+ },
+ "6238 Imrehegy, Kossuth L. tér 6.": {
+  "geoApprox": true,
+  "lat": 46.48453,
+  "lon": 19.303704
  },
  "6238 Imrehegy, Kossuth Lajos tér 13.": {
   "geoApprox": true,
@@ -24004,6 +24054,11 @@
   "lat": 46.839922,
   "lon": 18.956456
  },
+ "6323 Dunaegyháza, Mikszáth Kálmán  utca 25": {
+  "geoApprox": false,
+  "lat": 46.839997,
+  "lon": 18.956193
+ },
  "6326 Harta, Semmelweis  tér 1.": {
   "geoApprox": false,
   "lat": 46.694431,
@@ -24029,10 +24084,20 @@
   "lat": 46.644249,
   "lon": 19.000104
  },
+ "6328 Dunapataj, Ordasi 15-17.": {
+  "geoApprox": false,
+  "lat": 46.643348,
+  "lon": 18.994265
+ },
  "6328 Dunapataj, Ordasi u. 15-17.": {
   "geoApprox": false,
   "lat": 46.644249,
   "lon": 19.000104
+ },
+ "6331 Foktő, Kossuth L. 3.": {
+  "geoApprox": false,
+  "lat": 46.526445,
+  "lon": 18.928581
  },
  "6331 Foktő, Kossuth Lajos utca 12.": {
   "geoApprox": false,
@@ -24055,6 +24120,11 @@
   "lon": 18.891814
  },
  "6334 Géderlak, KOSSUTH U utca 89": {
+  "geoApprox": false,
+  "lat": 46.603743,
+  "lon": 18.914218
+ },
+ "6334 Géderlak, Kossuth L.  89.": {
   "geoApprox": false,
   "lat": 46.603743,
   "lon": 18.914218
@@ -24099,6 +24169,11 @@
   "lat": 46.490071,
   "lon": 19.069538
  },
+ "6341 Homokmégy, Kossuth L. 108.": {
+  "geoApprox": false,
+  "lat": 46.489992,
+  "lon": 19.069994
+ },
  "6341 Homokmégy, Kossuth u. 15.": {
   "geoApprox": false,
   "lat": 46.490071,
@@ -24113,6 +24188,11 @@
   "geoApprox": false,
   "lat": 46.445414,
   "lon": 19.030324
+ },
+ "6344 Hajós, Temető  utca 6.": {
+  "geoApprox": false,
+  "lat": 46.397983,
+  "lon": 19.112376
  },
  "6344 Hajós, Temető 6": {
   "geoApprox": false,
@@ -24199,6 +24279,16 @@
   "lat": 46.487842,
   "lon": 18.957105
  },
+ "6351 Bátya, Kis Ernő  utca 13.": {
+  "geoApprox": true,
+  "lat": 46.487415,
+  "lon": 18.954523
+ },
+ "6352 Fajsz, Szent István  utca 20.": {
+  "geoApprox": false,
+  "lat": 46.418104,
+  "lon": 18.922757
+ },
  "6352 Fajsz, Szent István u.20.": {
   "geoApprox": true,
   "lat": 46.416145,
@@ -24225,6 +24315,11 @@
   "lon": 18.958439
  },
  "6353 Dusnok, Köztársaság  4.": {
+  "geoApprox": false,
+  "lat": 46.392326,
+  "lon": 18.979284
+ },
+ "6353 Dusnok, Köztársaság  6.": {
   "geoApprox": false,
   "lat": 46.392326,
   "lon": 18.979284
@@ -24339,6 +24434,11 @@
   "lat": 46.379929,
   "lon": 19.65899
  },
+ "6412 Balotaszállás, Kossuth L.  utca 7.": {
+  "geoApprox": true,
+  "lat": 46.351012,
+  "lon": 19.536182
+ },
  "6412 Balotaszállás, Kossuth Lajos utca 7.": {
   "geoApprox": false,
   "lat": 46.350024,
@@ -24444,12 +24544,22 @@
   "lat": 46.126196,
   "lon": 19.471556
  },
+ "6424 Csikéria, Kossuth L. utca 4": {
+  "geoApprox": true,
+  "lat": 46.126196,
+  "lon": 19.471556
+ },
  "6425 Bácsszőlős, KOSSUTH 18": {
   "geoApprox": false,
   "lat": 46.135996,
   "lon": 19.422581
  },
  "6425 Bácsszőlős, Kossuth L. u. 18.": {
+  "geoApprox": true,
+  "lat": 46.135231,
+  "lon": 19.42125
+ },
+ "6425 Bácsszőlős, Kossuth L. utca 20": {
   "geoApprox": true,
   "lat": 46.135231,
   "lon": 19.42125
@@ -24465,6 +24575,11 @@
   "lon": 19.327634
  },
  "6430 Bácsalmás, Gróf Teleki 12": {
+  "geoApprox": false,
+  "lat": 46.120757,
+  "lon": 19.33321
+ },
+ "6430 Bácsalmás, Gróf Teleki József  utca 12": {
   "geoApprox": false,
   "lat": 46.120757,
   "lon": 19.33321
@@ -24544,6 +24659,11 @@
   "lat": 46.197445,
   "lon": 19.189038
  },
+ "6447 Felsőszentiván, Martinovics utca 7/A": {
+  "geoApprox": false,
+  "lat": 46.19537,
+  "lon": 19.185412
+ },
  "6447 Felsőszentiván, Rákóczi Ferenc utca 58/B": {
   "geoApprox": false,
   "lat": 46.197646,
@@ -24553,6 +24673,11 @@
   "geoApprox": false,
   "lat": 46.189852,
   "lon": 19.145271
+ },
+ "6448 Csávoly, Petőfi S.  utca 12/A": {
+  "geoApprox": true,
+  "lat": 46.194385,
+  "lon": 19.144102
  },
  "6449 Mélykút, NAGY  utca 4/C": {
   "geoApprox": false,
@@ -24599,10 +24724,20 @@
   "lat": 46.124025,
   "lon": 19.155818
  },
+ "6453 Bácsbokod, gróf Széchenyi István utca 80": {
+  "geoApprox": true,
+  "lat": 46.124025,
+  "lon": 19.155818
+ },
  "6454 Bácsborsód, Perczel 1": {
   "geoApprox": false,
   "lat": 46.094473,
   "lon": 19.154121
+ },
+ "6454 Bácsborsód, Petőfi  utca 1": {
+  "geoApprox": false,
+  "lat": 46.095638,
+  "lon": 19.158827
  },
  "6455 Katymár, Szabadság tér 4.": {
   "geoApprox": false,
@@ -24764,6 +24899,11 @@
   "lat": 46.166741,
   "lon": 18.962048
  },
+ "6500 Baja, Pokorny utca 2": {
+  "geoApprox": false,
+  "lat": 46.174606,
+  "lon": 18.963059
+ },
  "6500 Baja, Rókus u. 10.": {
   "geoApprox": false,
   "lat": 46.175533,
@@ -24844,6 +24984,11 @@
   "lat": 46.107413,
   "lon": 18.989517
  },
+ "6522 Gara, Kossuth L. utca 66": {
+  "geoApprox": true,
+  "lat": 46.034232,
+  "lon": 19.038691
+ },
  "6522 Gara, Páncsics 2/a ALAPELL": {
   "geoApprox": true,
   "lat": 46.034232,
@@ -24853,6 +24998,11 @@
   "geoApprox": false,
   "lat": 46.03583,
   "lon": 19.044284
+ },
+ "6523 Csátalja, Dózsa György utca 5": {
+  "geoApprox": false,
+  "lat": 46.03474,
+  "lon": 18.947329
  },
  "6523 Csátalja, Erzsébet 4": {
   "geoApprox": false,
@@ -24874,6 +25024,11 @@
   "lat": 45.950602,
   "lon": 18.93584
  },
+ "6525 Hercegszántó, Kossuth Lajos utca 25/B": {
+  "geoApprox": false,
+  "lat": 45.948166,
+  "lon": 18.926455
+ },
  "6525 Hercegszántó, Zrínyi Miklós utca 1/A": {
   "geoApprox": false,
   "lat": 45.944508,
@@ -24890,6 +25045,11 @@
   "lon": 18.902439
  },
  "6528 Bátmonostor, Kossuth Lajos  utca 1.": {
+  "geoApprox": false,
+  "lat": 46.105693,
+  "lon": 18.919473
+ },
+ "6528 Bátmonostor, Kossuth Lajos utca 1": {
   "geoApprox": false,
   "lat": 46.105693,
   "lon": 18.919473
@@ -27569,6 +27729,16 @@
   "lat": 46.190946,
   "lon": 18.259755
  },
+ "7300 Komló, Kossuth 103": {
+  "geoApprox": false,
+  "lat": 46.190946,
+  "lon": 18.259755
+ },
+ "7300 Komló, Kossuth L.  utca 103.": {
+  "geoApprox": true,
+  "lat": 46.191167,
+  "lon": 18.261378
+ },
  "7300 Komló, Kossuth L. utca 103.": {
   "geoApprox": true,
   "lat": 46.191167,
@@ -27644,6 +27814,11 @@
   "lat": 46.199508,
   "lon": 18.272751
  },
+ "7332 Magyaregregy, Kossuth L. utca 73.": {
+  "geoApprox": true,
+  "lat": 46.251009,
+  "lon": 18.308272
+ },
  "7333 Kárász, Ady E. u. 20.": {
   "geoApprox": true,
   "lat": 46.266374,
@@ -27653,6 +27828,11 @@
   "geoApprox": false,
   "lat": 46.266185,
   "lon": 18.313979
+ },
+ "7342 Mágocs, József A. utca 16.": {
+  "geoApprox": true,
+  "lat": 46.349833,
+  "lon": 18.22859
  },
  "7342 Mágocs, SZABADSÁG 22": {
   "geoApprox": false,
@@ -27679,6 +27859,11 @@
   "lat": 46.331198,
   "lon": 18.285401
  },
+ "7347 Egyházaskozár, Tinódi  utca 59.": {
+  "geoApprox": false,
+  "lat": 46.332583,
+  "lon": 18.31251
+ },
  "7347 Egyházaskozár, Tinódi u. 65.": {
   "geoApprox": false,
   "lat": 46.332583,
@@ -27688,6 +27873,11 @@
   "geoApprox": false,
   "lat": 46.332583,
   "lon": 18.31251
+ },
+ "7349 Szászvár, Arany J.  utca 30": {
+  "geoApprox": true,
+  "lat": 46.274409,
+  "lon": 18.378309
  },
  "7349 Szászvár, Arany János utca 30.": {
   "geoApprox": false,
@@ -27744,10 +27934,20 @@
   "lat": 46.329522,
   "lon": 18.131534
  },
+ "7362 Gerényes, Kossuth L.  utca 22.": {
+  "geoApprox": true,
+  "lat": 46.305428,
+  "lon": 18.184925
+ },
  "7362 Vásárosdombó, Szabadság  tér 10": {
   "geoApprox": false,
   "lat": 46.306191,
   "lon": 18.134681
+ },
+ "7362 Vásárosdombó, Szabadság  tér 14/A.": {
+  "geoApprox": false,
+  "lat": 46.306264,
+  "lon": 18.133537
  },
  "7362 Vásárosdombó, Szabadság tér 10.": {
   "geoApprox": false,
@@ -27769,6 +27969,11 @@
   "lat": 46.263416,
   "lon": 18.101634
  },
+ "7370 Sásd, Arad utca 1": {
+  "geoApprox": false,
+  "lat": 46.256828,
+  "lon": 18.107356
+ },
  "7370 Sásd, POZSONY 2": {
   "geoApprox": true,
   "lat": 46.255956,
@@ -27789,6 +27994,11 @@
   "lat": 46.252128,
   "lon": 18.109731
  },
+ "7384 Baranyajenő, Szabadság utca 71/B.": {
+  "geoApprox": false,
+  "lat": 46.271039,
+  "lon": 18.046895
+ },
  "7385 Gödre, Árpád  utca 1.": {
   "geoApprox": false,
   "lat": 46.29197,
@@ -27799,10 +28009,25 @@
   "lat": 46.29197,
   "lon": 17.971523
  },
+ "7386 Gödre, Dobó I.  utca 1.": {
+  "geoApprox": true,
+  "lat": 46.286363,
+  "lon": 17.972663
+ },
+ "7391 Mindszentgodisa, Béke utca 1.": {
+  "geoApprox": false,
+  "lat": 46.231282,
+  "lon": 18.086931
+ },
  "7391 Mindszentgodisa, KOSSUTH 50": {
   "geoApprox": false,
   "lat": 46.223592,
   "lon": 18.060698
+ },
+ "7394 Magyarhertelend, Petőfi S.  utca 26.": {
+  "geoApprox": true,
+  "lat": 46.189236,
+  "lon": 18.151543
  },
  "7394 Magyarhertelend, Petőfi utca 26.": {
   "geoApprox": false,
@@ -27810,6 +28035,11 @@
   "lon": 18.148979
  },
  "7396 Magyarszék, Hársfa utca 2/A": {
+  "geoApprox": false,
+  "lat": 46.195824,
+  "lon": 18.194731
+ },
+ "7396 Magyarszék, Hársfa utca 2/A.": {
   "geoApprox": false,
   "lat": 46.195824,
   "lon": 18.194731
@@ -28454,6 +28684,16 @@
   "lat": 46.075389,
   "lon": 18.222839
  },
+ "7621 Pécs, Hunyadi u. 9": {
+  "geoApprox": false,
+  "lat": 46.078204,
+  "lon": 18.227897
+ },
+ "7621 Pécs, Irgalmasok  utcája 1": {
+  "geoApprox": false,
+  "lat": 46.074817,
+  "lon": 18.228841
+ },
  "7621 Pécs, Irgalmasok  utcája 1.": {
   "geoApprox": false,
   "lat": 46.074817,
@@ -28479,10 +28719,30 @@
   "lat": 46.070581,
   "lon": 18.227003
  },
+ "7621 Pécs, Király  utca 44.": {
+  "geoApprox": false,
+  "lat": 46.076737,
+  "lon": 18.234419
+ },
+ "7621 Pécs, Köztársaság tér 1": {
+  "geoApprox": false,
+  "lat": 46.069017,
+  "lon": 18.222445
+ },
+ "7621 Pécs, Mária utca 2": {
+  "geoApprox": false,
+  "lat": 46.077135,
+  "lon": 18.229338
+ },
  "7621 Pécs, Perczel Miklós utca 40.": {
   "geoApprox": false,
   "lat": 46.076193,
   "lon": 18.234149
+ },
+ "7621 Pécs, Szent I. tér 8-10": {
+  "geoApprox": true,
+  "lat": 46.076509,
+  "lon": 18.228032
  },
  "7621 Pécs, Tüzér utca 1.": {
   "geoApprox": false,
@@ -28493,6 +28753,11 @@
   "geoApprox": false,
   "lat": 46.072696,
   "lon": 18.233779
+ },
+ "7622 Pécs, Batthyány utca 1-3.": {
+  "geoApprox": false,
+  "lat": 46.070281,
+  "lon": 18.234053
  },
  "7622 Pécs, Diófa utca 1": {
   "geoApprox": false,
@@ -28589,6 +28854,16 @@
   "lat": 46.074107,
   "lon": 18.221036
  },
+ "7623 Pécs, Rét 10": {
+  "geoApprox": false,
+  "lat": 46.068005,
+  "lon": 18.223117
+ },
+ "7623 Pécs, Rét utca 41-43": {
+  "geoApprox": false,
+  "lat": 46.072146,
+  "lon": 18.222843
+ },
  "7623 Pécs, Semmelweis u. 18.": {
   "geoApprox": false,
   "lat": 46.069389,
@@ -28659,6 +28934,11 @@
   "lat": 46.076509,
   "lon": 18.228032
  },
+ "7624 Pécs, Jurisics Miklós  utca 17.": {
+  "geoApprox": false,
+  "lat": 46.081954,
+  "lon": 18.211019
+ },
  "7624 Pécs, Jurisics Miklós utca 17.": {
   "geoApprox": false,
   "lat": 46.081954,
@@ -28704,12 +28984,27 @@
   "lat": 46.075004,
   "lon": 18.211787
  },
+ "7624 Pécs, Szigeti  út 97": {
+  "geoApprox": false,
+  "lat": 46.067183,
+  "lon": 18.190015
+ },
+ "7624 Pécs, alkotmány utca 38": {
+  "geoApprox": false,
+  "lat": 46.076693,
+  "lon": 18.216885
+ },
  "7625 Pécs, Jurisics M. utca 17": {
   "geoApprox": true,
   "lat": 46.076509,
   "lon": 18.228032
  },
  "7625 Pécs, Mikszáth Kálmán  utca 8": {
+  "geoApprox": false,
+  "lat": 46.083228,
+  "lon": 18.223661
+ },
+ "7625 Pécs, Mikszáth Kálmán  utca 8.": {
   "geoApprox": false,
   "lat": 46.083228,
   "lon": 18.223661
@@ -28789,6 +29084,11 @@
   "lat": 46.109803,
   "lon": 18.246987
  },
+ "7627 Pécs, Zsolnay V. 90": {
+  "geoApprox": false,
+  "lat": 46.07945,
+  "lon": 18.254047
+ },
  "7628 Pécs, Hősök  tere 7": {
   "geoApprox": false,
   "lat": 46.118577,
@@ -28803,6 +29103,11 @@
   "geoApprox": false,
   "lat": 46.095114,
   "lon": 18.265909
+ },
+ "7629 Pécs, Dobó István utca 35": {
+  "geoApprox": false,
+  "lat": 46.088353,
+  "lon": 18.266583
  },
  "7629 Pécs, Dobó István utca 41/a": {
   "geoApprox": false,
@@ -28819,6 +29124,11 @@
   "lat": 46.093553,
   "lon": 18.265155
  },
+ "7629 Pécs, Hársfa utca 94": {
+  "geoApprox": true,
+  "lat": 46.076509,
+  "lon": 18.228032
+ },
  "7630 Pécs, Bor utca 22.": {
   "geoApprox": false,
   "lat": 46.077215,
@@ -28833,6 +29143,11 @@
   "geoApprox": false,
   "lat": 46.134791,
   "lon": 18.326854
+ },
+ "7631 Pécs, Lovász Pál  tér 1": {
+  "geoApprox": false,
+  "lat": 46.044034,
+  "lon": 18.236846
  },
  "7631 Pécs, Lovász Pál tér 1": {
   "geoApprox": false,
@@ -28849,15 +29164,30 @@
   "lat": 46.049326,
   "lon": 18.213821
  },
+ "7632 Pécs, Aidinger J.u. 41": {
+  "geoApprox": true,
+  "lat": 46.076509,
+  "lon": 18.228032
+ },
  "7632 Pécs, Apáczai Cs. J. körtér 1": {
   "geoApprox": true,
   "lat": 46.076509,
   "lon": 18.228032
  },
+ "7632 Pécs, Apáczai Csere János körtér 1": {
+  "geoApprox": false,
+  "lat": 46.041378,
+  "lon": 18.222799
+ },
  "7632 Pécs, Apáczai Csere János körtér 1.": {
   "geoApprox": false,
   "lat": 46.041378,
   "lon": 18.222799
+ },
+ "7632 Pécs, Berek utca 15": {
+  "geoApprox": false,
+  "lat": 46.045123,
+  "lon": 18.219782
  },
  "7632 Pécs, Csontváry  utca 6/1 Hrsz: hrsz. 23912/140": {
   "geoApprox": true,
@@ -28999,6 +29329,11 @@
   "lat": 46.045638,
   "lon": 18.219781
  },
+ "7633 Pécs, Bánki D.u. 2": {
+  "geoApprox": true,
+  "lat": 46.076509,
+  "lon": 18.228032
+ },
  "7633 Pécs, DR. VERESS ENDRE utca 2": {
   "geoApprox": false,
   "lat": 46.064435,
@@ -29038,6 +29373,11 @@
   "geoApprox": true,
   "lat": 46.076509,
   "lon": 18.228032
+ },
+ "7633 Pécs, Esztergár u. 6.": {
+  "geoApprox": false,
+  "lat": 46.064009,
+  "lon": 18.194741
  },
  "7633 Pécs, Kőrösi Csoma Sándor  utca 1.": {
   "geoApprox": false,
@@ -29089,6 +29429,11 @@
   "lat": 46.064435,
   "lon": 18.201008
  },
+ "7633 Pécs, Építők u. 9": {
+  "geoApprox": true,
+  "lat": 46.076509,
+  "lon": 18.228032
+ },
  "7634 Pécs, Endresz Gy. utca 19": {
   "geoApprox": true,
   "lat": 46.076509,
@@ -29114,12 +29459,22 @@
   "lat": 46.100699,
   "lon": 18.247286
  },
+ "7636 Pécs, Malomvölgyi u. 1/B": {
+  "geoApprox": true,
+  "lat": 46.076509,
+  "lon": 18.228032
+ },
  "7636 Pécs, Nagy Ferenc tér 9.": {
   "geoApprox": false,
   "lat": 46.037982,
   "lon": 18.223542
  },
  "7636 Pécs, POLGÁRSZŐLŐ utca 12": {
+  "geoApprox": false,
+  "lat": 46.032025,
+  "lon": 18.220672
+ },
+ "7636 Pécs, Polgárszőlő  utca 12.": {
   "geoApprox": false,
   "lat": 46.032025,
   "lon": 18.220672
@@ -29134,10 +29489,20 @@
   "lat": 46.032025,
   "lon": 18.220672
  },
+ "7661 Erzsébet, Fő  út 56": {
+  "geoApprox": false,
+  "lat": 47.686974,
+  "lon": 17.597139
+ },
  "7661 Erzsébet, Fő 56": {
   "geoApprox": false,
   "lat": 46.099657,
   "lon": 18.45987
+ },
+ "7664 Berkesd, Alkotmány utca 40": {
+  "geoApprox": false,
+  "lat": 46.072214,
+  "lon": 18.411777
  },
  "7664 Berkesd, Alkotmány utca 40.": {
   "geoApprox": false,
@@ -29153,6 +29518,16 @@
   "geoApprox": false,
   "lat": 46.02255,
   "lon": 18.078539
+ },
+ "7671 Bicsérd, Alkotmány tér 5.": {
+  "geoApprox": false,
+  "lat": 46.020847,
+  "lon": 18.075655
+ },
+ "7673 Kővágószőlős, Rákóczi  utca 2.": {
+  "geoApprox": true,
+  "lat": 46.082967,
+  "lon": 18.125067
  },
  "7673 Kővágószőlős, Rákóczi 2": {
   "geoApprox": false,
@@ -29174,7 +29549,17 @@
   "lat": 46.140978,
   "lon": 18.116744
  },
+ "7678 Abaliget, Kossuth Lajos utca 87": {
+  "geoApprox": true,
+  "lat": 46.140978,
+  "lon": 18.116744
+ },
  "7681 Hetvehely, Rákóczi u. 37.": {
+  "geoApprox": false,
+  "lat": 46.133728,
+  "lon": 18.043761
+ },
+ "7681 Hetvehely, Rákóczi utca 37.": {
   "geoApprox": false,
   "lat": 46.133728,
   "lon": 18.043761
@@ -29183,6 +29568,11 @@
   "geoApprox": true,
   "lat": 46.132145,
   "lon": 18.044153
+ },
+ "7682 Bükkösd, Kossuth Lajos utca 47.": {
+  "geoApprox": false,
+  "lat": 46.102842,
+  "lon": 17.98961
  },
  "7682 Bükkösd, Kossuth Lajos utca 71.": {
   "geoApprox": false,
@@ -29198,6 +29588,16 @@
   "geoApprox": false,
   "lat": 46.134791,
   "lon": 18.326854
+ },
+ "7691 Pécs, Bencze József utca 13/1": {
+  "geoApprox": false,
+  "lat": 46.136986,
+  "lon": 18.326461
+ },
+ "7691 Pécs, Mázsaház  utca 25": {
+  "geoApprox": false,
+  "lat": 46.128595,
+  "lon": 18.314978
  },
  "7691 Pécs, Mázsaház utca 25.": {
   "geoApprox": false,
@@ -29239,6 +29639,11 @@
   "lat": 46.167085,
   "lon": 18.348121
  },
+ "7695 Mecseknádasd, Rákóczi F.  utca 2-4.": {
+  "geoApprox": true,
+  "lat": 46.224405,
+  "lon": 18.464517
+ },
  "7695 Mecseknádasd, Rákóczi Ferenc utca 2-4": {
   "geoApprox": false,
   "lat": 46.227473,
@@ -29253,6 +29658,11 @@
   "geoApprox": false,
   "lat": 46.25974,
   "lon": 18.494963
+ },
+ "7696 Hidas, Petőfi S. út 2/b": {
+  "geoApprox": true,
+  "lat": 46.259533,
+  "lon": 18.497748
  },
  "7696 Hidas, Petőfi Sándor utca 2 b": {
   "geoApprox": false,
@@ -29269,10 +29679,25 @@
   "lat": 46.003256,
   "lon": 18.705342
  },
+ "7700 Mohács, Kossuth": {
+  "geoApprox": false,
+  "lat": 45.999877,
+  "lon": 18.680803
+ },
+ "7700 Mohács, Kossuth út 58": {
+  "geoApprox": true,
+  "lat": 45.993384,
+  "lon": 18.682108
+ },
  "7700 Mohács, Perényi utca 8.": {
   "geoApprox": false,
   "lat": 45.994014,
   "lon": 18.686482
+ },
+ "7700 Mohács, Széchenyi  tér 17": {
+  "geoApprox": false,
+  "lat": 45.990263,
+  "lon": 18.688434
  },
  "7700 Mohács, VÉRADO U 1": {
   "geoApprox": false,
@@ -29339,6 +29764,11 @@
   "lat": 46.085176,
   "lon": 18.760007
  },
+ "7712 Dunaszekcső, Rév utca 9": {
+  "geoApprox": false,
+  "lat": 46.085176,
+  "lon": 18.760007
+ },
  "7716 Homorúd, Ifjúság  tér 6.": {
   "geoApprox": false,
   "lat": 45.982658,
@@ -29354,12 +29784,22 @@
   "lat": 45.948574,
   "lon": 18.705727
  },
+ "7717 Kölked, Rákóczi  utca 30": {
+  "geoApprox": false,
+  "lat": 45.949966,
+  "lon": 18.711418
+ },
  "7720 Pécsvárad, Dózsa Gy  utca 3": {
   "geoApprox": true,
   "lat": 46.160841,
   "lon": 18.420694
  },
  "7720 Pécsvárad, Dózsa Gy. u. 3.": {
+  "geoApprox": true,
+  "lat": 46.160841,
+  "lon": 18.420694
+ },
+ "7720 Pécsvárad, Dózsa Gy. utca 3.": {
   "geoApprox": true,
   "lat": 46.160841,
   "lon": 18.420694
@@ -29389,6 +29829,16 @@
   "lat": 46.154735,
   "lon": 18.614133
  },
+ "7726 Véménd, Vörösmarty utca 15": {
+  "geoApprox": false,
+  "lat": 46.154735,
+  "lon": 18.614133
+ },
+ "7727 Palotabozsok, Kossuth  út 77": {
+  "geoApprox": true,
+  "lat": 46.128834,
+  "lon": 18.640963
+ },
  "7727 Palotabozsok, Kossuth Lajos utca 77.": {
   "geoApprox": true,
   "lat": 46.128834,
@@ -29398,6 +29848,16 @@
   "geoApprox": false,
   "lat": 46.076253,
   "lon": 18.659747
+ },
+ "7728 Somberek, Kossuth utca 113": {
+  "geoApprox": false,
+  "lat": 46.08621,
+  "lon": 18.655096
+ },
+ "7733 Geresdlak, Hunyadi  utca 15.": {
+  "geoApprox": false,
+  "lat": 46.111565,
+  "lon": 18.520064
  },
  "7733 Geresdlak, Mohácsi út 16/B.": {
   "geoApprox": true,
@@ -29414,15 +29874,30 @@
   "lat": 46.085935,
   "lon": 18.569835
  },
+ "7735 Himesháza, Radnóti telep 74": {
+  "geoApprox": true,
+  "lat": 46.085935,
+  "lon": 18.569835
+ },
  "7741 Nagykozár, KOSSUTH 33": {
   "geoApprox": false,
   "lat": 46.062577,
   "lon": 18.321447
  },
+ "7741 Nagykozár, Kossuth utca 32.": {
+  "geoApprox": false,
+  "lat": 46.069718,
+  "lon": 18.31668
+ },
  "7745 Olasz, Kossuth L. 109/a": {
   "geoApprox": false,
   "lat": 46.014056,
   "lon": 18.411925
+ },
+ "7745 Olasz, Kossuth út 109/A": {
+  "geoApprox": true,
+  "lat": 46.015164,
+  "lon": 18.411796
  },
  "7751 Szederkény, PÉCSI út 19/B": {
   "geoApprox": false,
@@ -29438,6 +29913,11 @@
   "geoApprox": false,
   "lat": 45.996871,
   "lon": 18.449333
+ },
+ "7753 Szajk, Kossuth utca 106": {
+  "geoApprox": false,
+  "lat": 45.990128,
+  "lon": 18.532453
  },
  "7754 Bóly, Hunyadi János út 3 földszint 2-es": {
   "geoApprox": true,
@@ -29459,6 +29939,16 @@
   "lat": 45.970465,
   "lon": 18.514584
  },
+ "7754 Bóly, Hősök tere 9": {
+  "geoApprox": false,
+  "lat": 45.968185,
+  "lon": 18.517037
+ },
+ "7754 Bóly, Rákóczi u. 2.": {
+  "geoApprox": false,
+  "lat": 45.966999,
+  "lon": 18.519701
+ },
  "7754 Bóly, Szabadság  utca 1/B.": {
   "geoApprox": false,
   "lat": 45.970509,
@@ -29474,10 +29964,25 @@
   "lat": 45.935321,
   "lon": 18.46836
  },
+ "7756 Borjád, Deák Ferenc út 30": {
+  "geoApprox": true,
+  "lat": 45.935321,
+  "lon": 18.46836
+ },
  "7757 Babarc, Béke u. 48.": {
   "geoApprox": false,
   "lat": 46.005507,
   "lon": 18.550469
+ },
+ "7757 Babarc, Béke utca 48": {
+  "geoApprox": false,
+  "lat": 46.00479,
+  "lon": 18.551196
+ },
+ "7759 Lánycsók, Dózsa Gy. utca 12": {
+  "geoApprox": true,
+  "lat": 46.004824,
+  "lon": 18.623614
  },
  "7759 Lánycsók, II. Lajos utca 15": {
   "geoApprox": false,
@@ -29488,6 +29993,11 @@
   "geoApprox": false,
   "lat": 46.001759,
   "lon": 18.629509
+ },
+ "7761 Kozármisleny, Alkotmány  tér 54.": {
+  "geoApprox": false,
+  "lat": 46.040398,
+  "lon": 18.288778
  },
  "7761 Kozármisleny, Alkotmány tér 54.": {
   "geoApprox": false,
@@ -29519,6 +30029,16 @@
   "lat": 46.047823,
   "lon": 18.285705
  },
+ "7763 Egerág, Ipolyság  utca 5.": {
+  "geoApprox": false,
+  "lat": 45.977787,
+  "lon": 18.304378
+ },
+ "7766 Újpetre, KOSSUTH utca 48": {
+  "geoApprox": false,
+  "lat": 45.937891,
+  "lon": 18.362785
+ },
  "7766 Újpetre, Kossuth Lajos  utca 48": {
   "geoApprox": false,
   "lat": 45.937891,
@@ -29529,10 +30049,20 @@
   "lat": 45.937891,
   "lon": 18.362785
  },
+ "7768 Vokány, Kossuth  utca 86": {
+  "geoApprox": false,
+  "lat": 45.913262,
+  "lon": 18.336358
+ },
  "7768 Vokány, Kossuth Lajos utca 96": {
   "geoApprox": false,
   "lat": 45.913262,
   "lon": 18.336358
+ },
+ "7773 Villány, Baross G.  utca 37": {
+  "geoApprox": true,
+  "lat": 45.869764,
+  "lon": 18.455521
  },
  "7773 Villány, Baross G. u. 37": {
   "geoApprox": true,
@@ -29559,10 +30089,25 @@
   "lat": 45.845955,
   "lon": 18.486401
  },
+ "7775 Magyarbóly, Vasút  út 40": {
+  "geoApprox": true,
+  "lat": 45.840388,
+  "lon": 18.491754
+ },
+ "7781 Lippó, IFJÚSÁG utca 4": {
+  "geoApprox": false,
+  "lat": 45.867382,
+  "lon": 18.572615
+ },
  "7781 Lippó, Ifjúság u. 4.": {
   "geoApprox": false,
   "lat": 45.867382,
   "lon": 18.572615
+ },
+ "7783 Majs, Petőfi S.  utca 2/A": {
+  "geoApprox": true,
+  "lat": 45.908734,
+  "lon": 18.600301
  },
  "7783 Majs, Petőfi Sándor tér 2/A.": {
   "geoApprox": true,
@@ -29578,6 +30123,11 @@
   "geoApprox": false,
   "lat": 45.941402,
   "lon": 18.579377
+ },
+ "7800 Siklós, Dózsa Gy.  utca 5": {
+  "geoApprox": true,
+  "lat": 45.852145,
+  "lon": 18.298382
  },
  "7800 Siklós, Dózsa Gy. u. 5": {
   "geoApprox": true,
@@ -29624,6 +30174,11 @@
   "lat": 45.857198,
   "lon": 18.291432
  },
+ "7811 Szalánta, Hunyadi  utca 99.": {
+  "geoApprox": false,
+  "lat": 45.952181,
+  "lon": 18.237089
+ },
  "7811 Szalánta, Hunyadi utca 99.": {
   "geoApprox": false,
   "lat": 45.952181,
@@ -29634,12 +30189,22 @@
   "lat": 45.920743,
   "lon": 18.197908
  },
+ "7812 Garé, Rákóczi utca 83": {
+  "geoApprox": false,
+  "lat": 45.920743,
+  "lon": 18.197908
+ },
  "7815 Harkány, Kossuth L. u. 36": {
   "geoApprox": true,
   "lat": 45.847791,
   "lon": 18.235998
  },
  "7815 Harkány, Kossuth L. utca 42": {
+  "geoApprox": true,
+  "lat": 45.847791,
+  "lon": 18.235998
+ },
+ "7815 Harkány, Kőrösi Cs. S.  utca 43": {
   "geoApprox": true,
   "lat": 45.847791,
   "lon": 18.235998
@@ -29664,6 +30229,16 @@
   "lat": 45.877339,
   "lon": 18.164218
  },
+ "7817 Diósviszló, Petőfi utca 134": {
+  "geoApprox": false,
+  "lat": 45.877339,
+  "lon": 18.164218
+ },
+ "7822 Nagyharsány, Kikerics  utca 16": {
+  "geoApprox": false,
+  "lat": 45.846897,
+  "lon": 18.388601
+ },
  "7822 Nagyharsány, Kikerics út 2-4": {
   "geoApprox": true,
   "lat": 45.847418,
@@ -29679,6 +30254,16 @@
   "lat": 45.809423,
   "lon": 18.333469
  },
+ "7824 Egyházasharaszti, Kossuth L. utca 66": {
+  "geoApprox": true,
+  "lat": 45.809301,
+  "lon": 18.334322
+ },
+ "7826 Alsószentmárton, Kossuth utca 32": {
+  "geoApprox": false,
+  "lat": 45.792948,
+  "lon": 18.306073
+ },
  "7827 Beremend, Szabadság tér 5": {
   "geoApprox": false,
   "lat": 45.784854,
@@ -29689,20 +30274,40 @@
   "lat": 45.784854,
   "lon": 18.435481
  },
+ "7831 Pellérd, Dózsa György  utca 100": {
+  "geoApprox": false,
+  "lat": 46.034078,
+  "lon": 18.156741
+ },
  "7831 Pellérd, Dózsa György utca 100.": {
   "geoApprox": false,
   "lat": 46.034078,
   "lon": 18.156741
+ },
+ "7833 Görcsöny, Rákóczi út 7": {
+  "geoApprox": true,
+  "lat": 45.969606,
+  "lon": 18.135428
  },
  "7833 Görcsöny, Rákóczi út 7.": {
   "geoApprox": true,
   "lat": 45.969606,
   "lon": 18.135428
  },
+ "7834 Baksa, Kossuth utca 8": {
+  "geoApprox": false,
+  "lat": 45.951875,
+  "lon": 18.089088
+ },
  "7834 Baksa, Rádfa 1": {
   "geoApprox": true,
   "lat": 45.959505,
   "lon": 18.095042
+ },
+ "7836 Bogádmindszent, Kossuth  utca 34": {
+  "geoApprox": false,
+  "lat": 45.906322,
+  "lon": 18.042903
  },
  "7836 Bogádmindszent, Kossuth L. u. 34.": {
   "geoApprox": true,
@@ -29713,6 +30318,11 @@
   "geoApprox": false,
   "lat": 45.861158,
   "lon": 17.978728
+ },
+ "7838 Vajszló, Kodolányi tér 5": {
+  "geoApprox": false,
+  "lat": 45.859508,
+  "lon": 17.983801
  },
  "7838 Vajszló, TEMESVÁRI utca 20": {
   "geoApprox": false,
@@ -29729,6 +30339,11 @@
   "lat": 45.859536,
   "lon": 17.988577
  },
+ "7841 Baranyahidvég, Szabadság  utca 59": {
+  "geoApprox": false,
+  "lat": 45.846097,
+  "lon": 18.025537
+ },
  "7841 Sámod, Rózsa F. utca 56": {
   "geoApprox": true,
   "lat": 45.854702,
@@ -29739,10 +30354,20 @@
   "lat": 45.852365,
   "lon": 18.03795
  },
+ "7843 Kémes, Petőfi  utca 17": {
+  "geoApprox": false,
+  "lat": 45.825822,
+  "lon": 18.098761
+ },
  "7843 Kémes, Vértanuk  utca 2": {
   "geoApprox": false,
   "lat": 45.820716,
   "lon": 18.104492
+ },
+ "7851 Drávaszabolcs, Köztársaság  tér 7": {
+  "geoApprox": false,
+  "lat": 45.804013,
+  "lon": 18.211434
  },
  "7851 Drávaszabolcs, Köztársaság tér 7.": {
   "geoApprox": false,
@@ -29764,10 +30389,25 @@
   "lat": 46.048437,
   "lon": 17.808311
  },
+ "7900 Szigetvár, Rákóczi 18": {
+  "geoApprox": false,
+  "lat": 46.045109,
+  "lon": 17.801096
+ },
+ "7900 Szigetvár, Rákóczi 9": {
+  "geoApprox": false,
+  "lat": 46.046133,
+  "lon": 17.800223
+ },
  "7900 Szigetvár, Rákóczi u. 9-13": {
   "geoApprox": false,
   "lat": 46.046133,
   "lon": 17.800223
+ },
+ "7900 Szigetvár, SZENT ISTVÁN lakótelep 7": {
+  "geoApprox": false,
+  "lat": 46.054763,
+  "lon": 17.790453
  },
  "7900 Szigetvár, Szent István lakótelep 7.": {
   "geoApprox": false,
@@ -29778,6 +30418,11 @@
   "geoApprox": false,
   "lat": 46.047848,
   "lon": 17.799478
+ },
+ "7912 Nagypeterd, Kossuth utca 93/B.": {
+  "geoApprox": false,
+  "lat": 46.044356,
+  "lon": 17.898429
  },
  "7912 Nagypeterd, Petőfi utca 1/B.": {
   "geoApprox": false,
@@ -29794,6 +30439,11 @@
   "lat": 45.994752,
   "lon": 17.834612
  },
+ "7915 Dencsháza, Petőfi utca 36.": {
+  "geoApprox": false,
+  "lat": 45.993978,
+  "lon": 17.837616
+ },
  "7918 Lakócsa, Dózsa Gy. u. 2.": {
   "geoApprox": true,
   "lat": 45.896406,
@@ -29809,6 +30459,11 @@
   "lat": 46.090534,
   "lon": 17.749547
  },
+ "7922 Somogyapáti, Fő utca 82.": {
+  "geoApprox": false,
+  "lat": 46.091746,
+  "lon": 17.749319
+ },
  "7925 Somogyhárságy, Petőfi u. 64": {
   "geoApprox": false,
   "lat": 46.166929,
@@ -29818,6 +30473,11 @@
   "geoApprox": false,
   "lat": 46.111201,
   "lon": 17.840376
+ },
+ "7934 Almamellék, Kossuth utca 17.": {
+  "geoApprox": false,
+  "lat": 46.161642,
+  "lon": 17.879298
  },
  "7935 Ibafa, Kossuth L. u. 4.": {
   "geoApprox": true,
@@ -29833,6 +30493,16 @@
   "geoApprox": false,
   "lat": 46.164957,
   "lon": 17.836431
+ },
+ "7936 Szentlászló, Kossuth utca 21.": {
+  "geoApprox": false,
+  "lat": 46.157081,
+  "lon": 17.834913
+ },
+ "7940 Szentlőrinc, Eszterházi  utca 1": {
+  "geoApprox": true,
+  "lat": 46.041561,
+  "lon": 17.988914
  },
  "7940 Szentlőrinc, Eszterházy utca 1": {
   "geoApprox": false,
@@ -29864,10 +30534,25 @@
   "lat": 46.006762,
   "lon": 18.042978
  },
+ "7951 Szabadszentkirály, Petőfi utca 91.": {
+  "geoApprox": false,
+  "lat": 46.006762,
+  "lon": 18.042978
+ },
  "7953 Királyegyháza, Petőfi Sándor utca 61.": {
   "geoApprox": false,
   "lat": 45.99847,
   "lon": 17.968589
+ },
+ "7953 Királyegyháza, Petőfi utca 62.": {
+  "geoApprox": false,
+  "lat": 45.992692,
+  "lon": 17.961575
+ },
+ "7954 Magyarmecske, Petőfi  utca 94": {
+  "geoApprox": false,
+  "lat": 45.947031,
+  "lon": 17.963772
  },
  "7954 Magyarmecske, Petőfi 92": {
   "geoApprox": false,
@@ -29879,10 +30564,20 @@
   "lat": 45.825621,
   "lon": 17.822729
  },
+ "7960 Drávasztára, Kossuth utca 69": {
+  "geoApprox": false,
+  "lat": 45.826441,
+  "lon": 17.82151
+ },
  "7960 Sellye, Bodonyi  Nándor utca 1/A fsz 161": {
   "geoApprox": false,
   "lat": 45.87459,
   "lon": 17.849619
+ },
+ "7960 Sellye, Bodonyi N. utca 1/A": {
+  "geoApprox": true,
+  "lat": 45.873544,
+  "lon": 17.851405
  },
  "7960 Sellye, Bodonyi Nándor u. 1.": {
   "geoApprox": false,
@@ -29904,6 +30599,11 @@
   "lat": 45.87459,
   "lon": 17.849619
  },
+ "7964 Csányoszró, KOSSUTH utca 38": {
+  "geoApprox": false,
+  "lat": 45.881195,
+  "lon": 17.910345
+ },
  "7964 Csányoszró, Szabadság u. 4.": {
   "geoApprox": false,
   "lat": 45.88355,
@@ -29913,6 +30613,11 @@
   "geoApprox": false,
   "lat": 45.88355,
   "lon": 17.912461
+ },
+ "7967 Drávafok, Fő  utca 1/a": {
+  "geoApprox": false,
+  "lat": 45.88757,
+  "lon": 17.765157
  },
  "7967 Drávafok, Fő u. 1/A.": {
   "geoApprox": false,
@@ -29938,6 +30643,16 @@
   "geoApprox": false,
   "lat": 45.968017,
   "lon": 17.713036
+ },
+ "7975 Kétújfalu, Zrínyi utca 34.": {
+  "geoApprox": false,
+  "lat": 45.968017,
+  "lon": 17.713036
+ },
+ "7985 Nagydobsza, Fő utca 9.": {
+  "geoApprox": false,
+  "lat": 46.028149,
+  "lon": 17.667717
  },
  "7985 Nagydobsza, PETŐFI U. 9.": {
   "geoApprox": false,

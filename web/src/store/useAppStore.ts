@@ -7,6 +7,8 @@ import { readMapState } from '../lib/mapState';
 const initialUrl = readMapState(window.location.search);
 
 export type MapMetric = 'rate' | 'population' | 'popshare';
+/** the landing shows either the two physician branches or the health visitors */
+export type LandingView = 'praxis' | 'vedono';
 
 interface AppState {
   latest: LatestFile | null;
@@ -14,6 +16,7 @@ interface AppState {
   history: History | null;
   loadError: string | null;
   kind: PraxisKind;
+  view: LandingView;
   typeFilter: TypeFilter;
   mapMetric: MapMetric;
   selectedCounty: string | null;
@@ -25,6 +28,7 @@ interface AppState {
   selectMonth: (month: string | null) => Promise<void>;
   requestSearch: (name: string) => void;
   setKind: (k: PraxisKind) => void;
+  setView: (v: LandingView) => void;
   setTypeFilter: (t: TypeFilter) => void;
   setMapMetric: (m: MapMetric) => void;
   setSelectedCounty: (name: string | null) => void;
@@ -37,6 +41,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   history: null,
   loadError: null,
   kind: initialUrl.kind ?? 'dental',
+  view: 'praxis',
   typeFilter: initialUrl.type ?? 'all',
   mapMetric: initialUrl.metric ?? 'rate',
   selectedCounty: initialUrl.county ?? null,
@@ -45,8 +50,9 @@ export const useAppStore = create<AppState>((set, get) => ({
   searchRequest: null,
   // switching kind resets kind-specific view state
   setKind: (kind) => set({
-    kind, typeFilter: 'all', selectedCounty: null, selectedMonth: null,
+    kind, view: 'praxis', typeFilter: 'all', selectedCounty: null, selectedMonth: null,
   }),
+  setView: (view) => set({ view }),
   ensureMonth: async (month) => {
     const key = `${get().kind}/${month}`;
     if (get().monthCache[key]) return;

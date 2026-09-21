@@ -32,7 +32,10 @@
     "eeszt": "EESZT",
     "access": "Távolság",
     "data": "Adatok",
-    "risk": "Kockázat"
+    "analysis": "Elemző",
+    "specialist": "Szakellátás",
+    "home": "Főoldal",
+    "vedono": "Védőnő"
   },
   "hero": {
     "vacant": "betöltetlen {kind} körzet",
@@ -1062,5 +1065,56 @@
     "l4": "A szolgáltató méretét és a szomszédos üresedést a mai állapotból ismerjük; a többi jellemző minden hónapban csak a saját múltját használja.",
     "note": "Adatállapot: {month}. Orvosnév sehol nem hagyja el a feldolgozót — a „ugyanaz az orvos” jellemző csak időtartamként jelenik meg.",
     "backToMap": "Vissza a térképhez"
+  },
+  "analysis": {
+    "heading": "Elemző",
+    "lead": "Ami a havi pillanatképen túl van: melyik körzet veszítheti el az orvosát, meddig húzták eddig a körzetek, mennyi az ország tényleges lefedettsége településszinten, és hol találkozik egyszerre több baj."
+  },
+  "vedono": {
+    "label": "Védőnői körzetek",
+    "heading": "Védőnői körzetek",
+    "explain": "Az alapellátás harmadik ága: {services} finanszírozott védőnői szolgálat — {territorial} területi és {school} iskolai. A 2023-as állami átvétel óta túlélnyomórészt vármegyei kórházak a fenntartók; itt látszik, melyik szolgáltató alatt hány körzet működik és hol vannak a telephelyek.",
+    "noVacancy": "Betöltetlenségről ez a rész nem beszél: védőnői körzetekre sem a NEAK, sem az OKFŐ nem tesz közzé betöltetlen listát — ami nyilvános, az az EESZT törzspublikáció (finanszírozott szolgálatok és működési engedélyek). Ezért itt a szolgálatok száma, a fenntartók és a telephelyek szerepelnek, nem az, hogy dolgozik-e éppen védőnő az adott körzetben.",
+    "statTerritorial": "területi védőnői szolgálat",
+    "statSchool": "iskolai védőnői szolgálat",
+    "statPerService": "lakos jut egy területi szolgálatra",
+    "statProviders": "fenntartó szolgáltató",
+    "coverageLead": "településen van védőnői telephely ({with} / {total})",
+    "withPremises": "Van telephely a településen",
+    "withoutPremises": "Nincs telephely a településen",
+    "mapCount": "{n} / {total} védőnői szolgálat a térképen",
+    "loadTitle": "Mekkora terhelés jut egy területi körzetre?",
+    "loadExplain": "A 49/2004. (V. 21.) ESZCSM rendelet szerint egy területi védőnői körzet nagyjából 250 hét év alatti gyermek ellátására épül, ami körülbelül {reference} lakost jelent. Az alábbi bontás azt mutatja, hány vármegye esik ez alá, körülötte vagy fölé — a lakosságszám nem helyettesíti a gyermekszámot, csak közelíti.",
+    "bandUnder": "A referencia alatt (–10%)",
+    "bandNear": "A referencia körül (±10%)",
+    "bandOver": "A referencia fölött (+10%)",
+    "openTable": "Védőnői szolgálatok ({n})",
+    "openCounties": "Vármegyék összevetése",
+    "openProviders": "Fenntartók ({n})",
+    "tableTitle": "Védőnői szolgálatok",
+    "tableSubtitle": "Minden finanszírozott területi és iskolai védőnői szolgálat · szűrhető, exportálható",
+    "countyTitle": "Védőnői ellátás vármegyénként",
+    "countySubtitle": "Szolgálatok száma és az egy területi szolgálatra jutó lakosság",
+    "providerTitle": "A védőnői szolgálatok fenntartói",
+    "providerSubtitle": "Melyik szolgáltató alatt hány körzet működik",
+    "uncoveredTitle": "Települések védőnői telephely nélkül",
+    "uncoveredSubtitle": "Itt nincs bejegyzett védőnői telephely — ez nem jelenti azt, hogy nem jár ki védőnő",
+    "coveredTitle": "Települések védőnői telephellyel",
+    "coveredSubtitle": "Itt legalább egy védőnői szolgálat telephelye be van jegyezve",
+    "colBranch": "Típus",
+    "colProvider": "Fenntartó",
+    "colDistrict": "Járás",
+    "colTerritorial": "Területi",
+    "colSchool": "Iskolai",
+    "colServices": "Szolgálatok",
+    "colSettlements": "Települések",
+    "colProviders": "Fenntartók",
+    "colCounties": "Vármegyék",
+    "colPerService": "Lakos / területi szolgálat",
+    "branch": {
+      "territorial": "Területi védőnő",
+      "school": "Iskolai védőnő"
+    },
+    "note": "Forrás: EESZT törzspublikáció, {asOf}. Működési engedély {licence} szolgálathoz található, {missing}-hoz nem. Geokódolt telephely: {geocoded}. Védőnő neve sehol nem jelenik meg."
   }
 }

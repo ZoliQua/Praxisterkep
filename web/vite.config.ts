@@ -10,7 +10,8 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'index.html'),
         embed: resolve(__dirname, 'embed.html'),
-        risk: resolve(__dirname, 'kockazat.html'),
+        analysis: resolve(__dirname, 'elemzo.html'),
+        eeszt: resolve(__dirname, 'eeszt.html'),
       },
     },
   },
