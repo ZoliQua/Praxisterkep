@@ -65,6 +65,13 @@ def main() -> None:
         for r in vedono["rows"]:
             want(r.get("postalCode", ""), r["settlement"], r["address"])
 
+    # the specialist sites (source I) — one entry per distinct site address
+    spec_path = ROOT / "data" / "specialist.json"
+    if spec_path.exists():
+        spec = json.loads(spec_path.read_text(encoding="utf-8"))
+        for s in spec["sites"]:
+            want(s["postalCode"], s["settlement"], s["address"])
+
     cache = load_cache()
     todo = [k for k in premises if k not in cache]
     if args.limit:

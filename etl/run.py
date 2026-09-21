@@ -168,6 +168,19 @@ def main() -> None:
     except Exception as exc:  # noqa: BLE001 — supplement must not block release
         print(f"      WARNING: EESZT supplement skipped: {exc}")
 
+    # specialist care (source I): the contracted inpatient and outpatient
+    # institutions — context around the districts, never part of them
+    try:
+        import specialist
+        sp = specialist.build(month)
+        specialist.OUT.write_text(
+            json.dumps(sp, ensure_ascii=False, separators=(",", ":")) + "\n",
+            encoding="utf-8")
+        print(f"      wrote {specialist.OUT} ("
+              + ", ".join(f"{c}: {st['rows']}" for c, st in sp["stats"].items()) + ")")
+    except Exception as exc:  # noqa: BLE001 — supplement must not block release
+        print(f"      WARNING: specialist list skipped: {exc}")
+
     # health visitors: the third branch, EESZT-only (no NEAK vacancy list)
     try:
         import vedono

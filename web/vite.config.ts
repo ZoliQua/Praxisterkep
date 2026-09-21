@@ -12,6 +12,7 @@ export default defineConfig({
         embed: resolve(__dirname, 'embed.html'),
         analysis: resolve(__dirname, 'elemzo.html'),
         eeszt: resolve(__dirname, 'eeszt.html'),
+        specialist: resolve(__dirname, 'szakellato.html'),
       },
     },
   },

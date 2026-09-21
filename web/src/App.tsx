@@ -22,6 +22,7 @@ const VEDONO_NAV = [
   ['#adatok', 'nav.data'],
   ['elemzo.html', 'nav.analysis'],
   ['eeszt.html', 'nav.eeszt'],
+  ['szakellato.html', 'nav.specialist'],
   ['#modszertan', 'nav.methodology'],
 ] as const;
 
@@ -36,6 +37,7 @@ const NAV = [
   ['#adatok', 'nav.data'],
   ['elemzo.html', 'nav.analysis'],
   ['eeszt.html', 'nav.eeszt'],
+  ['szakellato.html', 'nav.specialist'],
   ['#modszertan', 'nav.methodology'],
 ] as const;
 

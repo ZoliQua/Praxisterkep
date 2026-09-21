@@ -39,4 +39,19 @@ SOURCES = {
         "format": "xls",
         "kind": "gp",
     },
+    # I — contracted inpatient (fekvőbeteg) specialist institutions. The PDF
+    # twin renders the same sheet, so only the workbook is archived.
+    "inpatient_specialist": {
+        "url": NEAK_BASE + "Fekvobeteg-szakellato_intezmenyek_xlsx&inline=true",
+        "format": "xlsx",
+        "kind": "specialist",
+    },
+    # I — contracted outpatient (járóbeteg) specialist institutions. The
+    # published PDF is truncated (it stops 84 rows before the end of the
+    # sheet), so the workbook is the only complete source.
+    "outpatient_specialist": {
+        "url": NEAK_BASE + "Jarobeteg-szakellato_intezmenyek_xlsx&inline=true",
+        "format": "xlsx",
+        "kind": "specialist",
+    },
 }
