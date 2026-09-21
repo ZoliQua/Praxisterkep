@@ -8,9 +8,17 @@ import { sortRows } from '../lib/eesztTable';
 import {
   PROVIDER_COLUMNS, biggestProviders, portfolioSpread, providerRows, useProviders,
 } from '../lib/providers';
-import { OPERATING_COLUMNS, operatingRows, useOperating } from '../lib/operating';
+import {
+  OPERATING_COLUMNS, careBreakdown, operatingRows, useOperating,
+} from '../lib/operating';
+import { serviceTypeColor } from '../lib/palette';
 import { DataTableModal } from './DataTableModal';
 import { renderExtraCell } from './EesztCells';
+
+const CARE_COLOR: Record<string, string> = {
+  gp: '#6ea8ff', dental: '#4fd6c2', specialist: '#c98500',
+  oncall: '#ff7a59', university: '#9085e9',
+};
 
 const SPREAD_COLOR: Record<string, string> = {
   '1': '#4fd6c2', '2': '#6ea8ff', '3-5': '#c98500', '6+': '#e05b8a',
@@ -24,6 +32,7 @@ export function ProviderSection({ part }: { part: number }) {
   const rows = useMemo(() => sortRows(providerRows(data), 'total', 'desc'), [data]);
   const spread = useMemo(() => portfolioSpread(data), [data]);
   const biggest = useMemo(() => biggestProviders(data, 5), [data]);
+  const care = useMemo(() => careBreakdown(operating), [operating]);
   const opRows = useMemo(
     () => sortRows(operatingRows(operating), 'settlement', 'asc'),
     [operating],
@@ -85,14 +94,31 @@ export function ProviderSection({ part }: { part: number }) {
 
       {operating && opRows.length > 0 && (
         <>
-          <h4 className="extra-block__title" id="eeszt-operating">
+          <h4 className="extra-block__title extra-block__title--spaced" id="eeszt-operating">
             {t('operating.level')}
           </h4>
           <p className="section__explain">{t('operating.explain')}</p>
+          <div className="eeszt-coverage">
+            <div className="eeszt-coverage__total">
+              <strong>{formatNumber(operating.stats.praxes)}</strong>
+              <span>{t('operating.praxes')}</span>
+            </div>
+            {care.map(({ group, n }) => (
+              <div key={group} className="eeszt-coverage__row">
+                <span className="eeszt-coverage__label">{t(`operating.group.${group}`)}</span>
+                <span className="eeszt-coverage__bar">
+                  <span style={{
+                    width: `${(n / operating.stats.praxes) * 100}%`,
+                    background: CARE_COLOR[group] ?? serviceTypeColor(group),
+                  }} />
+                </span>
+                <span className="eeszt-coverage__val">
+                  {formatNumber(n)} <em>({formatPercent(n / operating.stats.praxes)})</em>
+                </span>
+              </div>
+            ))}
+          </div>
           <div className="extra-stats">
-            <span className="extra-stats__item">
-              <strong>{formatNumber(operating.stats.praxes)}</strong> {t('operating.praxes')}
-            </span>
             <span className="extra-stats__item">
               <strong>{formatNumber(operating.stats.fromCode)}</strong> {t('operating.fromCode')}
             </span>

@@ -647,7 +647,7 @@
       "s1": "We take the NEAK records the code chain could not pair with an EESZT licence — districts and services alike.",
       "s2": "The NEAK surgery address is normalized (accents folded, abbreviations expanded: u. → utca, krt → körút, house number extracted, Budapest districts unified), and so is every premises address in the licence register. An exact agreement in the record's own profession family is a first-tier hit.",
       "s3": "The two registers often spell the same address differently (“Semmelweis I. u. 1.” ↔ “Semmelweis utca 1.”), so a second pass compares the street's stem, its type and the house number, ignoring abbreviated forenames and “Dr.” prefixes. “Kossuth tér” still differs from “Kossuth utca”.",
-      "s4": "Where the address leads nowhere we use the provider's **tax number**: the financing register's tax field is matched against the provider register, and we check whether that provider holds a licence of the right profession in the settlement. This is a deterministic link, not a similarity.",
+      "s4": "Where the address leads nowhere we use the provider's tax number: the financing register's tax field is matched against the provider register, and we check whether that provider holds a licence of the right profession in the settlement. This is a deterministic link, not a similarity.",
       "s5": "Finally the weaker evidence: the same street at another house number, then a provider-name match (legal forms — Kft., Korlátolt Felelősségű Társaság — and generic words removed, from 60% overlap).",
       "p4": "The code that does this:",
       "c1t": "A suggestion is not a pairing",
@@ -825,7 +825,7 @@
   },
   "access": {
     "heading": "How far is the nearest surgery?",
-    "explain": "For every {kind} district with no contracted physician we measure how far the nearest surgery with a contracted physician is (as the crow flies, from the district's headquarters address). The distance approximates access: it does **not** say the district is unserved — substitution is invisible in the published data, and a straight line is not travel time.",
+    "explain": "For every {kind} district with no contracted physician we measure how far the nearest surgery with a contracted physician is (as the crow flies, from the district's headquarters address). The distance approximates access: it does not say the district is unserved — substitution is invisible in the published data, and a straight line is not travel time.",
     "median": "median distance to the nearest operating surgery from {kind} districts without a contracted physician",
     "band": {
       "0-5": "within 0–5 km",
@@ -972,7 +972,8 @@
       "code": "code chain",
       "crosscheck": "cross-check",
       "none": "no match"
-    }
+    },
+    "colFinUnits": "Organisational unit(s) per the financing register"
   },
   "benefit": {
     "socio": "socio-economically and infrastructurally beneficiary",
@@ -987,6 +988,8 @@
       "benefit": "in a beneficiary settlement",
       "other": "in other settlements"
     },
-    "source": "Source: annexes 2 and 3 of 105/2015. (IV. 23.) Korm. rendelet (Nemzeti Jogszabálytár), matched by the settlement name and county the decree uses."
+    "source": "Source: annexes 2 and 3 of 105/2015. (IV. 23.) Korm. rendelet (Nemzeti Jogszabálytár), matched by the settlement name and county the decree uses.",
+    "openGroup": "Open these districts",
+    "groupSubtitle": "The districts of this group — filterable, sortable, exportable"
   }
 }

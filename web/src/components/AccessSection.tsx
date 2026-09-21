@@ -34,7 +34,7 @@ export function AccessSection() {
   const data = useAccess();
   const benefit = useBenefit();
   const kind = useAppStore((s) => s.kind);
-  const [open, setOpen] = useState<'districts' | 'counties' | null>(null);
+  const [open, setOpen] = useState<'districts' | 'counties' | 'benefit' | 'other' | null>(null);
   const [county, setCounty] = useState('');
 
   const rows = useMemo(
@@ -149,7 +149,10 @@ export function AccessSection() {
               {compare.map((c) => (
                 <tr key={c.group}>
                   <td>{t(`benefit.group.${c.group}`)}</td>
-                  <td className="is-num">{formatNumber(c.districts)}</td>
+                  <td className="is-num">
+                    <button className="info-drill" title={t('benefit.openGroup')}
+                      onClick={() => setOpen(c.group)}>{formatNumber(c.districts)}</button>
+                  </td>
                   <td className="is-num">{formatNumber(c.meanKm)} km</td>
                   <td className="is-num">{formatNumber(c.medianKm)} km</td>
                   <td className="is-num">{formatNumber(c.beyond10)}</td>
@@ -178,6 +181,19 @@ export function AccessSection() {
         })}
       </p>
 
+      {(open === 'benefit' || open === 'other') && (
+        <DataTableModal
+          open
+          onClose={() => setOpen(null)}
+          title={t(`benefit.group.${open}`)}
+          subtitle={t('benefit.groupSubtitle')}
+          rows={rows.filter((r) => (open === 'benefit' ? r.benefit === true : !r.benefit))}
+          columns={ACCESS_COLUMNS}
+          filename={`praxisterkep-tavolsag-${kind}-${open}`}
+          renderCell={renderExtraCell}
+          countUnit="districts"
+        />
+      )}
       <DataTableModal
         open={open === 'counties'}
         onClose={() => setOpen((cur) => (cur === 'counties' ? null : cur))}

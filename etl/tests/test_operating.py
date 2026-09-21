@@ -10,7 +10,7 @@ def _row(**over):
         "fin": "190090001", "group": "gp", "settlement": "Ajka", "county": "Veszprém",
         "neakCode": "M655", "provider": "DeveMed Korlátolt Felelősségű Társaság",
         "providerSource": "official", "tax": "22781110", "euszolgId": "114882",
-        "units": ["190091045"], "unitCount": 1,
+        "units": ["001293696"], "unitCount": 1, "finUnits": ["190091045"],
         "licences": [{
             "unit": "001293696", "licenceId": "001293696/A1/6301",
             "settlement": "Ajka", "address": "Semmelweis utca 1.",
@@ -38,7 +38,7 @@ def test_guard_rejects_a_source_that_contradicts_the_licences():
 
 
 def test_guard_accepts_a_praxis_with_no_licence_at_all():
-    out = _row(licences=[], licenceSource="none")
+    out = _row(licences=[], licenceSource="none", units=[], unitCount=0)
     out["stats"] = {"praxes": 1, "fromCode": 0, "fromCrosscheck": 0, "noLicence": 1}
     guard(out)
 
@@ -57,3 +57,18 @@ def test_guard_rejects_sources_that_do_not_add_up():
     out["stats"]["praxes"] = 5
     with pytest.raises(EesztError, match="do not add up"):
         guard(out)
+
+
+def test_guard_rejects_a_unit_count_that_contradicts_the_printed_licence():
+    # the financing register may link no unit at all while the cross-check
+    # still finds the licence — then the count must follow what is shown
+    with pytest.raises(EesztError, match="contradicts the licences"):
+        guard(_row(units=[], unitCount=0))
+
+
+def test_a_praxis_without_a_financing_unit_still_counts_its_licence():
+    out = _row(finUnits=[])
+    guard(out)
+    row = out["rows"][0]
+    assert row["unitCount"] == 1
+    assert row["units"] == [row["licences"][0]["unit"]]

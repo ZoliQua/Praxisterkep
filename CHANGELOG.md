@@ -5,6 +5,28 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.21.0] — 2026-09-21
+
+### Javítva
+- A működési szinten az „NNGYK9 azonosítók száma” nulla volt olyan
+  soroknál, ahol a mellette lévő oszlop engedélyt mutatott: a szám a
+  finanszírozási törzs szerinti egységeket számolta, az engedély viszont a
+  keresztellenőrzésből jött, másik egység alatt. A szám mostantól azt
+  mutatja, ami a sorban látszik; a finanszírozási törzs szerinti
+  egységek külön (alapértelmezésben rejtett) oszlopba kerültek. 16
+  praxishoz a finanszírozási törzs egyáltalán nem köt szervezeti
+  egységet — ez is külön számként látszik.
+- A térképi városfeliratoknál több hely a pont és a név között.
+- A szövegekbe tévedt markdown-csillagok eltávolítva.
+
+### Módosítva
+- A „2. Működési szint” elválasztva és lélegzőbb lett, és grafikus
+  bontást kapott ellátástípus szerint (háziorvosi körzet 5263, fogorvosi
+  2474, szakellátás 501, ügyelet 34, egyetemi alapellátás 19).
+- A kedvezményezett települések összevetésében a körzetszámok
+  kattinthatóak: megnyitják az adott csoport körzeteit táblázatban.
+- Vármegye kiválasztásakor a vármegye határa vastagabb vonallal látszik.
+
 ## [1.20.0] — 2026-09-21
 
 ### Hozzáadva

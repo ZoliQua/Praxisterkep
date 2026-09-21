@@ -27,6 +27,7 @@ export interface OperatingRow {
   euszolgId: string;
   units: string[];
   unitCount: number;
+  finUnits: string[];
   licences: OperatingLicence[];
   licenceSource: 'code' | 'crosscheck' | 'none';
 }
@@ -82,6 +83,7 @@ export const OPERATING_COLUMNS: ColDef[] = [
   { key: 'settlement', labelKey: 'operating.colNeakSettlement', type: 'text', visible: false },
   { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: false },
   { key: 'units', labelKey: 'operating.colUnits', type: 'text', visible: false },
+  { key: 'finUnits', labelKey: 'operating.colFinUnits', type: 'text', visible: false },
   { key: 'licenceCount', labelKey: 'operating.colLicenceCount', type: 'number', visible: false },
   { key: 'profession', labelKey: 'eeszt.colProfession', type: 'enum', visible: false },
   { key: 'source', labelKey: 'operating.colSource', type: 'enum', visible: true },
@@ -106,6 +108,7 @@ export function operatingRows(data: OperatingRaw | null): Row[] {
     euszolgId: r.euszolgId || null,
     unitCount: r.unitCount,
     units: r.units.join(', ') || null,
+    finUnits: r.finUnits.join(', ') || null,
     licences: licenceText(r),
     licenceCount: r.licences.length,
     profession: r.licences.length
@@ -119,4 +122,15 @@ export function operatingRows(data: OperatingRaw | null): Row[] {
     licenceId: r.licences[0]?.licenceId ?? null,
     unitCode: r.licences[0]?.unit ?? null,
   }));
+}
+
+
+/** how many praxes of each type of care, for the section's bar chart */
+export function careBreakdown(data: OperatingRaw | null): { group: string; n: number }[] {
+  if (!data) return [];
+  const counts = new Map<string, number>();
+  for (const r of data.rows) counts.set(r.group, (counts.get(r.group) ?? 0) + 1);
+  return [...counts.entries()]
+    .map(([group, n]) => ({ group, n }))
+    .sort((a, b) => b.n - a.n);
 }

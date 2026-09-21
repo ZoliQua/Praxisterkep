@@ -172,6 +172,12 @@ export function EesztMap({
         id: 'county-line', type: 'line', source: 'counties',
         paint: { 'line-color': '#2a3b52', 'line-width': 1 },
       });
+      // the county in focus gets a heavier outline of its own
+      map.addLayer({
+        id: 'county-focus', type: 'line', source: 'counties',
+        filter: ['==', ['get', 'name'], ''],
+        paint: { 'line-color': '#5b7ba6', 'line-width': 2.6, 'line-opacity': 0.9 },
+      });
       map.addSource('pts', {
         type: 'geojson',
         data: toGeoJSON(shownRef.current, statusFilled, statusDissolved),
@@ -305,6 +311,14 @@ export function EesztMap({
       districtMarkersRef.current = [];
     };
   }, [county, showDistricts, shown]);
+
+  // the heavier outline follows the selection
+  useEffect(() => {
+    const map = mapRef.current;
+    if (map?.getLayer('county-focus')) {
+      map.setFilter('county-focus', ['==', ['get', 'name'], county || '\u0000']);
+    }
+  }, [county]);
 
   // county focus (standalone mode)
   useEffect(() => {

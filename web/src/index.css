@@ -1490,7 +1490,7 @@ a:hover { text-decoration: underline; }
 }
 /* city labels are drawn as DOM markers, so they never swallow a map click */
 .map-city {
-  display: flex; align-items: center; gap: 4px; pointer-events: none;
+  display: flex; align-items: center; gap: 7px; pointer-events: none;
   transform: translateX(3px); text-shadow: 0 1px 3px var(--bg), 0 0 6px var(--bg);
 }
 .map-city i {
@@ -1533,3 +1533,4 @@ a:hover { text-decoration: underline; }
 }
 .benefit-compare { margin: 18px 0; }
 .benefit-compare .info-table { margin-top: 8px; }
+.extra-block__title--spaced { margin-top: 34px; padding-top: 22px; border-top: 1px solid var(--line); }

@@ -119,6 +119,11 @@ def build(date: str) -> dict:
         provider = by_neak_code.get(neak_code, {})
         tax = provider.get("tax") or next(
             (r[fx["ADOIGSZ_8"]] for r in cands if r[fx["ADOIGSZ_8"]]), "")
+        # the count has to describe what the row shows: the units of the
+        # licences listed next to it. Where the financing register links no
+        # unit at all (15 praxes) the cross-check still finds the licence, and
+        # a "0" beside a printed NNGYK9 would simply read as an error.
+        licence_units = sorted({lic["unit"] for lic in licences if lic["unit"]})
         rows.append({
             "fin": fid,
             "group": group,
@@ -129,8 +134,9 @@ def build(date: str) -> dict:
             "providerSource": "official" if provider.get("officialName") else "neak",
             "tax": tax,
             "euszolgId": provider.get("euszolgId", ""),
-            "units": units,
-            "unitCount": len(units),
+            "units": licence_units,
+            "unitCount": len(licence_units),
+            "finUnits": units,
             "licences": licences,
             "licenceSource": source,
         })
@@ -161,6 +167,8 @@ def build(date: str) -> dict:
             "byGroup": {k: v for k, v in sorted(stats.items()) if ":" in k},
             "multiSite": sum(1 for r in rows
                              if len({(x["settlement"], x["address"]) for x in r["licences"]}) > 1),
+            "withoutFinUnit": sum(1 for r in rows if not r["finUnits"]),
+            "byCare": dict(sorted(collections.Counter(r["group"] for r in rows).items())),
         },
         "rows": rows,
     }
@@ -171,7 +179,7 @@ def build(date: str) -> dict:
 def guard(out: dict) -> None:
     allowed = {"fin", "group", "settlement", "county", "neakCode", "provider",
                "providerSource", "tax", "euszolgId", "units", "unitCount",
-               "licences", "licenceSource"}
+               "finUnits", "licences", "licenceSource"}
     seen: set[str] = set()
     for row in out["rows"]:
         unknown = set(row) - allowed
@@ -182,6 +190,9 @@ def guard(out: dict) -> None:
         seen.add(row["fin"])
         if row["unitCount"] != len(row["units"]):
             raise EesztError(f"{row['fin']}: unit count does not match the list")
+        if row["unitCount"] != len({lic["unit"] for lic in row["licences"] if lic["unit"]}):
+            raise EesztError(
+                f"{row['fin']}: the unit count contradicts the licences shown")
         if row["licenceSource"] not in {"code", "crosscheck", "none"}:
             raise EesztError(f"{row['fin']}: unknown licence source")
         if (row["licenceSource"] == "none") != (not row["licences"]):

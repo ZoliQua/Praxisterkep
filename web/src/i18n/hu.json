@@ -647,7 +647,7 @@
       "s1": "Fogjuk azokat a NEAK-rekordokat, amelyeket a kódlánc nem tudott EESZT-engedéllyel párosítani — körzeteket és szolgálatokat egyaránt.",
       "s2": "A NEAK szerinti rendelőcímet normáljuk (ékezetek elhagyása, rövidítések feloldása: u. → utca, krt → körút, házszám kiemelése, budapesti kerületek egységesítése), és ugyanígy az engedélytörzs összes telephelycímét. Ha a kettő megegyezik, és az engedély a rekord szakmacsaládjába tartozik, az az első szintű találat.",
       "s3": "A két nyilvántartás gyakran másképp írja ugyanazt a címet („Semmelweis I. u. 1.” ↔ „Semmelweis utca 1.”), ezért második körben az utcanév törzse, az utca típusa és a házszám alapján is összevetjük őket — a keresztnév-rövidítések és a „Dr.” előtagok figyelmen kívül hagyásával. A „Kossuth tér” és a „Kossuth utca” így is különbözik.",
-      "s4": "Ha a cím nem vezet eredményre, a szolgáltató **adószámát** használjuk: a finanszírozási törzs (NEAK_FINSZOLG) adószám-mezőjét összevetjük a szolgáltatói törzs (EUSZOLG_PUBLIKUS) adószámával, és megnézzük, van-e az így azonosított szolgáltatónak a településen megfelelő szakmájú engedélye. Ez determinisztikus kapcsolat, nem hasonlóság.",
+      "s4": "Ha a cím nem vezet eredményre, a szolgáltató adószámát használjuk: a finanszírozási törzs (NEAK_FINSZOLG) adószám-mezőjét összevetjük a szolgáltatói törzs (EUSZOLG_PUBLIKUS) adószámával, és megnézzük, van-e az így azonosított szolgáltatónak a településen megfelelő szakmájú engedélye. Ez determinisztikus kapcsolat, nem hasonlóság.",
       "s5": "Végül a gyengébb bizonyítékok: ugyanaz az utca más házszámon, majd a szolgáltató nevének egyezése (a jogi formát — Kft., Korlátolt Felelősségű Társaság — és az általános szavakat elhagyva, legalább 60%-os átfedésnél).",
       "p4": "A kód, ami ezt csinálja:",
       "c1t": "A javaslat nem megfeleltetés",
@@ -825,7 +825,7 @@
   },
   "access": {
     "heading": "Milyen messze a legközelebbi rendelő?",
-    "explain": "Minden {kind} körzetre, ahol nincs szerződött orvos, megmérjük, milyen messze van a legközelebbi olyan rendelő, ahol van szerződött orvos (légvonalban, a körzet székhelycímétől). Ez a távolság az elérhetőséget közelíti: **nem** azt mondja, hogy a körzet ellátatlan — a helyettesítés a nyilvános adatokból nem látszik, és a légvonal nem menetidő.",
+    "explain": "Minden {kind} körzetre, ahol nincs szerződött orvos, megmérjük, milyen messze van a legközelebbi olyan rendelő, ahol van szerződött orvos (légvonalban, a körzet székhelycímétől). Ez a távolság az elérhetőséget közelíti: nem azt mondja, hogy a körzet ellátatlan — a helyettesítés a nyilvános adatokból nem látszik, és a légvonal nem menetidő.",
     "median": "a legközelebbi működő rendelő medián távolsága a szerződött orvos nélküli {kind} körzetekből",
     "band": {
       "0-5": "0–5 km-en belül",
@@ -972,7 +972,8 @@
       "code": "kódlánc",
       "crosscheck": "keresztellenőrzés",
       "none": "nincs találat"
-    }
+    },
+    "colFinUnits": "FINSZOLG szerinti szervezeti egység(ek)"
   },
   "benefit": {
     "socio": "társadalmi-gazdasági és infrastrukturális szempontból kedvezményezett",
@@ -987,6 +988,8 @@
       "benefit": "kedvezményezett településen",
       "other": "egyéb településen"
     },
-    "source": "Forrás: 105/2015. (IV. 23.) Korm. rendelet 2. és 3. melléklete (Nemzeti Jogszabálytár), a rendelet szerinti településnév és vármegye alapján párosítva."
+    "source": "Forrás: 105/2015. (IV. 23.) Korm. rendelet 2. és 3. melléklete (Nemzeti Jogszabálytár), a rendelet szerinti településnév és vármegye alapján párosítva.",
+    "openGroup": "A körzetek megnyitása",
+    "groupSubtitle": "A csoport körzetei — szűrhető, rendezhető, exportálható"
   }
 }
