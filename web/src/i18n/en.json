@@ -889,7 +889,15 @@
       "budapest_geojson": "Budapest district boundaries (OpenStreetMap).",
       "providers_json": "Unified provider list: NEAK code and name, official company name, tax number, seat and the provider's whole portfolio.",
       "operating_json": "Operating level: the licence, organisational unit and premises per praxis.",
-      "kedvezmenyezett_json": "Beneficiary settlements under annexes 2 and 3 of 105/2015. (IV. 23.) Korm. rendelet (socio-economic, unemployment and temporary status)."
+      "kedvezmenyezett_json": "Beneficiary settlements under annexes 2 and 3 of 105/2015. (IV. 23.) Korm. rendelet (socio-economic, unemployment and temporary status).",
+      "vedono_json": "Health-visitor services (EESZT): territorial and school districts, operators, premises",
+      "specialist_json": "Inpatient and outpatient specialist institutions (NEAK): departments, rooms, professions, sites",
+      "risk_json": "Vacancy risk: the 12-month probability for every filled district and the multipliers behind it",
+      "survival_json": "Survival analysis: every vacancy spell and the Kaplan–Meier curves",
+      "coverage_json": "Settlement coverage: every settlement's state, read at settlement level instead of district seats",
+      "composite_json": "Composite care-risk index per settlement, broken into its components",
+      "age_json": "Age composition per settlement (KSH, 2022 census, CC BY 4.0)",
+      "settlements_geojson": "Settlement centres (OpenStreetMap) with KSH code and population"
     },
     "useHeading": "How to use them",
     "use1": "The files are static and versioned: a finished month stays in months/, while latest.json always points at the current one.",
@@ -1121,7 +1129,10 @@
       "territorial": "Territorial",
       "school": "School"
     },
-    "note": "Source: EESZT master publication, {asOf}. An operating licence was found for {licence} services and not for {missing}. Geocoded premises: {geocoded}. No health visitor's name appears anywhere."
+    "note": "Source: EESZT master publication, {asOf}. An operating licence was found for {licence} services and not for {missing}. Geocoded premises: {geocoded}. No health visitor's name appears anywhere.",
+    "colYoung": "Residents aged 0–14",
+    "colYoungPerService": "Aged 0–14 / territorial service",
+    "statYoungPerService": "residents aged 0–14 per territorial service"
   },
   "specialist": {
     "heading": "Specialist institutions",
@@ -1305,5 +1316,19 @@
     "colShare": "Share (%)",
     "colAtRiskPop": "Affected residents",
     "note": "Data as of {month}. Sources: NEAK contracted providers, EESZT master publication, KSH 2022 census and gazetteer, government decree 105/2015. (IV. 23.)."
+  },
+  "age": {
+    "title": "Age composition: who lives there?",
+    "explain": "A vacancy rate means something different where a third of the residents are over 65. In the {year} census {young} of the national population were 0–14 and {old} were 65 or older; the spread between counties is far larger than that.",
+    "statOld": "residents over 65",
+    "statYoung": "residents aged 0–14",
+    "statOldest": "the oldest county ({share} over 65)",
+    "statYoungest": "the youngest county ({share} aged 0–14)",
+    "openTable": "Age composition by county",
+    "tableTitle": "Age composition by county",
+    "tableSubtitle": "The {year} census shares carried onto today's population",
+    "colYoungNow": "Aged 0–14",
+    "colOldNow": "65+",
+    "note": "Source: KSH, {year} census (CC BY 4.0). The composition comes from the census shares, the headcounts are those shares applied to the population on 1 January {population}. In {suppressed} tiny settlements KSH suppressed the cell for disclosure control; those are left missing rather than estimated."
   }
 }

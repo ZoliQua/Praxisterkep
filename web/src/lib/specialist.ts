@@ -211,18 +211,6 @@ export function siteRows(data: SpecialistRaw | null, care: Care | 'all'): Row[] 
     }));
 }
 
-export function detailRowsOf(care: Care | 'all') {
-  return (row: Record<string, unknown>): [string, string][] => [
-    [t('specialist.colCare'), String(row.care ?? '–')],
-    [t('specialist.colInstitution'), String(row.institution ?? '–')],
-    [t('eeszt.colAddress'), `${row.postalCode ?? ''} ${row.settlement ?? ''}, ${row.address ?? ''}`],
-    [t('specialist.colUnits'), String(row.units ?? '–')],
-    [t('specialist.colProfessions'), String(row.professions ?? '–')],
-    [t('operating.colNeakCode'), String(row.neakCode ?? '–')],
-    ...(care === 'all' ? [] : []),
-  ];
-}
-
 export function rowRows(data: SpecialistRaw | null, care: Care | 'all'): Row[] {
   return (data?.rows ?? [])
     .filter((r) => care === 'all' || r.care === care)

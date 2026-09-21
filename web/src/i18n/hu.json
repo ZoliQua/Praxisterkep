@@ -889,7 +889,15 @@
       "budapest_geojson": "Budapesti kerülethatárok (OpenStreetMap).",
       "providers_json": "Egységes szolgáltatói lista: NEAK kód és név, hivatalos cégnév, adószám, székhely és a szolgáltató teljes portfóliója.",
       "operating_json": "Működési szint: praxisonként a működési engedély, a szervezeti egység és a telephely.",
-      "kedvezmenyezett_json": "Kedvezményezett települések a 105/2015. (IV. 23.) Korm. rendelet 2. és 3. melléklete szerint (társadalmi-gazdasági és infrastrukturális, munkanélküliségi és átmeneti státusz)."
+      "kedvezmenyezett_json": "Kedvezményezett települések a 105/2015. (IV. 23.) Korm. rendelet 2. és 3. melléklete szerint (társadalmi-gazdasági és infrastrukturális, munkanélküliségi és átmeneti státusz).",
+      "vedono_json": "Védőnői szolgálatok (EESZT): területi és iskolai körzetek, fenntartók, telephelyek",
+      "specialist_json": "Fekvő- és járóbeteg-szakellátó intézmények (NEAK): osztályok, rendelők, szakmák, telephelyek",
+      "risk_json": "Kockázati előrejelzés: minden betöltött körzet 12 havi üresedési esélye és a mögötte lévő szorzók",
+      "survival_json": "Túlélés-elemzés: minden üresedési időszak és a Kaplan–Meier-görbék",
+      "coverage_json": "Települési lefedettség: minden település állapota körzetszékhely helyett településszinten",
+      "composite_json": "Összetett ellátási kockázati index településenként, összetevőkre bontva",
+      "age_json": "Korösszetétel településenként (KSH, 2022. évi népszámlálás, CC BY 4.0)",
+      "settlements_geojson": "Települések középpontja (OpenStreetMap) KSH-kóddal és lakossággal"
     },
     "useHeading": "Hogyan használd",
     "use1": "A fájlok statikusak és verziózottak: a hónap végleges állapota a months/ könyvtárban marad, a latest.json mindig az aktuális hónapra mutat.",
@@ -1121,7 +1129,10 @@
       "territorial": "Területi védőnő",
       "school": "Iskolai védőnő"
     },
-    "note": "Forrás: EESZT törzspublikáció, {asOf}. Működési engedély {licence} szolgálathoz található, {missing}-hoz nem. Geokódolt telephely: {geocoded}. Védőnő neve sehol nem jelenik meg."
+    "note": "Forrás: EESZT törzspublikáció, {asOf}. Működési engedély {licence} szolgálathoz található, {missing}-hoz nem. Geokódolt telephely: {geocoded}. Védőnő neve sehol nem jelenik meg.",
+    "colYoung": "0–14 éves lakos",
+    "colYoungPerService": "0–14 éves / területi szolgálat",
+    "statYoungPerService": "0–14 éves jut egy területi szolgálatra"
   },
   "specialist": {
     "heading": "Szakellátó intézmények",
@@ -1305,5 +1316,19 @@
     "colShare": "Arányuk (%)",
     "colAtRiskPop": "Érintett lakos",
     "note": "Adatállapot: {month}. Források: NEAK szerződött szolgáltatók, EESZT törzspublikáció, KSH 2022. évi népszámlálás és Helségnévtár, 105/2015. (IV. 23.) Korm. rendelet."
+  },
+  "age": {
+    "title": "Korösszetétel: kik laknak ott?",
+    "explain": "Egy betöltetlenségi arány mást jelent ott, ahol a lakosok harmada 65 év feletti. A {year}. évi népszámlálás szerint országosan a lakosság {young}-a 0–14 éves és {old}-a 65 éves vagy idősebb; a vármegyék közötti különbség ettől jóval nagyobb.",
+    "statOld": "65 év feletti lakos",
+    "statYoung": "0–14 éves lakos",
+    "statOldest": "a legidősebb vármegye ({share} 65 felett)",
+    "statYoungest": "a legfiatalabb vármegye ({share} 0–14 éves)",
+    "openTable": "Korösszetétel vármegyénként",
+    "tableTitle": "Korösszetétel vármegyénként",
+    "tableSubtitle": "A {year}-es népszámlálás arányai a mai lakosságra vetítve",
+    "colYoungNow": "0–14 éves (fő)",
+    "colOldNow": "65+ (fő)",
+    "note": "Forrás: KSH, {year}. évi népszámlálás (CC BY 4.0). A korösszetétel a népszámlálás arányaiból származik, a létszámok a {population}. január 1-i lakosságra vetítve. {suppressed} apró településnél a KSH adatvédelmi okból elhagyta a cellát; ezeket nem becsültük meg, hanem hiányzóként szerepelnek."
   }
 }

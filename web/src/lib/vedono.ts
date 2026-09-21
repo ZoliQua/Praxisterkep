@@ -35,6 +35,8 @@ export interface VedonoCounty {
   providers: number;
   population: number;
   residentsPerTerritorial: number;
+  young: number;
+  youngPerTerritorial: number;
 }
 
 export interface VedonoProvider {
@@ -70,6 +72,8 @@ export interface VedonoStats {
   settlementsTotal: number;
   population: number;
   residentsPerTerritorial: number;
+  young: number;
+  youngPerTerritorial: number;
 }
 
 export interface VedonoRaw {
@@ -131,6 +135,8 @@ export const COUNTY_COLUMNS: ColDef[] = [
   { key: 'school', labelKey: 'vedono.colSchool', type: 'number', visible: true },
   { key: 'population', labelKey: 'access.colPopulation', type: 'number', visible: true },
   { key: 'residentsPerTerritorial', labelKey: 'vedono.colPerService', type: 'number', visible: true },
+  { key: 'young', labelKey: 'vedono.colYoung', type: 'number', visible: true },
+  { key: 'youngPerTerritorial', labelKey: 'vedono.colYoungPerService', type: 'number', visible: true },
   { key: 'settlements', labelKey: 'vedono.colSettlements', type: 'number', visible: false },
   { key: 'providers', labelKey: 'vedono.colProviders', type: 'number', visible: false },
 ];

@@ -85,6 +85,9 @@ export function VedonoSection() {
           <strong>{formatNumber(st.residentsPerTerritorial)}</strong> {t('vedono.statPerService')}
         </span>
         <span className="extra-stats__item">
+          <strong>{formatNumber(st.youngPerTerritorial)}</strong> {t('vedono.statYoungPerService')}
+        </span>
+        <span className="extra-stats__item">
           <strong>{formatNumber(st.providers)}</strong> {t('vedono.statProviders')}
         </span>
       </div>

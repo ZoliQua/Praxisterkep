@@ -42,6 +42,16 @@ from build_eeszt import EesztError, load, latest_date
 from geocode import load_cache
 from parse_ksh import load_reference, normalize_settlement
 
+
+def load_age() -> tuple[dict, dict, int]:
+    """Census 0-14 counts per county and nationally, or empty if unavailable."""
+    path = ROOT / "data" / "age.json"
+    if not path.exists():
+        return {}, {}, 0
+    data = json.loads(path.read_text(encoding="utf-8"))
+    by_county = {c["name"]: c for c in data["counties"]}
+    return by_county, data["country"], data["country"].get("youngNow") or 0
+
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "data" / "vedono.json"
 SCHEMA_VERSION = 1
@@ -130,6 +140,7 @@ def build() -> dict:
 
 
 def overall(rows: list[dict], ksh) -> dict:
+    _, _, young = load_age()
     territorial = [r for r in rows if r["branch"] == "territorial"]
     school = [r for r in rows if r["branch"] == "school"]
     covered = {normalize_settlement(r["settlement"]) for r in rows if r["settlement"]}
@@ -147,10 +158,15 @@ def overall(rows: list[dict], ksh) -> dict:
         "settlementsTotal": len(ksh.entries) if ksh else 0,
         "population": population,
         "residentsPerTerritorial": round(population / len(territorial)) if territorial else 0,
+        # the district is built around children, so the census 0-14 count is
+        # the denominator that actually matters
+        "young": young,
+        "youngPerTerritorial": round(young / len(territorial)) if (territorial and young) else 0,
     }
 
 
 def by_county(rows: list[dict], ksh) -> list[dict]:
+    ages, _, _ = load_age()
     groups: dict[str, list[dict]] = collections.defaultdict(list)
     for r in rows:
         groups[r["county"]].append(r)
@@ -168,6 +184,10 @@ def by_county(rows: list[dict], ksh) -> list[dict]:
             "providers": len({r["provider"] for r in list_ if r["provider"]}),
             "population": population,
             "residentsPerTerritorial": round(population / territorial) if territorial else 0,
+            "young": (ages.get(county) or {}).get("youngNow") or 0,
+            "youngPerTerritorial": (
+                round(((ages.get(county) or {}).get("youngNow") or 0) / territorial)
+                if territorial else 0),
         })
     return out
 

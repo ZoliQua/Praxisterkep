@@ -5,6 +5,60 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.23.0] — 2026-09-21
+
+### Hozzáadva
+- **Védőnői körzetek** a főoldalon, saját ikonnal a fejlécben (fogorvos és
+  háziorvos mellé): 5050 finanszírozott szolgálat (4038 területi, 1012
+  iskolai), 293 fenntartó a 2023-as állami átvétel óta, telephely 1663
+  településen. Egy területi szolgálatra 2362 lakos, ebből 343 gyermek
+  (0–14 éves). Forrás az EESZT törzspublikáció: védőnői körzetekre sem a
+  NEAK, sem az OKFŐ nem közöl betöltetlen listát, ezért ez a rész
+  betöltetlenségről nem beszél — ezt ki is mondja. Védőnő neve sehol nem
+  jelenik meg; a kimenetet őr járja át névmarkerért.
+- **Szakellátó intézmények külön oldalon** (`szakellato.html`): 157
+  fekvőbeteg-intézmény 2498 osztállyal, 351 járóbeteg-intézmény 12 931
+  rendelővel, 221 szakma 1138 telephelyen. Szakmai lefedettség
+  vármegyénként és a legfeljebb három vármegyében elérhető ritka szakmák
+  listája. Mindkét lista az XLSX-ből készül: a járóbeteg-PDF 84 sorral
+  korábban ér véget, mint a saját táblázata, így hiányos forrás.
+- **Túlélés-elemzés** az elemző oldalon: 766 fogorvosi és 1765 háziorvosi
+  üresedési időszak Kaplan–Meier-görbével, a még tartó időszakok
+  cenzoráltként bent maradnak. Medián üresedés: fogorvosi 36 hónap,
+  háziorvosi 76 hónap; 12 hónap után még mindig üres 90%, illetve 88%.
+  Bontás településméret, körzettípus, kedvezményezett státusz és vármegye
+  szerint.
+- **Települési lefedettség a körzetszékhely helyett**: háziorvosi oldalon a
+  betöltetlenség 1081 települést érint a székhely szerinti 666 helyett — a
+  különbség az a 415 település, amelyet egy máshol székelő körzet lát el.
+  667 települést kizárólag betöltetlen körzet szolgál. Fogorvosi oldalon a
+  nyilvántartás nem közli az ellátott településeket, ezért ott a „nincs
+  adat” gyengébb állítás — külön jelölve.
+- **Összetett ellátási kockázati index** településenként: nyolc összetevő
+  (betöltetlenség, távolság háziorvosig, fogorvosig, járóbeteg-telephelyig
+  és kórházig, 65+ arány, körzeti kockázat, kedvezményezett státusz)
+  országos rangsorszázalékké alakítva, kerek és közzétett súlyokkal.
+  3177 településből 638 esik a két legmagasabb sávba (372 762 lakos).
+  Minden pontszám szétszedhető az őt alkotó összetevőkre.
+- **KSH korösszetétel** minden szinten: település, vármegye, ország
+  (0–14: 14,5%, 65+: 20,6%). Forrás a 2022. évi népszámlálás nyilvános
+  adatbázisa (CC BY 4.0), KSH-törzsszám szerint illesztve; a népszámlálási
+  arányok a mai lakosságra vetítve. Ahol a KSH adatvédelmi okból elhagyta a
+  cellát, csak a számtanilag egyértelmű eseteket pótoltuk, a többi hiányzó marad.
+- Új ETL-lépések: `vedono.py`, `specialist.py`, `ksh_age.py`, `centroids.py`,
+  `survival.py`, `coverage.py`, `composite.py`; új adatfájlok mind letölthetők
+  az Adatok részben.
+
+### Módosítva
+- A `kockazat.html` neve **`elemzo.html`** lett, és a négy elemzést egy
+  oldalon fogja össze (kockázati előrejelzés, túlélés, lefedettség,
+  összetett index) ugrópontokkal.
+- Az **EESZT-kiegészítés leköltözött a főoldalról** a saját oldalára
+  (`eeszt.html`): négy blokkra, egy keresztellenőrzésre és két teljes
+  adatböngészőre nőtt, és maga alá temette az utána következőket.
+- A települések középpontja új közös réteg (OpenStreetMap), így a
+  településszintű kérdések egységes koordinátán dolgoznak.
+
 ## [1.22.0] — 2026-09-21
 
 ### Hozzáadva

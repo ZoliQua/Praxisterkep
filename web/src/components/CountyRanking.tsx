@@ -4,6 +4,7 @@ import { t } from '../lib/i18n';
 import { formatPercent } from '../lib/format';
 import { countyRanking } from '../lib/selectors';
 import { useSnapshot } from '../store/useAppStore';
+import { AgeBlock } from './AgeBlock';
 import { CountyCompare } from './CountyCompare';
 import { GuessGame } from './GuessGame';
 
@@ -87,6 +88,7 @@ export function CountyRanking() {
           </text>
         </svg>
       </div>
+      <AgeBlock />
       <CountyCompare />
       <GuessGame />
     </section>
