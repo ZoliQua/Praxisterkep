@@ -1537,3 +1537,19 @@ a:hover { text-decoration: underline; }
 .risk-check { margin: 18px 0 8px; padding: 14px 18px; border-left: 3px solid var(--accent-soft, var(--accent)); background: var(--bg-raised); border-radius: 0 var(--radius) var(--radius) 0; }
 .risk-check .section__subheading { margin: 0 0 4px; font-size: 16px; }
 .risk-check .section__explain { margin: 0; }
+
+.chart__tick { font-size: 11px; fill: var(--ink-dim); }
+.chart__legend-item i {
+  display: inline-block; width: 14px; height: 3px; border-radius: 2px;
+}
+.chart__legend-item em { color: var(--ink-dim); font-style: normal; }
+
+.page-toc {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  max-width: var(--maxw); margin: 0 auto 8px; padding: 0 24px;
+}
+.page-toc a {
+  border: 1px solid var(--line-strong); border-radius: 999px;
+  padding: 5px 12px; font-size: 13px; color: var(--ink-dim); text-decoration: none;
+}
+.page-toc a:hover { color: var(--ink); border-color: var(--accent); }

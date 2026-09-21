@@ -30,6 +30,11 @@ const optional = [
   [join(repo, 'data', 'risk.json'), join(out, 'risk.json')],
   [join(repo, 'data', 'vedono.json'), join(out, 'vedono.json')],
   [join(repo, 'data', 'specialist.json'), join(out, 'specialist.json')],
+  [join(repo, 'data', 'age.json'), join(out, 'age.json')],
+  [join(repo, 'data', 'survival.json'), join(out, 'survival.json')],
+  [join(repo, 'data', 'coverage.json'), join(out, 'coverage.json')],
+  [join(repo, 'data', 'composite.json'), join(out, 'composite.json')],
+  [join(repo, 'data', 'geo', 'settlements.geojson'), join(out, 'settlements.geojson')],
 ];
 
 mkdirSync(out, { recursive: true });

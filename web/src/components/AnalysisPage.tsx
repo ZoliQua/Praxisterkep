@@ -7,6 +7,9 @@ import { useState } from 'react';
 import { t } from '../lib/i18n';
 import { PageNav } from './PageNav';
 import { RiskSection } from './RiskSection';
+import { SurvivalSection } from './SurvivalSection';
+import { CoverageSection } from './CoverageSection';
+import { CompositeSection } from './CompositeSection';
 import type { PraxisKind } from '../types';
 
 const LINKS = [
@@ -24,7 +27,15 @@ export function AnalysisPage() {
         <h1 className="section__heading">{t('analysis.heading')}</h1>
         <p className="section__lead">{t('analysis.lead')}</p>
       </header>
+      <nav className="page-toc">
+        {(['kockazat', 'tulel', 'lefedettseg', 'index'] as const).map((id) => (
+          <a key={id} href={`#${id}`}>{t(`analysis.toc.${id}`)}</a>
+        ))}
+      </nav>
       <RiskSection kind={kind} />
+      <SurvivalSection kind={kind} />
+      <CoverageSection kind={kind} />
+      <CompositeSection />
     </>
   );
 }

@@ -216,6 +216,23 @@ def main() -> None:
               + ", ".join(f"{k}: {len(v['rows'])}" for k, v in rk["kinds"].items()) + ")")
     except Exception as exc:  # noqa: BLE001 — supplement must not block release
         print(f"      WARNING: risk model skipped: {exc}")
+    # the analyses that read several outputs at once, in dependency order
+    for name, label in (("ksh_age", "age composition"),
+                        ("centroids", "settlement coordinates"),
+                        ("survival", "survival analysis"),
+                        ("coverage", "settlement coverage"),
+                        ("composite", "composite index")):
+        try:
+            module = __import__(name)
+            result = module.build()
+            if name == "centroids":
+                result.pop("missing", None)
+            module.OUT.write_text(
+                json.dumps(result, ensure_ascii=False, separators=(",", ":")) + "\n",
+                encoding="utf-8")
+            print(f"      wrote {module.OUT}")
+        except Exception as exc:  # noqa: BLE001 — analyses must not block release
+            print(f"      WARNING: {label} skipped: {exc}")
     print("done")
 
 
