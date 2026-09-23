@@ -216,18 +216,37 @@ def main() -> None:
               + ", ".join(f"{k}: {len(v['rows'])}" for k, v in rk["kinds"].items()) + ")")
     except Exception as exc:  # noqa: BLE001 — supplement must not block release
         print(f"      WARNING: risk model skipped: {exc}")
+    # the road graph is expensive (a 310 MB download and a few minutes of
+    # parsing) and changes slowly, so it is built only when it is missing
+    try:
+        import roads
+        if roads.OUT.exists():
+            print(f"      road graph present: {roads.OUT.name}")
+        else:
+            graph = roads.build(roads.fetch())
+            roads.OUT.parent.mkdir(parents=True, exist_ok=True)
+            import numpy as np
+            np.savez_compressed(roads.OUT, **graph)
+            print(f"      wrote {roads.OUT}")
+    except Exception as exc:  # noqa: BLE001 — routing must not block release
+        print(f"      WARNING: road graph skipped: {exc}")
+
     # the analyses that read several outputs at once, in dependency order
     for name, label in (("ksh_age", "age composition"),
                         ("centroids", "settlement coordinates"),
                         ("emergency", "on-call and emergency points"),
+                        ("traveltime", "driving times"),
                         ("survival", "survival analysis"),
                         ("workforce", "physician turnover"),
                         ("coverage", "settlement coverage"),
+                        ("transit", "public-transport reach"),
                         ("composite", "composite index"),
                         ("clusters", "care deserts")):
         try:
             module = __import__(name)
-            result = module.build()
+            # the transit feed is a 100 MB download, fetched on demand
+            result = (module.build(module.fetch()) if name == "transit"
+                      else module.build())
             if name == "centroids":
                 result.pop("missing", None)
             module.OUT.write_text(

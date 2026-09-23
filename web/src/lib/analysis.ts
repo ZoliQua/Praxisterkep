@@ -137,6 +137,7 @@ export interface CompositeSettlement {
   lon: number;
   gpClass: CoverageClass;
   dentalClass: CoverageClass;
+  km: Record<string, number | null>;
   raw: Record<string, number | null>;
   parts: Record<string, number | null>;
   missing: string[];
@@ -257,11 +258,13 @@ export const COMPOSITE_COLUMNS: ColDef[] = [
   { key: 'index', labelKey: 'composite.colIndex', type: 'number', visible: true },
   { key: 'band', labelKey: 'composite.colBand', type: 'enum', visible: true },
   { key: 'population', labelKey: 'access.colPopulation', type: 'number', visible: true },
-  { key: 'gpKm', labelKey: 'composite.colGpKm', type: 'number', visible: true },
-  { key: 'dentalKm', labelKey: 'composite.colDentalKm', type: 'number', visible: false },
-  { key: 'oncallKm', labelKey: 'emergency.colOncallKm', type: 'number', visible: true },
-  { key: 'outpatientKm', labelKey: 'composite.colOutKm', type: 'number', visible: false },
-  { key: 'inpatientKm', labelKey: 'composite.colInpKm', type: 'number', visible: true },
+  { key: 'gpMin', labelKey: 'composite.colGpMin', type: 'number', visible: true },
+  { key: 'oncallMin', labelKey: 'composite.colOncallMin', type: 'number', visible: true },
+  { key: 'inpatientMin', labelKey: 'composite.colInpMin', type: 'number', visible: true },
+  { key: 'dentalMin', labelKey: 'composite.colDentalMin', type: 'number', visible: false },
+  { key: 'outpatientMin', labelKey: 'composite.colOutMin', type: 'number', visible: false },
+  { key: 'transitPct', labelKey: 'composite.colTransit', type: 'number', visible: true },
+  { key: 'gpKm', labelKey: 'composite.colGpKm', type: 'number', visible: false },
   { key: 'oldSharePct', labelKey: 'coverage.colOldShare', type: 'number', visible: true },
   { key: 'riskPct', labelKey: 'composite.colRisk', type: 'number', visible: false },
   { key: 'deprivation', labelKey: 'composite.colBenefit', type: 'bool', visible: true },
@@ -318,11 +321,14 @@ export function compositeRows(data: CompositeRaw | null): Row[] {
     index: s.index,
     band: t(`composite.band.${s.band}`),
     population: s.population,
-    gpKm: s.raw.gpKm,
-    dentalKm: s.raw.dentalKm,
-    oncallKm: s.raw.oncallKm,
-    outpatientKm: s.raw.outpatientKm,
-    inpatientKm: s.raw.inpatientKm,
+    gpMin: s.raw.gpMin,
+    dentalMin: s.raw.dentalMin,
+    oncallMin: s.raw.oncallMin,
+    outpatientMin: s.raw.outpatientMin,
+    inpatientMin: s.raw.inpatientMin,
+    transitPct: s.raw.transit === null || s.raw.transit === undefined
+      ? null : Math.round(s.raw.transit * 100),
+    gpKm: s.km?.gp ?? null,
     oldSharePct: s.raw.ageing === null ? null : Math.round(s.raw.ageing * 1000) / 10,
     riskPct: s.raw.risk === null ? null : Math.round(s.raw.risk * 1000) / 10,
     deprivation: s.raw.deprivation === 1,

@@ -20,9 +20,10 @@ function detailRows(row: MapRow): [string, string][] {
     [t('composite.colIndex'), String(row.index ?? '–')],
     [t('composite.colBand'), String(row.band ?? '–')],
     [t('access.colPopulation'), formatNumber(Number(row.population ?? 0))],
-    [t('composite.colGpKm'), row.gpKm === null ? '–' : `${formatNumber(Number(row.gpKm))} km`],
-    [t('emergency.colOncallKm'), row.oncallKm === null ? '–' : `${formatNumber(Number(row.oncallKm))} km`],
-    [t('composite.colInpKm'), row.inpatientKm === null ? '–' : `${formatNumber(Number(row.inpatientKm))} km`],
+    [t('composite.colGpMin'), row.gpMin === null ? '–' : `${formatNumber(Number(row.gpMin))} perc`],
+    [t('composite.colOncallMin'), row.oncallMin === null ? '–' : `${formatNumber(Number(row.oncallMin))} perc`],
+    [t('composite.colInpMin'), row.inpatientMin === null ? '–' : `${formatNumber(Number(row.inpatientMin))} perc`],
+    [t('composite.colTransit'), row.transitPct === null ? '–' : `${formatNumber(Number(row.transitPct))}%`],
     [t('coverage.colOldShare'), row.oldSharePct === null ? '–' : `${formatNumber(Number(row.oldSharePct))}%`],
     [t('composite.colGpClass'), String(row.gpState ?? '–')],
     [t('composite.colDentalClass'), String(row.dentalState ?? '–')],
@@ -111,7 +112,7 @@ export function CompositeSection() {
               <th>{t('stats.thCounty')}</th>
               <th className="is-num">{t('composite.colIndex')}</th>
               <th className="is-num">{t('access.colPopulation')}</th>
-              <th className="is-num">{t('composite.colGpKm')}</th>
+              <th className="is-num">{t('composite.colGpMin')}</th>
               <th className="is-num">{t('coverage.colOldShare')}</th>
             </tr>
           </thead>
@@ -125,7 +126,9 @@ export function CompositeSection() {
                 </td>
                 <td className="is-num">{formatNumber(s.population)}</td>
                 <td className="is-num">
-                  {s.raw.gpKm === null ? '–' : `${formatNumber(s.raw.gpKm)} km`}
+                  {s.raw.gpMin === null ? '–' : t('composite.minutes', {
+                    n: formatNumber(s.raw.gpMin),
+                  })}
                 </td>
                 <td className="is-num">
                   {s.raw.ageing === null ? '–' : formatPercent(s.raw.ageing)}

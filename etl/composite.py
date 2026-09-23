@@ -10,18 +10,22 @@ settlement itself and each published beside the score, so a number can
 always be taken apart:
 
     vacancy      the districts serving it have no contracted physician
-    gpKm         distance to the nearest operating GP surgery
-    dentalKm     distance to the nearest operating dental surgery
-    oncallKm     distance to the nearest central on-call surgery
-    outpatientKm distance to the nearest contracted outpatient site
-    inpatientKm  distance to the nearest contracted hospital site
+    gpMin        driving minutes to the nearest operating GP surgery
+    dentalMin    driving minutes to the nearest operating dental surgery
+    oncallMin    driving minutes to the nearest central on-call surgery
+    outpatientMin driving minutes to the nearest outpatient site
+    inpatientMin driving minutes to the nearest hospital site
+    transit      how badly scheduled buses serve those destinations
     ageing       65+ share of the population (KSH 2022 census)
     risk         vacancy risk of the districts that serve it
     deprivation  beneficiary status under 105/2015. (IV. 23.) Korm. r.
 
-Distances are crow-flies kilometres from the settlement's centre, not travel
-time, and every component is turned into a 0–1 rank percentile across the
-country before weighting, so kilometres and shares can be added at all.
+Distances are free-flow driving minutes on the OpenStreetMap road network
+(traveltime.py), not straight lines: the crow-flies kilometres the earlier
+versions used flattered exactly the villages this index is meant to find.
+The straight-line kilometres travel with each row so the two can be
+compared. Every component is turned into a 0–1 rank percentile across the
+country before weighting, so minutes and shares can be added at all.
 
 This is a comparison, not a verdict: a high index says several public
 indicators point the same way, never that care is unavailable there
@@ -52,17 +56,19 @@ SCHEMA_VERSION = 1
 
 # the weights are deliberately round numbers and are published with the index
 WEIGHTS = {
-    "vacancy": 0.22,
-    "gpKm": 0.14,
-    "dentalKm": 0.08,
+    "vacancy": 0.20,
+    "gpMin": 0.12,
+    "dentalMin": 0.06,
     # the on-call point is what a vacant district falls back on, so it earns
     # its own weight rather than being folded into the surgery distance
-    "oncallKm": 0.10,
-    "outpatientKm": 0.05,
-    "inpatientKm": 0.08,
-    "ageing": 0.13,
+    "oncallMin": 0.10,
+    "outpatientMin": 0.04,
+    "inpatientMin": 0.08,
+    # a car is exactly what the households this index looks for do not have
+    "transit": 0.10,
+    "ageing": 0.12,
     "risk": 0.10,
-    "deprivation": 0.10,
+    "deprivation": 0.08,
 }
 BANDS = [("kiemelt", 0.05), ("magas", 0.20), ("kozepes", 0.50), ("alacsony", 1.0)]
 EARTH_KM = 6371.0088
@@ -123,11 +129,15 @@ def build() -> dict:
         (data_dir / "age.json").read_text(encoding="utf-8"))["settlements"]}
     risk = json.loads((data_dir / "risk.json").read_text(encoding="utf-8"))
     specialist = json.loads((data_dir / "specialist.json").read_text(encoding="utf-8"))
-    emergency_path = data_dir / "emergency.json"
-    oncall_km = {}
-    if emergency_path.exists():
-        emergency = json.loads(emergency_path.read_text(encoding="utf-8"))
-        oncall_km = {s["kshId"]: s["oncallKm"] for s in emergency["settlements"]}
+    travel_path = data_dir / "traveltime.json"
+    if not travel_path.exists():
+        raise ParseError("run etl/traveltime.py first — the index needs driving times")
+    travel = {r["kshId"]: r for r in
+              json.loads(travel_path.read_text(encoding="utf-8"))["settlements"]}
+    transit_path = data_dir / "transit.json"
+    transit = {r["kshId"]: r for r in
+               json.loads(transit_path.read_text(encoding="utf-8"))["settlements"]} \
+        if transit_path.exists() else {}
     benefit = json.loads((data_dir / "kedvezmenyezett.json").read_text(encoding="utf-8"))["settlements"]
     from kedvezmenyezett import county_key, normalize
 
@@ -165,6 +175,7 @@ def build() -> dict:
         a = age.get(e["kshId"], {})
         key = f"{county_key(e['county'])}|{normalize(e['name'])}"
         risks = risk_by_settlement.get(normalize_settlement(e["name"]), [])
+        drive = travel.get(e["kshId"], {})
         rows.append({
             "kshId": e["kshId"],
             "settlement": e["name"],
@@ -175,13 +186,21 @@ def build() -> dict:
             "lon": lon,
             "gpClass": gp_cover.get("class", "absent"),
             "dentalClass": dental_cover.get("class", "absent"),
+            # the straight lines the index used to run on, kept for comparison
+            "km": {
+                "gp": nearest(lat, lon, gp_points),
+                "dental": nearest(lat, lon, dental_points),
+                "outpatient": nearest(lat, lon, outpatient),
+                "inpatient": nearest(lat, lon, inpatient),
+            },
             "raw": {
                 "vacancy": vacancy_score(gp_cover.get("class"), dental_cover.get("class")),
-                "gpKm": nearest(lat, lon, gp_points),
-                "dentalKm": nearest(lat, lon, dental_points),
-                "oncallKm": oncall_km.get(e["kshId"]),
-                "outpatientKm": nearest(lat, lon, outpatient),
-                "inpatientKm": nearest(lat, lon, inpatient),
+                "gpMin": drive.get("gpMin"),
+                "dentalMin": drive.get("dentalMin"),
+                "oncallMin": drive.get("oncallMin"),
+                "outpatientMin": drive.get("outpatientMin"),
+                "inpatientMin": drive.get("inpatientMin"),
+                "transit": transit_score(transit.get(e["kshId"])),
                 "ageing": a.get("oldShare"),
                 "risk": (sum(risks) / len(risks)) if risks else None,
                 "deprivation": 1.0 if key in benefit else 0.0,
@@ -220,6 +239,24 @@ def build() -> dict:
     }
     guard(out)
     return out
+
+
+def transit_score(row: dict | None) -> float | None:
+    """How badly scheduled buses serve the settlement's own care destinations.
+
+    Half of it is how many of the three destinations (GP, on-call, hospital)
+    have no direct bus at all, half is how thin the service is — thirty
+    departures on an ordinary Wednesday counts as served. Budapest's
+    districts run on a feed this pipeline does not load, so they carry no
+    score rather than a bad one.
+    """
+    if not row or row.get("capital") or row.get("departures") is None:
+        return None
+    missing = [row.get(f"{layer}Direct") for layer in ("gp", "oncall", "inpatient")]
+    known = [m for m in missing if m is not None]
+    no_direct = (sum(0.0 if m else 1.0 for m in known) / len(known)) if known else 0.0
+    thin = 1.0 - min(row.get("departures") or 0, 30) / 30
+    return round(0.5 * no_direct + 0.5 * thin, 4)
 
 
 def vacancy_score(gp_class: str | None, dental_class: str | None) -> float:

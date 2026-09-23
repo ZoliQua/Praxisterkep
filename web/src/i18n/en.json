@@ -900,7 +900,9 @@
       "settlements_geojson": "Settlement centres (OpenStreetMap) with KSH code and population",
       "emergency_json": "On-call and emergency points (EESZT) with the distances measured from them per settlement",
       "workforce_json": "Physician changes from the archive and the physicians holding several districts (no names, pseudonymous keys)",
-      "clusters_json": "Contiguous care deserts and their settlements"
+      "clusters_json": "Contiguous care deserts and their settlements",
+      "traveltime_json": "Driving minutes from every settlement to the nearest care point (OpenStreetMap roads)",
+      "transit_json": "Public-transport reach: departures and direct services to where care is (Volánbusz GTFS)"
     },
     "useHeading": "How to use them",
     "use1": "The files are static and versioned: a finished month stays in months/, while latest.json always points at the current one.",
@@ -1087,7 +1089,9 @@
       "index": "Composite index",
       "orvosok": "Who holds the districts",
       "ugyelet": "On-call and ambulance",
-      "hianyteruletek": "Care deserts"
+      "hianyteruletek": "Care deserts",
+      "menetido": "Driving time",
+      "busz": "By bus?"
     }
   },
   "vedono": {
@@ -1293,7 +1297,13 @@
       "ageing": "Share of residents 65+",
       "risk": "Vacancy risk of the districts",
       "deprivation": "Beneficiary settlement",
-      "oncallKm": "Distance to a central on-call surgery"
+      "oncallKm": "Distance to a central on-call surgery",
+      "gpMin": "Driving time to a GP",
+      "dentalMin": "Driving time to a dentist",
+      "oncallMin": "Driving time to central on-call",
+      "outpatientMin": "Driving time to an outpatient site",
+      "inpatientMin": "Driving time to a hospital",
+      "transit": "Public-transport disadvantage"
     },
     "source": {
       "vacancy": "NEAK + settlement coverage",
@@ -1304,7 +1314,13 @@
       "ageing": "KSH 2022 census",
       "risk": "Vacancy risk model",
       "deprivation": "Gov. decree 105/2015. (IV. 23.)",
-      "oncallKm": "EESZT master publication (on-call services)"
+      "oncallKm": "EESZT master publication (on-call services)",
+      "gpMin": "OpenStreetMap roads + NEAK/EESZT",
+      "dentalMin": "OpenStreetMap roads + NEAK/EESZT",
+      "oncallMin": "OpenStreetMap roads + EESZT",
+      "outpatientMin": "OpenStreetMap roads + NEAK specialist list",
+      "inpatientMin": "OpenStreetMap roads + NEAK specialist list",
+      "transit": "Volánbusz GTFS timetable (CC0)"
     },
     "topTitle": "The ten settlements with the highest index",
     "openTable": "Settlements ({n})",
@@ -1327,7 +1343,14 @@
     "colAtRisk": "Top or high",
     "colShare": "Share (%)",
     "colAtRiskPop": "Affected residents",
-    "note": "Data as of {month}. Sources: NEAK contracted providers, EESZT master publication, KSH 2022 census and gazetteer, government decree 105/2015. (IV. 23.)."
+    "note": "Data as of {month}. Sources: NEAK contracted providers, EESZT master publication, KSH 2022 census and gazetteer, government decree 105/2015. (IV. 23.).",
+    "colGpMin": "GP (min)",
+    "colOncallMin": "On-call (min)",
+    "colInpMin": "Hospital (min)",
+    "colDentalMin": "Dentist (min)",
+    "colOutMin": "Outpatient (min)",
+    "colTransit": "Transit disadvantage (%)",
+    "minutes": "{n} min"
   },
   "age": {
     "title": "Age composition: who lives there?",
@@ -1451,5 +1474,93 @@
     "colSpread": "Extent (km)",
     "colCore": "Highest-index settlement",
     "note": "Method: single linkage at a {km} km radius, at least {min} settlements. Linkage also joins long corridors, so the extent travels beside the size in every row. Data as of {month}."
+  },
+  "travel": {
+    "heading": "Driving time instead of straight lines",
+    "explain": "Every distance on this site has been a crow-flies kilometre — we always said so, but a number that is wrong in a known direction is still wrong. From here the same distances are free-flow driving minutes on the OpenStreetMap road network. The Cserehát and the Őrség have been flattered by every chart we have published.",
+    "caveat": "Not modelled: traffic, turn restrictions, ferries, seasonal closures and roads across the border. The result is a free-flow lower bound: real journeys are longer rather than shorter. Trains and buses have their own section.",
+    "layer": {
+      "gp": "GP",
+      "dental": "Dentist",
+      "oncall": "Central on-call",
+      "ambulance": "Ambulance station",
+      "inpatient": "Hospital",
+      "outpatient": "Outpatient"
+    },
+    "band": {
+      "0-10": "within 10 minutes",
+      "10-20": "10–20 minutes",
+      "20-30": "20–30 minutes",
+      "30+": "beyond 30 minutes"
+    },
+    "median": "median driving time to the nearest one ({layer})",
+    "minutes": "{n} min",
+    "max": "the longest drive",
+    "beyond30": "residents live beyond 30 minutes",
+    "detourMedian": "minutes per crow-flies kilometre (median)",
+    "points": "destinations on the network",
+    "mapCount": "{n} / {total} settlements on the map",
+    "detourTitle": "Where does the straight line lie most?",
+    "detourExplain": "These settlements show the largest gap between the air distance and the road: a river, a ridge or a dead end sits in between. (In the Danube Bend and on Szentendre Island a ferry does too — which is not modelled.)",
+    "colMinutes": "Driving time (min)",
+    "colKm": "Straight line (km)",
+    "colDetour": "Minutes per air km",
+    "colAt": "Destination settlement",
+    "colGpMedian": "GP median (min)",
+    "colOncallMedian": "On-call median (min)",
+    "colInpMedian": "Hospital median (min)",
+    "colBeyond30": "Residents beyond 30 min",
+    "openTable": "Settlements ({n})",
+    "openCounties": "Counties compared",
+    "tableTitle": "Driving time — {layer}",
+    "tableSubtitle": "Minutes, straight-line kilometres and the gap, per settlement",
+    "countyTitle": "Driving time by county",
+    "countySubtitle": "Median driving times and residents beyond 30 minutes",
+    "note": "Road network: OpenStreetMap (ODbL), {source}. Settlements and destinations are snapped to the nearest road node, never to a motorway — you cannot leave one where you need to."
+  },
+  "transit": {
+    "heading": "Can you get there by bus?",
+    "explain": "Driving time answers the question for a household with a car. In the villages this site keeps pointing at, that is exactly what cannot be assumed. On an ordinary Wednesday ({day}) scheduled buses leave from {settlements} of {total} settlements — the question is whether any of them goes, without a change, to where the care is.",
+    "caveat": "\"No direct bus\" does not mean unreachable: with a change it often works. But a change is exactly what an eighty-year-old cannot always make. Trains are not in the data (MÁV releases its timetable only on request), and Budapest runs on a separate feed, so the capital's districts are left out of this section.",
+    "target": {
+      "gp": "GP",
+      "oncall": "Central on-call",
+      "inpatient": "Hospital"
+    },
+    "state": {
+      "direct": "Direct service",
+      "indirect": "Only with a change",
+      "none": "No bus at all"
+    },
+    "stateDirect": "Direct",
+    "stateIndirect": "With a change",
+    "stateNone": "No bus",
+    "stateCapital": "Budapest (other feed)",
+    "lead": "settlements have no direct bus to the nearest {target} ({people} residents)",
+    "statDepartures": "departures from a typical settlement (median)",
+    "statNoService": "settlements have no bus that day ({people} residents)",
+    "statRide": "median direct ride",
+    "statCapital": "capital districts excluded",
+    "openTable": "Settlements ({n})",
+    "openCounties": "Counties compared",
+    "tableTitle": "Public-transport reach by settlement",
+    "tableSubtitle": "Departures and direct services to where care is",
+    "countyTitle": "Public-transport reach by county",
+    "countySubtitle": "Where most settlements lack a direct service",
+    "colDepartures": "Departures (Wednesday)",
+    "colGp": "To a GP",
+    "colGpMinutes": "To a GP (min)",
+    "colOncall": "To on-call",
+    "colOncallMinutes": "To on-call (min)",
+    "colInpatient": "To a hospital",
+    "colReachable": "Settlements reachable directly",
+    "colTarget": "Destination",
+    "colMedianDepartures": "Median departures",
+    "colNoService": "Without a bus",
+    "colNoDirect": "No direct service to a GP",
+    "colNoDirectPop": "Residents affected",
+    "colNoDirectShare": "Share (%)",
+    "note": "Source: {source} ({licence}), timetable version {feed}, valid {from}–{to}. Departures are counted per trip, not per platform.",
+    "railNote": "Rail is missing: MÁV-START releases its GTFS only through a registration form, so a few rail-served settlements (Nagymaros and Budakalász among them) look as if they had no service at all."
   }
 }

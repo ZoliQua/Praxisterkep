@@ -9,3 +9,6 @@ data/geo/*_overpass_cache.json
 web/public/og.png
 data/raw/okfo_wayback/
 etl/geocode_cache.json.tmp
+data/raw/osm/
+data/geo/road_graph.npz
+data/raw/gtfs/

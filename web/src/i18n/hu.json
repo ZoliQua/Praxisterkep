@@ -900,7 +900,9 @@
       "settlements_geojson": "Települések középpontja (OpenStreetMap) KSH-kóddal és lakossággal",
       "emergency_json": "Ügyeleti és sürgősségi pontok (EESZT) és a tőlük mért távolságok településenként",
       "workforce_json": "Orvosváltások az archívumból és a több körzetet tartó orvosok (név nélkül, álnevesített kulccsal)",
-      "clusters_json": "Összefüggő ellátási hiányterületek és településeik"
+      "clusters_json": "Összefüggő ellátási hiányterületek és településeik",
+      "traveltime_json": "Menetidő percben minden településről a legközelebbi ellátási pontig (OpenStreetMap úthálózat)",
+      "transit_json": "Tömegközlekedési elérés: indulások és közvetlen járatok az ellátás helyszínére (Volánbusz GTFS)"
     },
     "useHeading": "Hogyan használd",
     "use1": "A fájlok statikusak és verziózottak: a hónap végleges állapota a months/ könyvtárban marad, a latest.json mindig az aktuális hónapra mutat.",
@@ -1087,7 +1089,9 @@
       "index": "Összetett index",
       "orvosok": "Ki tartja a körzeteket",
       "ugyelet": "Ügyelet és mentő",
-      "hianyteruletek": "Hiányterületek"
+      "hianyteruletek": "Hiányterületek",
+      "menetido": "Menetidő",
+      "busz": "Busszal elérhető?"
     }
   },
   "vedono": {
@@ -1293,7 +1297,13 @@
       "ageing": "65 év felettiek aránya",
       "risk": "A körzetek üresedési kockázata",
       "deprivation": "Kedvezményezett település",
-      "oncallKm": "Távolság központi ügyeletig"
+      "oncallKm": "Távolság központi ügyeletig",
+      "gpMin": "Menetidő háziorvosig",
+      "dentalMin": "Menetidő fogorvosig",
+      "oncallMin": "Menetidő központi ügyeletig",
+      "outpatientMin": "Menetidő járóbeteg-telephelyig",
+      "inpatientMin": "Menetidő kórházig",
+      "transit": "Tömegközlekedési hátrány"
     },
     "source": {
       "vacancy": "NEAK + települési lefedettség",
@@ -1304,7 +1314,13 @@
       "ageing": "KSH 2022. évi népszámlálás",
       "risk": "Kockázati előrejelzés",
       "deprivation": "105/2015. (IV. 23.) Korm. r.",
-      "oncallKm": "EESZT törzspublikáció (ügyeleti szolgálatok)"
+      "oncallKm": "EESZT törzspublikáció (ügyeleti szolgálatok)",
+      "gpMin": "OpenStreetMap úthálózat + NEAK/EESZT",
+      "dentalMin": "OpenStreetMap úthálózat + NEAK/EESZT",
+      "oncallMin": "OpenStreetMap úthálózat + EESZT",
+      "outpatientMin": "OpenStreetMap úthálózat + NEAK szakellátó lista",
+      "inpatientMin": "OpenStreetMap úthálózat + NEAK szakellátó lista",
+      "transit": "Volánbusz GTFS menetrend (CC0)"
     },
     "topTitle": "A tíz legmagasabb indexű település",
     "openTable": "Települések ({n})",
@@ -1327,7 +1343,14 @@
     "colAtRisk": "Kiemelt vagy magas",
     "colShare": "Arányuk (%)",
     "colAtRiskPop": "Érintett lakos",
-    "note": "Adatállapot: {month}. Források: NEAK szerződött szolgáltatók, EESZT törzspublikáció, KSH 2022. évi népszámlálás és Helségnévtár, 105/2015. (IV. 23.) Korm. rendelet."
+    "note": "Adatállapot: {month}. Források: NEAK szerződött szolgáltatók, EESZT törzspublikáció, KSH 2022. évi népszámlálás és Helségnévtár, 105/2015. (IV. 23.) Korm. rendelet.",
+    "colGpMin": "Háziorvos (perc)",
+    "colOncallMin": "Ügyelet (perc)",
+    "colInpMin": "Kórház (perc)",
+    "colDentalMin": "Fogorvos (perc)",
+    "colOutMin": "Járóbeteg (perc)",
+    "colTransit": "Buszos hátrány (%)",
+    "minutes": "{n} perc"
   },
   "age": {
     "title": "Korösszetétel: kik laknak ott?",
@@ -1451,5 +1474,93 @@
     "colSpread": "Kiterjedés (km)",
     "colCore": "Legmagasabb indexű település",
     "note": "Módszer: egyszeres láncolás {km} km-es sugárral, legalább {min} település. A láncolás hosszú folyosókat is összeköt, ezért a kiterjedés minden sornál ott van a méret mellett. Adatállapot: {month}."
+  },
+  "travel": {
+    "heading": "Menetidő légvonal helyett",
+    "explain": "Az oldal minden távolsága eddig légvonalban értendő kilométer volt — ezt mindig ki is írtuk, de egy ismert irányba tévedő szám attól még téves. Innentől ugyanazok a távolságok az OpenStreetMap úthálózatán, autóval, szabad forgalom mellett számított percekben szerepelnek. A Cserehátat és az Őrséget eddig minden ábránk szépítette.",
+    "caveat": "Amit nem modellezünk: forgalom, kanyarodási tilalmak, komp, szezonális lezárás és az országhatáron túli utak. Az eredmény így szabad forgalmi alsó becslés: a valós menetidő inkább hosszabb, mint rövidebb. Vasútra és buszra külön rész van.",
+    "layer": {
+      "gp": "Háziorvos",
+      "dental": "Fogorvos",
+      "oncall": "Központi ügyelet",
+      "ambulance": "Mentőállomás",
+      "inpatient": "Kórház",
+      "outpatient": "Járóbeteg"
+    },
+    "band": {
+      "0-10": "10 percen belül",
+      "10-20": "10–20 perc",
+      "20-30": "20–30 perc",
+      "30+": "30 perc felett"
+    },
+    "median": "a medián menetidő a legközelebbi célig ({layer})",
+    "minutes": "{n} perc",
+    "max": "a leghosszabb menetidő",
+    "beyond30": "lakos lakik 30 percnél távolabb",
+    "detourMedian": "perc jut egy légvonalbeli kilométerre (medián)",
+    "points": "célpont a hálózaton",
+    "mapCount": "{n} / {total} település a térképen",
+    "detourTitle": "Hol hazudik legnagyobbat a légvonal?",
+    "detourExplain": "Ezeken a településeken a legnagyobb a különbség a légvonal és az út között: folyó, hegyhát vagy zsákutca van közbeékelődve. (A Duna-kanyar és a Szentendrei-sziget esetében a komp is — azt nem modellezzük.)",
+    "colMinutes": "Menetidő (perc)",
+    "colKm": "Légvonal (km)",
+    "colDetour": "Perc / légvonal km",
+    "colAt": "A cél települése",
+    "colGpMedian": "Háziorvos medián (perc)",
+    "colOncallMedian": "Ügyelet medián (perc)",
+    "colInpMedian": "Kórház medián (perc)",
+    "colBeyond30": "30 percnél távolabb élő lakos",
+    "openTable": "Települések ({n})",
+    "openCounties": "Vármegyék összevetése",
+    "tableTitle": "Menetidő — {layer}",
+    "tableSubtitle": "Percek, légvonalbeli kilométerek és a különbség településenként",
+    "countyTitle": "Menetidő vármegyénként",
+    "countySubtitle": "Medián menetidők és a 30 percnél távolabb élők",
+    "note": "Úthálózat: OpenStreetMap (ODbL), {source}. A települések és a célpontok a legközelebbi úthálózati ponthoz vannak illesztve, autópályára soha — onnan nem lehet lehajtani ott, ahol éppen kell."
+  },
+  "transit": {
+    "heading": "Busszal is elérhető?",
+    "explain": "A menetidő annak a háztartásnak felel, amelyiknek van autója. Abban a faluban, ahová ez az oldal folyton mutat, pont ez az, amit nem lehet feltételezni. Egy átlagos szerdán ({day}) {settlements} településről indul menetrend szerinti busz a {total}-ből — a kérdés az, hogy visz-e átszállás nélkül oda, ahol az ellátás van.",
+    "caveat": "A „nincs közvetlen járat” nem azt jelenti, hogy nem lehet odajutni: átszállással gyakran igen. De az átszállás pont az, amit egy nyolcvanéves nem mindig tud megtenni. Vonat nincs az adatban (a MÁV csak regisztrációhoz kötötten adja ki a menetrendjét), a budapesti hálózat pedig külön adatforrás — a főváros kerületei ezért kimaradnak ebből a részből.",
+    "target": {
+      "gp": "Háziorvos",
+      "oncall": "Központi ügyelet",
+      "inpatient": "Kórház"
+    },
+    "state": {
+      "direct": "Van közvetlen járat",
+      "indirect": "Csak átszállással",
+      "none": "Egyáltalán nincs busz"
+    },
+    "stateDirect": "Közvetlen",
+    "stateIndirect": "Átszállással",
+    "stateNone": "Nincs busz",
+    "stateCapital": "Budapest (más adatforrás)",
+    "lead": "településről nincs közvetlen busz oda, ahol a legközelebbi {target} van ({people} lakos)",
+    "statDepartures": "indulás egy átlagos településről (medián)",
+    "statNoService": "településről nem indul busz aznap ({people} lakos)",
+    "statRide": "a medián közvetlen utazás hossza",
+    "statCapital": "budapesti kerület kimarad",
+    "openTable": "Települések ({n})",
+    "openCounties": "Vármegyék összevetése",
+    "tableTitle": "Tömegközlekedési elérés településenként",
+    "tableSubtitle": "Indulások és közvetlen járatok az ellátás helyszínére",
+    "countyTitle": "Tömegközlekedési elérés vármegyénként",
+    "countySubtitle": "Hol van a legtöbb település közvetlen járat nélkül",
+    "colDepartures": "Indulások (szerda)",
+    "colGp": "Háziorvoshoz",
+    "colGpMinutes": "Háziorvoshoz (perc)",
+    "colOncall": "Ügyelethez",
+    "colOncallMinutes": "Ügyelethez (perc)",
+    "colInpatient": "Kórházhoz",
+    "colReachable": "Közvetlenül elérhető település",
+    "colTarget": "Céltelepülés",
+    "colMedianDepartures": "Indulások medián",
+    "colNoService": "Busz nélkül",
+    "colNoDirect": "Nincs közvetlen háziorvoshoz",
+    "colNoDirectPop": "Érintett lakos",
+    "colNoDirectShare": "Arányuk (%)",
+    "note": "Forrás: {source} ({licence}), menetrendi változat {feed}, érvényesség {from}–{to}. Egy megállóból induló járatokat járatonként számoljuk, nem perónon ként.",
+    "railNote": "Vonat nincs benne: a MÁV-START menetrendi adatai csak regisztrációs űrlapon kérhetők, így pár vasúttal ellátott település (például Nagymaros és Budakalász) úgy látszik, mintha egyáltalán nem lenne közlekedése."
   }
 }

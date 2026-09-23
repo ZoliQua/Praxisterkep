@@ -37,6 +37,8 @@ const optional = [
   [join(repo, 'data', 'emergency.json'), join(out, 'emergency.json')],
   [join(repo, 'data', 'workforce.json'), join(out, 'workforce.json')],
   [join(repo, 'data', 'clusters.json'), join(out, 'clusters.json')],
+  [join(repo, 'data', 'traveltime.json'), join(out, 'traveltime.json')],
+  [join(repo, 'data', 'transit.json'), join(out, 'transit.json')],
   [join(repo, 'data', 'geo', 'settlements.geojson'), join(out, 'settlements.geojson')],
 ];
 

@@ -5,6 +5,47 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.25.0] — 2026-09-24
+
+### Hozzáadva
+- **Menetidő légvonal helyett.** Az oldal minden távolsága eddig légvonalban
+  értendő kilométer volt; mostantól ugyanazok a távolságok az
+  OpenStreetMap úthálózatán számított, szabad forgalmi autós percekben is
+  szerepelnek. Medián menetidő: háziorvosig 2,8 perc, fogorvosig 6,1,
+  központi ügyeletig 12,9, kórházig 13,9 perc. 138 648 lakos lakik 30
+  percnél távolabb kórháztól, 14 484 ügyelettől. Egy légvonalbeli
+  kilométerre mediánban 1,15 perc jut — a legnagyobb eltérések ott vannak,
+  ahol folyó vagy hegyhát van közben (Zalkod, Szigetmonostor, Nagymaros).
+- **Tömegközlekedés (GTFS).** A Volánbusz országos menetrendjéből (CC0,
+  napi frissítésű): egy átlagos szerdán 3154 településből 3147-ről indul
+  menetrend szerinti busz. Közvetlen járat oda, ahol az ellátás van, **137
+  településről nincs háziorvoshoz** (81 293 lakos), **269-ről a központi
+  ügyelethez** (379 672 lakos) és 476-ról kórházhoz (502 329 lakos).
+- Új ETL-lépések: `roads.py` (OSM úthálózat → gráf), `traveltime.py`
+  (többforrású Dijkstra rétegenként), `transit.py` (GTFS-feldolgozás).
+  Az OSM-kivonat és a menetrendi zip nem kerül a repóba, a URL és a
+  dátum reprodukálja őket.
+
+### Módosítva
+- Az **összetett index távolság-összetevői percben** számolnak a korábbi
+  légvonalbeli kilométerek helyett, és bekülött egy **tömegközlekedési
+  hátrány** összetevő (10% súly): fele a közvetlen járat hiánya a három
+  célhoz, fele a járatsűrűség. A súlyok újraosztása után a két
+  legmagasabb sávban 640 település van (309 197 lakos). A légvonalbeli
+  kilométerek minden sorban ott maradnak, hogy a két mérőszám
+  összevethető legyen.
+- Az összefüggő hiányterületek újraszámolva az új indexszel: 56 terület,
+  433 település, 163 682 lakos.
+
+### Ismert korlátok
+- A menetidő szabad forgalmi alsó becslés: forgalom, kanyarodási tilalom,
+  komp és szezonális lezárás nincs modellezve.
+- Vonat nincs a menetrendi adatban: a MÁV-START csak regisztrációs
+  űrlapon adja ki a GTFS-ét, így néhány vasúttal ellátott település
+  (Nagymaros, Budakalász) úgy látszik, mintha nem lenne közlekedése. A
+  budapesti hálózat külön adatforrás, ezért a főváros 23 kerülete
+  kimarad a buszos részből — nem „ellátatlanként” szerepel.
+
 ## [1.24.0] — 2026-09-23
 
 ### Hozzáadva
