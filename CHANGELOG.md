@@ -5,6 +5,46 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.24.0] — 2026-09-23
+
+### Hozzáadva
+- **Ügyelet és mentő** az elemző oldalon — a „betöltetlen ≠ ellátatlan”
+  hiányzó fele. Ugyanabból az EESZT-törzsből, amit havonta amúgy is
+  letöltünk: 213 központi ügyeleti szolgálat (202 telephellyel), 264
+  mentőszolgálati egység, 58 betegszállító és 68 művese-egység. Medián
+  távolság a legközelebbi ügyeletig 10,6 km (mentőállomásig 8,1 km);
+  111 675 lakos él 20 km-nél távolabb ügyelettől. Az orvos nélküli
+  körzetektől a medián 7,8 km, 31 körzet 20 km-nél távolabb.
+- **Ki tartja a körzeteket?** — orvosváltás és több körzetet tartó orvosok
+  az archívumból. Fogorvosi: 2297 orvos tartja a 2474 körzetet, 135-en
+  egynél többet (279 körzet), a legnagyobb állomány 4 körzet; a körzetek
+  25,1%-a cserélt orvost legalább egyszer. Háziorvosi: 5006 orvos, 169-en
+  több körzettel (426 körzet), a legnagyobb 8, váltás 12,5%. 154 háziorvos
+  tart körzetet egynél több vármegyében.
+- **A települési lefedettség idősora**: eddig csak a mai állapot látszott.
+  Háziorvosi oldalon 2019-03-ban 589 települést érintett betöltetlen
+  körzet, ma 1081-et; fogorvosin 232-ről 299-re nőtt. A grafikon külön
+  vonalon mutatja azokat, amelyeket kizárólag betöltetlen körzet szolgál.
+- **Összefüggő ellátási hiányterületek**: a két legfelső index-sáv
+  településeit összekapcsolva 58 összefüggő terület rajzolódik ki, 435
+  településsel és 195 350 lakossal; 208 település marad magában. A
+  legnagyobb a Vilmány körüli cserehát–hegyközi folyosó. Módszer:
+  egyszeres láncolás 6 km-es sugárral, legalább 3 település — a
+  kiterjedés minden sornál ott van a méret mellett.
+- Új ETL-lépések: `emergency.py`, `workforce.py`, `clusters.py`.
+
+### Módosítva
+- Az összetett index kapott egy nyolcadik összetevőt: **távolság a
+  legközelebbi központi ügyeletig** (10% súly). A többi súly ennek
+  megfelelően újrasúlyozva; a két legmagasabb sávban most 643 település
+  van 369 143 lakossal.
+
+### Adatvédelem
+- Orvosnév a munkaerő-elemzésből sem kerül ki: a feldolgozó minden nevet
+  álnevesített kulccsá alakít, mielőtt bármit megszámolna, és őr ellenőrzi
+  a kimenetet. A név gyenge azonosító (két orvost hívhatnak ugyanúgy) — ez
+  korlátként ki van írva az oldalon.
+
 ## [1.23.0] — 2026-09-21
 
 ### Hozzáadva

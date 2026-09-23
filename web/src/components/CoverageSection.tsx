@@ -11,6 +11,7 @@ import {
   coverageCountyRows, coverageRows, useCoverage,
 } from '../lib/analysis';
 import { DataTableModal } from './DataTableModal';
+import { CoverageTrendChart } from './charts/CoverageTrendChart';
 import type { PraxisKind } from '../types';
 
 const CLASSES: CoverageClass[] = ['filled', 'partial', 'vacantOnly', 'absent'];
@@ -66,6 +67,17 @@ export function CoverageSection({ kind }: { kind: PraxisKind }) {
             </span>
           </div>
         ))}
+      </div>
+
+      <div className="extra-block">
+        <h4 className="extra-block__title">{t('coverage.trendTitle')}</h4>
+        <p className="section__explain">{t('coverage.trendExplain', {
+          from: model.series[0]?.month ?? '',
+          fromN: formatNumber(model.series[0]?.affectedSettlements ?? 0),
+          to: model.series[model.series.length - 1]?.month ?? '',
+          toN: formatNumber(st.affectedSettlements),
+        })}</p>
+        <CoverageTrendChart points={model.series} color={CLASS_COLORS.vacantOnly} />
       </div>
 
       <div className="extra-stats">

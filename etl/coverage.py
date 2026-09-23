@@ -22,6 +22,10 @@ The two branches can be asked different questions, and the output says so:
     for dental "absent" means "no dental surgery in the settlement", which
     is a weaker statement. It is kept separate and labelled.
 
+The same classification is run over every archived month, so the trend is
+published with the current picture: a settlement count that only ever shows
+today cannot say whether the country is drifting.
+
 None of this is a claim that a settlement is unserved (CLAUDE.md rule 4):
 substitution is invisible in the published data. What is published here is
 which settlements depend on a district that currently has no physician.
@@ -106,6 +110,7 @@ def build() -> dict:
             "servedListPublished": kind == "gp",
             "stats": summarise(rows, seats),
             "counties": by_county(rows),
+            "series": series(kind, ksh),
             "settlements": rows,
         }
 
@@ -115,6 +120,42 @@ def build() -> dict:
         "kinds": kinds,
     }
     guard(out)
+    return out
+
+
+def series(kind: str, ksh) -> list[dict]:
+    """The same classes month by month, from the archived snapshots.
+
+    Months whose registry is missing (no filledPraxes) are skipped: there a
+    settlement's state is unknown, not uncovered.
+    """
+    out: list[dict] = []
+    total = [e for e in ksh.entries
+             if not (e["name"] == "Budapest" and not e["isDistrictOfCapital"])]
+    for path in sorted((ROOT / "data").glob(f"20*/{kind}.json")):
+        snap = json.loads(path.read_text(encoding="utf-8"))
+        if not snap.get("filledPraxes"):
+            continue
+        by_key = {normalize_settlement(s["name"]): s for s in snap.get("settlements", [])}
+        counts: collections.Counter = collections.Counter()
+        population: collections.Counter = collections.Counter()
+        for e in total:
+            s = by_key.get(normalize_settlement(e["name"]))
+            filled = (s or {}).get("filled", 0)
+            empty = len((s or {}).get("vacantPraxisIds", [])) + \
+                len((s or {}).get("dissolvedPraxisIds", []))
+            cls = "absent" if s is None else (
+                "partial" if (filled and empty) else "filled" if filled else "vacantOnly")
+            counts[cls] += 1
+            population[cls] += e["population"]
+        affected = counts["partial"] + counts["vacantOnly"]
+        out.append({
+            "month": path.parent.name,
+            **{c: counts.get(c, 0) for c in CLASSES},
+            "affectedSettlements": affected,
+            "affectedPopulation": population["partial"] + population["vacantOnly"],
+            "vacantOnlyPopulation": population["vacantOnly"],
+        })
     return out
 
 
@@ -173,6 +214,12 @@ def guard(out: dict) -> None:
             raise ParseError(f"{kind}: the class populations do not add up")
         if sum(c["settlements"] for c in k["counties"]) != st["settlements"]:
             raise ParseError(f"{kind}: county counts do not add up")
+        for point in k["series"]:
+            if sum(point[c] for c in CLASSES) != st["settlements"]:
+                raise ParseError(
+                    f"{kind}: the {point['month']} series row does not add up")
+        if k["series"] and k["series"][-1]["affectedSettlements"] != st["affectedSettlements"]:
+            raise ParseError(f"{kind}: the series does not end at today's figure")
         for r in k["settlements"]:
             if r["class"] not in CLASSES:
                 raise ParseError(f"{kind}: unknown class {r['class']!r}")

@@ -71,6 +71,7 @@ def test_coverage_guard_catches_a_class_that_contradicts_itself():
         "servedListPublished": True,
         "stats": coverage.summarise(rows, set()),
         "counties": coverage.by_county(rows),
+        "series": [],
         "settlements": rows,
     }}}
     out["kinds"]["gp"]["stats"]["settlements"] = 3178

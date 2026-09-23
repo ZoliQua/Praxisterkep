@@ -12,6 +12,7 @@ always be taken apart:
     vacancy      the districts serving it have no contracted physician
     gpKm         distance to the nearest operating GP surgery
     dentalKm     distance to the nearest operating dental surgery
+    oncallKm     distance to the nearest central on-call surgery
     outpatientKm distance to the nearest contracted outpatient site
     inpatientKm  distance to the nearest contracted hospital site
     ageing       65+ share of the population (KSH 2022 census)
@@ -51,12 +52,15 @@ SCHEMA_VERSION = 1
 
 # the weights are deliberately round numbers and are published with the index
 WEIGHTS = {
-    "vacancy": 0.25,
-    "gpKm": 0.15,
-    "dentalKm": 0.10,
+    "vacancy": 0.22,
+    "gpKm": 0.14,
+    "dentalKm": 0.08,
+    # the on-call point is what a vacant district falls back on, so it earns
+    # its own weight rather than being folded into the surgery distance
+    "oncallKm": 0.10,
     "outpatientKm": 0.05,
-    "inpatientKm": 0.10,
-    "ageing": 0.15,
+    "inpatientKm": 0.08,
+    "ageing": 0.13,
     "risk": 0.10,
     "deprivation": 0.10,
 }
@@ -119,6 +123,11 @@ def build() -> dict:
         (data_dir / "age.json").read_text(encoding="utf-8"))["settlements"]}
     risk = json.loads((data_dir / "risk.json").read_text(encoding="utf-8"))
     specialist = json.loads((data_dir / "specialist.json").read_text(encoding="utf-8"))
+    emergency_path = data_dir / "emergency.json"
+    oncall_km = {}
+    if emergency_path.exists():
+        emergency = json.loads(emergency_path.read_text(encoding="utf-8"))
+        oncall_km = {s["kshId"]: s["oncallKm"] for s in emergency["settlements"]}
     benefit = json.loads((data_dir / "kedvezmenyezett.json").read_text(encoding="utf-8"))["settlements"]
     from kedvezmenyezett import county_key, normalize
 
@@ -170,6 +179,7 @@ def build() -> dict:
                 "vacancy": vacancy_score(gp_cover.get("class"), dental_cover.get("class")),
                 "gpKm": nearest(lat, lon, gp_points),
                 "dentalKm": nearest(lat, lon, dental_points),
+                "oncallKm": oncall_km.get(e["kshId"]),
                 "outpatientKm": nearest(lat, lon, outpatient),
                 "inpatientKm": nearest(lat, lon, inpatient),
                 "ageing": a.get("oldShare"),

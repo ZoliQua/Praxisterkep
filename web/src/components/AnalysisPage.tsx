@@ -10,6 +10,9 @@ import { RiskSection } from './RiskSection';
 import { SurvivalSection } from './SurvivalSection';
 import { CoverageSection } from './CoverageSection';
 import { CompositeSection } from './CompositeSection';
+import { EmergencySection } from './EmergencySection';
+import { WorkforceSection } from './WorkforceSection';
+import { ClusterSection } from './ClusterSection';
 import type { PraxisKind } from '../types';
 
 const LINKS = [
@@ -28,14 +31,18 @@ export function AnalysisPage() {
         <p className="section__lead">{t('analysis.lead')}</p>
       </header>
       <nav className="page-toc">
-        {(['kockazat', 'tulel', 'lefedettseg', 'index'] as const).map((id) => (
+        {(['kockazat', 'tulel', 'orvosok', 'lefedettseg', 'ugyelet', 'index',
+           'hianyteruletek'] as const).map((id) => (
           <a key={id} href={`#${id}`}>{t(`analysis.toc.${id}`)}</a>
         ))}
       </nav>
       <RiskSection kind={kind} />
       <SurvivalSection kind={kind} />
+      <WorkforceSection kind={kind} />
       <CoverageSection kind={kind} />
+      <EmergencySection kind={kind} />
       <CompositeSection />
+      <ClusterSection />
     </>
   );
 }

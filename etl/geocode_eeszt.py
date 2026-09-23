@@ -72,6 +72,15 @@ def main() -> None:
         for s in spec["sites"]:
             want(s["postalCode"], s["settlement"], s["address"])
 
+    # the on-call and emergency points (source H as well); they are read from
+    # the registers because emergency.json cannot be built before they exist
+    try:
+        import emergency
+        for postal, settlement, address in emergency.premises():
+            want(postal, settlement, address)
+    except Exception as exc:  # noqa: BLE001 — a missing register must not block
+        print(f"  WARNING: emergency premises skipped: {exc}")
+
     cache = load_cache()
     todo = [k for k in premises if k not in cache]
     if args.limit:

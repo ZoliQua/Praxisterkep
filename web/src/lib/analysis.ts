@@ -102,6 +102,17 @@ export interface CoverageCounty {
   affectedShare: number;
 }
 
+export interface CoverageTrendPoint {
+  month: string;
+  filled: number;
+  partial: number;
+  vacantOnly: number;
+  absent: number;
+  affectedSettlements: number;
+  affectedPopulation: number;
+  vacantOnlyPopulation: number;
+}
+
 export interface CoverageRaw {
   schemaVersion: number;
   dataMonth: string;
@@ -109,6 +120,7 @@ export interface CoverageRaw {
     servedListPublished: boolean;
     stats: CoverageStats;
     counties: CoverageCounty[];
+    series: CoverageTrendPoint[];
     settlements: CoverageSettlement[];
   }>;
 }
@@ -247,6 +259,7 @@ export const COMPOSITE_COLUMNS: ColDef[] = [
   { key: 'population', labelKey: 'access.colPopulation', type: 'number', visible: true },
   { key: 'gpKm', labelKey: 'composite.colGpKm', type: 'number', visible: true },
   { key: 'dentalKm', labelKey: 'composite.colDentalKm', type: 'number', visible: false },
+  { key: 'oncallKm', labelKey: 'emergency.colOncallKm', type: 'number', visible: true },
   { key: 'outpatientKm', labelKey: 'composite.colOutKm', type: 'number', visible: false },
   { key: 'inpatientKm', labelKey: 'composite.colInpKm', type: 'number', visible: true },
   { key: 'oldSharePct', labelKey: 'coverage.colOldShare', type: 'number', visible: true },
@@ -307,6 +320,7 @@ export function compositeRows(data: CompositeRaw | null): Row[] {
     population: s.population,
     gpKm: s.raw.gpKm,
     dentalKm: s.raw.dentalKm,
+    oncallKm: s.raw.oncallKm,
     outpatientKm: s.raw.outpatientKm,
     inpatientKm: s.raw.inpatientKm,
     oldSharePct: s.raw.ageing === null ? null : Math.round(s.raw.ageing * 1000) / 10,

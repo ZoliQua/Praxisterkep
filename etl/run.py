@@ -219,9 +219,12 @@ def main() -> None:
     # the analyses that read several outputs at once, in dependency order
     for name, label in (("ksh_age", "age composition"),
                         ("centroids", "settlement coordinates"),
+                        ("emergency", "on-call and emergency points"),
                         ("survival", "survival analysis"),
+                        ("workforce", "physician turnover"),
                         ("coverage", "settlement coverage"),
-                        ("composite", "composite index")):
+                        ("composite", "composite index"),
+                        ("clusters", "care deserts")):
         try:
             module = __import__(name)
             result = module.build()

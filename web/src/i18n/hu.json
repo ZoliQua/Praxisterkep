@@ -897,7 +897,10 @@
       "coverage_json": "Települési lefedettség: minden település állapota körzetszékhely helyett településszinten",
       "composite_json": "Összetett ellátási kockázati index településenként, összetevőkre bontva",
       "age_json": "Korösszetétel településenként (KSH, 2022. évi népszámlálás, CC BY 4.0)",
-      "settlements_geojson": "Települések középpontja (OpenStreetMap) KSH-kóddal és lakossággal"
+      "settlements_geojson": "Települések középpontja (OpenStreetMap) KSH-kóddal és lakossággal",
+      "emergency_json": "Ügyeleti és sürgősségi pontok (EESZT) és a tőlük mért távolságok településenként",
+      "workforce_json": "Orvosváltások az archívumból és a több körzetet tartó orvosok (név nélkül, álnevesített kulccsal)",
+      "clusters_json": "Összefüggő ellátási hiányterületek és településeik"
     },
     "useHeading": "Hogyan használd",
     "use1": "A fájlok statikusak és verziózottak: a hónap végleges állapota a months/ könyvtárban marad, a latest.json mindig az aktuális hónapra mutat.",
@@ -1081,7 +1084,10 @@
       "kockazat": "Kockázati előrejelzés",
       "tulel": "Túlélés-elemzés",
       "lefedettseg": "Települési lefedettség",
-      "index": "Összetett index"
+      "index": "Összetett index",
+      "orvosok": "Ki tartja a körzeteket",
+      "ugyelet": "Ügyelet és mentő",
+      "hianyteruletek": "Hiányterületek"
     }
   },
   "vedono": {
@@ -1255,7 +1261,11 @@
     "colAffected": "Érintett település",
     "colAffectedPop": "Érintett lakos",
     "colAffectedShare": "Érintett arány (%)",
-    "note": "Adatállapot: {month}. Az érintettség nem azonos az ellátatlansággal: a helyettesítés a nyilvános adatokban nem látszik. Korösszetétel: KSH, 2022. évi népszámlálás."
+    "note": "Adatállapot: {month}. Az érintettség nem azonos az ellátatlansággal: a helyettesítés a nyilvános adatokban nem látszik. Korösszetétel: KSH, 2022. évi népszámlálás.",
+    "trendTitle": "Hogyan változott ez az archívumban?",
+    "trendExplain": "{from}: {fromN} érintett település — {to}: {toN}. A folytonos vonal az összes érintett település, a szaggatott azok, amelyeket kizárólag betöltetlen körzet szolgál.",
+    "trendAffected": "Érintett település",
+    "trendVacantOnly": "Csak betöltetlen körzet szolgálja"
   },
   "composite": {
     "heading": "Összetett ellátási kockázati index",
@@ -1282,7 +1292,8 @@
       "inpatientKm": "Távolság kórházig",
       "ageing": "65 év felettiek aránya",
       "risk": "A körzetek üresedési kockázata",
-      "deprivation": "Kedvezményezett település"
+      "deprivation": "Kedvezményezett település",
+      "oncallKm": "Távolság központi ügyeletig"
     },
     "source": {
       "vacancy": "NEAK + települési lefedettség",
@@ -1292,7 +1303,8 @@
       "inpatientKm": "NEAK szakellátó lista",
       "ageing": "KSH 2022. évi népszámlálás",
       "risk": "Kockázati előrejelzés",
-      "deprivation": "105/2015. (IV. 23.) Korm. r."
+      "deprivation": "105/2015. (IV. 23.) Korm. r.",
+      "oncallKm": "EESZT törzspublikáció (ügyeleti szolgálatok)"
     },
     "topTitle": "A tíz legmagasabb indexű település",
     "openTable": "Települések ({n})",
@@ -1330,5 +1342,114 @@
     "colYoungNow": "0–14 éves (fő)",
     "colOldNow": "65+ (fő)",
     "note": "Forrás: KSH, {year}. évi népszámlálás (CC BY 4.0). A korösszetétel a népszámlálás arányaiból származik, a létszámok a {population}. január 1-i lakosságra vetítve. {suppressed} apró településnél a KSH adatvédelmi okból elhagyta a cellát; ezeket nem becsültük meg, hanem hiányzóként szerepelnek."
+  },
+  "emergency": {
+    "heading": "Ügyelet és mentő: mi van a betöltetlen körzet körül?",
+    "explain": "Az oldal eddig csak azt tudta kimondani, hogy egy körzet betöltetlen. A másik fele ugyanabban az EESZT-törzsben van, amit havonta amúgy is letöltünk: {oncall} központi ügyeleti szolgálat és {ambulance} mentőszolgálati egység működési engedéllyel és telephellyel. Így minden településre és minden orvos nélküli körzetre megmondható, milyen messze van a legközelebbi ügyelet és mentőállomás.",
+    "caveat": "Ettől még óvatosan: a távolság légvonalban értendő, és egy közeli ügyeleti pont nem bizonyítja, hogy az ellátás meg is érkezik — ahogy a távoli sem bizonyítja, hogy nem. Ez tájékozódási pont, nem minősítés.",
+    "group": {
+      "oncall": "Központi ügyelet",
+      "ambulance": "Mentőállomás",
+      "transport": "Betegszállítás",
+      "dialysis": "Művese"
+    },
+    "band": {
+      "0-10": "10 km-en belül",
+      "10-20": "10–20 km",
+      "20-30": "20–30 km",
+      "30+": "30 km felett"
+    },
+    "median": "a medián távolság a legközelebbi ilyen pontig ({group})",
+    "beyond20": "lakos él 20 km-nél távolabb",
+    "districtMedian": "a medián távolság az orvos nélküli körzetektől",
+    "districtsBeyond20": "orvos nélküli körzet 20 km-nél távolabb",
+    "max": "a legnagyobb távolság",
+    "mapCount": "{n} / {total} ügyeleti és sürgősségi pont a térképen",
+    "openDistricts": "Orvos nélküli {kind} körzetek ({n})",
+    "openSettlements": "Települések ({n})",
+    "openPoints": "Ügyeleti és sürgősségi pontok ({n})",
+    "openCounties": "Vármegyék összevetése",
+    "districtTitle": "Orvos nélküli {kind} körzetek és a legközelebbi ügyelet",
+    "districtSubtitle": "Minden betöltetlen és megszűnt körzet, a hozzá legközelebbi ügyelettel és mentőállomással",
+    "settlementTitle": "Települések és a legközelebbi ügyelet",
+    "settlementSubtitle": "Minden település középpontjától mérve",
+    "pointTitle": "Ügyeleti és sürgősségi pontok",
+    "pointSubtitle": "Központi ügyelet, mentőállomás, betegszállítás és művese · szűrhető, exportálható",
+    "countyTitle": "Ügyeleti elérhetőség vármegyénként",
+    "countySubtitle": "Medián és legnagyobb távolság, és hány lakos él 20 km-nél távolabb",
+    "colGroup": "Típus",
+    "colKind": "Ág",
+    "colOncallKm": "Ügyelet (km)",
+    "colOncallAt": "Ügyelet helye",
+    "colAmbulanceKm": "Mentőállomás (km)",
+    "colAmbulanceAt": "Mentőállomás helye",
+    "colLongTerm": "Tartósan betöltetlen",
+    "colOncallMedian": "Ügyelet medián (km)",
+    "colOncallMax": "Ügyelet max (km)",
+    "colBeyond20": "20 km-nél távolabb élő lakos",
+    "colAmbulanceMedian": "Mentő medián (km)",
+    "colAmbulanceMax": "Mentő max (km)",
+    "note": "Forrás: EESZT törzspublikáció, {asOf}. Központi ügyelet: {oncallLocated} / {oncallTotal} szolgálat telephelye geokódolva, mentő: {ambulanceLocated} / {ambulanceTotal}. A helyettesítés és a hétköznapi rendelési idő nem látszik a nyilvános adatokban."
+  },
+  "workforce": {
+    "heading": "Ki tartja a körzeteket?",
+    "explain": "Az archívum {from} óta minden hónapban megnevezi a betöltött {kind} körzetek szerződött orvosát. {months} hónap egymás mellé téve olyasmit mutat, amit egyetlen pillanatkép sem: ma {physicians} orvos tartja a {districts} betöltött körzetet, és látszik, melyik körzet cserélt gazdát, hányszor.",
+    "privacy": "Név itt nem szerepel: a feldolgozó minden orvost álnevesített kulccsá alakít, mielőtt bármit megszámolna, így ez a rész csak azt tudja megmondani, hányan — azt nem, hogy kik. A név gyenge azonosító: két orvost hívhatnak ugyanúgy, ezt a számok olvasásakor érdemes fejben tartani.",
+    "statMulti": "orvos tart egynél több körzetet",
+    "statMultiDistricts": "körzet van több körzetet tartó orvosnál ({share})",
+    "statLargest": "körzet a legnagyobb egy orvoshoz tartozó állományban",
+    "statChanged": "a körzeteknek cserélt orvost legalább egyszer",
+    "bandsTitle": "Hány körzetet tart egy orvos?",
+    "bandsExplain": "A sáv az orvosok számát mutatja, zárójelben a hozzájuk tartozó körzetek számával.",
+    "band": {
+      "1": "Egy körzet",
+      "2": "Két körzet",
+      "3": "Három körzet",
+      "four": "Négy vagy több"
+    },
+    "districtsShort": "körzet",
+    "openPortfolios": "Több körzetet tartó orvosok ({n})",
+    "openDistricts": "Körzetek orvosváltással ({n})",
+    "openCounties": "Vármegyék összevetése",
+    "portfolioTitle": "Több {kind} körzetet tartó orvosok",
+    "portfolioSubtitle": "Egy sor egy orvos álnevesített kulcsa és a hozzá tartozó körzetek",
+    "districtTitle": "Orvosváltások — {kind} körzetek",
+    "districtSubtitle": "Hányszor cserélt orvost egy körzet az archívumban",
+    "countyTitle": "Orvosváltás vármegyénként — {kind}",
+    "countySubtitle": "Hol cserélődnek gyakran az orvosok, és hol tart egy orvos több körzetet",
+    "colDistricts": "Körzetek",
+    "colIds": "NEAK-kódok",
+    "colKey": "Álnevesített kulcs",
+    "colChanges": "Orvosváltás",
+    "colMonths": "Megfigyelt hónap",
+    "colPortfolio": "A mai orvos körzetei",
+    "colHeld": "Ma betöltött",
+    "colFirstSeen": "Először látva",
+    "colChanged": "Váltással érintett körzet",
+    "colChangeShare": "Váltással érintett arány (%)",
+    "colMulti": "Több körzetes orvosnál",
+    "colMultiShare": "Több körzetes arány (%)",
+    "note": "Összesen {changes} orvosváltás {months} hónap alatt. {crossCounty} orvos tart körzetet egynél több vármegyében. Az archívum hónapjai nem egyenletesek, így két pillanatkép közötti rövid váltás láthatatlan maradhat."
+  },
+  "clusters": {
+    "heading": "Összefüggő ellátási hiányterületek",
+    "explain": "Az összetett index településeket rangsorol, és így olvasva szórványos balszerencsének tűnik. Pedig nem az: ahol egy magas indexű települést csupa hasonló vesz körül, ott a szomszéd falu sem alternatíva. Itt a két legfelső sáv településeit kötjük össze, ha középpontjuk {km} km-en belül van; minden legalább {min} településből álló összefüggő folt egy hiányterület.",
+    "statClusters": "összefüggő hiányterület",
+    "statSettlements": "település tartozik valamelyik területhez ({share})",
+    "statPopulation": "lakos él ezeken a területeken",
+    "statIsolated": "település marad magában",
+    "mapCount": "{n} / {total} hiányterület a térképen",
+    "mapLegend": "Hiányterület középpontja",
+    "topTitle": "A nyolc legnépesebb hiányterület",
+    "openTable": "Hiányterületek ({n})",
+    "openMembers": "Érintett települések ({n})",
+    "tableTitle": "Összefüggő ellátási hiányterületek",
+    "tableSubtitle": "Egy sor egy terület: mérete, kiterjedése és átlagos mutatói",
+    "memberTitle": "Hiányterületek települései",
+    "memberSubtitle": "Melyik település melyik területhez tartozik",
+    "colName": "Terület",
+    "colSpread": "Kiterjedés (km)",
+    "colCore": "Legmagasabb indexű település",
+    "note": "Módszer: egyszeres láncolás {km} km-es sugárral, legalább {min} település. A láncolás hosszú folyosókat is összeköt, ezért a kiterjedés minden sornál ott van a méret mellett. Adatállapot: {month}."
   }
 }

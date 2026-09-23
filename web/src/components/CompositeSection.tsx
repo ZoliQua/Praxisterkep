@@ -21,6 +21,7 @@ function detailRows(row: MapRow): [string, string][] {
     [t('composite.colBand'), String(row.band ?? '–')],
     [t('access.colPopulation'), formatNumber(Number(row.population ?? 0))],
     [t('composite.colGpKm'), row.gpKm === null ? '–' : `${formatNumber(Number(row.gpKm))} km`],
+    [t('emergency.colOncallKm'), row.oncallKm === null ? '–' : `${formatNumber(Number(row.oncallKm))} km`],
     [t('composite.colInpKm'), row.inpatientKm === null ? '–' : `${formatNumber(Number(row.inpatientKm))} km`],
     [t('coverage.colOldShare'), row.oldSharePct === null ? '–' : `${formatNumber(Number(row.oldSharePct))}%`],
     [t('composite.colGpClass'), String(row.gpState ?? '–')],

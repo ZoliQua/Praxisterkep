@@ -29,7 +29,7 @@ const DESCRIBED = new Set([
   'operating.json', 'kedvezmenyezett.json', 'counties.geojson', 'jaras.geojson',
   'cities.geojson', 'budapest.geojson', 'vedono.json', 'specialist.json',
   'risk.json', 'survival.json', 'coverage.json', 'composite.json', 'age.json',
-  'settlements.geojson',
+  'settlements.geojson', 'emergency.json', 'workforce.json', 'clusters.json',
 ]);
 
 /** "access.json" -> "access_json", "months/" -> "months" (t() splits on dots) */

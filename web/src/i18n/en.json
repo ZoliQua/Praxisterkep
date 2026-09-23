@@ -897,7 +897,10 @@
       "coverage_json": "Settlement coverage: every settlement's state, read at settlement level instead of district seats",
       "composite_json": "Composite care-risk index per settlement, broken into its components",
       "age_json": "Age composition per settlement (KSH, 2022 census, CC BY 4.0)",
-      "settlements_geojson": "Settlement centres (OpenStreetMap) with KSH code and population"
+      "settlements_geojson": "Settlement centres (OpenStreetMap) with KSH code and population",
+      "emergency_json": "On-call and emergency points (EESZT) with the distances measured from them per settlement",
+      "workforce_json": "Physician changes from the archive and the physicians holding several districts (no names, pseudonymous keys)",
+      "clusters_json": "Contiguous care deserts and their settlements"
     },
     "useHeading": "How to use them",
     "use1": "The files are static and versioned: a finished month stays in months/, while latest.json always points at the current one.",
@@ -1081,7 +1084,10 @@
       "kockazat": "Vacancy risk",
       "tulel": "Survival analysis",
       "lefedettseg": "Settlement coverage",
-      "index": "Composite index"
+      "index": "Composite index",
+      "orvosok": "Who holds the districts",
+      "ugyelet": "On-call and ambulance",
+      "hianyteruletek": "Care deserts"
     }
   },
   "vedono": {
@@ -1255,7 +1261,11 @@
     "colAffected": "Affected settlements",
     "colAffectedPop": "Affected residents",
     "colAffectedShare": "Affected share (%)",
-    "note": "Data as of {month}. Being affected is not the same as being unserved: substitution is invisible in the published data. Age composition: KSH, 2022 census."
+    "note": "Data as of {month}. Being affected is not the same as being unserved: substitution is invisible in the published data. Age composition: KSH, 2022 census.",
+    "trendTitle": "How has this moved in the archive?",
+    "trendExplain": "{from}: {fromN} affected settlements — {to}: {toN}. The solid line is all affected settlements, the dashed one those served only by vacant districts.",
+    "trendAffected": "Affected settlements",
+    "trendVacantOnly": "Served only by vacant districts"
   },
   "composite": {
     "heading": "Composite care-risk index",
@@ -1282,7 +1292,8 @@
       "inpatientKm": "Distance to a hospital",
       "ageing": "Share of residents 65+",
       "risk": "Vacancy risk of the districts",
-      "deprivation": "Beneficiary settlement"
+      "deprivation": "Beneficiary settlement",
+      "oncallKm": "Distance to a central on-call surgery"
     },
     "source": {
       "vacancy": "NEAK + settlement coverage",
@@ -1292,7 +1303,8 @@
       "inpatientKm": "NEAK specialist list",
       "ageing": "KSH 2022 census",
       "risk": "Vacancy risk model",
-      "deprivation": "Gov. decree 105/2015. (IV. 23.)"
+      "deprivation": "Gov. decree 105/2015. (IV. 23.)",
+      "oncallKm": "EESZT master publication (on-call services)"
     },
     "topTitle": "The ten settlements with the highest index",
     "openTable": "Settlements ({n})",
@@ -1330,5 +1342,114 @@
     "colYoungNow": "Aged 0–14",
     "colOldNow": "65+",
     "note": "Source: KSH, {year} census (CC BY 4.0). The composition comes from the census shares, the headcounts are those shares applied to the population on 1 January {population}. In {suppressed} tiny settlements KSH suppressed the cell for disclosure control; those are left missing rather than estimated."
+  },
+  "emergency": {
+    "heading": "On-call and ambulance: what stands around a vacant district?",
+    "explain": "Until now the site could only say that a district is vacant. The other half is in the same EESZT register it downloads every month: {oncall} central on-call services and {ambulance} ambulance units with a licence and premises. So for every settlement and every district without a physician it can say how far the nearest on-call surgery and ambulance station are.",
+    "caveat": "With care: distances are crow-flies, and a nearby on-call point does not prove that care arrives — nor does a distant one prove that it does not. This is a bearing, not a verdict.",
+    "group": {
+      "oncall": "Central on-call",
+      "ambulance": "Ambulance station",
+      "transport": "Patient transport",
+      "dialysis": "Dialysis"
+    },
+    "band": {
+      "0-10": "within 10 km",
+      "10-20": "10–20 km",
+      "20-30": "20–30 km",
+      "30+": "beyond 30 km"
+    },
+    "median": "median distance to the nearest such point ({group})",
+    "beyond20": "residents live beyond 20 km",
+    "districtMedian": "median distance from districts without a physician",
+    "districtsBeyond20": "districts without a physician beyond 20 km",
+    "max": "the largest distance",
+    "mapCount": "{n} / {total} on-call and emergency points on the map",
+    "openDistricts": "{kind} districts without a physician ({n})",
+    "openSettlements": "Settlements ({n})",
+    "openPoints": "On-call and emergency points ({n})",
+    "openCounties": "Counties compared",
+    "districtTitle": "{kind} districts without a physician and the nearest on-call point",
+    "districtSubtitle": "Every vacant and dissolved district with its nearest on-call surgery and ambulance station",
+    "settlementTitle": "Settlements and the nearest on-call point",
+    "settlementSubtitle": "Measured from each settlement's centre",
+    "pointTitle": "On-call and emergency points",
+    "pointSubtitle": "Central on-call, ambulance, patient transport and dialysis · filterable, exportable",
+    "countyTitle": "On-call reach by county",
+    "countySubtitle": "Median and largest distance, and how many residents live beyond 20 km",
+    "colGroup": "Type",
+    "colKind": "Branch",
+    "colOncallKm": "On-call (km)",
+    "colOncallAt": "On-call at",
+    "colAmbulanceKm": "Ambulance (km)",
+    "colAmbulanceAt": "Ambulance at",
+    "colLongTerm": "Long-term vacant",
+    "colOncallMedian": "On-call median (km)",
+    "colOncallMax": "On-call max (km)",
+    "colBeyond20": "Residents beyond 20 km",
+    "colAmbulanceMedian": "Ambulance median (km)",
+    "colAmbulanceMax": "Ambulance max (km)",
+    "note": "Source: EESZT master publication, {asOf}. Central on-call: {oncallLocated} of {oncallTotal} services geocoded, ambulance: {ambulanceLocated} of {ambulanceTotal}. Substitution and weekday surgery hours are invisible in the public data."
+  },
+  "workforce": {
+    "heading": "Who holds the districts?",
+    "explain": "Since {from} every archived month names the contracted physician of each filled {kind} district. Put side by side, {months} months show what no snapshot can: today {physicians} physicians hold the {districts} filled districts, and it is visible which district changed hands, and how often.",
+    "privacy": "No name appears here: the pipeline turns every physician into a pseudonymous key before counting anything, so this block can only say how many — never who. A name is a weak identity: two physicians can share one, which is worth remembering when reading the numbers.",
+    "statMulti": "physicians hold more than one district",
+    "statMultiDistricts": "districts are held by a physician with several ({share})",
+    "statLargest": "districts in the largest single holding",
+    "statChanged": "of districts changed physician at least once",
+    "bandsTitle": "How many districts does one physician hold?",
+    "bandsExplain": "The bar shows the number of physicians, with the districts they hold in brackets.",
+    "band": {
+      "1": "One district",
+      "2": "Two districts",
+      "3": "Three districts",
+      "four": "Four or more"
+    },
+    "districtsShort": "districts",
+    "openPortfolios": "Physicians with several districts ({n})",
+    "openDistricts": "Districts by physician change ({n})",
+    "openCounties": "Counties compared",
+    "portfolioTitle": "Physicians holding several {kind} districts",
+    "portfolioSubtitle": "One row per physician's pseudonymous key and the districts they hold",
+    "districtTitle": "Physician changes — {kind} districts",
+    "districtSubtitle": "How often a district changed physician in the archive",
+    "countyTitle": "Physician turnover by county — {kind}",
+    "countySubtitle": "Where physicians change often, and where one holds several districts",
+    "colDistricts": "Districts",
+    "colIds": "NEAK codes",
+    "colKey": "Pseudonymous key",
+    "colChanges": "Changes",
+    "colMonths": "Months observed",
+    "colPortfolio": "Districts of today's physician",
+    "colHeld": "Filled today",
+    "colFirstSeen": "First seen",
+    "colChanged": "Districts with a change",
+    "colChangeShare": "Share with a change (%)",
+    "colMulti": "Held by a multi-district physician",
+    "colMultiShare": "Multi-district share (%)",
+    "note": "{changes} physician changes over {months} months. {crossCounty} physicians hold districts in more than one county. The archived months are unevenly spaced, so a short change between two snapshots can stay invisible."
+  },
+  "clusters": {
+    "heading": "Contiguous care deserts",
+    "explain": "The composite index ranks settlements one by one, and read that way it looks like scattered bad luck. It is not: where a high-index settlement is surrounded by similar ones, the next village is no alternative either. Here the settlements of the two highest bands are joined when their centres are within {km} km; every connected patch of at least {min} settlements is a care desert.",
+    "statClusters": "contiguous areas",
+    "statSettlements": "settlements belong to one of them ({share})",
+    "statPopulation": "residents live in these areas",
+    "statIsolated": "settlements stay on their own",
+    "mapCount": "{n} / {total} areas on the map",
+    "mapLegend": "Centre of a care desert",
+    "topTitle": "The eight most populous areas",
+    "openTable": "Care deserts ({n})",
+    "openMembers": "Settlements involved ({n})",
+    "tableTitle": "Contiguous care deserts",
+    "tableSubtitle": "One row per area: its size, extent and mean indicators",
+    "memberTitle": "Settlements of the care deserts",
+    "memberSubtitle": "Which settlement belongs to which area",
+    "colName": "Area",
+    "colSpread": "Extent (km)",
+    "colCore": "Highest-index settlement",
+    "note": "Method: single linkage at a {km} km radius, at least {min} settlements. Linkage also joins long corridors, so the extent travels beside the size in every row. Data as of {month}."
   }
 }

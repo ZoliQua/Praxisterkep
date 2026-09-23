@@ -34,6 +34,9 @@ const optional = [
   [join(repo, 'data', 'survival.json'), join(out, 'survival.json')],
   [join(repo, 'data', 'coverage.json'), join(out, 'coverage.json')],
   [join(repo, 'data', 'composite.json'), join(out, 'composite.json')],
+  [join(repo, 'data', 'emergency.json'), join(out, 'emergency.json')],
+  [join(repo, 'data', 'workforce.json'), join(out, 'workforce.json')],
+  [join(repo, 'data', 'clusters.json'), join(out, 'clusters.json')],
   [join(repo, 'data', 'geo', 'settlements.geojson'), join(out, 'settlements.geojson')],
 ];
 
