@@ -9,7 +9,7 @@ endpoint (discovered from the page's own XHR):
   GET /torzspublikacio-portlet/rest/torzsvizualizacio/getEntity
       ?entityId=<id>&page=<0-based>&size=<n>
 
-Three entities are downloaded in full and archived as JSONL under
+Five entities are downloaded in full and archived as JSONL under
 data/raw/eeszt/<name>_<YYYY-MM-DD>.jsonl.gz (one row per line, with the
 field list in a sidecar .meta.json):
 
@@ -18,6 +18,12 @@ field list in a sidecar .meta.json):
   EUSZOLG_PUBLIKUS         — healthcare providers: id, name, tax number, seat
   EUSZOLG_ENGEDELY_PUBLIKUS — operating licences: provider id, premises
                              address, profession code/name, financing flag
+  NEAK_FINSZOLG_EXT        — the same financed services with NEAK's own
+                             FIN -> provider (NNGYK6) link, provider name
+                             and tax number; used as a second opinion on the
+                             cross-check, never as its replacement
+  GYSE_FORGALMAZO          — medical-aid retailers: premises address and
+                             licence per shop (GYS1) or branch (GYS2)
 
 Every page is validated: row count must match, duplicate first-column ids
 fail loudly, and the run aborts if totalRowCount changes mid-download.
@@ -40,11 +46,16 @@ ENTITIES = {
     "neak_finszolg": "NEAK_FINSZOLG.NEAK_FINSZOLG.K",
     "euszolg": "EUSZOLG_PUBLIKUS.EUSZOLG_PUBLIKUS.M",
     "euszolg_engedely": "EUSZOLG_ENGEDELY_PUBLIKUS.EUSZOLG_ENGEDELY_PUBLIKUS.M",
+    "neak_finszolg_ext": "NEAK_FINSZOLG_EXT.NEAK_FINSZOLG_EXT.M",
+    "gyse_forgalmazo": "GYSE_FORGALMAZO.GYSE_FORGALMAZO.M",
 }
 HEADERS = {"User-Agent": ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
                           "AppleWebKit/537.36 (KHTML, like Gecko) "
                           "Chrome/128.0 Safari/537.36")}
 RAW_DIR = Path(__file__).resolve().parent.parent / "data" / "raw" / "eeszt"
+# entities whose first column is not a key: the retailer register lists one
+# row per premises, so a provider with four branches appears four times
+MULTI_ROW = {"gyse_forgalmazo"}
 
 
 def fetch_page(entity_id: str, page: int, size: int) -> dict:
@@ -90,7 +101,7 @@ def download(name: str, entity_id: str, size: int, sleep: float) -> Path:
                     f"({total} -> {data['totalRowCount']}) — rerun")
             for r in rows:
                 key = r["fields"][0]
-                if key in seen:
+                if key in seen and name not in MULTI_ROW:
                     raise RuntimeError(f"{name}: duplicate first column {key!r}")
                 seen.add(key)
                 fh.write(json.dumps(r["fields"], ensure_ascii=False) + "\n")

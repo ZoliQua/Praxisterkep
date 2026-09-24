@@ -3,6 +3,7 @@
 // leads home and the branch switch is local to the page, because these pages
 // hold their own kind state rather than the landing's store.
 import { t } from '../lib/i18n';
+import { NavMenu, type NavEntry } from './NavMenu';
 import { IconStethoscope, IconTooth } from './icons';
 import type { PraxisKind } from '../types';
 
@@ -34,12 +35,10 @@ export function PageNav({ kind = null, onKind, links = [] }: Props) {
             </button>
           </div>
         )}
-        <div className="topnav__links">
-          <a href={home}>{t('nav.home')}</a>
-          {links.map(([href, key]) => (
-            <a key={href} href={`${home}${href}`}>{t(key)}</a>
-          ))}
-        </div>
+        <NavMenu entries={[
+          { href: home, labelKey: 'nav.home' },
+          ...links.map(([href, key]): NavEntry => ({ href: `${home}${href}`, labelKey: key })),
+        ]} />
       </div>
     </nav>
   );

@@ -5,6 +5,47 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.26.0] — 2026-09-24
+
+### Hozzáadva
+- **Hivatalos összerendelés — második vélemény** (EESZT-oldal). A NEAK
+  bővített finanszírozási törzse (NEAK_FINSZOLG_EXT, 33 962 sor) minden
+  FIN-kódhoz megnevezi a szolgáltatót — pont azt a kapcsolatot, amit a
+  keresztellenőrzés címből és névből talál ki. A két forrás egymás
+  mellett: 8291 praxisból **99,1% egyezés**, 71 eltérés. A kódláncból
+  származó engedélyeknél 7860 egyezik és 10 tér el; a heurisztikus
+  keresztellenőrzésnél 310 és **61** — vagyis pontosan ott gyenge, ahol
+  sejteni lehetett. Négy olyan praxishoz is nevez szolgáltatót, amelyhez mi
+  semmit nem találtunk.
+  A saját láncunkat **nem cseréltük le**: ez egy másik elemzés, nem végső
+  igazság, és ahol eltérnek, az eltérés maga az eredmény.
+- **Gyógyászati segédeszköz-forgalmazók** (Szakellátás oldal): 1458
+  telephely 506 szolgáltatónál, hét engedélyezett tevékenységgel. Ezek nem
+  cserélhetők fel — javítóműhely nem ad ki járókeretet —, ezért a
+  távolsági kérdés a három kiadó tevékenységre vonatkozik: **1305
+  kiadóhely mindössze 231 településen**. Menetidőben a medián 10,8 perc,
+  a maximum 42,2; 11 710 lakos lakik 30 percnél távolabb a legközelebbi
+  kiadóhelytől. Egy telephelyre a legtöbb lakos Pest (7592),
+  Bács-Kiskun (6881) és Szabolcs-Szatmár-Bereg (6124) vármegyében jut.
+- Új ETL-lépések: `officialmap.py` és `gyse.py`; a segédeszköz-kiadóhelyek
+  a menetidő-elemzés önálló rétegeként is szerepelnek.
+
+### Módosítva
+- **Új felső menü**: tíz lapos link helyett hat pont, legördülő almenükkel.
+  Térkép (Miért fontos?, Nálam) · Statisztika (Rangsor, Háziorvos vs
+  Fogorvos, Távolság) · Módszertan (Adat export) · Elemző · EESZT ·
+  Szakellátás. Egérrel és kattintásra is nyílik, Escape és kívülre
+  kattintás zárja, mobilon a menü alá kerül. Az aloldalak ugyanezt a
+  sávot kapták.
+
+### Javítva
+- A törzsek letöltője eddig minden törzstől elvárta, hogy az első oszlopa
+  egyedi legyen; a forgalmazói törzsben egy szolgáltató több telephellyel
+  szerepel, ezért ez a szabály mostantól törzsenként kapcsolható.
+- A törzseket nem mindig ugyanazon a napon töltjük le. Eddig egy friss
+  törzs eltörte volna a régebbiek beolvasását; mostantól minden törzs a
+  saját, kért dátumnál nem későbbi pillanatképét olvassa.
+
 ## [1.25.0] — 2026-09-24
 
 ### Hozzáadva

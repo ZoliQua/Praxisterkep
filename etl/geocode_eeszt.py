@@ -81,6 +81,15 @@ def main() -> None:
     except Exception as exc:  # noqa: BLE001 — a missing register must not block
         print(f"  WARNING: emergency premises skipped: {exc}")
 
+    # the medical-aid retail premises (source H as well), read from the
+    # register so they can be geocoded before gyse.json is built
+    try:
+        import gyse
+        for postal, settlement, address in gyse.premises():
+            want(postal, settlement, address)
+    except Exception as exc:  # noqa: BLE001 — a missing register must not block
+        print(f"  WARNING: medical-aid premises skipped: {exc}")
+
     cache = load_cache()
     todo = [k for k in premises if k not in cache]
     if args.limit:

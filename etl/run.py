@@ -157,6 +157,14 @@ def main() -> None:
         print(f"      wrote {providers.OUT} ({prov_out['stats']['providers']} providers, "
               f"{prov_out['stats']['identified']} identified)")
 
+        # the medical-aid retailers: another EESZT register, same shape
+        import gyse
+        gy = gyse.build()
+        gyse.OUT.write_text(
+            json.dumps(gy, ensure_ascii=False, separators=(",", ":")) + "\n",
+            encoding="utf-8")
+        print(f"      wrote {gyse.OUT} ({gy['stats']['premises']} premises)")
+
         # operating level: which licence each praxis actually works under
         import operating
         op_out = operating.build(build_eeszt.latest_date())
@@ -165,6 +173,15 @@ def main() -> None:
             encoding="utf-8")
         print(f"      wrote {operating.OUT} ({op_out['stats']['praxes']} praxes, "
               f"{op_out['stats']['noLicence']} without a licence)")
+        # NEAK's own FIN -> provider link, held against ours (never replacing it)
+        import officialmap
+        om = officialmap.build()
+        officialmap.OUT.write_text(
+            json.dumps(om, ensure_ascii=False, separators=(",", ":")) + "\n",
+            encoding="utf-8")
+        print(f"      wrote {officialmap.OUT} "
+              f"({om['stats']['agreement']:.1%} agreement, "
+              f"{om['stats']['differ']} differences)")
     except Exception as exc:  # noqa: BLE001 — supplement must not block release
         print(f"      WARNING: EESZT supplement skipped: {exc}")
 

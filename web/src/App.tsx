@@ -14,32 +14,48 @@ import { DataSection } from './components/DataSection';
 import { Methodology } from './components/Methodology';
 import { Footer } from './components/Footer';
 import { VedonoSection } from './components/VedonoSection';
+import { NavMenu, type NavEntry } from './components/NavMenu';
 import { IconStethoscope, IconTooth, IconVedono } from './components/icons';
 import type { PraxisKind } from './types';
 
-const VEDONO_NAV = [
-  ['#vedono', 'nav.vedono'],
-  ['#adatok', 'nav.data'],
-  ['elemzo.html', 'nav.analysis'],
-  ['eeszt.html', 'nav.eeszt'],
-  ['szakellato.html', 'nav.specialist'],
-  ['#modszertan', 'nav.methodology'],
-] as const;
+// Six entries instead of ten flat links; the sections that belong together
+// travel in a submenu (see NavMenu).
+const NAV: NavEntry[] = [
+  {
+    href: '#terkep',
+    labelKey: 'nav.map',
+    children: [['#alapellatas', 'nav.why'], ['#nalam', 'nav.mine']],
+  },
+  {
+    href: '#statisztika',
+    labelKey: 'nav.stats',
+    children: [
+      ['#rangsor', 'nav.ranking'],
+      ['#osszevetes', 'nav.versus'],
+      ['#tavolsag', 'nav.access'],
+    ],
+  },
+  {
+    href: '#modszertan',
+    labelKey: 'nav.methodology',
+    children: [['#adatok', 'nav.data']],
+  },
+  { href: 'elemzo.html', labelKey: 'nav.analysis' },
+  { href: 'eeszt.html', labelKey: 'nav.eeszt' },
+  { href: 'szakellato.html', labelKey: 'nav.specialist' },
+];
 
-const NAV = [
-  ['#terkep', 'nav.map'],
-  ['#alapellatas', 'nav.why'],
-  ['#nalam', 'nav.mine'],
-  ['#rangsor', 'nav.ranking'],
-  ['#statisztika', 'nav.stats'],
-  ['#osszevetes', 'nav.versus'],
-  ['#tavolsag', 'nav.access'],
-  ['#adatok', 'nav.data'],
-  ['elemzo.html', 'nav.analysis'],
-  ['eeszt.html', 'nav.eeszt'],
-  ['szakellato.html', 'nav.specialist'],
-  ['#modszertan', 'nav.methodology'],
-] as const;
+const VEDONO_NAV: NavEntry[] = [
+  { href: '#vedono', labelKey: 'nav.vedono' },
+  {
+    href: '#modszertan',
+    labelKey: 'nav.methodology',
+    children: [['#adatok', 'nav.data']],
+  },
+  { href: 'elemzo.html', labelKey: 'nav.analysis' },
+  { href: 'eeszt.html', labelKey: 'nav.eeszt' },
+  { href: 'szakellato.html', labelKey: 'nav.specialist' },
+];
 
 export default function App() {
   const snapshot = useSnapshot();
@@ -98,11 +114,7 @@ export default function App() {
             aria-label={locale === 'hu' ? 'Switch to English' : 'Váltás magyarra'}>
             {locale === 'hu' ? 'EN' : 'HU'}
           </button>
-          <div className="topnav__links">
-            {(view === 'vedono' ? VEDONO_NAV : NAV).map(([href, key]) => (
-              <a key={href} href={href}>{t(key)}</a>
-            ))}
-          </div>
+          <NavMenu entries={view === 'vedono' ? VEDONO_NAV : NAV} />
         </div>
       </nav>
       {view === 'vedono' ? <VedonoSection /> : (

@@ -1,0 +1,19 @@
+{
+  "entityId": "GYSE_FORGALMAZO.GYSE_FORGALMAZO.M",
+  "date": "2026-09-24",
+  "fields": [
+    "EUSZOLG_AZONOSITO",
+    "KOZPONTITORZS_NEV",
+    "TELEPHELY_AZONOSITO",
+    "MEGYE",
+    "IRSZ",
+    "TELEPULES",
+    "CIM",
+    "SZERVEZETI_EGYSEG_KOD",
+    "SZERVEZETI_EGYSEG_NEV",
+    "SZAKMA_KOD",
+    "SZAKMA_NEV",
+    "ENGEDELYEZO_HATOSAG"
+  ],
+  "totalRowCount": 2146
+}

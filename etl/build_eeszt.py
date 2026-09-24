@@ -61,15 +61,39 @@ class EesztError(Exception):
     pass
 
 
-def latest_date() -> str:
+def latest_date(name: str | None = None) -> str:
+    """The newest archived snapshot date, for one entity or for any of them."""
+    # the date wildcard is exact: "neak_finszolg_*" would also match the
+    # longer "neak_finszolg_ext_*" and read the wrong register
+    pattern = f"{name}_????-??-??.meta.json" if name else "*_????-??-??.meta.json"
     dates = sorted({p.name.rsplit("_", 1)[1].split(".")[0]
-                    for p in RAW.glob("*_*.meta.json")})
+                    for p in RAW.glob(pattern)})
     if not dates:
-        raise EesztError(f"no EESZT downloads in {RAW}")
+        raise EesztError(f"no EESZT downloads in {RAW}"
+                         + (f" for {name}" if name else ""))
     return dates[-1]
 
 
+def resolve(name: str, date: str) -> str:
+    """The snapshot of this entity to read for a requested date.
+
+    Entities are not always fetched on the same day — a new register added
+    today would otherwise make every older one unreadable. The newest
+    snapshot at or before the requested date is used, and never a later one,
+    so a date pinned for reproducibility stays pinned.
+    """
+    if (RAW / f"{name}_{date}.meta.json").exists():
+        return date
+    older = [d for d in sorted({p.name.rsplit("_", 1)[1].split(".")[0]
+                                for p in RAW.glob(f"{name}_????-??-??.meta.json")})
+             if d <= date]
+    if not older:
+        raise EesztError(f"{name}: no snapshot at or before {date}")
+    return older[-1]
+
+
 def load(name: str, date: str) -> tuple[dict[str, int], list[list]]:
+    date = resolve(name, date)
     meta = json.loads((RAW / f"{name}_{date}.meta.json").read_text(encoding="utf-8"))
     rows = [json.loads(line) for line in
             gzip.open(RAW / f"{name}_{date}.jsonl.gz", "rt", encoding="utf-8")]

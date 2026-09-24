@@ -17,6 +17,7 @@ import { makeCellRenderer } from './EesztCells';
 import { NeakDetailModal } from './NeakDetailModal';
 import { DentalExtraBlocks } from './DentalExtraBlocks';
 import { CrosscheckSection } from './CrosscheckSection';
+import { OfficialMapSection } from './OfficialMapSection';
 import { ProviderSection } from './ProviderSection';
 
 function TableIcon({ warn = false }: { warn?: boolean }) {
@@ -127,6 +128,9 @@ export function EesztSection() {
       {/* the cross-check closes the section: part 3 for dental (which has the
           specialist part), part 2 for GP */}
       <CrosscheckSection kind={kind} part={kind === 'dental' ? 3 : 2} />
+
+      {/* NEAK's own FIN -> provider link, as a second opinion on the above */}
+      <OfficialMapSection />
 
       {/* the provider list spans both branches, so it closes the section */}
       <ProviderSection part={kind === 'dental' ? 4 : 3} />

@@ -14,6 +14,8 @@ OpenStreetMap road network (see roads.py), for:
     ambulance        the nearest ambulance station
     inpatient        the nearest contracted hospital site
     outpatient       the nearest contracted outpatient site
+    gyse             the nearest medical-aid dispensing premises (GYS1-3;
+                     a repair shop is not a substitute for a supplier)
 
 Method: one multi-source Dijkstra per layer over the *transposed* graph, so
 what is computed is the time from every road node to the nearest care point
@@ -74,7 +76,7 @@ EARTH_KM = 6371.0088
 # two point sets with their own means would stretch them differently and the
 # nearest neighbour would come out wrong
 REFERENCE_LAT = 47.0
-LAYERS = ("gp", "dental", "oncall", "ambulance", "inpatient", "outpatient")
+LAYERS = ("gp", "dental", "oncall", "ambulance", "inpatient", "outpatient", "gyse")
 
 
 def band_of(minutes: float) -> str:
@@ -116,6 +118,13 @@ def care_points() -> dict[str, list[tuple[float, float, str]]]:
         for p in emergency["points"]:
             if p["group"] in out and p["lat"] is not None:
                 out[p["group"]].append((p["lat"], p["lon"], p["settlement"]))
+
+    gyse_path = data_dir / "gyse.json"
+    if gyse_path.exists():
+        gyse = json.loads(gyse_path.read_text(encoding="utf-8"))
+        for s in gyse["sites"]:
+            if s["lat"] is not None and s["kind"] in ("shop", "branch", "workshop"):
+                out["gyse"].append((s["lat"], s["lon"], s["settlement"]))
 
     specialist_path = data_dir / "specialist.json"
     if specialist_path.exists():
