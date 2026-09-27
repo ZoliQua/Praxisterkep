@@ -8,7 +8,7 @@
     "dev": "vite",
     "prebuild": "node scripts/sync-data.mjs && node scripts/og-image.mjs",
     "build": "tsc -b && vite build",
-    "postbuild": "node scripts/share-pages.mjs",
+    "postbuild": "node scripts/share-pages.mjs && node scripts/settlement-pages.mjs",
     "test": "vitest run",
     "lint": "oxlint",
     "preview": "vite preview"

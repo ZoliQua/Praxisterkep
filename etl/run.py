@@ -19,6 +19,7 @@ import parse_registry
 from build import attach_geocodes, build_history, build_snapshot, write_outputs
 from fetch_neak import fetch_month
 from geocode import geocode_site, load_cache
+from pipeline import Step, run_steps
 from validate import (
     previous_month_count,
     validate_records,
@@ -26,7 +27,8 @@ from validate import (
     validate_statement_month,
 )
 
-RAW_DIR = Path(__file__).resolve().parent.parent / "data" / "raw"
+ROOT = Path(__file__).resolve().parent.parent
+RAW_DIR = ROOT / "data" / "raw"
 
 
 def _parse_kind(kind: str, raw: Path, month: str) -> tuple[list, list, list]:
@@ -59,6 +61,10 @@ def main() -> None:
     parser.add_argument(
         "--skip-geocode", action="store_true",
         help="use only cached coordinates (no Nominatim requests)",
+    )
+    parser.add_argument(
+        "--rebuild-roads", action="store_true",
+        help="rebuild the OSM road graph even if one is already present",
     )
     args = parser.parse_args()
     month = args.month
@@ -115,163 +121,125 @@ def main() -> None:
         print(f"      wrote {path}")
     print(f"      wrote {build_history()}")
 
-    # EESZT supplement (source H) — optional: a failed download or guard
-    # keeps the previous data/eeszt.json and never blocks the NEAK release
-    print("[+] EESZT supplement")
-    try:
+    # Everything below is a supplement or an analysis: it may fail without
+    # stopping the release, but it may not fail quietly. Steps declare what
+    # they need, the runner skips those whose input did not rebuild, and the
+    # outcome lands in data/pipeline.json for the workflow to check.
+    print("[+] supplements and analyses")
+    eeszt_date = None
+
+    def write(module, result) -> str:
+        module.OUT.write_text(
+            json.dumps(result, ensure_ascii=False, separators=(",", ":")) + "\n",
+            encoding="utf-8")
+        return module.OUT.name
+
+    def step_eeszt() -> str:
+        nonlocal eeszt_date
         import build_eeszt
         import fetch_eeszt
         for name, entity in fetch_eeszt.ENTITIES.items():
             fetch_eeszt.download(name, entity, size=500, sleep=1.0)
-        out = build_eeszt.build(build_eeszt.latest_date())
+        eeszt_date = build_eeszt.latest_date()
+        out = build_eeszt.build(eeszt_date)
         build_eeszt.OUT.write_text(
             json.dumps(out, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
-        print(f"      wrote {build_eeszt.OUT}")
+        return f"{build_eeszt.OUT.name}, registers of {eeszt_date}"
 
-        # the dental services outside the district map (on-call, university,
-        # every Szakellátás service), joined to the same EESZT registers
-        import build_dental_extra
-        extra = build_dental_extra.build(month, build_eeszt.latest_date())
-        build_dental_extra.OUT.write_text(
-            json.dumps(extra, ensure_ascii=False, separators=(",", ":")) + "\n",
-            encoding="utf-8")
-        counts = " ".join(f"{g}={st['services']}" for g, st in extra["stats"].items())
-        print(f"      wrote {build_dental_extra.OUT} ({counts})")
-
-        # cross-check: what the addresses and provider names say about the
-        # records the code chain could not pair
-        import crosscheck
-        xcheck = crosscheck.build(build_eeszt.latest_date())
-        crosscheck.OUT.write_text(
-            json.dumps(xcheck, ensure_ascii=False, separators=(",", ":")) + "\n",
-            encoding="utf-8")
-        print(f"      wrote {crosscheck.OUT} ({len(xcheck['records'])} records, "
-              f"{len(xcheck['eesztOnly'])} EESZT-only)")
-
-        # one row per contracted provider, with its official name and seat
-        import providers
-        prov_out = providers.build(build_eeszt.latest_date())
-        providers.OUT.write_text(
-            json.dumps(prov_out, ensure_ascii=False, separators=(",", ":")) + "\n",
-            encoding="utf-8")
-        print(f"      wrote {providers.OUT} ({prov_out['stats']['providers']} providers, "
-              f"{prov_out['stats']['identified']} identified)")
-
-        # the medical-aid retailers: another EESZT register, same shape
-        import gyse
-        gy = gyse.build()
-        gyse.OUT.write_text(
-            json.dumps(gy, ensure_ascii=False, separators=(",", ":")) + "\n",
-            encoding="utf-8")
-        print(f"      wrote {gyse.OUT} ({gy['stats']['premises']} premises)")
-
-        # operating level: which licence each praxis actually works under
-        import operating
-        op_out = operating.build(build_eeszt.latest_date())
-        operating.OUT.write_text(
-            json.dumps(op_out, ensure_ascii=False, separators=(",", ":")) + "\n",
-            encoding="utf-8")
-        print(f"      wrote {operating.OUT} ({op_out['stats']['praxes']} praxes, "
-              f"{op_out['stats']['noLicence']} without a licence)")
-        # NEAK's own FIN -> provider link, held against ours (never replacing it)
-        import officialmap
-        om = officialmap.build()
-        officialmap.OUT.write_text(
-            json.dumps(om, ensure_ascii=False, separators=(",", ":")) + "\n",
-            encoding="utf-8")
-        print(f"      wrote {officialmap.OUT} "
-              f"({om['stats']['agreement']:.1%} agreement, "
-              f"{om['stats']['differ']} differences)")
-    except Exception as exc:  # noqa: BLE001 — supplement must not block release
-        print(f"      WARNING: EESZT supplement skipped: {exc}")
-
-    # specialist care (source I): the contracted inpatient and outpatient
-    # institutions — context around the districts, never part of them
-    try:
-        import specialist
-        sp = specialist.build(month)
-        specialist.OUT.write_text(
-            json.dumps(sp, ensure_ascii=False, separators=(",", ":")) + "\n",
-            encoding="utf-8")
-        print(f"      wrote {specialist.OUT} ("
-              + ", ".join(f"{c}: {st['rows']}" for c, st in sp["stats"].items()) + ")")
-    except Exception as exc:  # noqa: BLE001 — supplement must not block release
-        print(f"      WARNING: specialist list skipped: {exc}")
-
-    # health visitors: the third branch, EESZT-only (no NEAK vacancy list)
-    try:
-        import vedono
-        vd = vedono.build()
-        vedono.OUT.write_text(
-            json.dumps(vd, ensure_ascii=False, separators=(",", ":")) + "\n",
-            encoding="utf-8")
-        print(f"      wrote {vedono.OUT} ({vd['stats']['services']} services)")
-    except Exception as exc:  # noqa: BLE001 — supplement must not block release
-        print(f"      WARNING: health-visitor supplement skipped: {exc}")
-
-    # accessibility: how far the nearest operating surgery is (needs only the
-    # NEAK snapshot, so it runs even when the EESZT step failed)
-    try:
-        import access
-        acc = access.build()
-        access.OUT.write_text(
-            json.dumps(acc, ensure_ascii=False, separators=(",", ":")) + "\n",
-            encoding="utf-8")
-        print(f"      wrote {access.OUT} ({len(acc['districts'])} districts)")
-    except Exception as exc:  # noqa: BLE001 — supplement must not block release
-        print(f"      WARNING: accessibility analysis skipped: {exc}")
-
-    # vacancy risk: learned from the archived monthly snapshots, so it needs
-    # the whole data/ history rather than this month alone
-    try:
-        import risk
-        rk = risk.build()
-        risk.OUT.write_text(
-            json.dumps(rk, ensure_ascii=False, separators=(",", ":")) + "\n",
-            encoding="utf-8")
-        print(f"      wrote {risk.OUT} ("
-              + ", ".join(f"{k}: {len(v['rows'])}" for k, v in rk["kinds"].items()) + ")")
-    except Exception as exc:  # noqa: BLE001 — supplement must not block release
-        print(f"      WARNING: risk model skipped: {exc}")
-    # the road graph is expensive (a 310 MB download and a few minutes of
-    # parsing) and changes slowly, so it is built only when it is missing
-    try:
-        import roads
-        if roads.OUT.exists():
-            print(f"      road graph present: {roads.OUT.name}")
-        else:
-            graph = roads.build(roads.fetch())
-            roads.OUT.parent.mkdir(parents=True, exist_ok=True)
-            import numpy as np
-            np.savez_compressed(roads.OUT, **graph)
-            print(f"      wrote {roads.OUT}")
-    except Exception as exc:  # noqa: BLE001 — routing must not block release
-        print(f"      WARNING: road graph skipped: {exc}")
-
-    # the analyses that read several outputs at once, in dependency order
-    for name, label in (("ksh_age", "age composition"),
-                        ("centroids", "settlement coordinates"),
-                        ("emergency", "on-call and emergency points"),
-                        ("traveltime", "driving times"),
-                        ("survival", "survival analysis"),
-                        ("workforce", "physician turnover"),
-                        ("coverage", "settlement coverage"),
-                        ("transit", "public-transport reach"),
-                        ("composite", "composite index"),
-                        ("clusters", "care deserts")):
-        try:
-            module = __import__(name)
-            # the transit feed is a 100 MB download, fetched on demand
-            result = (module.build(module.fetch()) if name == "transit"
-                      else module.build())
-            if name == "centroids":
+    def simple(module_name, describe=None, args=()):
+        """A step that builds from its own inputs and writes its own file."""
+        def run() -> str:
+            module = __import__(module_name)
+            result = module.build(*args() if callable(args) else args)
+            if module_name == "centroids":
                 result.pop("missing", None)
-            module.OUT.write_text(
-                json.dumps(result, ensure_ascii=False, separators=(",", ":")) + "\n",
-                encoding="utf-8")
-            print(f"      wrote {module.OUT}")
-        except Exception as exc:  # noqa: BLE001 — analyses must not block release
-            print(f"      WARNING: {label} skipped: {exc}")
+            name = write(module, result)
+            return f"{name}{describe(result) if describe else ''}"
+        return run
+
+    def roads_step() -> str:
+        import numpy as np
+        import roads
+        if roads.OUT.exists() and not args.rebuild_roads:
+            return f"{roads.OUT.name} already built"
+        graph = roads.build(roads.fetch())
+        roads.OUT.parent.mkdir(parents=True, exist_ok=True)
+        np.savez_compressed(roads.OUT, **graph)
+        return f"{roads.OUT.name} from {graph['source'][0]}"
+
+    def transit_step() -> str:
+        import transit
+        result = transit.build(transit.fetch())
+        return f"{write(transit, result)}, feed {result['feedVersion']}"
+
+    steps = [
+        Step("eeszt", "EESZT master registers", step_eeszt,
+             output=ROOT / "data" / "eeszt.json"),
+        Step("dental_extra", "dental services outside the districts",
+             simple("build_dental_extra", args=lambda: (month, eeszt_date)),
+             needs=("eeszt",), output=ROOT / "data" / "dental_extra.json"),
+        Step("crosscheck", "cross-check of the unpaired records",
+             simple("crosscheck", args=lambda: (eeszt_date,)),
+             needs=("eeszt",), output=ROOT / "data" / "crosscheck.json"),
+        Step("providers", "provider register",
+             simple("providers", args=lambda: (eeszt_date,),
+                    describe=lambda r: f", {r['stats']['providers']} providers"),
+             needs=("eeszt",), output=ROOT / "data" / "providers.json"),
+        Step("gyse", "medical-aid retailers",
+             simple("gyse", describe=lambda r: f", {r['stats']['premises']} premises"),
+             needs=("eeszt",), output=ROOT / "data" / "gyse.json"),
+        Step("operating", "operating level",
+             simple("operating", args=lambda: (eeszt_date,),
+                    describe=lambda r: f", {r['stats']['noLicence']} without a licence"),
+             needs=("eeszt", "crosscheck", "providers"),
+             output=ROOT / "data" / "operating.json"),
+        Step("officialmap", "NEAK's own provider link",
+             simple("officialmap",
+                    describe=lambda r: f", {r['stats']['differ']} differences"),
+             needs=("operating",), output=ROOT / "data" / "officialmap.json"),
+        Step("specialist", "specialist institutions",
+             simple("specialist", args=lambda: (month,)),
+             output=ROOT / "data" / "specialist.json"),
+        Step("vedono", "health-visitor branch",
+             simple("vedono", describe=lambda r: f", {r['stats']['services']} services"),
+             needs=("eeszt",), output=ROOT / "data" / "vedono.json"),
+        Step("access", "distance to the nearest surgery", simple("access"),
+             output=ROOT / "data" / "access.json"),
+        Step("risk", "vacancy risk", simple("risk"),
+             output=ROOT / "data" / "risk.json"),
+        Step("ksh_age", "age composition", simple("ksh_age"),
+             output=ROOT / "data" / "age.json"),
+        Step("centroids", "settlement coordinates", simple("centroids"),
+             output=ROOT / "data" / "geo" / "settlements.geojson"),
+        Step("emergency", "on-call and emergency points", simple("emergency"),
+             needs=("eeszt", "centroids"), output=ROOT / "data" / "emergency.json"),
+        Step("roads", "road graph", roads_step,
+             output=ROOT / "data" / "geo" / "road_graph.npz"),
+        Step("traveltime", "driving times", simple("traveltime"),
+             needs=("roads", "centroids", "emergency", "specialist", "gyse"),
+             output=ROOT / "data" / "traveltime.json"),
+        Step("survival", "survival analysis", simple("survival"),
+             output=ROOT / "data" / "survival.json"),
+        Step("workforce", "physician turnover", simple("workforce"),
+             output=ROOT / "data" / "workforce.json"),
+        Step("coverage", "settlement coverage", simple("coverage"),
+             needs=("ksh_age",), output=ROOT / "data" / "coverage.json"),
+        Step("transit", "public-transport reach", transit_step,
+             needs=("traveltime",), output=ROOT / "data" / "transit.json"),
+        Step("composite", "composite index", simple("composite"),
+             needs=("coverage", "traveltime", "transit", "risk", "ksh_age",
+                    "specialist"),
+             output=ROOT / "data" / "composite.json"),
+        Step("clusters", "care deserts", simple("clusters"),
+             needs=("composite",), output=ROOT / "data" / "clusters.json"),
+        # the analyses turned inside out: one record per settlement, which
+        # the build then bakes into a static page for each of them
+        Step("settlements", "settlement profiles", simple("settlements"),
+             needs=("coverage", "composite", "traveltime", "transit", "ksh_age",
+                    "clusters", "gyse", "vedono"),
+             output=ROOT / "data" / "settlements.json"),
+    ]
+    run_steps(steps, month)
     print("done")
 
 

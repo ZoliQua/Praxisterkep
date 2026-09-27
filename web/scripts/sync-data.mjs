@@ -41,6 +41,8 @@ const optional = [
   [join(repo, 'data', 'transit.json'), join(out, 'transit.json')],
   [join(repo, 'data', 'officialmap.json'), join(out, 'officialmap.json')],
   [join(repo, 'data', 'gyse.json'), join(out, 'gyse.json')],
+  [join(repo, 'data', 'settlement_slugs.json'), join(out, 'settlement_slugs.json')],
+  [join(repo, 'data', 'pipeline.json'), join(out, 'pipeline.json')],
   [join(repo, 'data', 'geo', 'settlements.geojson'), join(out, 'settlements.geojson')],
 ];
 

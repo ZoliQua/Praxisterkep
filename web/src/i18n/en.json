@@ -145,7 +145,8 @@
     "populationLine": "residents (HCSO, 2025)",
     "timelineTitle": "Vacancy timeline",
     "timelineYears": "yrs",
-    "timelineNote": "The bars run from the vacancy start reported by NEAK to the latest data release; the darker segment is the legally long-term vacant period (OKFŐ)."
+    "timelineNote": "The bars run from the vacancy start reported by NEAK to the latest data release; the darker segment is the legally long-term vacant period (OKFŐ).",
+    "openProfile": "The full profile of {name} →"
   },
   "ranking": {
     "heading": "County ranking",
@@ -904,7 +905,9 @@
       "traveltime_json": "Driving minutes from every settlement to the nearest care point (OpenStreetMap roads)",
       "transit_json": "Public-transport reach: departures and direct services to where care is (Volánbusz GTFS)",
       "officialmap_json": "NEAK's own FIN → provider link, set beside our cross-check",
-      "gyse_json": "Medical-aid retail premises and their licensed activities (EESZT)"
+      "gyse_json": "Medical-aid retail premises and their licensed activities (EESZT)",
+      "settlement_slugs_json": "Settlement names and the address of each one's profile page",
+      "pipeline_json": "The status of the monthly run, step by step: what rebuilt and what did not"
     },
     "useHeading": "How to use them",
     "use1": "The files are static and versioned: a finished month stays in months/, while latest.json always points at the current one.",

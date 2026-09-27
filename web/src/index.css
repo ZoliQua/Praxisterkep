@@ -1601,3 +1601,47 @@ a:hover { text-decoration: underline; }
   .topnav__group { flex-wrap: wrap; }
   .topnav__group > a { flex: none; }
 }
+
+/* ---------- settlement pages (static, generated at build time) ---------- */
+.tp-kicker {
+  color: var(--ink-dim); font-size: 13px; text-transform: uppercase;
+  letter-spacing: 0.08em; margin-bottom: 6px;
+}
+.tp-cards { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.tp-card {
+  background: var(--bg-panel); border: 1px solid var(--line);
+  border-left: 3px solid var(--line-strong);
+  border-radius: var(--radius); padding: 16px 18px;
+}
+.tp-card h3 { font-size: 15px; margin: 0 0 8px; }
+.tp-card p { margin: 0 0 6px; color: var(--ink-dim); font-size: 14px; }
+.tp-card__state { color: var(--ink) !important; font-weight: 600; }
+.tp-card--ok { border-left-color: #4fd6c2; }
+.tp-card--warn { border-left-color: #ffb454; }
+.tp-card--bad { border-left-color: #ff7a59; }
+.tp-card--dim { border-left-color: var(--line-strong); }
+.tp-note { color: var(--ink-faint); font-size: 13px; margin-top: 10px; }
+.tp-list { color: var(--ink-dim); font-size: 14px; margin: 10px 0 0 18px; }
+.tp-list li { margin-bottom: 4px; }
+.tp-index {
+  display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+  background: var(--bg-panel); border: 1px solid var(--line);
+  border-left: 3px solid var(--line-strong);
+  border-radius: var(--radius); padding: 16px 20px; margin-bottom: 12px;
+}
+.tp-index__value {
+  font-family: var(--font-display); font-size: 40px; font-weight: 800;
+  line-height: 1; font-variant-numeric: tabular-nums;
+}
+.tp-index__band { text-transform: uppercase; letter-spacing: 0.06em; font-size: 13px; margin: 0 0 4px; }
+.tp-index p { margin: 0; color: var(--ink-dim); font-size: 14px; }
+.tp-index--ok { border-left-color: #4fd6c2; }
+.tp-index--mid { border-left-color: #c98500; }
+.tp-index--warn { border-left-color: #ff7a59; }
+.tp-index--bad { border-left-color: #e05b8a; }
+.tp-index-list { line-height: 2; font-size: 14px; }
+.tp-index-list a { color: var(--ink-dim); }
+.tp-index-list a:hover { color: var(--accent); }
+.tp-footer { color: var(--ink-faint); font-size: 13px; border-top: 1px solid var(--line); padding-top: 18px; }
+.settlement-card__link { margin: -4px 0 12px; font-size: 14px; }
+.settlement-card__link a { color: var(--accent); }

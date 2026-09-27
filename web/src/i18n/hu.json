@@ -145,7 +145,8 @@
     "populationLine": "lakos (KSH, 2025)",
     "timelineTitle": "Betöltetlenség idővonala",
     "timelineYears": "éve",
-    "timelineNote": "A sávok a NEAK által közölt betöltetlenség-kezdettől a legutolsó adatközlésig tartanak; a sötétebb szakasz a jogilag is tartósan betöltetlen időszak (OKFŐ)."
+    "timelineNote": "A sávok a NEAK által közölt betöltetlenség-kezdettől a legutolsó adatközlésig tartanak; a sötétebb szakasz a jogilag is tartósan betöltetlen időszak (OKFŐ).",
+    "openProfile": "{name} teljes adatlapja →"
   },
   "ranking": {
     "heading": "Megyei rangsor",
@@ -904,7 +905,9 @@
       "traveltime_json": "Menetidő percben minden településről a legközelebbi ellátási pontig (OpenStreetMap úthálózat)",
       "transit_json": "Tömegközlekedési elérés: indulások és közvetlen járatok az ellátás helyszínére (Volánbusz GTFS)",
       "officialmap_json": "A NEAK saját FIN → szolgáltató összerendelése a mi keresztellenőrzésünk mellé állítva",
-      "gyse_json": "Gyógyászati segédeszköz-forgalmazók telephelyei és engedélyezett tevékenységeik (EESZT)"
+      "gyse_json": "Gyógyászati segédeszköz-forgalmazók telephelyei és engedélyezett tevékenységeik (EESZT)",
+      "settlement_slugs_json": "Településnevek és a hozzájuk tartozó adatlap-címek",
+      "pipeline_json": "A havi futtatás állapota lépésenként: mi épült újra és mi nem"
     },
     "useHeading": "Hogyan használd",
     "use1": "A fájlok statikusak és verziózottak: a hónap végleges állapota a months/ könyvtárban marad, a latest.json mindig az aktuális hónapra mutat.",

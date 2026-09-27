@@ -1,9 +1,19 @@
+# the district pipeline
 pdfplumber>=0.11
 pandas>=2.2
 openpyxl>=3.1
 requests>=2.32
 pyarrow>=17.0
-pytest>=8.0
 xlrd>=2.0
 lxml>=5.0
 beautifulsoup4>=4.12
+
+# the routing and transit analyses: the OSM road graph is parsed with
+# pyosmium and walked with scipy's Dijkstra, and the GTFS feed is read with
+# pandas. Without these the travel-time steps used to fail into a printed
+# warning while the monthly job committed last month's numbers as if fresh.
+numpy>=2.0
+scipy>=1.14
+osmium>=4.0
+
+pytest>=8.0

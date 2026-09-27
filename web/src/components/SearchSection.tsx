@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { t, tKind } from '../lib/i18n';
 import { formatDuration, formatMonth, formatNumber, monthsBetween } from '../lib/format';
 import { praxesById, primarySite, searchSettlements } from '../lib/selectors';
+import { useSettlementLinks } from '../lib/settlementLink';
 import { useAppStore, useSnapshot } from '../store/useAppStore';
 import { DirectoryTableModal } from './DirectoryTableModal';
 import { SettlementTimeline } from './SettlementTimeline';
@@ -95,6 +96,9 @@ export function SearchSection() {
         .filter((p): p is Praxis => p !== undefined)
     : [];
 
+  const linkFor = useSettlementLinks();
+  const settlementHref = selected ? linkFor(selected.name, selected.county) : null;
+
   // GP settlement entries are coverage-based, dental ones are seat-based
   const filledLabel = kind === 'gp' ? t('search.filledCoverage') : t('search.filledSeat');
   const filledHere = useMemo(() => {
@@ -163,6 +167,13 @@ export function SearchSection() {
                 && ` · ${formatNumber(selected.population)} ${t('search.populationLine')}`}
             </small>
           </h3>
+          {settlementHref && (
+            <p className="settlement-card__link">
+              <a href={settlementHref}>{t('search.openProfile', {
+                name: selected.name,
+              })}</a>
+            </p>
+          )}
           <div className="settlement-card__row">
             <span className="badge badge--ok">{selected.filled}</span>
             <span className="praxis-line">{filledLabel}</span>

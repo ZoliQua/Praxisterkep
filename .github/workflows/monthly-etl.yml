@@ -22,6 +22,9 @@ jobs:
       - name: Run pipeline
         id: pipeline
         run: python etl/run.py
+      # The supplements and analyses do not abort the run — but whatever did
+      # rebuild is worth publishing, so the snapshot is committed first and
+      # the failures are reported afterwards.
       - name: Commit snapshot
         if: success()
         run: |
@@ -30,6 +33,9 @@ jobs:
           git add data/
           git diff --cached --quiet || git commit -m "data: monthly NEAK snapshot"
           git push
+      - name: Report skipped or failed steps
+        if: success()
+        run: python etl/pipeline.py --check
       - name: Open issue on failure
         if: failure()
         uses: actions/github-script@v7
@@ -39,5 +45,10 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               title: `ETL failed: ${new Date().toISOString().slice(0,10)}`,
-              body: "Monthly pipeline failed validation. Check the run log; do not force-publish."
+              body: [
+                "The monthly pipeline did not finish cleanly.",
+                "",
+                "If the core NEAK steps failed, nothing was published — check the run log and do not force-publish.",
+                "If a supplement or an analysis failed, the rest was committed and `data/pipeline.json` names what is missing; anything built on top of it was skipped rather than recomputed from stale input."
+              ].join("\n")
             })
