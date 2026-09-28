@@ -136,7 +136,11 @@ function indexBlock(profile) {
 }
 
 function page(profile) {
-  const { settlement, county, district } = profile;
+  const { settlement, county } = profile;
+  // Budapest's districts are their own járás ("Budapest 03. ker."), and
+  // printing "Budapest 03. ker. járás" under the heading reads like a typo
+  const district = profile.district && profile.district !== settlement
+    ? profile.district : '';
   const title = `${settlement} — alapellátás egy helyen`;
   const gpState = profile.gp ? (STATE[profile.gp.state] ?? [''])[0] : '';
   const drive = profile.travel?.gp;
