@@ -16,6 +16,7 @@ import {
 import { DataTableModal } from './DataTableModal';
 import { EesztMap, type MapRow } from './EesztMap';
 import { GyseSection } from './GyseSection';
+import { PharmacySection } from './PharmacySection';
 import { PageNav } from './PageNav';
 import { renderExtraCell } from './EesztCells';
 
@@ -182,6 +183,7 @@ export function SpecialistPage() {
         <p className="extra-note">{t('specialist.pdfNote')}</p>
       </section>
 
+      <PharmacySection />
       <GyseSection />
 
       <DataTableModal

@@ -13,7 +13,8 @@ import {
 import { DataTableModal } from './DataTableModal';
 import { EesztMap, type MapRow } from './EesztMap';
 
-const LAYERS: Layer[] = ['gp', 'oncall', 'inpatient', 'dental', 'outpatient', 'ambulance'];
+const LAYERS: Layer[] = ['gp', 'oncall', 'inpatient', 'pharmacy', 'dental',
+  'outpatient', 'ambulance', 'gyse'];
 
 export function TravelTimeSection() {
   const data = useTravel();

@@ -908,7 +908,8 @@
       "gyse_json": "Gyógyászati segédeszköz-forgalmazók telephelyei és engedélyezett tevékenységeik (EESZT)",
       "settlement_slugs_json": "Településnevek és a hozzájuk tartozó adatlap-címek",
       "pipeline_json": "A havi futtatás állapota lépésenként: mi épült újra és mi nem",
-      "referral_json": "NEAK 9 jegyű beutalási törzslista: a havi FIN-kód állomány, és ami belépett vagy kilépett"
+      "referral_json": "NEAK 9 jegyű beutalási törzslista: a havi FIN-kód állomány, és ami belépett vagy kilépett",
+      "pharmacy_json": "NEAK-kal szerződött gyógyszertárak címmel és koordinátával"
     },
     "useHeading": "Hogyan használd",
     "use1": "A fájlok statikusak és verziózottak: a hónap végleges állapota a months/ könyvtárban marad, a latest.json mindig az aktuális hónapra mutat.",
@@ -1491,7 +1492,9 @@
       "oncall": "Központi ügyelet",
       "ambulance": "Mentőállomás",
       "inpatient": "Kórház",
-      "outpatient": "Járóbeteg"
+      "outpatient": "Járóbeteg",
+      "gyse": "Segédeszköz-kiadóhely",
+      "pharmacy": "Gyógyszertár"
     },
     "band": {
       "0-10": "10 percen belül",
@@ -1664,5 +1667,30 @@
     "enteredTitle": "A tárgyhónapban belépett finanszírozási kódok",
     "enteredSubtitle": "Új 9 jegyű kódok a NEAK beutalási törzslistájában",
     "note": "A törzslista megnevezés-mezője háziorvosi soroknál gyakran orvosnév: {withheld} ilyen sort név nélkül közlünk, mert név csak betöltött körzetnél, a NEAK nyilvántartása alapján szerepelhet."
+  },
+  "pharmacy": {
+    "heading": "Gyógyszertárak",
+    "explain": "A NEAK-kal szerződött {n} gyógyszertár {settlements} településen a {total}-ből. A recept csak akkor ér valamit, ha van hol kiváltani — a menetidő részben a gyógyszertár is külön réteg.",
+    "caveat": "Ez a szerződött hálózat: szerződés nélküli patika nincs benne, és a lista nem mondja meg a típust (közforgalmú, fiók, kézi) sem a nyitvatartást. Az a nyilvántartás, amelyik ezeket közli (OGYÉI gyógyszertár-kereső), a robots.txt-jében és a szerzői jogi nyilatkozatában is tiltja a gépi, adatbázis-szerű feldolgozást — ezért nem onnan dolgozunk.",
+    "statPer": "lakos jut egy gyógyszertárra",
+    "statCovered": "a települések ennyi százalékán van patika",
+    "statWithout": "településen nincs ({people} lakos)",
+    "mapCount": "{n} / {total} gyógyszertár a térképen",
+    "mapLegend": "Szerződött gyógyszertár",
+    "openTable": "Gyógyszertárak ({n})",
+    "openWithout": "Patika nélküli települések ({n})",
+    "openCounties": "Vármegyék összevetése",
+    "tableTitle": "Szerződött gyógyszertárak",
+    "tableSubtitle": "Egy sor egy patika · szűrhető, exportálható, térképre tehető",
+    "countyTitle": "Gyógyszertárak vármegyénként",
+    "countySubtitle": "Patikák száma és az egy patikára jutó lakosság",
+    "withoutTitle": "Települések gyógyszertár nélkül",
+    "withoutSubtitle": "Itt nincs szerződött patika — a menetidő rész megmutatja, milyen messze a legközelebbi",
+    "colName": "Patika neve",
+    "colOperator": "Működtető",
+    "colPostal": "Irányítószám",
+    "colCount": "Patikák",
+    "colPer": "Lakos / patika",
+    "note": "Forrás: NEAK szerződött gyógyszertárak, {month}. Geokódolt cím: {geocoded}."
   }
 }

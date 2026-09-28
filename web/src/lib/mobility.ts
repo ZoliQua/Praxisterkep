@@ -6,7 +6,8 @@ import { useEffect, useState } from 'react';
 import { t } from './i18n';
 import type { ColDef, Row } from './eesztTable';
 
-export type Layer = 'gp' | 'dental' | 'oncall' | 'ambulance' | 'inpatient' | 'outpatient';
+export type Layer = 'gp' | 'dental' | 'oncall' | 'ambulance' | 'inpatient'
+  | 'outpatient' | 'gyse' | 'pharmacy';
 
 export interface TravelSettlement {
   kshId: string;

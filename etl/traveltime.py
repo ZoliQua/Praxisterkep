@@ -16,6 +16,7 @@ OpenStreetMap road network (see roads.py), for:
     outpatient       the nearest contracted outpatient site
     gyse             the nearest medical-aid dispensing premises (GYS1-3;
                      a repair shop is not a substitute for a supplier)
+    pharmacy         the nearest pharmacy NEAK has a dispensing contract with
 
 Method: one multi-source Dijkstra per layer over the *transposed* graph, so
 what is computed is the time from every road node to the nearest care point
@@ -76,7 +77,8 @@ EARTH_KM = 6371.0088
 # two point sets with their own means would stretch them differently and the
 # nearest neighbour would come out wrong
 REFERENCE_LAT = 47.0
-LAYERS = ("gp", "dental", "oncall", "ambulance", "inpatient", "outpatient", "gyse")
+LAYERS = ("gp", "dental", "oncall", "ambulance", "inpatient", "outpatient",
+          "gyse", "pharmacy")
 
 
 def band_of(minutes: float) -> str:
@@ -125,6 +127,13 @@ def care_points() -> dict[str, list[tuple[float, float, str]]]:
         for s in gyse["sites"]:
             if s["lat"] is not None and s["kind"] in ("shop", "branch", "workshop"):
                 out["gyse"].append((s["lat"], s["lon"], s["settlement"]))
+
+    pharmacy_path = data_dir / "pharmacy.json"
+    if pharmacy_path.exists():
+        pharmacy = json.loads(pharmacy_path.read_text(encoding="utf-8"))
+        for s in pharmacy["pharmacies"]:
+            if s["lat"] is not None:
+                out["pharmacy"].append((s["lat"], s["lon"], s["settlement"]))
 
     specialist_path = data_dir / "specialist.json"
     if specialist_path.exists():

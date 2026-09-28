@@ -908,7 +908,8 @@
       "gyse_json": "Medical-aid retail premises and their licensed activities (EESZT)",
       "settlement_slugs_json": "Settlement names and the address of each one's profile page",
       "pipeline_json": "The status of the monthly run, step by step: what rebuilt and what did not",
-      "referral_json": "NEAK referral master list: the monthly FIN-code stock, and what entered or left"
+      "referral_json": "NEAK referral master list: the monthly FIN-code stock, and what entered or left",
+      "pharmacy_json": "Pharmacies contracted by NEAK, with address and coordinates"
     },
     "useHeading": "How to use them",
     "use1": "The files are static and versioned: a finished month stays in months/, while latest.json always points at the current one.",
@@ -1491,7 +1492,9 @@
       "oncall": "Central on-call",
       "ambulance": "Ambulance station",
       "inpatient": "Hospital",
-      "outpatient": "Outpatient"
+      "outpatient": "Outpatient",
+      "gyse": "Medical-aid shop",
+      "pharmacy": "Pharmacy"
     },
     "band": {
       "0-10": "within 10 minutes",
@@ -1664,5 +1667,30 @@
     "enteredTitle": "Financing codes that entered this month",
     "enteredSubtitle": "New nine-character codes in NEAK's referral master list",
     "note": "The name field of the master list often holds a physician's name on GP rows: {withheld} such rows are published without it, because a name may appear only for a filled district, from NEAK's own registry."
+  },
+  "pharmacy": {
+    "heading": "Pharmacies",
+    "explain": "{n} pharmacies under a NEAK dispensing contract, in {settlements} of {total} settlements. A prescription is only worth something if there is somewhere to fill it — the driving-time section carries pharmacies as their own layer.",
+    "caveat": "This is the contracted network: a pharmacy without a contract is missing, and the list gives neither the type (full, branch, dispensary) nor the opening hours. The register that does publish those (OGYÉI's pharmacy finder) forbids automated, database-like processing in both its robots.txt and its copyright notice — so we do not take it from there.",
+    "statPer": "residents per pharmacy",
+    "statCovered": "of settlements have one",
+    "statWithout": "settlements have none ({people} residents)",
+    "mapCount": "{n} / {total} pharmacies on the map",
+    "mapLegend": "Contracted pharmacy",
+    "openTable": "Pharmacies ({n})",
+    "openWithout": "Settlements without a pharmacy ({n})",
+    "openCounties": "Counties compared",
+    "tableTitle": "Contracted pharmacies",
+    "tableSubtitle": "One row per pharmacy · filterable, exportable, mappable",
+    "countyTitle": "Pharmacies by county",
+    "countySubtitle": "Pharmacy counts and residents per pharmacy",
+    "withoutTitle": "Settlements without a pharmacy",
+    "withoutSubtitle": "No contracted pharmacy here — the driving-time section shows how far the nearest one is",
+    "colName": "Pharmacy",
+    "colOperator": "Operator",
+    "colPostal": "Postcode",
+    "colCount": "Pharmacies",
+    "colPer": "Residents / pharmacy",
+    "note": "Source: NEAK contracted pharmacies, {month}. Geocoded addresses: {geocoded}."
   }
 }

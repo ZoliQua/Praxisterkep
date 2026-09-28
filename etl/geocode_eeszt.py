@@ -90,6 +90,13 @@ def main() -> None:
     except Exception as exc:  # noqa: BLE001 — a missing register must not block
         print(f"  WARNING: medical-aid premises skipped: {exc}")
 
+    # the contracted pharmacies (source L) — a NEAK list, same treatment
+    pharmacy_path = ROOT / "data" / "pharmacy.json"
+    if pharmacy_path.exists():
+        pharmacy = json.loads(pharmacy_path.read_text(encoding="utf-8"))
+        for r in pharmacy["pharmacies"]:
+            want(r["postalCode"], r["settlement"], r["address"])
+
     cache = load_cache()
     todo = [k for k in premises if k not in cache]
     if args.limit:
