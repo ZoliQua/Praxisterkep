@@ -39,6 +39,16 @@ SOURCES = {
         "format": "xls",
         "kind": "gp",
     },
+    # C2 — the monthly referral master list: the authoritative FIN code ->
+    # institution crosswalk, with sheets naming the FIN codes that entered and
+    # left the financing system this month. For GP that exit list is the
+    # closest thing NEAK publishes to the dissolved list it does not publish.
+    "referral_master": {
+        "url": ("https://www.neak.gov.hu/pfile/file?path=/letoltheto/altfin_dok/"
+                "torzs/9_jegyu_beutalasi_torzslista&inline=true"),
+        "format": "xlsx",
+        "kind": "referral",
+    },
     # I — contracted inpatient (fekvőbeteg) specialist institutions. The PDF
     # twin renders the same sheet, so only the workbook is archived.
     "inpatient_specialist": {

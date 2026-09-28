@@ -43,6 +43,7 @@ const optional = [
   [join(repo, 'data', 'gyse.json'), join(out, 'gyse.json')],
   [join(repo, 'data', 'settlement_slugs.json'), join(out, 'settlement_slugs.json')],
   [join(repo, 'data', 'pipeline.json'), join(out, 'pipeline.json')],
+  [join(repo, 'data', 'referral.json'), join(out, 'referral.json')],
   [join(repo, 'data', 'geo', 'settlements.geojson'), join(out, 'settlements.geojson')],
 ];
 

@@ -907,7 +907,8 @@
       "officialmap_json": "A NEAK saját FIN → szolgáltató összerendelése a mi keresztellenőrzésünk mellé állítva",
       "gyse_json": "Gyógyászati segédeszköz-forgalmazók telephelyei és engedélyezett tevékenységeik (EESZT)",
       "settlement_slugs_json": "Településnevek és a hozzájuk tartozó adatlap-címek",
-      "pipeline_json": "A havi futtatás állapota lépésenként: mi épült újra és mi nem"
+      "pipeline_json": "A havi futtatás állapota lépésenként: mi épült újra és mi nem",
+      "referral_json": "NEAK 9 jegyű beutalási törzslista: a havi FIN-kód állomány, és ami belépett vagy kilépett"
     },
     "useHeading": "Hogyan használd",
     "use1": "A fájlok statikusak és verziózottak: a hónap végleges állapota a months/ könyvtárban marad, a latest.json mindig az aktuális hónapra mutat.",
@@ -1645,5 +1646,23 @@
     "colRetail": "Ebből kiadóhely",
     "colPerSite": "Lakos / telephely",
     "note": "Forrás: EESZT törzspublikáció (GYSE_FORGALMAZO), {asOf}. Geokódolt telephely: {geocoded} / {sites}."
+  },
+  "referral": {
+    "heading": "Honnan tudjuk, hogy egy körzet megszűnt?",
+    "explain": "A NEAK háziorvosi körzetekre nem tesz közzé megszűnt-listát, ezért az oldal abból következtet a megszűnésre, hogy egy FIN-kód eltűnik a havi nyilvántartásból. A 9 jegyű beutalási törzslista viszont havonta közli is: külön lapon azokat a kódokat, amelyek a tárgyhónapban már nem szerepelnek, és azokat, amelyek újonnan beléptek ({period}).",
+    "check": "Ebben a hónapban {exited} kód lépett ki és {entered} lépett be. A kilépők közül {ours} olyan körzet, amelyet az oldal is közl — és mindegyiket már eddig is megszűntként tartottuk nyilván. A teljes törzsben {master} általunk közölt körzet szerepel, {missing} nem.",
+    "colType": "Ág",
+    "colLabel": "Megnevezés",
+    "colOurStatus": "Nálunk",
+    "colPeriod": "Időszak",
+    "labelWithheld": "— (orvosnév, nem közöljük)",
+    "notOurs": "nem körzet",
+    "openExited": "Kilépett kódok ({n})",
+    "openEntered": "Belépett kódok ({n})",
+    "exitedTitle": "A tárgyhónapban kilépett finanszírozási kódok",
+    "exitedSubtitle": "Amelyik a NEAK beutalási törzslistájából kiér — mellette, hogy nálunk milyen státuszban van",
+    "enteredTitle": "A tárgyhónapban belépett finanszírozási kódok",
+    "enteredSubtitle": "Új 9 jegyű kódok a NEAK beutalási törzslistájában",
+    "note": "A törzslista megnevezés-mezője háziorvosi soroknál gyakran orvosnév: {withheld} ilyen sort név nélkül közlünk, mert név csak betöltött körzetnél, a NEAK nyilvántartása alapján szerepelhet."
   }
 }

@@ -907,7 +907,8 @@
       "officialmap_json": "NEAK's own FIN → provider link, set beside our cross-check",
       "gyse_json": "Medical-aid retail premises and their licensed activities (EESZT)",
       "settlement_slugs_json": "Settlement names and the address of each one's profile page",
-      "pipeline_json": "The status of the monthly run, step by step: what rebuilt and what did not"
+      "pipeline_json": "The status of the monthly run, step by step: what rebuilt and what did not",
+      "referral_json": "NEAK referral master list: the monthly FIN-code stock, and what entered or left"
     },
     "useHeading": "How to use them",
     "use1": "The files are static and versioned: a finished month stays in months/, while latest.json always points at the current one.",
@@ -1645,5 +1646,23 @@
     "colRetail": "Of which dispensing",
     "colPerSite": "Residents / premises",
     "note": "Source: EESZT master publication (GYSE_FORGALMAZO), {asOf}. Geocoded premises: {geocoded} of {sites}."
+  },
+  "referral": {
+    "heading": "How do we know a district was dissolved?",
+    "explain": "NEAK publishes no dissolved list for GP districts, so the site infers a dissolution from a FIN code disappearing out of the monthly registry. The referral master list does publish one: separate sheets name the codes that no longer appear this month and the ones that newly entered ({period}).",
+    "check": "This month {exited} codes left and {entered} entered. Of the departures, {ours} are districts this site publishes — and every one of them was already recorded as dissolved here. The master list contains {master} of our districts and is missing {missing}.",
+    "colType": "Branch",
+    "colLabel": "Name",
+    "colOurStatus": "Our status",
+    "colPeriod": "Period",
+    "labelWithheld": "— (a physician's name, withheld)",
+    "notOurs": "not a district",
+    "openExited": "Departed codes ({n})",
+    "openEntered": "Entered codes ({n})",
+    "exitedTitle": "Financing codes that left this month",
+    "exitedSubtitle": "Gone from NEAK's referral master list — with the status this site gives them",
+    "enteredTitle": "Financing codes that entered this month",
+    "enteredSubtitle": "New nine-character codes in NEAK's referral master list",
+    "note": "The name field of the master list often holds a physician's name on GP rows: {withheld} such rows are published without it, because a name may appear only for a filled district, from NEAK's own registry."
   }
 }

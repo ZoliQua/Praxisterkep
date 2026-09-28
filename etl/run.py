@@ -197,6 +197,14 @@ def main() -> None:
              simple("officialmap",
                     describe=lambda r: f", {r['stats']['differ']} differences"),
              needs=("operating",), output=ROOT / "data" / "officialmap.json"),
+        # NEAK's monthly referral master list: the FIN -> institution
+        # crosswalk, and the entry/exit log that stands in for the dissolved
+        # list NEAK does not publish for GP
+        Step("referral", "referral master list",
+             simple("referral", args=lambda: (month,),
+                    describe=lambda r: f", {r['stats']['exited']} codes left, "
+                                       f"{r['stats']['entered']} entered"),
+             output=ROOT / "data" / "referral.json"),
         Step("specialist", "specialist institutions",
              simple("specialist", args=lambda: (month,)),
              output=ROOT / "data" / "specialist.json"),
