@@ -909,7 +909,8 @@
       "settlement_slugs_json": "Settlement names and the address of each one's profile page",
       "pipeline_json": "The status of the monthly run, step by step: what rebuilt and what did not",
       "referral_json": "NEAK referral master list: the monthly FIN-code stock, and what entered or left",
-      "pharmacy_json": "Pharmacies contracted by NEAK, with address and coordinates"
+      "pharmacy_json": "Pharmacies contracted by NEAK, with address and coordinates",
+      "licence_history_json": "Since when the organisational unit a service works under has existed (from EESZT snapshots)"
     },
     "useHeading": "How to use them",
     "use1": "The files are static and versioned: a finished month stays in months/, while latest.json always points at the current one.",
@@ -1692,5 +1693,38 @@
     "colCount": "Pharmacies",
     "colPer": "Residents / pharmacy",
     "note": "Source: NEAK contracted pharmacies, {month}. Geocoded addresses: {geocoded}."
+  },
+  "licenceHistory": {
+    "heading": "How old is the unit a district works under?",
+    "explain": "The EESZT licence register answers for past dates, so {snapshots} snapshots were taken between {from} and {to}. From those it can be read, district by district, since when the organisational unit it works under today has existed.",
+    "limit": "What it does not tell us is who ran the district before. It turns out a unit belongs to its provider permanently — of the 81,600 units present both in January 2024 and in July 2026, exactly two changed provider. A change of operator therefore creates a new unit, and the link between a FIN code and a unit has no public history. The date of a new unit is an upper bound: the present arrangement is no older than that.",
+    "statNew": "services work under a unit that did not exist at the start of the window ({share})",
+    "thWindow": "Window",
+    "thNew": "Services whose unit appeared",
+    "thArrived": "New units in the register",
+    "thLeft": "Units that left",
+    "openTable": "Services under a new unit ({n})",
+    "tableTitle": "Services whose unit appeared during the window",
+    "tableSubtitle": "The date marks the snapshot in which the unit first appeared",
+    "colSince": "Unit first seen",
+    "colAfter": "Appeared after",
+    "note": "{older} services already had their unit in the first snapshot — for those the public record gives no date, only that it is older than the window, so the file carries the dated rows only.",
+    "types": {
+      "JAR": "outpatient care",
+      "HSZ": "GP",
+      "FOG": "dental",
+      "ISK": "school and youth health",
+      "VNO": "health visitor",
+      "FEK": "inpatient care",
+      "USZ": "central on-call",
+      "MENT": "ambulance",
+      "BET": "patient transport",
+      "MV": "dialysis",
+      "HAJL": "care for the homeless",
+      "PET": "PET-CT"
+    },
+    "byBranch": "By branch:",
+    "colInstitution": "Provider (NEAK)",
+    "colProvider": "Provider (EESZT)"
   }
 }

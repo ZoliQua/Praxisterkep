@@ -157,6 +157,16 @@ def main() -> None:
             return f"{name}{describe(result) if describe else ''}"
         return run
 
+    def history_step() -> str:
+        import eeszt_history
+        # fetch=True downloads only the snapshots that are not archived yet,
+        # which is how the timeline picks up each new half year on its own
+        result = eeszt_history.build(fetch=True)
+        st = write(eeszt_history, result)
+        return (f"{st}, {result['stats']['snapshots']} snapshots, "
+                f"{result['stats']['unitsNewerThanWindow']} services under a "
+                "unit newer than the window")
+
     def roads_step() -> str:
         import numpy as np
         import roads
@@ -209,6 +219,12 @@ def main() -> None:
              simple("pharmacy", args=lambda: (month,),
                     describe=lambda r: f", {r['stats']['pharmacies']} pharmacies"),
              output=ROOT / "data" / "pharmacy.json"),
+        # how old the organisational unit behind a district is, from the
+        # licence register's dated snapshots — the one register that answers
+        # for the past
+        Step("licence_history", "unit age from the licence snapshots",
+             history_step, needs=("eeszt", "providers"),
+             output=ROOT / "data" / "licence_history.json"),
         Step("specialist", "specialist institutions",
              simple("specialist", args=lambda: (month,)),
              output=ROOT / "data" / "specialist.json"),

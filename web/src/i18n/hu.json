@@ -909,7 +909,8 @@
       "settlement_slugs_json": "Településnevek és a hozzájuk tartozó adatlap-címek",
       "pipeline_json": "A havi futtatás állapota lépésenként: mi épült újra és mi nem",
       "referral_json": "NEAK 9 jegyű beutalási törzslista: a havi FIN-kód állomány, és ami belépett vagy kilépett",
-      "pharmacy_json": "NEAK-kal szerződött gyógyszertárak címmel és koordinátával"
+      "pharmacy_json": "NEAK-kal szerződött gyógyszertárak címmel és koordinátával",
+      "licence_history_json": "Mióta létezik az a szervezeti egység, amely alatt egy szolgálat ma dolgozik (EESZT-pillanatképekből)"
     },
     "useHeading": "Hogyan használd",
     "use1": "A fájlok statikusak és verziózottak: a hónap végleges állapota a months/ könyvtárban marad, a latest.json mindig az aktuális hónapra mutat.",
@@ -1692,5 +1693,38 @@
     "colCount": "Patikák",
     "colPer": "Lakos / patika",
     "note": "Forrás: NEAK szerződött gyógyszertárak, {month}. Geokódolt cím: {geocoded}."
+  },
+  "licenceHistory": {
+    "heading": "Mióta működik a mai szervezeti egység?",
+    "explain": "Az EESZT engedélytörzse korábbi dátumokra is válaszol, így {snapshots} pillanatképet kértünk le {from} és {to} között. Ebből körzetenként kiolvasható, mióta létezik az a szervezeti egység, amely alatt ma dolgozik.",
+    "limit": "Amit viszont nem tudunk meg: ki működtette korábban. Kiderült ugyanis, hogy az egység véglegesen a szolgáltatójához tartozik — a 2024 januárjában és 2026 júliusában is meglévő 81 600 egységből mindössze kettő váltott szolgáltatót. Működtetőváltáskor tehát új egység jön létre, a FIN-kód és az egység kapcsolatának pedig nincs története a nyilvános adatokban. Az új egység dátuma így felső korlát: ennyi időnél semmiképp nem régebbi a mai felállás.",
+    "statNew": "szolgálat dolgozik olyan egység alatt, ami az időszak elején még nem létezett ({share})",
+    "thWindow": "Időszak",
+    "thNew": "Ekkor megjelent szolgálati egység",
+    "thArrived": "Új egység a törzsben",
+    "thLeft": "Kikerült egység",
+    "openTable": "Új egység alatt működő szolgálatok ({n})",
+    "tableTitle": "Szolgálatok, amelyek egysége az időszakban jelent meg",
+    "tableSubtitle": "A dátum azt a pillanatképet jelöli, amelyikben az egység először szerepelt",
+    "colSince": "Egység először",
+    "colAfter": "Ezután jelent meg",
+    "note": "{older} szolgálat egysége már az első pillanatképben is megvolt — ezekre a nyilvános adat nem mond dátumot, csak annyit, hogy régebbi az ablaknál. A fájl így csak a datálható sorokat közli.",
+    "types": {
+      "JAR": "járóbeteg-szakellátás",
+      "HSZ": "háziorvosi",
+      "FOG": "fogászati",
+      "ISK": "iskola- és ifjúság-egészségügy",
+      "VNO": "védőnői",
+      "FEK": "fekvőbeteg-szakellátás",
+      "USZ": "központi ügyelet",
+      "MENT": "mentés",
+      "BET": "betegszállítás",
+      "MV": "művese",
+      "HAJL": "hajléktalan-ellátás",
+      "PET": "PET-CT"
+    },
+    "byBranch": "Ágazat szerint:",
+    "colInstitution": "Szolgáltató (NEAK)",
+    "colProvider": "Szolgáltató (EESZT)"
   }
 }

@@ -5,6 +5,77 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.27.0] — 2026-09-28
+
+### Hozzáadva
+- **Településlap mind a 3177 településnek** (`/telepules/<slug>/`). Az
+  elemzések eddig országos és vármegyei szinten álltak; innentől minden
+  településnek van egy statikus, kereshető lapja: ki látja el (háziorvos,
+  fogorvos, védőnő, iskola-egészségügy), mennyi a menetidő a
+  legközelebbi rendelőig, ügyeletig, mentőállomásig, kórházig,
+  gyógyszertárig, jár-e busz, milyen az életkori összetétel, és hogy áll
+  az összetett kockázati indexben. A névazonosság feloldva (Komló és
+  Kömlő ugyanarra a slugra egyszerűsödött): a nagyobb kapja a rövid
+  címet, a többi vármegyenevet kap. Lapindex és sitemap is készül —
+  összesen 3182 URL.
+- **NEAK beutalási törzslista** (`etl/referral.py`, Módszertan oldal).
+  A havonta közzétett „9 jegyű beutalási törzslista” 35 320 finanszírozási
+  kódot ír le, ebből 9183 körzet, és négy munkalapja közül kettő
+  változásnapló. Vagyis a NEAK **mégis megnevezi, melyik kód lépett ki és
+  melyik be** — háziorvosira is, amire betöltetlenségi listán kívül nincs
+  más forrás. Ebben a hónapban 33 belépő és 65 kilépő kód; a kilépők közül
+  11 olyan körzet, amit mi is közlünk, és **mind a 11-et már eddig is
+  megszűntként tartottuk nyilván**. A körzetcímke 5351 sorban orvosnevet
+  tartalmaz: ezeket a fájl visszatartja, mert ez a lista nem mondja meg,
+  betöltött-e a körzet (CLAUDE.md 3. szabály).
+- **Szerződött gyógyszertárak** (`etl/pharmacy.py`, Szakellátás oldal).
+  3205 közforgalmú gyógyszertár 1552 településen — vagyis **1625
+  településen egy sincs**. Egy gyógyszertárra átlagosan 2976 lakos jut.
+  Menetidőben a legkönnyebben elérhető réteg az egész oldalon: a medián
+  2,1 perc, a maximum 17,0, és nincs olyan lakos, aki 30 percnél
+  távolabb lakna. Az adat a NEAK szerződött partneri listájából jön; az
+  OGYÉI gyógyszertár-keresőjét **nem** használjuk, mert a `robots.txt`-je
+  tiltja és a jogi nyilatkozata is kizárja az adatbázis-szerű
+  feldolgozást.
+- **„Mióta működik a mai szervezeti egység?”** (EESZT oldal,
+  `etl/eeszt_history.py`). Az engedélytörzs — és csak az — visszamenőleg
+  is válaszol: ugyanaz a végpont elfogad egy dátumot, így hét
+  pillanatképet kértünk le 2024-01-15 és ma között. Ebből 33 128
+  szolgálatra megállapítható, hogy **4066 olyan szervezeti egység alatt
+  dolgozik, amelyik az időszak elején még nem létezett** (járóbeteg 2025,
+  háziorvosi 781, fogászati 494, védőnői 289, iskola-egészségügy 254,
+  fekvőbeteg 167, ügyelet 52).
+  A fontosabb eredmény az, amit **nem** tudunk meg: a 2024-01 és 2026-07
+  között is meglévő 81 600 egységből mindössze **kettő** váltott
+  szolgáltatót. Az egység tehát véglegesen a szolgáltatójához tartozik,
+  működtetőváltáskor új egység jön létre, a FIN-kód és az egység
+  kapcsolatának pedig nincs nyilvános története — így a „ki működtette ezt
+  a körzetet 2024-ben” kérdés nyilvános adatból nem válaszolható meg, és
+  az oldal nem is állítja az ellenkezőjét. A pillanatképek tömörített
+  kivonatként kerülnek az archívumba, nem teljes törzsként.
+
+### Módosítva
+- **A hónapos futás megmondja, ha valami kimaradt.** Az ellenőrzések és
+  kiegészítések eddig egy try/except-ben ültek: ami elhasalt, csendben
+  kimaradt a kiadásból. Innentől minden lépés deklarálja, mire épül
+  (`etl/pipeline.py`), a futtató kihagyja azt, aminek az előzménye nem
+  épült fel, az eredmény bekerül a `data/pipeline.json`-ba, és a
+  GitHub Action `--check`-kel bukik, ha bármi hibázott vagy kimaradt —
+  a snapshot viszont már előtte el van mentve.
+- **A CI-ban addig nem is volt meg minden könyvtár**, amivel az
+  útvonal-számítás és a menetidő fut: a `numpy`, `scipy` és `osmium`
+  most bekerült az `etl/requirements.txt`-be. Visszamenőleg kiderült,
+  hogy ezek a lépések a havi futásból mindig kimaradtak — észrevétlenül,
+  mert nem volt, ami szóljon.
+- Az engedélytörzs pillanatképeinek dátumlistája **magát hosszabbítja**:
+  minden év január és július 15-e bekerül, amint elmúlt, így a
+  vizsgált időszak külön kézi szerkesztés nélkül nő.
+
+### Javítva
+- A fájl 10 MB lett volna, mert minden szolgálathoz sort írt, azoknak is,
+  amelyekre a nyilvános adat nem mond dátumot: a `licence_history.json`
+  mostantól csak a datálható 4066 sort közli, a többit számként. 1,2 MB.
+
 ## [1.26.0] — 2026-09-24
 
 ### Hozzáadva

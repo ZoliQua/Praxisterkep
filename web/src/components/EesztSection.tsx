@@ -18,6 +18,7 @@ import { NeakDetailModal } from './NeakDetailModal';
 import { DentalExtraBlocks } from './DentalExtraBlocks';
 import { CrosscheckSection } from './CrosscheckSection';
 import { OfficialMapSection } from './OfficialMapSection';
+import { LicenceHistorySection } from './LicenceHistorySection';
 import { ProviderSection } from './ProviderSection';
 
 function TableIcon({ warn = false }: { warn?: boolean }) {
@@ -131,6 +132,10 @@ export function EesztSection() {
 
       {/* NEAK's own FIN -> provider link, as a second opinion on the above */}
       <OfficialMapSection />
+
+      {/* what the archived licence register can say about how old the
+          current arrangement is — and what it cannot say at all */}
+      <LicenceHistorySection />
 
       {/* the provider list spans both branches, so it closes the section */}
       <ProviderSection part={kind === 'dental' ? 4 : 3} />
