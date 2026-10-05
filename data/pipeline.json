@@ -1,63 +1,87 @@
 {
  "schemaVersion": 1,
- "month": "2026-09",
- "finished": "2026-09-27T23:56:04+00:00",
+ "month": "2026-10",
+ "finished": "2026-10-05T12:14:52+00:00",
  "steps": [
   {
    "name": "eeszt",
    "label": "EESZT master registers",
-   "status": "ok",
-   "note": "eeszt.json, registers of 2026-09-28",
+   "status": "failed",
+   "note": "RuntimeError: NEAK_FINSZOLG.NEAK_FINSZOLG.K page 0 failed after retries: 404 Client Error: Not Found for url: https://www.eeszt.gov.hu/torzspublikacio-portlet/rest/torzsvizualizacio/getEntity?entityId=NEAK_FINSZOLG.NEAK_FINSZOLG.K&page=0&size=500",
    "output": "data/eeszt.json",
-   "outputWritten": "2026-09-27T23:54:37+00:00"
+   "outputWritten": "2026-10-05T12:04:46+00:00"
   },
   {
    "name": "dental_extra",
    "label": "dental services outside the districts",
-   "status": "ok",
-   "note": "dental_extra.json",
+   "status": "skipped",
+   "note": "needs eeszt",
    "output": "data/dental_extra.json",
-   "outputWritten": "2026-09-27T23:54:38+00:00"
+   "outputWritten": "2026-10-05T12:04:46+00:00"
   },
   {
    "name": "crosscheck",
    "label": "cross-check of the unpaired records",
-   "status": "ok",
-   "note": "crosscheck.json",
+   "status": "skipped",
+   "note": "needs eeszt",
    "output": "data/crosscheck.json",
-   "outputWritten": "2026-09-27T23:54:43+00:00"
+   "outputWritten": "2026-10-05T12:04:46+00:00"
   },
   {
    "name": "providers",
    "label": "provider register",
-   "status": "ok",
-   "note": "providers.json, 6990 providers",
+   "status": "skipped",
+   "note": "needs eeszt",
    "output": "data/providers.json",
-   "outputWritten": "2026-09-27T23:54:58+00:00"
+   "outputWritten": "2026-10-05T12:04:46+00:00"
   },
   {
    "name": "gyse",
    "label": "medical-aid retailers",
-   "status": "ok",
-   "note": "gyse.json, 1458 premises",
+   "status": "skipped",
+   "note": "needs eeszt",
    "output": "data/gyse.json",
-   "outputWritten": "2026-09-27T23:54:58+00:00"
+   "outputWritten": "2026-10-05T12:04:46+00:00"
   },
   {
    "name": "operating",
    "label": "operating level",
-   "status": "ok",
-   "note": "operating.json, 6 without a licence",
+   "status": "skipped",
+   "note": "needs eeszt, crosscheck, providers",
    "output": "data/operating.json",
-   "outputWritten": "2026-09-27T23:54:59+00:00"
+   "outputWritten": "2026-10-05T12:04:46+00:00"
   },
   {
    "name": "officialmap",
    "label": "NEAK's own provider link",
-   "status": "ok",
-   "note": "officialmap.json, 71 differences",
+   "status": "skipped",
+   "note": "needs operating",
    "output": "data/officialmap.json",
-   "outputWritten": "2026-09-27T23:55:01+00:00"
+   "outputWritten": "2026-10-05T12:04:46+00:00"
+  },
+  {
+   "name": "referral",
+   "label": "referral master list",
+   "status": "ok",
+   "note": "referral.json, 47 codes left, 69 entered",
+   "output": "data/referral.json",
+   "outputWritten": "2026-10-05T12:11:29+00:00"
+  },
+  {
+   "name": "pharmacy",
+   "label": "contracted pharmacies",
+   "status": "failed",
+   "note": "ParseError: /home/runner/work/OEP-Alapellatas/OEP-Alapellatas/data/raw/2026-10/pharmacies.xlsx is missing — fetch the month first",
+   "output": "data/pharmacy.json",
+   "outputWritten": "2026-10-05T12:04:46+00:00"
+  },
+  {
+   "name": "licence_history",
+   "label": "unit age from the licence snapshots",
+   "status": "skipped",
+   "note": "needs eeszt, providers",
+   "output": "data/licence_history.json",
+   "outputWritten": "2026-10-05T12:04:46+00:00"
   },
   {
    "name": "specialist",
@@ -65,15 +89,15 @@
    "status": "ok",
    "note": "specialist.json",
    "output": "data/specialist.json",
-   "outputWritten": "2026-09-27T23:55:03+00:00"
+   "outputWritten": "2026-10-05T12:11:32+00:00"
   },
   {
    "name": "vedono",
    "label": "health-visitor branch",
-   "status": "ok",
-   "note": "vedono.json, 5050 services",
+   "status": "skipped",
+   "note": "needs eeszt",
    "output": "data/vedono.json",
-   "outputWritten": "2026-09-27T23:55:03+00:00"
+   "outputWritten": "2026-10-05T12:04:46+00:00"
   },
   {
    "name": "access",
@@ -81,7 +105,7 @@
    "status": "ok",
    "note": "access.json",
    "output": "data/access.json",
-   "outputWritten": "2026-09-27T23:55:08+00:00"
+   "outputWritten": "2026-10-05T12:11:36+00:00"
   },
   {
    "name": "risk",
@@ -89,7 +113,7 @@
    "status": "ok",
    "note": "risk.json",
    "output": "data/risk.json",
-   "outputWritten": "2026-09-27T23:55:28+00:00"
+   "outputWritten": "2026-10-05T12:12:01+00:00"
   },
   {
    "name": "ksh_age",
@@ -97,39 +121,39 @@
    "status": "ok",
    "note": "age.json",
    "output": "data/age.json",
-   "outputWritten": "2026-09-27T23:55:29+00:00"
+   "outputWritten": "2026-10-05T12:12:02+00:00"
   },
   {
    "name": "centroids",
    "label": "settlement coordinates",
-   "status": "ok",
-   "note": "settlements.geojson",
+   "status": "failed",
+   "note": "ParseError: /home/runner/work/OEP-Alapellatas/OEP-Alapellatas/data/geo/cities_overpass_cache.json is missing; run fetch_geo.py first",
    "output": "data/geo/settlements.geojson",
-   "outputWritten": "2026-09-27T23:55:29+00:00"
+   "outputWritten": "2026-10-05T12:04:46+00:00"
   },
   {
    "name": "emergency",
    "label": "on-call and emergency points",
-   "status": "ok",
-   "note": "emergency.json",
+   "status": "skipped",
+   "note": "needs eeszt, centroids",
    "output": "data/emergency.json",
-   "outputWritten": "2026-09-27T23:55:30+00:00"
+   "outputWritten": "2026-10-05T12:04:46+00:00"
   },
   {
    "name": "roads",
    "label": "road graph",
    "status": "ok",
-   "note": "road_graph.npz already built",
+   "note": "road_graph.npz from hungary-261003.osm.pbf",
    "output": "data/geo/road_graph.npz",
-   "outputWritten": "2026-09-23T22:30:26+00:00"
+   "outputWritten": "2026-10-05T12:14:46+00:00"
   },
   {
    "name": "traveltime",
    "label": "driving times",
-   "status": "ok",
-   "note": "traveltime.json",
+   "status": "skipped",
+   "note": "needs centroids, emergency, gyse, pharmacy",
    "output": "data/traveltime.json",
-   "outputWritten": "2026-09-27T23:55:39+00:00"
+   "outputWritten": "2026-10-05T12:04:46+00:00"
   },
   {
    "name": "survival",
@@ -137,7 +161,7 @@
    "status": "ok",
    "note": "survival.json",
    "output": "data/survival.json",
-   "outputWritten": "2026-09-27T23:55:39+00:00"
+   "outputWritten": "2026-10-05T12:14:48+00:00"
   },
   {
    "name": "workforce",
@@ -145,7 +169,7 @@
    "status": "ok",
    "note": "workforce.json",
    "output": "data/workforce.json",
-   "outputWritten": "2026-09-27T23:55:41+00:00"
+   "outputWritten": "2026-10-05T12:14:50+00:00"
   },
   {
    "name": "coverage",
@@ -153,32 +177,58 @@
    "status": "ok",
    "note": "coverage.json",
    "output": "data/coverage.json",
-   "outputWritten": "2026-09-27T23:55:42+00:00"
+   "outputWritten": "2026-10-05T12:14:52+00:00"
   },
   {
    "name": "transit",
    "label": "public-transport reach",
-   "status": "ok",
-   "note": "transit.json, feed 01664.20260923",
+   "status": "skipped",
+   "note": "needs traveltime",
    "output": "data/transit.json",
-   "outputWritten": "2026-09-27T23:55:54+00:00"
+   "outputWritten": "2026-10-05T12:04:46+00:00"
   },
   {
    "name": "composite",
    "label": "composite index",
-   "status": "ok",
-   "note": "composite.json",
+   "status": "skipped",
+   "note": "needs traveltime, transit",
    "output": "data/composite.json",
-   "outputWritten": "2026-09-27T23:56:04+00:00"
+   "outputWritten": "2026-10-05T12:04:46+00:00"
   },
   {
    "name": "clusters",
    "label": "care deserts",
-   "status": "ok",
-   "note": "clusters.json",
+   "status": "skipped",
+   "note": "needs composite",
    "output": "data/clusters.json",
-   "outputWritten": "2026-09-27T23:56:04+00:00"
+   "outputWritten": "2026-10-05T12:04:46+00:00"
+  },
+  {
+   "name": "settlements",
+   "label": "settlement profiles",
+   "status": "skipped",
+   "note": "needs composite, traveltime, transit, clusters, gyse, vedono",
+   "output": "data/settlements.json",
+   "outputWritten": "2026-10-05T12:04:46+00:00"
   }
  ],
- "failed": []
+ "failed": [
+  "eeszt",
+  "dental_extra",
+  "crosscheck",
+  "providers",
+  "gyse",
+  "operating",
+  "officialmap",
+  "pharmacy",
+  "licence_history",
+  "vedono",
+  "centroids",
+  "emergency",
+  "traveltime",
+  "transit",
+  "composite",
+  "clusters",
+  "settlements"
+ ]
 }
