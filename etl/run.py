@@ -29,6 +29,9 @@ from validate import (
 
 ROOT = Path(__file__).resolve().parent.parent
 RAW_DIR = ROOT / "data" / "raw"
+# how old an archived EESZT register may be before a failed download stops
+# being an inconvenience and starts being stale data
+EESZT_MAX_AGE_DAYS = 45
 
 
 def _parse_kind(kind: str, raw: Path, month: str) -> tuple[list, list, list]:
@@ -138,13 +141,32 @@ def main() -> None:
         nonlocal eeszt_date
         import build_eeszt
         import fetch_eeszt
+        today = date.today()
+        stale = []
         for name, entity in fetch_eeszt.ENTITIES.items():
-            fetch_eeszt.download(name, entity, size=500, sleep=1.0)
+            try:
+                fetch_eeszt.download(name, entity, size=500, sleep=1.0)
+            except Exception as exc:  # noqa: BLE001 — the portal has bad days
+                # October 2026 is what this is for: the portal answered 404 for
+                # one register and took every analysis built on EESZT down with
+                # it. An archived register is still a published fact, so the
+                # run continues with it — and says how old it is, rather than
+                # letting it pass for today's.
+                archived = build_eeszt.latest_date(name)
+                age = (today - date.fromisoformat(archived)).days
+                if age > EESZT_MAX_AGE_DAYS:
+                    raise RuntimeError(
+                        f"{name}: the download failed ({exc}) and the newest "
+                        f"archived register is {archived}, {age} days old") from exc
+                print(f"      WARNING: {name} did not refresh ({exc}); "
+                      f"keeping the register of {archived}, {age} days old")
+                stale.append(f"{name} {archived} ({age} d)")
         eeszt_date = build_eeszt.latest_date()
         out = build_eeszt.build(eeszt_date)
         build_eeszt.OUT.write_text(
             json.dumps(out, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
-        return f"{build_eeszt.OUT.name}, registers of {eeszt_date}"
+        note = f"{build_eeszt.OUT.name}, registers of {eeszt_date}"
+        return note + (f" — NOT refreshed today: {', '.join(stale)}" if stale else "")
 
     def simple(module_name, describe=None, args=()):
         """A step that builds from its own inputs and writes its own file."""

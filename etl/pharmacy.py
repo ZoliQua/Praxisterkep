@@ -140,7 +140,10 @@ def build(month: str | None = None) -> dict:
                             if p.is_dir() and (p / FILE).exists())[-1]
     path = RAW_DIR / month / FILE
     if not path.exists():
-        raise ParseError(f"{path} is missing — fetch the month first")
+        # unlike the NEAK registers, this workbook is linked from a landing
+        # page rather than sitting in the monthly directory, so the month's
+        # fetch does not bring it and the step fetches it here
+        path = fetch(month)
 
     cache_path = ROOT / "etl" / "geocode_cache.json"
     cache = json.loads(cache_path.read_text(encoding="utf-8")) if cache_path.exists() else {}

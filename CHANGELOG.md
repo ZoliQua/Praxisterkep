@@ -5,6 +5,35 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.27.1] — 2026-10-07
+
+### Hozzáadva
+- **Októberi NEAK-adatok.** Fogorvosi: 2776 körzetből **262 betöltetlen**
+  (szeptemberben 259), az érintett lakosság 780 226 fő; 42 megszűnt
+  körzet. Háziorvosi: 6283 körzetből **1026 betöltetlen** (1025), 1 398 925
+  lakos. A beutalási törzslistából 69 kód lépett be és 47 ki. Minden
+  kiegészítés és elemzés újraszámolva, a 3177 településlap is.
+
+### Javítva
+A havi futás október 5-én elhasalt, és ez most már látszik is: az új
+`--check` megállította a kiadást és nyitott egy hibajegyet ahelyett, hogy
+hiányos adatot tett volna ki. Három oka volt, mindhárom megszűnt.
+- **Az EESZT-portál 404-et adott** a NEAK_FINSZOLG törzsre, és magával
+  vitte mind a 16 rá épülő lépést. Ha egy törzs nem tölthető le, a futás
+  mostantól a **legutóbbi archivált példánnyal megy tovább, és kiírja, hány
+  napos** — 45 napnál öregebb archívumnál viszont hibával áll meg. Egy
+  rossz napja a portálnak nem viheti el a fél oldalt, elavult adatot viszont
+  nem adunk ki mai gyanánt.
+- **A gyógyszertári munkafüzetet** nem a NEAK havi könyvtárából kell
+  szedni, hanem egy landing oldalról — a lépés eddig csak kereste a fájlt.
+  Most maga tölti le.
+- **A településközéppontokhoz tartozó Overpass-gyorsítótár** `.gitignore`-ban
+  volt, így CI-gépen soha nem tudott lefutni, és vitte a menetidőt, a
+  buszelérést meg a településlapokat. A két szükséges fájl (2,2 MB statikus
+  geometria) mostantól a repó része; a nehéz járás-lekérdezések kint
+  maradnak.
+- Mindhárom hibára teszt került (`etl/tests/test_pipeline_recovery.py`).
+
 ## [1.27.0] — 2026-09-28
 
 ### Hozzáadva

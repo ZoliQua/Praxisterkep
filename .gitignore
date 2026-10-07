@@ -5,7 +5,12 @@ __pycache__/
 .venv/
 .DS_Store
 web/public/data/
-data/geo/*_overpass_cache.json
+# the Overpass caches centroids reads (cities, budapest) ARE tracked: they are
+# static geometry, and without them the monthly run cannot build the centre
+# points at all. The járás caches stay out — only fetch_geo.py reads them,
+# and they are rebuilt on demand.
+data/geo/jaras_overpass_cache.json
+data/geo/jaras_seat_overpass_cache.json
 web/public/og.png
 data/raw/okfo_wayback/
 etl/geocode_cache.json.tmp
