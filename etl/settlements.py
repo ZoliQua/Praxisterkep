@@ -89,6 +89,8 @@ def build() -> dict:
     clusters = read("clusters.json")
     gyse = read("gyse.json")
     vedono = read("vedono.json")
+    pharmacy = read("pharmacy.json")
+    tenure = read("tenure.json")
     benefit = (read("kedvezmenyezett.json") or {}).get("settlements", {})
     if not (latest and coverage and composite):
         raise ParseError("the district, coverage or index data is missing")
@@ -114,6 +116,40 @@ def build() -> dict:
                 "name": cluster["name"], "settlements": cluster["settlements"],
                 "population": cluster["population"],
             }
+
+    # the surgeries that actually stand in a settlement, with the physician
+    # the public NEAK registry names (CLAUDE.md rule 3: filled districts only)
+    surgeries: dict[str, list[dict]] = {}
+    for kind in ("gp", "dental"):
+        spells = (tenure or {}).get("kinds", {}).get(kind, {})
+        for f in latest["kinds"][kind].get("filledPraxes", []):
+            spell = spells.get(f["id"]) or {}
+            surgeries.setdefault(normalize_settlement(f["settlement"]), []).append({
+                "kind": kind,
+                "fin": f["id"],
+                "type": f.get("type", ""),
+                "doctor": f.get("doctor", ""),
+                "provider": f.get("provider", ""),
+                "postalCode": f.get("postalCode", ""),
+                "address": f.get("address", ""),
+                # how long this physician has held it, as far back as our own
+                # archive reaches; fromStart means "or longer"
+                "since": spell.get("since", ""),
+                "months": spell.get("months"),
+                "fromStart": bool(spell.get("fromStart")),
+            })
+    for rows_ in surgeries.values():
+        rows_.sort(key=lambda r: (r["kind"], r["type"], r["doctor"]))
+
+    chemists: dict[str, list[dict]] = {}
+    for ph in (pharmacy or {}).get("pharmacies", []):
+        chemists.setdefault(normalize_settlement(ph["settlement"]), []).append({
+            "name": ph["name"],
+            "postalCode": ph.get("postalCode", ""),
+            "address": ph.get("address", ""),
+        })
+    for rows_ in chemists.values():
+        rows_.sort(key=lambda r: r["name"])
 
     shops: dict[str, int] = {}
     for row in (gyse or {}).get("settlements", []):
@@ -157,7 +193,7 @@ def build() -> dict:
                         "km": drive.get(f"{layer}Km"),
                         "at": drive.get(f"{layer}At")}
                 for layer in ("gp", "dental", "oncall", "ambulance",
-                              "inpatient", "outpatient", "gyse")
+                              "inpatient", "outpatient", "gyse", "pharmacy")
                 if drive.get(f"{layer}Min") is not None
             }
 
@@ -190,6 +226,10 @@ def build() -> dict:
             }
         if key in cluster_of:
             record["cluster"] = cluster_of[key]
+        if name_key in surgeries:
+            record["surgeries"] = surgeries[name_key]
+        if name_key in chemists:
+            record["pharmacies"] = chemists[name_key]
         if name_key in shops:
             record["gyse"] = shops[name_key]
         if name_key in visitors:

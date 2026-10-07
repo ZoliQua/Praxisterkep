@@ -12,12 +12,41 @@
 import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { countyMap } from './county-map.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const dist = join(here, '..', 'dist');
 const profiles = JSON.parse(
   readFileSync(join(here, '..', '..', 'data', 'settlements.json'), 'utf8'),
 );
+
+// the geometry the little county map is drawn from; all three are files the
+// pipeline already produces and the build already copies to public/data
+const geoDir = join(here, '..', '..', 'data', 'geo');
+const readGeo = (name) => JSON.parse(readFileSync(join(geoDir, name), 'utf8'));
+const geo = {
+  counties: readGeo('counties.geojson'),
+  cities: readGeo('cities.geojson'),
+  settlements: readGeo('settlements.geojson'),
+  byKsh: new Map(),
+  byName: new Map(),
+};
+for (const f of geo.settlements.features) {
+  geo.byKsh.set(f.properties.kshId, f.geometry.coordinates);
+  // a name alone can collide, so the county-qualified key wins when it is known
+  geo.byName.set(`${f.properties.name}|${f.properties.county}`, f.geometry.coordinates);
+  if (!geo.byName.has(f.properties.name)) {
+    geo.byName.set(f.properties.name, f.geometry.coordinates);
+  }
+}
+
+// how far back the tenure claim can reach: the oldest monthly snapshot the
+// archive holds a registry for
+const tenureData = JSON.parse(
+  readFileSync(join(here, '..', '..', 'data', 'tenure.json'), 'utf8'),
+);
+const archiveFrom = Object.values(tenureData.stats)
+  .map((s) => s.from).sort()[0];
 
 const HU_MONTHS = ['január', 'február', 'március', 'április', 'május', 'június',
   'július', 'augusztus', 'szeptember', 'október', 'november', 'december'];
@@ -158,6 +187,61 @@ function indexBlock(profile) {
   </div>`;
 }
 
+const TYPE_LABEL = {
+  adult: 'felnőtt', child: 'gyermek', mixed: 'vegyes', school: 'iskolai',
+};
+
+/**
+ * How long the physician now holding a district has held it, out of our own
+ * archive. The archive is the limit of the claim, so a spell that reaches
+ * its first snapshot is reported as "or longer" rather than as a date NEAK
+ * never published.
+ */
+function tenureLabel(row) {
+  if (row.months === null || row.months === undefined) return '–';
+  const years = Math.floor(row.months / 12);
+  if (row.fromStart) return `${Math.max(years, 1)}. éve vagy régebben`;
+  if (years < 1) return '< 1 éve';
+  return `${years} éve`;
+}
+
+function surgeryTable(profile, kind, heading) {
+  const rows = (profile.surgeries ?? []).filter((r) => r.kind === kind);
+  if (!rows.length) return '';
+  return `<h3 class="tp-subhead">${esc(heading)}</h3>
+  <table class="info-table">
+    <thead><tr><th>Orvos</th><th>Körzet</th><th>Rendelő címe</th>
+      <th>Mióta ő látja el</th></tr></thead>
+    <tbody>${rows.map((r) => `<tr>
+      <td>${esc(r.doctor || '–')}</td>
+      <td>${esc(TYPE_LABEL[r.type] ?? r.type ?? '')}</td>
+      <td>${esc([r.postalCode, profile.settlement].filter(Boolean).join(' '))}${
+  r.address ? `, ${esc(r.address)}` : ''}</td>
+      <td>${esc(tenureLabel(r))}</td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+}
+
+function pharmacyBlock(profile) {
+  const here_ = profile.pharmacies ?? [];
+  const drive = profile.travel?.pharmacy;
+  if (here_.length) {
+    return `<table class="info-table">
+    <thead><tr><th>Gyógyszertár</th><th>Cím</th></tr></thead>
+    <tbody>${here_.map((ph) => `<tr>
+      <td>${esc(ph.name)}</td>
+      <td>${esc([ph.postalCode, profile.settlement].filter(Boolean).join(' '))}${
+  ph.address ? `, ${esc(ph.address)}` : ''}</td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+  }
+  if (drive && drive.at) {
+    return `<p class="tp-note">A településen nincs szerződött gyógyszertár. A legközelebbi
+      ${esc(drive.at)} településen van, ${esc(minutes(drive.minutes))} autóval.</p>`;
+  }
+  return '<p class="tp-note">A településen nincs szerződött gyógyszertár.</p>';
+}
+
 function page(profile) {
   const { settlement, county } = profile;
   // Budapest's districts are their own járás ("Budapest 03. ker."), and
@@ -213,6 +297,11 @@ function page(profile) {
 </header>
 
 <section class="section container">
+  <h2 class="section__subheading">Hol van ez?</h2>
+  ${countyMap(profile, geo)}
+</section>
+
+<section class="section container">
   <h2 class="section__subheading">Van-e orvos?</h2>
   <div class="tp-cards">
     ${branchCard('Háziorvosi ellátás', profile.gp)}
@@ -222,6 +311,13 @@ function page(profile) {
     ${num(profile.vedono.territorial)} területi, ${num(profile.vedono.school)} iskolai.</p>` : ''}
   <p class="tp-note">A betöltetlenség nem azonos az ellátatlansággal: a helyettesítés a
     nyilvános adatokban nem látszik.</p>
+  ${surgeryTable(profile, 'gp', 'Betöltött háziorvosi körzetek a településen')}
+  ${surgeryTable(profile, 'dental', 'Betöltött fogorvosi körzetek a településen')}
+  ${(profile.surgeries ?? []).length ? `<p class="tp-note">Az orvos neve a NEAK
+    szerződött szolgáltatói nyilvántartásából való, és csak betöltött körzetnél
+    szerepel. A „mióta" a saját archívumunkból jön (${esc(String(archiveFrom))} óta
+    őrzött havi NEAK-pillanatképek), nem NEAK által közölt kezdődátum; rendelési
+    időt egyik nyilvános forrás sem közöl.</p>` : ''}
 </section>
 
 <section class="section container">
@@ -234,6 +330,11 @@ function page(profile) {
   </table>
   ${profile.gyse ? `<p class="tp-note">A településen ${num(profile.gyse)} gyógyászati
     segédeszköz-kiadóhely működik.</p>` : ''}
+</section>
+
+<section class="section container">
+  <h2 class="section__subheading">Gyógyszertár</h2>
+  ${pharmacyBlock(profile)}
 </section>
 
 <section class="section container">
@@ -316,7 +417,7 @@ writeFileSync(join(dist, 'telepules', 'index.html'), `<!doctype html>
 </div></nav>
 <header class="section container">
   <h1 class="section__heading">Települések</h1>
-  <p class="section__lead">Mind a ${profiles.settlements.length} település adatlapja, vármegyénként.</p>
+  <p class="section__lead">Mind a ${profiles.settlements.length} település adatlapja, megyénként.</p>
 </header>
 ${countyBlocks}
 </body>

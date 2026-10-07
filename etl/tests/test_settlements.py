@@ -72,3 +72,14 @@ def test_guard_rejects_a_rank_outside_the_field():
 def test_guard_rejects_a_thin_country():
     with pytest.raises(ParseError, match="only 2 settlement profiles"):
         settlements.guard({"settlements": [profile(), profile(slug="b")]})
+
+
+def test_the_surgery_rows_name_only_filled_districts():
+    """CLAUDE.md rule 3: a physician's name belongs to a filled district."""
+    import settlements as mod
+    source = Path(mod.__file__).read_text(encoding="utf-8")
+    # the only place names are read from is latest.json's filledPraxes list
+    assert 'latest["kinds"][kind].get("filledPraxes", [])' in source
+    assert '"doctor": f.get("doctor", "")' in source
+    # and nothing reads a name off the vacant list
+    assert '"praxes"' not in source.split("surgeries: dict")[1].split("chemists")[0]

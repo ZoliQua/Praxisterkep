@@ -915,7 +915,8 @@
       "referral_json": "NEAK referral master list: the monthly FIN-code stock, and what entered or left",
       "pharmacy_json": "Pharmacies contracted by NEAK, with address and coordinates",
       "licence_history_json": "Since when the organisational unit a service works under has existed (from EESZT snapshots)",
-      "counties_json": "Per-county aggregates and their settlements in compact rows (from the settlement profiles)"
+      "counties_json": "Per-county aggregates and their settlements in compact rows (from the settlement profiles)",
+      "tenure_json": "How long the physician now holding a district has held it, from our own monthly archive"
     },
     "useHeading": "How to use them",
     "use1": "The files are static and versioned: a finished month stays in months/, while latest.json always points at the current one.",

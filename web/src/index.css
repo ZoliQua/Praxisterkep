@@ -1741,3 +1741,17 @@ a:hover { text-decoration: underline; }
 .county-dot--partial { background: #f0b429; }
 .county-dot--vacantOnly { background: #ef6461; }
 .county-dot--absent { background: var(--line-strong); }
+
+/* The settlement page's county map and its two new tables. */
+.tp-map { margin: 4px 0 8px; }
+.tp-map svg { display: block; width: 100%; height: auto; }
+.tp-maplegend {
+  display: flex; flex-wrap: wrap; gap: 12px; margin: 8px 0 4px;
+  font-size: 12.5px; color: var(--ink-dim);
+}
+.tp-maplegend span { display: inline-flex; align-items: center; gap: 6px; }
+.tp-maplegend i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+.tp-map figcaption { font-size: 12.5px; color: var(--ink-faint); margin-top: 4px; }
+.tp-subhead {
+  font: 600 14.5px var(--font-display); color: var(--ink); margin: 20px 0 6px;
+}

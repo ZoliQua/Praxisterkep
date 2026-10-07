@@ -5,6 +5,45 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.29.0] — 2026-10-07
+
+### Hozzáadva
+- **Megyetérkép minden településlapon.** Beégetett SVG (ezek a lapok
+  JavaScriptet nem futtatnak): a megye körvonala, a megyeszékhely és a nagyobb
+  városok tájékozódásnak, nagyban kiemelve maga a település — és szaggatott
+  vonallal, menetidővel felirat ozva, hol áll a legközelebbi **háziorvosi
+  rendelő, fogorvosi rendelő, központi ügyelet, kórház és gyógyszertár**, ha
+  nem helyben van. Az egy településre eső szolgáltatások egyetlen feliratba
+  kerülnek, a feliratok pedig kitérnek egymás és a pontok elől.
+  A vonal nem útvonal, és a felirat ezt ki is mondja.
+- **„Betöltött háziorvosi/fogorvosi körzetek a településen"** táblázat: orvos
+  neve, körzet típusa, rendelő címe — és hogy **mióta látja el ugyanaz az
+  orvos**, éves bontásban („< 1 éve", „3 éve", „7. éve vagy régebben").
+  Rendelési időt egyik nyilvános forrás sem közöl, ezt a lap meg is mondja.
+- **Gyógyszertár-blokk**: a településen működő szerződött gyógyszertárak
+  nevekkel és címmel, ha pedig egy sincs, a legközelebbi hely és menetideje.
+- Új ETL-lépés: **`etl/tenure.py`** → `data/tenure.json`. A betöltöttség
+  hosszát a saját archívumunkból olvassa (24 fogorvosi és 20 háziorvosi havi
+  pillanatkép 2017-10, illetve 2019-03 óta). Amelyik körzetet a legrégebbi
+  pillanatkép is ugyanazzal az orvossal mutatja, ott a válasz **„vagy
+  régebben"** — a NEAK kezdődátumot nem közöl, és kitalálni nem fogunk.
+  A regiszter nélkül újraépített hónapok (csak betöltetlen lista) nem
+  szakítják meg a sorozatot, mert nem mondanak semmit.
+  1439 fogorvosi és 3938 háziorvosi körzetnél tart ugyanaz az orvos az
+  archívum kezdete óta.
+
+### Módosítva
+- **„Vármegye" helyett újra „megye"** az egész felületen (62 szöveg). Az ETL
+  mindkét írásmódot ismeri továbbra is, mert a források is vegyesen használják.
+- A településprofilok (`data/settlements.json`) mostantól viszik a település
+  betöltött körzeteit, gyógyszertárait és a legközelebbi gyógyszertár
+  menetidejét is.
+
+### Eltávolítva
+- A Cloudflare Pages-re mutató `.github/workflows/deploy.yml`. Két titok
+  hiányában minden pusholásnál elbukott, miközben az élesítést a Vercel
+  végzi — a hibajelzés csak zaj volt.
+
 ## [1.28.0] — 2026-10-07
 
 Az oldal szerkezetének újratervezése — `docs/UJRATERVEZES.md`. Az adatoldal

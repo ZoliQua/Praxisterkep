@@ -283,11 +283,18 @@ def main() -> None:
              output=ROOT / "data" / "composite.json"),
         Step("clusters", "care deserts", simple("clusters"),
              needs=("composite",), output=ROOT / "data" / "clusters.json"),
+        # how long the physician now holding a district has held it, read out
+        # of our own archive of monthly snapshots
+        Step("tenure", "how long districts have been filled",
+             simple("tenure",
+                    describe=lambda r: f", {r['stats']['dental']['snapshots']} dental "
+                                       f"and {r['stats']['gp']['snapshots']} GP snapshots"),
+             output=ROOT / "data" / "tenure.json"),
         # the analyses turned inside out: one record per settlement, which
         # the build then bakes into a static page for each of them
         Step("settlements", "settlement profiles", simple("settlements"),
              needs=("coverage", "composite", "traveltime", "transit", "ksh_age",
-                    "clusters", "gyse", "vedono"),
+                    "clusters", "gyse", "vedono", "pharmacy", "tenure"),
              output=ROOT / "data" / "settlements.json"),
         # the same profiles sliced by county and cut to what a county page
         # shows: the middle level the site jumped over

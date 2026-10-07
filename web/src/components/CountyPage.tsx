@@ -1,4 +1,4 @@
-// "Vármegye" (megye.html) — the level between the country and a town.
+// "Megye" (megye.html) — the level between the country and a town.
 //
 // Everything on this site was either national or about one of 3177
 // settlements; a county was only ever a filter on the map. This page answers
