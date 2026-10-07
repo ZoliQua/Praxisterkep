@@ -126,7 +126,7 @@ export function layerStats(data: TravelRaw | null, layer: Layer): LayerStats | n
 
 export function travelColumns(layer: Layer): ColDef[] {
   return [
-    { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+    { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true, link: 'settlement' },
     { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: true },
     { key: 'population', labelKey: 'access.colPopulation', type: 'number', visible: true },
     { key: `${layer}Min`, labelKey: 'travel.colMinutes', type: 'number', visible: true },
@@ -147,7 +147,7 @@ export const TRAVEL_COUNTY_COLUMNS: ColDef[] = [
 ];
 
 export const TRANSIT_COLUMNS: ColDef[] = [
-  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true, link: 'settlement' },
   { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: true },
   { key: 'population', labelKey: 'access.colPopulation', type: 'number', visible: true },
   { key: 'departures', labelKey: 'transit.colDepartures', type: 'number', visible: true },

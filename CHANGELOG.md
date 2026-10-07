@@ -5,6 +5,63 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.28.0] — 2026-10-07
+
+Az oldal szerkezetének újratervezése — `docs/UJRATERVEZES.md`. Az adatoldal
+rég kész volt, a megjelenítés viszont a növekedés sorrendjében épült: négyféle
+navigáció ugyanarra az oldalra, elveszett ágválasztás a lapok között, 3177
+településlap, ahová csak a kereső vitt el, és egy főoldal, ami négy oldal
+munkáját végezte.
+
+### Hozzáadva
+- **Közös kontextus** (`web/src/lib/context.ts`): az ág, a vármegye és a
+  település egyetlen kiválasztás, ami az URL-ben utazik (`?k=&m=&tel=`), és
+  minden lapközi link átviszi. Aki a térképen háziorvosit választ és átmegy az
+  Elemzőre, **háziorvosi adatot kap** — eddig fogorvosit kapott, szó nélkül.
+  Minden lap tetején ugyanott egy **kontextussáv** mutatja, mire szűkítettünk,
+  és egy kattintással el is engedhető.
+- **Vármegyei lap** (`megye.html`): az ország és a 3177 település közötti
+  hiányzó szint. Lakosság, települések, betöltetlenség áganként, medián
+  menetidők, buszelérés, kockázati sávok, a vármegye helye a rangsorban — és
+  a vármegye **összes települése** táblázatban, mindegyik a saját lapjára
+  linkelve. Mögötte új ETL-lépés (`etl/county_profiles.py` →
+  `data/counties.json`, 265 KB), ami ugyanazokból a településprofilokból
+  dolgozik, így a két lap nem mondhat mást.
+- **Mit nézz meg ezután?** sávok: a szekciók végén 2–4 kártya a következő
+  kérdéssel, a kontextust megtartva. Eddig minden válasz zsákutca volt.
+- **Kattintható településnevek minden táblázatban** (34 oszlopdefiníció egy
+  `link: 'settlement'` jelzőt kapott): a menetidő, az index, a hiányterületek,
+  a gyógyszertárak és a többi tábla minden sora elvezet a település lapjára.
+- **Megosztható táblázatok**: a nyitott tábla és a keresése az URL-be kerül
+  (`?tabla=…&tq=…`), így egy konkrét szűrés továbbküldhető.
+- Két új lap a főoldalról leválasztva: **`miert.html`** (Miért fontos? és a
+  megelőzés láncolata) és **`modszertan.html`** (módszertan + adatexport).
+
+### Módosítva
+- **Egyetlen menü, hét ponttal, a nagyítás sorrendjében**: Térkép · Vármegye ·
+  Település · Elemző · Nyilvántartás · Ki lát el még? · Módszertan. A
+  definíció egy helyen van (`web/src/lib/siteNav.json`), és **a 3177 statikus
+  településlap ugyanonnan építi a sávját**, tehát nem csúszhatnak szét.
+  Az „EESZT" innentől „Nyilvántartás", a „Szakellátás" „Ki lát el még?".
+- **A főoldalon csak a kérdés maradt**: hero, térkép, „Nálam". Az országos
+  trendek, a Háziorvos vs Fogorvos összevetés és a légvonalbeli távolság az
+  Elemzőre költözött, a vármegyei rangsor a vármegyei lapra. A régi
+  horgonylinkek (`/#alapellatas`, `/#adatok`, `/#rangsor`…) átirányítanak oda,
+  ahol a tartalmuk most van.
+- A `/megye/<slug>/` megosztólapok a vármegyei lapra visznek, nem a térkép
+  egy szűrőjére.
+- A térkép vármegyeszűrője a közös kontextust állítja: amit ott kiválasztasz,
+  azzal nyílnak az elemzések is.
+
+### Javítva
+- **A horgonyok végre megérkeznek.** A böngésző akkor ugrott a `#nalam`-ra,
+  amikor az oldal még üres `<div id="root">` volt, így minden lapközi link a
+  lap tetejére vitt. Mostantól a cél addig marad a helyén, amíg a felette
+  betöltődő ábrák lejjebb tolják — és azonnal elengedi, ha az olvasó görget.
+- A térkép körzetfelirat-jelölői `lat !== null`-t vizsgáltak, ami az
+  `undefined`-ot átengedte: egy hiányzó koordináta `NaN`-nal dobta el a
+  MapLibre-t, és vele az egész lapot. Most `Number.isFinite` a feltétel.
+
 ## [1.27.1] — 2026-10-07
 
 ### Hozzáadva

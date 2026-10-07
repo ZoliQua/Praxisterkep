@@ -215,7 +215,7 @@ export const CURVE_COLORS = ['#4fd6c2', '#ff7a59', '#ffb454', '#b8b0f5', '#e05b8
 
 export const SPELL_COLUMNS: ColDef[] = [
   { key: 'fin', labelKey: 'eeszt.colFin', type: 'text', visible: true },
-  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true, link: 'settlement' },
   { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: true },
   { key: 'type', labelKey: 'stats.thType', type: 'enum', visible: false },
   { key: 'start', labelKey: 'survival.colStart', type: 'text', visible: true },
@@ -227,7 +227,7 @@ export const SPELL_COLUMNS: ColDef[] = [
 ];
 
 export const COVERAGE_COLUMNS: ColDef[] = [
-  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true, link: 'settlement' },
   { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: true },
   { key: 'district', labelKey: 'vedono.colDistrict', type: 'enum', visible: false },
   { key: 'state', labelKey: 'coverage.colClass', type: 'enum', visible: true },
@@ -252,7 +252,7 @@ export const COVERAGE_COUNTY_COLUMNS: ColDef[] = [
 ];
 
 export const COMPOSITE_COLUMNS: ColDef[] = [
-  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true, link: 'settlement' },
   { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: true },
   { key: 'district', labelKey: 'vedono.colDistrict', type: 'enum', visible: false },
   { key: 'index', labelKey: 'composite.colIndex', type: 'number', visible: true },

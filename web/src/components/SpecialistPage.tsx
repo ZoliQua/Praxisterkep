@@ -21,11 +21,6 @@ import { PageNav } from './PageNav';
 import { useHashScroll } from '../lib/useHashScroll';
 import { renderExtraCell } from './EesztCells';
 
-const LINKS = [
-  ['elemzo.html', 'nav.analysis'],
-  ['eeszt.html', 'nav.eeszt'],
-] as const;
-
 function detailRows(row: MapRow): [string, string][] {
   return [
     [t('specialist.colCare'), String(row.care ?? '–')],
@@ -69,7 +64,7 @@ export function SpecialistPage() {
       key: t(`specialist.care.${c}`), label: t(`specialist.care.${c}`), color: CARE_COLORS[c],
     })), [care]);
 
-  if (!data) return (<><PageNav links={LINKS} /><div className="loading">…</div></>);
+  if (!data) return (<><PageNav /><div className="loading">…</div></>);
   const inp = data.stats.inpatient;
   const outp = data.stats.outpatient;
   const worst = coverage[coverage.length - 1];
@@ -77,7 +72,7 @@ export function SpecialistPage() {
 
   return (
     <>
-      <PageNav links={LINKS} />
+      <PageNav />
       <header className="section container">
         <h1 className="section__heading">{t('specialist.heading')}</h1>
         <p className="section__lead">{t('specialist.lead')}</p>

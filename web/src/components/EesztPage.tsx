@@ -9,18 +9,13 @@ import { useHashScroll } from '../lib/useHashScroll';
 import { EesztSection } from './EesztSection';
 import type { PraxisKind } from '../types';
 
-const LINKS = [
-  ['elemzo.html', 'nav.analysis'],
-  ['szakellato.html', 'nav.specialist'],
-] as const;
-
 export function EesztPage() {
   const kind = useAppStore((s) => s.kind);
   const setKind = useAppStore((s) => s.setKind);
   useHashScroll();
   return (
     <>
-      <PageNav kind={kind} onKind={(k: PraxisKind) => setKind(k)} links={LINKS} />
+      <PageNav kind={kind} onKind={(k: PraxisKind) => setKind(k)} />
       <EesztSection />
     </>
   );

@@ -57,7 +57,7 @@ export function useLicenceHistory(): LicenceHistoryRaw | null {
 export const HISTORY_COLUMNS: ColDef[] = [
   { key: 'fin', labelKey: 'eeszt.colFin', type: 'text', visible: true },
   { key: 'typeLabel', labelKey: 'referral.colType', type: 'enum', visible: true },
-  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true, link: 'settlement' },
   { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: true },
   { key: 'firstSeen', labelKey: 'licenceHistory.colSince', type: 'enum', visible: true },
   { key: 'appearedAfter', labelKey: 'licenceHistory.colAfter', type: 'enum', visible: false },

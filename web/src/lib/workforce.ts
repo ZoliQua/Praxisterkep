@@ -90,7 +90,7 @@ export const PORTFOLIO_COLUMNS: ColDef[] = [
 
 export const DISTRICT_COLUMNS: ColDef[] = [
   { key: 'id', labelKey: 'eeszt.colFin', type: 'text', visible: true },
-  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true, link: 'settlement' },
   { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: true },
   { key: 'changes', labelKey: 'workforce.colChanges', type: 'number', visible: true },
   { key: 'monthsObserved', labelKey: 'workforce.colMonths', type: 'number', visible: true },

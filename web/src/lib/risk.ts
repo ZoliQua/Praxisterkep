@@ -108,7 +108,7 @@ export function levelLabel(factor: string, level: string): string {
 
 export const RISK_COLUMNS: ColDef[] = [
   { key: 'fin', labelKey: 'eeszt.colFin', type: 'text', visible: true },
-  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true, link: 'settlement' },
   { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: true },
   { key: 'type', labelKey: 'stats.thType', type: 'enum', visible: false },
   { key: 'risk', labelKey: 'risk.colRisk', type: 'number', visible: true },

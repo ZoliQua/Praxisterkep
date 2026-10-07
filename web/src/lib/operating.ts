@@ -80,7 +80,7 @@ export const OPERATING_COLUMNS: ColDef[] = [
   { key: 'euszolgId', labelKey: 'operating.colEuszolgId', type: 'text', visible: true },
   { key: 'unitCount', labelKey: 'operating.colUnitCount', type: 'number', visible: true },
   { key: 'licences', labelKey: 'operating.colLicences', type: 'text', visible: true },
-  { key: 'settlement', labelKey: 'operating.colNeakSettlement', type: 'text', visible: false },
+  { key: 'settlement', labelKey: 'operating.colNeakSettlement', type: 'text', visible: false, link: 'settlement' },
   { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: false },
   { key: 'units', labelKey: 'operating.colUnits', type: 'text', visible: false },
   { key: 'finUnits', labelKey: 'operating.colFinUnits', type: 'text', visible: false },

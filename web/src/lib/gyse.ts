@@ -76,7 +76,7 @@ export function useGyse(): GyseRaw | null {
 
 export const SITE_COLUMNS: ColDef[] = [
   { key: 'kindLabel', labelKey: 'gyse.colKind', type: 'enum', visible: true },
-  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true, link: 'settlement' },
   { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: true },
   { key: 'address', labelKey: 'eeszt.colAddress', type: 'text', visible: true },
   { key: 'provider', labelKey: 'vedono.colProvider', type: 'text', visible: true },
@@ -96,7 +96,7 @@ export const COUNTY_COLUMNS: ColDef[] = [
 ];
 
 export const SETTLEMENT_COLUMNS: ColDef[] = [
-  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true, link: 'settlement' },
   { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: true },
   { key: 'population', labelKey: 'access.colPopulation', type: 'number', visible: true },
   { key: 'sites', labelKey: 'gyse.colSites', type: 'number', visible: true },

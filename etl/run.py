@@ -289,6 +289,12 @@ def main() -> None:
              needs=("coverage", "composite", "traveltime", "transit", "ksh_age",
                     "clusters", "gyse", "vedono"),
              output=ROOT / "data" / "settlements.json"),
+        # the same profiles sliced by county and cut to what a county page
+        # shows: the middle level the site jumped over
+        Step("county_profiles", "county profiles",
+             simple("county_profiles",
+                    describe=lambda r: f", {len(r['counties'])} counties"),
+             needs=("settlements",), output=ROOT / "data" / "counties.json"),
     ]
     run_steps(steps, month)
     print("done")

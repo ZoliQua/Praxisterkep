@@ -16,6 +16,11 @@ export interface ColDef {
   labelKey: string;
   type: ColType;
   visible: boolean;
+  /**
+   * 'settlement': the cell names a settlement, so the table links it to its
+   * own page. The row must also carry a `county`, because names collide.
+   */
+  link?: 'settlement';
 }
 
 /* ---------------- matched table ---------------- */
@@ -53,7 +58,7 @@ export type EesztRow = {
 
 export const COLUMNS: ColDef[] = [
   { key: 'fin', labelKey: 'eeszt.colFin', type: 'text', visible: false },
-  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true, link: 'settlement' },
   { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: true },
   { key: 'type', labelKey: 'stats.thType', type: 'enum', visible: true },
   { key: 'status', labelKey: 'stats.thStatus', type: 'enum', visible: true },
@@ -155,7 +160,7 @@ export type UnmatchedRow = BaseRow & { reason: string; detail: string };
 
 export const UNMATCHED_COLUMNS: ColDef[] = [
   { key: 'fin', labelKey: 'eeszt.colFin', type: 'text', visible: true },
-  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true, link: 'settlement' },
   { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: true },
   { key: 'type', labelKey: 'stats.thType', type: 'enum', visible: true },
   { key: 'status', labelKey: 'stats.thStatus', type: 'enum', visible: true },
@@ -311,7 +316,7 @@ export type ReasonLicenceRow = BaseRow & {
 
 export const REASON_SIMPLE_COLUMNS: ColDef[] = [
   { key: 'fin', labelKey: 'eeszt.colFin', type: 'text', visible: true },
-  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true, link: 'settlement' },
   { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: true },
   { key: 'type', labelKey: 'stats.thType', type: 'enum', visible: true },
   { key: 'status', labelKey: 'stats.thStatus', type: 'enum', visible: true },
@@ -321,7 +326,7 @@ export const REASON_SIMPLE_COLUMNS: ColDef[] = [
 
 export const REASON_LICENCE_COLUMNS: ColDef[] = [
   { key: 'fin', labelKey: 'eeszt.colFin', type: 'text', visible: true },
-  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true, link: 'settlement' },
   { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: false },
   { key: 'type', labelKey: 'stats.thType', type: 'enum', visible: false },
   { key: 'status', labelKey: 'stats.thStatus', type: 'enum', visible: true },

@@ -35,7 +35,11 @@
     "analysis": "Elemző",
     "specialist": "Szakellátás",
     "home": "Főoldal",
-    "vedono": "Védőnő"
+    "vedono": "Védőnő",
+    "countyPage": "Vármegye",
+    "settlements": "Település",
+    "registry": "Nyilvántartás",
+    "whoElse": "Ki lát el még?"
   },
   "hero": {
     "vacant": "betöltetlen {kind} körzet",
@@ -910,7 +914,8 @@
       "pipeline_json": "A havi futtatás állapota lépésenként: mi épült újra és mi nem",
       "referral_json": "NEAK 9 jegyű beutalási törzslista: a havi FIN-kód állomány, és ami belépett vagy kilépett",
       "pharmacy_json": "NEAK-kal szerződött gyógyszertárak címmel és koordinátával",
-      "licence_history_json": "Mióta létezik az a szervezeti egység, amely alatt egy szolgálat ma dolgozik (EESZT-pillanatképekből)"
+      "licence_history_json": "Mióta létezik az a szervezeti egység, amely alatt egy szolgálat ma dolgozik (EESZT-pillanatképekből)",
+      "counties_json": "Vármegyénkénti összesítő és a települései tömör sorokban (a településprofilokból)"
     },
     "useHeading": "Hogyan használd",
     "use1": "A fájlok statikusak és verziózottak: a hónap végleges állapota a months/ könyvtárban marad, a latest.json mindig az aktuális hónapra mutat.",
@@ -1099,7 +1104,10 @@
       "ugyelet": "Ügyelet és mentő",
       "hianyteruletek": "Hiányterületek",
       "menetido": "Menetidő",
-      "busz": "Busszal elérhető?"
+      "busz": "Busszal elérhető?",
+      "statisztika": "Országos trendek",
+      "osszevetes": "Háziorvos vs Fogorvos",
+      "tavolsag": "Távolság légvonalban"
     }
   },
   "vedono": {
@@ -1649,7 +1657,8 @@
     "colSites": "Telephelyek",
     "colRetail": "Ebből kiadóhely",
     "colPerSite": "Lakos / telephely",
-    "note": "Forrás: EESZT törzspublikáció (GYSE_FORGALMAZO), {asOf}. Geokódolt telephely: {geocoded} / {sites}."
+    "note": "Forrás: EESZT törzspublikáció (GYSE_FORGALMAZO), {asOf}. Geokódolt telephely: {geocoded} / {sites}.",
+    "navLabel": "Segédeszköz"
   },
   "referral": {
     "heading": "Honnan tudjuk, hogy egy körzet megszűnt?",
@@ -1692,7 +1701,8 @@
     "colPostal": "Irányítószám",
     "colCount": "Patikák",
     "colPer": "Lakos / patika",
-    "note": "Forrás: NEAK szerződött gyógyszertárak, {month}. Geokódolt cím: {geocoded}."
+    "note": "Forrás: NEAK szerződött gyógyszertárak, {month}. Geokódolt cím: {geocoded}.",
+    "navLabel": "Gyógyszertárak"
   },
   "licenceHistory": {
     "heading": "Mióta működik a mai szervezeti egység?",
@@ -1732,5 +1742,100 @@
     "clearCounty": "{county} elvetése",
     "clearSettlement": "A település elvetése",
     "clearAll": "Országos nézet"
+  },
+  "county": {
+    "heading": "Vármegyék",
+    "lead": "Az országos szám és az egy település között van egy szint, amire eddig csak a térkép szűrője válaszolt. Ez a lap ugyanazokat a kérdéseket teszi fel egy vármegyére, és továbbvisz a településeihez.",
+    "pick": "Vármegye",
+    "pickNone": "Válassz vármegyét…",
+    "nothingPicked": "Válassz egy vármegyét a listából — a választás a többi lapon is megőrződik.",
+    "population": "lakos",
+    "settlements": "település",
+    "gpVacantOnly": "település, ahol csak betöltetlen háziorvosi körzet van",
+    "oncall": "medián menetidő a legközelebbi ügyeletig",
+    "rank": "{rank}. a {of} vármegyéből",
+    "minutes": "{n} perc",
+    "gpLine": "Háziorvosi ellátás",
+    "dentalLine": "Fogászati ellátás",
+    "stateLine": "{filled} településnek van betöltött körzete, {partial} helyen betöltött és betöltetlen is van, {vacant} helyen csak betöltetlen.",
+    "dentalSeats": "További {n} település egyik fogászati körzet listáján sem körzetszékhely — ez nem azt jelenti, hogy nincs ellátásuk, hanem azt, hogy máshonnan kapják.",
+    "travelLine": "Medián menetidő (autóval)",
+    "travelValues": "háziorvos {gp} · fogorvos {dental} · kórház {inpatient}",
+    "busLine": "Busszal",
+    "busValue": "{n} településről ({share}) nincs közvetlen járat a legközelebbi háziorvosi rendelőhöz a referencianapon.",
+    "bandLine": "Összetett kockázati index",
+    "bandValue": "{kiemelt} település kiemelt, {magas} magas sávban.",
+    "tableHeading": "{county} települései",
+    "tableExplain": "Minden település neve a saját lapjára visz, ahol az összes elemzés rá vonatkozó sora együtt szerepel.",
+    "thSettlement": "Település",
+    "thPopulation": "Lakos",
+    "thGp": "Háziorvos",
+    "thDental": "Fogorvos",
+    "thGpMin": "Háziorvos (perc)",
+    "thOncall": "Ügyelet (perc)",
+    "thBand": "Index",
+    "sort": {
+      "band": "Kockázat szerint",
+      "population": "Lakosság szerint",
+      "name": "Név szerint",
+      "gpMin": "Legtávolabbi háziorvos",
+      "oncallMin": "Legtávolabbi ügyelet"
+    },
+    "state": {
+      "filled": "Van betöltött körzete",
+      "partial": "Betöltött és betöltetlen körzete is van",
+      "vacantOnly": "Csak betöltetlen körzet tartozik hozzá",
+      "absent": "Egyik körzet listáján sem körzetszékhely"
+    },
+    "band": {
+      "kiemelt": "kiemelt",
+      "magas": "magas",
+      "kozepes": "közepes",
+      "alacsony": "alacsony"
+    },
+    "caveat": "A sorrend összehasonlítás, nem ítélet: egy rosszabb hely a rangsorban azt jelenti, hogy több mutató mutat ugyanabba az irányba — nem azt, hogy ott nincs ellátás."
+  },
+  "next": {
+    "heading": "Mit nézz meg ezután?",
+    "map": {
+      "title": "A térkép",
+      "text": "Hol vannak a betöltetlen körzetek, és mi a helyzet nálad?"
+    },
+    "county": {
+      "title": "A vármegyéd",
+      "text": "Ugyanezek a kérdések egy vármegyére, a településeivel együtt."
+    },
+    "analysis": {
+      "title": "Elemző",
+      "text": "Mi következik ebből: kockázat, menetidő, lefedettség, hiányterületek."
+    },
+    "registry": {
+      "title": "Nyilvántartás",
+      "text": "Miből tudjuk: a NEAK és az EESZT törzsei, egymásnak feszítve."
+    },
+    "specialist": {
+      "title": "Ki lát el még?",
+      "text": "Szakellátás, gyógyszertár, segédeszköz — ami az alapellátás után jön."
+    },
+    "why": {
+      "title": "Miért fontos?",
+      "text": "Mit előz meg az alapellátás, és mi történik, ha nincs."
+    },
+    "method": {
+      "title": "Módszertan és adatok",
+      "text": "Hogyan készülnek a számok, és hol tölthetők le."
+    },
+    "settlement": {
+      "title": "A település lapja",
+      "text": "Minden elemzés egyetlen településre vetítve."
+    },
+    "bus": {
+      "title": "És busszal?",
+      "text": "Ugyanez a távolság menetrend szerinti járattal, akinek nincs autója."
+    },
+    "deserts": {
+      "title": "Hiányterületek",
+      "text": "Hol ér össze több magas kockázatú település egy összefüggő folttá?"
+    }
   }
 }

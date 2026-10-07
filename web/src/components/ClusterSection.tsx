@@ -125,6 +125,7 @@ export function ClusterSection() {
         rows={rows}
         columns={CLUSTER_COLUMNS}
         filename="praxisterkep-hianyteruletek"
+        onRequestOpen={() => setOpen('clusters')}
         countUnit="rows"
       />
       <DataTableModal
@@ -135,6 +136,7 @@ export function ClusterSection() {
         rows={members}
         columns={MEMBER_COLUMNS}
         filename="praxisterkep-hianyteruletek-telepulesek"
+        onRequestOpen={() => setOpen('members')}
         countUnit="rows"
       />
     </section>

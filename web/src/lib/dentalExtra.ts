@@ -105,7 +105,7 @@ export type ExtraRow = Row & {
 export const EXTRA_COLUMNS: ColDef[] = [
   { key: 'fin', labelKey: 'extra.colCode', type: 'text', visible: true },
   { key: 'unitType', labelKey: 'extra.colUnitType', type: 'enum', visible: true },
-  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true, link: 'settlement' },
   { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: true },
   { key: 'postalCode', labelKey: 'eeszt.colPostal', type: 'text', visible: false },
   { key: 'address', labelKey: 'extra.colAddress', type: 'text', visible: true },
@@ -220,7 +220,7 @@ export function countyBreakdown(data: DentalExtraRaw | null, group: ExtraGroup):
 export const EXTRA_UNMATCHED_COLUMNS: ColDef[] = [
   { key: 'fin', labelKey: 'extra.colCode', type: 'text', visible: true },
   { key: 'unitType', labelKey: 'extra.colUnitType', type: 'enum', visible: true },
-  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true, link: 'settlement' },
   { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: true },
   { key: 'address', labelKey: 'extra.colAddress', type: 'text', visible: true },
   { key: 'reason', labelKey: 'eeszt.colReason', type: 'enum', visible: true },
@@ -298,7 +298,7 @@ export function reasonCount(
 export const EXTRA_REASON_LICENCE_COLUMNS: ColDef[] = [
   { key: 'fin', labelKey: 'extra.colCode', type: 'text', visible: true },
   { key: 'unitType', labelKey: 'extra.colUnitType', type: 'enum', visible: true },
-  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true, link: 'settlement' },
   { key: 'unitCode', labelKey: 'eeszt.colUnit', type: 'text', visible: true },
   { key: 'licenceId', labelKey: 'eeszt.colLicenceId', type: 'text', visible: true },
   { key: 'licSettlement', labelKey: 'eeszt.colLicSettlement', type: 'text', visible: true },

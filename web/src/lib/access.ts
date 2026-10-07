@@ -83,7 +83,7 @@ export function bandLabel(key: string): string {
 
 export const ACCESS_COLUMNS: ColDef[] = [
   { key: 'fin', labelKey: 'eeszt.colFin', type: 'text', visible: true },
-  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true, link: 'settlement' },
   { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: true },
   { key: 'type', labelKey: 'stats.thType', type: 'enum', visible: false },
   { key: 'status', labelKey: 'stats.thStatus', type: 'enum', visible: true },

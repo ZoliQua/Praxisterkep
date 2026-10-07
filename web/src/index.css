@@ -1588,6 +1588,13 @@ a:hover { text-decoration: underline; }
   border-radius: 10px; box-shadow: 0 10px 28px rgb(0 0 0 / 35%);
 }
 .topnav__submenu[hidden] { display: none; }
+/* the generated settlement pages carry no JavaScript: there the panel opens
+   on hover alone. In the app the same gesture is already handled in JS, so
+   this only ever agrees with it. */
+.topnav__group:hover > .topnav__submenu[hidden] { display: flex; }
+@media (max-width: 720px) {
+  .topnav__group:hover > .topnav__submenu[hidden] { display: none; }
+}
 .topnav__submenu a {
   padding: 7px 14px; font-size: 13px; color: var(--ink-dim);
   text-transform: none; letter-spacing: 0.01em; white-space: nowrap;
@@ -1683,3 +1690,54 @@ a:hover { text-decoration: underline; }
   .contextbar__inner { padding: 6px 16px; }
   .contextbar__clear { margin-left: 0; }
 }
+
+/* "Mit nézz meg ezután?" — the hand-off at the end of a page or a section. */
+.nextsteps { margin: 28px 0 8px; }
+.nextsteps__heading {
+  font: 600 13px var(--font-display); color: var(--ink-faint);
+  text-transform: uppercase; letter-spacing: 0.07em; margin: 0 0 10px;
+}
+.nextsteps__cards {
+  display: grid; gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+}
+.nextsteps__card {
+  display: block; padding: 12px 14px; border: 1px solid var(--line);
+  border-radius: 10px; background: var(--bg-raised); text-decoration: none;
+}
+.nextsteps__card:hover { border-color: var(--accent); background: var(--bg-panel); }
+.nextsteps__title {
+  display: block; font-weight: 600; color: var(--ink); margin-bottom: 3px;
+}
+.nextsteps__title::after { content: ' →'; color: var(--accent); }
+.nextsteps__text { display: block; font-size: 13px; color: var(--ink-dim); }
+
+/* The county page. */
+.county-picker { display: flex; align-items: center; gap: 10px; margin: 14px 0 6px; }
+.county-picker span { font-size: 13px; color: var(--ink-faint); }
+.county-picker select {
+  background: var(--bg-panel); color: var(--ink); border: 1px solid var(--line);
+  border-radius: 8px; padding: 7px 10px; font-size: 14px; min-width: 220px;
+}
+.county-stats {
+  display: grid; gap: 12px; margin: 18px 0 20px;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+}
+.county-note { color: var(--ink-faint); font-size: 12.5px; }
+.county-sort { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 12px; }
+.county-sort button {
+  border: 1px solid var(--line); background: var(--bg-raised); color: var(--ink-dim);
+  border-radius: 999px; padding: 5px 12px; font-size: 12.5px; cursor: pointer;
+}
+.county-sort button.is-on {
+  border-color: var(--accent); color: var(--accent-ink); background: var(--accent);
+}
+.county-table td a { color: var(--ink); }
+.county-dot {
+  display: inline-block; width: 10px; height: 10px; border-radius: 50%;
+  background: var(--ink-faint);
+}
+.county-dot--filled { background: #4fd6c2; }
+.county-dot--partial { background: #f0b429; }
+.county-dot--vacantOnly { background: #ef6461; }
+.county-dot--absent { background: var(--line-strong); }

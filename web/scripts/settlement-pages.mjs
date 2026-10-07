@@ -30,6 +30,20 @@ const cssFile = readdirSync(join(dist, 'assets')).filter((f) => f.endsWith('.css
 
 // the site-wide context (lib/context.ts) written into a static link: ?tel=
 // is the settlement slug, ?m= its county, and the SPA picks both up on load
+// the one menu (src/lib/siteNav.json) and its Hungarian labels, so these
+// 3177 static pages cannot disagree with the app about which pages exist
+const nav = JSON.parse(readFileSync(join(here, '..', 'src', 'lib', 'siteNav.json'), 'utf8'));
+const hu = JSON.parse(readFileSync(join(here, '..', 'src', 'i18n', 'hu.json'), 'utf8'));
+const label = (key) => key.split('.').reduce((o, k) => (o ?? {})[k], hu) ?? key;
+
+const navBar = (profile) => nav.entries.map((e) => {
+  const children = (e.children ?? []).map(([href, key]) =>
+    `<a href="${esc(ctx(href, profile))}">${esc(label(key))}</a>`).join('');
+  return `<div class="topnav__group"><a href="${esc(ctx(e.href, profile))}">${
+    esc(label(e.labelKey))}${children ? '<i class="topnav__caret" aria-hidden="true"></i>' : ''
+  }</a>${children ? `<div class="topnav__submenu" hidden>${children}</div>` : ''}</div>`;
+}).join('\n    ');
+
 const ctx = (href, profile) => {
   const [path, hash] = href.includes('#') ? [href.slice(0, href.indexOf('#')),
     href.slice(href.indexOf('#'))] : [href, ''];
@@ -186,11 +200,7 @@ function page(profile) {
 <nav class="topnav"><div class="topnav__inner">
   <a class="topnav__brand" href="/">PRAXISTÉRKÉP</a>
   <div class="topnav__links">
-    <div class="topnav__group"><a href="${esc(ctx('/', profile))}">Főoldal</a></div>
-    <div class="topnav__group"><a href="/telepules/">Települések</a></div>
-    <div class="topnav__group"><a href="${esc(ctx('/elemzo.html', profile))}">Elemző</a></div>
-    <div class="topnav__group"><a href="${esc(ctx('/eeszt.html', profile))}">Nyilvántartás</a></div>
-    <div class="topnav__group"><a href="${esc(ctx('/szakellato.html', profile))}">Ki lát el még?</a></div>
+    ${navBar(profile)}
   </div>
 </div></nav>
 

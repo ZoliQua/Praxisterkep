@@ -157,6 +157,7 @@ export function CompositeSection() {
         rows={rows}
         columns={COMPOSITE_COLUMNS}
         filename="praxisterkep-index"
+        onRequestOpen={() => setOpen('settlements')}
         renderCell={renderExtraCell}
         countUnit="rows"
         above={{
@@ -177,6 +178,7 @@ export function CompositeSection() {
         rows={counties}
         columns={COMPOSITE_COUNTY_COLUMNS}
         filename="praxisterkep-index-megyek"
+        onRequestOpen={() => setOpen('counties')}
         countUnit="rows"
       />
     </section>

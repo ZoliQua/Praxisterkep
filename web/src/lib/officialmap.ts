@@ -72,7 +72,7 @@ export function useOfficialMap(): OfficialRaw | null {
 
 export const OFFICIAL_COLUMNS: ColDef[] = [
   { key: 'fin', labelKey: 'eeszt.colFin', type: 'text', visible: true },
-  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true, link: 'settlement' },
   { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: true },
   { key: 'verdictLabel', labelKey: 'officialmap.colVerdict', type: 'enum', visible: true },
   { key: 'sourceLabel', labelKey: 'officialmap.colSource', type: 'enum', visible: true },

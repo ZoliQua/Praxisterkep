@@ -10,6 +10,7 @@ import {
   type ColDef, type Filters, type Row,
 } from '../lib/eesztTable';
 import { downloadBlob } from '../lib/exportChart';
+import { useSettlementLinks } from '../lib/settlementLink';
 
 const PAGE_SIZES = [25, 50, 100, 500, 0]; // 0 = all
 
@@ -21,7 +22,7 @@ const COUNT_KEY = {
 
 export function DataTableModal<R extends Row>({
   open, onClose, title, subtitle, rows, columns, filename, renderCell, above,
-  countUnit = 'districts',
+  onRequestOpen, countUnit = 'districts',
 }: {
   open: boolean;
   onClose: () => void;
@@ -36,7 +37,15 @@ export function DataTableModal<R extends Row>({
   renderCell?: (col: ColDef, row: R) => React.ReactNode | undefined;
   /** optional toggleable panel above the table, fed the filtered rows */
   above?: { label: string; render: (rows: R[]) => React.ReactNode; defaultOn?: boolean };
+  /**
+   * Called on mount when the address bar names this table (?tabla=<filename>).
+   * Tables whose owner passes it can be linked to directly, already open.
+   */
+  onRequestOpen?: () => void;
 }) {
+  // a settlement named in any table is a way to its own page, where every
+  // analysis meets on that one place
+  const settlementLink = useSettlementLinks();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [visible, setVisible] = useState<Set<string>>(
     () => new Set(columns.filter((c) => c.visible).map((c) => c.key)),
@@ -48,6 +57,37 @@ export function DataTableModal<R extends Row>({
   const [page, setPage] = useState(0);
   const [chooserOpen, setChooserOpen] = useState(false);
   const [showAbove, setShowAbove] = useState(above?.defaultOn ?? true);
+
+  // A filtered table is the thing people want to send each other, and until
+  // now it lived only in this component's state. The open table and its search
+  // ride in the address bar (?tabla=&tq=), next to the branch and the area.
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search);
+    if (p.get('tabla') !== filename) return;
+    setGlobal(p.get('tq') ?? '');
+    onRequestOpen?.();
+    // mount only: the address is read once, then this component owns the state
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (!open) return undefined;
+    const write = (on: boolean) => {
+      const p = new URLSearchParams(window.location.search);
+      if (on) {
+        p.set('tabla', filename);
+        if (global) p.set('tq', global); else p.delete('tq');
+      } else {
+        p.delete('tabla');
+        p.delete('tq');
+      }
+      const q = p.toString();
+      window.history.replaceState(
+        null, '', `${window.location.pathname}${q ? `?${q}` : ''}${window.location.hash}`);
+    };
+    write(true);
+    return () => write(false);
+  }, [open, filename, global]);
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -228,9 +268,13 @@ export function DataTableModal<R extends Row>({
                 <tr key={`${String(r.fin ?? '')}-${i}`}>
                   {shownCols.map((c) => {
                     const custom = renderCell?.(c, r);
+                    const text = cellText(r[c.key]);
+                    const href = c.link === 'settlement' && text
+                      ? settlementLink(text, cellText(r.county)) : null;
                     return (
                       <td key={c.key} className={c.type === 'number' ? 'is-num' : undefined}>
-                        {custom !== undefined ? custom : (cellText(r[c.key]) || '–')}
+                        {custom !== undefined ? custom
+                          : href ? <a href={href}>{text}</a> : (text || '–')}
                       </td>
                     );
                   })}

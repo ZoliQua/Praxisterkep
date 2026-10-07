@@ -35,7 +35,11 @@
     "analysis": "Analysis",
     "specialist": "Specialist care",
     "home": "Home",
-    "vedono": "Health visitors"
+    "vedono": "Health visitors",
+    "countyPage": "County",
+    "settlements": "Settlements",
+    "registry": "Registry",
+    "whoElse": "Who else provides care?"
   },
   "hero": {
     "vacant": "vacant {kind} districts",
@@ -910,7 +914,8 @@
       "pipeline_json": "The status of the monthly run, step by step: what rebuilt and what did not",
       "referral_json": "NEAK referral master list: the monthly FIN-code stock, and what entered or left",
       "pharmacy_json": "Pharmacies contracted by NEAK, with address and coordinates",
-      "licence_history_json": "Since when the organisational unit a service works under has existed (from EESZT snapshots)"
+      "licence_history_json": "Since when the organisational unit a service works under has existed (from EESZT snapshots)",
+      "counties_json": "Per-county aggregates and their settlements in compact rows (from the settlement profiles)"
     },
     "useHeading": "How to use them",
     "use1": "The files are static and versioned: a finished month stays in months/, while latest.json always points at the current one.",
@@ -1099,7 +1104,10 @@
       "ugyelet": "On-call and ambulance",
       "hianyteruletek": "Care deserts",
       "menetido": "Driving time",
-      "busz": "By bus?"
+      "busz": "By bus?",
+      "statisztika": "National trends",
+      "osszevetes": "GP vs dental",
+      "tavolsag": "Distance as the crow flies"
     }
   },
   "vedono": {
@@ -1649,7 +1657,8 @@
     "colSites": "Premises",
     "colRetail": "Of which dispensing",
     "colPerSite": "Residents / premises",
-    "note": "Source: EESZT master publication (GYSE_FORGALMAZO), {asOf}. Geocoded premises: {geocoded} of {sites}."
+    "note": "Source: EESZT master publication (GYSE_FORGALMAZO), {asOf}. Geocoded premises: {geocoded} of {sites}.",
+    "navLabel": "Medical aids"
   },
   "referral": {
     "heading": "How do we know a district was dissolved?",
@@ -1692,7 +1701,8 @@
     "colPostal": "Postcode",
     "colCount": "Pharmacies",
     "colPer": "Residents / pharmacy",
-    "note": "Source: NEAK contracted pharmacies, {month}. Geocoded addresses: {geocoded}."
+    "note": "Source: NEAK contracted pharmacies, {month}. Geocoded addresses: {geocoded}.",
+    "navLabel": "Pharmacies"
   },
   "licenceHistory": {
     "heading": "How old is the unit a district works under?",
@@ -1732,5 +1742,100 @@
     "clearCounty": "Drop {county}",
     "clearSettlement": "Drop the settlement",
     "clearAll": "Whole country"
+  },
+  "county": {
+    "heading": "Counties",
+    "lead": "Between the national number and a single town there is a level only the map's filter ever answered. This page asks the same questions of one county, and hands you on to its settlements.",
+    "pick": "County",
+    "pickNone": "Choose a county…",
+    "nothingPicked": "Choose a county — the choice is kept on the other pages too.",
+    "population": "residents",
+    "settlements": "settlements",
+    "gpVacantOnly": "settlements where every GP district is vacant",
+    "oncall": "median driving time to the nearest on-call surgery",
+    "rank": "{rank} of {of} counties",
+    "minutes": "{n} min",
+    "gpLine": "GP care",
+    "dentalLine": "Dental care",
+    "stateLine": "{filled} settlements have a filled district, {partial} have both filled and vacant ones, {vacant} have only vacant ones.",
+    "dentalSeats": "A further {n} settlements are not the seat of any dental district — which does not mean they have no care, but that it comes from elsewhere.",
+    "travelLine": "Median driving time",
+    "travelValues": "GP {gp} · dentist {dental} · hospital {inpatient}",
+    "busLine": "By bus",
+    "busValue": "{n} settlements ({share}) have no direct service to the nearest GP surgery on the reference day.",
+    "bandLine": "Composite care-risk index",
+    "bandValue": "{kiemelt} settlements in the highest band, {magas} in the high band.",
+    "tableHeading": "Settlements of {county}",
+    "tableExplain": "Every name leads to its own page, where all the analyses meet on that settlement.",
+    "thSettlement": "Settlement",
+    "thPopulation": "Residents",
+    "thGp": "GP",
+    "thDental": "Dentist",
+    "thGpMin": "GP (min)",
+    "thOncall": "On-call (min)",
+    "thBand": "Index",
+    "sort": {
+      "band": "By risk",
+      "population": "By population",
+      "name": "By name",
+      "gpMin": "Furthest GP",
+      "oncallMin": "Furthest on-call"
+    },
+    "state": {
+      "filled": "Has a filled district",
+      "partial": "Has both filled and vacant districts",
+      "vacantOnly": "Only vacant districts",
+      "absent": "Not the seat of any district"
+    },
+    "band": {
+      "kiemelt": "highest",
+      "magas": "high",
+      "kozepes": "middling",
+      "alacsony": "low"
+    },
+    "caveat": "The order is a comparison, not a verdict: a worse place means more indicators point the same way, not that care is missing."
+  },
+  "next": {
+    "heading": "Where to next?",
+    "map": {
+      "title": "The map",
+      "text": "Where the vacant districts are, and what it looks like where you live."
+    },
+    "county": {
+      "title": "Your county",
+      "text": "The same questions one zoom out, with every settlement listed."
+    },
+    "analysis": {
+      "title": "Analyses",
+      "text": "What follows from it: risk, driving time, coverage, care deserts."
+    },
+    "registry": {
+      "title": "The registers",
+      "text": "How we know: the NEAK and EESZT master data, held against each other."
+    },
+    "specialist": {
+      "title": "Who else provides care?",
+      "text": "Specialist care, pharmacies, medical aids — what comes after primary care."
+    },
+    "why": {
+      "title": "Why it matters",
+      "text": "What primary care prevents, and what happens without it."
+    },
+    "method": {
+      "title": "Method and data",
+      "text": "How the numbers are made, and where to download them."
+    },
+    "settlement": {
+      "title": "The settlement's page",
+      "text": "Every analysis projected onto one settlement."
+    },
+    "bus": {
+      "title": "And by bus?",
+      "text": "The same distance on scheduled services, for those without a car."
+    },
+    "deserts": {
+      "title": "Care deserts",
+      "text": "Where several high-risk settlements form one contiguous patch."
+    }
   }
 }

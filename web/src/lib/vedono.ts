@@ -117,7 +117,7 @@ export const BRANCH_COLORS: Record<string, string> = {
 export const SERVICE_COLUMNS: ColDef[] = [
   { key: 'fin', labelKey: 'eeszt.colFin', type: 'text', visible: true },
   { key: 'branch', labelKey: 'vedono.colBranch', type: 'enum', visible: true },
-  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true, link: 'settlement' },
   { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: true },
   { key: 'district', labelKey: 'vedono.colDistrict', type: 'enum', visible: false },
   { key: 'address', labelKey: 'eeszt.colAddress', type: 'text', visible: true },
@@ -152,7 +152,7 @@ export const PROVIDER_COLUMNS: ColDef[] = [
 ];
 
 export const SETTLEMENT_COLUMNS: ColDef[] = [
-  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true, link: 'settlement' },
   { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: true },
   { key: 'district', labelKey: 'vedono.colDistrict', type: 'enum', visible: false },
   { key: 'population', labelKey: 'access.colPopulation', type: 'number', visible: true },

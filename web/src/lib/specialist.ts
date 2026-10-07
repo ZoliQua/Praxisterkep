@@ -135,7 +135,7 @@ export function useSpecialist(): SpecialistRaw | null {
 export const SITE_COLUMNS: ColDef[] = [
   { key: 'care', labelKey: 'specialist.colCare', type: 'enum', visible: true },
   { key: 'institution', labelKey: 'specialist.colInstitution', type: 'text', visible: true },
-  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true, link: 'settlement' },
   { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: true },
   { key: 'address', labelKey: 'eeszt.colAddress', type: 'text', visible: true },
   { key: 'units', labelKey: 'specialist.colUnits', type: 'number', visible: true },
@@ -151,7 +151,7 @@ export const ROW_COLUMNS: ColDef[] = [
   { key: 'unit', labelKey: 'specialist.colUnit', type: 'text', visible: true },
   { key: 'profession', labelKey: 'specialist.colProfession', type: 'enum', visible: true },
   { key: 'professionCode', labelKey: 'specialist.colProfessionCode', type: 'text', visible: false },
-  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true, link: 'settlement' },
   { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: true },
   { key: 'address', labelKey: 'eeszt.colAddress', type: 'text', visible: false },
   { key: 'neakCode', labelKey: 'operating.colNeakCode', type: 'text', visible: false },

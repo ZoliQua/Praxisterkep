@@ -176,7 +176,7 @@ export type CrosscheckRow = Row & { fin: string; verdict: string };
 export const CROSSCHECK_COLUMNS: ColDef[] = [
   { key: 'fin', labelKey: 'crosscheck.colCode', type: 'text', visible: true },
   { key: 'source', labelKey: 'crosscheck.colSource', type: 'enum', visible: true },
-  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true, link: 'settlement' },
   { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: false },
   { key: 'address', labelKey: 'crosscheck.colNeakAddress', type: 'text', visible: true },
   { key: 'reason', labelKey: 'crosscheck.colReason', type: 'enum', visible: true },
@@ -235,7 +235,7 @@ export function crosscheckRows(
 export const CANDIDATE_COLUMNS: ColDef[] = [
   { key: 'fin', labelKey: 'crosscheck.colCode', type: 'text', visible: true },
   { key: 'source', labelKey: 'crosscheck.colSource', type: 'enum', visible: true },
-  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true, link: 'settlement' },
   { key: 'address', labelKey: 'crosscheck.colNeakAddress', type: 'text', visible: true },
   { key: 'unitCode', labelKey: 'crosscheck.colSuggestedUnit', type: 'text', visible: true },
   { key: 'licenceId', labelKey: 'eeszt.colLicenceId', type: 'text', visible: true },
@@ -280,7 +280,7 @@ export const EESZT_ONLY_COLUMNS: ColDef[] = [
   { key: 'fin', labelKey: 'eeszt.colFin', type: 'text', visible: true },
   { key: 'tip', labelKey: 'crosscheck.colTip', type: 'enum', visible: true },
   { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: true },
-  { key: 'settlement', labelKey: 'eeszt.colLicSettlement', type: 'text', visible: true },
+  { key: 'settlement', labelKey: 'eeszt.colLicSettlement', type: 'text', visible: true, link: 'settlement' },
   { key: 'address', labelKey: 'crosscheck.colLicAddress', type: 'text', visible: true },
   { key: 'profession', labelKey: 'eeszt.colProfession', type: 'enum', visible: true },
   { key: 'unitCode', labelKey: 'eeszt.colUnit', type: 'text', visible: true },
@@ -336,7 +336,7 @@ export function verdictBreakdown(
 export const MANUAL_COLUMNS: ColDef[] = [
   { key: 'fin', labelKey: 'crosscheck.colCode', type: 'text', visible: true },
   { key: 'source', labelKey: 'crosscheck.colSource', type: 'enum', visible: true },
-  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true, link: 'settlement' },
   { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: false },
   { key: 'address', labelKey: 'crosscheck.colNeakAddress', type: 'text', visible: true },
   { key: 'units', labelKey: 'crosscheck.colOwnUnit', type: 'text', visible: true },

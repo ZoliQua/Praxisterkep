@@ -1,11 +1,11 @@
-// The top bar of the standalone pages (analysis, EESZT, specialist care).
-// The landing page has its own nav with the section anchors; here the brand
-// leads home and the branch switch is local to the page, because these pages
-// hold their own kind state rather than the landing's store.
+// The top bar of every standalone page. It shows the same six-plus-one
+// entries as the landing (lib/siteNav.ts) in the order of the zooms they
+// offer, and every link carries the branch and the area on.
 import { t } from '../lib/i18n';
 import { contextHref } from '../lib/context';
 import { ContextBar } from './ContextBar';
-import { NavMenu, type NavEntry } from './NavMenu';
+import { NavMenu } from './NavMenu';
+import { SITE_NAV, withContext } from '../lib/siteNav';
 import { IconStethoscope, IconTooth } from './icons';
 import type { PraxisKind } from '../types';
 
@@ -13,17 +13,15 @@ interface Props {
   /** null hides the branch switch (pages that are not per-branch) */
   kind?: PraxisKind | null;
   onKind?: (kind: PraxisKind) => void;
-  /** other standalone pages worth reaching from here: [href, i18n key] */
-  links?: readonly (readonly [string, string])[];
 }
 
-export function PageNav({ kind = null, onKind, links = [] }: Props) {
+export function PageNav({ kind = null, onKind }: Props) {
   const home = import.meta.env.BASE_URL;
   return (
     <>
     <nav className="topnav">
       <div className="topnav__inner">
-        <a className="topnav__brand" href={home}>{t('site.title')}</a>
+        <a className="topnav__brand" href={contextHref(home)}>{t('site.title')}</a>
         {kind && onKind && (
           <div className="topnav__kind" role="group">
             <button aria-pressed={kind === 'dental'}
@@ -38,11 +36,7 @@ export function PageNav({ kind = null, onKind, links = [] }: Props) {
             </button>
           </div>
         )}
-        <NavMenu entries={[
-          { href: contextHref(home), labelKey: 'nav.home' },
-          ...links.map(([href, key]): NavEntry => (
-            { href: contextHref(`${home}${href}`), labelKey: key })),
-        ]} />
+        <NavMenu entries={withContext(SITE_NAV)} />
       </div>
     </nav>
     <ContextBar />

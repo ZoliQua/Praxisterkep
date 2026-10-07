@@ -79,7 +79,7 @@ export const CLUSTER_COLUMNS: ColDef[] = [
 ];
 
 export const MEMBER_COLUMNS: ColDef[] = [
-  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true, link: 'settlement' },
   { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: true },
   { key: 'cluster', labelKey: 'clusters.colName', type: 'enum', visible: true },
   { key: 'population', labelKey: 'access.colPopulation', type: 'number', visible: true },

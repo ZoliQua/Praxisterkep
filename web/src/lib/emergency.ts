@@ -129,7 +129,7 @@ export function groupStats(data: EmergencyRaw | null, group: EmergencyGroup): Di
 
 export const POINT_COLUMNS: ColDef[] = [
   { key: 'groupLabel', labelKey: 'emergency.colGroup', type: 'enum', visible: true },
-  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true, link: 'settlement' },
   { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: true },
   { key: 'address', labelKey: 'eeszt.colAddress', type: 'text', visible: true },
   { key: 'provider', labelKey: 'vedono.colProvider', type: 'text', visible: true },
@@ -139,7 +139,7 @@ export const POINT_COLUMNS: ColDef[] = [
 ];
 
 export const SETTLEMENT_COLUMNS: ColDef[] = [
-  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true, link: 'settlement' },
   { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: true },
   { key: 'population', labelKey: 'access.colPopulation', type: 'number', visible: true },
   { key: 'oncallKm', labelKey: 'emergency.colOncallKm', type: 'number', visible: true },
@@ -152,7 +152,7 @@ export const SETTLEMENT_COLUMNS: ColDef[] = [
 export const DISTRICT_COLUMNS: ColDef[] = [
   { key: 'id', labelKey: 'eeszt.colFin', type: 'text', visible: true },
   { key: 'kindLabel', labelKey: 'emergency.colKind', type: 'enum', visible: true },
-  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true },
+  { key: 'settlement', labelKey: 'stats.thSettlement', type: 'text', visible: true, link: 'settlement' },
   { key: 'county', labelKey: 'stats.thCounty', type: 'enum', visible: true },
   { key: 'statusLabel', labelKey: 'stats.thStatus', type: 'enum', visible: true },
   { key: 'oncallKm', labelKey: 'emergency.colOncallKm', type: 'number', visible: true },

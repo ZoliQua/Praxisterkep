@@ -1,6 +1,6 @@
 // Generates one static share page per county into dist/megye/<slug>/ —
 // crawlers get county-specific OG metadata, humans get redirected to the
-// map focused on that county. Runs in postbuild.
+// county's own page. Runs in postbuild.
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -42,7 +42,9 @@ for (const county of counties) {
     gLine ? `Háziorvosi: ${gLine}` : null,
     `Praxistérkép, ${monthLabel}`,
   ].filter(Boolean).join(' · ');
-  const target = `/?m=${encodeURIComponent(county)}#terkep`;
+  // the county has a page of its own now; the map filter was the best this
+  // link could do before there was one
+  const target = `/megye.html?m=${encodeURIComponent(county)}`;
   const title = `${county} — betöltetlen alapellátási körzetek`;
   const html = `<!doctype html>
 <html lang="hu">

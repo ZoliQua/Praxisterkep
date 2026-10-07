@@ -1,0 +1,70 @@
+{
+  "entries": [
+    {
+      "href": "/",
+      "labelKey": "nav.map",
+      "children": [
+        [
+          "/#nalam",
+          "nav.mine"
+        ],
+        [
+          "/miert.html",
+          "nav.why"
+        ]
+      ]
+    },
+    {
+      "href": "/megye.html",
+      "labelKey": "nav.countyPage"
+    },
+    {
+      "href": "/telepules/",
+      "labelKey": "nav.settlements"
+    },
+    {
+      "href": "/elemzo.html",
+      "labelKey": "nav.analysis",
+      "children": [
+        [
+          "/elemzo.html#kockazat",
+          "analysis.toc.kockazat"
+        ],
+        [
+          "/elemzo.html#menetido",
+          "analysis.toc.menetido"
+        ],
+        [
+          "/elemzo.html#index",
+          "analysis.toc.index"
+        ],
+        [
+          "/elemzo.html#hianyteruletek",
+          "analysis.toc.hianyteruletek"
+        ]
+      ]
+    },
+    {
+      "href": "/eeszt.html",
+      "labelKey": "nav.registry"
+    },
+    {
+      "href": "/szakellato.html",
+      "labelKey": "nav.whoElse",
+      "children": [
+        [
+          "/szakellato.html#gyogyszertar",
+          "pharmacy.navLabel"
+        ],
+        [
+          "/szakellato.html#segedeszkoz",
+          "gyse.navLabel"
+        ]
+      ]
+    },
+    {
+      "href": "/modszertan.html",
+      "labelKey": "nav.methodology"
+    }
+  ]
+}

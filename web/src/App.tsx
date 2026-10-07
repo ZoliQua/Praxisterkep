@@ -4,66 +4,25 @@ import { useAppStore, useSnapshot } from './store/useAppStore';
 import { Hero } from './components/Hero';
 import { ScrollyIntro } from './components/ScrollyIntro';
 import { ContextBar } from './components/ContextBar';
+import { NextSteps } from './components/NextSteps';
+import { SITE_NAV, VEDONO_NAV, withContext } from './lib/siteNav';
+import { contextHref } from './lib/context';
 import { useHashScroll } from './lib/useHashScroll';
-import { useContextHref } from './lib/context';
 import { MapSection } from './components/MapSection';
 import { SearchSection } from './components/SearchSection';
-import { CountyRanking } from './components/CountyRanking';
-import { StatsSection } from './components/StatsSection';
-import { VersusSection } from './components/VersusSection';
-import { AccessSection } from './components/AccessSection';
-import { WhySection } from './components/WhySection';
-import { DataSection } from './components/DataSection';
-import { Methodology } from './components/Methodology';
 import { Footer } from './components/Footer';
 import { VedonoSection } from './components/VedonoSection';
-import { NavMenu, type NavEntry } from './components/NavMenu';
+import { NavMenu } from './components/NavMenu';
 import { IconStethoscope, IconTooth, IconVedono } from './components/icons';
 import type { PraxisKind } from './types';
 
-// Six entries instead of ten flat links; the sections that belong together
-// travel in a submenu (see NavMenu).
-const NAV: NavEntry[] = [
-  {
-    href: '#terkep',
-    labelKey: 'nav.map',
-    children: [['#alapellatas', 'nav.why'], ['#nalam', 'nav.mine']],
-  },
-  {
-    href: '#statisztika',
-    labelKey: 'nav.stats',
-    children: [
-      ['#rangsor', 'nav.ranking'],
-      ['#osszevetes', 'nav.versus'],
-      ['#tavolsag', 'nav.access'],
-    ],
-  },
-  {
-    href: '#modszertan',
-    labelKey: 'nav.methodology',
-    children: [['#adatok', 'nav.data']],
-  },
-  { href: 'elemzo.html', labelKey: 'nav.analysis' },
-  { href: 'eeszt.html', labelKey: 'nav.eeszt' },
-  { href: 'szakellato.html', labelKey: 'nav.specialist' },
-];
-
-/** The same entries, with the branch and area written into every page link. */
-function withContext(entries: NavEntry[], href: (h: string) => string): NavEntry[] {
-  return entries.map((e) => (e.href.startsWith('#') ? e : { ...e, href: href(e.href) }));
-}
-
-const VEDONO_NAV: NavEntry[] = [
-  { href: '#vedono', labelKey: 'nav.vedono' },
-  {
-    href: '#modszertan',
-    labelKey: 'nav.methodology',
-    children: [['#adatok', 'nav.data']],
-  },
-  { href: 'elemzo.html', labelKey: 'nav.analysis' },
-  { href: 'eeszt.html', labelKey: 'nav.eeszt' },
-  { href: 'szakellato.html', labelKey: 'nav.specialist' },
-];
+/** Where the landing hands the reader on, now that it is only the question. */
+const LANDING_NEXT = [
+  { href: '/megye.html', titleKey: 'next.county.title', textKey: 'next.county.text' },
+  { href: '/elemzo.html', titleKey: 'next.analysis.title', textKey: 'next.analysis.text' },
+  { href: '/miert.html', titleKey: 'next.why.title', textKey: 'next.why.text' },
+  { href: '/modszertan.html', titleKey: 'next.method.title', textKey: 'next.method.text' },
+] as const;
 
 export default function App() {
   const snapshot = useSnapshot();
@@ -76,7 +35,6 @@ export default function App() {
   // the sections arrive with the snapshot, so the browser's own jump to
   // #nalam happens before there is anything to jump to
   useHashScroll();
-  const href = useContextHref();
 
   useEffect(() => {
     void loadData();
@@ -89,6 +47,21 @@ export default function App() {
 
   useEffect(() => {
     document.documentElement.lang = locale;
+  }, []);
+
+  // sections that have moved to pages of their own: a link someone shared
+  // before the split must still arrive where its content lives
+  useEffect(() => {
+    const moved: Record<string, string> = {
+      alapellatas: 'miert.html', modszertan: 'modszertan.html',
+      adatok: 'modszertan.html#adatok', forrasok: 'modszertan.html',
+      rangsor: 'megye.html#rangsor',
+      statisztika: 'elemzo.html#statisztika',
+      osszevetes: 'elemzo.html#osszevetes',
+      tavolsag: 'elemzo.html#tavolsag',
+    };
+    const target = moved[decodeURIComponent(window.location.hash.slice(1))];
+    if (target) window.location.replace(contextHref(target));
   }, []);
 
   function switchLocale() {
@@ -126,7 +99,7 @@ export default function App() {
             aria-label={locale === 'hu' ? 'Switch to English' : 'Váltás magyarra'}>
             {locale === 'hu' ? 'EN' : 'HU'}
           </button>
-          <NavMenu entries={withContext(view === 'vedono' ? VEDONO_NAV : NAV, href)} />
+          <NavMenu entries={withContext(view === 'vedono' ? VEDONO_NAV : SITE_NAV)} />
         </div>
       </nav>
       <ContextBar />
@@ -135,16 +108,10 @@ export default function App() {
           <Hero />
           <ScrollyIntro />
           <MapSection />
-          <WhySection />
           <SearchSection />
-          <CountyRanking />
-          <StatsSection />
-          <VersusSection />
-          <AccessSection />
         </>
       )}
-      <DataSection />
-      <Methodology />
+      <div className="section container"><NextSteps items={LANDING_NEXT} /></div>
       <Footer />
     </>
   );

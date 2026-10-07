@@ -12,6 +12,7 @@ import { formatNumber } from '../lib/format';
 import { cellText, type Row } from '../lib/eesztTable';
 import { eesztLink } from '../lib/eeszt';
 import { useAppStore } from '../store/useAppStore';
+import { useContextStore } from '../lib/context';
 import { exportMapPng } from '../lib/mapExport';
 import { LAYER_KEYS, setLayer } from '../lib/mapLayers';
 import { useOrientationLayers } from './useOrientationLayers';
@@ -113,7 +114,11 @@ export function EesztMap({
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MLMap | null>(null);
   const readyRef = useRef(false);
-  const [county, setCounty] = useState('');
+  // the county filter is the site-wide context: a county picked here is the
+  // one the analyses and the county page open on, and the other way round
+  const county = useContextStore((st) => st.county) ?? '';
+  const setCounty = (name: string) =>
+    useContextStore.getState().setCounty(name || null);
   const [selected, setSelected] = useState<MapRow | null>(null);
   const requestSearch = useAppStore((s) => s.requestSearch);
 
@@ -125,7 +130,7 @@ export function EesztMap({
     () => [...new Set(rows.map((r) => r.county))].sort((a, b) => a.localeCompare(b, 'hu')),
     [rows],
   );
-  const located = shown.filter((r) => r.lat !== null).length;
+  const located = shown.filter((r) => Number.isFinite(r.lat)).length;
   const shownRef = useRef(shown);
   shownRef.current = shown;
 
@@ -293,7 +298,7 @@ export function EesztMap({
     const map = mapRef.current;
     if (!map || !county || !showDistricts) return;
     districtMarkersRef.current = shown
-      .filter((r) => r.lat !== null && r.lon !== null)
+      .filter((r) => Number.isFinite(r.lat) && Number.isFinite(r.lon))
       .slice(0, 400)
       .map((r) => {
         const el = document.createElement('div');

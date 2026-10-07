@@ -105,9 +105,20 @@ export function contextHref(
   search: string = typeof window === 'undefined' ? '' : window.location.search,
 ): string {
   const [path, hash] = splitHash(href);
-  // a bare anchor stays on this page, so its existing query is kept
-  const q = writeContext(path === '' ? search : '', ctx);
+  // a link that stays on this page keeps its query: the map's month, filters
+  // and colouring live there, and a menu click must not wipe them
+  const q = writeContext(path === '' || samePage(path) ? search : '', ctx);
   return `${path}${q}${hash}`;
+}
+
+/** Whether this href points at the page the browser is already showing. */
+function samePage(path: string): boolean {
+  if (typeof window === 'undefined') return false;
+  const here = window.location.pathname;
+  if (path === here) return true;
+  // "/" and "/index.html" are the same page, and so are "/x/" and "/x/index.html"
+  const norm = (p: string) => p.replace(/index\.html$/, '');
+  return norm(path) === norm(here);
 }
 
 function splitHash(href: string): [string, string] {

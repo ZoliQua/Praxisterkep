@@ -150,6 +150,7 @@ export function TravelTimeSection() {
         rows={rows}
         columns={travelColumns(layer)}
         filename={`praxisterkep-menetido-${layer}`}
+        onRequestOpen={() => setOpen('settlements')}
         countUnit="rows"
       />
       <DataTableModal
@@ -160,6 +161,7 @@ export function TravelTimeSection() {
         rows={counties}
         columns={TRAVEL_COUNTY_COLUMNS}
         filename="praxisterkep-menetido-megyek"
+        onRequestOpen={() => setOpen('counties')}
         countUnit="rows"
       />
     </section>
