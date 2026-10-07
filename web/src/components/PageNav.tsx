@@ -3,6 +3,8 @@
 // leads home and the branch switch is local to the page, because these pages
 // hold their own kind state rather than the landing's store.
 import { t } from '../lib/i18n';
+import { contextHref } from '../lib/context';
+import { ContextBar } from './ContextBar';
 import { NavMenu, type NavEntry } from './NavMenu';
 import { IconStethoscope, IconTooth } from './icons';
 import type { PraxisKind } from '../types';
@@ -18,6 +20,7 @@ interface Props {
 export function PageNav({ kind = null, onKind, links = [] }: Props) {
   const home = import.meta.env.BASE_URL;
   return (
+    <>
     <nav className="topnav">
       <div className="topnav__inner">
         <a className="topnav__brand" href={home}>{t('site.title')}</a>
@@ -36,10 +39,13 @@ export function PageNav({ kind = null, onKind, links = [] }: Props) {
           </div>
         )}
         <NavMenu entries={[
-          { href: home, labelKey: 'nav.home' },
-          ...links.map(([href, key]): NavEntry => ({ href: `${home}${href}`, labelKey: key })),
+          { href: contextHref(home), labelKey: 'nav.home' },
+          ...links.map(([href, key]): NavEntry => (
+            { href: contextHref(`${home}${href}`), labelKey: key })),
         ]} />
       </div>
     </nav>
+    <ContextBar />
+    </>
   );
 }

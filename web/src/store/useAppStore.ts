@@ -3,6 +3,7 @@ import type { LatestFile, PraxisKind, Snapshot, Timeseries, TimeseriesMonth } fr
 import type { History, HistoryEntry, Persistence } from '../lib/statsSelectors';
 import type { TypeFilter } from '../lib/selectors';
 import { readMapState } from '../lib/mapState';
+import { useContextStore } from '../lib/context';
 
 const initialUrl = readMapState(window.location.search);
 
@@ -40,18 +41,22 @@ export const useAppStore = create<AppState>((set, get) => ({
   timeseries: null,
   history: null,
   loadError: null,
-  kind: initialUrl.kind ?? 'dental',
+  // kind and county are site-wide context now (lib/context.ts); the store
+  // mirrors them so every component keeps reading them the way it always has
+  kind: useContextStore.getState().kind,
   view: 'praxis',
   typeFilter: initialUrl.type ?? 'all',
   mapMetric: initialUrl.metric ?? 'rate',
-  selectedCounty: initialUrl.county ?? null,
+  selectedCounty: useContextStore.getState().county,
   selectedMonth: null,
   monthCache: {},
   searchRequest: null,
-  // switching kind resets kind-specific view state
-  setKind: (kind) => set({
-    kind, view: 'praxis', typeFilter: 'all', selectedCounty: null, selectedMonth: null,
-  }),
+  // switching kind resets kind-specific view state; the branch itself travels
+  // through the context store, which writes it to the address bar
+  setKind: (kind) => {
+    useContextStore.getState().setContext({ kind, county: null, settlement: null });
+    set({ view: 'praxis', typeFilter: 'all', selectedMonth: null });
+  },
   setView: (view) => set({ view }),
   ensureMonth: async (month) => {
     const key = `${get().kind}/${month}`;
@@ -78,7 +83,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   })),
   setTypeFilter: (typeFilter) => set({ typeFilter }),
   setMapMetric: (mapMetric) => set({ mapMetric }),
-  setSelectedCounty: (selectedCounty) => set({ selectedCounty }),
+  setSelectedCounty: (county) => useContextStore.getState().setCounty(county),
   loadData: async () => {
     if (get().latest) return;
     try {
@@ -94,6 +99,14 @@ export const useAppStore = create<AppState>((set, get) => ({
     }
   },
 }));
+
+// the context is the single source of truth; the mirror follows it
+useContextStore.subscribe((c) => {
+  const { kind, selectedCounty } = useAppStore.getState();
+  if (c.kind !== kind || c.county !== selectedCounty) {
+    useAppStore.setState({ kind: c.kind, selectedCounty: c.county });
+  }
+});
 
 /** Snapshot of the active kind — null until data is loaded. */
 export function useSnapshot(): Snapshot | null {

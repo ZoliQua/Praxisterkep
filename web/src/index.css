@@ -33,6 +33,9 @@
 
 html {
   scroll-behavior: smooth;
+  /* every anchor on the site has to clear the sticky top bar (and the context
+     bar under it), otherwise a section lands behind them */
+  scroll-padding-top: 76px;
   /* a modal locks body scrolling; without a reserved gutter the page (and the
      map underneath) jumps sideways when the scrollbar disappears */
   scrollbar-gutter: stable;
@@ -1645,3 +1648,38 @@ a:hover { text-decoration: underline; }
 .tp-footer { color: var(--ink-faint); font-size: 13px; border-top: 1px solid var(--line); padding-top: 18px; }
 .settlement-card__link { margin: -4px 0 12px; font-size: 14px; }
 .settlement-card__link a { color: var(--accent); }
+
+/* The context bar: what the page is narrowed to, in the same place on every
+   page. It only appears when something is selected. */
+.contextbar {
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--bg) 88%, var(--accent) 12%);
+}
+.contextbar__inner {
+  max-width: var(--maxw); margin: 0 auto; padding: 7px 24px;
+  display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
+  font-size: 13px;
+}
+.contextbar__label { color: var(--ink-faint); text-transform: uppercase;
+  font-size: 11px; letter-spacing: 0.06em; }
+.contextbar__chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 4px 3px 10px; border: 1px solid var(--line);
+  border-radius: 999px; background: var(--bg-panel);
+}
+.contextbar__chip a { color: var(--ink); text-decoration: none; font-weight: 600; }
+.contextbar__chip a:hover { text-decoration: underline; }
+.contextbar__chip button {
+  width: 20px; height: 20px; border: 0; border-radius: 50%; cursor: pointer;
+  background: transparent; color: var(--ink-faint); font-size: 15px; line-height: 1;
+}
+.contextbar__chip button:hover { background: var(--line); color: var(--ink); }
+.contextbar__clear {
+  margin-left: auto; border: 0; background: transparent; cursor: pointer;
+  color: var(--ink-faint); font-size: 12.5px; text-decoration: underline;
+}
+.contextbar__clear:hover { color: var(--ink); }
+@media (max-width: 640px) {
+  .contextbar__inner { padding: 6px 16px; }
+  .contextbar__clear { margin-left: 0; }
+}

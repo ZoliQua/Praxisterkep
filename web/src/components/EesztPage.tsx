@@ -5,6 +5,7 @@
 // that came after it.
 import { useAppStore } from '../store/useAppStore';
 import { PageNav } from './PageNav';
+import { useHashScroll } from '../lib/useHashScroll';
 import { EesztSection } from './EesztSection';
 import type { PraxisKind } from '../types';
 
@@ -16,6 +17,7 @@ const LINKS = [
 export function EesztPage() {
   const kind = useAppStore((s) => s.kind);
   const setKind = useAppStore((s) => s.setKind);
+  useHashScroll();
   return (
     <>
       <PageNav kind={kind} onKind={(k: PraxisKind) => setKind(k)} links={LINKS} />

@@ -2,7 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { t, tKind } from '../lib/i18n';
 import { formatDuration, formatMonth, formatNumber, monthsBetween } from '../lib/format';
 import { praxesById, primarySite, searchSettlements } from '../lib/selectors';
-import { useSettlementLinks } from '../lib/settlementLink';
+import { useSettlementIndex, useSettlementLinks } from '../lib/settlementLink';
+import { useContextStore } from '../lib/context';
 import { useAppStore, useSnapshot } from '../store/useAppStore';
 import { DirectoryTableModal } from './DirectoryTableModal';
 import { SettlementTimeline } from './SettlementTimeline';
@@ -68,8 +69,17 @@ export function SearchSection() {
   const query = state.kind === kind ? state.query : '';
   const selected = state.kind === kind ? state.selected : null;
   const setQuery = (q: string) => setState({ kind, query: q, selected: null });
-  const setSelected = (s2: SettlementEntry | null) =>
+  // picking a settlement here narrows the whole site to it: every link out of
+  // this page carries it, and the analyses open on it
+  const index = useSettlementIndex();
+  const setContext = useContextStore((s2) => s2.setContext);
+  const setSelected = (s2: SettlementEntry | null) => {
     setState({ kind, query, selected: s2 });
+    setContext({
+      county: s2?.county ?? null,
+      settlement: s2 ? index?.bySlugKey.get(`${s2.name}|${s2.county}`) ?? null : null,
+    });
+  };
   const [directoryOpen, setDirectoryOpen] = useState(false);
   const searchReq = useAppStore((s2) => s2.searchRequest);
 

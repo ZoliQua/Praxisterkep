@@ -3,6 +3,9 @@ import { locale, t } from './lib/i18n';
 import { useAppStore, useSnapshot } from './store/useAppStore';
 import { Hero } from './components/Hero';
 import { ScrollyIntro } from './components/ScrollyIntro';
+import { ContextBar } from './components/ContextBar';
+import { useHashScroll } from './lib/useHashScroll';
+import { useContextHref } from './lib/context';
 import { MapSection } from './components/MapSection';
 import { SearchSection } from './components/SearchSection';
 import { CountyRanking } from './components/CountyRanking';
@@ -45,6 +48,11 @@ const NAV: NavEntry[] = [
   { href: 'szakellato.html', labelKey: 'nav.specialist' },
 ];
 
+/** The same entries, with the branch and area written into every page link. */
+function withContext(entries: NavEntry[], href: (h: string) => string): NavEntry[] {
+  return entries.map((e) => (e.href.startsWith('#') ? e : { ...e, href: href(e.href) }));
+}
+
 const VEDONO_NAV: NavEntry[] = [
   { href: '#vedono', labelKey: 'nav.vedono' },
   {
@@ -65,6 +73,10 @@ export default function App() {
   const setView = useAppStore((s) => s.setView);
   const loadError = useAppStore((s) => s.loadError);
   const loadData = useAppStore((s) => s.loadData);
+  // the sections arrive with the snapshot, so the browser's own jump to
+  // #nalam happens before there is anything to jump to
+  useHashScroll();
+  const href = useContextHref();
 
   useEffect(() => {
     void loadData();
@@ -114,9 +126,10 @@ export default function App() {
             aria-label={locale === 'hu' ? 'Switch to English' : 'Váltás magyarra'}>
             {locale === 'hu' ? 'EN' : 'HU'}
           </button>
-          <NavMenu entries={view === 'vedono' ? VEDONO_NAV : NAV} />
+          <NavMenu entries={withContext(view === 'vedono' ? VEDONO_NAV : NAV, href)} />
         </div>
       </nav>
+      <ContextBar />
       {view === 'vedono' ? <VedonoSection /> : (
         <>
           <Hero />

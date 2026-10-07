@@ -28,6 +28,15 @@ const monthLabel = `${year}. ${HU_MONTHS[month - 1]}`;
 const cssFile = readdirSync(join(dist, 'assets')).filter((f) => f.endsWith('.css'))
   .sort((a, b) => b.length - a.length)[0];
 
+// the site-wide context (lib/context.ts) written into a static link: ?tel=
+// is the settlement slug, ?m= its county, and the SPA picks both up on load
+const ctx = (href, profile) => {
+  const [path, hash] = href.includes('#') ? [href.slice(0, href.indexOf('#')),
+    href.slice(href.indexOf('#'))] : [href, ''];
+  const q = new URLSearchParams({ m: profile.county, tel: profile.slug });
+  return `${path}?${q}${hash}`;
+};
+
 const esc = (s) => String(s ?? '').replace(/[<>&"]/g, (ch) => `&#${ch.charCodeAt(0)};`);
 const num = (n) => (n === null || n === undefined ? '–'
   : new Intl.NumberFormat('hu-HU').format(n));
@@ -177,10 +186,11 @@ function page(profile) {
 <nav class="topnav"><div class="topnav__inner">
   <a class="topnav__brand" href="/">PRAXISTÉRKÉP</a>
   <div class="topnav__links">
-    <div class="topnav__group"><a href="/">Főoldal</a></div>
+    <div class="topnav__group"><a href="${esc(ctx('/', profile))}">Főoldal</a></div>
     <div class="topnav__group"><a href="/telepules/">Települések</a></div>
-    <div class="topnav__group"><a href="/elemzo.html">Elemző</a></div>
-    <div class="topnav__group"><a href="/szakellato.html">Szakellátás</a></div>
+    <div class="topnav__group"><a href="${esc(ctx('/elemzo.html', profile))}">Elemző</a></div>
+    <div class="topnav__group"><a href="${esc(ctx('/eeszt.html', profile))}">Nyilvántartás</a></div>
+    <div class="topnav__group"><a href="${esc(ctx('/szakellato.html', profile))}">Ki lát el még?</a></div>
   </div>
 </div></nav>
 
@@ -239,15 +249,17 @@ ${age ? `<section class="section container">
   <p class="tp-note">Az index nyolc nyilvános mutató súlyozott átlaga, országos
     rangsorszázalékokból. Összehasonlítás, nem ítélet: a magas érték azt jelenti, hogy több
     mutató mutat ugyanabba az irányba — nem azt, hogy ott nincs ellátás.
-    <a href="/elemzo.html#index">A módszer részletesen</a>.</p>
+    <a href="${esc(ctx('/elemzo.html#index', profile))}">A módszer részletesen</a>.</p>
 </section>
 
 <footer class="section container tp-footer">
   <p>Adatállapot: ${esc(monthLabel)}. Források: NEAK szerződött szolgáltatók és betöltetlen
     körzetek, EESZT törzspublikáció, KSH Helységnévtár és 2022. évi népszámlálás,
     OpenStreetMap, Volánbusz menetrend. A NEAK adatai tájékoztató jellegűek.</p>
-  <p><a href="/">Vissza a térképhez</a> · <a href="/telepules/">Minden település</a> ·
-    <a href="/elemzo.html">Elemző</a> · <a href="/#adatok">Adat export</a></p>
+  <p><a href="${esc(ctx('/', profile))}">Vissza a térképhez</a> ·
+    <a href="/telepules/">Minden település</a> ·
+    <a href="${esc(ctx('/elemzo.html', profile))}">Elemző</a> ·
+    <a href="/#adatok">Adat export</a></p>
 </footer>
 </body>
 </html>

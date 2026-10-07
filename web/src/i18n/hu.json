@@ -1726,5 +1726,11 @@
     "byBranch": "Ágazat szerint:",
     "colInstitution": "Szolgáltató (NEAK)",
     "colProvider": "Szolgáltató (EESZT)"
+  },
+  "context": {
+    "label": "Amit nézel:",
+    "clearCounty": "{county} elvetése",
+    "clearSettlement": "A település elvetése",
+    "clearAll": "Országos nézet"
   }
 }

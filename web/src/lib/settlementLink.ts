@@ -6,28 +6,55 @@ import { useEffect, useState } from 'react';
 
 type Row = [name: string, county: string, slug: string];
 
-let cache: Map<string, string> | null = null;
-let pending: Promise<Map<string, string>> | null = null;
+export interface SettlementIndex {
+  /** "name|county" -> slug */
+  bySlugKey: Map<string, string>;
+  /** slug -> name and county, for showing what a bare slug in a link means */
+  bySlug: Map<string, { name: string; county: string }>;
+}
+
+let cache: SettlementIndex | null = null;
+let pending: Promise<SettlementIndex> | null = null;
 
 const key = (name: string, county: string) => `${name}|${county}`;
+const empty = (): SettlementIndex => ({ bySlugKey: new Map(), bySlug: new Map() });
 
-export function useSettlementLinks(): (name: string, county: string) => string | null {
-  const [map, setMap] = useState<Map<string, string> | null>(cache);
+export function useSettlementIndex(): SettlementIndex | null {
+  const [index, setIndex] = useState<SettlementIndex | null>(cache);
   useEffect(() => {
     let alive = true;
     pending ??= fetch(`${import.meta.env.BASE_URL}data/settlement_slugs.json`)
       .then((r) => (r.ok ? r.json() : null))
       .then((d: { settlements: Row[] } | null) => {
-        cache = new Map((d?.settlements ?? []).map(([n, c, s]) => [key(n, c), s]));
-        return cache;
+        const out = empty();
+        for (const [name, county, slug] of d?.settlements ?? []) {
+          out.bySlugKey.set(key(name, county), slug);
+          out.bySlug.set(slug, { name, county });
+        }
+        cache = out;
+        return out;
       })
-      .catch(() => new Map<string, string>());
-    void pending.then((m) => { if (alive) setMap(m); });
+      .catch(empty);
+    void pending.then((m) => { if (alive) setIndex(m); });
     return () => { alive = false; };
   }, []);
+  return index;
+}
 
+export function settlementHref(slug: string): string {
+  return `${import.meta.env.BASE_URL}telepules/${slug}/`;
+}
+
+export function useSettlementLinks(): (name: string, county: string) => string | null {
+  const index = useSettlementIndex();
   return (name: string, county: string) => {
-    const slug = map?.get(key(name, county));
-    return slug ? `${import.meta.env.BASE_URL}telepules/${slug}/` : null;
+    const slug = index?.bySlugKey.get(key(name, county));
+    return slug ? settlementHref(slug) : null;
   };
+}
+
+/** What a slug in the address bar stands for — null while the index loads. */
+export function useSettlementBySlug(slug: string | null): { name: string; county: string } | null {
+  const index = useSettlementIndex();
+  return slug ? index?.bySlug.get(slug) ?? null : null;
 }

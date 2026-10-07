@@ -18,6 +18,7 @@ import { EesztMap, type MapRow } from './EesztMap';
 import { GyseSection } from './GyseSection';
 import { PharmacySection } from './PharmacySection';
 import { PageNav } from './PageNav';
+import { useHashScroll } from '../lib/useHashScroll';
 import { renderExtraCell } from './EesztCells';
 
 const LINKS = [
@@ -40,6 +41,7 @@ type Modal = 'sites' | 'rows' | 'counties' | 'professions' | 'institutions'
   | 'coverage' | 'rare' | null;
 
 export function SpecialistPage() {
+  useHashScroll();
   const data = useSpecialist();
   const [care, setCare] = useState<Care | 'all'>('all');
   const [open, setOpen] = useState<Modal>(null);

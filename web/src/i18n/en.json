@@ -1726,5 +1726,11 @@
     "byBranch": "By branch:",
     "colInstitution": "Provider (NEAK)",
     "colProvider": "Provider (EESZT)"
+  },
+  "context": {
+    "label": "Narrowed to:",
+    "clearCounty": "Drop {county}",
+    "clearSettlement": "Drop the settlement",
+    "clearAll": "Whole country"
   }
 }
