@@ -12,6 +12,7 @@
 import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { loadEnv } from 'vite';
 import { countyMap, countyThumb } from './county-map.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -61,7 +62,8 @@ const cssFile = readdirSync(join(dist, 'assets')).filter((f) => f.endsWith('.css
 // the street map is written only when a tile provider is configured: without
 // VITE_MAP_STYLE the bundle would have nothing to draw on, so the button is
 // not offered at all (src/streetmap.ts makes the same check at runtime)
-const streetFile = process.env.VITE_MAP_STYLE
+const env = loadEnv('production', join(here, '..'), 'VITE_');
+const streetFile = env.VITE_MAP_STYLE
   ? readdirSync(join(dist, 'assets')).find((f) => /^streetmap-.*\.js$/.test(f))
   : null;
 
@@ -100,7 +102,7 @@ function streetPoints(profile) {
 function streetBlock(profile) {
   if (!streetFile) return '';
   const points = streetPoints(profile);
-  if (points.length < 2) return '';
+  if (!points.length) return '';
   const kinds = [...new Set(points.map((p) => p.kind))];
   return `<section class="section container">
   <h2 class="section__subheading">Utcaszinten</h2>
