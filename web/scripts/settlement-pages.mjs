@@ -58,6 +58,76 @@ const monthLabel = `${year}. ${HU_MONTHS[month - 1]}`;
 const cssFile = readdirSync(join(dist, 'assets')).filter((f) => f.endsWith('.css'))
   .sort((a, b) => b.length - a.length)[0];
 
+// the street map is written only when a tile provider is configured: without
+// VITE_MAP_STYLE the bundle would have nothing to draw on, so the button is
+// not offered at all (src/streetmap.ts makes the same check at runtime)
+const streetFile = process.env.VITE_MAP_STYLE
+  ? readdirSync(join(dist, 'assets')).find((f) => /^streetmap-.*\.js$/.test(f))
+  : null;
+
+const STREET_LABELS = {
+  gp: 'Háziorvosi rendelő', dental: 'Fogorvosi rendelő', pharmacy: 'Gyógyszertár',
+  oncall: 'Központi ügyelet', ambulance: 'Mentőállomás', inpatient: 'Kórház',
+  outpatient: 'Járóbeteg-szakrendelés', gyse: 'Gyógyászati segédeszköz',
+};
+
+/** Everything in this settlement that has a coordinate, for the street map. */
+function streetPoints(profile) {
+  const out = [];
+  for (const s2 of profile.surgeries ?? []) {
+    if (s2.lat && s2.lon) {
+      out.push({ lat: s2.lat, lon: s2.lon, kind: s2.kind,
+        name: s2.doctor || STREET_LABELS[s2.kind],
+        address: `${s2.postalCode} ${profile.settlement}, ${s2.address}`,
+        approx: s2.geoApprox === true });
+    }
+  }
+  for (const ph of profile.pharmacies ?? []) {
+    if (ph.lat && ph.lon) {
+      out.push({ lat: ph.lat, lon: ph.lon, kind: 'pharmacy', name: ph.name,
+        address: `${ph.postalCode} ${profile.settlement}, ${ph.address}`,
+        approx: ph.geoApprox === true });
+    }
+  }
+  for (const pl of profile.places ?? []) {
+    out.push({ lat: pl.lat, lon: pl.lon, kind: pl.kind,
+      name: pl.name || STREET_LABELS[pl.kind] || pl.kind,
+      address: pl.address, approx: pl.geoApprox === true });
+  }
+  return out;
+}
+
+function streetBlock(profile) {
+  if (!streetFile) return '';
+  const points = streetPoints(profile);
+  if (points.length < 2) return '';
+  const kinds = [...new Set(points.map((p) => p.kind))];
+  return `<section class="section container">
+  <h2 class="section__subheading">Utcaszinten</h2>
+  <p class="section__explain">Hol állnak pontosan: a betöltött rendelők az orvos
+    nevével, a gyógyszertárak, és ami még a településen van. A térkép csak
+    kattintásra töltődik be, hogy a lap addig is azonnal olvasható maradjon.</p>
+  <div class="tp-street" data-streetmap>
+    <button type="button" class="data-btn data-btn--accent"
+      data-loading="Térkép betöltése…" data-failed="A térkép nem töltődött be">
+      Utcaszintű térkép (${num(points.length)} pont)
+    </button>
+    <p class="tp-maplegend">${kinds.map((k) =>
+    `<span><i class="street-pin" style="background:${
+      { gp: '#4fd6c2', dental: '#8ab4ff', pharmacy: '#c88ff0', oncall: '#f0b429',
+        ambulance: '#ef8354', inpatient: '#ef6461', outpatient: '#9bd4a5',
+        gyse: '#b8a4ff' }[k] ?? '#94a3b8'}"></i>${
+    esc(STREET_LABELS[k] ?? k)}</span>`).join('')}</p>
+    <div class="tp-street__map" hidden></div>
+    <script type="application/json">${
+  JSON.stringify(points).replace(/</g, '\\u003c')}</script>
+  </div>
+  <p class="tp-note">A pontok geokódolt címek (Nominatim/OpenStreetMap), nem
+    helyszíni felmérés: ahol a cím pontatlan, a jelölő a település közepére esik,
+    és ezt a buborék ki is írja.</p>
+</section>`;
+}
+
 // the site-wide context (lib/context.ts) written into a static link: ?tel=
 // is the settlement slug, ?m= its county, and the SPA picks both up on load
 // the one menu (src/lib/siteNav.json) and its Hungarian labels, so these
@@ -424,7 +494,8 @@ function page(profile) {
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="canonical" href="/telepules/${esc(profile.slug)}/">
-<link rel="stylesheet" href="/assets/${esc(cssFile)}">
+<link rel="stylesheet" href="/assets/${esc(cssFile)}">${streetFile ? `
+<script type="module" src="/assets/${esc(streetFile)}" defer></script>` : ''}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900;1,62..125,400..900&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap&subset=latin-ext" rel="stylesheet">
@@ -508,6 +579,8 @@ function page(profile) {
     mutató mutat ugyanabba az irányba — nem azt, hogy ott nincs ellátás.
     <a href="${esc(ctx('/elemzo.html#index', profile))}">A módszer részletesen</a>.</p>
 </section>
+
+${streetBlock(profile)}
 
 ${changeBlock(profile)}
 

@@ -1861,3 +1861,18 @@ a:hover { text-decoration: underline; }
 }
 .choropleth__county.is-clickable path { cursor: pointer; }
 .choropleth__county.is-on path { stroke: var(--ink); stroke-width: 1.6; }
+
+/* The street map a settlement page loads on demand. */
+.tp-street__map { height: 420px; border-radius: 10px; overflow: hidden;
+  border: 1px solid var(--line); margin-top: 10px; }
+.street-pin {
+  display: inline-block; width: 13px; height: 13px; border-radius: 50%;
+  border: 2px solid #0b1016; box-shadow: 0 0 0 1px rgba(248, 250, 252, 0.35);
+  cursor: pointer;
+}
+.street-pin--approx { opacity: 0.55; border-style: dashed; }
+.maplibregl-popup-content {
+  background: var(--bg-panel); color: var(--ink); font-size: 13px;
+  border: 1px solid var(--line); border-radius: 8px;
+}
+.maplibregl-popup-tip { border-top-color: var(--bg-panel) !important; }

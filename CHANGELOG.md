@@ -5,6 +5,27 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.31.0] — 2026-10-08
+
+### Hozzáadva
+- **Utcaszintű térkép a településlapokon**, gombra betöltve. A lapok
+  változatlanul JavaScript nélküli statikus HTML-ek; a térkép csak akkor
+  töltődik be, ha valaki kéri, és csak akkor íródik ki egyáltalán, ha van
+  beállított csempeszolgáltató (`VITE_MAP_STYLE`). Rajta: minden betöltött
+  háziorvosi és fogorvosi rendelő az orvos nevével és címével, a
+  gyógyszertárak, az ügyeleti pont, a mentőállomás, a kórház, a
+  járóbeteg-szakrendelés és a segédeszköz-kiadóhely — mind kattintható.
+- **A betöltött praxisok geokódolása** (`etl/geocode_filled.py`): eddig csak
+  a betöltetlen körzeteknek volt koordinátája, mert a térkép a hiányt
+  mutatta. 7729 betöltött körzetből 5326-hoz kellett cím szerinti keresés.
+  A munka megszakítható és folytatható, mert minden találat azonnal a közös
+  gyorsítótárba kerül.
+- **`.github/workflows/geocode.yml`**: a geokódolás a futtatón megy, nem egy
+  laptopon — másodpercenként egy Nominatim-kérés, utána újraépíti a
+  településprofilokat és commitol.
+- A településprofilok mostantól viszik a rendelők, gyógyszertárak és a
+  település minden egyéb ellátóhelyének koordinátáját.
+
 ## [1.30.0] — 2026-10-08
 
 ### Hozzáadva
