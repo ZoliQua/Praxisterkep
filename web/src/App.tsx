@@ -9,6 +9,7 @@ import { SITE_NAV, VEDONO_NAV, withContext } from './lib/siteNav';
 import { contextHref } from './lib/context';
 import { useHashScroll } from './lib/useHashScroll';
 import { MapSection } from './components/MapSection';
+import { WhySection } from './components/WhySection';
 import { SearchSection } from './components/SearchSection';
 import { Footer } from './components/Footer';
 import { VedonoSection } from './components/VedonoSection';
@@ -53,7 +54,7 @@ export default function App() {
   // before the split must still arrive where its content lives
   useEffect(() => {
     const moved: Record<string, string> = {
-      alapellatas: 'miert.html', modszertan: 'modszertan.html',
+      modszertan: 'modszertan.html',
       adatok: 'modszertan.html#adatok', forrasok: 'modszertan.html',
       rangsor: 'megye.html#rangsor',
       statisztika: 'elemzo.html#statisztika',
@@ -108,6 +109,7 @@ export default function App() {
           <Hero />
           <ScrollyIntro />
           <MapSection />
+          <WhySection />
           <SearchSection />
         </>
       )}

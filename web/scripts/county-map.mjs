@@ -108,6 +108,10 @@ function pad(box, share = 0.06) {
 export function countyMap(profile, geo) {
   const county = geo.counties.features.find((f) => f.properties.name === profile.county);
   if (!county) return '';
+  // in the capital the county outline is one blob: the districts are what a
+  // reader recognises, so they are drawn inside it
+  const inner = profile.county === 'Budapest'
+    ? (geo.budapest?.features ?? []) : [];
 
   const here = geo.byKsh.get(profile.kshId);
   if (!here) return '';
@@ -128,9 +132,15 @@ export function countyMap(profile, geo) {
   for (const t of targets) box = grow(box, t.coords);
   const { height, xy } = projector(pad(box));
 
-  const path = county.geometry.coordinates
+  const ringPath = (rings) => rings
     .map((ring) => `M${ring.map((p) => xy(p).map((v) => v.toFixed(1)).join(' ')).join('L')}Z`)
     .join('');
+  const path = ringPath(county.geometry.coordinates);
+  const innerPath = inner.map((f) => {
+    const polys = f.geometry.type === 'MultiPolygon'
+      ? f.geometry.coordinates.flat() : f.geometry.coordinates;
+    return ringPath(polys);
+  }).join('');
 
   // the county seat and the larger towns, for orientation only
   const towns = geo.cities.features
@@ -216,7 +226,9 @@ export function countyMap(profile, geo) {
   return `<figure class="tp-map">
   <svg viewBox="0 0 ${W} ${height}" width="100%" height="auto" role="img"
     aria-label="${esc(profile.settlement)} elhelyezkedése ${esc(profile.county)} megyében">
-    <path d="${path}" fill="#131d2b" stroke="#2a3b52" stroke-width="1.2"/>
+    <path d="${path}" fill="#131d2b" stroke="#2a3b52" stroke-width="1.2"/>${innerPath ? `
+    <path d="${innerPath}" fill="none" stroke="#2a3b52" stroke-width="0.7"
+      opacity="0.9"/>` : ''}
     ${townDots}
     ${lines}
     <circle cx="${hx.toFixed(1)}" cy="${hy.toFixed(1)}" r="10" fill="none"
@@ -231,4 +243,50 @@ export function countyMap(profile, geo) {
     kapcsolat: a felirat a közúton számított menetidőt mondja.${
   inPlace.length ? ` Helyben van: ${esc(inPlace.join(', '))}.` : ''}</figcaption>
 </figure>`;
+}
+
+
+/**
+ * The same county, thumbnail-sized: outline, seat, a few larger towns. No
+ * settlement is picked out — this one is a sign above a list, so the reader
+ * knows which part of the country the next hundred names belong to.
+ */
+export function countyThumb(countyName, geo, width = 190, height = 120) {
+  const county = geo.counties.features.find((f) => f.properties.name === countyName);
+  if (!county) return '';
+  const box = pad(bboxOf(county.geometry.coordinates), 0.04);
+  const [minLon, minLat, maxLon, maxLat] = box;
+  const k = Math.cos(((minLat + maxLat) / 2) * Math.PI / 180);
+  const scale = Math.min(width / ((maxLon - minLon) * k), height / (maxLat - minLat));
+  const xy = ([lon, lat]) => [
+    (lon - minLon) * k * scale + (width - (maxLon - minLon) * k * scale) / 2,
+    (maxLat - lat) * scale + (height - (maxLat - minLat) * scale) / 2,
+  ];
+  const path = county.geometry.coordinates
+    .map((ring) => `M${ring.map((p) => xy(p).map((v) => v.toFixed(1)).join(' ')).join('L')}Z`)
+    .join('');
+  const towns = geo.cities.features
+    .filter((f) => f.properties.rank === 'seat' || f.properties.big)
+    .filter((f) => {
+      const [lon, lat] = f.geometry.coordinates;
+      return lon >= minLon && lon <= maxLon && lat >= minLat && lat <= maxLat;
+    })
+    .sort((a, b) => (b.properties.rank === 'seat') - (a.properties.rank === 'seat')
+      || b.properties.population - a.properties.population)
+    .slice(0, 4);
+  const labels = labeller();
+  const dots = towns.map((f) => {
+    const [x, y] = xy(f.geometry.coordinates);
+    const seat = f.properties.rank === 'seat';
+    labels.block(x, y, 3);
+    const spot = labels.place(x + 5, y + 3, f.properties.name.length * 4.6, { push: 2 });
+    return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${seat ? 2.6 : 1.8}"
+      fill="${seat ? '#cbd5e1' : '#64748b'}"/>${spot ? `
+    <text x="${(spot.anchorEnd ? x - 5 : x + 5).toFixed(1)}" y="${spot.y.toFixed(1)}"
+      ${spot.anchorEnd ? 'text-anchor="end" ' : ''}font-size="${seat ? 8.5 : 7.5}"
+      fill="${seat ? '#cbd5e1' : '#94a3b8'}">${esc(f.properties.name)}</text>` : ''}`;
+  }).join('');
+  return `<svg class="tp-thumb" viewBox="0 0 ${width} ${height}" width="${width}"
+    height="${height}" role="img" aria-label="${esc(countyName)} megye">
+    <path d="${path}" fill="#131d2b" stroke="#2a3b52" stroke-width="1"/>${dots}</svg>`;
 }

@@ -9,7 +9,7 @@
           "nav.mine"
         ],
         [
-          "/miert.html",
+          "/#alapellatas",
           "nav.why"
         ]
       ]
@@ -52,6 +52,10 @@
       "href": "/szakellato.html",
       "labelKey": "nav.whoElse",
       "children": [
+        [
+          "/szakellato.html#szakellatas",
+          "specialist.navLabel"
+        ],
         [
           "/szakellato.html#gyogyszertar",
           "pharmacy.navLabel"

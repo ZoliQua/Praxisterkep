@@ -916,7 +916,8 @@
       "pharmacy_json": "NEAK-kal szerződött gyógyszertárak címmel és koordinátával",
       "licence_history_json": "Mióta létezik az a szervezeti egység, amely alatt egy szolgálat ma dolgozik (EESZT-pillanatképekből)",
       "counties_json": "Megyénkénti összesítő és a települései tömör sorokban (a településprofilokból)",
-      "tenure_json": "Mióta tartja a mai orvos a körzetét, a saját havi archívumunkból"
+      "tenure_json": "Mióta tartja a mai orvos a körzetét, a saját havi archívumunkból",
+      "fluctuation_json": "Praxisfluktuáció: hány körzetben cserélődött az orvos, megyénként és évenként"
     },
     "useHeading": "Hogyan használd",
     "use1": "A fájlok statikusak és verziózottak: a hónap végleges állapota a months/ könyvtárban marad, a latest.json mindig az aktuális hónapra mutat.",
@@ -1222,7 +1223,14 @@
     "colMissing": "Hiányzó szakma",
     "colShare": "Lefedettség (%)",
     "note": "Forrás: NEAK szerződött szolgáltatók, {month}. Összesen {rows} sor, ebből {geocoded} geokódolt telephellyel.",
-    "pdfNote": "A feldolgozás a két XLSX-ből történik: a járóbeteg-lista PDF változata 84 sorral korábban ér véget, mint a saját táblázata, ezért hiányos forrásként nem használható."
+    "pdfNote": "A feldolgozás a két XLSX-ből történik: a járóbeteg-lista PDF változata 84 sorral korábban ér véget, mint a saját táblázata, ezért hiányos forrásként nem használható.",
+    "mapSites": "Telephelyek",
+    "navLabel": "Szakellátó intézmények",
+    "pickProfession": "Szakma",
+    "allProfessions": "Minden szakma (lefedettség)",
+    "hasProfession": "van {name}",
+    "lacksProfession": "nincs {name}",
+    "professionLine": "A(z) {name} {n} megyében érhető el. A többiből a betegnek utaznia kell érte."
   },
   "survival": {
     "heading": "Túlélés-elemzés: meddig tart egy üresedés?",
@@ -1381,7 +1389,13 @@
     "tableSubtitle": "A {year}-es népszámlálás arányai a mai lakosságra vetítve",
     "colYoungNow": "0–14 éves (fő)",
     "colOldNow": "65+ (fő)",
-    "note": "Forrás: KSH, {year}. évi népszámlálás (CC BY 4.0). A korösszetétel a népszámlálás arányaiból származik, a létszámok a {population}. január 1-i lakosságra vetítve. {suppressed} apró településnél a KSH adatvédelmi okból elhagyta a cellát; ezeket nem becsültük meg, hanem hiányzóként szerepelnek."
+    "note": "Forrás: KSH, {year}. évi népszámlálás (CC BY 4.0). A korösszetétel a népszámlálás arányaiból származik, a létszámok a {population}. január 1-i lakosságra vetítve. {suppressed} apró településnél a KSH adatvédelmi okból elhagyta a cellát; ezeket nem becsültük meg, hanem hiányzóként szerepelnek.",
+    "pieLabel": "Korösszetétel",
+    "part": {
+      "young": "0–14 éves",
+      "working": "15–64 éves",
+      "old": "65 év felett"
+    }
   },
   "emergency": {
     "heading": "Ügyelet és mentő: mi van a betöltetlen körzet körül?",
@@ -1656,10 +1670,14 @@
     "colSiteId": "Telephely-azonosító",
     "colAuthority": "Engedélyező hatóság",
     "colSites": "Telephelyek",
-    "colRetail": "Ebből kiadóhely",
+    "colRetail": "Kiadóhely",
     "colPerSite": "Lakos / telephely",
     "note": "Forrás: EESZT törzspublikáció (GYSE_FORGALMAZO), {asOf}. Geokódolt telephely: {geocoded} / {sites}.",
-    "navLabel": "Segédeszköz"
+    "navLabel": "Segédeszköz",
+    "countyHeading": "Megyénként: hány lakosra jut egy kiadóhely",
+    "countyTip": "{county}: {sites} kiadóhely · {people} lakos jut egyre",
+    "colSettlements": "Település",
+    "colResidentsPerSite": "Lakos / kiadóhely"
   },
   "referral": {
     "heading": "Honnan tudjuk, hogy egy körzet megszűnt?",
@@ -1794,7 +1812,13 @@
       "kozepes": "közepes",
       "alacsony": "alacsony"
     },
-    "caveat": "A sorrend összehasonlítás, nem ítélet: egy rosszabb hely a rangsorban azt jelenti, hogy több mutató mutat ugyanabba az irányba — nem azt, hogy ott nincs ellátás."
+    "caveat": "A sorrend összehasonlítás, nem ítélet: egy rosszabb hely a rangsorban azt jelenti, hogy több mutató mutat ugyanabba az irányba — nem azt, hogy ott nincs ellátás.",
+    "gpVacantOnlyOf": "településen nincs szerződött háziorvos (az összesből)",
+    "dentalDistricts": "betöltetlen fogorvosi körzet a megyében lévőkből",
+    "dentalLongTerm": "ebből {n} tartósan betöltetlen · {dissolved} megszűnt körzet",
+    "oncallPoints": "közfinanszírozott ügyeleti pont a megyében",
+    "ambulance": "{n} mentőállomás",
+    "oncallMedian": "medián {m} az ügyeletig"
   },
   "next": {
     "heading": "Mit nézz meg ezután?",
@@ -1838,5 +1862,24 @@
       "title": "Hiányterületek",
       "text": "Hol ér össze több magas kockázatú település egy összefüggő folttá?"
     }
+  },
+  "churn": {
+    "heading": "Mennyire cserélődnek az orvosok?",
+    "explain": "Egy körzet, ahol hét éve ugyanaz az orvos rendel, és egy másik, ahol négy év alatt három váltotta egymást, a térképen egyformán „betöltött”. Ez a rész a különbség: {snapshots} havi pillanatkép {from} óta, mindegyikben ott a szerződött orvos neve, így a névváltás látható. Az arányok az utóbbi {months} hónapra vonatkoznak.",
+    "explainShort": "Orvosváltás a saját archívumunk havi pillanatképeiből",
+    "changes": "{kind} körzetben cserélődött az orvos {months} hónap alatt",
+    "ofDistricts": "a {n} betöltött körzet {share}-a",
+    "countyRate": "{county}: váltás 100 körzetre",
+    "countyDetail": "{changes} váltás {districts} körzetben · medián {years} éve ugyanaz az orvos",
+    "worst": "A legtöbb váltás",
+    "openTable": "Megyék táblázatban",
+    "tableTitle": "Praxisfluktuáció megyénként",
+    "caveat": "A névváltás nem feltétlenül távozás: házasság, elírás vagy a nyilvántartás pontosítása is megváltoztathatja. Lazán hasonlítunk („Dr.”, közök, kis- és nagybetű nélkül), de a maradék zaj a számokban van. Az archívum nem egyenletes: ahol két pillanatkép között év telt el, az időközi váltások összeolvadnak.",
+    "colDistricts": "Betöltött körzet",
+    "colRecent": "Váltás (12 hó)",
+    "colRate": "Váltás / 100 körzet",
+    "colTenure": "Medián hónap ugyanazzal az orvossal",
+    "colUnchanged": "Változatlan az archívum kezdete óta",
+    "colAll": "Összes váltás"
   }
 }

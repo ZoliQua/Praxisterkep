@@ -12,6 +12,7 @@ import {
 } from '../lib/gyse';
 import { DataTableModal } from './DataTableModal';
 import { EesztMap, type MapRow } from './EesztMap';
+import { CountyChoropleth } from './charts/CountyChoropleth';
 import { renderExtraCell } from './EesztCells';
 
 function detailRows(row: MapRow): [string, string][] {
@@ -36,6 +37,12 @@ export function GyseSection() {
   const counties = useMemo(
     () => sortRows(countyRows(data), 'residentsPerSite', 'desc'), [data],
   );
+  /** darker where more residents share one dispensing place */
+  const countyLoad = useMemo(() => {
+    const max = Math.max(...counties.map((c) => Number(c.residentsPerSite) || 0), 1);
+    return new Map(counties.map((c) => [String(c.county),
+      (Number(c.residentsPerSite) || 0) / max]));
+  }, [counties]);
   const settlements = useMemo(() => settlementRows(data, false), [data]);
   const without = useMemo(() => settlementRows(data, true), [data]);
   const kinds = useMemo(() => kindBreakdown(data), [data]);
@@ -96,7 +103,43 @@ export function GyseSection() {
       </div>
 
       <EesztMap rows={mapRows as MapRow[]} categories={categories} detailRows={detailRows}
-        searchLink={false} countKey="gyse.mapCount" exportName="praxisterkep-segedeszkoz" />
+        searchLink={false} countKey="gyse.mapCount"
+        defaultLayers={{ counties: true, seats: true, jaras: true, budapest: true }}
+        siteLabelKey="specialist.mapSites" openOnOneCounty
+        exportName="praxisterkep-segedeszkoz" />
+
+      {/* how many residents one dispensing place serves, county by county:
+          the question is not how many premises there are but how many people
+          share one */}
+      <h3 className="section__subheading">{t('gyse.countyHeading')}</h3>
+      <CountyChoropleth values={countyLoad} color="#c88ff0" selected={null}
+        format={(name) => {
+          const row = counties.find((c) => c.county === name);
+          return row
+            ? t('gyse.countyTip', {
+              county: name, sites: formatNumber(Number(row.retail)),
+              people: formatNumber(Number(row.residentsPerSite)),
+            })
+            : `${name}: –`;
+        }} />
+      <table className="info-table">
+        <thead><tr>
+          <th>{t('stats.thCounty')}</th>
+          <th className="is-num">{t('gyse.colRetail')}</th>
+          <th className="is-num">{t('gyse.colSettlements')}</th>
+          <th className="is-num">{t('gyse.colResidentsPerSite')}</th>
+        </tr></thead>
+        <tbody>
+          {counties.map((c) => (
+            <tr key={String(c.county)}>
+              <td>{String(c.county)}</td>
+              <td className="is-num">{formatNumber(Number(c.retail))}</td>
+              <td className="is-num">{formatNumber(Number(c.settlements))}</td>
+              <td className="is-num">{formatNumber(Number(c.residentsPerSite))}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
 
       <div className="eeszt-actions">
         <button className="data-btn data-btn--accent" onClick={() => setOpen('sites')}>

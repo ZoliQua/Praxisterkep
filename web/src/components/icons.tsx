@@ -52,3 +52,27 @@ export function IconTooth() {
     </svg>
   );
 }
+
+/** A cross in a shield: the on-call point that answers when the surgery is shut. */
+export function IconOncall() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"
+      strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M12 2.5 4.5 5.5v6c0 4.6 3.2 8.6 7.5 10 4.3-1.4 7.5-5.4 7.5-10v-6L12 2.5Z" />
+      <path d="M12 8v7M8.5 11.5h7" />
+    </svg>
+  );
+}
+
+/** A siren: ambulance stations. */
+export function IconAmbulance() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"
+      strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M3 16.5v-6h11l4 3.5v2.5" />
+      <path d="M3 16.5h18" />
+      <circle cx="7.5" cy="18" r="1.8" /><circle cx="16.5" cy="18" r="1.8" />
+      <path d="M8 12.5h3M9.5 11v3" />
+    </svg>
+  );
+}

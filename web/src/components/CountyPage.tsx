@@ -15,6 +15,11 @@ import {
 } from '../lib/counties';
 import { settlementHref } from '../lib/settlementLink';
 import { CountyRanking } from './CountyRanking';
+import { CountyPicker } from './CountyPicker';
+import { CountyChurn } from './CountyChurn';
+import { AgeLegend, AgePie } from './charts/AgePie';
+import { Donut } from './charts/Donut';
+import { IconAmbulance, IconOncall, IconTooth } from './icons';
 import { PageNav } from './PageNav';
 import { NextSteps } from './NextSteps';
 import { Footer } from './Footer';
@@ -74,6 +79,8 @@ export function CountyPage() {
         <h1 className="section__heading">{t('county.heading')}</h1>
         <p className="section__lead">{t('county.lead')}</p>
 
+        <CountyPicker />
+
         <label className="county-picker">
           <span>{t('county.pick')}</span>
           <select value={county ?? ''} onChange={(e) => setCounty(e.target.value || null)}>
@@ -89,15 +96,78 @@ export function CountyPage() {
 
         {agg && (
           <>
-            <div className="county-stats">
-              <Stat value={formatNumber(agg.population)} label={t('county.population')} />
-              <Stat value={formatNumber(agg.settlements)} label={t('county.settlements')} />
-              <Stat value={formatNumber(agg.gpVacantOnly)}
-                label={t('county.gpVacantOnly')}
-                note={gpRank ? t('county.rank', { rank: gpRank.rank, of: gpRank.of }) : ''} />
-              <Stat value={minutes(agg.medianOncallMinutes)} label={t('county.oncall')}
-                note={oncallRank
-                  ? t('county.rank', { rank: oncallRank.rank, of: oncallRank.of }) : ''} />
+            <div className="county-cards">
+              {/* who lives here */}
+              <article className="county-card">
+                <div className="county-card__figure">
+                  {agg.age && <AgePie split={agg.age} size={116} hole={34} />}
+                </div>
+                <div className="county-card__body">
+                  <div className="stat__value">{formatNumber(agg.population)}</div>
+                  <div className="stat__label">{t('county.population')}</div>
+                  {agg.age && <AgeLegend split={agg.age} />}
+                </div>
+              </article>
+
+              {/* how many of its settlements have nobody under contract */}
+              <article className="county-card">
+                <div className="county-card__figure">
+                  <Donut thickness={16} slices={[
+                    { value: agg.gpVacantOnly, color: '#ef6461',
+                      label: t('county.gpVacantOnly') },
+                    { value: agg.gpPartial, color: '#f0b429',
+                      label: t('county.state.partial') },
+                    { value: agg.settlements - agg.gpVacantOnly - agg.gpPartial,
+                      color: '#4fd6c2', label: t('county.state.filled') },
+                  ]}>
+                    <strong>{formatPercent(agg.gpVacantOnly / agg.settlements)}</strong>
+                  </Donut>
+                </div>
+                <div className="county-card__body">
+                  <div className="stat__value">{formatNumber(agg.gpVacantOnly)}
+                    <span className="stat__of"> / {formatNumber(agg.settlements)}</span>
+                  </div>
+                  <div className="stat__label">{t('county.gpVacantOnlyOf')}</div>
+                  {gpRank && <div className="stat__context">
+                    {t('county.rank', { rank: gpRank.rank, of: gpRank.of })}</div>}
+                </div>
+              </article>
+
+              {/* the dental districts themselves, not the settlements */}
+              <article className="county-card county-card--icon">
+                <div className="county-card__ghost" aria-hidden="true"><IconTooth /></div>
+                <div className="county-card__body">
+                  <div className="stat__value">
+                    {formatNumber(agg.dentalDistricts?.vacant ?? 0)}
+                    <span className="stat__of"> / {formatNumber(
+                      agg.dentalDistricts?.total ?? 0)}</span>
+                  </div>
+                  <div className="stat__label">{t('county.dentalDistricts')}</div>
+                  <div className="stat__context">{t('county.dentalLongTerm', {
+                    n: formatNumber(agg.dentalDistricts?.longTerm ?? 0),
+                    dissolved: formatNumber(agg.dentalDistricts?.dissolved ?? 0),
+                  })}</div>
+                </div>
+              </article>
+
+              {/* and what answers when the surgery is shut */}
+              <article className="county-card county-card--icon">
+                <div className="county-card__ghost" aria-hidden="true"><IconOncall /></div>
+                <div className="county-card__body">
+                  <div className="stat__value">{formatNumber(agg.oncallPoints ?? 0)}</div>
+                  <div className="stat__label">{t('county.oncallPoints')}</div>
+                  <div className="stat__context">
+                    <IconAmbulance /> {t('county.ambulance', {
+                      n: formatNumber(agg.ambulanceStations ?? 0),
+                    })}
+                    {agg.medianOncallMinutes !== null && ` · ${t('county.oncallMedian', {
+                      m: minutes(agg.medianOncallMinutes),
+                    })}`}
+                    {oncallRank && ` · ${t('county.rank', {
+                      rank: oncallRank.rank, of: oncallRank.of })}`}
+                  </div>
+                </div>
+              </article>
             </div>
 
             <table className="info-table">
@@ -189,6 +259,8 @@ export function CountyPage() {
 
         <NextSteps items={NEXT} />
       </section>
+      {/* how often a district changes physician — the archive's own answer */}
+      <CountyChurn county={county} />
       {/* where every county stands, which is the question this page answers
           one row at a time */}
       <CountyRanking />
@@ -197,12 +269,3 @@ export function CountyPage() {
   );
 }
 
-function Stat({ value, label, note }: { value: string; label: string; note?: string }) {
-  return (
-    <div className="stat">
-      <div className="stat__value">{value}</div>
-      <div className="stat__label">{label}</div>
-      {note && <div className="stat__context">{note}</div>}
-    </div>
-  );
-}

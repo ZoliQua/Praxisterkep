@@ -3,7 +3,9 @@
 // faded). Zoomable, county focus, clickable points with a side panel.
 // Used standalone in the EESZT section and above the data browser, where
 // it follows the table's filters (it simply renders the rows it is given).
-import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  Fragment, useEffect, useMemo, useRef, useState, useSyncExternalStore,
+} from 'react';
 import { Map as MLMap, Marker, NavigationControl } from 'maplibre-gl';
 import type { GeoJSONSource, MapLayerMouseEvent } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
@@ -14,7 +16,7 @@ import { eesztLink } from '../lib/eeszt';
 import { useAppStore } from '../store/useAppStore';
 import { useContextStore } from '../lib/context';
 import { exportMapPng } from '../lib/mapExport';
-import { LAYER_KEYS, setLayer } from '../lib/mapLayers';
+import { LAYER_KEYS, setLayer, type LayerChoice } from '../lib/mapLayers';
 import { useOrientationLayers } from './useOrientationLayers';
 
 const HUNGARY: [[number, number], [number, number]] = [[16.0, 45.7], [23.0, 48.65]];
@@ -67,7 +69,8 @@ function loadCountyBboxes(): Promise<Map<string, Bbox>> {
   return bboxPromise;
 }
 
-function toGeoJSON(rows: MapRow[], statusFilled: string, statusDissolved: string) {
+function toGeoJSON(rows: MapRow[], statusFilled: string, statusDissolved: string,
+  county = '') {
   const features: GeoJSON.Feature[] = [];
   rows.forEach((r, i) => {
     if (r.lat === null || r.lon === null) return;
@@ -81,15 +84,38 @@ function toGeoJSON(rows: MapRow[], statusFilled: string, statusDissolved: string
         s: r.status === statusFilled ? 'f' : r.status === statusDissolved ? 'd' : 'v',
         approx: r.geoApprox === true,
         mismatch: r.settlementMatch === false,
+        // outside the county in focus: drawn, but faint, so the chosen county
+        // reads as part of a country rather than as an island
+        dim: Boolean(county) && r.county !== county,
       },
     });
   });
   return { type: 'FeatureCollection', features } as GeoJSON.FeatureCollection;
 }
 
+// When several maps on one page open "on a county", they must open on the
+// same one — three maps showing three different counties reads as a bug, and
+// is one. The pick is made once per page load and shared.
+let sharedFallback = '';
+const fallbackListeners = new Set<() => void>();
+
+function setSharedFallback(county: string) {
+  sharedFallback = county;
+  fallbackListeners.forEach((fn) => fn());
+}
+
+function useSharedFallback(): string {
+  return useSyncExternalStore(
+    (fn) => { fallbackListeners.add(fn); return () => fallbackListeners.delete(fn); },
+    () => sharedFallback,
+    () => '',
+  );
+}
+
 export function EesztMap({
   rows, height = 460, countyFilter = true, fitToRows = false, searchLink = true,
   categories, detailRows, countKey = 'eeszt.mapCount', onCounty, exportName = 'terkep',
+  defaultLayers, siteLabelKey = 'eeszt.mapDistrictNames', openOnOneCounty = false,
 }: {
   rows: MapRow[];
   height?: number;
@@ -108,6 +134,16 @@ export function EesztMap({
   countKey?: string;
   /** told whenever the county focus changes ('' = the whole country) */
   onCounty?: (county: string) => void;
+  /** what this map shows unless the visitor has said otherwise */
+  defaultLayers?: LayerChoice;
+  /** the toggle that labels the rows' settlements ("Körzetnevek" by default) */
+  siteLabelKey?: string;
+  /**
+   * Open on a county rather than on all 3177 points at once. Which one is
+   * arbitrary — the point is that a reader sees a county-sized picture first
+   * and picks their own, not that this county matters.
+   */
+  openOnOneCounty?: boolean;
   /** file name stem for the PNG export */
   exportName?: string;
 }) {
@@ -116,9 +152,16 @@ export function EesztMap({
   const readyRef = useRef(false);
   // the county filter is the site-wide context: a county picked here is the
   // one the analyses and the county page open on, and the other way round
-  const county = useContextStore((st) => st.county) ?? '';
-  const setCounty = (name: string) =>
+  const chosenCounty = useContextStore((st) => st.county) ?? '';
+  const setCounty = (name: string) => {
+    setFallback('');
     useContextStore.getState().setCounty(name || null);
+  };
+  // a county the page picked for itself, so that "no choice yet" does not
+  // mean "every point in the country at once"
+  const fallback = useSharedFallback();
+  const setFallback = setSharedFallback;
+  const county = chosenCounty || fallback;
   const [selected, setSelected] = useState<MapRow | null>(null);
   const requestSearch = useAppStore((s) => s.requestSearch);
 
@@ -127,12 +170,18 @@ export function EesztMap({
     [rows, county],
   );
   const counties = useMemo(
-    () => [...new Set(rows.map((r) => r.county))].sort((a, b) => a.localeCompare(b, 'hu')),
+    () => [...new Set(rows.map((r) => r.county).filter(Boolean))]
+      .sort((a, b) => a.localeCompare(b, 'hu')),
     [rows],
   );
+  useEffect(() => {
+    if (!openOnOneCounty || chosenCounty || fallback || counties.length < 2) return;
+    setFallback(counties[Math.floor(Math.random() * counties.length)]);
+  }, [openOnOneCounty, chosenCounty, fallback, counties]);
   const located = shown.filter((r) => Number.isFinite(r.lat)).length;
-  const shownRef = useRef(shown);
-  shownRef.current = shown;
+  // the source holds every row, so a click resolves against the full list
+  const rowsRef = useRef(rows);
+  rowsRef.current = rows;
 
   const statusFilled = t('stats.statusFilled');
   const statusDissolved = t('stats.statusDissolved');
@@ -185,7 +234,7 @@ export function EesztMap({
       });
       map.addSource('pts', {
         type: 'geojson',
-        data: toGeoJSON(shownRef.current, statusFilled, statusDissolved),
+        data: toGeoJSON(rowsRef.current, statusFilled, statusDissolved),
       });
       // settlements the decree lists get a halo, under the points themselves
       map.addLayer({
@@ -204,16 +253,19 @@ export function EesztMap({
       map.addLayer({
         id: 'pts', type: 'circle', source: 'pts',
         paint: {
-          'circle-radius': ['interpolate', ['linear'], ['zoom'], 6, 2.6, 9, 4.5, 12, 7],
+          'circle-radius': ['case', ['get', 'dim'], 2,
+            ['interpolate', ['linear'], ['zoom'], 6, 2.6, 9, 4.5, 12, 7]],
           'circle-color': colorRef.current as never,
-          'circle-opacity': ['case', ['get', 'approx'], 0.4, 0.9],
-          'circle-stroke-width': ['case', ['get', 'mismatch'], 1.6, 0.6],
+          'circle-opacity': ['case', ['get', 'dim'], 0.16,
+            ['get', 'approx'], 0.4, 0.9],
+          'circle-stroke-width': ['case', ['get', 'dim'], 0,
+            ['get', 'mismatch'], 1.6, 0.6],
           'circle-stroke-color': ['case', ['get', 'mismatch'], COLOR_MISMATCH, '#0b1016'],
         },
       });
       map.on('click', 'pts', (e: MapLayerMouseEvent) => {
         const i = e.features?.[0]?.properties?.i;
-        if (typeof i === 'number') setSelected(shownRef.current[i] ?? null);
+        if (typeof i === 'number') setSelected(rowsRef.current[i] ?? null);
       });
       map.on('mouseenter', 'pts', () => { map.getCanvas().style.cursor = 'pointer'; });
       map.on('mouseleave', 'pts', () => { map.getCanvas().style.cursor = ''; });
@@ -250,7 +302,8 @@ export function EesztMap({
         timer = window.setTimeout(apply, 150);
         return;
       }
-      src.setData(toGeoJSON(shown, statusFilled, statusDissolved));
+      // every point is in the source; the county decides which are faint
+      src.setData(toGeoJSON(rows, statusFilled, statusDissolved, county));
       if (fitToRows) {
         let minX = 180, minY = 90, maxX = -180, maxY = -90, n = 0;
         for (const r of shown) {
@@ -269,7 +322,7 @@ export function EesztMap({
       cancelled = true;
       window.clearTimeout(timer);
     };
-  }, [shown, statusFilled, statusDissolved, fitToRows]);
+  }, [rows, shown, county, statusFilled, statusDissolved, fitToRows]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -278,7 +331,7 @@ export function EesztMap({
     }
   }, [color]);
 
-  const layers = useOrientationLayers(mapRef);
+  const layers = useOrientationLayers(mapRef, defaultLayers);
   const [showDistricts, setShowDistricts] = useState(true);
 
   // the halo around points in settlements the decree lists
@@ -297,8 +350,19 @@ export function EesztMap({
     districtMarkersRef.current = [];
     const map = mapRef.current;
     if (!map || !county || !showDistricts) return;
+    // one label per settlement, not one per row: a county seat with forty
+    // sites used to print its name forty times on top of itself
+    const seen = new Set<string>();
+    const fold = (name: string) => name.normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
     districtMarkersRef.current = shown
       .filter((r) => Number.isFinite(r.lat) && Number.isFinite(r.lon))
+      .filter((r) => {
+        const key = fold(String(r.settlement ?? ''));
+        if (!key || seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      })
       .slice(0, 400)
       .map((r) => {
         const el = document.createElement('div');
@@ -380,7 +444,7 @@ export function EesztMap({
         {county && (
           <button type="button" className={`map-layer${showDistricts ? ' is-on' : ''}`}
             aria-pressed={showDistricts} onClick={() => setShowDistricts((v) => !v)}>
-            {showDistricts ? '◉' : '○'} {t('eeszt.mapDistrictNames')}
+            {showDistricts ? '◉' : '○'} {t(siteLabelKey)}
           </button>
         )}
         <button type="button" className="eeszt-map__save"

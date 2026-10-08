@@ -91,6 +91,7 @@ def build() -> dict:
     vedono = read("vedono.json")
     pharmacy = read("pharmacy.json")
     tenure = read("tenure.json")
+    ages = read("age.json")
     benefit = (read("kedvezmenyezett.json") or {}).get("settlements", {})
     if not (latest and coverage and composite):
         raise ParseError("the district, coverage or index data is missing")
@@ -116,6 +117,38 @@ def build() -> dict:
                 "name": cluster["name"], "settlements": cluster["settlements"],
                 "population": cluster["population"],
             }
+
+    # which districts serve this settlement and are not filled: the ids come
+    # from the snapshot's own per-settlement index, the details from the
+    # district records themselves
+    vacancies: dict[str, list[dict]] = {}
+    for kind in ("gp", "dental"):
+        snap = latest["kinds"][kind]
+        by_fin = {p["id"]: p for p in snap.get("praxes", [])}
+        for row in snap.get("settlements", []):
+            ids = list(row.get("vacantPraxisIds", [])) + list(row.get("dissolvedPraxisIds", []))
+            for fin in ids:
+                praxis = by_fin.get(fin)
+                if praxis is None:
+                    continue
+                site = (praxis.get("sites") or [{}])[0]
+                vacancies.setdefault(row["kshId"], []).append({
+                    "kind": kind,
+                    "fin": fin,
+                    "type": praxis.get("type", ""),
+                    "status": praxis.get("status", ""),
+                    "since": praxis.get("vacantSince", ""),
+                    "longTerm": bool(praxis.get("longTerm")),
+                    "longTermSince": praxis.get("longTermSince", ""),
+                    "seat": site.get("settlement", ""),
+                    "population": praxis.get("population"),
+                })
+    for rows_ in vacancies.values():
+        rows_.sort(key=lambda r: (r["kind"], r["since"] or "9999"))
+
+    # what the same settlement looked like a year ago, from the archive
+    year_ago = archive_year_ago(latest.get("month", ""))
+    recent_cutoff = month_back(latest.get("month", ""), 12)
 
     # the surgeries that actually stand in a settlement, with the physician
     # the public NEAK registry names (CLAUDE.md rule 3: filled districts only)
@@ -208,11 +241,14 @@ def build() -> dict:
                    for layer in ("gp", "oncall", "inpatient")},
             }
 
-        ages = by_id["age"].get(key)
-        if ages and not ages["suppressed"]:
+        age_row = by_id["age"].get(key)
+        if age_row and not age_row["suppressed"]:
             record["age"] = {
-                "youngShare": ages["youngShare"], "oldShare": ages["oldShare"],
-                "young": ages["youngNow"], "old": ages["oldNow"],
+                "youngShare": age_row["youngShare"], "oldShare": age_row["oldShare"],
+                "young": age_row["youngNow"], "old": age_row["oldNow"],
+                # the census counts behind the shares, for the age split chart
+                "censusYoung": age_row["young"], "censusWorking": age_row["working"],
+                "censusOld": age_row["old"], "censusTotal": age_row["censusTotal"],
             }
 
         index = by_id["composite"].get(key)
@@ -226,6 +262,21 @@ def build() -> dict:
             }
         if key in cluster_of:
             record["cluster"] = cluster_of[key]
+        if key in vacancies:
+            record["vacant"] = vacancies[key]
+        then = {}
+        for kind, rows__ in year_ago["kinds"].items():
+            now = record.get(kind)
+            if now is None:
+                continue
+            then[kind] = {"vacant": rows__.get(key, 0), "vacantNow": now["vacant"]}
+        if then:
+            # physicians who took over a district here inside the window
+            fresh = sum(1 for r in surgeries.get(name_key, [])
+                        if r["since"] and r["since"] >= recent_cutoff
+                        and not r["fromStart"])
+            record["change"] = {"month": year_ago["month"], "kinds": then,
+                                "newDoctors": fresh}
         if name_key in surgeries:
             record["surgeries"] = surgeries[name_key]
         if name_key in chemists:
@@ -240,13 +291,72 @@ def build() -> dict:
 
         rows.append(record)
 
+    country = (ages or {}).get("country") or {}
     out = {
         "schemaVersion": SCHEMA_VERSION,
         "dataMonth": latest.get("month", ""),
         "bands": composite.get("bands", []),
+        # the national age split, so a settlement page can say how its own
+        # differs without loading the census file
+        "national": {
+            "age": {
+                "young": country.get("young"),
+                "old": country.get("old"),
+                "total": country.get("censusTotal"),
+                "working": (country.get("censusTotal") or 0)
+                - (country.get("young") or 0) - (country.get("old") or 0),
+            },
+        },
+        "comparedWith": year_ago["month"],
         "settlements": rows,
     }
     guard(out)
+    return out
+
+
+def month_back(month: str, back: int) -> str:
+    if not month:
+        return ""
+    i = int(month[:4]) * 12 + int(month[5:7]) - 1 - back
+    return f"{i // 12:04d}-{i % 12 + 1:02d}"
+
+
+def archive_year_ago(month: str, back: int = 12, tolerance: int = 3) -> dict:
+    """How many districts serving each settlement were vacant a year ago.
+
+    Only the vacancy lists are compared, not the filled counts: the vacancy
+    PDF was published (and backfilled) for every month we hold, while the
+    registry behind "filled" is missing from several of them, and a month
+    without a registry would read as "every doctor left".
+
+    The archive is not evenly spaced, so each branch takes the nearest month
+    it holds — and nothing at all if that is more than a quarter away,
+    because "a year ago" would then be a different claim. A settlement that
+    is absent from an archived month's index had no vacancy that month.
+    """
+    out: dict = {"month": "", "kinds": {}}
+    if not month:
+        return out
+    target_i = int(month[:4]) * 12 + int(month[5:7]) - 1 - back
+    target = f"{target_i // 12:04d}-{target_i % 12 + 1:02d}"
+    picked = ""
+    for kind in ("gp", "dental"):
+        best, best_gap = None, tolerance + 1
+        for path in sorted((ROOT / "data").glob(f"????-??/{kind}.json")):
+            name = path.parent.name
+            gap = abs((int(name[:4]) * 12 + int(name[5:7])) - (target_i + 1))
+            if gap < best_gap:
+                best, best_gap = path, gap
+        if best is None:
+            continue
+        snap = json.loads(best.read_text(encoding="utf-8"))
+        out["kinds"][kind] = {
+            row["kshId"]: len(row.get("vacantPraxisIds", []))
+            + len(row.get("dissolvedPraxisIds", []))
+            for row in snap.get("settlements", []) if row.get("kshId")
+        }
+        picked = picked or best.parent.name
+    out["month"] = picked or target
     return out
 
 

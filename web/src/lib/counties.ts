@@ -23,6 +23,25 @@ export interface CountyAggregateRow {
   medianOncallMinutes: number | null;
   medianInpatientMinutes: number | null;
   withoutDirectBus: number;
+  /** census age split; absent where the census suppressed the county */
+  age?: { young: number; working: number; old: number; total: number };
+  oncallPoints?: number;
+  ambulanceStations?: number;
+  gpDistricts?: DistrictCounts;
+  dentalDistricts?: DistrictCounts;
+  gpChurn?: ChurnCounts;
+  dentalChurn?: ChurnCounts;
+}
+
+/** The districts NEAK publishes for the county — not the settlements. */
+export interface DistrictCounts {
+  total: number; vacant: number; dissolved: number; longTerm: number;
+  rate: number | null;
+}
+
+export interface ChurnCounts {
+  districts: number; recentChanges: number; recentRate: number | null;
+  medianTenureMonths: number | null; unchangedWholeWindow: number;
 }
 
 /** One settlement, in the compact order the ETL writes (see FIELDS there). */

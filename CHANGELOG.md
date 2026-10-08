@@ -5,6 +5,53 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.30.0] — 2026-10-08
+
+### Hozzáadva
+- **Kattintható Magyarország-térkép a megyelapon**: a húsz megye körvonala,
+  kattintásra az egész oldal arra a megyére áll át. A négy vezető szám
+  grafikát kapott és kicserélődött: korösszetétel-kördiagram a lakosságszám
+  mellé, gyűrűdiagram arról, hány településen nincs szerződött háziorvos,
+  fogászati körzetszám fog-ikonnal, és a megye **közfinanszírozott ügyeleti
+  pontjainak** száma (mentőállomásokkal és a mediánnal).
+- **Praxisfluktuáció** (`etl/fluctuation.py`, megyelap): hány körzetben
+  cserélődött az orvos. Egy hét éve ugyanazzal az orvossal működő körzet és
+  egy négy év alatt hármat látott körzet a térképen egyformán „betöltött" —
+  ez a rész a különbség. Az elmúlt 12 hónapban **431 háziorvosi és 251
+  fogorvosi körzetben** váltott az orvos; a legnagyobb mozgás Pest (12,3%)
+  és Borsod-Abaúj-Zemplén (16,5%) megyében.
+- **Településlapok**: a „Kik laknak itt?" felkerült a térkép alá, és két
+  kördiagramot kapott — a település korösszetétele és az országos átlagtól
+  való eltérése. Új táblázat a **betöltetlen és megszűnt körzetekről** (ág,
+  típus, állapot, mióta, székhely), új **„Mi változott egy év alatt?"** rész
+  (betöltetlenség egy éve és ma, új orvosok), és a „Milyen messze?" tábla
+  „Hol" oszlopa mostantól **átvisz a másik település lapjára**.
+- A **településlistán** minden megye fölött kis megyetérkép a székhellyel és
+  a nagyobb városokkal.
+- **Budapestnél a kerülethatárok** is rajzolódnak a településlap térképén.
+- A „Ki lát el még?" menüpont almenüjébe felkerült a **Szakellátó
+  intézmények**, a szakmalefedettséghez pedig **szakmaválasztó megyetérkép**:
+  egy szakmát kiválasztva látszik, mely megyékben érhető el egyáltalán.
+- A segédeszköz-részben **megyei táblázat és térkép**: hány lakosra jut egy
+  kiadóhely megyénként.
+
+### Módosítva
+- **„Miért fontos?" visszakerült a térkép oldalára** — a menüpont megmaradt,
+  most horgonyként. A korábbi `miert.html` átirányít.
+- A **Szakellátás oldal térképei egy megyére nyitnak** (mindhárom ugyanarra),
+  a többi megye halványan látszik; alapból a megyenevek, megyeszékhelyek,
+  járáshatárok és Budapest kerületei vannak bekapcsolva, a többi réteg nem.
+  A „Körzetnevek" kapcsoló itt **„Telephelyek"**, és **településenként egy
+  felirat** jelenik meg — eddig egy megyeszékhely annyiszor írta ki a nevét,
+  ahány telephelye volt.
+
+### Javítva
+- **A gyógyszertár-térkép üres volt**, amint megyét választott valaki: a
+  gyógyszertársorokban nem volt megye, így a szűrés mindent kidobott. A NEAK
+  listája nem közöl megyét, ezért a helységnévtárból kapja (3194/3205 sorhoz).
+- A megyeszűrő `select` csak olyan megyéket kínál, amelyek szerepelnek is az
+  adott réteg soraiban.
+
 ## [1.29.0] — 2026-10-07
 
 ### Hozzáadva

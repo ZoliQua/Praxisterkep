@@ -1755,3 +1755,109 @@ a:hover { text-decoration: underline; }
 .tp-subhead {
   font: 600 14.5px var(--font-display); color: var(--ink); margin: 20px 0 6px;
 }
+
+/* The clickable county picker on the county page. */
+.countypicker { margin: 10px 0 16px; }
+.countypicker svg { width: 100%; height: auto; display: block; }
+.countypicker__county path {
+  fill: var(--bg-panel); stroke: var(--line-strong); stroke-width: 0.8;
+  cursor: pointer; transition: fill 120ms;
+}
+.countypicker__county text {
+  font-size: 8px; fill: var(--ink-faint); pointer-events: none;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.countypicker__county:hover path { fill: var(--bg-raised); stroke: var(--accent); }
+.countypicker__county.is-on path { fill: var(--accent); stroke: var(--accent); }
+.countypicker__county.is-on text { fill: var(--accent-ink); font-weight: 700; }
+.countypicker__county:focus-visible path { outline: 2px solid var(--accent); }
+
+/* The four headline cards. */
+.county-cards {
+  display: grid; gap: 12px; margin: 18px 0 22px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+.county-card {
+  position: relative; overflow: hidden;
+  display: flex; gap: 14px; align-items: center;
+  padding: 14px 16px; border: 1px solid var(--line); border-radius: 12px;
+  background: var(--bg-raised);
+}
+.county-card__figure { flex: none; }
+.county-card__body { min-width: 0; }
+.county-card .stat__value { font-size: 26px; }
+.stat__of { color: var(--ink-faint); font-size: 17px; font-weight: 500; }
+.county-card--icon .county-card__ghost {
+  position: absolute; right: -10px; top: -6px; width: 108px; height: 108px;
+  color: var(--line-strong); opacity: 0.55; pointer-events: none;
+}
+.county-card--icon .county-card__ghost svg { width: 100%; height: 100%; }
+.county-card .stat__context svg { width: 14px; height: 14px; vertical-align: -2px; }
+
+.donut { position: relative; }
+.donut__center {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  font: 700 17px var(--font-display); color: var(--ink);
+}
+.agelegend { list-style: none; margin: 8px 0 0; padding: 0; font-size: 12.5px; }
+.agelegend li { display: flex; align-items: center; gap: 7px; padding: 1px 0; }
+.agelegend i { width: 9px; height: 9px; border-radius: 2px; flex: none; }
+.agelegend__label { color: var(--ink-dim); min-width: 86px; }
+.agelegend__count { color: var(--ink-faint); }
+.agelegend__diff { color: #4fd6c2; margin-left: auto; }
+.agelegend__diff.is-more { color: #f0b429; }
+
+/* Physician turnover. */
+.churn-kind { margin: 10px 0 14px; }
+.churn-bars { display: grid; gap: 4px; margin: 14px 0 10px; }
+.churn-bar { display: grid; grid-template-columns: 170px 1fr auto; gap: 10px;
+  align-items: center; font-size: 12.5px; }
+.churn-bar__name { color: var(--ink-dim); }
+.churn-bar.is-on .churn-bar__name { color: var(--accent); font-weight: 700; }
+.churn-bar__track { background: var(--line); border-radius: 3px; height: 10px; }
+.churn-bar__fill { display: block; height: 100%; border-radius: 3px;
+  background: var(--accent); }
+.churn-bar.is-on .churn-bar__fill { background: #f0b429; }
+.churn-bar__value { color: var(--ink); white-space: nowrap; }
+.churn-bar__abs { color: var(--ink-faint); }
+@media (max-width: 640px) {
+  .churn-bar { grid-template-columns: 110px 1fr; }
+  .churn-bar__value { grid-column: 2; }
+}
+
+/* The settlement page's age split and its year-on-year change. */
+.tp-ages { display: flex; flex-wrap: wrap; gap: 26px; margin: 10px 0 6px; }
+.tp-age { margin: 0; display: flex; flex-direction: column; gap: 6px; min-width: 240px; }
+.tp-age figcaption {
+  font: 600 13px var(--font-display); color: var(--ink); order: -1;
+}
+.tp-age--compare { opacity: 0.85; }
+.tp-changes { list-style: none; padding: 0; margin: 10px 0; display: grid; gap: 6px; }
+.tp-change {
+  padding: 9px 12px; border-left: 3px solid var(--line-strong);
+  background: var(--bg-raised); border-radius: 0 8px 8px 0; font-size: 13.5px;
+}
+.tp-change--bad { border-left-color: #ef6461; }
+.tp-change--ok { border-left-color: #4fd6c2; }
+.tp-change--same { border-left-color: var(--line-strong); color: var(--ink-dim); }
+
+/* The settlement index: a thumbnail of each county above its list. */
+.tp-index-county { padding-top: 18px; }
+.tp-index-head { display: flex; gap: 16px; align-items: center; margin-bottom: 8px; }
+.tp-index-head h2 { margin: 0; }
+.tp-thumb { flex: none; border: 1px solid var(--line); border-radius: 8px;
+  background: var(--bg-raised); }
+@media (max-width: 560px) {
+  .tp-index-head { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+
+/* One number per county, painted onto the country. */
+.choropleth { margin: 10px 0 14px; }
+.choropleth svg { width: 100%; height: auto; display: block; }
+.choropleth__county path { stroke: var(--line-strong); stroke-width: 0.8; }
+.choropleth__county text {
+  font-size: 8px; fill: var(--ink-faint); pointer-events: none;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.choropleth__county.is-clickable path { cursor: pointer; }
+.choropleth__county.is-on path { stroke: var(--ink); stroke-width: 1.6; }

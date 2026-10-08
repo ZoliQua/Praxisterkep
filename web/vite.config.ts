@@ -13,7 +13,6 @@ export default defineConfig({
         analysis: resolve(__dirname, 'elemzo.html'),
         eeszt: resolve(__dirname, 'eeszt.html'),
         specialist: resolve(__dirname, 'szakellato.html'),
-        why: resolve(__dirname, 'miert.html'),
         method: resolve(__dirname, 'modszertan.html'),
         county: resolve(__dirname, 'megye.html'),
       },

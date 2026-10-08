@@ -19,6 +19,7 @@ Usage:
 """
 from __future__ import annotations
 
+import collections
 import json
 import statistics
 import sys
@@ -95,11 +96,46 @@ def aggregate(name: str, rows: list[list]) -> dict:
     }
 
 
+def read(name: str) -> dict:
+    path = ROOT / "data" / name
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+
+
 def build() -> dict:
     if not SRC.exists():
         raise ParseError(f"{SRC} is missing — run settlements.py first")
     src = json.loads(SRC.read_text(encoding="utf-8"))
     profiles = src["settlements"]
+    # the four headline numbers a county page leads with come from the
+    # branch-level sources, not from counting settlements: a district is the
+    # unit NEAK publishes, and an on-call point serves many settlements
+    latest = read("latest.json")
+    ages = read("age.json")
+    emergency = read("emergency.json")
+    churn = read("fluctuation.json")
+
+    districts = {kind: {c["name"]: c for c in latest.get("kinds", {})
+                        .get(kind, {}).get("counties", [])}
+                 for kind in ("gp", "dental")}
+    age_of = {c["name"]: c for c in ages.get("counties", [])}
+    # the county field of an emergency point names its PROVIDER's seat, so
+    # 203 of 213 on-call points would sit in Budapest. The premises say where
+    # the point actually is, so the settlement decides.
+    county_of_settlement = {p["settlement"]: p["county"] for p in profiles}
+
+    def where(point: dict) -> str:
+        name = point.get("settlement") or ""
+        if name.startswith("Budapest"):
+            return "Budapest"
+        return county_of_settlement.get(name) or point.get("county") or ""
+
+    oncall: collections.Counter = collections.Counter(
+        where(p) for p in emergency.get("points", []) if p["group"] == "oncall")
+    ambulance: collections.Counter = collections.Counter(
+        where(p) for p in emergency.get("points", []) if p["group"] == "ambulance")
+    fluct = {kind: {c["county"]: c for c in churn.get("kinds", {})
+                    .get(kind, {}).get("counties", [])}
+             for kind in ("gp", "dental")}
 
     by_county: dict[str, list[list]] = {}
     for p in profiles:
@@ -109,11 +145,47 @@ def build() -> dict:
         "schemaVersion": SCHEMA_VERSION,
         "dataMonth": src.get("dataMonth", ""),
         "fields": list(FIELDS),
-        "counties": [aggregate(name, rows)
-                     for name, rows in sorted(by_county.items())],
+        "counties": [aggregate(name, rows) | extras(
+            name, districts, age_of, oncall, ambulance, fluct)
+            for name, rows in sorted(by_county.items())],
         "settlements": {name: rows for name, rows in sorted(by_county.items())},
     }
     guard(out)
+    return out
+
+
+def extras(name, districts, age_of, oncall, ambulance, fluct) -> dict:
+    """The county-level facts that do not come from counting settlements."""
+    age = age_of.get(name) or {}
+    total = age.get("censusTotal")
+    out = {
+        "oncallPoints": oncall.get(name, 0),
+        "ambulanceStations": ambulance.get(name, 0),
+    }
+    if total:
+        # the census split the page draws as a pie; working age is what the
+        # other two leave
+        out["age"] = {
+            "young": age.get("young"), "old": age.get("old"), "total": total,
+            "working": total - (age.get("young") or 0) - (age.get("old") or 0),
+        }
+    for kind in ("gp", "dental"):
+        row = districts.get(kind, {}).get(name)
+        if row:
+            out[f"{kind}Districts"] = {
+                "total": row["total"], "vacant": row["vacant"],
+                "dissolved": row["dissolved"], "longTerm": row.get("longTerm", 0),
+                "rate": row.get("vacancyRate"),
+            }
+        churn_row = fluct.get(kind, {}).get(name)
+        if churn_row:
+            out[f"{kind}Churn"] = {
+                "districts": churn_row["districts"],
+                "recentChanges": churn_row["recentChanges"],
+                "recentRate": churn_row["recentRate"],
+                "medianTenureMonths": churn_row["medianTenureMonths"],
+                "unchangedWholeWindow": churn_row["unchangedWholeWindow"],
+            }
     return out
 
 

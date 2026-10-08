@@ -155,6 +155,10 @@ def build(month: str | None = None) -> dict:
         r["lat"] = (geo or {}).get("lat")
         r["lon"] = (geo or {}).get("lon")
         r["geoApprox"] = bool((geo or {}).get("geoApprox")) if geo else None
+        # the list carries no county; everything that filters by county (the
+        # map, the tables) needs one on the row itself
+        entry = ksh.lookup(r["settlement"]) if ksh else None
+        r["county"] = entry["county"] if entry else ""
 
     out = {
         "schemaVersion": SCHEMA_VERSION,

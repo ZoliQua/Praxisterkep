@@ -67,7 +67,10 @@ export function PharmacySection() {
       </div>
 
       <EesztMap rows={mapRows as MapRow[]} categories={categories} detailRows={detailRows}
-        searchLink={false} countKey="pharmacy.mapCount" exportName="praxisterkep-gyogyszertarak" />
+        searchLink={false} countKey="pharmacy.mapCount"
+        defaultLayers={{ counties: true, seats: true, jaras: true, budapest: true }}
+        siteLabelKey="specialist.mapSites" openOnOneCounty
+        exportName="praxisterkep-gyogyszertarak" />
 
       <div className="eeszt-actions">
         <button className="data-btn data-btn--accent" onClick={() => setOpen('pharmacies')}>

@@ -12,7 +12,7 @@
 import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { countyMap } from './county-map.mjs';
+import { countyMap, countyThumb } from './county-map.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const dist = join(here, '..', 'dist');
@@ -28,6 +28,7 @@ const geo = {
   counties: readGeo('counties.geojson'),
   cities: readGeo('cities.geojson'),
   settlements: readGeo('settlements.geojson'),
+  budapest: readGeo('budapest.geojson'),
   byKsh: new Map(),
   byName: new Map(),
 };
@@ -118,7 +119,19 @@ const LAYERS = [
   ['inpatient', 'Kórház'],
   ['outpatient', 'Járóbeteg-szakrendelés'],
   ['gyse', 'Gyógyászati segédeszköz'],
+  ['pharmacy', 'Gyógyszertár'],
 ];
+
+// name -> slug, so every settlement named anywhere on the page can be opened
+const slugOf = new Map();
+for (const p of profiles.settlements) {
+  slugOf.set(`${p.settlement}|${p.county}`, p.slug);
+  if (!slugOf.has(p.settlement)) slugOf.set(p.settlement, p.slug);
+}
+const settlementLink = (name, county, text = name) => {
+  const slug = slugOf.get(`${name}|${county}`) ?? slugOf.get(name);
+  return slug ? `<a href="/telepules/${esc(slug)}/">${esc(text)}</a>` : esc(text);
+};
 
 function branchCard(title, branch) {
   if (!branch) {
@@ -143,11 +156,148 @@ function travelRows(profile) {
     const t = travel[key];
     if (!t) return '';
     const where = t.at && t.at !== profile.settlement
-      ? esc(t.at) : '<em>helyben</em>';
+      ? settlementLink(t.at, profile.county) : '<em>helyben</em>';
     return `<tr><td>${esc(label)}</td><td class="is-num">${esc(minutes(t.minutes))}</td>
       <td class="is-num">${t.km === null || t.km === undefined ? '–' : `${esc(String(t.km).replace('.', ','))} km`}</td>
       <td>${where}</td></tr>`;
   }).join('\n');
+}
+
+const AGE_COLORS = { young: '#4fd6c2', working: '#6ea8ff', old: '#f0b429' };
+const AGE_LABELS = { young: '0–14 éves', working: '15–64 éves', old: '65 év felett' };
+
+/** A pie of the three age groups; no JavaScript, so the arcs are written out. */
+function agePie(split, size = 118) {
+  const total = split.young + split.working + split.old;
+  if (!total) return '';
+  const r = size / 2;
+  let angle = -Math.PI / 2;
+  const parts = ['young', 'working', 'old'].map((key) => {
+    const from = angle;
+    angle += (split[key] / total) * Math.PI * 2;
+    const p = (a) => [r + r * Math.cos(a), r + r * Math.sin(a)];
+    const [x1, y1] = p(from);
+    const [x2, y2] = p(angle);
+    const big = angle - from > Math.PI ? 1 : 0;
+    return `<path d="M${r} ${r}L${x1.toFixed(2)} ${y1.toFixed(2)}A${r} ${r} 0 ${big} 1 ${
+      x2.toFixed(2)} ${y2.toFixed(2)}Z" fill="${AGE_COLORS[key]}" stroke="#0b1016"
+      stroke-width="1"><title>${esc(AGE_LABELS[key])}</title></path>`;
+  }).join('');
+  return `<svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}"
+    role="img" aria-label="Korösszetétel"><g>${parts}</g>
+    <circle cx="${r}" cy="${r}" r="${(r * 0.46).toFixed(1)}" fill="#101823"/></svg>`;
+}
+
+function ageLegend(split, compare) {
+  const total = split.young + split.working + split.old;
+  const cTotal = compare ? compare.young + compare.working + compare.old : 0;
+  return `<ul class="agelegend">${['young', 'working', 'old'].map((key) => {
+    const share = total ? split[key] / total : 0;
+    const diff = cTotal ? share - compare[key] / cTotal : null;
+    return `<li><i style="background:${AGE_COLORS[key]}"></i>
+      <span class="agelegend__label">${esc(AGE_LABELS[key])}</span>
+      <strong>${esc(pct(share))}</strong>
+      <span class="agelegend__count">${num(split[key])}</span>${diff === null ? '' :
+  `<span class="agelegend__diff${diff > 0 ? ' is-more' : ''}">${
+    diff > 0 ? '+' : '−'}${esc(pct(Math.abs(diff)))}</span>`}</li>`;
+  }).join('')}</ul>`;
+}
+
+function ageBlock(profile) {
+  const a = profile.age;
+  if (!a || a.censusTotal === undefined) {
+    return '<p class="tp-note">A népszámlálás erre a településre nem közöl korcsoportos bontást (kis lélekszámnál elhagyja).</p>';
+  }
+  const split = { young: a.censusYoung, working: a.censusWorking, old: a.censusOld };
+  const national = profiles.national?.age;
+  return `<div class="tp-ages">
+    <figure class="tp-age">
+      ${agePie(split)}
+      <figcaption>${esc(profile.settlement)}</figcaption>
+      ${ageLegend(split, national)}
+    </figure>
+    ${national ? `<figure class="tp-age tp-age--compare">
+      ${agePie({ young: national.young, working: national.working, old: national.old })}
+      <figcaption>Országos</figcaption>
+      ${ageLegend(national)}
+    </figure>` : ''}
+  </div>
+  <p class="tp-note">A százalékok a 2022-es népszámlálásból valók, a jobb oldali
+    oszlop az országos aránytól való eltérés. A lakosságszám a KSH friss
+    helységnévtárából jön, ezért a kettő összege nem azonos.</p>`;
+}
+
+const VACANCY_TYPE = {
+  adult: 'felnőtt', child: 'gyermek', mixed: 'vegyes', school: 'iskolai',
+};
+
+function vacancyTable(profile) {
+  const rows = profile.vacant ?? [];
+  if (!rows.length) return '';
+  return `<h3 class="tp-subhead">Betöltetlen és megszűnt körzetek, amelyek ide tartoznak</h3>
+  <table class="info-table">
+    <thead><tr><th>Ág</th><th>Körzet</th><th>Állapot</th><th>Mióta</th>
+      <th>Székhely</th></tr></thead>
+    <tbody>${rows.map((r) => `<tr>
+      <td>${r.kind === 'gp' ? 'háziorvosi' : 'fogorvosi'}</td>
+      <td>${esc(VACANCY_TYPE[r.type] ?? r.type ?? '')}</td>
+      <td>${r.status === 'dissolved' ? 'megszűnt' : (r.longTerm
+    ? 'tartósan betöltetlen' : 'betöltetlen')}</td>
+      <td>${esc(sinceLabel(r.since))}</td>
+      <td>${r.seat && r.seat !== profile.settlement
+    ? settlementLink(r.seat, profile.county) : '<em>helyben</em>'}</td>
+    </tr>`).join('')}</tbody>
+  </table>
+  <p class="tp-note">A „mióta" a NEAK betöltetlenségi listájának kezdő hónapja.
+    Betöltetlen körzetet nem nevesítünk orvossal, és a helyettesítés a nyilvános
+    adatokban nem látszik.</p>`;
+}
+
+function sinceLabel(month) {
+  if (!month) return '–';
+  const [y, m] = month.split('-').map(Number);
+  if (!y) return '–';
+  const months = (year - y) * 12 + (month - m);
+  const years = Math.floor(months / 12);
+  const label = `${y}. ${HU_MONTHS[(m || 1) - 1]}`;
+  if (years < 1) return `${label} (< 1 éve)`;
+  return `${label} (${years} éve)`;
+}
+
+function changeBlock(profile) {
+  const change = profile.change;
+  if (!change) return '';
+  const lines = [];
+  for (const [kind, c] of Object.entries(change.kinds)) {
+    const label = kind === 'gp' ? 'háziorvosi' : 'fogorvosi';
+    const delta = c.vacantNow - c.vacant;
+    if (delta === 0 && c.vacantNow === 0) continue;
+    lines.push(delta === 0
+      ? `<li class="tp-change tp-change--same">A ${label} ellátásban ${
+        num(c.vacantNow)} betöltetlen vagy megszűnt körzet tartozik ide — egy éve ugyanennyi.</li>`
+      : `<li class="tp-change tp-change--${delta > 0 ? 'bad' : 'ok'}">
+        ${delta > 0 ? '▲' : '▼'} A ${label} ellátásban ${num(c.vacant)} helyett ${
+  num(c.vacantNow)} betöltetlen vagy megszűnt körzet tartozik ide.</li>`);
+  }
+  if (change.newDoctors) {
+    lines.push(`<li class="tp-change tp-change--ok">▲ ${num(change.newDoctors)} körzetben
+      új orvos kezdett az elmúlt egy évben.</li>`);
+  }
+  if (!lines.length) {
+    lines.push('<li class="tp-change tp-change--same">Az elmúlt egy évben nem változott, amit a nyilvános adatokból látunk.</li>');
+  }
+  return `<section class="section container">
+  <h2 class="section__subheading">Mi változott egy év alatt?</h2>
+  <p class="section__explain">Az összevetés alapja a ${esc(change.month)} havi
+    pillanatkép a saját archívumunkból.</p>
+  <ul class="tp-changes">${lines.join('')}</ul>
+  <p class="tp-note">Csak azt vetjük össze, amire minden hónapra van adatunk: a
+    betöltetlen és megszűnt körzeteket, illetve az orvosváltásokat. A menetidő, a
+    buszelérés és a gyógyszertári hálózat visszamenőleg nem áll rendelkezésre,
+    ezekre nem mondunk változást. Megyei szinten a
+    <a href="/megye.html?m=${encodeURIComponent(profile.county)}#fluktuacio">fluktuáció</a>
+    mutatja, mennyire cserélődnek az orvosok.</p>
+</section>`;
 }
 
 function transitBlock(profile) {
@@ -258,7 +408,6 @@ function page(profile) {
     `Praxistérkép, ${monthLabel}.`,
   ].filter(Boolean).join(' ');
 
-  const age = profile.age;
   const cluster = profile.cluster;
 
   return `<!doctype html>
@@ -302,6 +451,11 @@ function page(profile) {
 </section>
 
 <section class="section container">
+  <h2 class="section__subheading">Kik laknak itt?</h2>
+  ${ageBlock(profile)}
+</section>
+
+<section class="section container">
   <h2 class="section__subheading">Van-e orvos?</h2>
   <div class="tp-cards">
     ${branchCard('Háziorvosi ellátás', profile.gp)}
@@ -313,6 +467,7 @@ function page(profile) {
     nyilvános adatokban nem látszik.</p>
   ${surgeryTable(profile, 'gp', 'Betöltött háziorvosi körzetek a településen')}
   ${surgeryTable(profile, 'dental', 'Betöltött fogorvosi körzetek a településen')}
+  ${vacancyTable(profile)}
   ${(profile.surgeries ?? []).length ? `<p class="tp-note">Az orvos neve a NEAK
     szerződött szolgáltatói nyilvántartásából való, és csak betöltött körzetnél
     szerepel. A „mióta" a saját archívumunkból jön (${esc(String(archiveFrom))} óta
@@ -342,15 +497,6 @@ function page(profile) {
   ${transitBlock(profile)}
 </section>
 
-${age ? `<section class="section container">
-  <h2 class="section__subheading">Kik laknak itt?</h2>
-  <p>${num(profile.population)} lakosból <strong>${num(age.young)}</strong> gyermek
-    (0–14 éves, ${pct(age.youngShare)}) és <strong>${num(age.old)}</strong> idős
-    (65 év feletti, ${pct(age.oldShare)}).</p>
-  <p class="tp-note">Korösszetétel: KSH, 2022. évi népszámlálás (CC BY 4.0), a mai
-    lakosságra vetítve.</p>
-</section>` : ''}
-
 <section class="section container">
   <h2 class="section__subheading">Összetett ellátási kockázati index</h2>
   ${indexBlock(profile)}
@@ -362,6 +508,8 @@ ${age ? `<section class="section container">
     mutató mutat ugyanabba az irányba — nem azt, hogy ott nincs ellátás.
     <a href="${esc(ctx('/elemzo.html#index', profile))}">A módszer részletesen</a>.</p>
 </section>
+
+${changeBlock(profile)}
 
 <footer class="section container tp-footer">
   <p>Adatállapot: ${esc(monthLabel)}. Források: NEAK szerződött szolgáltatók és betöltetlen
@@ -393,8 +541,15 @@ for (const p of profiles.settlements) {
 }
 const countyBlocks = [...byCounty.entries()]
   .sort((a, b) => a[0].localeCompare(b[0], 'hu'))
-  .map(([county, list]) => `<section class="section container">
-    <h2 class="section__subheading">${esc(county)}</h2>
+  .map(([county, list]) => `<section class="section container tp-index-county">
+    <div class="tp-index-head">
+      ${countyThumb(county, geo)}
+      <div>
+        <h2 class="section__subheading">${esc(county)}</h2>
+        <p class="tp-note">${num(list.length)} település ·
+          <a href="/megye.html?m=${encodeURIComponent(county)}">a megye adatai</a></p>
+      </div>
+    </div>
     <p class="tp-index-list">${list
       .sort((a, b) => a.settlement.localeCompare(b.settlement, 'hu'))
       .map((p) => `<a href="/telepules/${esc(p.slug)}/">${esc(p.settlement)}</a>`)

@@ -290,6 +290,13 @@ def main() -> None:
                     describe=lambda r: f", {r['stats']['dental']['snapshots']} dental "
                                        f"and {r['stats']['gp']['snapshots']} GP snapshots"),
              output=ROOT / "data" / "tenure.json"),
+        # how often a district changes physician — the archive's own answer
+        Step("fluctuation", "physician turnover from the archive",
+             simple("fluctuation",
+                    describe=lambda r: f", {r['kinds']['gp']['recentChanges']} GP and "
+                                       f"{r['kinds']['dental']['recentChanges']} dental "
+                                       "changes in the last year"),
+             needs=("tenure",), output=ROOT / "data" / "fluctuation.json"),
         # the analyses turned inside out: one record per settlement, which
         # the build then bakes into a static page for each of them
         Step("settlements", "settlement profiles", simple("settlements"),
@@ -301,7 +308,8 @@ def main() -> None:
         Step("county_profiles", "county profiles",
              simple("county_profiles",
                     describe=lambda r: f", {len(r['counties'])} counties"),
-             needs=("settlements",), output=ROOT / "data" / "counties.json"),
+             needs=("settlements", "fluctuation", "emergency", "ksh_age"),
+             output=ROOT / "data" / "counties.json"),
     ]
     run_steps(steps, month)
     print("done")

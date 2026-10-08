@@ -15,6 +15,7 @@ import {
 } from '../lib/specialist';
 import { DataTableModal } from './DataTableModal';
 import { EesztMap, type MapRow } from './EesztMap';
+import { CountyChoropleth } from './charts/CountyChoropleth';
 import { GyseSection } from './GyseSection';
 import { PharmacySection } from './PharmacySection';
 import { PageNav } from './PageNav';
@@ -57,6 +58,23 @@ export function SpecialistPage() {
   const coverage = useMemo(
     () => professionCoverage(data, coverageCare), [data, coverageCare],
   );
+  const [profession, setProfession] = useState('');
+  const professionNames = useMemo(
+    () => [...new Set((data?.professions ?? [])
+      .filter((p) => p.care === coverageCare).map((p) => p.profession))]
+      .sort((a, b) => a.localeCompare(b, 'hu')),
+    [data, coverageCare],
+  );
+  /** by county: 1 where the chosen profession exists, else the coverage share */
+  const professionMap = useMemo(() => {
+    if (!profession) {
+      return new Map(coverage.map((c) => [c.county, c.share]));
+    }
+    const counties = new Set((data?.professions ?? [])
+      .filter((p) => p.care === coverageCare && p.profession === profession)
+      .flatMap((p) => p.countyList));
+    return new Map(coverage.map((c) => [c.county, counties.has(c.county) ? 1 : 0]));
+  }, [profession, coverage, data, coverageCare]);
   const rare = useMemo(() => rareProfessions(data, coverageCare), [data, coverageCare]);
   const categories = useMemo(() => (['inpatient', 'outpatient'] as Care[])
     .filter((c) => care === 'all' || care === c)
@@ -112,6 +130,8 @@ export function SpecialistPage() {
 
         <EesztMap rows={mapSites as MapRow[]} categories={categories}
           detailRows={detailRows} searchLink={false} countKey="specialist.mapCount"
+          defaultLayers={{ counties: true, seats: true, jaras: true, budapest: true }}
+          siteLabelKey="specialist.mapSites" openOnOneCounty
           exportName={`praxisterkep-szakellatas-${care}`} />
 
         <div className="eeszt-actions">
@@ -145,6 +165,32 @@ export function SpecialistPage() {
               worstN: formatNumber(worst.present),
             })}
           </p>
+        )}
+
+        {/* which counties have a given profession at all — the bars below say
+            how many of the national list each county holds, this says where
+            one named profession can be reached */}
+        <label className="county-picker">
+          <span>{t('specialist.pickProfession')}</span>
+          <select value={profession}
+            onChange={(e) => setProfession(e.target.value)}>
+            <option value="">{t('specialist.allProfessions')}</option>
+            {professionNames.map((name) => (
+              <option key={name} value={name}>{name}</option>
+            ))}
+          </select>
+        </label>
+        <CountyChoropleth values={professionMap} selected={null}
+          color={CARE_COLORS[coverageCare]}
+          format={(countyName, v) => (profession
+            ? `${countyName}: ${v ? t('specialist.hasProfession', { name: profession })
+              : t('specialist.lacksProfession', { name: profession })}`
+            : `${countyName}: ${formatPercent(v ?? 0)}`)} />
+        {profession && (
+          <p className="access-county">{t('specialist.professionLine', {
+            name: profession,
+            n: formatNumber([...professionMap.values()].filter(Boolean).length),
+          })}</p>
         )}
 
         <div className="eeszt-coverage">

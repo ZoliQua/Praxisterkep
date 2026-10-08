@@ -916,7 +916,8 @@
       "pharmacy_json": "Pharmacies contracted by NEAK, with address and coordinates",
       "licence_history_json": "Since when the organisational unit a service works under has existed (from EESZT snapshots)",
       "counties_json": "Per-county aggregates and their settlements in compact rows (from the settlement profiles)",
-      "tenure_json": "How long the physician now holding a district has held it, from our own monthly archive"
+      "tenure_json": "How long the physician now holding a district has held it, from our own monthly archive",
+      "fluctuation_json": "Physician turnover: how many districts changed doctor, by county and year"
     },
     "useHeading": "How to use them",
     "use1": "The files are static and versioned: a finished month stays in months/, while latest.json always points at the current one.",
@@ -1222,7 +1223,14 @@
     "colMissing": "Professions missing",
     "colShare": "Coverage (%)",
     "note": "Source: NEAK contracted providers, {month}. {rows} rows in total, {geocoded} of them with a geocoded site.",
-    "pdfNote": "Both lists are parsed from the XLSX files: the PDF of the outpatient list stops 84 rows before the end of its own sheet, so it cannot serve as a complete source."
+    "pdfNote": "Both lists are parsed from the XLSX files: the PDF of the outpatient list stops 84 rows before the end of its own sheet, so it cannot serve as a complete source.",
+    "mapSites": "Sites",
+    "navLabel": "Specialist institutions",
+    "pickProfession": "Profession",
+    "allProfessions": "All professions (coverage)",
+    "hasProfession": "has {name}",
+    "lacksProfession": "no {name}",
+    "professionLine": "{name} is available in {n} counties; from the others, patients travel for it."
   },
   "survival": {
     "heading": "Survival analysis: how long does a vacancy last?",
@@ -1381,7 +1389,13 @@
     "tableSubtitle": "The {year} census shares carried onto today's population",
     "colYoungNow": "Aged 0–14",
     "colOldNow": "65+",
-    "note": "Source: KSH, {year} census (CC BY 4.0). The composition comes from the census shares, the headcounts are those shares applied to the population on 1 January {population}. In {suppressed} tiny settlements KSH suppressed the cell for disclosure control; those are left missing rather than estimated."
+    "note": "Source: KSH, {year} census (CC BY 4.0). The composition comes from the census shares, the headcounts are those shares applied to the population on 1 January {population}. In {suppressed} tiny settlements KSH suppressed the cell for disclosure control; those are left missing rather than estimated.",
+    "pieLabel": "Age composition",
+    "part": {
+      "young": "0–14",
+      "working": "15–64",
+      "old": "65 and over"
+    }
   },
   "emergency": {
     "heading": "On-call and ambulance: what stands around a vacant district?",
@@ -1656,10 +1670,14 @@
     "colSiteId": "Premises id",
     "colAuthority": "Licensing authority",
     "colSites": "Premises",
-    "colRetail": "Of which dispensing",
+    "colRetail": "Dispensing places",
     "colPerSite": "Residents / premises",
     "note": "Source: EESZT master publication (GYSE_FORGALMAZO), {asOf}. Geocoded premises: {geocoded} of {sites}.",
-    "navLabel": "Medical aids"
+    "navLabel": "Medical aids",
+    "countyHeading": "By county: residents per dispensing place",
+    "countyTip": "{county}: {sites} dispensing places · {people} residents each",
+    "colSettlements": "Settlements",
+    "colResidentsPerSite": "Residents / place"
   },
   "referral": {
     "heading": "How do we know a district was dissolved?",
@@ -1794,7 +1812,13 @@
       "kozepes": "middling",
       "alacsony": "low"
     },
-    "caveat": "The order is a comparison, not a verdict: a worse place means more indicators point the same way, not that care is missing."
+    "caveat": "The order is a comparison, not a verdict: a worse place means more indicators point the same way, not that care is missing.",
+    "gpVacantOnlyOf": "settlements with no contracted GP (of all)",
+    "dentalDistricts": "vacant dental districts of those in the county",
+    "dentalLongTerm": "{n} of them long-term vacant · {dissolved} dissolved",
+    "oncallPoints": "publicly financed on-call points in the county",
+    "ambulance": "{n} ambulance stations",
+    "oncallMedian": "median {m} to the on-call point"
   },
   "next": {
     "heading": "Where to next?",
@@ -1838,5 +1862,24 @@
       "title": "Care deserts",
       "text": "Where several high-risk settlements form one contiguous patch."
     }
+  },
+  "churn": {
+    "heading": "How often does the doctor change?",
+    "explain": "A district with the same physician for seven years and one that has had three in four both read as “filled” on the map. This is the difference: {snapshots} monthly snapshots since {from}, each naming the contracted physician, so a change of name is visible. The rates cover the last {months} months.",
+    "explainShort": "Physician changes from our own monthly snapshots",
+    "changes": "{kind} districts changed physician in {months} months",
+    "ofDistricts": "{share} of the {n} filled districts",
+    "countyRate": "{county}: changes per 100 districts",
+    "countyDetail": "{changes} changes across {districts} districts · median {years} years with the same doctor",
+    "worst": "Most churn",
+    "openTable": "Counties in a table",
+    "tableTitle": "Physician turnover by county",
+    "caveat": "A change of name is not always a departure: marriage, a typo or a tidied register can cause one. Names are compared loosely, but the remaining noise is in these numbers. The archive is uneven: where a year passed between two snapshots, changes in between merge into one.",
+    "colDistricts": "Filled districts",
+    "colRecent": "Changes (12 mo)",
+    "colRate": "Changes / 100 districts",
+    "colTenure": "Median months with the same doctor",
+    "colUnchanged": "Unchanged since the archive began",
+    "colAll": "All changes"
   }
 }
