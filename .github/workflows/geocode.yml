@@ -1,0 +1,53 @@
+name: geocode
+
+# The surgeries that have a doctor had never been geocoded: the map only ever
+# needed to show where care was missing. A street-level settlement map needs
+# the opposite, and that is a few thousand Nominatim lookups at one request a
+# second — an hour of waiting that belongs on a runner, not on a laptop.
+#
+# Resumable by design: every hit is written to etl/geocode_cache.json, so a
+# second run only looks up what the first did not reach.
+on:
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "How many addresses to look up (0 = all that are missing)"
+        required: false
+        default: "0"
+
+concurrency:
+  group: geocode
+  cancel-in-progress: false
+
+jobs:
+  geocode:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install what the geocoder needs
+        run: pip install -r etl/requirements.txt
+
+      - name: Look up the missing addresses
+        run: python etl/geocode_filled.py --limit ${{ inputs.limit || 0 }}
+
+      # the profiles carry the coordinates, so they are rebuilt here too
+      - name: Rebuild the settlement and county profiles
+        run: |
+          python etl/settlements.py
+          python etl/county_profiles.py
+
+      - name: Commit what was found
+        run: |
+          git config user.name "Dúl Zoltán"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git add etl/geocode_cache.json data/settlements.json \
+                  data/settlement_slugs.json data/counties.json
+          git diff --staged --quiet && echo "nothing new" && exit 0
+          git commit -m "data: coordinates for the surgeries that have a doctor"
+          git push

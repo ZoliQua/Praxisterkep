@@ -92,6 +92,11 @@ def build() -> dict:
     pharmacy = read("pharmacy.json")
     tenure = read("tenure.json")
     ages = read("age.json")
+    emergency = read("emergency.json")
+    specialist = read("specialist.json")
+    # the coordinates of the surgeries that have a doctor, for the street-level
+    # map; geocode_filled.py fills this cache
+    coords = json.loads((ROOT / "etl" / "geocode_cache.json").read_text(encoding="utf-8"))
     benefit = (read("kedvezmenyezett.json") or {}).get("settlements", {})
     if not (latest and coverage and composite):
         raise ParseError("the district, coverage or index data is missing")
@@ -157,9 +162,14 @@ def build() -> dict:
         spells = (tenure or {}).get("kinds", {}).get(kind, {})
         for f in latest["kinds"][kind].get("filledPraxes", []):
             spell = spells.get(f["id"]) or {}
+            geo = coords.get(f"{f.get('postalCode', '')} {f.get('settlement', '')}, "
+                             f"{f.get('address', '')}") or {}
             surgeries.setdefault(normalize_settlement(f["settlement"]), []).append({
                 "kind": kind,
                 "fin": f["id"],
+                "lat": geo.get("lat"),
+                "lon": geo.get("lon"),
+                "geoApprox": bool(geo.get("geoApprox")) if geo.get("lat") else None,
                 "type": f.get("type", ""),
                 "doctor": f.get("doctor", ""),
                 "provider": f.get("provider", ""),
@@ -180,9 +190,40 @@ def build() -> dict:
             "name": ph["name"],
             "postalCode": ph.get("postalCode", ""),
             "address": ph.get("address", ""),
+            "lat": ph.get("lat"),
+            "lon": ph.get("lon"),
+            "geoApprox": ph.get("geoApprox"),
         })
     for rows_ in chemists.values():
         rows_.sort(key=lambda r: r["name"])
+
+    # everything else that stands in the settlement and has a coordinate: the
+    # on-call point, the ambulance station, the hospital, the outpatient clinic
+    # and the medical-aid shop. One block, so a map can draw them together.
+    places: dict[str, list[dict]] = {}
+
+    def add_place(settlement: str, kind: str, name: str, address: str,
+                  lat, lon, approx=None) -> None:
+        if lat is None or lon is None or not settlement:
+            return
+        places.setdefault(normalize_settlement(settlement), []).append({
+            "kind": kind, "name": name, "address": address,
+            "lat": lat, "lon": lon, "geoApprox": bool(approx),
+        })
+
+    for point in (emergency or {}).get("points", []):
+        add_place(point.get("settlement", ""), point["group"],
+                  point.get("provider", ""), point.get("address", ""),
+                  point.get("lat"), point.get("lon"), point.get("geoApprox"))
+    for site in (specialist or {}).get("sites", []):
+        add_place(site.get("settlement", ""), site.get("care", "specialist"),
+                  site.get("institution", ""), site.get("address", ""),
+                  site.get("lat"), site.get("lon"), site.get("geoApprox"))
+    for site in (gyse or {}).get("sites", []):
+        if site.get("kind") in ("shop", "branch", "workshop"):
+            add_place(site.get("settlement", ""), "gyse", site.get("provider", ""),
+                      site.get("address", ""), site.get("lat"), site.get("lon"),
+                      site.get("geoApprox"))
 
     shops: dict[str, int] = {}
     for row in (gyse or {}).get("settlements", []):
@@ -281,6 +322,8 @@ def build() -> dict:
             record["surgeries"] = surgeries[name_key]
         if name_key in chemists:
             record["pharmacies"] = chemists[name_key]
+        if name_key in places:
+            record["places"] = places[name_key]
         if name_key in shops:
             record["gyse"] = shops[name_key]
         if name_key in visitors:

@@ -15,6 +15,8 @@ export default defineConfig({
         specialist: resolve(__dirname, 'szakellato.html'),
         method: resolve(__dirname, 'modszertan.html'),
         county: resolve(__dirname, 'megye.html'),
+        // not a page: the lazy street map the static settlement pages load
+        streetmap: resolve(__dirname, 'src/streetmap.ts'),
       },
     },
   },
