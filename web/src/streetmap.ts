@@ -36,14 +36,17 @@ function start(root: HTMLElement) {
   button.addEventListener('click', () => {
     button.disabled = true;
     button.textContent = button.dataset.loading ?? '…';
+    // the container has to have its size before the map is built in it: a
+    // hidden box is zero by zero, and MapLibre would settle for its own
+    // default and never match the page
+    host.hidden = false;
+    root.classList.add('is-open');
     void import('./streetmapRender')
       .then((m) => m.render(host, payload(root), STYLE))
-      .then(() => {
-        root.classList.add('is-open');
-        button.hidden = true;
-        host.hidden = false;
-      })
+      .then(() => { button.hidden = true; })
       .catch(() => {
+        host.hidden = true;
+        root.classList.remove('is-open');
         button.disabled = false;
         button.textContent = button.dataset.failed ?? button.textContent;
       });

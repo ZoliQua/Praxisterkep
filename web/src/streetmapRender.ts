@@ -26,6 +26,8 @@ export async function render(host: HTMLElement, points: StreetPoint[], style: st
     // a style that never loads must not leave the page waiting for ever
     window.setTimeout(resolve, 8000);
   });
+  // the section may have been laid out while the tiles were coming
+  map.resize();
   for (const p of points) {
     const el = document.createElement('i');
     el.className = `street-pin${p.approx ? ' street-pin--approx' : ''}`;
