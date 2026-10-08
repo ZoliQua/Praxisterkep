@@ -126,7 +126,10 @@ function streetBlock(profile) {
   </div>
   <p class="tp-note">A pontok geokódolt címek (Nominatim/OpenStreetMap), nem
     helyszíni felmérés: ahol a cím pontatlan, a jelölő a település közepére esik,
-    és ezt a buborék ki is írja.</p>
+    és ezt a buborék ki is írja. Térkép:
+    <a href="https://www.maptiler.com/copyright/" rel="noopener">© MapTiler</a>,
+    adat: <a href="https://www.openstreetmap.org/copyright" rel="noopener">©
+    OpenStreetMap közreműködők</a>.</p>
 </section>`;
 }
 

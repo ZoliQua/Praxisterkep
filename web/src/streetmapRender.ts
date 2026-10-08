@@ -19,7 +19,17 @@ export async function render(host: HTMLElement, points: StreetPoint[], style: st
     style,
     bounds: bounds(points),
     fitBoundsOptions: { padding: 60, maxZoom: 16 },
-    attributionControl: { compact: true },
+    // written out rather than left to the style: the tiles are MapTiler's and
+    // the data is OpenStreetMap's, and both licences require it to be visible.
+    // A style that is slow or fails to report its own sources must not be able
+    // to leave the map unattributed.
+    attributionControl: {
+      compact: true,
+      customAttribution: '<a href="https://www.maptiler.com/copyright/" '
+        + 'target="_blank" rel="noopener">© MapTiler</a> '
+        + '<a href="https://www.openstreetmap.org/copyright" target="_blank" '
+        + 'rel="noopener">© OpenStreetMap contributors</a>',
+    },
   });
   await new Promise<void>((resolve) => {
     map.once('load', () => resolve());
