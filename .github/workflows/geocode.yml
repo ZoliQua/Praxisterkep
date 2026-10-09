@@ -42,6 +42,9 @@ jobs:
           python etl/settlements.py
           python etl/county_profiles.py
 
+      # Two and a half hours of lookups were lost once because the branch had
+      # moved on while the job ran and the push was rejected. The result is
+      # rebased onto whatever arrived in the meantime, and retried.
       - name: Commit what was found
         run: |
           git config user.name "Dúl Zoltán"
@@ -50,4 +53,10 @@ jobs:
                   data/settlement_slugs.json data/counties.json
           git diff --staged --quiet && echo "nothing new" && exit 0
           git commit -m "data: coordinates for the surgeries that have a doctor"
-          git push
+          for attempt in 1 2 3 4 5; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            echo "push attempt $attempt failed; retrying"
+            sleep $((attempt * 20))
+          done
+          echo "could not push after five attempts" >&2
+          exit 1
