@@ -5,6 +5,29 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.32.0] — 2026-10-09
+
+### Hozzáadva
+- **Körzetállomány a főoldal tetején**, a betöltetlenségi szám fölött. Eddig
+  az oldal egy „1026"-tal nyitott, és az olvasóra hagyta, hogy mennyiből:
+  most elöl áll a teljes állomány, sávon és számokban, hogy **mennyi a
+  betöltött, a betöltetlen és (ahol a NEAK ilyet közöl) a megszűnt** körzet.
+  Háziorvosi: 6283 körzetből 5257 betöltött (83,7%), 1026 betöltetlen.
+  Fogorvosi: 2776-ból 2472 betöltött (89,0%), 262 betöltetlen, 42 megszűnt.
+- **Típusonkénti bontás**, mert egy szám két különböző országot takar. A
+  háziorvosi ellátásban a **felnőtt** körzetek 10,2%-a betöltetlen, a **házi
+  gyermekorvosi** körzeteké 18,3%, a **vegyeseké** 28,4% — vagyis ott a
+  legrosszabb, ahol egyetlen körzet lát el mindenkit. Fogászatban: felnőtt
+  4,9%, gyermek 13,2%, vegyes 11,7%, iskolai 0%. A sávok a legrosszabb
+  típushoz arányosítva, hogy a típusok egymáshoz képest legyenek olvashatók.
+- A típusnevek ágfüggők: a „gyermek" a háziorvosi ellátásban **házi
+  gyermekorvosi körzet**, fogászatban **gyermekfogászat**.
+
+### Javítva
+- A geokódoló workflow **rebase-el a push előtt**. Az első futás 2 óra 36
+  perc alatt végzett, majd eldobta az egészet, mert közben három commit
+  érkezett a `main`-re, és a push elutasításra került.
+
 ## [1.31.0] — 2026-10-08
 
 ### Hozzáadva

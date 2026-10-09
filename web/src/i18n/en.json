@@ -1881,5 +1881,27 @@
     "colTenure": "Median months with the same doctor",
     "colUnchanged": "Unchanged since the archive began",
     "colAll": "All changes"
+  },
+  "balance": {
+    "heading": "How the {kind} district stock stands",
+    "total": "{kind} districts in the country",
+    "thType": "District type",
+    "thTotal": "Districts",
+    "thRate": "Vacancy",
+    "note": "A mixed district serves adults and children together — in smaller settlements it is usually the only one there is. Bar lengths are scaled to the worst type, so the types can be read against each other.",
+    "type": {
+      "gp": {
+        "adult": "adult GP",
+        "child": "paediatric GP",
+        "mixed": "mixed (adults and children)"
+      },
+      "dental": {
+        "adult": "adult dental",
+        "child": "paediatric dental",
+        "mixed": "mixed (adults and children)",
+        "school": "school and youth"
+      }
+    },
+    "dissolvedNote": "The {n} dissolved districts are not in the type breakdown: the register drops their type along with them."
   }
 }

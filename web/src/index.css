@@ -1876,3 +1876,58 @@ a:hover { text-decoration: underline; }
   border: 1px solid var(--line); border-radius: 8px;
 }
 .maplibregl-popup-tip { border-top-color: var(--bg-panel) !important; }
+
+/* "Hogyan áll a körzetállomány?" — the stock the headline number is part of. */
+.balance {
+  margin: 22px 0 10px; padding: 16px 18px; border: 1px solid var(--line);
+  border-radius: 12px; background: var(--bg-raised);
+}
+.balance__heading {
+  margin: 0 0 12px; font: 600 15px var(--font-display); color: var(--ink);
+}
+.balance__main { display: flex; gap: 22px; align-items: center; flex-wrap: wrap; }
+.balance__figures { flex: none; }
+.balance__total {
+  display: block; font: 800 34px var(--font-display); color: var(--ink);
+  font-variant-numeric: tabular-nums; line-height: 1;
+}
+.balance__totalLabel { font-size: 12.5px; color: var(--ink-faint); }
+.balance__barwrap { flex: 1 1 320px; min-width: 260px; }
+.balance-bar {
+  display: flex; height: 16px; border-radius: 8px; overflow: hidden;
+  background: var(--line);
+}
+.balance-bar__part { display: block; height: 100%; }
+.balance-bar__part--filled, .balance-dot--filled { background: #4fd6c2; }
+.balance-bar__part--vacant, .balance-dot--vacant { background: #ef6461; }
+.balance-bar__part--dissolved, .balance-dot--dissolved { background: var(--line-strong); }
+.balance__legend {
+  list-style: none; display: flex; flex-wrap: wrap; gap: 14px;
+  margin: 9px 0 0; padding: 0; font-size: 13px;
+}
+.balance__legend li { display: flex; align-items: center; gap: 6px; }
+.balance__legend strong { color: var(--ink); font-variant-numeric: tabular-nums; }
+.balance__legend span { color: var(--ink-dim); }
+.balance__legend em { color: var(--ink-faint); font-style: normal; }
+.balance-dot { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
+.balance__types { width: 100%; border-collapse: collapse; margin-top: 14px;
+  font-size: 13px; }
+.balance__types th, .balance__types td {
+  text-align: left; padding: 6px 10px 6px 0; border-bottom: 1px solid var(--line);
+}
+.balance__types th {
+  color: var(--ink-faint); font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.05em; font-weight: 600;
+}
+.balance__types .is-num { text-align: right; font-variant-numeric: tabular-nums; }
+.balance__rate { display: flex; align-items: center; gap: 8px; }
+.balance__rateTrack {
+  flex: 1 1 90px; max-width: 160px; height: 8px; border-radius: 4px;
+  background: var(--line); overflow: hidden;
+}
+.balance__rateFill { display: block; height: 100%; background: #ef6461; }
+.balance__rateVal { color: var(--ink); font-variant-numeric: tabular-nums; }
+.balance__note { margin: 10px 0 0; font-size: 12.5px; color: var(--ink-faint); }
+@media (max-width: 560px) {
+  .balance__types th:nth-child(3), .balance__types td:nth-child(3) { display: none; }
+}

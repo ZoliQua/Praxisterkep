@@ -1881,5 +1881,27 @@
     "colTenure": "Medián hónap ugyanazzal az orvossal",
     "colUnchanged": "Változatlan az archívum kezdete óta",
     "colAll": "Összes váltás"
+  },
+  "balance": {
+    "heading": "Hogyan áll a {kind} körzetállomány?",
+    "total": "{kind} körzet az országban",
+    "thType": "Körzettípus",
+    "thTotal": "Körzet",
+    "thRate": "Betöltetlenség",
+    "note": "A vegyes körzet felnőtteket és gyerekeket együtt lát el — a kisebb településeken jellemzően ez az egyetlen körzet. A sávok hossza a legrosszabb típushoz van arányosítva, hogy a típusok egymáshoz képest legyenek olvashatók.",
+    "type": {
+      "gp": {
+        "adult": "felnőtt háziorvosi",
+        "child": "házi gyermekorvosi",
+        "mixed": "vegyes (felnőtt és gyermek együtt)"
+      },
+      "dental": {
+        "adult": "felnőtt fogászati",
+        "child": "gyermekfogászati",
+        "mixed": "vegyes (felnőtt és gyermek együtt)",
+        "school": "iskolai, ifjúsági"
+      }
+    },
+    "dissolvedNote": "A {n} megszűnt körzet nem szerepel a típusonkénti bontásban: megszűnésével a típusa is eltűnt a nyilvántartásból."
   }
 }
