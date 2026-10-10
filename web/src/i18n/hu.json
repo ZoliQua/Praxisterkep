@@ -1549,7 +1549,17 @@
     "tableSubtitle": "Percek, légvonalbeli kilométerek és a különbség településenként",
     "countyTitle": "Menetidő megyénként",
     "countySubtitle": "Medián menetidők és a 30 percnél távolabb élők",
-    "note": "Úthálózat: OpenStreetMap (ODbL), {source}. A települések és a célpontok a legközelebbi úthálózati ponthoz vannak illesztve, autópályára soha — onnan nem lehet lehajtani ott, ahol éppen kell."
+    "note": "Úthálózat: OpenStreetMap (ODbL), {source}. A települések és a célpontok a legközelebbi úthálózati ponthoz vannak illesztve, autópályára soha — onnan nem lehet lehajtani ott, ahol éppen kell.",
+    "layerFrom": {
+      "gp": "háziorvostól",
+      "dental": "fogorvostól",
+      "oncall": "központi ügyelettől",
+      "ambulance": "mentőállomástól",
+      "inpatient": "kórháztól",
+      "outpatient": "járóbeteg-szakrendeléstől",
+      "gyse": "segédeszköz-kiadóhelytől",
+      "pharmacy": "gyógyszertártól"
+    }
   },
   "transit": {
     "heading": "Busszal is elérhető?",
@@ -1880,7 +1890,13 @@
     "colRate": "Váltás / 100 körzet",
     "colTenure": "Medián hónap ugyanazzal az orvossal",
     "colUnchanged": "Változatlan az archívum kezdete óta",
-    "colAll": "Összes váltás"
+    "colAll": "Összes váltás",
+    "heatmapTitle": "Hol és mikor cserélődtek az orvosok?",
+    "heatmapExplain": "Egy cella: hány orvosváltás jutott 100 körzetre egy év alatt — nem nyers darabszám, mert a pillanatképeink nem egyenletesen követik egymást (van, hogy egy hónap, van, hogy két év telik köztük), és a darabszám inkább azt mutatná, mikor őriztünk meg fájlt. Az üres cella olyan év, amelyről nincs használható pillanatképünk — nem nulla váltás. Egy hosszú szünet váltásait egyenletesen osztjuk el a hónapjai között; a nyilvántartás nem mondja meg, mikor történtek. A megyenévre kattintva az egész oldal arra a megyére áll.",
+    "barsTitle": "Az elmúlt 12 hónap megyénként",
+    "colOverall": "Teljes időszak",
+    "cell": "{county}, {year}: 100 körzetre {rate} váltás évente ({changes} váltás, {months} megfigyelt hónap)",
+    "cellNone": "{county}, {year}: nincs használható pillanatkép"
   },
   "balance": {
     "heading": "Hogyan áll a {kind} körzetállomány?",
@@ -1903,5 +1919,15 @@
       }
     },
     "dissolvedNote": "A {n} megszűnt körzet nem szerepel a típusonkénti bontásban: megszűnésével a típusa is eltűnt a nyilvántartásból."
+  },
+  "threshold": {
+    "label": "Mennyi menetidőt tartasz elfogadhatónak?",
+    "people": "lakos lakik ennél távolabb a legközelebbi {layer} ({minutes} percnél több)",
+    "of": "— az ország {share}-a, {settlements} településen",
+    "curveLabel": "Hány lakos esik a küszöbön kívül, különböző küszöböknél",
+    "worst": "A legtávolabbiak:",
+    "unreachable": "{n} települést az úthálózaton egyáltalán nem ért el a számítás — ezek nem szerepelnek sem a számlálóban, sem a nevezőben.",
+    "over": "{minutes} percnél távolabb",
+    "under": "{minutes} percen belül"
   }
 }

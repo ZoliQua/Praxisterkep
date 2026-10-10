@@ -54,11 +54,19 @@ def county_key(name: str) -> str:
     return "Budapest" if out.startswith("Budapest") else out
 
 
-def changes(kind: str, all_months: list[str]) -> tuple[list[dict], list[str]]:
-    """Every physician change we can see, with the month it became visible."""
+def changes(kind: str, all_months: list[str]) -> tuple[list[dict], list[str], list[dict]]:
+    """Every physician change we can see, with the month it became visible.
+
+    Also returns the intervals between the snapshots it could use. The archive
+    is not evenly spaced — fourteen months pass between some pairs and one
+    between others — so a count per calendar year says as much about our
+    snapshots as about the country. Per interval, with the months it spans and
+    the districts it covers, the same count can be annualised and compared.
+    """
     previous: dict[str, tuple[str, str]] = {}   # fin -> (doctor key, county)
     seen: list[str] = []
     found: list[dict] = []
+    intervals: list[dict] = []
     for month in all_months:
         snap = tenure.snapshot(month, kind)
         if snap is None:
@@ -68,15 +76,29 @@ def changes(kind: str, all_months: list[str]) -> tuple[list[dict], list[str]]:
         # works where, and must not read as "everyone left"
         if not filled:
             continue
-        seen.append(month)
+        here: collections.Counter = collections.Counter()
+        districts: collections.Counter = collections.Counter()
         for f in filled:
             key = tenure.doctor_key(f.get("doctor", ""))
             county = county_key(f.get("county", ""))
+            districts[county] += 1
             before = previous.get(f["id"])
             if before is not None and before[0] != key:
                 found.append({"month": month, "fin": f["id"], "county": county})
+                here[county] += 1
             previous[f["id"]] = (key, county)
-    return found, seen
+        if seen:
+            span = tenure.month_diff(seen[-1], month)
+            intervals.append({
+                "from": seen[-1], "to": month, "months": span,
+                "counties": {county: {"changes": here.get(county, 0),
+                                      "districts": districts[county]}
+                             for county in sorted(districts)},
+                "changes": sum(here.values()),
+                "districts": sum(districts.values()),
+            })
+        seen.append(month)
+    return found, seen, intervals
 
 
 def build() -> dict:
@@ -93,7 +115,7 @@ def build() -> dict:
         "kinds": {},
     }
     for kind in KINDS:
-        found, seen = changes(kind, all_months)
+        found, seen, intervals = changes(kind, all_months)
         if len(seen) < 4:
             raise ParseError(f"{kind}: {len(seen)} usable snapshots is too few")
 
@@ -136,12 +158,24 @@ def build() -> dict:
             "recentChanges": sum(recent.values()),
             "districts": sum(districts.values()),
             "byYear": dict(sorted(by_year.items())),
+            # one column per snapshot pair, annualised, because the gaps
+            # between our snapshots are not equal
+            "intervals": [i | {"rate": annual_rate(i["changes"], i["districts"],
+                                                   i["months"])}
+                          for i in intervals],
             "counties": counties,
             # one row per change, so a settlement page can count its own
             "events": found,
         }
     guard(out)
     return out
+
+
+def annual_rate(changes: int, districts: int, months: int) -> float | None:
+    """Changes per 100 districts per year, so uneven gaps can be compared."""
+    if not districts or months <= 0:
+        return None
+    return round(changes / districts * 100 * 12 / months, 1)
 
 
 def recent_cutoff(data_month: str) -> str:
@@ -161,6 +195,12 @@ def guard(out: dict) -> None:
                              f"{k['districts']} overall")
         if k["recentChanges"] > k["changes"]:
             raise ParseError(f"{kind}: more recent changes than changes")
+        if sum(i["changes"] for i in k["intervals"]) != k["changes"]:
+            raise ParseError(f"{kind}: the intervals do not add up to the changes")
+        for interval in k["intervals"]:
+            if interval["months"] <= 0:
+                raise ParseError(f"{kind}: {interval['from']} -> {interval['to']} "
+                                 "is not a step forward")
         # a county cannot have changed more often than it has districts in
         # every single year of the window without something being wrong
         for c in k["counties"]:

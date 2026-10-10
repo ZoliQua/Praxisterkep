@@ -12,6 +12,8 @@ import {
 } from '../lib/mobility';
 import { DataTableModal } from './DataTableModal';
 import { EesztMap, type MapRow } from './EesztMap';
+import { TravelThreshold } from './TravelThreshold';
+import { defaultThreshold } from '../lib/threshold';
 
 const LAYERS: Layer[] = ['gp', 'oncall', 'inpatient', 'pharmacy', 'dental',
   'outpatient', 'ambulance', 'gyse'];
@@ -20,14 +22,29 @@ export function TravelTimeSection() {
   const data = useTravel();
   const [layer, setLayer] = useState<Layer>('gp');
   const [open, setOpen] = useState<'settlements' | 'counties' | null>(null);
+  // the reader's own idea of an acceptable drive; the map follows it. It
+  // starts where the chosen layer has something to say and stays put once
+  // the reader has moved it.
+  const [minutes, setMinutes] = useState<number | null>(null);
+  const threshold = minutes ?? defaultThreshold(layer);
 
   const rows = useMemo(
     () => sortRows(travelRows(data, layer), `${layer}Min`, 'desc'), [data, layer],
   );
   const counties = useMemo(() => travelCountyRows(data), [data]);
-  const categories = useMemo(() => (data?.bands ?? []).map((band) => ({
-    key: t(`travel.band.${band}`), label: t(`travel.band.${band}`), color: BAND_COLORS[band],
-  })), [data]);
+  // two colours, not four: the question on this map is now "inside or
+  // outside the dial", and the bands are still in the breakdown above
+  const categories = useMemo(() => [
+    { key: 'over', label: t('threshold.over', { minutes: String(threshold) }),
+      color: '#ef6461' },
+    { key: 'under', label: t('threshold.under', { minutes: String(threshold) }),
+      color: '#4fd6c2' },
+  ], [threshold]);
+  const mapRows = useMemo(() => rows.map((r) => ({
+    ...r,
+    type: typeof r[`${layer}Min`] === 'number' && Number(r[`${layer}Min`]) > threshold
+      ? 'over' : 'under',
+  })), [rows, layer, threshold]);
 
   const detailRows = useMemo(() => (row: MapRow): [string, string][] => [
     [t('travel.colMinutes'), row[`${layer}Min`] === null ? '–'
@@ -97,9 +114,12 @@ export function TravelTimeSection() {
         </span>
       </div>
 
-      <EesztMap rows={rows as MapRow[]} categories={categories} detailRows={detailRows}
-        searchLink={false} countKey="travel.mapCount"
-        exportName={`praxisterkep-menetido-${layer}`} />
+      <TravelThreshold data={data} layer={layer} minutes={threshold}
+        onMinutes={setMinutes} />
+
+      <EesztMap rows={mapRows as MapRow[]} categories={categories}
+        detailRows={detailRows} searchLink={false} countKey="travel.mapCount"
+        exportName={`praxisterkep-menetido-${layer}-${threshold}perc`} />
 
       <div className="extra-block">
         <h4 className="extra-block__title">{t('travel.detourTitle')}</h4>

@@ -1549,7 +1549,17 @@
     "tableSubtitle": "Minutes, straight-line kilometres and the gap, per settlement",
     "countyTitle": "Driving time by county",
     "countySubtitle": "Median driving times and residents beyond 30 minutes",
-    "note": "Road network: OpenStreetMap (ODbL), {source}. Settlements and destinations are snapped to the nearest road node, never to a motorway — you cannot leave one where you need to."
+    "note": "Road network: OpenStreetMap (ODbL), {source}. Settlements and destinations are snapped to the nearest road node, never to a motorway — you cannot leave one where you need to.",
+    "layerFrom": {
+      "gp": "GP",
+      "dental": "dentist",
+      "oncall": "on-call surgery",
+      "ambulance": "ambulance station",
+      "inpatient": "hospital",
+      "outpatient": "outpatient clinic",
+      "gyse": "medical-aid shop",
+      "pharmacy": "pharmacy"
+    }
   },
   "transit": {
     "heading": "Can you get there by bus?",
@@ -1880,7 +1890,13 @@
     "colRate": "Changes / 100 districts",
     "colTenure": "Median months with the same doctor",
     "colUnchanged": "Unchanged since the archive began",
-    "colAll": "All changes"
+    "colAll": "All changes",
+    "heatmapTitle": "Where and when did the doctors change?",
+    "heatmapExplain": "One cell: changes per 100 districts per year — not a raw count, because our snapshots are unevenly spaced (a month between some, two years between others) and a count would mostly show when we kept a file. An empty cell is a year with no usable snapshot, not a year without changes. The changes of a long gap are spread evenly over its months; the register does not say when inside it they happened. Clicking a county name narrows the whole page to it.",
+    "barsTitle": "The last 12 months by county",
+    "colOverall": "Whole window",
+    "cell": "{county}, {year}: {rate} changes per 100 districts a year ({changes} changes over {months} observed months)",
+    "cellNone": "{county}, {year}: no usable snapshot"
   },
   "balance": {
     "heading": "How the {kind} district stock stands",
@@ -1903,5 +1919,15 @@
       }
     },
     "dissolvedNote": "The {n} dissolved districts are not in the type breakdown: the register drops their type along with them."
+  },
+  "threshold": {
+    "label": "How many minutes do you consider acceptable?",
+    "people": "residents live further than that from the nearest {layer} (more than {minutes} minutes)",
+    "of": "— {share} of the country, across {settlements} settlements",
+    "curveLabel": "Population outside the threshold, at each threshold",
+    "worst": "The furthest:",
+    "unreachable": "{n} settlements the road graph could not reach at all — they are in neither the numerator nor the denominator.",
+    "over": "further than {minutes} min",
+    "under": "within {minutes} min"
   }
 }

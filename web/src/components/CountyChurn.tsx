@@ -11,6 +11,8 @@ import { formatDecimal, formatNumber, formatPercent } from '../lib/format';
 import {
   CHURN_COLUMNS, churnRows, churnTableRows, useFluctuation,
 } from '../lib/fluctuation';
+import { churnMatrix } from '../lib/churnMatrix';
+import { ChurnHeatmap } from './charts/ChurnHeatmap';
 import { DataTableModal } from './DataTableModal';
 import type { PraxisKind } from '../types';
 
@@ -19,6 +21,7 @@ export function CountyChurn({ county }: { county: string | null }) {
   const [kind, setKind] = useState<PraxisKind>('gp');
   const [open, setOpen] = useState(false);
   const rows = useMemo(() => churnRows(data, kind), [data, kind]);
+  const matrix = useMemo(() => churnMatrix(data, kind), [data, kind]);
   if (!data) return null;
 
   const branch = data.kinds[kind];
@@ -77,6 +80,12 @@ export function CountyChurn({ county }: { county: string | null }) {
         )}
       </div>
 
+      {/* where and when, in one grid: counties down, years across */}
+      <h3 className="section__subheading">{t('churn.heatmapTitle')}</h3>
+      <p className="section__explain">{t('churn.heatmapExplain')}</p>
+      <ChurnHeatmap matrix={matrix} />
+
+      <h3 className="section__subheading">{t('churn.barsTitle')}</h3>
       <div className="churn-bars">
         {[...rows].sort((a, b) => (b.recentRate ?? 0) - (a.recentRate ?? 0)).map((r) => (
           <div key={r.county} className={`churn-bar${r.county === county ? ' is-on' : ''}`}>

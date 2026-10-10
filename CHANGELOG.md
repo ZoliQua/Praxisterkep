@@ -5,6 +5,32 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.33.0] — 2026-10-10
+
+### Hozzáadva
+- **Küszöbcsúszka a menetidőhöz** (Elemző → Menetidő). Eddig a rész egy kép
+  volt: medián, maximum, 10/20/30 perces sávok. Mostantól eszköz: beállítod,
+  hány percet tartasz elfogadhatónak, és a lap megmondja, **hány lakos lakik
+  ennél távolabb, hány településen** — a térkép pedig átszíneződik, a küszöb
+  fölöttiek kiemelve. Mellette görbe arról, hogyan csökken az érintett
+  lakosság a küszöb emelésével, és a legtávolabbi települések névvel.
+  A csúszka ott indul, ahol az adott rétegnek mondanivalója van: háziorvosnál
+  10, kórháznál 30 percnél. Néhány szám belőle: **10 percnél messzebb él a
+  legközelebbi háziorvostól 63 488 ember** 120 településen; 30 percnél
+  messzebb a kórháztól 136 706 ember; 20 percnél messzebb a központi
+  ügyelettől **274 968 ember 382 településen**.
+- **Fluktuációs hőtérkép** (Megye → Mennyire cserélődnek az orvosok): 20 megye
+  × 8 év, egy cellában az évesített orvosváltási ráta (váltás 100 körzetre,
+  évente). A megyenévre kattintva az egész oldal arra a megyére áll.
+
+### Módosítva
+- A fluktuációs adat mostantól **pillanatkép-páronként** is tárolja a
+  váltásokat (`intervals`), a köztük eltelt hónapokkal. Enélkül a hőtérkép
+  hazudna: az archívum egyenetlen — van, ahol egy hónap, van, ahol 27 telik
+  két használható pillanatkép között —, így a nyers darabszám főleg azt
+  mutatná, mikor őriztünk meg fájlt. Egy év, amelyről nincs pillanatképünk,
+  üresen marad, nem nullaként.
+
 ## [1.32.0] — 2026-10-09
 
 ### Hozzáadva

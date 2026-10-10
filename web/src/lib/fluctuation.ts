@@ -23,6 +23,12 @@ export interface FluctuationRaw {
     from: string; snapshots: number; changes: number; recentChanges: number;
     districts: number; byYear: Record<string, number>; counties: ChurnCounty[];
     events: { month: string; fin: string; county: string }[];
+    /** one entry per snapshot pair: the archive's own, uneven, steps */
+    intervals: {
+      from: string; to: string; months: number; changes: number;
+      districts: number; rate: number | null;
+      counties: Record<string, { changes: number; districts: number }>;
+    }[];
   }>;
 }
 
