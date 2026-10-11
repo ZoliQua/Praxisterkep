@@ -42,6 +42,13 @@ describe('travel-time threshold', () => {
     expect(beyond(data, 'gp', 10)!.worst.map((w) => w.settlement)).toEqual(['C', 'B']);
   });
 
+  it('answers for the county in focus when there is one', () => {
+    const r = beyond(data, 'gp', 20, 5, 'Zala')!;
+    expect(r).toMatchObject({ settlements: 1, population: 500, ofSettlements: 1 });
+    expect(beyond(data, 'gp', 20, 5, 'Vas')!.population).toBe(2000);
+    expect(beyond(data, 'gp', 20, 5, 'Nincs ilyen')).toBeNull();
+  });
+
   it('says nothing without data', () => {
     expect(beyond(null, 'gp', 20)).toBeNull();
     expect(beyond({ settlements: [] } as unknown as TravelRaw, 'gp', 20)).toBeNull();

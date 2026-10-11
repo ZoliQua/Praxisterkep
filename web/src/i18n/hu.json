@@ -500,7 +500,8 @@
     "colDoctor": "Betöltő orvos",
     "colNeakCode": "NEAK kód",
     "mapDistrictNames": "Körzetnevek",
-    "mapSavePng": "Térkép mentése (PNG)"
+    "mapSavePng": "Térkép mentése (PNG)",
+    "colAddress": "Cím"
   },
   "dataTable": {
     "searchAll": "Keresés minden oszlopban…",
@@ -1923,11 +1924,12 @@
   "threshold": {
     "label": "Mennyi menetidőt tartasz elfogadhatónak?",
     "people": "lakos lakik ennél távolabb a legközelebbi {layer} ({minutes} percnél több)",
-    "of": "— az ország {share}-a, {settlements} településen",
+    "of": "— {where} lakosságának {share}-a, {settlements} településen",
     "curveLabel": "Hány lakos esik a küszöbön kívül, különböző küszöböknél",
     "worst": "A legtávolabbiak:",
     "unreachable": "{n} települést az úthálózaton egyáltalán nem ért el a számítás — ezek nem szerepelnek sem a számlálóban, sem a nevezőben.",
     "over": "{minutes} percnél távolabb",
-    "under": "{minutes} percen belül"
+    "under": "{minutes} percen belül",
+    "country": "az ország"
   }
 }

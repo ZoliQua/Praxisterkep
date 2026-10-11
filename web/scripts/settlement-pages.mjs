@@ -71,6 +71,12 @@ const STREET_LABELS = {
   gp: 'Háziorvosi rendelő', dental: 'Fogorvosi rendelő', pharmacy: 'Gyógyszertár',
   oncall: 'Központi ügyelet', ambulance: 'Mentőállomás', inpatient: 'Kórház',
   outpatient: 'Járóbeteg-szakrendelés', gyse: 'Gyógyászati segédeszköz',
+  transport: 'Betegszállítás', dialysis: 'Művese',
+};
+const STREET_COLORS = {
+  gp: '#4fd6c2', dental: '#8ab4ff', pharmacy: '#c88ff0', oncall: '#f0b429',
+  ambulance: '#ef8354', inpatient: '#ef6461', outpatient: '#9bd4a5',
+  gyse: '#b8a4ff', transport: '#7dd3fc', dialysis: '#f0abfc',
 };
 
 /** Everything in this settlement that has a coordinate, for the street map. */
@@ -116,9 +122,7 @@ function streetBlock(profile) {
     </button>
     <p class="tp-maplegend">${kinds.map((k) =>
     `<span><i class="street-pin" style="background:${
-      { gp: '#4fd6c2', dental: '#8ab4ff', pharmacy: '#c88ff0', oncall: '#f0b429',
-        ambulance: '#ef8354', inpatient: '#ef6461', outpatient: '#9bd4a5',
-        gyse: '#b8a4ff' }[k] ?? '#94a3b8'}"></i>${
+      STREET_COLORS[k] ?? '#94a3b8'}"></i>${
     esc(STREET_LABELS[k] ?? k)}</span>`).join('')}</p>
     <div class="tp-street__map" hidden></div>
     <script type="application/json">${

@@ -1808,7 +1808,6 @@ a:hover { text-decoration: underline; }
 .agelegend__diff.is-more { color: #f0b429; }
 
 /* Physician turnover. */
-.churn-kind { margin: 10px 0 14px; }
 .churn-bars { display: grid; gap: 4px; margin: 14px 0 10px; }
 .churn-bar { display: grid; grid-template-columns: 170px 1fr auto; gap: 10px;
   align-items: center; font-size: 12.5px; }

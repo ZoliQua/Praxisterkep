@@ -72,3 +72,11 @@ def test_snapshot_resolution_prefers_the_newest_at_or_before_a_date():
     assert resolve("neak_finszolg_ext", "2099-01-01") <= "2099-01-01"
     with pytest.raises(EesztError):
         resolve("neak_finszolg_ext", "2000-01-01")
+
+
+def test_the_capital_is_called_budapest_here_too():
+    """The register says "Főváros"; the rest of the site says Budapest."""
+    import gyse
+    assert gyse.county_key("Főváros") == "Budapest"
+    assert gyse.county_key("Budapest") == "Budapest"
+    assert gyse.county_key("Pest vármegye") == "Pest"

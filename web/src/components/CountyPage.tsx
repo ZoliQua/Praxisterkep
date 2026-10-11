@@ -53,6 +53,8 @@ export function CountyPage() {
   const data = useCounties();
   const county = useContextStore((s) => s.county);
   const setCounty = useContextStore((s) => s.setCounty);
+  const kind = useContextStore((s) => s.kind);
+  const setKind = useContextStore((s) => s.setKind);
   const [sort, setSort] = useState<SortKey>('band');
 
   const agg = countyOf(data, county);
@@ -74,7 +76,7 @@ export function CountyPage() {
 
   return (
     <>
-      <PageNav />
+      <PageNav kind={kind} onKind={setKind} />
       <section className="section container" id="varmegye">
         <h1 className="section__heading">{t('county.heading')}</h1>
         <p className="section__lead">{t('county.lead')}</p>

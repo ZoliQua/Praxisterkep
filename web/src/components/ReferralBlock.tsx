@@ -5,6 +5,7 @@
 // other: every exit it names should be a district we already call dissolved.
 import { useEffect, useState } from 'react';
 import { t } from '../lib/i18n';
+import { districtStatus } from '../lib/eesztTable';
 import { formatNumber } from '../lib/format';
 import { DataTableModal } from './DataTableModal';
 import type { ColDef, Row } from '../lib/eesztTable';
@@ -72,7 +73,7 @@ export function ReferralBlock() {
     ...r,
     typeLabel: data.types[r.type] ?? r.type,
     label: r.labelWithheld ? t('referral.labelWithheld') : r.label,
-    ourStatusLabel: r.ourStatus ? t(`status.${r.ourStatus}`) : t('referral.notOurs'),
+    ourStatusLabel: r.ourStatus ? districtStatus(r.ourStatus) : t('referral.notOurs'),
   }));
 
   return (

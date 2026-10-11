@@ -9,7 +9,7 @@ import type { StreetPoint } from './streetmap';
 const COLORS: Record<string, string> = {
   gp: '#4fd6c2', dental: '#8ab4ff', pharmacy: '#c88ff0', oncall: '#f0b429',
   ambulance: '#ef8354', inpatient: '#ef6461', outpatient: '#9bd4a5',
-  gyse: '#b8a4ff',
+  gyse: '#b8a4ff', transport: '#7dd3fc', dialysis: '#f0abfc',
 };
 
 export async function render(host: HTMLElement, points: StreetPoint[], style: string) {

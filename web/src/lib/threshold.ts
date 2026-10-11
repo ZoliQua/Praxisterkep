@@ -47,8 +47,12 @@ const value = (row: TravelSettlement, layer: Layer): number | null => {
 
 export function beyond(
   data: TravelRaw | null, layer: Layer, minutes: number, worstCount = 5,
+  county: string | null = null,
 ): Beyond | null {
-  const rows = data?.settlements;
+  // the map above is narrowed to the county in focus; an answer that stayed
+  // national beside it would be answering a different question
+  const all = data?.settlements;
+  const rows = county ? all?.filter((r) => r.county === county) : all;
   if (!rows?.length) return null;
 
   let settlements = 0;
@@ -92,10 +96,10 @@ export function beyond(
  * under the dial: how the affected population falls as the minutes rise.
  */
 export function curve(
-  data: TravelRaw | null, layer: Layer,
+  data: TravelRaw | null, layer: Layer, county: string | null = null,
 ): { minutes: number; population: number }[] {
   return THRESHOLDS.map((minutes) => ({
     minutes,
-    population: beyond(data, layer, minutes, 0)?.population ?? 0,
+    population: beyond(data, layer, minutes, 0, county)?.population ?? 0,
   }));
 }

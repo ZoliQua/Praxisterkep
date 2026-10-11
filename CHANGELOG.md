@@ -5,6 +5,31 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.33.1] — 2026-10-11
+
+### Módosítva
+- A megyelapon az ág váltása a **felső sáv fog/sztetoszkóp ikonjaival**
+  történik, nem egy szekción belüli szöveges kapcsolóval — ugyanúgy, mint
+  minden más lapon. A megyeválasztás közben megmarad.
+
+### Javítva
+- **A „Szakellátó intézmények" menüpont a semmibe mutatott**: a `#szakellatas`
+  horgony egyetlen szekcióhoz sem tartozott, így a link a lap tetejére vitt,
+  a horgonykereső pedig nyolc másodpercig kereste a nem létező szekciót.
+- **A segédeszköz-nyilvántartás „Főváros"-nak hívja Budapestet**, minden más
+  forrásunk Budapestnek. A közös megyeválasztás bevezetése óta ez azt
+  jelentette, hogy Budapestet választva a réteg 627 telephelye eltűnt, a
+  „Főváros" kiválasztása pedig olyan megyére állította az egész oldalt,
+  amit a többi lap nem ismer.
+- **Nyers i18n-kulcsok jelentek meg a lapon**: a `status.vacant`,
+  `status.dissolved` és `eeszt.colAddress` kulcsoknak egyik nyelvi fájlban
+  sem volt párjuk. A körzetállapot neve mostantól egy helyen dől el.
+- **Az utcaszintű térkép két ponttípusa** (betegszállítás, művese) név és
+  szín nélkül maradt: a jelmagyarázatban az angol kulcsuk látszott.
+- **A menetidő-csúszka országos választ adott akkor is, ha a térkép mellette
+  egy megyére volt szűrve.** Mostantól a kiválasztott megyére felel, és
+  megnevezi, mire vonatkozik.
+
 ## [1.33.0] — 2026-10-10
 
 ### Hozzáadva

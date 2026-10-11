@@ -500,7 +500,8 @@
     "colDoctor": "Contracted physician",
     "colNeakCode": "NEAK code",
     "mapDistrictNames": "District names",
-    "mapSavePng": "Save map (PNG)"
+    "mapSavePng": "Save map (PNG)",
+    "colAddress": "Address"
   },
   "dataTable": {
     "searchAll": "Search all columns…",
@@ -1923,11 +1924,12 @@
   "threshold": {
     "label": "How many minutes do you consider acceptable?",
     "people": "residents live further than that from the nearest {layer} (more than {minutes} minutes)",
-    "of": "— {share} of the country, across {settlements} settlements",
+    "of": "— {share} of {where}, across {settlements} settlements",
     "curveLabel": "Population outside the threshold, at each threshold",
     "worst": "The furthest:",
     "unreachable": "{n} settlements the road graph could not reach at all — they are in neither the numerator nor the denominator.",
     "over": "further than {minutes} min",
-    "under": "within {minutes} min"
+    "under": "within {minutes} min",
+    "country": "the country"
   }
 }

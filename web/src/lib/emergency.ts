@@ -4,6 +4,7 @@
 // station, all from the EESZT registers the site already downloads.
 import { useEffect, useState } from 'react';
 import { t } from './i18n';
+import { districtStatus } from './eesztTable';
 import type { ColDef, Row } from './eesztTable';
 
 export type EmergencyGroup = 'oncall' | 'ambulance' | 'transport' | 'dialysis';
@@ -199,7 +200,7 @@ export function districtRows(data: EmergencyRaw | null, kind: 'dental' | 'gp'): 
     .map((d) => ({
       ...d,
       kindLabel: t(`kinds.${d.kind}.label`),
-      statusLabel: t(`status.${d.status}`),
+      statusLabel: districtStatus(d.status),
     }));
 }
 

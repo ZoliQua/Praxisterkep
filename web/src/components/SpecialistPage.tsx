@@ -91,7 +91,7 @@ export function SpecialistPage() {
   return (
     <>
       <PageNav />
-      <header className="section container">
+      <header className="section container" id="szakellatas">
         <h1 className="section__heading">{t('specialist.heading')}</h1>
         <p className="section__lead">{t('specialist.lead')}</p>
         <p className="section__explain">{t('specialist.explain')}</p>

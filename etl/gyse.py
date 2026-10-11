@@ -63,7 +63,12 @@ RETAIL = ("shop", "branch", "workshop")
 
 def county_key(name: str) -> str:
     out = re.sub(r"\s+(megye|vármegye)$", "", (name or "").strip())
-    return "Budapest" if out.startswith("Budapest") else out
+    # this register is the only one that calls the capital "Főváros"; every
+    # other source — and every county filter on the site — says Budapest, and
+    # a county nobody else knows drops 627 premises out of every comparison
+    if out.startswith("Budapest") or out == "Főváros":
+        return "Budapest"
+    return out
 
 
 def settlement_key(name: str) -> str:

@@ -8,6 +8,7 @@ import { useMemo } from 'react';
 import { t } from '../lib/i18n';
 import { formatNumber, formatPercent } from '../lib/format';
 import { beyond, curve, THRESHOLDS } from '../lib/threshold';
+import { useContextStore } from '../lib/context';
 import type { Layer, TravelRaw } from '../lib/mobility';
 
 const W = 320;
@@ -26,8 +27,10 @@ export function TravelThreshold({ data, layer, minutes, onMinutes }: {
   minutes: number;
   onMinutes: (minutes: number) => void;
 }) {
-  const result = useMemo(() => beyond(data, layer, minutes), [data, layer, minutes]);
-  const points = useMemo(() => curve(data, layer), [data, layer]);
+  const county = useContextStore((s) => s.county);
+  const result = useMemo(
+    () => beyond(data, layer, minutes, 5, county), [data, layer, minutes, county]);
+  const points = useMemo(() => curve(data, layer, county), [data, layer, county]);
   if (!result) return null;
 
   const max = Math.max(...points.map((p) => p.population), 1);
@@ -56,6 +59,7 @@ export function TravelThreshold({ data, layer, minutes, onMinutes }: {
           minutes: String(minutes),
         })}
         {' '}<span className="threshold__of">{t('threshold.of', {
+          where: county ?? t('threshold.country'),
           share: share(result.population, result.ofPopulation),
           settlements: formatNumber(result.settlements),
         })}</span>

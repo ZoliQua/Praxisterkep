@@ -6,6 +6,7 @@
 // the contracted physician, so a change of name between two of them is a
 // change of doctor.
 import { useMemo, useState } from 'react';
+import { useContextStore } from '../lib/context';
 import { t, tKind } from '../lib/i18n';
 import { formatDecimal, formatNumber, formatPercent } from '../lib/format';
 import {
@@ -18,7 +19,8 @@ import type { PraxisKind } from '../types';
 
 export function CountyChurn({ county }: { county: string | null }) {
   const data = useFluctuation();
-  const [kind, setKind] = useState<PraxisKind>('gp');
+  // the branch is the one the tooth/stethoscope switch in the bar is set to
+  const kind = useContextStore((s) => s.kind) as PraxisKind;
   const [open, setOpen] = useState(false);
   const rows = useMemo(() => churnRows(data, kind), [data, kind]);
   const matrix = useMemo(() => churnMatrix(data, kind), [data, kind]);
@@ -36,14 +38,6 @@ export function CountyChurn({ county }: { county: string | null }) {
         months: String(data.recentMonths), from: branch.from,
         snapshots: String(branch.snapshots),
       })}</p>
-
-      <div className="topnav__kind churn-kind" role="group">
-        {(['gp', 'dental'] as const).map((k) => (
-          <button key={k} aria-pressed={kind === k} onClick={() => setKind(k)}>
-            {t(`kinds.${k}.label`)}
-          </button>
-        ))}
-      </div>
 
       <div className="county-stats">
         <div className="stat">

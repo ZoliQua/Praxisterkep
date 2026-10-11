@@ -23,6 +23,18 @@ export interface ColDef {
   link?: 'settlement';
 }
 
+/**
+ * What a district's status is called. Two call sites used to build
+ * `status.<value>` by hand — a key no locale file has, so the raw key was
+ * printed on the page.
+ */
+export function districtStatus(status: string): string {
+  if (status === 'filled') return t('stats.statusFilled');
+  if (status === 'dissolved') return t('stats.statusDissolved');
+  if (status === 'vacant_longterm') return t('stats.statusLongTerm');
+  return t('stats.statusVacant');
+}
+
 /* ---------------- matched table ---------------- */
 
 export type EesztRow = {
@@ -98,8 +110,7 @@ type BaseRow = {
 };
 
 function baseRows(snapshot: Snapshot): BaseRow[] {
-  const statusLabel = (s: string) => (s === 'filled' ? t('stats.statusFilled')
-    : s === 'dissolved' ? t('stats.statusDissolved') : t('stats.statusVacant'));
+  const statusLabel = districtStatus;
   return [
     ...snapshot.praxes.map((p) => ({
       fin: p.id,
