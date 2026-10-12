@@ -1778,15 +1778,19 @@ a:hover { text-decoration: underline; }
   font-size: 8px; fill: var(--ink-faint); pointer-events: none;
   text-transform: uppercase; letter-spacing: 0.04em;
 }
-.countypicker__county:hover path { fill: var(--bg-raised); stroke: var(--accent); }
+.countypicker__county.is-hover path {
+  fill: var(--bg-raised); stroke: var(--accent); stroke-width: 1.4;
+}
+.countypicker__county.is-hover text { fill: var(--ink); }
 .countypicker__county.is-on path {
   fill: var(--accent); stroke: var(--ink); stroke-width: 1.6;
   /* the outline has to survive its neighbours, so it is drawn, not outlined */
   paint-order: stroke fill;
 }
 .countypicker__county.is-on text {
-  fill: var(--accent-ink); font-weight: 700; font-size: 9px;
-  paint-order: stroke fill; stroke: var(--accent); stroke-width: 1.6px;
+  fill: #f8fafc; font-weight: 700; font-size: 9px;
+  paint-order: stroke fill; stroke: #0b1016; stroke-width: 2.4px;
+  stroke-linejoin: round;
 }
 /* a focus ring follows the shape; the browser's own box would be a rectangle
    across half the country */
@@ -1800,7 +1804,7 @@ a:hover { text-decoration: underline; }
   display: grid; gap: 12px; margin: 18px 0 22px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
-@media (min-width: 1500px) {
+@media (min-width: 1600px) {
   .county-cards { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 @media (max-width: 700px) {
@@ -1816,7 +1820,7 @@ a:hover { text-decoration: underline; }
 /* the text needs room of its own: squeezed beside the ring it used to break
    into one word a line, and the legend's counts fell off the card */
 .county-card__body { min-width: 0; flex: 1 1 190px; }
-.county-card .stat__value { font-size: 26px; line-height: 1.1; }
+.county-card .stat__value { font-size: 28px; line-height: 1.1; }
 .county-card .stat__label { line-height: 1.35; }
 .stat__of { color: var(--ink-faint); font-size: 17px; font-weight: 500; }
 .county-card--icon .county-card__ghost {
@@ -2043,3 +2047,11 @@ a:hover { text-decoration: underline; }
   /* the same for the hero's animated visuals */
   .showcase, .showcase__stage, .hero__showcase { max-width: 100%; overflow: hidden; }
 }
+
+/* The county cards answer to the pointer: a slice names itself. */
+.agepie path, .donut circle { transition: opacity 120ms; cursor: pointer; }
+.agelegend li { border-radius: 6px; padding: 2px 4px; margin: 0 -4px; cursor: default; }
+.agelegend li.is-on { background: var(--bg-panel); }
+.agelegend li:focus-visible { outline: 1px solid var(--accent); }
+.county-card .stat__value { transition: color 120ms; }
+.county-card__body { align-self: center; }

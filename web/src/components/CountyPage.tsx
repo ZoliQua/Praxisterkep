@@ -17,7 +17,7 @@ import { settlementHref } from '../lib/settlementLink';
 import { CountyRanking } from './CountyRanking';
 import { CountyPicker } from './CountyPicker';
 import { CountyChurn } from './CountyChurn';
-import { AgeLegend, AgePie } from './charts/AgePie';
+import { AgeLegend, AgePie, type AgeKey } from './charts/AgePie';
 import { Donut } from './charts/Donut';
 import { IconAmbulance, IconOncall, IconTooth } from './icons';
 import { PageNav } from './PageNav';
@@ -56,6 +56,10 @@ export function CountyPage() {
   const kind = useContextStore((s) => s.kind);
   const setKind = useContextStore((s) => s.setKind);
   const [sort, setSort] = useState<SortKey>('band');
+  // what the pointer is on, in each of the two charts: the card says what it
+  // is rather than leaving the colour to be decoded against a legend
+  const [ageOn, setAgeOn] = useState<AgeKey | null>(null);
+  const [stateOn, setStateOn] = useState<string | null>(null);
 
   const agg = countyOf(data, county);
   const rows = useMemo(() => {
@@ -70,6 +74,15 @@ export function CountyPage() {
     };
     return [...list].sort(by[sort]);
   }, [data, county, sort]);
+
+  // the settlements of the county by what their GP care looks like
+  const stateSlices = agg ? [
+    { value: agg.gpVacantOnly, color: '#ef6461', label: t('county.state.vacantOnly') },
+    { value: agg.gpPartial, color: '#f0b429', label: t('county.state.partial') },
+    { value: agg.settlements - agg.gpVacantOnly - agg.gpPartial,
+      color: '#4fd6c2', label: t('county.state.filled') },
+  ] : [];
+  const active = stateSlices.find((s2) => s2.label === stateOn) ?? null;
 
   const gpRank = rankOf(data, county, (c) => vacantShare(c, 'gp'));
   const oncallRank = rankOf(data, county, (c) => c.medianOncallMinutes);
@@ -102,34 +115,61 @@ export function CountyPage() {
               {/* who lives here */}
               <article className="county-card">
                 <div className="county-card__figure">
-                  {agg.age && <AgePie split={agg.age} size={116} hole={34} />}
+                  {agg.age && (
+                    <AgePie split={agg.age} size={150} hole={44}
+                      active={ageOn} onActive={setAgeOn} />
+                  )}
                 </div>
                 <div className="county-card__body">
-                  <div className="stat__value">{formatNumber(agg.population)}</div>
-                  <div className="stat__label">{t('county.population')}</div>
-                  {agg.age && <AgeLegend split={agg.age} />}
+                  {ageOn && agg.age ? (
+                    <>
+                      <div className="stat__value">
+                        {formatNumber(agg.age[ageOn])}
+                      </div>
+                      <div className="stat__label">{t('county.ageOf', {
+                        group: t(`age.part.${ageOn}`),
+                        share: formatPercent(agg.age[ageOn] / agg.age.total),
+                      })}</div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="stat__value">{formatNumber(agg.population)}</div>
+                      <div className="stat__label">{t('county.population')}</div>
+                    </>
+                  )}
+                  {agg.age && (
+                    <AgeLegend split={agg.age} active={ageOn} onActive={setAgeOn} />
+                  )}
                 </div>
               </article>
 
               {/* how many of its settlements have nobody under contract */}
               <article className="county-card">
                 <div className="county-card__figure">
-                  <Donut thickness={16} slices={[
-                    { value: agg.gpVacantOnly, color: '#ef6461',
-                      label: t('county.gpVacantOnly') },
-                    { value: agg.gpPartial, color: '#f0b429',
-                      label: t('county.state.partial') },
-                    { value: agg.settlements - agg.gpVacantOnly - agg.gpPartial,
-                      color: '#4fd6c2', label: t('county.state.filled') },
-                  ]}>
+                  <Donut size={150} thickness={20} slices={stateSlices}
+                    active={stateOn} onActive={setStateOn}>
                     <strong>{formatPercent(agg.gpVacantOnly / agg.settlements)}</strong>
                   </Donut>
                 </div>
                 <div className="county-card__body">
-                  <div className="stat__value">{formatNumber(agg.gpVacantOnly)}
-                    <span className="stat__of"> / {formatNumber(agg.settlements)}</span>
-                  </div>
-                  <div className="stat__label">{t('county.gpVacantOnlyOf')}</div>
+                  {active ? (
+                    <>
+                      <div className="stat__value">{formatNumber(active.value)}
+                        <span className="stat__of"> / {formatNumber(agg.settlements)}</span>
+                      </div>
+                      <div className="stat__label">{t('county.stateOf', {
+                        state: active.label.toLowerCase(),
+                        share: formatPercent(active.value / agg.settlements),
+                      })}</div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="stat__value">{formatNumber(agg.gpVacantOnly)}
+                        <span className="stat__of"> / {formatNumber(agg.settlements)}</span>
+                      </div>
+                      <div className="stat__label">{t('county.gpVacantOnlyOf')}</div>
+                    </>
+                  )}
                   {gpRank && <div className="stat__context">
                     {t('county.rank', { rank: gpRank.rank, of: gpRank.of })}</div>}
                 </div>

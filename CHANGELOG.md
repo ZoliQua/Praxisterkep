@@ -5,6 +5,25 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.33.3] — 2026-10-12
+
+### Módosítva
+- **A megyei mutatók válaszolnak az egérre.** A kördiagram szeletére (vagy a
+  jelmagyarázat sorára) húzva a kártya átáll arra a halmazra: kiírja a
+  nevét, a darabszámot és az arányt, a többi szelet elhalványul. Ugyanez a
+  gyűrűdiagramon: „22 / 183 település: betöltött és betöltetlen körzete is
+  van (12,0%)". Az ábrák nagyobbak lettek (150 px).
+
+### Javítva
+- **A körvonal az egér alatti megyénél is a szomszédok alá került.** A
+  kiválasztottat már korábban előre hoztam, de az egér alattit nem: a
+  Bács-Kiskunra húzva a határának csak egy darabja látszott. Mostantól
+  mindkettő a többi fölé rajzolódik.
+- **A kiválasztott megye neve** szélesebb, mint maga a megye, így félig a
+  saját kitöltésén, félig sötét szomszédokon feküdt; a sötét betű világos
+  holdudvarral az utóbbi felén maszatnak látszott. Most világos betű sötét
+  holdudvarral, ami mindkét felén olvasható.
+
 ## [1.33.2] — 2026-10-12
 
 ### Javítva

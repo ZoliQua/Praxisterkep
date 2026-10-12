@@ -1829,7 +1829,9 @@
     "dentalLongTerm": "ebből {n} tartósan betöltetlen · {dissolved} megszűnt körzet",
     "oncallPoints": "közfinanszírozott ügyeleti pont a megyében",
     "ambulance": "{n} mentőállomás",
-    "oncallMedian": "medián {m} az ügyeletig"
+    "oncallMedian": "medián {m} az ügyeletig",
+    "ageOf": "{group} — a megye lakosságának {share}-a",
+    "stateOf": "település: {state} ({share})"
   },
   "next": {
     "heading": "Mit nézz meg ezután?",

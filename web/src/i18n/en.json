@@ -1829,7 +1829,9 @@
     "dentalLongTerm": "{n} of them long-term vacant · {dissolved} dissolved",
     "oncallPoints": "publicly financed on-call points in the county",
     "ambulance": "{n} ambulance stations",
-    "oncallMedian": "median {m} to the on-call point"
+    "oncallMedian": "median {m} to the on-call point",
+    "ageOf": "{group} — {share} of the county",
+    "stateOf": "settlements: {state} ({share})"
   },
   "next": {
     "heading": "Where to next?",
