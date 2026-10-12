@@ -1824,7 +1824,7 @@
       "alacsony": "low"
     },
     "caveat": "The order is a comparison, not a verdict: a worse place means more indicators point the same way, not that care is missing.",
-    "gpVacantOnlyOf": "settlements with no contracted GP (of all)",
+    "gpVacantOnlyOf": "settlements with no contracted GP",
     "dentalDistricts": "vacant dental districts of those in the county",
     "dentalLongTerm": "{n} of them long-term vacant · {dissolved} dissolved",
     "oncallPoints": "publicly financed on-call points in the county",

@@ -5,6 +5,28 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.33.2] — 2026-10-12
+
+### Javítva
+- **A megyeválasztó kijelölése a szomszédok alá került.** Az SVG a
+  dokumentum sorrendjében rajzol, így a kiválasztott megye körvonalát a
+  későbbi megyék felülírták; a fókuszkeret ráadásul egy téglalap volt az
+  ország negyede fölött. A kiválasztott megye mostantól utoljára rajzolódik,
+  a keret pedig az alakját követi.
+- **A megyei mutatókártyák szövege nem fért ki**: a gyűrűdiagram mellett a
+  feliratok szavanként törtek, a korosztályi bontás számai pedig lelógtak a
+  kártyáról. A kártyák két oszlopban állnak (széles képernyőn négyben), a
+  szöveg saját helyet kap, a háttérikon halványabb.
+- **A településlista tetején nem volt menü** — csak a logó. Ugyanazt a sávot
+  kapja, mint minden más lap.
+- A megyetérképek **csak a saját megyéjük városait** címkézik: a
+  bács-kiskuni bélyegképen eddig Szeged és Szekszárd is szerepelt, mert
+  beleestek a keretbe.
+- **Mobilon az egész oldal oldalra csúszott**: a széles táblázatok, a
+  nyolcelemű rétegválasztó és az idősáv kitolták a lapot. A táblázatok
+  mostantól a saját dobozukban gördülnek, a kapcsolósorok tördelnek —
+  mind a nyolc lap elfér 420 pixelen.
+
 ## [1.33.1] — 2026-10-11
 
 ### Módosítva

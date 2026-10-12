@@ -33,6 +33,11 @@ const geo = {
   byKsh: new Map(),
   byName: new Map(),
 };
+// which county a town belongs to, so a map labels its own towns and not
+// whichever neighbour happens to fall inside the frame
+geo.countyOfTown = new Map(
+  geo.settlements.features.map((f) => [f.properties.name, f.properties.county]),
+);
 for (const f of geo.settlements.features) {
   geo.byKsh.set(f.properties.kshId, f.geometry.coordinates);
   // a name alone can collide, so the county-qualified key wins when it is known
@@ -154,6 +159,9 @@ const navBar = (profile) => nav.entries.map((e) => {
 }).join('\n    ');
 
 const ctx = (href, profile) => {
+  // the index page has no settlement of its own: its links carry no context
+  // rather than someone else's
+  if (!profile) return href;
   const [path, hash] = href.includes('#') ? [href.slice(0, href.indexOf('#')),
     href.slice(href.indexOf('#'))] : [href, ''];
   const q = new URLSearchParams({ m: profile.county, tel: profile.slug });
@@ -651,6 +659,9 @@ writeFileSync(join(dist, 'telepules', 'index.html'), `<!doctype html>
 <body>
 <nav class="topnav"><div class="topnav__inner">
   <a class="topnav__brand" href="/">PRAXISTÉRKÉP</a>
+  <div class="topnav__links">
+    ${navBar(null)}
+  </div>
 </div></nav>
 <header class="section container">
   <h1 class="section__heading">Települések</h1>

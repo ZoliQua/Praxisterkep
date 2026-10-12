@@ -196,6 +196,9 @@ a:hover { text-decoration: underline; }
 .seg {
   display: inline-flex; border: 1px solid var(--line-strong);
   border-radius: 999px; overflow: hidden; background: var(--bg-raised);
+  /* eight layer names in a row ran off the side of a phone and took the
+     page with them; they wrap instead */
+  flex-wrap: wrap; max-width: 100%;
 }
 .seg button {
   appearance: none; border: 0; background: transparent; color: var(--ink-dim);
@@ -372,7 +375,12 @@ a:hover { text-decoration: underline; }
 
 .stats-table { margin-top: 26px; color: var(--ink-dim); font-size: 14px; }
 .stats-table summary { cursor: pointer; color: var(--accent); }
-.stats-table__scroll { overflow-x: auto; margin-top: 12px; }
+.stats-table__scroll {
+  overflow-x: auto; margin-top: 12px;
+  /* without this the scroller inherits the grid's automatic minimum width,
+     grows to its content and takes the page with it */
+  min-width: 0; max-width: 100%;
+}
 .stats-table table {
   border-collapse: collapse; font-size: 13px; min-width: 640px;
   font-variant-numeric: tabular-nums;
@@ -1044,6 +1052,9 @@ a:hover { text-decoration: underline; }
   display: flex; align-items: center; gap: 14px; margin-top: 14px;
   border: 1px solid var(--line); border-radius: 999px;
   background: var(--bg-raised); padding: 8px 18px 8px 8px;
+  /* the play bar is one flex row of fixed-width parts: on a phone it has to
+     wrap, or the month label hangs over the edge and the page scrolls */
+  flex-wrap: wrap;
 }
 .timeline__play {
   flex: none; width: 34px; height: 34px; border-radius: 50%;
@@ -1768,28 +1779,49 @@ a:hover { text-decoration: underline; }
   text-transform: uppercase; letter-spacing: 0.04em;
 }
 .countypicker__county:hover path { fill: var(--bg-raised); stroke: var(--accent); }
-.countypicker__county.is-on path { fill: var(--accent); stroke: var(--accent); }
-.countypicker__county.is-on text { fill: var(--accent-ink); font-weight: 700; }
-.countypicker__county:focus-visible path { outline: 2px solid var(--accent); }
+.countypicker__county.is-on path {
+  fill: var(--accent); stroke: var(--ink); stroke-width: 1.6;
+  /* the outline has to survive its neighbours, so it is drawn, not outlined */
+  paint-order: stroke fill;
+}
+.countypicker__county.is-on text {
+  fill: var(--accent-ink); font-weight: 700; font-size: 9px;
+  paint-order: stroke fill; stroke: var(--accent); stroke-width: 1.6px;
+}
+/* a focus ring follows the shape; the browser's own box would be a rectangle
+   across half the country */
+.countypicker__county { outline: none; }
+.countypicker__county:focus-visible path {
+  stroke: var(--ink); stroke-width: 2.2; stroke-dasharray: 4 2;
+}
 
 /* The four headline cards. */
 .county-cards {
   display: grid; gap: 12px; margin: 18px 0 22px;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+@media (min-width: 1500px) {
+  .county-cards { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (max-width: 700px) {
+  .county-cards { grid-template-columns: 1fr; }
 }
 .county-card {
   position: relative; overflow: hidden;
-  display: flex; gap: 14px; align-items: center;
+  display: flex; gap: 14px; align-items: center; flex-wrap: wrap;
   padding: 14px 16px; border: 1px solid var(--line); border-radius: 12px;
   background: var(--bg-raised);
 }
 .county-card__figure { flex: none; }
-.county-card__body { min-width: 0; }
-.county-card .stat__value { font-size: 26px; }
+/* the text needs room of its own: squeezed beside the ring it used to break
+   into one word a line, and the legend's counts fell off the card */
+.county-card__body { min-width: 0; flex: 1 1 190px; }
+.county-card .stat__value { font-size: 26px; line-height: 1.1; }
+.county-card .stat__label { line-height: 1.35; }
 .stat__of { color: var(--ink-faint); font-size: 17px; font-weight: 500; }
 .county-card--icon .county-card__ghost {
-  position: absolute; right: -10px; top: -6px; width: 108px; height: 108px;
-  color: var(--line-strong); opacity: 0.55; pointer-events: none;
+  position: absolute; right: -14px; top: -10px; width: 96px; height: 96px;
+  color: var(--line-strong); opacity: 0.32; pointer-events: none;
 }
 .county-card--icon .county-card__ghost svg { width: 100%; height: 100%; }
 .county-card .stat__context svg { width: 14px; height: 14px; vertical-align: -2px; }
@@ -1800,9 +1832,12 @@ a:hover { text-decoration: underline; }
   font: 700 17px var(--font-display); color: var(--ink);
 }
 .agelegend { list-style: none; margin: 8px 0 0; padding: 0; font-size: 12.5px; }
-.agelegend li { display: flex; align-items: center; gap: 7px; padding: 1px 0; }
+.agelegend li {
+  display: flex; align-items: baseline; gap: 7px; padding: 1px 0;
+  flex-wrap: wrap;
+}
 .agelegend i { width: 9px; height: 9px; border-radius: 2px; flex: none; }
-.agelegend__label { color: var(--ink-dim); min-width: 86px; }
+.agelegend__label { color: var(--ink-dim); min-width: 78px; flex: 1 1 auto; }
 .agelegend__count { color: var(--ink-faint); }
 .agelegend__diff { color: #4fd6c2; margin-left: auto; }
 .agelegend__diff.is-more { color: #f0b429; }
@@ -1982,4 +2017,29 @@ a:hover { text-decoration: underline; }
 .heatmap__overall {
   background: transparent !important; color: var(--ink-dim) !important;
   border-color: transparent !important; font-weight: 600;
+}
+
+/* On a phone the wide tables used to push the whole page sideways: the body
+   scrolled, so a column of text drifted out of view while reading. They
+   scroll inside their own box now, and the page does not move. */
+@media (max-width: 760px) {
+  /* the spotlight is a two-column grid; on a phone it stacks, and its parts
+     may not set their own minimum width from their content */
+  .showcase { grid-template-columns: 1fr; }
+  .showcase > * { min-width: 0; }
+  .timeline { border-radius: 18px; padding: 8px 12px; }
+  .info-table,
+  .balance__types,
+  .data-dialog table,
+  .county-table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  /* a map's own labels may reach past its edge; the map clips them rather
+     than widening the page */
+  .eeszt-map, .map-shell { overflow: hidden; }
+  /* the same for the hero's animated visuals */
+  .showcase, .showcase__stage, .hero__showcase { max-width: 100%; overflow: hidden; }
 }

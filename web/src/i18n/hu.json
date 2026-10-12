@@ -1824,7 +1824,7 @@
       "alacsony": "alacsony"
     },
     "caveat": "A sorrend összehasonlítás, nem ítélet: egy rosszabb hely a rangsorban azt jelenti, hogy több mutató mutat ugyanabba az irányba — nem azt, hogy ott nincs ellátás.",
-    "gpVacantOnlyOf": "településen nincs szerződött háziorvos (az összesből)",
+    "gpVacantOnlyOf": "településen nincs szerződött háziorvos",
     "dentalDistricts": "betöltetlen fogorvosi körzet a megyében lévőkből",
     "dentalLongTerm": "ebből {n} tartósan betöltetlen · {dissolved} megszűnt körzet",
     "oncallPoints": "közfinanszírozott ügyeleti pont a megyében",

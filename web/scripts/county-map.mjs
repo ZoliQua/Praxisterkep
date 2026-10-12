@@ -146,8 +146,7 @@ export function countyMap(profile, geo) {
   const towns = geo.cities.features
     .filter((f) => f.properties.rank === 'seat' || f.properties.big)
     .map((f) => ({ ...f.properties, coords: f.geometry.coordinates }))
-    .filter((c) => c.coords[0] >= box[0] && c.coords[0] <= box[2]
-      && c.coords[1] >= box[1] && c.coords[1] <= box[3])
+    .filter((c) => geo.countyOfTown?.get(c.name) === profile.county)
     .filter((c) => c.name !== profile.settlement)
     .sort((a, b) => (b.rank === 'seat') - (a.rank === 'seat') || b.population - a.population)
     .slice(0, 12);
@@ -267,10 +266,7 @@ export function countyThumb(countyName, geo, width = 190, height = 120) {
     .join('');
   const towns = geo.cities.features
     .filter((f) => f.properties.rank === 'seat' || f.properties.big)
-    .filter((f) => {
-      const [lon, lat] = f.geometry.coordinates;
-      return lon >= minLon && lon <= maxLon && lat >= minLat && lat <= maxLat;
-    })
+    .filter((f) => geo.countyOfTown?.get(f.properties.name) === countyName)
     .sort((a, b) => (b.properties.rank === 'seat') - (a.properties.rank === 'seat')
       || b.properties.population - a.properties.population)
     .slice(0, 4);

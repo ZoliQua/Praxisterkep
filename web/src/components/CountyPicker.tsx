@@ -26,7 +26,10 @@ export function CountyPicker({ onPick }: { onPick?: (county: string) => void }) 
   return (
     <div className="countypicker">
       <svg viewBox={`0 0 ${W} ${H}`} role="group" aria-label={t('county.pick')}>
-        {shapes.map((s) => (
+        {/* the chosen county goes last: SVG paints in document order, and
+            drawn in place its outline disappears under its neighbours */}
+        {[...shapes].sort((a, b) => Number(a.name === county) - Number(b.name === county))
+          .map((s) => (
           <g key={s.name} className={`countypicker__county${
             s.name === county ? ' is-on' : ''}`}
             onClick={() => pick(s.name)} role="button" tabIndex={0}
@@ -39,7 +42,7 @@ export function CountyPicker({ onPick }: { onPick?: (county: string) => void }) 
               <text x={s.cx} y={s.cy} textAnchor="middle">{s.name}</text>
             )}
           </g>
-        ))}
+          ))}
       </svg>
     </div>
   );
