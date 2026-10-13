@@ -41,6 +41,11 @@ geo.countyOfTown = new Map(
 );
 // which county a járás belongs to, so a map draws its own and not the
 // neighbours' lines
+// a map label that names another settlement is a way to its page
+geo.linkOf = (name, county) => {
+  const slug = slugOf.get(`${name}|${county}`) ?? slugOf.get(name);
+  return slug ? `/telepules/${slug}/` : '';
+};
 geo.countyOfJaras = new Map(
   geo.settlements.features.map((f) => [f.properties.district, f.properties.county]),
 );
@@ -116,20 +121,26 @@ function streetPoints(profile) {
   return out;
 }
 
-function streetBlock(profile) {
+function streetBlock(profile, opts = {}) {
   if (!streetFile) return '';
-  const points = streetPoints(profile);
+  const all = streetPoints(profile);
+  const points = opts.only ? all.filter((p) => opts.only.includes(p.kind)) : all;
   if (!points.length) return '';
   const kinds = [...new Set(points.map((p) => p.kind))];
-  return `<section class="section container">
+  // the pharmacy section embeds the same machinery with one layer only
+  const wrap = opts.id
+    ? (inner) => `<div class="tp-streetwrap">${inner}</div>`
+    : (inner) => `<section class="section container" id="elerhetoseg">
   <h2 class="section__subheading">Utcaszinten</h2>
   <p class="section__explain">Hol állnak pontosan: a betöltött rendelők az orvos
     nevével, a gyógyszertárak, és ami még a településen van. A térkép csak
     kattintásra töltődik be, hogy a lap addig is azonnal olvasható maradjon.</p>
+  ${inner}</section>`;
+  return wrap(`
   <div class="tp-street" data-streetmap>
     <button type="button" class="data-btn data-btn--accent"
       data-loading="Térkép betöltése…" data-failed="A térkép nem töltődött be">
-      Utcaszintű térkép (${num(points.length)} pont)
+      ${opts.only ? 'Térkép megnyitása' : 'Utcaszintű térkép'} (${num(points.length)} pont)
     </button>
     <p class="tp-maplegend">${kinds.map((k) =>
     `<span><i class="street-pin" style="background:${
@@ -139,13 +150,12 @@ function streetBlock(profile) {
     <script type="application/json">${
   JSON.stringify(points).replace(/</g, '\\u003c')}</script>
   </div>
-  <p class="tp-note">A pontok geokódolt címek (Nominatim/OpenStreetMap), nem
-    helyszíni felmérés: ahol a cím pontatlan, a jelölő a település közepére esik,
-    és ezt a buborék ki is írja. Térkép:
+  <p class="tp-note">${opts.lead ? `${esc(opts.lead)} ` : ''}A pontok geokódolt címek
+    (Nominatim/OpenStreetMap), nem helyszíni felmérés: ahol a cím pontatlan, a
+    jelölő a település közepére esik, és ezt a buborék ki is írja. Térkép:
     <a href="https://www.maptiler.com/copyright/" rel="noopener">© MapTiler</a>,
     adat: <a href="https://www.openstreetmap.org/copyright" rel="noopener">©
-    OpenStreetMap közreműködők</a>.</p>
-</section>`;
+    OpenStreetMap közreműködők</a>.</p>`);
 }
 
 // the site-wide context (lib/context.ts) written into a static link: ?tel=
@@ -407,7 +417,7 @@ function pyramid(bySex, { width = 300, band = 26, gap = 4 } = {}) {
     const mw = (m / max) * half;
     const fw = (f / max) * half;
     const sum = m + f;
-    return `<g class="pyramid__row">
+    return `<a href="#kor-${key}" class="pyramid__row">
       <rect x="${(half - mw).toFixed(1)}" y="${y}" width="${mw.toFixed(1)}"
         height="${band}" fill="#6ea8ff" rx="2"><title>${esc(AGE_LABELS[key])} · férfi: ${
   num(m)} (${pct(sum ? m / sum : 0)} a korcsoporton belül)</title></rect>
@@ -420,7 +430,7 @@ function pyramid(bySex, { width = 300, band = 26, gap = 4 } = {}) {
         font-size="11" fill="#cbd5e1">${num(m)}</text>
       <text x="${(half + 86 + fw + 6).toFixed(1)}" y="${y + band / 2 + 4}"
         font-size="11" fill="#cbd5e1">${num(f)}</text>
-    </g>`;
+    </a>`;
   }).join('');
   return `<svg class="tp-pyramid" viewBox="0 0 ${width} ${height}" width="100%"
     height="auto" role="img" aria-label="Korfa nemek szerint">${bars}</svg>`;
@@ -444,22 +454,23 @@ function ageBlock(profile) {
 
   const figures = [
     oldRatio === null ? null : {
-      value: `${Math.round(oldRatio)}`,
-      label: 'idős száz munkaképes korúra',
+      value: `${Math.round(oldRatio)}`, per: '/ 100 munkaképes korú',
+      label: 'idős (65 év felett)',
       note: nationalOldRatio === null ? '' :
         `országosan ${Math.round(nationalOldRatio)}`,
     },
     youthRatio === null ? null : {
-      value: `${Math.round(youthRatio)}`,
-      label: 'gyermek száz munkaképes korúra', note: '',
+      value: `${Math.round(youthRatio)}`, per: '/ 100 munkaképes korú',
+      label: 'gyermek (0–14 éves)', note: '',
     },
     ageingIndex === null ? null : {
-      value: `${Math.round(ageingIndex)}`,
-      label: 'idős száz gyermekre (öregedési index)',
+      value: `${Math.round(ageingIndex)}`, per: '/ 100 gyermek',
+      label: 'idős — öregedési index',
       note: ageingIndex > 100 ? 'több az idős, mint a gyermek' : 'több a gyermek, mint az idős',
     },
     femaleShare === null ? null : {
-      value: pct(femaleShare), label: 'a lakosság nő', note: '',
+      value: pct(femaleShare), per: '', label: 'a lakosság nő',
+      note: a.male && a.female ? `${num(a.male)} férfi · ${num(a.female)} nő` : '',
     },
   ].filter(Boolean);
 
@@ -487,8 +498,10 @@ function ageBlock(profile) {
     </figure>
   </div>
   <div class="tp-figures">${figures.map((f) => `<div class="tp-figure">
+    ${f.per ? '<span class="tp-figure__ghost" aria-hidden="true">/100</span>' : ''}
     <span class="tp-figure__value">${esc(f.value)}</span>
-    <span class="tp-figure__label">${esc(f.label)}</span>
+    <span class="tp-figure__label">${esc(f.label)}${f.per
+    ? ` <em>${esc(f.per)}</em>` : ''}</span>
     ${f.note ? `<span class="tp-figure__note">${esc(f.note)}</span>` : ''}
   </div>`).join('')}</div>
   <p class="tp-note">Forrás: KSH, 2022. évi népszámlálás (CC BY 4.0). A fenti
@@ -504,7 +517,14 @@ const VACANCY_TYPE = {
 function vacancyTable(profile) {
   const rows = profile.vacant ?? [];
   if (!rows.length) return '';
-  return `<h3 class="tp-subhead">Betöltetlen és megszűnt körzetek, amelyek ide tartoznak</h3>
+  return `<details class="tp-details tp-details--vacant" open>
+  <summary>
+    <svg class="tp-details__ghost" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M12 3 2.5 20h19L12 3Z"/><path d="M12 10v4M12 17h.01"/></svg>
+    <span class="tp-details__title">Betöltetlen és megszűnt körzetek, amelyek ide tartoznak</span>
+    <span class="tp-details__count">${num(rows.length)}</span>
+  </summary>
   <table class="info-table">
     <thead><tr><th>Ág</th><th>Körzet</th><th>Állapot</th><th>Mióta</th>
       <th>Székhely</th></tr></thead>
@@ -523,9 +543,11 @@ function vacancyTable(profile) {
     adatokban nem látszik.</p>`;
 }
 
-function sinceLabel(month) {
-  if (!month) return '–';
-  const [y, m] = month.split('-').map(Number);
+function sinceLabel(value) {
+  // the parameter used to be called `month`, which shadowed the data month
+  // this function subtracts from — every duration came out as NaN
+  if (!value) return '–';
+  const [y, m] = value.split('-').map(Number);
   if (!y) return '–';
   const months = (year - y) * 12 + (month - m);
   const years = Math.floor(months / 12);
@@ -556,9 +578,17 @@ function vedonoBlock(profile) {
     seen.get(key).count += 1;
   }
   const rows = [...seen.values()];
-  return `<h3 class="tp-subhead">Védőnői szolgálat</h3>
-  <p class="section__explain">${num(v.territorial)} területi és ${num(v.school)} iskolai
-    védőnői szolgálat telephelye van a településen.</p>
+  return `<details class="tp-details tp-details--vedono" open>
+  <summary>
+    <svg class="tp-details__ghost" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="7" r="3.2"/><path d="M5 20c.6-3.6 3.4-5.6 7-5.6s6.4 2 7 5.6"/>
+      <path d="M16.5 10.5c1.6.6 2.6 1.8 3 3.5"/></svg>
+    <span class="tp-details__title">Védőnői szolgálat</span>
+    <span class="tp-details__count">${num(v.territorial + v.school)}</span>
+    <span class="tp-details__preview">${num(v.territorial)} területi · ${
+  num(v.school)} iskolai</span>
+  </summary>
   ${rows.length ? `<table class="info-table">
     <thead><tr><th>Cím</th><th>Fenntartó</th><th class="is-num">Szolgálat</th></tr></thead>
     <tbody>${rows.map((r) => `<tr>
@@ -570,7 +600,8 @@ function vedonoBlock(profile) {
   </table>` : ''}
   <p class="tp-note">A védőnő nevét egyetlen nyilvános nyilvántartás sem közli —
     a szolgálat és a fenntartó igen, a személy nem. (Orvosnevet is csak betöltött
-    körzetnél, a NEAK saját közzétételéből mutatunk.)</p>`;
+    körzetnél, a NEAK saját közzétételéből mutatunk.)</p>
+  </details>`;
 }
 
 /**
@@ -601,16 +632,44 @@ function changeBlock(profile) {
   const change = profile.change;
   if (!change) return '';
   const lines = [];
+  const details = [];
   for (const [kind, c] of Object.entries(change.kinds)) {
     const label = kind === 'gp' ? 'háziorvosi' : 'fogorvosi';
     const delta = c.vacantNow - c.vacant;
-    if (delta === 0 && c.vacantNow === 0) continue;
-    lines.push(delta === 0
-      ? `<li class="tp-change tp-change--same">A ${label} ellátásban ${
-        num(c.vacantNow)} betöltetlen vagy megszűnt körzet tartozik ide — egy éve ugyanennyi.</li>`
-      : `<li class="tp-change tp-change--${delta > 0 ? 'bad' : 'ok'}">
-        ${delta > 0 ? '▲' : '▼'} A ${label} ellátásban ${num(c.vacant)} helyett ${
+    if (delta !== 0 || c.vacantNow) {
+      lines.push(delta === 0
+        ? `<li class="tp-change tp-change--same">A ${label} ellátásban ${
+          num(c.vacantNow)} betöltetlen vagy megszűnt körzet tartozik ide — egy éve ugyanennyi.</li>`
+        : `<li class="tp-change tp-change--${delta > 0 ? 'bad' : 'ok'}">
+          ${delta > 0 ? '▲' : '▼'} A ${label} ellátásban ${num(c.vacant)} helyett ${
   num(c.vacantNow)} betöltetlen vagy megszűnt körzet tartozik ide.</li>`);
+    }
+    // the districts themselves, where the current snapshot can corroborate it
+    for (const row of c.newlyVacant ?? []) {
+      details.push({ kind: label, state: 'bad',
+        what: `${VACANCY_TYPE[row.type] ?? row.type} körzet`,
+        who: `${row.seat && row.seat !== profile.settlement ? `${row.seat} székhellyel` : 'helyben'}`,
+        when: row.since, fin: row.fin,
+        verb: row.status === 'dissolved' ? 'megszűnt' : 'betöltetlenné vált' });
+    }
+    for (const row of c.resolved ?? []) {
+      details.push({ kind: label, state: 'ok',
+        what: `${VACANCY_TYPE[row.type] ?? row.type} körzet`,
+        who: row.doctor || '', when: '', fin: row.fin, verb: 'betöltődött' });
+    }
+  }
+  for (const a of change.arrivals ?? []) {
+    // the same district often shows up twice: it left the vacancy list and a
+    // physician started in it. One row, with the date the other one lacks.
+    const already = details.find((d) => d.fin === a.fin);
+    if (already) {
+      already.when = already.when || a.since;
+      already.who = already.who || a.doctor;
+      continue;
+    }
+    details.push({ kind: a.kind === 'gp' ? 'háziorvosi' : 'fogorvosi', state: 'ok',
+      what: `${VACANCY_TYPE[a.type] ?? a.type} körzet`, who: a.doctor,
+      when: a.since, fin: a.fin, verb: 'új orvost kapott' });
   }
   if (change.newDoctors) {
     lines.push(`<li class="tp-change tp-change--ok">▲ ${num(change.newDoctors)} körzetben
@@ -619,16 +678,40 @@ function changeBlock(profile) {
   if (!lines.length) {
     lines.push('<li class="tp-change tp-change--same">Az elmúlt egy évben nem változott, amit a nyilvános adatokból látunk.</li>');
   }
-  return `<section class="section container">
+  return `<section class="section container" id="valtozas">
   <h2 class="section__subheading">Mi változott egy év alatt?</h2>
   <p class="section__explain">Az összevetés alapja a ${esc(change.month)} havi
     pillanatkép a saját archívumunkból.</p>
   <ul class="tp-changes">${lines.join('')}</ul>
+  ${details.length ? `<details class="tp-details tp-details--change">
+    <summary>
+      <svg class="tp-details__ghost" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M4 17h6l4-10 3 6h3"/></svg>
+      <span class="tp-details__title">Melyik körzettel mi történt</span>
+      <span class="tp-details__count">${num(details.length)}</span>
+    </summary>
+    <table class="info-table">
+      <thead><tr><th>Ág</th><th>Körzet</th><th>Mi történt</th><th>Ki / hol</th>
+        <th>Mikortól</th></tr></thead>
+      <tbody>${details.map((d) => `<tr class="tp-row--${d.state}">
+        <td>${esc(d.kind)}</td>
+        <td>${esc(d.what)}</td>
+        <td>${esc(d.verb)}</td>
+        <td>${esc(d.who || '–')}</td>
+        <td>${esc(d.when ? sinceLabel(d.when) : '–')}</td>
+      </tr>`).join('')}</tbody>
+    </table>
+    <p class="tp-note">Csak azok a változások szerepelnek, amiket a mai pillanatkép
+      meg is erősít: egy körzet akkor „betöltetlenné vált”, ha a betöltetlensége az
+      elmúlt egy évben kezdődött, és akkor „betöltődött”, ha ma orvos rendel benne.
+      Az archívum egyenetlensége így nem jelenik meg változásnak.</p>
+  </details>` : ''}
   <p class="tp-note">Csak azt vetjük össze, amire minden hónapra van adatunk: a
     betöltetlen és megszűnt körzeteket, illetve az orvosváltásokat. A menetidő, a
     buszelérés és a gyógyszertári hálózat visszamenőleg nem áll rendelkezésre,
     ezekre nem mondunk változást. Megyei szinten a
-    <a href="/megye.html?m=${encodeURIComponent(profile.county)}#fluktuacio">fluktuáció</a>
+    <a href="${esc(ctx(`/megye.html?m=${encodeURIComponent(profile.county)}#fluktuacio`, profile))}">fluktuáció</a>
     mutatja, mennyire cserélődnek az orvosok.</p>
 </section>`;
 }
@@ -688,10 +771,25 @@ function tenureLabel(row) {
   return `${years} éve`;
 }
 
+const BRANCH_GHOST = {
+  gp: '<path d="M6 3v5a4 4 0 0 0 8 0V3"/><path d="M10 12v2.5a4.5 4.5 0 0 0 9 0V12"/><circle cx="19" cy="10" r="2"/>',
+  dental: '<path d="M7.5 3.5c-2 0-3.5 1.8-3.5 4.2 0 3 1 4.6 1.6 7.2.5 2.2.8 5.1 2.4 5.1 1.5 0 1.6-3.4 2.4-5.3.3-.8.8-1.2 1.6-1.2s1.3.4 1.6 1.2c.8 1.9.9 5.3 2.4 5.3 1.6 0 1.9-2.9 2.4-5.1.6-2.6 1.6-4.2 1.6-7.2 0-2.4-1.5-4.2-3.5-4.2-1.6 0-2.7.8-4.5.8s-2.9-.8-4.5-.8Z"/>',
+};
+
 function surgeryTable(profile, kind, heading) {
   const rows = (profile.surgeries ?? []).filter((r) => r.kind === kind);
   if (!rows.length) return '';
-  return `<h3 class="tp-subhead">${esc(heading)}</h3>
+  const names = rows.map((r) => r.doctor).filter(Boolean);
+  return `<details class="tp-details tp-details--${kind}">
+  <summary>
+    <svg class="tp-details__ghost" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"
+      aria-hidden="true">${BRANCH_GHOST[kind] ?? ''}</svg>
+    <span class="tp-details__title">${esc(heading)}</span>
+    <span class="tp-details__count">${num(rows.length)}</span>
+    <span class="tp-details__preview">${esc(names.slice(0, 3).join(' · '))}${
+  names.length > 3 ? ` · +${num(names.length - 3)}` : ''}</span>
+  </summary>
   <table class="info-table">
     <thead><tr><th>Orvos</th><th>Körzet</th><th>Rendelő címe</th>
       <th>Mióta ő látja el</th></tr></thead>
@@ -702,7 +800,8 @@ function surgeryTable(profile, kind, heading) {
   r.address ? `, ${esc(r.address)}` : ''}</td>
       <td>${esc(tenureLabel(r))}</td>
     </tr>`).join('')}</tbody>
-  </table>`;
+  </table>
+  </details>`;
 }
 
 function pharmacyBlock(profile) {
@@ -725,6 +824,136 @@ function pharmacyBlock(profile) {
   return '<p class="tp-note">A településen nincs szerződött gyógyszertár.</p>';
 }
 
+
+/**
+ * The rail down the left: where you are on the page, and the whole page at a
+ * glance. It is a list of anchors — the browser's own scrolling does the
+ * work, and :target marks the one that was clicked. On a phone it lies down
+ * across the top instead, because a rail would eat a third of the screen.
+ */
+const SECTIONS = [
+  ['elhelyezkedes', 'Elhelyezkedés', 'map'],
+  ['lakossag', 'Lakosság', 'people'],
+  ['elerhetoseg', 'Elérhetőség', 'pin'],
+  ['orvosok', 'Orvosok', 'doctor'],
+  ['tavolsag', 'Távolság', 'road'],
+  ['gyogyszertar', 'Gyógyszertár', 'pill'],
+  ['kozlekedes', 'Közlekedés', 'bus'],
+  ['kockazat', 'Kockázati index', 'gauge'],
+  ['valtozas', 'Változás', 'delta'],
+];
+
+const RAIL_ICONS = {
+  map: '<path d="M3 6.5 9 4l6 2.5L21 4v13.5L15 20l-6-2.5L3 20Z"/><path d="M9 4v13.5M15 6.5V20"/>',
+  people: '<circle cx="9" cy="8" r="3"/><circle cx="17" cy="9.5" r="2.2"/><path d="M3.5 19c.6-3 2.9-4.6 5.5-4.6S14 16 14.6 19"/><path d="M16 14.6c2 .2 3.6 1.6 4 4.4"/>',
+  pin: '<path d="M12 21s7-5.8 7-11a7 7 0 1 0-14 0c0 5.2 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/>',
+  doctor: '<path d="M6 3v5a4 4 0 0 0 8 0V3"/><path d="M10 12v2.5a4.5 4.5 0 0 0 9 0V12"/><circle cx="19" cy="10" r="2"/>',
+  road: '<path d="M8 3 5 21M16 3l3 18M12 4v3M12 10v3M12 16v3"/>',
+  pill: '<rect x="3" y="9" width="18" height="7" rx="3.5"/><path d="M12 9v7"/>',
+  bus: '<rect x="4" y="4" width="16" height="12" rx="2.5"/><path d="M4 10h16"/><circle cx="8" cy="19" r="1.6"/><circle cx="16" cy="19" r="1.6"/>',
+  gauge: '<path d="M4 17a8 8 0 1 1 16 0"/><path d="M12 17 16 10"/>',
+  delta: '<path d="M4 17h6l4-10 3 6h3"/>',
+};
+
+const railIcon = (key) => `<svg viewBox="0 0 24 24" fill="none"
+  stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+  stroke-linejoin="round" aria-hidden="true">${RAIL_ICONS[key] ?? ''}</svg>`;
+
+function sectionRail(present) {
+  // a rail that points at a section the page does not have is worse than no
+  // rail: the blocks decide, not the list
+  const items = SECTIONS.filter(([id]) => present.has(id));
+  return `<nav class="tp-rail" aria-label="Szakaszok">
+    <ul>${items.map(([id, label, icon]) => `<li>
+      <a href="#${id}">${railIcon(icon)}<span>${esc(label)}</span></a>
+    </li>`).join('')}</ul>
+  </nav>`;
+}
+
+/** A rule with a word on it, so a long section reads as its parts. */
+function divider(label) {
+  return `<p class="tp-divider"><span>${esc(label)}</span></p>`;
+}
+
+/** A question mark that explains itself on hover and on focus — no script. */
+function helpTip(text) {
+  return `<span class="tp-help" tabindex="0" role="note"
+    aria-label="${esc(text)}">?<span class="tp-help__body">${esc(text)}</span></span>`;
+}
+
+const TRAVEL_COLORS = {
+  gp: '#4fd6c2', dental: '#8ab4ff', oncall: '#f0b429', ambulance: '#ef8354',
+  inpatient: '#ef6461', outpatient: '#9bd4a5', gyse: '#b8a4ff', pharmacy: '#c88ff0',
+};
+
+/** The drive to each kind of care, as bars, before the table says it again. */
+function travelChart(profile) {
+  const travel = profile.travel ?? {};
+  const rows = LAYERS
+    .map(([key, label]) => ({ key, label, min: (travel[key] || {}).minutes,
+      at: (travel[key] || {}).at }))
+    .filter((r) => r.min !== null && r.min !== undefined);
+  if (!rows.length) return '';
+  const max = Math.max(...rows.map((r) => r.min), 1);
+  return `<div class="tp-bars">${rows.map((r) => `<div class="tp-bar">
+    <span class="tp-bar__label">${esc(r.label)}</span>
+    <span class="tp-bar__track">
+      <span class="tp-bar__fill" style="width:${Math.max((r.min / max) * 100, 1.5)}%;
+        background:${TRAVEL_COLORS[r.key] ?? '#94a3b8'}"
+        title="${esc(r.label)}: ${esc(minutes(r.min))}"></span>
+    </span>
+    <span class="tp-bar__value">${esc(minutes(r.min))}${
+  r.at && r.at !== profile.settlement ? ` <em>${esc(r.at)}</em>` : ' <em>helyben</em>'}</span>
+  </div>`).join('')}</div>`;
+}
+
+/** What the timetable gives this settlement, before the sentences. */
+function transitChart(profile) {
+  const bus = profile.transit;
+  if (!bus) return '';
+  const targets = [['gp', 'háziorvos'], ['oncall', 'ügyelet'], ['inpatient', 'kórház']];
+  return `<div class="tp-figures tp-figures--compact">
+    <div class="tp-figure"><span class="tp-figure__value">${num(bus.departures)}</span>
+      <span class="tp-figure__label">indulás a referencianapon</span></div>
+    <div class="tp-figure"><span class="tp-figure__value">${num(bus.reachable)}</span>
+      <span class="tp-figure__label">átszállás nélkül elérhető település</span></div>
+    ${targets.map(([key, label]) => {
+    const t = bus[key] || {};
+    const ok = t.direct;
+    return `<div class="tp-figure tp-figure--${ok ? 'ok' : 'bad'}">
+      <span class="tp-figure__value">${ok ? '✓' : '✕'}</span>
+      <span class="tp-figure__label">${esc(label)}${ok && t.minutes
+    ? ` · ${num(t.minutes)} perc` : ''}</span>
+      ${t.target ? `<span class="tp-figure__note">${esc(t.target)}</span>` : ''}
+    </div>`;
+  }).join('')}
+  </div>`;
+}
+
+/** Where this settlement sits on the index, against the whole country. */
+function indexCompare(profile) {
+  const index = profile.index;
+  if (!index) return '';
+  const percentile = index.of ? 1 - (index.rank - 1) / index.of : null;
+  const bands = [['alacsony', 'alacsony'], ['kozepes', 'közepes'],
+    ['magas', 'magas'], ['kiemelt', 'kiemelt']];
+  return `<div class="tp-indexscale">
+    <div class="tp-indexscale__bar">
+      ${bands.map(([key, label]) => `<span class="tp-indexscale__band tp-indexscale__band--${key}"
+        title="${esc(label)} sáv"></span>`).join('')}
+      <span class="tp-indexscale__marker" style="left:${Math.min(Math.max(index.value, 0), 100).toFixed(1)}%">
+        <span>${esc(String(index.value).replace('.', ','))}</span>
+      </span>
+    </div>
+    <p class="tp-indexscale__legend">
+      <span>0 — a legjobb helyzetű település</span><span>100 — a legrosszabb</span>
+    </p>
+    <p class="tp-note">${esc(profile.settlement)} a ${num(index.of)} településből a
+      <strong>${num(index.rank)}.</strong> helyen áll${percentile === null ? '' :
+  ` — az ország ${pct(percentile)}-ánál kedvezőbb a helyzete`}.</p>
+  </div>`;
+}
+
 function page(profile) {
   const { settlement, county } = profile;
   // Budapest's districts are their own járás ("Budapest 03. ker."), and
@@ -732,6 +961,13 @@ function page(profile) {
   const district = profile.district && profile.district !== settlement
     ? profile.district : '';
   const title = `${settlement} — alapellátás egy helyen`;
+  // the optional blocks are built first, so the rail can list what exists
+  const streetHtml = streetBlock(profile);
+  const changeHtml = changeBlock(profile);
+  const present = new Set(['elhelyezkedes', 'lakossag', 'orvosok', 'tavolsag',
+    'gyogyszertar', 'kozlekedes', 'kockazat']);
+  if (streetHtml) present.add('elerhetoseg');
+  if (changeHtml) present.add('valtozas');
   const gpState = profile.gp ? (STATE[profile.gp.state] ?? [''])[0] : '';
   const drive = profile.travel?.gp;
   const desc = [
@@ -779,43 +1015,51 @@ function page(profile) {
     rangsorában.</p>
 </header>
 
-<section class="section container">
+${sectionRail(present)}
+
+<section class="section container" id="elhelyezkedes">
   <h2 class="section__subheading">Hol van ez?</h2>
   ${countyMap(profile, geo)}
 </section>
 
-<section class="section container">
+<section class="section container" id="lakossag">
   <h2 class="section__subheading">Kik laknak itt?</h2>
   ${ageBlock(profile)}
 </section>
 
-<section class="section container">
+${streetHtml}
+
+<section class="section container" id="orvosok">
   <h2 class="section__subheading">Van-e orvos?</h2>
-  ${surgeryTable(profile, 'gp', 'Háziorvosok a településen')}
-  ${surgeryTable(profile, 'dental', 'Fogorvosok a településen')}
-  ${(profile.surgeries ?? []).length ? '' : `<p class="tp-note">A településen egyetlen
-    betöltött körzetnek sincs rendelője — alább az látszik, mely körzetek tartoznak
-    ide, és hol a legközelebbi ellátás.</p>`}
   <div class="tp-cards">
     ${branchCard('Háziorvosi ellátás', profile.gp)}
     ${branchCard('Fogorvosi ellátás', profile.dental)}
   </div>
+  ${surgeryTable(profile, 'gp', 'Háziorvosok a településen')}
+  ${surgeryTable(profile, 'dental', 'Fogorvosok a településen')}
+  ${(profile.surgeries ?? []).length ? `<p class="tp-note">Az orvos neve a NEAK
+    szerződött szolgáltatói nyilvántartásából való, és csak betöltött körzetnél
+    szerepel. A „mióta” a saját archívumunkból jön (${esc(String(archiveFrom))} óta
+    őrzött havi NEAK-pillanatképek), nem NEAK által közölt kezdődátum; rendelési
+    időt egyik nyilvános forrás sem közöl.</p>` : `<p class="tp-note">A településen
+    egyetlen betöltött körzetnek sincs rendelője — alább az látszik, mely körzetek
+    tartoznak ide, és hol a legközelebbi ellátás.</p>`}
+
+  ${divider('Ami betöltetlen')}
   <p class="tp-note">A betöltetlenség nem azonos az ellátatlansággal: a helyettesítés a
     nyilvános adatokban nem látszik.</p>
   ${vacancyTable(profile)}
-  ${vedonoBlock(profile)}
   ${dentalCatchment(profile)}
-  ${(profile.surgeries ?? []).length ? `<p class="tp-note">Az orvos neve a NEAK
-    szerződött szolgáltatói nyilvántartásából való, és csak betöltött körzetnél
-    szerepel. A „mióta" a saját archívumunkból jön (${esc(String(archiveFrom))} óta
-    őrzött havi NEAK-pillanatképek), nem NEAK által közölt kezdődátum; rendelési
-    időt egyik nyilvános forrás sem közöl.</p>` : ''}
+
+  ${divider('Védőnői ellátás')}
+  ${vedonoBlock(profile)}
 </section>
 
-<section class="section container">
+<section class="section container" id="tavolsag">
   <h2 class="section__subheading">Milyen messze?</h2>
   <p class="section__explain">Autóval, szabad forgalom mellett, az OpenStreetMap úthálózatán
     számolva — a légvonalbeli távolság mellette áll, mert a kettő nem ugyanaz.</p>
+  ${travelChart(profile)}
   <table class="info-table">
     <thead><tr><th>Ellátás</th><th class="is-num">Menetidő</th><th class="is-num">Légvonal</th><th>Hol</th></tr></thead>
     <tbody>${travelRows(profile)}</tbody>
@@ -824,18 +1068,23 @@ function page(profile) {
     segédeszköz-kiadóhely működik.</p>` : ''}
 </section>
 
-<section class="section container">
+<section class="section container" id="gyogyszertar">
   <h2 class="section__subheading">Gyógyszertár</h2>
   ${pharmacyBlock(profile)}
+  ${streetBlock(profile, { only: ['pharmacy'], id: 'patikaterkep',
+    heading: '', lead: 'A gyógyszertárak a térképen, utcaszinten.' })}
 </section>
 
-<section class="section container">
+<section class="section container" id="kozlekedes">
   <h2 class="section__subheading">Busszal is elérhető?</h2>
+  ${transitChart(profile)}
   ${transitBlock(profile)}
 </section>
 
-<section class="section container">
-  <h2 class="section__subheading">Összetett ellátási kockázati index</h2>
+<section class="section container" id="kockazat">
+  <h2 class="section__subheading">Összetett ellátási kockázati index
+    ${helpTip('Nyolc nyilvános mutató súlyozott átlaga, mindegyik országos rangsorszázalékra váltva: betöltetlenség, menetidő háziorvoshoz, fogorvoshoz, ügyelethez, járóbeteg- és fekvőbeteg-ellátáshoz, buszelérés, korösszetétel, kockázati előrejelzés és a kedvezményezett települési besorolás. A 100 a legrosszabb helyzetű települést jelenti, nem azt, hogy ott nincs ellátás.')}</h2>
+  ${indexCompare(profile)}
   ${indexBlock(profile)}
   ${cluster ? `<p>Ez a település egy <strong>összefüggő ellátási hiányterület</strong> része
     (${esc(cluster.name)} környéke: ${num(cluster.settlements)} település,
@@ -846,9 +1095,7 @@ function page(profile) {
     <a href="${esc(ctx('/elemzo.html#index', profile))}">A módszer részletesen</a>.</p>
 </section>
 
-${streetBlock(profile)}
-
-${changeBlock(profile)}
+${changeHtml}
 
 <footer class="section container tp-footer">
   <p>Adatállapot: ${esc(monthLabel)}. Források: NEAK szerződött szolgáltatók és betöltetlen

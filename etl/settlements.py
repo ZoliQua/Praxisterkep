@@ -151,6 +151,12 @@ def build() -> dict:
     for rows_ in vacancies.values():
         rows_.sort(key=lambda r: (r["kind"], r["since"] or "9999"))
 
+    # every district that has a doctor today, by code: the year-on-year
+    # comparison leans on it to tell a real change from an archive artefact
+    filled_now = {f["id"]: {**f, "kind": kind}
+                  for kind in ("gp", "dental")
+                  for f in latest["kinds"][kind].get("filledPraxes", [])}
+
     # what the same settlement looked like a year ago, from the archive
     year_ago = archive_year_ago(latest.get("month", ""))
     recent_cutoff = month_back(latest.get("month", ""), 12)
@@ -326,14 +332,44 @@ def build() -> dict:
             now = record.get(kind)
             if now is None:
                 continue
-            then[kind] = {"vacant": rows__.get(key, 0), "vacantNow": now["vacant"]}
+            was = set(rows__.get(key, []))
+            is_now = {v["fin"] for v in vacancies.get(key, []) if v["kind"] == kind}
+            by_fin = {v["fin"]: v for v in vacancies.get(key, [])}
+            # The two sets differ for two reasons: something changed, or an
+            # archived month's list was built differently from today's. Only
+            # the changes the current snapshot can corroborate are reported —
+            # a district "newly" vacant since 2004 is an archive artefact, not
+            # news, and a district that merely left the list proves nothing
+            # unless it is filled today.
+            then[kind] = {
+                "vacant": len(was), "vacantNow": len(is_now),
+                "resolved": [
+                    {"fin": fin, "doctor": filled_now[fin].get("doctor", ""),
+                     "settlement": filled_now[fin].get("settlement", ""),
+                     "type": filled_now[fin].get("type", "")}
+                    for fin in sorted(was - is_now) if fin in filled_now
+                ],
+                "newlyVacant": [
+                    {k: by_fin[fin][k] for k in ("fin", "type", "status",
+                                                 "since", "seat")}
+                    for fin in sorted(is_now - was)
+                    if fin in by_fin and (by_fin[fin]["since"] or "") >= recent_cutoff
+                ],
+            }
         if then:
             # physicians who took over a district here inside the window
             fresh = sum(1 for r in surgeries.get(name_key, [])
                         if r["since"] and r["since"] >= recent_cutoff
                         and not r["fromStart"])
+            # who started here inside the window, by name: the registry names
+            # a physician of a filled district, and only of a filled one
+            arrivals = [
+                {k: r[k] for k in ("kind", "fin", "type", "doctor", "since")}
+                for r in surgeries.get(name_key, [])
+                if r["since"] and r["since"] >= recent_cutoff and not r["fromStart"]
+            ]
             record["change"] = {"month": year_ago["month"], "kinds": then,
-                                "newDoctors": fresh}
+                                "newDoctors": fresh, "arrivals": arrivals}
         if name_key in surgeries:
             record["surgeries"] = surgeries[name_key]
         if name_key in chemists:
@@ -413,9 +449,11 @@ def archive_year_ago(month: str, back: int = 12, tolerance: int = 3) -> dict:
         if best is None:
             continue
         snap = json.loads(best.read_text(encoding="utf-8"))
+        # the codes themselves, not just how many: a page can then say which
+        # district went vacant and which one found a doctor
         out["kinds"][kind] = {
-            row["kshId"]: len(row.get("vacantPraxisIds", []))
-            + len(row.get("dissolvedPraxisIds", []))
+            row["kshId"]: sorted(set(row.get("vacantPraxisIds", []))
+                                 | set(row.get("dissolvedPraxisIds", [])))
             for row in snap.get("settlements", []) if row.get("kshId")
         }
         picked = picked or best.parent.name

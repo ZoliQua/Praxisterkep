@@ -5,6 +5,45 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.36.0] — 2026-10-13
+
+A településlapok átépítése. Minden továbbra is **JavaScript nélkül** működik
+(a térképek kivételével, amik gombnyomásra töltődnek): a kapcsolók
+jelölőnégyzetek, a lenyílók `<details>`-ek, a kiemelés CSS.
+
+### Hozzáadva
+- **Oldalsó, mindig látható szakaszmenü** ikonokkal: Elhelyezkedés ·
+  Lakosság · Elérhetőség · Orvosok · Távolság · Gyógyszertár · Közlekedés ·
+  Kockázati index · Változás. Csak azokra a szakaszokra mutat, amik az adott
+  lapon léteznek; mobilon vízszintes sávvá fekszik.
+- **A térkép rétegei ki-be kapcsolhatók**: háziorvos, fogorvos, központi
+  ügyelet, kórház, gyógyszertár, járásszékhelyek. A térképen megnevezett
+  települések **kattinthatók**, átvisznek a saját lapjukra.
+- **Menetidő-grafika** a táblázat fölött, **buszelérés-mutatók** a mondatok
+  fölött, és az **index skálája** a település jelölőjével — mellette „?",
+  ami elmagyarázza, miből áll.
+- **A „Mi változott egy év alatt?" kifejti magát**: lenyitható táblázat arról,
+  melyik körzet vált betöltetlenné és melyikben kezdett orvos (névvel,
+  dátummal). Csak az szerepel benne, amit a mai pillanatkép megerősít.
+- **Gyógyszertár-szakasz**: beágyazott utcaszintű térkép, csak a
+  gyógyszertárakkal.
+- A **korfa is kattintható**, és a korcsoportok aránya a „/100" háttérszámmal
+  olvasható („35 idős / 100 munkaképes korú").
+
+### Módosítva
+- **A „Van-e orvos?" sorrendje**: elöl a két összefoglaló panel, utána a
+  háziorvosok és fogorvosok **lenyitható** táblázata (ágra utaló ikonnal,
+  létszámmal és névelőnézettel), majd elválasztó, a betöltetlen körzetek, és
+  a védőnői szolgálat — ez utóbbi is saját ikonnal és kerettel.
+- **Az „Utcaszinten" szakasz a harmadik helyre került**, „Elérhetőség" néven
+  a menüben.
+- Kisebb térköz a lap tetején: a térkép fölötti üres sáv a felére csökkent.
+
+### Javítva
+- A betöltetlen körzetek „mióta" oszlopa **„NaN éve"-t írt**: a
+  `sinceLabel(month)` paraméter elfedte az adathónapot, amiből számolt.
+- A „?" buborék mobilon kilógott a képernyőről, és vele az egész lap.
+
 ## [1.35.0] — 2026-10-13
 
 ### Hozzáadva

@@ -201,10 +201,11 @@ export function countyMap(profile, geo) {
     const dots = group.map((t, i) => `
     <circle cx="${(tx + (i - (group.length - 1) / 2) * 5).toFixed(1)}"
       cy="${ty.toFixed(1)}" r="3.6" fill="${t.color}"/>`).join('');
-    return `<g class="cm-link">${strokes}${dots}${spot ? `
-    <text x="${(spot.anchorEnd ? tx - 9 : tx + 9).toFixed(1)}" y="${spot.y.toFixed(1)}"
-      ${spot.anchorEnd ? 'text-anchor="end" ' : ''}fill="#cbd5e1"
-      font-size="11">${esc(text)}</text>` : ''}
+    return `<g class="cm-link ${group.map((t) => `cm-layer--${t.key}`).join(' ')}">${strokes}${dots}${spot ? `
+    <a href="${esc(geo.linkOf?.(at, profile.county) ?? '')}" class="cm-townlink">
+      <text x="${(spot.anchorEnd ? tx - 9 : tx + 9).toFixed(1)}" y="${spot.y.toFixed(1)}"
+        ${spot.anchorEnd ? 'text-anchor="end" ' : ''}fill="#cbd5e1"
+        font-size="11">${esc(text)}</text></a>` : ''}
   </g>`;
   }).join('\n  ');
 
@@ -214,20 +215,29 @@ export function countyMap(profile, geo) {
     const jaras = c.rank === 'jarasSeat';
     const size = seat ? 6.2 : jaras ? 5 : 5.4;
     const spot = labels.place(x + 6, y + 3.5, c.name.length * size, { push: 2 });
-    return `<g class="cm-town">
+    return `<g class="cm-town${jaras ? ' cm-layer--jarasseat' : ''}">
     <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${seat ? 3.4 : jaras ? 1.8 : 2.2}"
       fill="${seat ? '#94a3b8' : jaras ? '#51637a' : '#64748b'}"/>${spot ? `
-    <text x="${(spot.anchorEnd ? x - 6 : x + 6).toFixed(1)}" y="${spot.y.toFixed(1)}"
-      ${spot.anchorEnd ? 'text-anchor="end" ' : ''}font-size="${
+    <a href="${esc(geo.linkOf?.(c.name, profile.county) ?? '')}" class="cm-townlink">
+      <text x="${(spot.anchorEnd ? x - 6 : x + 6).toFixed(1)}" y="${spot.y.toFixed(1)}"
+        ${spot.anchorEnd ? 'text-anchor="end" ' : ''}font-size="${
   seat ? 11.5 : jaras ? 9 : 10}"
-      fill="${seat ? '#cbd5e1' : jaras ? '#8595aa' : '#94a3b8'}"${
-  seat ? ' font-weight="600"' : ''}>${esc(c.name)}</text>` : ''}
+        fill="${seat ? '#cbd5e1' : jaras ? '#8595aa' : '#94a3b8'}"${
+  seat ? ' font-weight="600"' : ''}>${esc(c.name)}</text></a>` : ''}
   </g>`;
   }).join('\n  ');
 
-  const legend = targets.length
-    ? `<p class="tp-maplegend">${targets.map((t) =>
-      `<span><i style="background:${t.color}"></i>${esc(t.label)}</span>`).join('')}</p>`
+  // the switches: a checkbox per layer, so the map can be read one question
+  // at a time. No script — the stylesheet hides what is unchecked.
+  const toggles = [
+    ...targets.map((t) => ({ key: t.key, label: t.label, color: t.color })),
+    { key: 'jarasseat', label: 'Járásszékhelyek', color: '#51637a' },
+  ];
+  const legend = toggles.length
+    ? `<p class="tp-maplegend tp-maplegend--toggles">${toggles.map((t) => `
+      <label class="cm-toggle"><input type="checkbox" checked
+        data-layer="${t.key}"><i style="background:${t.color}"></i>${
+  esc(t.label)}</label>`).join('')}</p>`
     : '';
 
   const inPlace = LINKS
@@ -238,6 +248,7 @@ export function countyMap(profile, geo) {
     .map((l) => l.label);
 
   return `<figure class="tp-map">
+  ${legend}
   <svg viewBox="0 0 ${W} ${height}" width="100%" height="auto" role="img"
     aria-label="${esc(profile.settlement)} elhelyezkedése ${esc(profile.county)} megyében">
     <path d="${path}" fill="#131d2b" stroke="#2a3b52" stroke-width="1.2"/>${innerPath ? `
@@ -253,7 +264,6 @@ export function countyMap(profile, geo) {
       y="${(mine?.y ?? hy + 4.5).toFixed(1)}"${mine?.anchorEnd ? ' text-anchor="end"' : ''}
       font-size="13.5" font-weight="700" fill="#f8fafc">${esc(profile.settlement)}</text>
   </svg>
-  ${legend}
   <figcaption>${esc(profile.county)} megye${profile.district
     ? `, ${esc(profile.district)} járás (kiemelve)` : ''}. A vékony vonalak
     járáshatárok, a kis pontok járásszékhelyek. A szaggatott vonal nem útvonal,

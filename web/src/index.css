@@ -2101,7 +2101,7 @@ a:hover { text-decoration: underline; }
 }
 .tp-figure {
   padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px;
-  background: var(--bg-raised);
+  background: var(--bg-raised); position: relative; overflow: hidden;
 }
 .tp-figure__value {
   display: block; font: 800 24px var(--font-display); color: var(--ink);
@@ -2153,11 +2153,192 @@ a:hover { text-decoration: underline; }
 .comparebar__value em.is-more { color: #f0b429; }
 
 /* the pyramid answers the pointer too */
-.tp-pyramid g { cursor: default; }
-.tp-pyramid g:hover rect { opacity: 1; }
-.tp-pyramid:has(g:hover) g:not(:hover) rect { opacity: 0.35; }
+.tp-pyramid .pyramid__row { cursor: pointer; }
+.tp-pyramid:has(.pyramid__row:hover) .pyramid__row:not(:hover) rect { opacity: 0.35; }
 .agelegend__row a {
   display: flex; align-items: baseline; gap: 7px; text-decoration: none;
   color: inherit; padding: 2px 4px; margin: 0 -4px; border-radius: 6px;
 }
 .agelegend__row a:hover { background: var(--bg-panel); }
+
+/* ---- the settlement page's rail, switches and panels --------------------
+   All of it works without JavaScript: :has() for the switches, <details>
+   for the panels, plain anchors for the rail. */
+
+.tp-rail {
+  position: fixed; left: 14px; top: 50%; transform: translateY(-50%); z-index: 40;
+}
+.tp-rail ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.tp-rail a {
+  display: flex; align-items: center; gap: 8px; padding: 7px 10px;
+  border-radius: 999px; text-decoration: none; color: var(--ink-faint);
+  font-size: 12.5px; white-space: nowrap; border: 1px solid transparent;
+  background: color-mix(in srgb, var(--bg) 80%, transparent);
+  backdrop-filter: blur(4px);
+}
+.tp-rail a svg { width: 16px; height: 16px; flex: none; }
+.tp-rail a span {
+  max-width: 0; overflow: hidden; opacity: 0; transition: max-width 160ms, opacity 160ms;
+}
+.tp-rail:hover a span, .tp-rail a:focus-visible span { max-width: 150px; opacity: 1; }
+.tp-rail a:hover, .tp-rail a:focus-visible {
+  color: var(--ink); border-color: var(--line-strong); background: var(--bg-raised);
+}
+@media (max-width: 1100px) {
+  .tp-rail {
+    position: sticky; top: 56px; left: 0; transform: none; margin: 0 0 8px;
+    background: var(--bg); border-bottom: 1px solid var(--line); padding: 6px 0;
+  }
+  .tp-rail ul {
+    grid-auto-flow: column; grid-auto-columns: max-content;
+    overflow-x: auto; gap: 4px; padding: 0 16px;
+  }
+  .tp-rail a span { max-width: 150px; opacity: 1; }
+}
+
+/* the map's layer switches */
+.tp-maplegend--toggles { gap: 8px; }
+.cm-toggle {
+  display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
+  padding: 3px 10px 3px 7px; border: 1px solid var(--line); border-radius: 999px;
+  background: var(--bg-raised); font-size: 12px; color: var(--ink-dim);
+  user-select: none;
+}
+.cm-toggle input { appearance: none; width: 0; height: 0; margin: 0; position: absolute; }
+.cm-toggle:has(input:checked) { color: var(--ink); border-color: var(--line-strong); }
+.cm-toggle:has(input:not(:checked)) i { opacity: 0.25; }
+.cm-toggle:has(input:not(:checked)) { opacity: 0.6; text-decoration: line-through; }
+.cm-toggle:focus-within { outline: 2px solid var(--accent); outline-offset: 1px; }
+.tp-map:has([data-layer="gp"]:not(:checked)) .cm-layer--gp,
+.tp-map:has([data-layer="dental"]:not(:checked)) .cm-layer--dental,
+.tp-map:has([data-layer="oncall"]:not(:checked)) .cm-layer--oncall,
+.tp-map:has([data-layer="inpatient"]:not(:checked)) .cm-layer--inpatient,
+.tp-map:has([data-layer="pharmacy"]:not(:checked)) .cm-layer--pharmacy,
+.tp-map:has([data-layer="jarasseat"]:not(:checked)) .cm-layer--jarasseat {
+  display: none;
+}
+.cm-townlink text { cursor: pointer; }
+.cm-townlink:hover text { fill: var(--accent) !important; }
+.tp-map { margin-top: 2px; }
+.tp-map svg { margin-top: 2px; }
+
+/* collapsible panels with the branch's own mark behind the heading */
+.tp-details {
+  margin: 12px 0; border: 1px solid var(--line); border-radius: 12px;
+  background: var(--bg-raised); overflow: hidden;
+}
+.tp-details > summary {
+  display: flex; align-items: center; gap: 10px; padding: 12px 16px;
+  cursor: pointer; list-style: none; position: relative;
+}
+.tp-details > summary::-webkit-details-marker { display: none; }
+.tp-details > summary::after {
+  content: '▾'; margin-left: auto; color: var(--ink-faint); transition: transform 150ms;
+}
+.tp-details[open] > summary::after { transform: rotate(180deg); }
+.tp-details__ghost {
+  position: absolute; right: 42px; top: -14px; width: 86px; height: 86px;
+  opacity: 0.12; pointer-events: none;
+}
+.tp-details--gp { border-left: 3px solid #4fd6c2; }
+.tp-details--gp .tp-details__ghost { color: #4fd6c2; }
+.tp-details--dental { border-left: 3px solid #8ab4ff; }
+.tp-details--dental .tp-details__ghost { color: #8ab4ff; }
+.tp-details--vacant { border-left: 3px solid #ef6461; }
+.tp-details--vacant .tp-details__ghost { color: #ef6461; }
+.tp-details--vedono { border-left: 3px solid #c88ff0; }
+.tp-details--vedono .tp-details__ghost { color: #c88ff0; }
+.tp-details--change { border-left: 3px solid var(--accent); }
+.tp-details--change .tp-details__ghost { color: var(--accent); }
+.tp-details__title { font: 600 14px var(--font-display); color: var(--ink); }
+.tp-details__count {
+  font-size: 12px; color: var(--accent-ink); background: var(--accent);
+  border-radius: 999px; padding: 1px 8px; font-weight: 700;
+}
+.tp-details__preview { font-size: 12.5px; color: var(--ink-faint); }
+.tp-details > table, .tp-details > p { margin: 0 16px 14px; width: calc(100% - 32px); }
+.tp-row--ok td:nth-child(3) { color: #4fd6c2; }
+.tp-row--bad td:nth-child(3) { color: #ef6461; }
+
+/* a word on a rule, to break a long section into its parts */
+.tp-divider {
+  display: flex; align-items: center; gap: 12px; margin: 26px 0 10px;
+  color: var(--ink-faint); font: 600 11.5px var(--font-display);
+  text-transform: uppercase; letter-spacing: 0.08em;
+}
+.tp-divider::before, .tp-divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--line);
+}
+
+/* the question mark that explains itself */
+.tp-help {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--line-strong);
+  color: var(--ink-faint); font-size: 11px; cursor: help; position: relative;
+  vertical-align: 3px; margin-left: 6px;
+}
+.tp-help__body {
+  position: absolute; right: 0; top: calc(100% + 8px);
+  width: 320px; max-width: min(70vw, calc(100vw - 48px));
+  padding: 10px 12px; border-radius: 10px;
+  background: var(--bg-panel); border: 1px solid var(--line-strong);
+  color: var(--ink-dim); font: 400 12.5px/1.45 var(--font-body);
+  text-transform: none; letter-spacing: 0; opacity: 0; pointer-events: none;
+  transition: opacity 120ms; z-index: 30;
+}
+.tp-help:hover .tp-help__body, .tp-help:focus .tp-help__body { opacity: 1; }
+
+/* bars above a table, so the shape comes before the numbers */
+.tp-bars { display: grid; gap: 5px; margin: 10px 0 16px; }
+.tp-bar { display: grid; grid-template-columns: 180px 1fr auto; gap: 10px;
+  align-items: center; font-size: 12.5px; }
+.tp-bar__label { color: var(--ink-dim); }
+.tp-bar__track { height: 10px; background: var(--line); border-radius: 3px; }
+.tp-bar__fill { display: block; height: 100%; border-radius: 3px; }
+.tp-bar__value { color: var(--ink); white-space: nowrap; }
+.tp-bar__value em { color: var(--ink-faint); font-style: normal; }
+@media (max-width: 640px) {
+  .tp-bar { grid-template-columns: 120px 1fr; }
+  .tp-bar__value { grid-column: 2; }
+}
+
+.tp-figures--compact .tp-figure { padding: 8px 10px; }
+.tp-figure--ok .tp-figure__value { color: #4fd6c2; }
+.tp-figure--bad .tp-figure__value { color: #ef6461; }
+
+/* where the settlement sits on the index */
+.tp-indexscale { margin: 28px 0 16px; }
+.tp-indexscale__bar { position: relative; display: flex; height: 14px;
+  border-radius: 4px; overflow: hidden; }
+.tp-indexscale__band { flex: 1; }
+.tp-indexscale__band--alacsony { background: #4fd6c2; }
+.tp-indexscale__band--kozepes { background: #9bd4a5; }
+.tp-indexscale__band--magas { background: #f0b429; }
+.tp-indexscale__band--kiemelt { background: #ef6461; }
+.tp-indexscale__marker {
+  position: absolute; top: -6px; width: 2px; height: 26px; background: var(--ink);
+}
+.tp-indexscale__marker span {
+  position: absolute; left: 50%; top: -22px; transform: translateX(-50%);
+  font: 700 12.5px var(--font-display); color: var(--ink); white-space: nowrap;
+  background: var(--bg); padding: 0 4px; border-radius: 4px;
+}
+.tp-indexscale__legend {
+  display: flex; justify-content: space-between; font-size: 11.5px;
+  color: var(--ink-faint); margin: 10px 0 0;
+}
+.tp-streetwrap { margin-top: 10px; }
+.tp-figure { position: relative; overflow: hidden; }
+.tp-figure__ghost {
+  position: absolute; right: 10px; bottom: 2px; font: 800 34px var(--font-display);
+  color: var(--line-strong); opacity: 0.45; pointer-events: none; white-space: nowrap;
+  line-height: 1;
+}
+.tp-figure__label em { color: var(--ink-faint); font-style: normal; }
+
+/* On a settlement page the sections follow one another closely: 64px of air
+   above each heading made the first map look stranded. */
+body:has(.tp-rail) .section { padding: 30px 0 18px; }
+body:has(.tp-rail) .section:first-of-type { padding-top: 10px; }
+body:has(.tp-rail) .tp-map { margin: 2px 0 6px; }
+body:has(.tp-rail) .tp-map svg { margin-top: 0; }
