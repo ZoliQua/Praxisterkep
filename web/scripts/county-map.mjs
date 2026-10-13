@@ -109,9 +109,13 @@ export function countyMap(profile, geo) {
   const county = geo.counties.features.find((f) => f.properties.name === profile.county);
   if (!county) return '';
   // in the capital the county outline is one blob: the districts are what a
-  // reader recognises, so they are drawn inside it
+  // reader recognises, so they are drawn inside it. Everywhere else the
+  // járás lines do that job — they are the unit on-call and outpatient care
+  // is organised by, so "which járás am I in" is a real question.
   const inner = profile.county === 'Budapest'
-    ? (geo.budapest?.features ?? []) : [];
+    ? (geo.budapest?.features ?? [])
+    : (geo.jaras?.features ?? []).filter(
+      (f) => geo.countyOfJaras?.get(f.properties.name) === profile.county);
 
   const here = geo.byKsh.get(profile.kshId);
   if (!here) return '';
@@ -141,15 +145,24 @@ export function countyMap(profile, geo) {
       ? f.geometry.coordinates.flat() : f.geometry.coordinates;
     return ringPath(polys);
   }).join('');
+  // the settlement's own járás, picked out of the rest
+  const ownJaras = inner.find((f) => f.properties.name === profile.district);
+  const minePath = ownJaras ? ringPath(ownJaras.geometry.type === 'MultiPolygon'
+    ? ownJaras.geometry.coordinates.flat() : ownJaras.geometry.coordinates) : '';
 
   // the county seat and the larger towns, for orientation only
   const towns = geo.cities.features
-    .filter((f) => f.properties.rank === 'seat' || f.properties.big)
+    .filter((f) => ['seat', 'county', 'jarasSeat'].includes(f.properties.rank)
+      || f.properties.big)
     .map((f) => ({ ...f.properties, coords: f.geometry.coordinates }))
     .filter((c) => geo.countyOfTown?.get(c.name) === profile.county)
     .filter((c) => c.name !== profile.settlement)
-    .sort((a, b) => (b.rank === 'seat') - (a.rank === 'seat') || b.population - a.population)
-    .slice(0, 12);
+    // the county seat first, then the bigger towns, then the járás seats:
+    // whatever room the labeller has left goes to the smaller ones
+    .sort((a, b) => (b.rank === 'seat') - (a.rank === 'seat')
+      || (b.big === true) - (a.big === true)
+      || b.population - a.population)
+    .slice(0, 16);
 
   const [hx, hy] = xy(here);
   const labels = labeller();
@@ -198,15 +211,17 @@ export function countyMap(profile, geo) {
   const townDots = towns.map((c) => {
     const [x, y] = xy(c.coords);
     const seat = c.rank === 'seat';
-    const spot = labels.place(x + 6, y + 3.5, c.name.length * (seat ? 6.2 : 5.4),
-      { push: 2 });
+    const jaras = c.rank === 'jarasSeat';
+    const size = seat ? 6.2 : jaras ? 5 : 5.4;
+    const spot = labels.place(x + 6, y + 3.5, c.name.length * size, { push: 2 });
     return `<g class="cm-town">
-    <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${seat ? 3.4 : 2.2}"
-      fill="${seat ? '#94a3b8' : '#64748b'}"/>${spot ? `
+    <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${seat ? 3.4 : jaras ? 1.8 : 2.2}"
+      fill="${seat ? '#94a3b8' : jaras ? '#51637a' : '#64748b'}"/>${spot ? `
     <text x="${(spot.anchorEnd ? x - 6 : x + 6).toFixed(1)}" y="${spot.y.toFixed(1)}"
-      ${spot.anchorEnd ? 'text-anchor="end" ' : ''}font-size="${seat ? 11.5 : 10}"
-      fill="${seat ? '#cbd5e1' : '#94a3b8'}"${seat ? ' font-weight="600"' : ''}
-      >${esc(c.name)}</text>` : ''}
+      ${spot.anchorEnd ? 'text-anchor="end" ' : ''}font-size="${
+  seat ? 11.5 : jaras ? 9 : 10}"
+      fill="${seat ? '#cbd5e1' : jaras ? '#8595aa' : '#94a3b8'}"${
+  seat ? ' font-weight="600"' : ''}>${esc(c.name)}</text>` : ''}
   </g>`;
   }).join('\n  ');
 
@@ -227,7 +242,8 @@ export function countyMap(profile, geo) {
     aria-label="${esc(profile.settlement)} elhelyezkedése ${esc(profile.county)} megyében">
     <path d="${path}" fill="#131d2b" stroke="#2a3b52" stroke-width="1.2"/>${innerPath ? `
     <path d="${innerPath}" fill="none" stroke="#2a3b52" stroke-width="0.7"
-      opacity="0.9"/>` : ''}
+      opacity="0.9"/>` : ''}${minePath ? `
+    <path d="${minePath}" fill="#18273a" stroke="#3d5a80" stroke-width="0.9"/>` : ''}
     ${townDots}
     ${lines}
     <circle cx="${hx.toFixed(1)}" cy="${hy.toFixed(1)}" r="10" fill="none"
@@ -238,8 +254,10 @@ export function countyMap(profile, geo) {
       font-size="13.5" font-weight="700" fill="#f8fafc">${esc(profile.settlement)}</text>
   </svg>
   ${legend}
-  <figcaption>${esc(profile.county)} megye. A szaggatott vonal nem útvonal, hanem
-    kapcsolat: a felirat a közúton számított menetidőt mondja.${
+  <figcaption>${esc(profile.county)} megye${profile.district
+    ? `, ${esc(profile.district)} járás (kiemelve)` : ''}. A vékony vonalak
+    járáshatárok, a kis pontok járásszékhelyek. A szaggatott vonal nem útvonal,
+    hanem kapcsolat: a felirat a közúton számított menetidőt mondja.${
   inPlace.length ? ` Helyben van: ${esc(inPlace.join(', '))}.` : ''}</figcaption>
 </figure>`;
 }

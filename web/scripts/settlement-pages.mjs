@@ -30,6 +30,7 @@ const geo = {
   cities: readGeo('cities.geojson'),
   settlements: readGeo('settlements.geojson'),
   budapest: readGeo('budapest.geojson'),
+  jaras: readGeo('jaras.geojson'),
   byKsh: new Map(),
   byName: new Map(),
 };
@@ -37,6 +38,11 @@ const geo = {
 // whichever neighbour happens to fall inside the frame
 geo.countyOfTown = new Map(
   geo.settlements.features.map((f) => [f.properties.name, f.properties.county]),
+);
+// which county a járás belongs to, so a map draws its own and not the
+// neighbours' lines
+geo.countyOfJaras = new Map(
+  geo.settlements.features.map((f) => [f.properties.district, f.properties.county]),
 );
 for (const f of geo.settlements.features) {
   geo.byKsh.set(f.properties.kshId, f.geometry.coordinates);
@@ -253,54 +259,144 @@ function travelRows(profile) {
 const AGE_COLORS = { young: '#4fd6c2', working: '#6ea8ff', old: '#f0b429' };
 const AGE_LABELS = { young: '0–14 éves', working: '15–64 éves', old: '65 év felett' };
 
-/** A pie of the three age groups; no JavaScript, so the arcs are written out. */
-function agePie(split, size = 132) {
+/**
+ * The age charts, interactive without a line of JavaScript.
+ *
+ * These pages carry no script, and that is the point of them — they have to
+ * work with the network off. So the pointer work is done in CSS: hovering a
+ * slice (or a dot, or a bar) reveals its own readout through :has(), and
+ * clicking one pins it through :target, because an anchor is a click a static
+ * page can hear. Nothing moves that a reader did not ask to move.
+ */
+function agePie(split, size = 132, prefix = 'kor') {
   const total = split.young + split.working + split.old;
   if (!total) return '';
   const r = size / 2;
-  let angle = -Math.PI / 2;
-  const parts = ['young', 'working', 'old'].map((key) => {
-    const from = angle;
-    angle += (split[key] / total) * Math.PI * 2;
+  const keys = ['young', 'working', 'old'];
+  const shares = keys.map((k) => split[k] / total);
+  const starts = shares.reduce((acc, share, i) => [...acc, acc[i] + share * Math.PI * 2],
+    [-Math.PI / 2]);
+  const wedge = (key, i) => {
+    const from = starts[i];
+    const to = starts[i + 1];
     const p = (a) => [r + r * Math.cos(a), r + r * Math.sin(a)];
     const [x1, y1] = p(from);
-    const [x2, y2] = p(angle);
-    const big = angle - from > Math.PI ? 1 : 0;
-    return `<path d="M${r} ${r}L${x1.toFixed(2)} ${y1.toFixed(2)}A${r} ${r} 0 ${big} 1 ${
-      x2.toFixed(2)} ${y2.toFixed(2)}Z" fill="${AGE_COLORS[key]}" stroke="#0b1016"
-      stroke-width="1"><title>${esc(AGE_LABELS[key])}</title></path>`;
-  }).join('');
+    const [x2, y2] = p(to);
+    const big = to - from > Math.PI ? 1 : 0;
+    return `<a href="#${prefix}-${key}" class="agepie__slice agepie__slice--${key}">
+      <path d="M${r} ${r}L${x1.toFixed(2)} ${y1.toFixed(2)}A${r} ${r} 0 ${big} 1 ${
+  x2.toFixed(2)} ${y2.toFixed(2)}Z" fill="${AGE_COLORS[key]}" stroke="#0b1016"
+        stroke-width="1"><title>${esc(AGE_LABELS[key])}: ${num(split[key])} (${
+  pct(shares[i])})</title></path></a>`;
+  };
+  const readouts = keys.map((key, i) => `<g id="${prefix}-${key}"
+    class="agepie__readout agepie__readout--${key}">
+    <text x="${r}" y="${r - 2}" text-anchor="middle" font-size="15"
+      font-weight="700" fill="${AGE_COLORS[key]}">${esc(pct(shares[i]))}</text>
+    <text x="${r}" y="${r + 14}" text-anchor="middle" font-size="10"
+      fill="#94a3b8">${num(split[key])} fő</text>
+  </g>`).join('');
   return `<svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}"
-    role="img" aria-label="Korösszetétel"><g>${parts}</g>
-    <circle cx="${r}" cy="${r}" r="${(r * 0.46).toFixed(1)}" fill="#101823"/></svg>`;
+    role="img" aria-label="Korösszetétel" class="agepie">
+    <g class="agepie__wedges">${keys.map(wedge).join('')}</g>
+    <circle cx="${r}" cy="${r}" r="${(r * 0.46).toFixed(1)}" fill="#101823"/>
+    ${readouts}
+    <text class="agepie__hint" x="${r}" y="${r + 4}" text-anchor="middle"
+      font-size="9.5" fill="#64748b">vidd rá</text>
+  </svg>`;
 }
 
-function ageLegend(split, compare) {
+/**
+ * A hundred residents as a hundred dots. The pie says the proportion; this
+ * says what the proportion is made of, which is the thing people can picture.
+ */
+function hundredDots(split, prefix = 'kor') {
+  const total = split.young + split.working + split.old;
+  if (!total) return '';
+  const keys = ['young', 'working', 'old'];
+  const counts = keys.map((k) => Math.round((split[k] / total) * 100));
+  // rounding must still leave a hundred dots
+  const drift = 100 - counts.reduce((a, b) => a + b, 0);
+  counts[1] += drift;
+  const dots = keys.flatMap((key, i) => Array.from({ length: Math.max(counts[i], 0) },
+    () => key));
+  const cols = 20;
+  const r = 5;
+  const gap = 3.4;
+  const w = cols * (r * 2 + gap);
+  const rows = Math.ceil(dots.length / cols);
+  const h = rows * (r * 2 + gap);
+  return `<svg class="hundred" viewBox="0 0 ${w} ${h}" width="100%" height="auto"
+    role="img" aria-label="Száz lakosból hány esik az egyes korcsoportokba">
+    ${dots.map((key, i) => {
+    const x = (i % cols) * (r * 2 + gap) + r;
+    const y = Math.floor(i / cols) * (r * 2 + gap) + r;
+    return `<a href="#${prefix}-${key}"><circle class="hundred__dot hundred__dot--${key}"
+      cx="${x}" cy="${y}" r="${r}" fill="${AGE_COLORS[key]}"><title>${
+  esc(AGE_LABELS[key])}</title></circle></a>`;
+  }).join('')}
+  </svg>
+  <p class="tp-note">Száz lakosból ennyi esik az egyes korcsoportokba. Vidd rá az
+    egeret vagy kattints rá: a kördiagram közepén kiírja a pontos számot.</p>`;
+}
+
+/** The settlement against the country, as two bars per age group. */
+function compareBars(split, national) {
+  if (!national) return '';
+  const total = split.young + split.working + split.old;
+  const nTotal = national.young + national.working + national.old;
+  if (!total || !nTotal) return '';
+  const keys = ['young', 'working', 'old'];
+  const max = Math.max(...keys.flatMap((k) => [split[k] / total, national[k] / nTotal]));
+  return `<div class="comparebars">${keys.map((key) => {
+    const here = split[key] / total;
+    const there = national[key] / nTotal;
+    const diff = here - there;
+    return `<div class="comparebar">
+      <span class="comparebar__label">${esc(AGE_LABELS[key])}</span>
+      <span class="comparebar__track">
+        <span class="comparebar__fill" style="width:${(here / max * 100).toFixed(1)}%;
+          background:${AGE_COLORS[key]}"></span>
+        <span class="comparebar__national" style="left:${(there / max * 100).toFixed(1)}%"
+          title="országos: ${esc(pct(there))}"></span>
+      </span>
+      <span class="comparebar__value">${esc(pct(here))}
+        <em class="${diff > 0 ? 'is-more' : ''}">${diff > 0 ? '+' : '−'}${
+  esc(pct(Math.abs(diff)))}</em></span>
+    </div>`;
+  }).join('')}
+  <p class="tp-note">A sötét vonal az országos arány — ahol a sáv túlnyúlik rajta,
+    ott a településen több.</p></div>`;
+}
+
+function ageLegend(split, compare, prefix = 'kor') {
   const total = split.young + split.working + split.old;
   const cTotal = compare ? compare.young + compare.working + compare.old : 0;
   return `<ul class="agelegend">${['young', 'working', 'old'].map((key) => {
     const share = total ? split[key] / total : 0;
     const diff = cTotal ? share - compare[key] / cTotal : null;
-    return `<li><i style="background:${AGE_COLORS[key]}"></i>
-      <span class="agelegend__label">${esc(AGE_LABELS[key])}</span>
-      <strong>${esc(pct(share))}</strong>
-      <span class="agelegend__count">${num(split[key])}</span>${diff === null ? '' :
+    return `<li class="agelegend__row agelegend__row--${key}">
+      <a href="#${prefix}-${key}">
+        <i style="background:${AGE_COLORS[key]}"></i>
+        <span class="agelegend__label">${esc(AGE_LABELS[key])}</span>
+        <strong>${esc(pct(share))}</strong>
+        <span class="agelegend__count">${num(split[key])}</span>${diff === null ? '' :
   `<span class="agelegend__diff${diff > 0 ? ' is-more' : ''}">${
-    diff > 0 ? '+' : '−'}${esc(pct(Math.abs(diff)))}</span>`}</li>`;
+    diff > 0 ? '+' : '−'}${esc(pct(Math.abs(diff)))}</span>`}
+      </a></li>`;
   }).join('')}</ul>`;
 }
 
 /**
- * A population pyramid: three bands, men left, women right, drawn against the
- * same scale as the country's so the two shapes can be compared by eye.
+ * A population pyramid: three bands, men left, women right.
  *
  * The census answers by sex and we were only ever adding the two halves up.
  * The halves are the interesting part — a village with twice as many women
  * over 65 as men is a different place from one with an even split.
  */
-function pyramid(bySex, { width = 300, band = 26, gap = 4, scale } = {}) {
+function pyramid(bySex, { width = 300, band = 26, gap = 4 } = {}) {
   const rows = ['old', 'working', 'young'];
-  const max = scale ?? Math.max(...rows.flatMap((k) => [
+  const max = Math.max(...rows.flatMap((k) => [
     (bySex[k] || {}).male || 0, (bySex[k] || {}).female || 0]), 1);
   const half = (width - 86) / 2;
   const height = rows.length * (band + gap);
@@ -310,11 +406,14 @@ function pyramid(bySex, { width = 300, band = 26, gap = 4, scale } = {}) {
     const f = (bySex[key] || {}).female || 0;
     const mw = (m / max) * half;
     const fw = (f / max) * half;
-    return `<g>
+    const sum = m + f;
+    return `<g class="pyramid__row">
       <rect x="${(half - mw).toFixed(1)}" y="${y}" width="${mw.toFixed(1)}"
-        height="${band}" fill="#6ea8ff" rx="2"><title>${esc(AGE_LABELS[key])} · férfi: ${num(m)}</title></rect>
+        height="${band}" fill="#6ea8ff" rx="2"><title>${esc(AGE_LABELS[key])} · férfi: ${
+  num(m)} (${pct(sum ? m / sum : 0)} a korcsoporton belül)</title></rect>
       <rect x="${half + 86}" y="${y}" width="${fw.toFixed(1)}" height="${band}"
-        fill="#f0abfc" rx="2"><title>${esc(AGE_LABELS[key])} · nő: ${num(f)}</title></rect>
+        fill="#f0abfc" rx="2"><title>${esc(AGE_LABELS[key])} · nő: ${num(f)} (${
+  pct(sum ? f / sum : 0)} a korcsoporton belül)</title></rect>
       <text x="${half + 43}" y="${y + band / 2 + 4}" text-anchor="middle"
         font-size="11" fill="#94a3b8">${esc(AGE_LABELS[key])}</text>
       <text x="${(half - mw - 6).toFixed(1)}" y="${y + band / 2 + 4}" text-anchor="end"
@@ -376,6 +475,16 @@ function ageBlock(profile) {
       <p class="tp-note">A sávok hossza az adott település legnépesebb
         csoportjához van mérve.</p>
     </figure>` : ''}
+  </div>
+  <div class="tp-ages">
+    <figure class="tp-age tp-age--hundred">
+      <figcaption>Száz lakosból</figcaption>
+      ${hundredDots(split)}
+    </figure>
+    <figure class="tp-age tp-age--compare">
+      <figcaption>Az országos arányhoz képest</figcaption>
+      ${compareBars(split, national)}
+    </figure>
   </div>
   <div class="tp-figures">${figures.map((f) => `<div class="tp-figure">
     <span class="tp-figure__value">${esc(f.value)}</span>

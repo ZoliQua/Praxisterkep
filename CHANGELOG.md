@@ -5,6 +5,31 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.35.0] — 2026-10-13
+
+### Hozzáadva
+- **Járáshatárok és járásszékhelyek a településlapok térképén.** A saját
+  járás kiemelve, a határok vékony vonallal, a járásszékhelyek kis ponttal —
+  az ügyelet és a járóbeteg-ellátás ezen a szinten szerveződik, így a
+  „melyik járásban vagyok" valódi kérdés.
+- **A „Kik laknak itt?" interaktív lett — JavaScript nélkül.** Ezek a lapok
+  szkript nélküli statikus HTML-ek, és ez a lényegük; az egérkezelés CSS-ben
+  történik (`:has()`), a kattintás pedig horgonnyal rögzíthető (`:target`).
+  A kördiagram szeletére húzva a közepén megjelenik az arány és a létszám, a
+  többi szelet elhalványul; a korfa sávjai ugyanígy válaszolnak.
+- **Két új ábra**: „Száz lakosból" — száz pont korcsoport szerint színezve —,
+  és az országos aránnyal való összevetés, ahol a sötét vonal az országos
+  érték, a sáv pedig a településé.
+
+### Hozzáadva (dokumentum)
+- **`docs/neak-adatigenyles.md`**: levélminta a NEAK-hoz a fogászati körzetek
+  ellátott településeinek listájáért, és **`docs/neak-adatigenyles-minta.xlsx`**,
+  egy kitöltésre előkészített munkafüzet (oszlopok, példasorok, útmutató lap).
+  A kérés azért szűk, mert pontosan egy hiányt pótol: a háziorvosi listában
+  szerepel az ellátott települések oszlopa, a fogászatiban nem — emiatt 3177
+  településből 2105 nem jelenik meg egyetlen fogászati körzet listáján sem.
+  A munkafüzet újragenerálható: `python scripts/neak_template.py`.
+
 ## [1.34.0] — 2026-10-13
 
 ### Hozzáadva

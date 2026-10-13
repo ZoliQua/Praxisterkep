@@ -2109,3 +2109,55 @@ a:hover { text-decoration: underline; }
 }
 .tp-figure__label { display: block; font-size: 12.5px; color: var(--ink-dim); }
 .tp-figure__note { display: block; font-size: 12px; color: var(--ink-faint); margin-top: 2px; }
+
+/* The settlement page's age charts, interactive without JavaScript: :has()
+   for the pointer, :target for a click that stays. */
+.agepie__readout { opacity: 0; transition: opacity 120ms; }
+.agepie__hint { opacity: 1; transition: opacity 120ms; }
+.agepie:has(.agepie__slice--young:hover) .agepie__readout--young,
+.agepie:has(.agepie__slice--working:hover) .agepie__readout--working,
+.agepie:has(.agepie__slice--old:hover) .agepie__readout--old,
+.agepie__readout:target { opacity: 1; }
+.agepie:has(.agepie__slice:hover) .agepie__hint,
+.agepie:has(.agepie__readout:target) .agepie__hint { opacity: 0; }
+.agepie__slice path { transition: opacity 120ms; cursor: pointer; }
+.agepie:has(.agepie__slice--young:hover) .agepie__slice:not(.agepie__slice--young) path,
+.agepie:has(.agepie__slice--working:hover) .agepie__slice:not(.agepie__slice--working) path,
+.agepie:has(.agepie__slice--old:hover) .agepie__slice:not(.agepie__slice--old) path {
+  opacity: 0.32;
+}
+
+.hundred { max-width: 300px; }
+.hundred__dot { transition: opacity 120ms, r 120ms; cursor: pointer; }
+.hundred:has(.hundred__dot--young:hover) .hundred__dot:not(.hundred__dot--young),
+.hundred:has(.hundred__dot--working:hover) .hundred__dot:not(.hundred__dot--working),
+.hundred:has(.hundred__dot--old:hover) .hundred__dot:not(.hundred__dot--old) {
+  opacity: 0.25;
+}
+.tp-age--hundred, .tp-age--compare { flex: 1 1 300px; max-width: 420px; }
+
+.comparebars { display: grid; gap: 8px; margin-top: 4px; }
+.comparebar { display: grid; grid-template-columns: 92px 1fr auto; gap: 10px;
+  align-items: center; font-size: 12.5px; }
+.comparebar__label { color: var(--ink-dim); }
+.comparebar__track {
+  position: relative; height: 12px; background: var(--line); border-radius: 3px;
+}
+.comparebar__fill { display: block; height: 100%; border-radius: 3px; }
+.comparebar__national {
+  position: absolute; top: -3px; width: 2px; height: 18px; background: var(--ink);
+  opacity: 0.8;
+}
+.comparebar__value { color: var(--ink); white-space: nowrap; }
+.comparebar__value em { color: #4fd6c2; font-style: normal; margin-left: 4px; }
+.comparebar__value em.is-more { color: #f0b429; }
+
+/* the pyramid answers the pointer too */
+.tp-pyramid g { cursor: default; }
+.tp-pyramid g:hover rect { opacity: 1; }
+.tp-pyramid:has(g:hover) g:not(:hover) rect { opacity: 0.35; }
+.agelegend__row a {
+  display: flex; align-items: baseline; gap: 7px; text-decoration: none;
+  color: inherit; padding: 2px 4px; margin: 0 -4px; border-radius: 6px;
+}
+.agelegend__row a:hover { background: var(--bg-panel); }
