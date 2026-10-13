@@ -6,7 +6,7 @@ import type { ReactNode } from 'react';
 export interface Slice { value: number; color: string; label: string }
 
 export function Donut({
-  slices, size = 150, thickness = 20, children, active, onActive,
+  slices, size = 150, thickness = 20, children, active, onActive, onPick,
 }: {
   slices: readonly Slice[];
   size?: number;
@@ -15,6 +15,8 @@ export function Donut({
   /** the slice the card is currently showing, if any */
   active?: string | null;
   onActive?: (label: string | null) => void;
+  /** a click on a slice: the page narrows to what that slice counts */
+  onPick?: (label: string) => void;
 }) {
   const total = slices.reduce((a, s) => a + s.value, 0);
   const r = size / 2 - thickness / 2;
@@ -34,7 +36,9 @@ export function Donut({
               stroke={s.color} strokeWidth={thickness} strokeDasharray={dash}
               strokeDashoffset={-offset}
               opacity={!active || active === s.label ? 1 : 0.3}
+              className={onPick ? 'is-clickable' : undefined}
               onPointerEnter={() => onActive?.(s.label)}
+              onClick={onPick ? () => onPick(s.label) : undefined}
               transform={`rotate(-90 ${size / 2} ${size / 2})`}>
               <title>{s.label}</title>
             </circle>

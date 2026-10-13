@@ -1831,7 +1831,18 @@
     "ambulance": "{n} mentőállomás",
     "oncallMedian": "medián {m} az ügyeletig",
     "ageOf": "{group} — a megye lakosságának {share}-a",
-    "stateOf": "település: {state} ({share})"
+    "stateOf": "település: {state} ({share})",
+    "dentalOf": "fogászati körzet: {state}",
+    "oncallAndAmbulance": "ügyeleti pont és mentőállomás a megyében",
+    "pointHint": "Vidd rá az egért, hogy lásd, melyik településen van — kattintva a település lapja nyílik.",
+    "pointUnknown": "A nyilvántartás nem ad telephelyet",
+    "point": {
+      "oncall": "központi ügyelet",
+      "ambulance": "mentőállomás"
+    },
+    "filtered": "Csak azok a települések látszanak, ahol a {branch} ellátás: {state} ({n} település).",
+    "clearFilter": "Mind",
+    "pointUnknownShort": "telephely nélkül"
   },
   "next": {
     "heading": "Mit nézz meg ezután?",

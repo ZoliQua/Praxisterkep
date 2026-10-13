@@ -24,13 +24,26 @@ export interface CountyAggregateRow {
   medianInpatientMinutes: number | null;
   withoutDirectBus: number;
   /** census age split; absent where the census suppressed the county */
-  age?: { young: number; working: number; old: number; total: number };
+  age?: {
+    young: number; working: number; old: number; total: number;
+    male?: number; female?: number;
+    bySex?: Record<string, { male: number; female: number }>;
+  };
   oncallPoints?: number;
   ambulanceStations?: number;
+  /** the on-call and ambulance points themselves, one row each */
+  emergency?: EmergencyPoint[];
   gpDistricts?: DistrictCounts;
   dentalDistricts?: DistrictCounts;
   gpChurn?: ChurnCounts;
   dentalChurn?: ChurnCounts;
+}
+
+export interface EmergencyPoint {
+  group: 'oncall' | 'ambulance';
+  settlement: string;
+  slug: string;
+  provider: string;
 }
 
 /** The districts NEAK publishes for the county — not the settlements. */

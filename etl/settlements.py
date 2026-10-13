@@ -225,6 +225,19 @@ def build() -> dict:
                       site.get("address", ""), site.get("lat"), site.get("lon"),
                       site.get("geoApprox"))
 
+    visitor_sites: dict[str, list[dict]] = {}
+    for row in (vedono or {}).get("rows", []):
+        if not row.get("settlement"):
+            continue
+        visitor_sites.setdefault(normalize_settlement(row["settlement"]), []).append({
+            "branch": row.get("branch", ""),
+            "provider": row.get("provider", ""),
+            "postalCode": row.get("postalCode", ""),
+            "address": row.get("address", ""),
+        })
+    for rows_ in visitor_sites.values():
+        rows_.sort(key=lambda r: (r["branch"], r["address"]))
+
     shops: dict[str, int] = {}
     for row in (gyse or {}).get("settlements", []):
         shops[normalize_settlement(row["settlement"])] = row["retail"]
@@ -290,6 +303,9 @@ def build() -> dict:
                 # the census counts behind the shares, for the age split chart
                 "censusYoung": age_row["young"], "censusWorking": age_row["working"],
                 "censusOld": age_row["old"], "censusTotal": age_row["censusTotal"],
+                # the pyramid: each band by sex, straight from the census
+                "male": age_row.get("male"), "female": age_row.get("female"),
+                "bySex": age_row.get("bySex"),
             }
 
         index = by_id["composite"].get(key)
@@ -330,6 +346,7 @@ def build() -> dict:
             record["vedono"] = {
                 "territorial": visitors[name_key]["territorial"],
                 "school": visitors[name_key]["school"],
+                "sites": visitor_sites.get(name_key, []),
             }
 
         rows.append(record)
@@ -348,6 +365,9 @@ def build() -> dict:
                 "total": country.get("censusTotal"),
                 "working": (country.get("censusTotal") or 0)
                 - (country.get("young") or 0) - (country.get("old") or 0),
+                "male": country.get("male"),
+                "female": country.get("female"),
+                "bySex": country.get("bySex"),
             },
         },
         "comparedWith": year_ago["month"],

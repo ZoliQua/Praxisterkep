@@ -122,7 +122,29 @@ def compose(cells: dict[str, int | None]) -> dict:
                 "suppressed": True, "recovered": False}
     if sum(groups.values()) != total:  # type: ignore[arg-type]
         raise ParseError("age groups do not sum to the census total")
-    return {"censusTotal": total, **groups, "suppressed": False, "recovered": recovered}
+    # the census answers by sex and we were throwing half of it away: the two
+    # halves are what a population pyramid is made of, and they cost nothing
+    # extra — they are in the same response
+    sexes = {
+        "male": sum_or_none(cells.get(m) for m, _f in GROUPS.values()),
+        "female": sum_or_none(cells.get(f) for _m, f in GROUPS.values()),
+    }
+    by_sex = {
+        name: {"male": cells.get(male), "female": cells.get(female)}
+        for name, (male, female) in GROUPS.items()
+    }
+    return {"censusTotal": total, **groups, "suppressed": False,
+            "recovered": recovered, **sexes, "bySex": by_sex}
+
+
+def sum_or_none(values) -> int | None:
+    """None if any part is suppressed: a partial sum would read as a total."""
+    out = 0
+    for v in values:
+        if v is None:
+            return None
+        out += v
+    return out
 
 
 def build(refresh: bool = False) -> dict:
@@ -152,6 +174,12 @@ def build(refresh: bool = False) -> dict:
             "young": sum(d["young"] for d in districts),
             "working": sum(d["working"] for d in districts),
             "old": sum(d["old"] for d in districts),
+            "male": sum_or_none(d["male"] for d in districts),
+            "female": sum_or_none(d["female"] for d in districts),
+            "bySex": {g: {sex: sum_or_none((d["bySex"] or {}).get(g, {}).get(sex)
+                                           for d in districts)
+                          for sex in ("male", "female")}
+                      for g in GROUPS},
             "suppressed": False, "recovered": False,
         }))
 
@@ -191,6 +219,10 @@ def entry(e: dict, comp: dict) -> dict:
         "young": comp["young"],
         "working": comp["working"],
         "old": comp["old"],
+        # the pyramid: each age group by sex, as the census answers it
+        "male": comp.get("male"),
+        "female": comp.get("female"),
+        "bySex": comp.get("bySex"),
         "youngShare": shares["young"],
         "oldShare": shares["old"],
         # the 2022 shares carried onto the 2025 resident population
@@ -214,6 +246,11 @@ def aggregate(settlements: list[dict], key) -> dict[str, dict]:
         census = sum(s["censusTotal"] or 0 for s in usable)
         young = sum(s["young"] or 0 for s in usable)
         old = sum(s["old"] or 0 for s in usable)
+        working = sum(s["working"] or 0 for s in usable)
+        by_sex = {g: {sex: sum((s["bySex"] or {}).get(g, {}).get(sex) or 0
+                               for s in usable)
+                      for sex in ("male", "female")}
+                  for g in GROUPS}
         population = sum(s["population"] for s in list_)
         out[name] = {
             "name": name,
@@ -222,7 +259,11 @@ def aggregate(settlements: list[dict], key) -> dict[str, dict]:
             "population": population,
             "censusTotal": census,
             "young": young,
+            "working": working,
             "old": old,
+            "male": sum(s["male"] or 0 for s in usable),
+            "female": sum(s["female"] or 0 for s in usable),
+            "bySex": by_sex,
             "youngShare": young / census if census else None,
             "oldShare": old / census if census else None,
             "youngNow": round((young / census) * population) if census else None,

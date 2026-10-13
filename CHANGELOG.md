@@ -5,6 +5,33 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.34.0] — 2026-10-13
+
+### Hozzáadva
+- **A megyelap köreire rá lehet kattintani.** A háziorvosi gyűrű szeletére
+  kattintva az alatta lévő településtáblázat arra a halmazra szűkül („csak
+  azok a települések, ahol csak betöltetlen körzet van"), a szűrés egy
+  kattintással el is engedhető.
+- **A fogorvosi kártya is kördiagramot kapott** (betöltött / betöltetlen /
+  megszűnt körzet a megyében), ugyanúgy kattintható.
+- **Az ügyeleti kártya a pontokat magukat mutatja**: minden ügyeleti pont és
+  mentőállomás egy-egy címke a település nevével, rájuk húzva kiírja a
+  fenntartót, kattintva a település lapja nyílik.
+- **Korfa minden településlapon**: a népszámlálás nemek szerinti bontását
+  eddig összeadtuk és eldobtuk, pedig ugyanabban a válaszban megvolt. Mellé a
+  KSH szokásos mutatói: hány idős és hány gyermek jut száz munkaképes korúra
+  (az országos értékkel összevetve), az öregedési index és a nők aránya.
+- **A „Van-e orvos?" az orvosok nevével kezdődik** — háziorvosok, fogorvosok
+  névvel, címmel, azután a betöltetlenségi kép és a betöltetlen körzetek
+  listája.
+- **Védőnői blokk**: a szolgálatok telephelye és fenntartója. A védőnő nevét
+  egyetlen nyilvános nyilvántartás sem közli, ezt a lap ki is mondja.
+- **„Melyik fogászati körzethez tartozik?"** — annál a 2105 településnél,
+  amelyik egyetlen fogászati körzet listáján sem szerepel, a lap megmondja,
+  miért (a NEAK a fogászatnál csak a székhelyet közli), és megmutatja a
+  legközelebbi rendelőt — kimondva, hogy az a legközelebbi, nem feltétlenül
+  az illetékes.
+
 ## [1.33.3] — 2026-10-12
 
 ### Módosítva

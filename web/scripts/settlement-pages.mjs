@@ -254,7 +254,7 @@ const AGE_COLORS = { young: '#4fd6c2', working: '#6ea8ff', old: '#f0b429' };
 const AGE_LABELS = { young: '0–14 éves', working: '15–64 éves', old: '65 év felett' };
 
 /** A pie of the three age groups; no JavaScript, so the arcs are written out. */
-function agePie(split, size = 118) {
+function agePie(split, size = 132) {
   const total = split.young + split.working + split.old;
   if (!total) return '';
   const r = size / 2;
@@ -290,6 +290,43 @@ function ageLegend(split, compare) {
   }).join('')}</ul>`;
 }
 
+/**
+ * A population pyramid: three bands, men left, women right, drawn against the
+ * same scale as the country's so the two shapes can be compared by eye.
+ *
+ * The census answers by sex and we were only ever adding the two halves up.
+ * The halves are the interesting part — a village with twice as many women
+ * over 65 as men is a different place from one with an even split.
+ */
+function pyramid(bySex, { width = 300, band = 26, gap = 4, scale } = {}) {
+  const rows = ['old', 'working', 'young'];
+  const max = scale ?? Math.max(...rows.flatMap((k) => [
+    (bySex[k] || {}).male || 0, (bySex[k] || {}).female || 0]), 1);
+  const half = (width - 86) / 2;
+  const height = rows.length * (band + gap);
+  const bars = rows.map((key, i) => {
+    const y = i * (band + gap);
+    const m = (bySex[key] || {}).male || 0;
+    const f = (bySex[key] || {}).female || 0;
+    const mw = (m / max) * half;
+    const fw = (f / max) * half;
+    return `<g>
+      <rect x="${(half - mw).toFixed(1)}" y="${y}" width="${mw.toFixed(1)}"
+        height="${band}" fill="#6ea8ff" rx="2"><title>${esc(AGE_LABELS[key])} · férfi: ${num(m)}</title></rect>
+      <rect x="${half + 86}" y="${y}" width="${fw.toFixed(1)}" height="${band}"
+        fill="#f0abfc" rx="2"><title>${esc(AGE_LABELS[key])} · nő: ${num(f)}</title></rect>
+      <text x="${half + 43}" y="${y + band / 2 + 4}" text-anchor="middle"
+        font-size="11" fill="#94a3b8">${esc(AGE_LABELS[key])}</text>
+      <text x="${(half - mw - 6).toFixed(1)}" y="${y + band / 2 + 4}" text-anchor="end"
+        font-size="11" fill="#cbd5e1">${num(m)}</text>
+      <text x="${(half + 86 + fw + 6).toFixed(1)}" y="${y + band / 2 + 4}"
+        font-size="11" fill="#cbd5e1">${num(f)}</text>
+    </g>`;
+  }).join('');
+  return `<svg class="tp-pyramid" viewBox="0 0 ${width} ${height}" width="100%"
+    height="auto" role="img" aria-label="Korfa nemek szerint">${bars}</svg>`;
+}
+
 function ageBlock(profile) {
   const a = profile.age;
   if (!a || a.censusTotal === undefined) {
@@ -297,21 +334,58 @@ function ageBlock(profile) {
   }
   const split = { young: a.censusYoung, working: a.censusWorking, old: a.censusOld };
   const national = profiles.national?.age;
+  const total = a.censusTotal;
+  // the standard KSH ratios: how many dependants per hundred of working age
+  const youthRatio = a.censusWorking ? (a.censusYoung / a.censusWorking) * 100 : null;
+  const oldRatio = a.censusWorking ? (a.censusOld / a.censusWorking) * 100 : null;
+  const nationalOldRatio = national && national.working
+    ? (national.old / national.working) * 100 : null;
+  const ageingIndex = a.censusYoung ? (a.censusOld / a.censusYoung) * 100 : null;
+  const femaleShare = a.female && total ? a.female / total : null;
+
+  const figures = [
+    oldRatio === null ? null : {
+      value: `${Math.round(oldRatio)}`,
+      label: 'idős száz munkaképes korúra',
+      note: nationalOldRatio === null ? '' :
+        `országosan ${Math.round(nationalOldRatio)}`,
+    },
+    youthRatio === null ? null : {
+      value: `${Math.round(youthRatio)}`,
+      label: 'gyermek száz munkaképes korúra', note: '',
+    },
+    ageingIndex === null ? null : {
+      value: `${Math.round(ageingIndex)}`,
+      label: 'idős száz gyermekre (öregedési index)',
+      note: ageingIndex > 100 ? 'több az idős, mint a gyermek' : 'több a gyermek, mint az idős',
+    },
+    femaleShare === null ? null : {
+      value: pct(femaleShare), label: 'a lakosság nő', note: '',
+    },
+  ].filter(Boolean);
+
   return `<div class="tp-ages">
     <figure class="tp-age">
-      ${agePie(split)}
-      <figcaption>${esc(profile.settlement)}</figcaption>
+      ${agePie(split, 132)}
+      <figcaption>${esc(profile.settlement)} korcsoportjai</figcaption>
       ${ageLegend(split, national)}
     </figure>
-    ${national ? `<figure class="tp-age tp-age--compare">
-      ${agePie({ young: national.young, working: national.working, old: national.old })}
-      <figcaption>Országos</figcaption>
-      ${ageLegend(national)}
+    ${a.bySex ? `<figure class="tp-age tp-age--pyramid">
+      ${pyramid(a.bySex)}
+      <figcaption>Korfa: férfiak és nők</figcaption>
+      <p class="tp-note">A sávok hossza az adott település legnépesebb
+        csoportjához van mérve.</p>
     </figure>` : ''}
   </div>
-  <p class="tp-note">A százalékok a 2022-es népszámlálásból valók, a jobb oldali
-    oszlop az országos aránytól való eltérés. A lakosságszám a KSH friss
-    helységnévtárából jön, ezért a kettő összege nem azonos.</p>`;
+  <div class="tp-figures">${figures.map((f) => `<div class="tp-figure">
+    <span class="tp-figure__value">${esc(f.value)}</span>
+    <span class="tp-figure__label">${esc(f.label)}</span>
+    ${f.note ? `<span class="tp-figure__note">${esc(f.note)}</span>` : ''}
+  </div>`).join('')}</div>
+  <p class="tp-note">Forrás: KSH, 2022. évi népszámlálás (CC BY 4.0). A fenti
+    arányok a népszámlálás ${num(total)} fős népességére vonatkoznak; a lap
+    tetején szereplő ${num(profile.population)} fő a KSH friss
+    helységnévtárából való, ezért a kettő nem azonos.</p>`;
 }
 
 const VACANCY_TYPE = {
@@ -349,6 +423,69 @@ function sinceLabel(month) {
   const label = `${y}. ${HU_MONTHS[(m || 1) - 1]}`;
   if (years < 1) return `${label} (< 1 éve)`;
   return `${label} (${years} éve)`;
+}
+
+const VEDONO_BRANCH = { territorial: 'területi', school: 'iskolai' };
+
+/**
+ * The health visitors' services, with their premises.
+ *
+ * Not their names: no public register carries them. The NEAK registry names
+ * a contracted physician, and that is the only name this site shows; the
+ * health-visitor branch is published as services and providers only.
+ */
+function vedonoBlock(profile) {
+  const v = profile.vedono;
+  // the index carries a row for settlements with none at all; a heading that
+  // says "0 and 0" is worse than no heading
+  if (!v || (!v.territorial && !v.school && !(v.sites ?? []).length)) return '';
+  const sites = v.sites ?? [];
+  const seen = new Map();
+  for (const site of sites) {
+    const key = `${site.postalCode} ${site.address}`;
+    if (!seen.has(key)) seen.set(key, { ...site, count: 0 });
+    seen.get(key).count += 1;
+  }
+  const rows = [...seen.values()];
+  return `<h3 class="tp-subhead">Védőnői szolgálat</h3>
+  <p class="section__explain">${num(v.territorial)} területi és ${num(v.school)} iskolai
+    védőnői szolgálat telephelye van a településen.</p>
+  ${rows.length ? `<table class="info-table">
+    <thead><tr><th>Cím</th><th>Fenntartó</th><th class="is-num">Szolgálat</th></tr></thead>
+    <tbody>${rows.map((r) => `<tr>
+      <td>${esc([r.postalCode, profile.settlement].filter(Boolean).join(' '))}${
+  r.address ? `, ${esc(r.address)}` : ''}</td>
+      <td>${esc(r.provider || '–')}</td>
+      <td class="is-num">${num(r.count)}</td>
+    </tr>`).join('')}</tbody>
+  </table>` : ''}
+  <p class="tp-note">A védőnő nevét egyetlen nyilvános nyilvántartás sem közli —
+    a szolgálat és a fenntartó igen, a személy nem. (Orvosnevet is csak betöltött
+    körzetnél, a NEAK saját közzétételéből mutatunk.)</p>`;
+}
+
+/**
+ * Which dental district serves a settlement that is not a district seat.
+ *
+ * NEAK does not publish it. The GP registry names every settlement a district
+ * serves; the dental registry names only the seat, so for two thirds of the
+ * country the official answer is not in any public file. What can be said
+ * honestly is what is nearby — and that is what this says, in those words.
+ */
+function dentalCatchment(profile) {
+  if ((profile.dental || {}).state !== 'absent') return '';
+  const drive = profile.travel?.dental;
+  return `<h3 class="tp-subhead">Melyik fogászati körzethez tartozik?</h3>
+  <p class="section__explain">Ezt a települést egyetlen fogászati körzet listája sem
+    nevezi meg. Nem azért, mert nincs ellátása, hanem mert a <strong>NEAK a fogászatnál
+    csak a körzet székhelyét közli</strong>, a hozzá tartozó településeket nem — a
+    háziorvosi nyilvántartásban ez szerepel, a fogászatiban nem. A tényleges
+    körzethatárt önkormányzati rendelet mondja ki, ami nincs központi, gépi
+    feldolgozásra alkalmas formában közzétéve.</p>
+  ${drive ? `<p>A legközelebbi fogorvosi rendelő
+    <strong>${settlementLink(drive.at, profile.county)}</strong> településen van,
+    ${esc(minutes(drive.minutes))} autóval. Ez a legközelebbi, nem feltétlenül az,
+    amelyikhez a település hivatalosan tartozik.</p>` : ''}`;
 }
 
 function changeBlock(profile) {
@@ -545,17 +682,20 @@ function page(profile) {
 
 <section class="section container">
   <h2 class="section__subheading">Van-e orvos?</h2>
+  ${surgeryTable(profile, 'gp', 'Háziorvosok a településen')}
+  ${surgeryTable(profile, 'dental', 'Fogorvosok a településen')}
+  ${(profile.surgeries ?? []).length ? '' : `<p class="tp-note">A településen egyetlen
+    betöltött körzetnek sincs rendelője — alább az látszik, mely körzetek tartoznak
+    ide, és hol a legközelebbi ellátás.</p>`}
   <div class="tp-cards">
     ${branchCard('Háziorvosi ellátás', profile.gp)}
     ${branchCard('Fogorvosi ellátás', profile.dental)}
   </div>
-  ${profile.vedono ? `<p class="tp-note">Védőnői szolgálat telephelye a településen:
-    ${num(profile.vedono.territorial)} területi, ${num(profile.vedono.school)} iskolai.</p>` : ''}
   <p class="tp-note">A betöltetlenség nem azonos az ellátatlansággal: a helyettesítés a
     nyilvános adatokban nem látszik.</p>
-  ${surgeryTable(profile, 'gp', 'Betöltött háziorvosi körzetek a településen')}
-  ${surgeryTable(profile, 'dental', 'Betöltött fogorvosi körzetek a településen')}
   ${vacancyTable(profile)}
+  ${vedonoBlock(profile)}
+  ${dentalCatchment(profile)}
   ${(profile.surgeries ?? []).length ? `<p class="tp-note">Az orvos neve a NEAK
     szerződött szolgáltatói nyilvántartásából való, és csak betöltött körzetnél
     szerepel. A „mióta" a saját archívumunkból jön (${esc(String(archiveFrom))} óta

@@ -133,6 +133,22 @@ def build() -> dict:
         where(p) for p in emergency.get("points", []) if p["group"] == "oncall")
     ambulance: collections.Counter = collections.Counter(
         where(p) for p in emergency.get("points", []) if p["group"] == "ambulance")
+    # and the points themselves, so a county page can show them one by one
+    # rather than as a number
+    slug_of = {p["settlement"]: p["slug"] for p in profiles}
+    points: dict[str, list[dict]] = {}
+    for point in emergency.get("points", []):
+        if point["group"] not in ("oncall", "ambulance"):
+            continue
+        name = point.get("settlement") or ""
+        points.setdefault(where(point), []).append({
+            "group": point["group"],
+            "settlement": name,
+            "slug": slug_of.get(name, ""),
+            "provider": point.get("provider", ""),
+        })
+    for rows in points.values():
+        rows.sort(key=lambda r: (r["group"], r["settlement"]))
     fluct = {kind: {c["county"]: c for c in churn.get("kinds", {})
                     .get(kind, {}).get("counties", [])}
              for kind in ("gp", "dental")}
@@ -146,7 +162,7 @@ def build() -> dict:
         "dataMonth": src.get("dataMonth", ""),
         "fields": list(FIELDS),
         "counties": [aggregate(name, rows) | extras(
-            name, districts, age_of, oncall, ambulance, fluct)
+            name, districts, age_of, oncall, ambulance, fluct, points)
             for name, rows in sorted(by_county.items())],
         "settlements": {name: rows for name, rows in sorted(by_county.items())},
     }
@@ -154,13 +170,14 @@ def build() -> dict:
     return out
 
 
-def extras(name, districts, age_of, oncall, ambulance, fluct) -> dict:
+def extras(name, districts, age_of, oncall, ambulance, fluct, points) -> dict:
     """The county-level facts that do not come from counting settlements."""
     age = age_of.get(name) or {}
     total = age.get("censusTotal")
     out = {
         "oncallPoints": oncall.get(name, 0),
         "ambulanceStations": ambulance.get(name, 0),
+        "emergency": points.get(name, []),
     }
     if total:
         # the census split the page draws as a pie; working age is what the

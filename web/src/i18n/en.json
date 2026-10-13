@@ -1831,7 +1831,18 @@
     "ambulance": "{n} ambulance stations",
     "oncallMedian": "median {m} to the on-call point",
     "ageOf": "{group} — {share} of the county",
-    "stateOf": "settlements: {state} ({share})"
+    "stateOf": "settlements: {state} ({share})",
+    "dentalOf": "dental districts: {state}",
+    "oncallAndAmbulance": "on-call points and ambulance stations in the county",
+    "pointHint": "Hover to see which settlement it is — click to open its page.",
+    "pointUnknown": "The register gives no premises",
+    "point": {
+      "oncall": "on-call surgery",
+      "ambulance": "ambulance station"
+    },
+    "filtered": "Showing only settlements where {branch} care is: {state} ({n} settlements).",
+    "clearFilter": "All",
+    "pointUnknownShort": "no premises"
   },
   "next": {
     "heading": "Where to next?",

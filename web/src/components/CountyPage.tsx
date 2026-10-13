@@ -19,7 +19,8 @@ import { CountyPicker } from './CountyPicker';
 import { CountyChurn } from './CountyChurn';
 import { AgeLegend, AgePie, type AgeKey } from './charts/AgePie';
 import { Donut } from './charts/Donut';
-import { IconAmbulance, IconOncall, IconTooth } from './icons';
+import { PointGrid } from './charts/PointGrid';
+import { IconTooth } from './icons';
 import { PageNav } from './PageNav';
 import { NextSteps } from './NextSteps';
 import { Footer } from './Footer';
@@ -60,10 +61,14 @@ export function CountyPage() {
   // is rather than leaving the colour to be decoded against a legend
   const [ageOn, setAgeOn] = useState<AgeKey | null>(null);
   const [stateOn, setStateOn] = useState<string | null>(null);
+  const [dentalOn, setDentalOn] = useState<string | null>(null);
+  /** the settlement table below follows whichever slice was clicked */
+  const [filter, setFilter] = useState<{ branch: 'gp' | 'dental'; state: State } | null>(null);
 
   const agg = countyOf(data, county);
   const rows = useMemo(() => {
-    const list = settlementRows(data, county);
+    const list = settlementRows(data, county)
+      .filter((r) => !filter || r[filter.branch] === filter.state);
     const by: Record<SortKey, (a: SettlementRow, b: SettlementRow) => number> = {
       name: (a, b) => a.name.localeCompare(b.name, 'hu'),
       population: (a, b) => b.population - a.population,
@@ -73,16 +78,39 @@ export function CountyPage() {
       oncallMin: (a, b) => (b.oncallMin ?? -1) - (a.oncallMin ?? -1),
     };
     return [...list].sort(by[sort]);
-  }, [data, county, sort]);
+  }, [data, county, sort, filter]);
 
   // the settlements of the county by what their GP care looks like
   const stateSlices = agg ? [
-    { value: agg.gpVacantOnly, color: '#ef6461', label: t('county.state.vacantOnly') },
-    { value: agg.gpPartial, color: '#f0b429', label: t('county.state.partial') },
+    { value: agg.gpVacantOnly, color: '#ef6461',
+      label: t('county.state.vacantOnly'), state: 'vacantOnly' as State },
+    { value: agg.gpPartial, color: '#f0b429',
+      label: t('county.state.partial'), state: 'partial' as State },
     { value: agg.settlements - agg.gpVacantOnly - agg.gpPartial,
-      color: '#4fd6c2', label: t('county.state.filled') },
+      color: '#4fd6c2', label: t('county.state.filled'), state: 'filled' as State },
   ] : [];
   const active = stateSlices.find((s2) => s2.label === stateOn) ?? null;
+
+  // the county's dental districts, as NEAK counts them
+  const dentalSlices = agg?.dentalDistricts ? [
+    { value: agg.dentalDistricts.vacant, color: '#ef6461',
+      label: t('stats.statusVacant'), state: 'vacantOnly' as State },
+    { value: agg.dentalDistricts.dissolved, color: 'var(--line-strong)',
+      label: t('stats.statusDissolved'), state: '' as State },
+    { value: Math.max(agg.dentalDistricts.total - agg.dentalDistricts.vacant
+      - agg.dentalDistricts.dissolved, 0), color: '#4fd6c2',
+      label: t('stats.statusFilled'), state: 'filled' as State },
+  ] : [];
+  const dentalActive = dentalSlices.find((s2) => s2.label === dentalOn) ?? null;
+
+  /** A slice names a class of settlement; clicking one shows just those. */
+  const pickState = (branch: 'gp' | 'dental', label: string,
+    slices: { label: string; state?: State }[]) => {
+    const state = slices.find((s2) => s2.label === label)?.state;
+    if (!state) return;
+    setFilter((cur) => (cur && cur.branch === branch && cur.state === state
+      ? null : { branch, state }));
+  };
 
   const gpRank = rankOf(data, county, (c) => vacantShare(c, 'gp'));
   const oncallRank = rankOf(data, county, (c) => c.medianOncallMinutes);
@@ -147,7 +175,8 @@ export function CountyPage() {
               <article className="county-card">
                 <div className="county-card__figure">
                   <Donut size={150} thickness={20} slices={stateSlices}
-                    active={stateOn} onActive={setStateOn}>
+                    active={stateOn} onActive={setStateOn}
+                    onPick={(label: string) => pickState('gp', label, stateSlices)}>
                     <strong>{formatPercent(agg.gpVacantOnly / agg.settlements)}</strong>
                   </Donut>
                 </div>
@@ -178,13 +207,36 @@ export function CountyPage() {
               {/* the dental districts themselves, not the settlements */}
               <article className="county-card county-card--icon">
                 <div className="county-card__ghost" aria-hidden="true"><IconTooth /></div>
+                <div className="county-card__figure">
+                  <Donut size={150} thickness={20} slices={dentalSlices}
+                    active={dentalOn} onActive={setDentalOn}
+                    onPick={(label: string) => pickState('dental', label, dentalSlices)}>
+                    <strong>{formatPercent(
+                      (agg.dentalDistricts?.vacant ?? 0)
+                      / (agg.dentalDistricts?.total || 1))}</strong>
+                  </Donut>
+                </div>
                 <div className="county-card__body">
-                  <div className="stat__value">
-                    {formatNumber(agg.dentalDistricts?.vacant ?? 0)}
-                    <span className="stat__of"> / {formatNumber(
-                      agg.dentalDistricts?.total ?? 0)}</span>
-                  </div>
-                  <div className="stat__label">{t('county.dentalDistricts')}</div>
+                  {dentalActive ? (
+                    <>
+                      <div className="stat__value">{formatNumber(dentalActive.value)}
+                        <span className="stat__of"> / {formatNumber(
+                          agg.dentalDistricts?.total ?? 0)}</span>
+                      </div>
+                      <div className="stat__label">{t('county.dentalOf', {
+                        state: dentalActive.label.toLowerCase(),
+                      })}</div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="stat__value">
+                        {formatNumber(agg.dentalDistricts?.vacant ?? 0)}
+                        <span className="stat__of"> / {formatNumber(
+                          agg.dentalDistricts?.total ?? 0)}</span>
+                      </div>
+                      <div className="stat__label">{t('county.dentalDistricts')}</div>
+                    </>
+                  )}
                   <div className="stat__context">{t('county.dentalLongTerm', {
                     n: formatNumber(agg.dentalDistricts?.longTerm ?? 0),
                     dissolved: formatNumber(agg.dentalDistricts?.dissolved ?? 0),
@@ -193,18 +245,19 @@ export function CountyPage() {
               </article>
 
               {/* and what answers when the surgery is shut */}
-              <article className="county-card county-card--icon">
-                <div className="county-card__ghost" aria-hidden="true"><IconOncall /></div>
+              <article className="county-card county-card--wide">
                 <div className="county-card__body">
-                  <div className="stat__value">{formatNumber(agg.oncallPoints ?? 0)}</div>
-                  <div className="stat__label">{t('county.oncallPoints')}</div>
+                  <div className="stat__value">{formatNumber(agg.oncallPoints ?? 0)}
+                    <span className="stat__of"> + {formatNumber(
+                      agg.ambulanceStations ?? 0)}</span>
+                  </div>
+                  <div className="stat__label">{t('county.oncallAndAmbulance')}</div>
+                  <PointGrid points={agg.emergency ?? []}
+                    base={import.meta.env.BASE_URL} />
                   <div className="stat__context">
-                    <IconAmbulance /> {t('county.ambulance', {
-                      n: formatNumber(agg.ambulanceStations ?? 0),
-                    })}
-                    {agg.medianOncallMinutes !== null && ` · ${t('county.oncallMedian', {
+                    {agg.medianOncallMinutes !== null && t('county.oncallMedian', {
                       m: minutes(agg.medianOncallMinutes),
-                    })}`}
+                    })}
                     {oncallRank && ` · ${t('county.rank', {
                       rank: oncallRank.rank, of: oncallRank.of })}`}
                   </div>
@@ -263,6 +316,18 @@ export function CountyPage() {
               {t('county.tableHeading', { county: agg.name })}
             </h2>
             <p className="section__explain">{t('county.tableExplain')}</p>
+            {filter && (
+              <p className="county-filter">
+                {t('county.filtered', {
+                  branch: t(`kinds.${filter.branch}.label`).toLowerCase(),
+                  state: t(`county.state.${filter.state || 'absent'}`).toLowerCase(),
+                  n: formatNumber(rows.length),
+                })}
+                <button type="button" onClick={() => setFilter(null)}>
+                  {t('county.clearFilter')}
+                </button>
+              </p>
+            )}
             <div className="county-sort">
               {(['band', 'population', 'name', 'gpMin', 'oncallMin'] as const).map((k) => (
                 <button key={k} className={sort === k ? 'is-on' : ''}
