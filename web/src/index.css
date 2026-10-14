@@ -217,7 +217,12 @@ a:hover { text-decoration: underline; }
   margin: 10px 0 2px;
 }
 .dsw__label { color: var(--ink-faint); font-size: 12.5px; }
-.dsw--compact { margin: 6px 0 0; }
+.dsw--compact { margin: 0; }
+.hero__switches {
+  display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+  margin: 10px 0 22px;
+}
+.hero__switches .seg--kind { margin: 0; }
 .dsw__note { margin: 6px 0 0; color: var(--ink-faint); font-size: 12px; }
 
 .map-legend {
@@ -2408,7 +2413,8 @@ body:has(.tp-rail) .tp-map svg { margin-top: 0; }
 
 .dt-list, .dt-grouped { display: flex; flex-direction: column; }
 .dt-row {
-  display: grid; grid-template-columns: 0.85fr 1.25fr 0.65fr 1.9fr 0.9fr; gap: 10px;
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr 0.6fr 1.7fr 0.85fr 1fr; gap: 10px;
   padding: 7px 0; border-bottom: 1px solid var(--line); font-size: 13px;
   align-items: baseline;
 }
@@ -2425,6 +2431,18 @@ body:has(.tp-rail) .tp-map svg { margin-top: 0; }
 }
 .dt-cell--doctor { color: var(--ink); font-weight: 600; }
 .dt-cell--since { color: var(--ink-dim); }
+/* the licence register as a second opinion: a tick where it knows the
+   district at the published address, a mark where it knows it elsewhere, and
+   the reason where it does not know it at all */
+/* a dot where the registry's own wording differs from the one spelling the
+   site shows; the hover says what it types */
+.dt-raw { font-style: normal; color: var(--line-strong); margin-left: 4px; cursor: help; }
+.dt-cell--eeszt { color: var(--ink-faint); font-size: 12px; }
+.dt-cell--eeszt i { font-style: normal; font-weight: 700; }
+.dt-eeszt--0 { color: var(--ink-dim); }
+.dt-eeszt--0 i { color: #4fd6c2; }
+.dt-eeszt--1 i { color: #f0b429; }
+.dt-eeszt--2 i, .dt-eeszt--3 i { color: var(--line-strong); }
 .dt-sort { cursor: pointer; }
 .dt-sort:hover { color: var(--ink); }
 .dt-sort::after { content: ''; }
@@ -2436,11 +2454,13 @@ body:has(.tp-rail) .tp-map svg { margin-top: 0; }
 .dt:has(.dt-radio--sort[data-sort="site"]:checked) .dt-row { order: var(--o-site); }
 .dt:has(.dt-radio--sort[data-sort="tenure"]:checked) .dt-row { order: var(--o-tenure); }
 .dt:has(.dt-radio--sort[data-sort="fin"]:checked) .dt-row { order: var(--o-fin); }
+.dt:has(.dt-radio--sort[data-sort="eeszt"]:checked) .dt-row { order: var(--o-eeszt); }
 /* and which column heading says so */
 .dt:has(.dt-radio--sort[data-sort="doctor"]:checked) .dt-sort[data-for="doctor"]::after,
 .dt:has(.dt-radio--sort[data-sort="type"]:checked) .dt-sort[data-for="type"]::after,
 .dt:has(.dt-radio--sort[data-sort="site"]:checked) .dt-sort[data-for="site"]::after,
 .dt:has(.dt-radio--sort[data-sort="fin"]:checked) .dt-sort[data-for="fin"]::after,
+.dt:has(.dt-radio--sort[data-sort="eeszt"]:checked) .dt-sort[data-for="eeszt"]::after,
 .dt:has(.dt-radio--sort[data-sort="tenure"]:checked) .dt-sort[data-for="tenure"]::after {
   content: ' ↓'; color: var(--accent);
 }

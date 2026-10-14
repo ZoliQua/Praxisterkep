@@ -182,7 +182,9 @@ def build_snapshot(
         # registry fields NEAK publishes about the contracted service; the
         # provider organisation and the physician are names, so they stay on
         # filled praxes only (CLAUDE.md rule 3, enforced by validate.py)
-        for field in ("neakCode", "level", "provider"):
+        # the registry's own wording where etl/address.py gave the surgery one
+        # spelling: the claim stays checkable against the source file
+        for field in ("neakCode", "level", "provider", "addressRaw"):
             if e.get(field):
                 entry[field] = e[field]
         if e.get("doctor"):

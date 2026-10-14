@@ -4,7 +4,6 @@ import { formatDuration, formatMonth, formatNumber, monthsBetween } from '../lib
 import { praxesById, primarySite, searchSettlements } from '../lib/selectors';
 import { useSettlementIndex, useSettlementLinks } from '../lib/settlementLink';
 import { useContextStore } from '../lib/context';
-import { DissolvedSwitch } from './DissolvedSwitch';
 import { useAppStore, useSnapshot } from '../store/useAppStore';
 import { DirectoryTableModal } from './DirectoryTableModal';
 import { SettlementTimeline } from './SettlementTimeline';
@@ -128,14 +127,16 @@ export function SearchSection() {
   const selectedUnlisted = selected
     ? !listedNames.has(`${selected.name}|${selected.county}`) : false;
 
-  // the reader decides whether a district whose contract ended counts here
-  const dissolvedMode = useContextStore((s2) => s2.dissolved);
-  const vacantHere = selected
-    ? [...selected.vacantPraxisIds,
-      ...(dissolvedMode === 'with' ? selected.dissolvedPraxisIds : [])]
-        .map((id) => byId.get(id))
-        .filter((p): p is Praxis => p !== undefined)
-    : [];
+  // Here the two lists are never added together. A resident asking about
+  // their own settlement is owed the distinction, not a sum: a vacant
+  // district still exists and may get a doctor, a dissolved one is gone from
+  // the register. Each gets its own line and its own list.
+  const praxesOf = (ids: string[]) => ids
+    .map((id) => byId.get(id))
+    .filter((p): p is Praxis => p !== undefined);
+  const vacantHere = selected ? praxesOf(selected.vacantPraxisIds) : [];
+  const dissolvedHere = selected ? praxesOf(selected.dissolvedPraxisIds) : [];
+  const anyHere = vacantHere.length + dissolvedHere.length;
 
   const linkFor = useSettlementLinks();
   const settlementHref = selected ? linkFor(selected.name, selected.county) : null;
@@ -167,7 +168,6 @@ export function SearchSection() {
         </button>
       </div>
       <p className="section__explain">{tKind('search.explain', kind)}</p>
-      <DissolvedSwitch compact />
 
       <div className="search-box">
         <input
@@ -223,12 +223,23 @@ export function SearchSection() {
           {vacantHere.length > 0 && (
             <div className="settlement-card__row">
               <span className="badge badge--vacant">{vacantHere.length}</span>
-              <span className="praxis-line">{tKind(
-                dissolvedMode === 'with' ? 'search.vacantCount' : 'search.vacantCountOnly',
-                kind, { n: String(vacantHere.length) })}</span>
+              <span className="praxis-line">{tKind('search.vacantCountOnly', kind, {
+                n: String(vacantHere.length),
+              })}</span>
             </div>
           )}
           {vacantHere.map((p) => (
+            <PraxisRow key={p.id} praxis={p} month={snapshot.month} />
+          ))}
+          {dissolvedHere.length > 0 && (
+            <div className="settlement-card__row">
+              <span className="badge badge--dissolved">{dissolvedHere.length}</span>
+              <span className="praxis-line">{tKind('search.dissolvedCount', kind, {
+                n: String(dissolvedHere.length),
+              })}</span>
+            </div>
+          )}
+          {dissolvedHere.map((p) => (
             <PraxisRow key={p.id} praxis={p} month={snapshot.month} />
           ))}
           {selected.affectedByDissolved && (
@@ -236,7 +247,7 @@ export function SearchSection() {
               <span className="praxis-line">{t('search.affectedByDissolved')}</span>
             </div>
           )}
-          {vacantHere.length === 0 && !selected.affectedByDissolved
+          {anyHere === 0 && !selected.affectedByDissolved
             && !selectedUnlisted && (
             <div className="settlement-card__row">
               <span className="praxis-line">{tKind('search.noVacant', kind)}</span>
@@ -247,12 +258,13 @@ export function SearchSection() {
               <span className="praxis-line">{tKind('search.unlisted', kind)}</span>
             </div>
           )}
-          {vacantHere.length > 0 && (
+          {anyHere > 0 && (
             <div className="settlement-card__row">
               <span className="praxis-line">{t('search.reminder')}</span>
             </div>
           )}
-          <SettlementTimeline praxes={vacantHere} month={snapshot.month} />
+          <SettlementTimeline praxes={[...vacantHere, ...dissolvedHere]}
+            month={snapshot.month} />
           {filledHere.length > 0 && (
             <>
               <h4 className="settlement-card__subhead">

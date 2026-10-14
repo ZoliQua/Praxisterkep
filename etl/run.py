@@ -12,6 +12,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+import address
 import parse_dental
 import parse_gp
 import parse_okfo
@@ -32,6 +33,23 @@ RAW_DIR = ROOT / "data" / "raw"
 # how old an archived EESZT register may be before a failed download stops
 # being an inconvenience and starts being stale data
 EESZT_MAX_AGE_DAYS = 45
+
+
+def _tidy_addresses(vacant: list, dissolved: list, registry: list,
+                    cache: dict) -> int:
+    """One spelling per surgery, across everything this month parsed.
+
+    The registry is typed by hand and the same clinic reaches us under four
+    spellings; etl/address.py decides which one to show, and the decisions are
+    pinned in its cache so that a later month cannot relabel a surgery behind
+    the reader's back. The registry and the vacancy lists are tidied together,
+    because a vacant district's site is the same kind of address and lands in
+    the same geocoder.
+    """
+    sites = [site for praxis in [*vacant, *dissolved]
+             for site in praxis.get("sites", [])]
+    return (address.normalize_entries(registry, cache=cache)
+            + address.normalize_entries(sites, cache=cache))
 
 
 def _parse_kind(kind: str, raw: Path, month: str) -> tuple[list, list, list]:
@@ -79,11 +97,13 @@ def main() -> None:
 
     snapshots: dict[str, dict] = {}
     cache = load_cache()
+    addr_cache = address.load_cache()
     for kind in kinds:
         print(f"[2/5] parse {kind}")
         vacant, dissolved, registry = _parse_kind(kind, raw, month)
+        tidied = _tidy_addresses(vacant, dissolved, registry, addr_cache)
         print(f"      vacant={len(vacant)} dissolved={len(dissolved)} "
-              f"registry={len(registry)}")
+              f"registry={len(registry)} addresses tidied={tidied}")
 
         print(f"[3/5] geocode {kind}")
         if not args.skip_geocode:
@@ -119,6 +139,7 @@ def main() -> None:
         validate_snapshot(snapshot)
         snapshots[kind] = snapshot
 
+    address.save_cache(addr_cache)
     print("[5/5] build")
     for path in write_outputs(snapshots, month):
         print(f"      wrote {path}")

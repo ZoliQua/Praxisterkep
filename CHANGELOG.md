@@ -5,6 +5,48 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.39.0] — 2026-10-14
+
+Egy rendelőnek egy címe. A NEAK-nyilvántartást kézzel gépelik,
+húsz megyében, évek óta, és látszik is: Szombathelyen ugyanaz a
+fogászati rendelő négy alakban szerepelt.
+
+### Hozzáadva
+- **Címtisztítás az ETL-ben** (`etl/address.py`). Külön válik a
+  helyesírás (nagybetűs kiabálás, „utca" → „u.", házszám:
+  „20/a" → „20/A.") és az összevonás (egy településen belül az
+  azonos helyek egy címkét kapnak). Az eredmény: *9700 Szombathely,
+  Kiskar u. 5-7.* lett a „KISKAR 7.", „kISKAR 7." és „Kiskar u. 7."
+  alakokból, *Szent Márton u. 20/A.* a „Szent M. u."-ból,
+  *Nádasdy Ferenc út 43.* a kétféle „u./út" írásmódból.
+  Országosan **3666 cím** kapott egységes alakot.
+- A döntések **`etl/address_cache.json`-ben rögzülnek** (ahogy a
+  geokód-gyorsítótár), így havi frissítéskor csak az új sorokat
+  kell eldönteni, és egy későbbi hónap nem nevezi át hátulról a
+  rendelőt. Kézi javítás: `etl/address_overrides.json`.
+  Semmi nem vész el: ahol a két alak eltér, az entitás viszi magával
+  a nyilvántartás saját szövegét (`addressRaw`), és a
+  településlapon egy pont jelöli, amire ráhúzva kiírja.
+- **EESZT engedély oszlop** a településlapok orvostábláiban: van-e a
+  körzethez illeszthető működési engedély, a közzétett címen
+  („van"), másik telephelyen („van (más telephely)"), vagy nincs —
+  az indokkal. Rendezhető, mint a többi oszlop.
+
+### Módosítva
+- **Alapértelmezés: megszűnt körzetek nélkül.** „Betöltetlen" azt
+  jelenti, amit a NEAK betöltetlenségi listája jelent; a megszűnt
+  szerződésű körzet külön dolog, amit a lap külön nevez meg.
+  A kapcsoló a főoldalon **egy sorban áll a fogorvosi/háziorvosi
+  váltóval**, a megyei rangsornál pedig az **évszűrő mellé** került.
+- A **„Mi a helyzet nálam?"-nak nincs kapcsolója**: ott soha nem adjuk
+  össze a kettőt. A megszűnt körzet saját sort és saját
+  felsorolást kap a betöltetlenek alatt.
+- A **megyeoldal körzetgyűrűje mindig számol a megszűntekkel** — ez a
+  megye saját állománya —, és saját szelettel mutatja őket; a megye
+  tetején nincs többé kapcsoló.
+- Frissült az EESZT törzspublikáció (2026-10-14) és vele minden rá
+  épülő kiegészítő és elemzés.
+
 ## [1.38.0] — 2026-10-14
 
 A megszűnt szerződésű körzetek eddig némán bele voltak

@@ -22,7 +22,6 @@ import { Donut, DonutLegend } from './charts/Donut';
 import { PointGrid } from './charts/PointGrid';
 import { IconTooth } from './icons';
 import { vacancyOf } from '../lib/vacancy';
-import { DissolvedSwitch } from './DissolvedSwitch';
 import { PageNav } from './PageNav';
 import { NextSteps } from './NextSteps';
 import { Footer } from './Footer';
@@ -58,7 +57,6 @@ export function CountyPage() {
   const setCounty = useContextStore((s) => s.setCounty);
   const kind = useContextStore((s) => s.kind);
   const setKind = useContextStore((s) => s.setKind);
-  const mode = useContextStore((s) => s.dissolved);
   const [sort, setSort] = useState<SortKey>('band');
   // what the pointer is on, in each of the two charts: the card says what it
   // is rather than leaving the colour to be decoded against a legend
@@ -95,16 +93,17 @@ export function CountyPage() {
   const active = stateSlices.find((s2) => s2.label === stateOn) ?? null;
 
   // the county's dental districts, as NEAK counts them
-  const dentalParts = vacancyOf(agg?.dentalDistricts, mode);
-  const dentalTotal = mode === 'with'
-    ? agg?.dentalDistricts?.total ?? 0
-    : Math.max((agg?.dentalDistricts?.total ?? 0) - dentalParts.dissolved, 0);
+  // the county card always counts the dissolved districts: this ring is the
+  // county's own stock, and a contract that ended is part of what became of
+  // it. The ring says so with a slice of its own, which the dissolved never
+  // get inside a single number.
+  const dentalParts = vacancyOf(agg?.dentalDistricts, 'with');
+  const dentalTotal = agg?.dentalDistricts?.total ?? 0;
   const dentalSlices = agg?.dentalDistricts ? [
     { value: agg.dentalDistricts.vacant, color: '#ef6461',
       label: t('stats.statusVacant'), state: 'vacantOnly' as State },
-    ...(mode === 'with' ? [{ value: agg.dentalDistricts.dissolved,
-      color: 'var(--line-strong)',
-      label: t('stats.statusDissolved'), state: '' as State }] : []),
+    { value: agg.dentalDistricts.dissolved, color: 'var(--line-strong)',
+      label: t('stats.statusDissolved'), state: '' as State },
     { value: Math.max(agg.dentalDistricts.total - agg.dentalDistricts.vacant
       - agg.dentalDistricts.dissolved, 0), color: '#4fd6c2',
       label: t('stats.statusFilled'), state: 'filled' as State },
@@ -131,7 +130,6 @@ export function CountyPage() {
         <p className="section__lead">{t('county.lead')}</p>
 
         <CountyPicker />
-        <DissolvedSwitch />
 
         <label className="county-picker">
           <span>{t('county.pick')}</span>

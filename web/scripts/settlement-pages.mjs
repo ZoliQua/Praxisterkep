@@ -58,6 +58,52 @@ for (const f of geo.settlements.features) {
   }
 }
 
+// The EESZT licence register, as a second opinion on every filled district:
+// does the authority that licenses surgeries know of one behind this NEAK
+// code, and is it at the address NEAK publishes? It is a supplement, so a
+// missing file must not take the pages down with it.
+const eeszt = (() => {
+  try {
+    return JSON.parse(readFileSync(join(here, '..', '..', 'data', 'eeszt.json'), 'utf8'));
+  } catch {
+    return null;
+  }
+})();
+const EESZT_REASON = {
+  noFin: 'nincs az EESZT-ben',
+  noUnitLicence: 'nincs működési engedély',
+  ambiguous: 'kétértelmű telephely',
+  otherProfession: 'más szakmájú engedély',
+  otherTip: 'más szolgálattípus',
+};
+
+/**
+ * What the licence register says about one district.
+ *
+ * `ok` is for sorting and for the tick; `label` is what the cell says; `title`
+ * is the detail a hover gives. A district with a licence at a different
+ * settlement is not an error — a surgery may sit in the next village — so it
+ * is marked rather than denied.
+ */
+function eesztLicence(fin) {
+  if (!eeszt) return null;
+  const e = eeszt.praxes?.[fin];
+  if (e?.l) {
+    const [postalCode, settlement, address, , , flags] = e.l;
+    const settlementMatch = (flags & 1) !== 0;
+    const where = [postalCode, settlement, address].filter(Boolean).join(' ');
+    return settlementMatch
+      ? { ok: 0, label: 'van', title: `Engedélyezett telephely: ${where}` }
+      : { ok: 1, label: 'van (más telephely)', title: `Engedélyezett telephely: ${where}` };
+  }
+  const un = eeszt.unmatched?.[fin];
+  if (un) {
+    const reason = EESZT_REASON[un[1]] ?? un[1];
+    return { ok: 2, label: reason, title: `Az EESZT-ben nincs ehhez a körzethez egyértelműen illeszthető működési engedély (${reason}).` };
+  }
+  return { ok: 3, label: '–', title: 'Az EESZT törzsében nincs adat erről a kódról.' };
+}
+
 // how far back the tenure claim can reach: the oldest monthly snapshot the
 // archive holds a registry for
 const tenureData = JSON.parse(
@@ -809,6 +855,14 @@ function siteOf(profile, row) {
  * radios. The column headings are labels for the sort radios, so clicking a
  * heading sorts, the way a table should.
  */
+function eesztCell(row) {
+  const e = row.eeszt;
+  if (!e) return '<span class="dt-cell dt-cell--eeszt" role="cell">–</span>';
+  const mark = e.ok === 0 ? '✓' : e.ok === 1 ? '!' : '–';
+  return `<span class="dt-cell dt-cell--eeszt dt-eeszt--${e.ok}" role="cell"
+    title="${esc(e.title)}"><i aria-hidden="true">${mark}</i> ${esc(e.label)}</span>`;
+}
+
 function doctorTable(profile, kind, heading) {
   const rows = (profile.surgeries ?? []).filter((r) => r.kind === kind);
   if (!rows.length) return '';
@@ -820,7 +874,10 @@ function doctorTable(profile, kind, heading) {
   // first spelling seen
   const withSite = rows.map((r) => {
     const site = siteOf(profile, r);
-    return { ...r, site, siteKey: site.toLowerCase().replace(/\s+/g, ' ').trim() };
+    return {
+      ...r, site, siteKey: site.toLowerCase().replace(/\s+/g, ' ').trim(),
+      eeszt: eesztLicence(r.fin),
+    };
   });
   const rank = (list, key) => {
     const sorted = [...list].map((r, i) => ({ r, i }))
@@ -833,6 +890,7 @@ function doctorTable(profile, kind, heading) {
   const byType = rank(withSite, (a, b) => (TYPE_ORDER[a.type] ?? 9) - (TYPE_ORDER[b.type] ?? 9));
   const bySite = rank(withSite, (a, b) => a.siteKey.localeCompare(b.siteKey, 'hu'));
   const byFin = rank(withSite, (a, b) => (a.fin || '').localeCompare(b.fin || ''));
+  const byEeszt = rank(withSite, (a, b) => (a.eeszt?.ok ?? 9) - (b.eeszt?.ok ?? 9));
   const byTenure = rank(withSite, (a, b) => {
     // longest first: a spell that reaches the edge of the archive leads
     if (a.fromStart !== b.fromStart) return a.fromStart ? -1 : 1;
@@ -855,16 +913,19 @@ function doctorTable(profile, kind, heading) {
   const listRow = (r) => `<div class="dt-row" role="row" style="
       --o-doctor:${byDoctor.get(r)}; --o-type:${byType.get(r)};
       --o-site:${bySite.get(r)}; --o-tenure:${byTenure.get(r)};
-      --o-fin:${byFin.get(r)}">
+      --o-fin:${byFin.get(r)}; --o-eeszt:${byEeszt.get(r)}">
     <span class="dt-cell dt-cell--fin" role="cell">${esc(r.fin || '–')}</span>
     <span class="dt-cell dt-cell--doctor" role="cell">${esc(r.doctor || '–')}${
   (perDoctor.get(r.doctor || '—') ?? []).length > 1
     ? '<i class="dt-flag" title="Több körzetben vagy telephelyen rendel">⧉</i>' : ''}</span>
     <span class="dt-cell" role="cell">${esc(VACANCY_TYPE[r.type] ?? r.type ?? '')}</span>
-    <span class="dt-cell" role="cell">${esc(r.site)}${
+    <span class="dt-cell" role="cell"${r.addressRaw
+  ? ` title="A nyilvántartásban: ${esc(r.addressRaw)}"` : ''}>${esc(r.site)}${
   (perSite.get(r.siteKey) ?? []).length > 1
-    ? '<i class="dt-flag" title="Több orvos rendel ezen a címen">⧉</i>' : ''}</span>
+    ? '<i class="dt-flag" title="Több orvos rendel ezen a címen">⧉</i>' : ''}${
+  r.addressRaw ? '<i class="dt-raw" aria-hidden="true">·</i>' : ''}</span>
     <span class="dt-cell dt-cell--since" role="cell">${esc(tenureLabel(r))}</span>
+    ${eesztCell(r)}
   </div>`;
 
   const groupBlock = (entries, title) => entries.map(([key, list]) => `
@@ -875,8 +936,10 @@ function doctorTable(profile, kind, heading) {
         <span class="dt-cell dt-cell--fin" role="cell">${esc(r.fin || '–')}</span>
         <span class="dt-cell dt-cell--doctor" role="cell">${esc(r.doctor || '–')}</span>
         <span class="dt-cell" role="cell">${esc(VACANCY_TYPE[r.type] ?? r.type ?? '')}</span>
-        <span class="dt-cell" role="cell">${esc(r.site)}</span>
+        <span class="dt-cell" role="cell"${r.addressRaw
+  ? ` title="A nyilvántartásban: ${esc(r.addressRaw)}"` : ''}>${esc(r.site)}</span>
         <span class="dt-cell dt-cell--since" role="cell">${esc(tenureLabel(r))}</span>
+        ${eesztCell(r)}
       </div>`).join('')}
     </div>`).join('');
 
@@ -891,7 +954,7 @@ function doctorTable(profile, kind, heading) {
 
   const sortOptions = [
     ['fin', 'NEAK kód'], ['doctor', 'Orvos'], ['type', 'Körzet'],
-    ['site', 'Rendelő címe'], ['tenure', 'Mióta'],
+    ['site', 'Rendelő címe'], ['tenure', 'Mióta'], ['eeszt', 'EESZT engedély'],
   ];
 
   return `<details class="tp-details tp-details--${kind}">

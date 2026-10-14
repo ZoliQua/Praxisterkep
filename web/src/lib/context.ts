@@ -26,6 +26,10 @@ export interface SiteContext {
    * resident both mean "nobody is under contract here" — but it is not the
    * only honest reading, and the reader could not see which one they were
    * getting. Now they choose, and the choice travels in the address bar.
+   *
+   * The default is the narrow reading: "betöltetlen" means what NEAK's
+   * vacancy list means, and a district whose contract ended is a separate
+   * thing that the page names separately.
    */
   dissolved: DissolvedMode;
 }
@@ -40,7 +44,7 @@ export const CONTEXT_KEYS = {
 } as const;
 
 export const EMPTY: SiteContext = {
-  kind: 'dental', county: null, settlement: null, dissolved: 'with',
+  kind: 'dental', county: null, settlement: null, dissolved: 'without',
 };
 
 const SLUG_RE = /^[a-z0-9-]{2,60}$/;
@@ -53,7 +57,7 @@ export function readContext(search: string = window.location.search): SiteContex
     kind: kind === 'gp' ? 'gp' : 'dental',
     county: p.get(CONTEXT_KEYS.county) || null,
     settlement: settlement && SLUG_RE.test(settlement) ? settlement : null,
-    dissolved: p.get(CONTEXT_KEYS.dissolved) === '0' ? 'without' : 'with',
+    dissolved: p.get(CONTEXT_KEYS.dissolved) === '1' ? 'with' : 'without',
   };
 }
 
@@ -68,8 +72,8 @@ export function writeContext(search: string, ctx: SiteContext): string {
   setOr(CONTEXT_KEYS.kind, ctx.kind === 'gp' ? 'gp' : null);
   setOr(CONTEXT_KEYS.county, ctx.county);
   setOr(CONTEXT_KEYS.settlement, ctx.settlement);
-  // counting the dissolved is the default, so only the other choice is written
-  setOr(CONTEXT_KEYS.dissolved, ctx.dissolved === 'without' ? '0' : null);
+  // the narrow reading is the default, so only the other choice is written
+  setOr(CONTEXT_KEYS.dissolved, ctx.dissolved === 'with' ? '1' : null);
   const q = p.toString();
   return q ? `?${q}` : '';
 }

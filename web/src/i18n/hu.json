@@ -154,7 +154,8 @@
     "openProfile": "{name} teljes adatlapja →",
     "vacantCount": "betöltetlen vagy megszűnt {kind} körzet tartozik a településhez",
     "vacantCountOnly": "betöltetlen {kind} körzet tartozik a településhez",
-    "unlisted": "Ez a település egyetlen közzétett {kind} körzet listáján sem szerepel. Ez nem azt jelenti, hogy nincs ellátás — azt jelenti, hogy a NEAK nyilvános adataiból nem derül ki, melyik körzet az illetékes. A település saját lapja megmutatja a legközelebbi rendelőt és a menetidőt."
+    "unlisted": "Ez a település egyetlen közzétett {kind} körzet listáján sem szerepel. Ez nem azt jelenti, hogy nincs ellátás — azt jelenti, hogy a NEAK nyilvános adataiból nem derül ki, melyik körzet az illetékes. A település saját lapja megmutatja a legközelebbi rendelőt és a menetidőt.",
+    "dissolvedCount": "megszűnt szerződésű {kind} körzet tartozott a településhez"
   },
   "ranking": {
     "heading": "Megyei rangsor",

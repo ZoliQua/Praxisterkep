@@ -40,7 +40,6 @@ export function CountyRanking() {
   return (
     <section className="section container" id="rangsor">
       <h2 className="section__heading">{t('ranking.heading')}</h2>
-      <DissolvedSwitch compact />
       <p className="section__explain">
         {t('ranking.explain')}{' '}
         {minYears > 0 && t('ranking.filterNote', { n: minYears })}
@@ -54,6 +53,9 @@ export function CountyRanking() {
             </button>
           ))}
         </div>
+        {/* the duration filter and the reading of "vacant" are the same kind
+            of control: both decide what the bars count */}
+        <DissolvedSwitch compact />
       </div>
       <div className="ranking-chart">
         <svg viewBox={`0 0 ${WIDTH} ${height}`} role="img" aria-label={t('ranking.heading')}>

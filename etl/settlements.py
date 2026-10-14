@@ -175,6 +175,9 @@ def build() -> dict:
             surgeries.setdefault(normalize_settlement(f["settlement"]), []).append({
                 "kind": kind,
                 "fin": f["id"],
+                # what the registry itself typed, where it differs from the
+                # one spelling this site shows (etl/address.py)
+                **({"addressRaw": f["addressRaw"]} if f.get("addressRaw") else {}),
                 "lat": geo.get("lat"),
                 "lon": geo.get("lon"),
                 "geoApprox": bool(geo.get("geoApprox")) if geo.get("lat") else None,

@@ -154,7 +154,8 @@
     "openProfile": "The full profile of {name} →",
     "vacantCount": "vacant or dissolved {kind} districts belong to this settlement",
     "vacantCountOnly": "vacant {kind} district(s) belong to this settlement",
-    "unlisted": "This settlement appears on no published {kind} district list. That does not mean there is no care: NEAK simply does not publish which district is responsible. Its own page shows the nearest surgery and the drive."
+    "unlisted": "This settlement appears on no published {kind} district list. That does not mean there is no care: NEAK simply does not publish which district is responsible. Its own page shows the nearest surgery and the drive.",
+    "dissolvedCount": "dissolved {kind} district(s) belonged to this settlement"
   },
   "ranking": {
     "heading": "County ranking",

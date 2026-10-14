@@ -17,14 +17,18 @@ export function Hero() {
         {t(`kinds.${kind}.question`).replace('?', '')}
         <span className="accent">?</span>
       </h1>
-      <div className="seg seg--kind" role="group">
-        {(['dental', 'gp'] as PraxisKind[]).map((k) => (
-          <button key={k} aria-pressed={kind === k} onClick={() => setKind(k)}>
-            {t(`kinds.${k}.label`)}
-          </button>
-        ))}
+      {/* the branch and the reading of "vacant" are one row: both decide
+          what every number below them counts */}
+      <div className="hero__switches">
+        <div className="seg seg--kind" role="group">
+          {(['dental', 'gp'] as PraxisKind[]).map((k) => (
+            <button key={k} aria-pressed={kind === k} onClick={() => setKind(k)}>
+              {t(`kinds.${k}.label`)}
+            </button>
+          ))}
+        </div>
+        {snapshot.national.dissolved > 0 && <DissolvedSwitch compact />}
       </div>
-      {snapshot.national.dissolved > 0 && <DissolvedSwitch />}
       <p className="hero__lead">{t('site.lead')}</p>
       <p className="hero__meta">
         {t('site.lastUpdate')}: {formatMonth(snapshot.month)}
