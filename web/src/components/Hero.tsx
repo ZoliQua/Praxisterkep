@@ -1,8 +1,6 @@
 import { t } from '../lib/i18n';
 import { formatMonth } from '../lib/format';
 import { useAppStore, useSnapshot, useTimeseriesMonths } from '../store/useAppStore';
-import { HeroShowcase } from './HeroShowcase';
-import { PraxisBalance } from './PraxisBalance';
 import type { PraxisKind } from '../types';
 
 export function Hero() {
@@ -30,12 +28,6 @@ export function Hero() {
         {t('site.lastUpdate')}: {formatMonth(snapshot.month)}
         {monthCount === 1 && <> · {t('site.firstMonthNote')}</>}
       </p>
-
-      {/* the whole stock first: the spotlight below counts what is missing
-          from it, and that number means little without this one */}
-      <PraxisBalance />
-
-      <HeroShowcase />
 
       <p className="notice">{t('hero.vacantVsUnserved')}</p>
     </header>

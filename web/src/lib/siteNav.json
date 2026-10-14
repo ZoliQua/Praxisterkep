@@ -5,6 +5,10 @@
       "labelKey": "nav.map",
       "children": [
         [
+          "/#allomany",
+          "nav.stock"
+        ],
+        [
           "/#nalam",
           "nav.mine"
         ],

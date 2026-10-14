@@ -540,7 +540,8 @@ function vacancyTable(profile) {
   </table>
   <p class="tp-note">A „mióta" a NEAK betöltetlenségi listájának kezdő hónapja.
     Betöltetlen körzetet nem nevesítünk orvossal, és a helyettesítés a nyilvános
-    adatokban nem látszik.</p>`;
+    adatokban nem látszik.</p>
+  </details>`;
 }
 
 function sinceLabel(value) {
@@ -555,8 +556,6 @@ function sinceLabel(value) {
   if (years < 1) return `${label} (< 1 éve)`;
   return `${label} (${years} éve)`;
 }
-
-const VEDONO_BRANCH = { territorial: 'területi', school: 'iskolai' };
 
 /**
  * The health visitors' services, with their premises.
@@ -753,10 +752,6 @@ function indexBlock(profile) {
   </div>`;
 }
 
-const TYPE_LABEL = {
-  adult: 'felnőtt', child: 'gyermek', mixed: 'vegyes', school: 'iskolai',
-};
-
 /**
  * How long the physician now holding a district has held it, out of our own
  * archive. The archive is the limit of the claim, so a spell that reaches
@@ -776,31 +771,153 @@ const BRANCH_GHOST = {
   dental: '<path d="M7.5 3.5c-2 0-3.5 1.8-3.5 4.2 0 3 1 4.6 1.6 7.2.5 2.2.8 5.1 2.4 5.1 1.5 0 1.6-3.4 2.4-5.3.3-.8.8-1.2 1.6-1.2s1.3.4 1.6 1.2c.8 1.9.9 5.3 2.4 5.3 1.6 0 1.9-2.9 2.4-5.1.6-2.6 1.6-4.2 1.6-7.2 0-2.4-1.5-4.2-3.5-4.2-1.6 0-2.7.8-4.5.8s-2.9-.8-4.5-.8Z"/>',
 };
 
-function surgeryTable(profile, kind, heading) {
+const TYPE_ORDER = { adult: 0, child: 1, mixed: 2, school: 3 };
+
+/** The address of a surgery, as one string. */
+function siteOf(profile, row) {
+  return [row.postalCode, profile.settlement].filter(Boolean).join(' ')
+    + (row.address ? `, ${row.address}` : '');
+}
+
+/**
+ * The doctors of one branch: sortable by every column, and groupable by
+ * surgery or by physician — all of it in HTML and CSS.
+ *
+ * Why it matters: a list sorted by name hides the two things worth seeing.
+ * Several doctors often share one surgery (they take turns in the same
+ * rooms), and one doctor often holds several districts or works at more than
+ * one address. Grouping says which, and the list says it in a line.
+ *
+ * How it works without a script: every row carries its rank for each column
+ * in a custom property, the radio buttons decide which rank `order` reads,
+ * and the grouped views are rendered beside the list and swapped by the same
+ * radios. The column headings are labels for the sort radios, so clicking a
+ * heading sorts, the way a table should.
+ */
+function doctorTable(profile, kind, heading) {
   const rows = (profile.surgeries ?? []).filter((r) => r.kind === kind);
   if (!rows.length) return '';
+  const id = `${kind}-${profile.slug}`;
   const names = rows.map((r) => r.doctor).filter(Boolean);
+
+  // the registry writes the same address in several spellings ("Huszár ltp."
+  // and "Huszár Ltp."), so grouping goes by a folded key, display by the
+  // first spelling seen
+  const withSite = rows.map((r) => {
+    const site = siteOf(profile, r);
+    return { ...r, site, siteKey: site.toLowerCase().replace(/\s+/g, ' ').trim() };
+  });
+  const rank = (list, key) => {
+    const sorted = [...list].map((r, i) => ({ r, i }))
+      .sort((a, b) => key(a.r, b.r) || a.i - b.i);
+    const out = new Map();
+    sorted.forEach(({ r }, i) => out.set(r, i + 1));
+    return out;
+  };
+  const byDoctor = rank(withSite, (a, b) => (a.doctor || '').localeCompare(b.doctor || '', 'hu'));
+  const byType = rank(withSite, (a, b) => (TYPE_ORDER[a.type] ?? 9) - (TYPE_ORDER[b.type] ?? 9));
+  const bySite = rank(withSite, (a, b) => a.siteKey.localeCompare(b.siteKey, 'hu'));
+  const byTenure = rank(withSite, (a, b) => {
+    // longest first: a spell that reaches the edge of the archive leads
+    if (a.fromStart !== b.fromStart) return a.fromStart ? -1 : 1;
+    return (b.months ?? 0) - (a.months ?? 0);
+  });
+
+  // the two facts a flat list hides
+  const perSite = new Map();
+  const perDoctor = new Map();
+  const siteLabel = new Map();
+  for (const r of withSite) {
+    perSite.set(r.siteKey, [...(perSite.get(r.siteKey) ?? []), r]);
+    if (!siteLabel.has(r.siteKey)) siteLabel.set(r.siteKey, r.site);
+    const key = r.doctor || '—';
+    perDoctor.set(key, [...(perDoctor.get(key) ?? []), r]);
+  }
+  const sharedSites = [...perSite.values()].filter((l) => l.length > 1).length;
+  const busyDoctors = [...perDoctor.values()].filter((l) => l.length > 1).length;
+
+  const listRow = (r) => `<div class="dt-row" role="row" style="
+      --o-doctor:${byDoctor.get(r)}; --o-type:${byType.get(r)};
+      --o-site:${bySite.get(r)}; --o-tenure:${byTenure.get(r)}">
+    <span class="dt-cell dt-cell--doctor" role="cell">${esc(r.doctor || '–')}${
+  (perDoctor.get(r.doctor || '—') ?? []).length > 1
+    ? '<i class="dt-flag" title="Több körzetben vagy telephelyen rendel">⧉</i>' : ''}</span>
+    <span class="dt-cell" role="cell">${esc(VACANCY_TYPE[r.type] ?? r.type ?? '')}</span>
+    <span class="dt-cell" role="cell">${esc(r.site)}${
+  (perSite.get(r.siteKey) ?? []).length > 1
+    ? '<i class="dt-flag" title="Több orvos rendel ezen a címen">⧉</i>' : ''}</span>
+    <span class="dt-cell dt-cell--since" role="cell">${esc(tenureLabel(r))}</span>
+  </div>`;
+
+  const groupBlock = (entries, title) => entries.map(([key, list]) => `
+    <div class="dt-group">
+      <p class="dt-group__head"><strong>${esc(key)}</strong>
+        <span>${num(list.length)} ${esc(title)}</span></p>
+      ${list.map((r) => `<div class="dt-row dt-row--grouped" role="row">
+        <span class="dt-cell dt-cell--doctor" role="cell">${esc(r.doctor || '–')}</span>
+        <span class="dt-cell" role="cell">${esc(VACANCY_TYPE[r.type] ?? r.type ?? '')}</span>
+        <span class="dt-cell" role="cell">${esc(r.site)}</span>
+        <span class="dt-cell dt-cell--since" role="cell">${esc(tenureLabel(r))}</span>
+      </div>`).join('')}
+    </div>`).join('');
+
+  const byName = (list) => [...list]
+    .sort((a, b) => (a.doctor || '').localeCompare(b.doctor || '', 'hu'));
+  const siteGroups = [...perSite.entries()]
+    .sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0], 'hu'))
+    .map(([key, list]) => [siteLabel.get(key) ?? key, byName(list)]);
+  const doctorGroups = [...perDoctor.entries()]
+    .sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0], 'hu'))
+    .map(([key, list]) => [key, byName(list)]);
+
+  const sortOptions = [
+    ['doctor', 'Orvos'], ['type', 'Körzet'], ['site', 'Rendelő címe'],
+    ['tenure', 'Mióta'],
+  ];
+
   return `<details class="tp-details tp-details--${kind}">
   <summary>
     <svg class="tp-details__ghost" viewBox="0 0 24 24" fill="none" stroke="currentColor"
       stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"
       aria-hidden="true">${BRANCH_GHOST[kind] ?? ''}</svg>
-    <span class="tp-details__title">${esc(heading)}</span>
+    <span class="dt-details__title tp-details__title">${esc(heading)}</span>
     <span class="tp-details__count">${num(rows.length)}</span>
     <span class="tp-details__preview">${esc(names.slice(0, 3).join(' · '))}${
   names.length > 3 ? ` · +${num(names.length - 3)}` : ''}</span>
   </summary>
-  <table class="info-table">
-    <thead><tr><th>Orvos</th><th>Körzet</th><th>Rendelő címe</th>
-      <th>Mióta ő látja el</th></tr></thead>
-    <tbody>${rows.map((r) => `<tr>
-      <td>${esc(r.doctor || '–')}</td>
-      <td>${esc(TYPE_LABEL[r.type] ?? r.type ?? '')}</td>
-      <td>${esc([r.postalCode, profile.settlement].filter(Boolean).join(' '))}${
-  r.address ? `, ${esc(r.address)}` : ''}</td>
-      <td>${esc(tenureLabel(r))}</td>
-    </tr>`).join('')}</tbody>
-  </table>
+
+  <div class="dt" role="table">
+    <div class="dt-controls">
+      <span class="dt-controls__label">Csoportosítás:</span>
+      ${[['list', 'Lista'], ['site', 'Telephely szerint'], ['doctor', 'Orvos szerint']]
+    .map(([key, label], i) => `<input type="radio" name="g-${id}" id="g-${id}-${key}"
+        class="dt-radio dt-radio--group" data-group="${key}"${i === 0 ? ' checked' : ''}>
+      <label for="g-${id}-${key}" class="dt-chip">${esc(label)}</label>`).join('')}
+      ${sortOptions.map(([key], i) => `<input type="radio" name="s-${id}"
+        id="s-${id}-${key}" class="dt-radio dt-radio--sort" data-sort="${key}"${
+  i === 0 ? ' checked' : ''}>`).join('')}
+    </div>
+
+    ${sharedSites || busyDoctors ? `<p class="dt-hint">${[
+    sharedSites ? `${num(sharedSites)} címen több orvos is rendel` : '',
+    busyDoctors ? `${num(busyDoctors)} orvos több körzetben vagy telephelyen dolgozik` : '',
+  ].filter(Boolean).join(' · ')} — a ⧉ jelöli őket, a csoportosítás megmutatja.</p>` : ''}
+
+    <div class="dt-list">
+      <div class="dt-row dt-row--head" role="row">
+        ${sortOptions.map(([key, label]) => `<label class="dt-cell dt-sort"
+          for="s-${id}-${key}" data-for="${key}">${esc(label)}</label>`).join('')}
+      </div>
+      ${withSite.map(listRow).join('')}
+    </div>
+
+    <div class="dt-grouped dt-grouped--site">
+      ${groupBlock(siteGroups, 'orvos')}
+    </div>
+    <div class="dt-grouped dt-grouped--doctor">
+      ${groupBlock(doctorGroups, 'körzet')}
+    </div>
+  </div>
   </details>`;
 }
 
@@ -1035,8 +1152,8 @@ ${streetHtml}
     ${branchCard('Háziorvosi ellátás', profile.gp)}
     ${branchCard('Fogorvosi ellátás', profile.dental)}
   </div>
-  ${surgeryTable(profile, 'gp', 'Háziorvosok a településen')}
-  ${surgeryTable(profile, 'dental', 'Fogorvosok a településen')}
+  ${doctorTable(profile, 'gp', 'Háziorvosok a településen')}
+  ${doctorTable(profile, 'dental', 'Fogorvosok a településen')}
   ${(profile.surgeries ?? []).length ? `<p class="tp-note">Az orvos neve a NEAK
     szerződött szolgáltatói nyilvántartásából való, és csak betöltött körzetnél
     szerepel. A „mióta” a saját archívumunkból jön (${esc(String(archiveFrom))} óta

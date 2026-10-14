@@ -2342,3 +2342,78 @@ body:has(.tp-rail) .section { padding: 30px 0 18px; }
 body:has(.tp-rail) .section:first-of-type { padding-top: 10px; }
 body:has(.tp-rail) .tp-map { margin: 2px 0 6px; }
 body:has(.tp-rail) .tp-map svg { margin-top: 0; }
+
+/* ---- the doctor table: sortable and groupable, in CSS -------------------
+   Every row carries its rank for each column in a custom property; the radio
+   buttons decide which rank `order` reads. The grouped views sit beside the
+   list and the same radios swap them. */
+.dt { padding: 0 16px 14px; }
+.dt-radio { position: absolute; opacity: 0; pointer-events: none; }
+.dt-controls {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 6px;
+  margin: 2px 0 10px; font-size: 12.5px;
+}
+.dt-controls__label { color: var(--ink-faint); margin-right: 2px; }
+.dt-chip {
+  padding: 3px 11px; border: 1px solid var(--line); border-radius: 999px;
+  color: var(--ink-dim); cursor: pointer; background: var(--bg-panel);
+}
+.dt-chip:hover { color: var(--ink); border-color: var(--line-strong); }
+.dt-radio--group:checked + .dt-chip {
+  background: var(--accent); color: var(--accent-ink); border-color: var(--accent);
+  font-weight: 600;
+}
+.dt-hint { font-size: 12.5px; color: var(--ink-faint); margin: 0 0 10px; }
+
+.dt-list, .dt-grouped { display: flex; flex-direction: column; }
+.dt-row {
+  display: grid; grid-template-columns: 1.3fr 0.7fr 2fr 1fr; gap: 10px;
+  padding: 7px 0; border-bottom: 1px solid var(--line); font-size: 13px;
+  align-items: baseline;
+}
+.dt-row--head {
+  border-bottom-color: var(--line-strong); order: 0 !important;
+  color: var(--ink-faint); font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.05em; font-weight: 600;
+}
+.dt-cell--doctor { color: var(--ink); font-weight: 600; }
+.dt-cell--since { color: var(--ink-dim); }
+.dt-sort { cursor: pointer; }
+.dt-sort:hover { color: var(--ink); }
+.dt-sort::after { content: ''; }
+.dt-flag { font-style: normal; color: var(--accent); margin-left: 5px; cursor: help; }
+
+/* which rank the list is ordered by */
+.dt:has(.dt-radio--sort[data-sort="doctor"]:checked) .dt-row { order: var(--o-doctor); }
+.dt:has(.dt-radio--sort[data-sort="type"]:checked) .dt-row { order: var(--o-type); }
+.dt:has(.dt-radio--sort[data-sort="site"]:checked) .dt-row { order: var(--o-site); }
+.dt:has(.dt-radio--sort[data-sort="tenure"]:checked) .dt-row { order: var(--o-tenure); }
+/* and which column heading says so */
+.dt:has(.dt-radio--sort[data-sort="doctor"]:checked) .dt-sort[data-for="doctor"]::after,
+.dt:has(.dt-radio--sort[data-sort="type"]:checked) .dt-sort[data-for="type"]::after,
+.dt:has(.dt-radio--sort[data-sort="site"]:checked) .dt-sort[data-for="site"]::after,
+.dt:has(.dt-radio--sort[data-sort="tenure"]:checked) .dt-sort[data-for="tenure"]::after {
+  content: ' ↓'; color: var(--accent);
+}
+
+/* which view is on */
+.dt-grouped { display: none; }
+.dt:has(.dt-radio--group[data-group="site"]:checked) .dt-list,
+.dt:has(.dt-radio--group[data-group="doctor"]:checked) .dt-list { display: none; }
+.dt:has(.dt-radio--group[data-group="site"]:checked) .dt-grouped--site,
+.dt:has(.dt-radio--group[data-group="doctor"]:checked) .dt-grouped--doctor {
+  display: flex;
+}
+.dt-group { margin-bottom: 12px; }
+.dt-group__head {
+  display: flex; align-items: baseline; gap: 10px; margin: 8px 0 2px;
+  font-size: 13px; color: var(--ink-dim);
+}
+.dt-group__head strong { color: var(--ink); }
+.dt-group__head span { color: var(--ink-faint); font-size: 12px; }
+.dt-row--grouped { padding-left: 12px; border-left: 2px solid var(--line); }
+
+@media (max-width: 700px) {
+  .dt-row { grid-template-columns: 1fr 1fr; }
+  .dt-row--head { display: none; }
+}

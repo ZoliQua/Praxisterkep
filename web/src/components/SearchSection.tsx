@@ -188,6 +188,14 @@ export function SearchSection() {
             <span className="badge badge--ok">{selected.filled}</span>
             <span className="praxis-line">{filledLabel}</span>
           </div>
+          {vacantHere.length > 0 && (
+            <div className="settlement-card__row">
+              <span className="badge badge--vacant">{vacantHere.length}</span>
+              <span className="praxis-line">{tKind('search.vacantCount', kind, {
+                n: String(vacantHere.length),
+              })}</span>
+            </div>
+          )}
           {vacantHere.map((p) => (
             <PraxisRow key={p.id} praxis={p} month={snapshot.month} />
           ))}

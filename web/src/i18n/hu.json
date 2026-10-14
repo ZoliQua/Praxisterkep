@@ -39,7 +39,8 @@
     "countyPage": "Megye",
     "settlements": "Település",
     "registry": "Nyilvántartás",
-    "whoElse": "Ki lát el még?"
+    "whoElse": "Ki lát el még?",
+    "stock": "Körzetállomány"
   },
   "hero": {
     "vacant": "betöltetlen {kind} körzet",
@@ -150,7 +151,8 @@
     "timelineTitle": "Betöltetlenség idővonala",
     "timelineYears": "éve",
     "timelineNote": "A sávok a NEAK által közölt betöltetlenség-kezdettől a legutolsó adatközlésig tartanak; a sötétebb szakasz a jogilag is tartósan betöltetlen időszak (OKFŐ).",
-    "openProfile": "{name} teljes adatlapja →"
+    "openProfile": "{name} teljes adatlapja →",
+    "vacantCount": "betöltetlen vagy megszűnt {kind} körzet tartozik a településhez"
   },
   "ranking": {
     "heading": "Megyei rangsor",

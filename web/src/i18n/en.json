@@ -39,7 +39,8 @@
     "countyPage": "County",
     "settlements": "Settlements",
     "registry": "Registry",
-    "whoElse": "Who else provides care?"
+    "whoElse": "Who else provides care?",
+    "stock": "District stock"
   },
   "hero": {
     "vacant": "vacant {kind} districts",
@@ -150,7 +151,8 @@
     "timelineTitle": "Vacancy timeline",
     "timelineYears": "yrs",
     "timelineNote": "The bars run from the vacancy start reported by NEAK to the latest data release; the darker segment is the legally long-term vacant period (OKFŐ).",
-    "openProfile": "The full profile of {name} →"
+    "openProfile": "The full profile of {name} →",
+    "vacantCount": "vacant or dissolved {kind} districts belong to this settlement"
   },
   "ranking": {
     "heading": "County ranking",

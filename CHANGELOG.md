@@ -5,6 +5,39 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.37.0] — 2026-10-14
+
+Rendezhető orvostáblák a településlapokon, és néhány helyre tett dolog a
+főoldalon. Továbbra is **JavaScript nélkül**: a rendezés és a
+csoportosítás rádiógomb, `:has()` és CSS `order`.
+
+### Hozzáadva
+- **A „Háziorvosok a településen" és a „Fogorvosok a településen" táblázat
+  minden oszlop szerint rendezhető** — orvos, körzet típusa, rendelő címe,
+  mióta. Az oszlopfejléc maga a kapcsoló. Alapértelmezés: **orvos neve
+  ABC-sorrendben**.
+- **Csoportosítás telephely és orvos szerint.** Egy címen gyakran több orvos
+  rendel, és egy orvos gyakran több körzetet vagy telephelyet visz — a
+  csoportosított nézet ezt mutatja meg, a listában pedig ⧉ jelöli az
+  érintett sorokat. A táblázat fölötti sor egy mondatban összegzi
+  („3 címen több orvos is rendel").
+- A főoldali **„Mi a helyzet nálam?"** a betöltetlen körzetek számát
+  **pirossal, külön sorban** is kiírja a felsorolás előtt.
+- A **körzetállomány** saját menüpontot kapott a Térkép menü tetején.
+
+### Módosítva
+- **A főoldal sorrendje**: scrollos bevezető → hatrészes interaktív grafika
+  → körzetállomány → „Mi a helyzet nálam?" → térkép → „Miért fontos?".
+  A keresés szűkíti a térképet, ezért került a térkép a kérdés mögé,
+  amire válaszol.
+- A telephely szerinti csoportosítás **összevonja a nyilvántartás eltérő
+  írásmódjait** (pl. „Huszár ltp." és „Huszár Ltp." egy cím).
+
+### Javítva
+- **A „Védőnői szolgálat" belógott a „Betöltetlen és megszűnt körzetek"
+  lenyiló alá** — a betöltetlenségi blokk `<details>`-e nem záródott le.
+  Most külön szakasz, ahogy szánva volt.
+
 ## [1.36.0] — 2026-10-13
 
 A településlapok átépítése. Minden továbbra is **JavaScript nélkül** működik

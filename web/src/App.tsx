@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 import { locale, t } from './lib/i18n';
 import { useAppStore, useSnapshot } from './store/useAppStore';
 import { Hero } from './components/Hero';
+import { HeroShowcase } from './components/HeroShowcase';
+import { PraxisBalance } from './components/PraxisBalance';
 import { ScrollyIntro } from './components/ScrollyIntro';
 import { ContextBar } from './components/ContextBar';
 import { NextSteps } from './components/NextSteps';
@@ -108,9 +110,13 @@ export default function App() {
         <>
           <Hero />
           <ScrollyIntro />
+          <HeroShowcase />
+          <PraxisBalance />
+          <SearchSection />
+          {/* the search narrows the map, so it comes after the question it
+              answers rather than before it */}
           <MapSection />
           <WhySection />
-          <SearchSection />
         </>
       )}
       <div className="section container"><NextSteps items={LANDING_NEXT} /></div>
