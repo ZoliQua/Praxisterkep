@@ -17,6 +17,8 @@ export interface SiteContext {
   county: string | null;
   /** settlement slug (the key of its own page), or null */
   settlement: string | null;
+  /** járás name as districts.json spells it ("Pápai"), or null */
+  district: string | null;
   /**
    * Whether a vacancy figure counts the dissolved districts too.
    *
@@ -40,11 +42,12 @@ export type DissolvedMode = 'with' | 'without';
 // 'k' and 'm' are what the map has always written, so old links keep working;
 // 't' was already taken by the praxis-type filter, hence 'tel'.
 export const CONTEXT_KEYS = {
-  kind: 'k', county: 'm', settlement: 'tel', dissolved: 'msz',
+  kind: 'k', county: 'm', settlement: 'tel', dissolved: 'msz', district: 'jar',
 } as const;
 
 export const EMPTY: SiteContext = {
   kind: 'dental', county: null, settlement: null, dissolved: 'without',
+  district: null,
 };
 
 const SLUG_RE = /^[a-z0-9-]{2,60}$/;
@@ -58,6 +61,7 @@ export function readContext(search: string = window.location.search): SiteContex
     county: p.get(CONTEXT_KEYS.county) || null,
     settlement: settlement && SLUG_RE.test(settlement) ? settlement : null,
     dissolved: p.get(CONTEXT_KEYS.dissolved) === '1' ? 'with' : 'without',
+    district: p.get(CONTEXT_KEYS.district) || null,
   };
 }
 
@@ -74,6 +78,7 @@ export function writeContext(search: string, ctx: SiteContext): string {
   setOr(CONTEXT_KEYS.settlement, ctx.settlement);
   // the narrow reading is the default, so only the other choice is written
   setOr(CONTEXT_KEYS.dissolved, ctx.dissolved === 'with' ? '1' : null);
+  setOr(CONTEXT_KEYS.district, ctx.district);
   const q = p.toString();
   return q ? `?${q}` : '';
 }
@@ -82,6 +87,7 @@ interface ContextState extends SiteContext {
   setKind: (kind: PraxisKind) => void;
   setCounty: (county: string | null) => void;
   setSettlement: (settlement: string | null) => void;
+  setDistrict: (district: string | null) => void;
   setDissolved: (dissolved: DissolvedMode) => void;
   setContext: (patch: Partial<SiteContext>) => void;
   clear: () => void;
@@ -101,19 +107,20 @@ export const useContextStore = create<ContextState>((set, get) => ({
   setKind: (kind) => get().setContext({ kind }),
   setCounty: (county) => get().setContext({ county }),
   setSettlement: (settlement) => get().setContext({ settlement }),
+  setDistrict: (district) => get().setContext({ district }),
   setDissolved: (dissolved) => get().setContext({ dissolved }),
   setContext: (patch) => {
     const next = { ...contextOf(get()), ...patch };
     set(next);
     syncUrl(next);
   },
-  clear: () => get().setContext({ county: null, settlement: null }),
+  clear: () => get().setContext({ county: null, settlement: null, district: null }),
 }));
 
 function contextOf(s: SiteContext): SiteContext {
   return {
     kind: s.kind, county: s.county, settlement: s.settlement,
-    dissolved: s.dissolved,
+    dissolved: s.dissolved, district: s.district,
   };
 }
 
@@ -164,5 +171,7 @@ export function useContextHref(): (href: string) => string {
   const county = useContextStore((s) => s.county);
   const settlement = useContextStore((s) => s.settlement);
   const dissolved = useContextStore((s) => s.dissolved);
-  return (href: string) => contextHref(href, { kind, county, settlement, dissolved });
+  const district = useContextStore((s) => s.district);
+  return (href: string) =>
+    contextHref(href, { kind, county, settlement, dissolved, district });
 }

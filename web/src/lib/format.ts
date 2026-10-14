@@ -51,3 +51,22 @@ export function formatDecimal(n: number | string): string {
   const text = String(n);
   return locale === 'en' ? text : text.replace('.', ',');
 }
+
+/**
+ * The Hungarian definite article in front of a number: "a 8." but "az 1."
+ *
+ * Writing "a(z)" is the safe way out and it reads like a form letter. The
+ * article follows the first sound of the number as it is said, so this looks
+ * at the leading word: "egy" and "öt" start with a vowel, and so do "ötven",
+ * "ötszáz" and "ezer" — everything else starts with a consonant.
+ */
+export function huArticle(n: number): string {
+  const abs = Math.floor(Math.abs(n));
+  if (abs >= 1000) {
+    if (abs < 2000) return 'az'; // ezer
+    return huArticle(Math.floor(abs / 1000)) === 'az' && abs >= 5000 ? 'az' : 'a';
+  }
+  if (abs >= 100) return Math.floor(abs / 100) === 5 ? 'az' : 'a'; // ötszáz
+  if (abs >= 10) return Math.floor(abs / 10) === 5 ? 'az' : 'a';   // ötven
+  return abs === 1 || abs === 5 ? 'az' : 'a';
+}

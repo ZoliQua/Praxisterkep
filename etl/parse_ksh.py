@@ -73,10 +73,11 @@ def parse(xlsx_path: Path) -> KshRef:
     cols = list(df.columns)
     df = df.rename(columns={
         cols[0]: "name", cols[1]: "ksh", cols[3]: "county",
-        cols[5]: "district", cols[10]: "pop",
+        cols[5]: "district", cols[6]: "districtSeat", cols[10]: "pop",
     })
     entries: list[dict] = []
-    for r in df[["name", "ksh", "county", "district", "pop"]].itertuples():
+    for r in df[["name", "ksh", "county", "district", "districtSeat",
+                 "pop"]].itertuples():
         if pd.isna(r.name) or pd.isna(r.ksh):
             continue
         name = str(r.name).strip()
@@ -93,6 +94,11 @@ def parse(xlsx_path: Path) -> KshRef:
             "kshId": str(int(float(r.ksh))).zfill(5),
             "county": county,
             "district": "" if pd.isna(r.district) else str(r.district).strip(),
+            # the gazetteer names the seat of every district itself; deriving
+            # it from the adjective ("Pápai" -> "Pápa") would only ever be a
+            # guess, and five of them are not district seats by rank at all
+            "districtSeat": ("" if pd.isna(r.districtSeat)
+                             else str(r.districtSeat).strip()),
             "population": 0 if pd.isna(r.pop) else int(float(r.pop)),
             "isDistrictOfCapital": is_ker,
         })

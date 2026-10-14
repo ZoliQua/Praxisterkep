@@ -5,6 +5,55 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.41.0] — 2026-10-14
+
+**Járás szint.** A megye húsz sor, a település háromezer — a
+köztük lévő szint az, amiben az emberek élnek: itt van a
+körzetszékhely, itt van az ügyeleti pont, és innen indul „a
+legközelebbi város, ahol van fogorvos”. Új menüpont a Megye és a
+Település között.
+
+### Hozzáadva
+- **`jaras.html`**: az ország 174 járása és a főváros 23
+  kerülete, egyenként. A zoomszintek mostantól: ország → megye →
+  **járás** → település.
+- **Országtérkép 197 alakzattal**, betöltetlenség szerint
+  színezve, kattinthatóan. Ez az, amit a megyetérkép elrejt: egy
+  közepes megyén belül az egyik járás 60%-on áll, a másik
+  nullán. A skála teteje a 90. percentilis, különben egyetlen
+  szélsőséges járás a háttérbe nyomná az összes
+  többit.
+- **Mondatban is megfogalmazott elemzés** minden járásra: hányadik a
+  197 mérhető között, hol áll az országos mediánhoz és a saját
+  megyéjéhez képest, mennyi a medián menetidő.
+- **Kártya-sor**: lakosság és korfának megfelelő kordiagram,
+  háziorvosi és fogorvosi körzetgyűrű (betöltött / betöltetlen /
+  megszűnt, jelmagyarázattal), menetidők és elérés.
+- **Rangsor**: a legrosszabb és a legjobb nyolc járás, közöttük a
+  kiválasztott, országos mediánvonallal. A sávok kattinthatók.
+- **Pontfelhő**: medián menetidő a rendelőig × betöltetlenség,
+  minden járás egy pont, a pont mérete a lakosság — két külön
+  baj, vagy egy.
+- **A járás települései** rendezhető táblázatban, a székhely
+  kiemelve, minden név a saját lapjára visz.
+- ETL: **`etl/district_profiles.py`** → `data/districts.json` (197 sor,
+  451 KB). Minden szám a települési adatlapokból és a NEAK havi
+  listáiból jön, semmit nem számolunk újra — a járáslap és a
+  településlap nem mondhat mást. A székhely a KSH
+  helységnévtárának saját oszlopából jön: a névből
+  visszafejteni („Pápai” → „Pápa”) csak tippelés lenne, és öt
+  székhely nem is járásszékhely rangú.
+- A kiválasztott járás a címsorban utazik (`?jar=`), mint a megye és a
+  település.
+- **Magyar határozott névelő számok előtt** (`huArticle`): „az 1.",
+  „a 27.", „az 50." — a „a(z)" űrlapnyelv helyett.
+
+### Megjegyzés
+Egy körzet ahhoz a járáshoz tartozik, amelyikben a rendelője áll
+(a fogorvosi nyilvántartásban nincs járás oszlop). 38 fogorvosi
+szolgálat címében csak „Budapest” szerepel kerület nélkül; ezeket
+külön számoljuk, nem szórjuk szét a kerületek között.
+
 ## [1.40.0] — 2026-10-14
 
 A címtisztítás második köre, és egy oszlop, ami eddig többet

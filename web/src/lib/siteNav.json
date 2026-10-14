@@ -23,6 +23,10 @@
       "labelKey": "nav.countyPage"
     },
     {
+      "href": "/jaras.html",
+      "labelKey": "nav.districtPage"
+    },
+    {
       "href": "/telepules/",
       "labelKey": "nav.settlements"
     },

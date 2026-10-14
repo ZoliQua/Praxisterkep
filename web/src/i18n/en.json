@@ -40,7 +40,8 @@
     "settlements": "Settlements",
     "registry": "Registry",
     "whoElse": "Who else provides care?",
-    "stock": "District stock"
+    "stock": "District stock",
+    "districtPage": "District"
   },
   "hero": {
     "vacant": "vacant {kind} districts",
@@ -1966,5 +1967,41 @@
     "noteWithout": "The figure leaves out the {n} districts whose contract ended.",
     "withShort": "with dissolved",
     "withoutShort": "without dissolved"
+  },
+  "district": {
+    "heading": "Districts",
+    "lead": "A county is twenty rows and a settlement is one of three thousand; the jaras is the level people live in. Hungary's 174 districts and the capital's 23, one by one.",
+    "mapNote": "The map shows the vacancy of {kind} districts per district: the darker, the higher the share. The ramp tops out at the 90th percentile. Hover or click for the detail.",
+    "allCounties": "All 20 counties",
+    "pick": "District",
+    "pickNone": "Pick a district",
+    "nothingPicked": "Pick a district on the map or from the list.",
+    "stateHeading": "{name} district",
+    "population": "residents in {n} settlements",
+    "seatLine": "Seat: {seat} · {county} county",
+    "vacantOf": "vacant or dissolved {branch} districts here",
+    "sliceOf": "{state} {branch} districts here",
+    "longTerm": "{n} long-term vacant",
+    "per10k": "{n} filled districts per 10,000 residents",
+    "travelLabel": "median drive: GP · on-call · hospital",
+    "accessLine": "{bus} settlements without a direct bus · {oncall} on-call points · {ambulance} ambulance stations · {pharmacies} pharmacies",
+    "medianIndex": "median care-risk index: {n}",
+    "rankingHeading": "Where it stands",
+    "rankingExplain": "The worst and best eight districts by {branch} vacancy, with the selected one between them. The dashed line is the national median. The bars are clickable.",
+    "medianLine": "national median: {n}",
+    "scatterHeading": "Does distance go with it?",
+    "scatterExplain": "Every dot is a district: the median drive to the nearest surgery across, the vacancy rate up. Dot size is population.",
+    "scatterX": "median drive to a surgery (minutes)",
+    "scatterY": "vacancy",
+    "scatterRead": "{rate} vacancy, {minutes} minutes median drive",
+    "tableHeading": "Settlements of {name}",
+    "caveat": "Every number comes from the settlement profiles and NEAK's monthly lists; nothing is recomputed. A district belongs to the jaras its surgery stands in.",
+    "unplaced": "A further {n} dental services name only Budapest with no district.",
+    "verdict": {
+      "worse": "{rate} of {branch} districts in {name} are vacant — {rank} worst of {of} measurable districts, above the national median ({median}).",
+      "better": "{rate} of {branch} districts in {name} are vacant — {rank} of {of}, below the national median ({median}).",
+      "county": "Within {county} county it is {rank} of {of}.",
+      "travel": "The median drive to the nearest GP surgery is {n}, the {rank} longest of {of}."
+    }
   }
 }

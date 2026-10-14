@@ -40,7 +40,8 @@
     "settlements": "Település",
     "registry": "Nyilvántartás",
     "whoElse": "Ki lát el még?",
-    "stock": "Körzetállomány"
+    "stock": "Körzetállomány",
+    "districtPage": "Járás"
   },
   "hero": {
     "vacant": "betöltetlen {kind} körzet",
@@ -1966,5 +1967,41 @@
     "noteWithout": "A számból kimarad a {n} megszűnt szerződésű körzet.",
     "withShort": "megszűnttel",
     "withoutShort": "megszűnt nélkül"
+  },
+  "district": {
+    "heading": "Járások",
+    "lead": "A megye húsz sor, a település háromezer: a járás az a szint, amiben az emberek élnek — itt van a körzetszékhely, itt van az ügyeleti pont, és innen indul „a legközelebbi város, ahol van fogorvos”. Az ország 174 járása és a főváros 23 kerülete, egyenként.",
+    "mapNote": "A térkép a {kind} körzetek betöltetlenségét mutatja járásonként: minél sötétebb, annál nagyobb az arány. A skála teteje a 90. percentilis — ami fölötte van, az ugyanazt a legerősebb színt kapja. Vidd rá az egeret, vagy kattints rá.",
+    "allCounties": "Mind a 20 megye",
+    "pick": "Járás",
+    "pickNone": "Válassz járást",
+    "nothingPicked": "Válassz járást a térképen vagy a listából.",
+    "stateHeading": "{name} járás",
+    "population": "lakos {n} településen",
+    "seatLine": "Székhely: {seat} · {county} megye",
+    "vacantOf": "betöltetlen vagy megszűnt {branch} körzet a járásban",
+    "sliceOf": "{state} {branch} körzet a járásban",
+    "longTerm": "{n} tartósan betöltetlen",
+    "per10k": "{n} betöltött körzet 10 000 lakosra",
+    "travelLabel": "medián menetidő: háziorvos · ügyelet · kórház",
+    "accessLine": "{bus} településre nem megy közvetlen busz · {oncall} ügyeleti pont · {ambulance} mentőállomás · {pharmacies} gyógyszertár",
+    "medianIndex": "medián kockázati index: {n}",
+    "rankingHeading": "Hol áll a többihez képest?",
+    "rankingExplain": "A legrosszabb és a legjobb nyolc járás a {branch} betöltetlenség szerint, közöttük a kiválasztott. A szaggatott vonal az országos medián. A sávok kattinthatók.",
+    "medianLine": "országos medián: {n}",
+    "scatterHeading": "Összefügg a távolsággal?",
+    "scatterExplain": "Minden pont egy járás: vízszintesen a települések medián menetideje a legközelebbi rendelőig, függőlegesen a betöltetlenségi arány. A pont mérete a lakosság. Két külön baj, vagy egy — a felhő megmutatja.",
+    "scatterX": "medián menetidő a rendelőig (perc)",
+    "scatterY": "betöltetlenség",
+    "scatterRead": "{rate} betöltetlenség, {minutes} perc medián menetidő",
+    "tableHeading": "{name} járás települései",
+    "caveat": "A járás minden száma a települési adatlapokból és a NEAK havi listáiból jön — semmit nem számolunk újra, így a járáslap és a településlap nem mondhat mást. Egy körzet ahhoz a járáshoz tartozik, amelyikben a rendelője áll.",
+    "unplaced": "További {n} fogorvosi szolgálat címében csak „Budapest” szerepel kerület nélkül; ezek egyik kerületi sorban sem szerepelnek.",
+    "verdict": {
+      "worse": "{name} járásban a {branch} körzetek {rate}-a betöltetlen — ezzel {art} {rank}. legrosszabb a {of} mérhető járás között, az országos medián ({median}) fölött.",
+      "better": "{name} járásban a {branch} körzetek {rate}-a betöltetlen — {art} {rank}. a {of} mérhető járás rangsorában, az országos medián ({median}) alatt.",
+      "county": "A megyén belül ({county}) a {of} járásból {art} {rank}.",
+      "travel": "A települések medián menetideje a legközelebbi háziorvosi rendelőig {n}, ami {art} {rank}. leghosszabb a {of} járás között."
+    }
   }
 }

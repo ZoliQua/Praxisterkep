@@ -4,7 +4,8 @@ import {
 } from './context';
 
 const ctx = (over: Partial<SiteContext> = {}): SiteContext =>
-  ({ kind: 'dental', county: null, settlement: null, dissolved: 'without', ...over });
+  ({ kind: 'dental', county: null, settlement: null, dissolved: 'without',
+    district: null, ...over });
 
 describe('site context', () => {
   it('reads what the map has always written', () => {

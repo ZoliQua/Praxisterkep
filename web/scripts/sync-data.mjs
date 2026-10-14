@@ -47,9 +47,11 @@ const optional = [
   [join(repo, 'data', 'pharmacy.json'), join(out, 'pharmacy.json')],
   [join(repo, 'data', 'licence_history.json'), join(out, 'licence_history.json')],
   [join(repo, 'data', 'counties.json'), join(out, 'counties.json')],
+  [join(repo, 'data', 'districts.json'), join(out, 'districts.json')],
   [join(repo, 'data', 'tenure.json'), join(out, 'tenure.json')],
   [join(repo, 'data', 'fluctuation.json'), join(out, 'fluctuation.json')],
   [join(repo, 'data', 'geo', 'settlements.geojson'), join(out, 'settlements.geojson')],
+  [join(repo, 'data', 'geo', 'jaras.geojson'), join(out, 'jaras.geojson')],
 ];
 
 mkdirSync(out, { recursive: true });
