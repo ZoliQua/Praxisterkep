@@ -1,7 +1,7 @@
 {
  "schemaVersion": 1,
  "month": "2026-10",
- "finished": "2026-10-14T15:24:32+00:00",
+ "finished": "2026-10-14T16:10:42+00:00",
  "steps": [
   {
    "name": "eeszt",
@@ -9,7 +9,7 @@
    "status": "ok",
    "note": "eeszt.json, registers of 2026-10-14",
    "output": "data/eeszt.json",
-   "outputWritten": "2026-10-14T15:23:17+00:00"
+   "outputWritten": "2026-10-14T16:09:28+00:00"
   },
   {
    "name": "dental_extra",
@@ -17,7 +17,7 @@
    "status": "ok",
    "note": "dental_extra.json",
    "output": "data/dental_extra.json",
-   "outputWritten": "2026-10-14T15:23:17+00:00"
+   "outputWritten": "2026-10-14T16:09:29+00:00"
   },
   {
    "name": "crosscheck",
@@ -25,7 +25,7 @@
    "status": "ok",
    "note": "crosscheck.json",
    "output": "data/crosscheck.json",
-   "outputWritten": "2026-10-14T15:23:21+00:00"
+   "outputWritten": "2026-10-14T16:09:32+00:00"
   },
   {
    "name": "providers",
@@ -33,7 +33,7 @@
    "status": "ok",
    "note": "providers.json, 6982 providers",
    "output": "data/providers.json",
-   "outputWritten": "2026-10-14T15:23:24+00:00"
+   "outputWritten": "2026-10-14T16:09:36+00:00"
   },
   {
    "name": "gyse",
@@ -41,7 +41,7 @@
    "status": "ok",
    "note": "gyse.json, 1455 premises",
    "output": "data/gyse.json",
-   "outputWritten": "2026-10-14T15:23:24+00:00"
+   "outputWritten": "2026-10-14T16:09:36+00:00"
   },
   {
    "name": "operating",
@@ -49,7 +49,7 @@
    "status": "ok",
    "note": "operating.json, 1 without a licence",
    "output": "data/operating.json",
-   "outputWritten": "2026-10-14T15:23:25+00:00"
+   "outputWritten": "2026-10-14T16:09:37+00:00"
   },
   {
    "name": "officialmap",
@@ -57,7 +57,7 @@
    "status": "ok",
    "note": "officialmap.json, 126 differences",
    "output": "data/officialmap.json",
-   "outputWritten": "2026-10-14T15:23:26+00:00"
+   "outputWritten": "2026-10-14T16:09:37+00:00"
   },
   {
    "name": "referral",
@@ -65,7 +65,7 @@
    "status": "ok",
    "note": "referral.json, 47 codes left, 69 entered",
    "output": "data/referral.json",
-   "outputWritten": "2026-10-14T15:23:38+00:00"
+   "outputWritten": "2026-10-14T16:09:49+00:00"
   },
   {
    "name": "pharmacy",
@@ -73,7 +73,7 @@
    "status": "ok",
    "note": "pharmacy.json, 3205 pharmacies",
    "output": "data/pharmacy.json",
-   "outputWritten": "2026-10-14T15:23:38+00:00"
+   "outputWritten": "2026-10-14T16:09:49+00:00"
   },
   {
    "name": "licence_history",
@@ -81,7 +81,7 @@
    "status": "ok",
    "note": "licence_history.json, 7 snapshots, 4588 services under a unit newer than the window",
    "output": "data/licence_history.json",
-   "outputWritten": "2026-10-14T15:23:40+00:00"
+   "outputWritten": "2026-10-14T16:09:51+00:00"
   },
   {
    "name": "specialist",
@@ -89,7 +89,7 @@
    "status": "ok",
    "note": "specialist.json",
    "output": "data/specialist.json",
-   "outputWritten": "2026-10-14T15:23:41+00:00"
+   "outputWritten": "2026-10-14T16:09:52+00:00"
   },
   {
    "name": "vedono",
@@ -97,7 +97,7 @@
    "status": "ok",
    "note": "vedono.json, 5023 services",
    "output": "data/vedono.json",
-   "outputWritten": "2026-10-14T15:23:42+00:00"
+   "outputWritten": "2026-10-14T16:09:53+00:00"
   },
   {
    "name": "access",
@@ -105,7 +105,7 @@
    "status": "ok",
    "note": "access.json",
    "output": "data/access.json",
-   "outputWritten": "2026-10-14T15:23:44+00:00"
+   "outputWritten": "2026-10-14T16:09:55+00:00"
   },
   {
    "name": "risk",
@@ -113,7 +113,7 @@
    "status": "ok",
    "note": "risk.json",
    "output": "data/risk.json",
-   "outputWritten": "2026-10-14T15:23:58+00:00"
+   "outputWritten": "2026-10-14T16:10:09+00:00"
   },
   {
    "name": "ksh_age",
@@ -121,7 +121,7 @@
    "status": "ok",
    "note": "age.json",
    "output": "data/age.json",
-   "outputWritten": "2026-10-14T15:23:58+00:00"
+   "outputWritten": "2026-10-14T16:10:09+00:00"
   },
   {
    "name": "centroids",
@@ -129,7 +129,7 @@
    "status": "ok",
    "note": "settlements.geojson",
    "output": "data/geo/settlements.geojson",
-   "outputWritten": "2026-10-14T15:23:58+00:00"
+   "outputWritten": "2026-10-14T16:10:09+00:00"
   },
   {
    "name": "emergency",
@@ -137,7 +137,7 @@
    "status": "ok",
    "note": "emergency.json",
    "output": "data/emergency.json",
-   "outputWritten": "2026-10-14T15:23:59+00:00"
+   "outputWritten": "2026-10-14T16:10:10+00:00"
   },
   {
    "name": "roads",
@@ -153,7 +153,7 @@
    "status": "ok",
    "note": "traveltime.json",
    "output": "data/traveltime.json",
-   "outputWritten": "2026-10-14T15:24:06+00:00"
+   "outputWritten": "2026-10-14T16:10:16+00:00"
   },
   {
    "name": "survival",
@@ -161,7 +161,7 @@
    "status": "ok",
    "note": "survival.json",
    "output": "data/survival.json",
-   "outputWritten": "2026-10-14T15:24:07+00:00"
+   "outputWritten": "2026-10-14T16:10:17+00:00"
   },
   {
    "name": "workforce",
@@ -169,7 +169,7 @@
    "status": "ok",
    "note": "workforce.json",
    "output": "data/workforce.json",
-   "outputWritten": "2026-10-14T15:24:08+00:00"
+   "outputWritten": "2026-10-14T16:10:18+00:00"
   },
   {
    "name": "coverage",
@@ -177,7 +177,7 @@
    "status": "ok",
    "note": "coverage.json",
    "output": "data/coverage.json",
-   "outputWritten": "2026-10-14T15:24:09+00:00"
+   "outputWritten": "2026-10-14T16:10:19+00:00"
   },
   {
    "name": "transit",
@@ -185,7 +185,7 @@
    "status": "ok",
    "note": "transit.json, feed 01664.20260923",
    "output": "data/transit.json",
-   "outputWritten": "2026-10-14T15:24:20+00:00"
+   "outputWritten": "2026-10-14T16:10:30+00:00"
   },
   {
    "name": "composite",
@@ -193,7 +193,7 @@
    "status": "ok",
    "note": "composite.json",
    "output": "data/composite.json",
-   "outputWritten": "2026-10-14T15:24:30+00:00"
+   "outputWritten": "2026-10-14T16:10:40+00:00"
   },
   {
    "name": "clusters",
@@ -201,7 +201,7 @@
    "status": "ok",
    "note": "clusters.json",
    "output": "data/clusters.json",
-   "outputWritten": "2026-10-14T15:24:30+00:00"
+   "outputWritten": "2026-10-14T16:10:40+00:00"
   },
   {
    "name": "tenure",
@@ -209,7 +209,7 @@
    "status": "ok",
    "note": "tenure.json, 24 dental and 20 GP snapshots",
    "output": "data/tenure.json",
-   "outputWritten": "2026-10-14T15:24:31+00:00"
+   "outputWritten": "2026-10-14T16:10:41+00:00"
   },
   {
    "name": "fluctuation",
@@ -217,7 +217,7 @@
    "status": "ok",
    "note": "fluctuation.json, 431 GP and 251 dental changes in the last year",
    "output": "data/fluctuation.json",
-   "outputWritten": "2026-10-14T15:24:32+00:00"
+   "outputWritten": "2026-10-14T16:10:42+00:00"
   },
   {
    "name": "settlements",
@@ -225,7 +225,7 @@
    "status": "ok",
    "note": "settlements.json",
    "output": "data/settlements.json",
-   "outputWritten": "2026-10-14T15:24:32+00:00"
+   "outputWritten": "2026-10-14T16:10:42+00:00"
   },
   {
    "name": "county_profiles",
@@ -233,7 +233,7 @@
    "status": "ok",
    "note": "counties.json, 20 counties",
    "output": "data/counties.json",
-   "outputWritten": "2026-10-14T15:24:32+00:00"
+   "outputWritten": "2026-10-14T16:10:42+00:00"
   }
  ],
  "failed": []

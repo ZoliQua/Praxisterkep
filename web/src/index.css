@@ -2442,7 +2442,10 @@ body:has(.tp-rail) .tp-map svg { margin-top: 0; }
 .dt-eeszt--0 { color: var(--ink-dim); }
 .dt-eeszt--0 i { color: #4fd6c2; }
 .dt-eeszt--1 i { color: #f0b429; }
-.dt-eeszt--2 i, .dt-eeszt--3 i { color: var(--line-strong); }
+/* found by the cross-check rather than the direct pairing: a tick, but a
+   quieter one — it is a reasoned match, not the register's own link */
+.dt-eeszt--2 i { color: #9bd4a5; }
+.dt-eeszt--3 i, .dt-eeszt--4 i { color: var(--line-strong); }
 .dt-sort { cursor: pointer; }
 .dt-sort:hover { color: var(--ink); }
 .dt-sort::after { content: ''; }

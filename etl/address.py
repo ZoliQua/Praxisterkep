@@ -52,6 +52,10 @@ import unicodedata
 from collections import defaultdict
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from parse_ksh import normalize_settlement  # noqa: E402
+
 ROOT = Path(__file__).resolve().parent.parent
 CACHE = Path(__file__).resolve().parent / "address_cache.json"
 OVERRIDES = Path(__file__).resolve().parent / "address_overrides.json"
@@ -63,7 +67,7 @@ SCHEMA_VERSION = 1
 # different kind of street and shortening them would lose that.
 STREET_TYPES = {
     "utca": "u.", "u": "u.", "u.": "u.", "utcza": "u.",
-    "út": "út", "ut": "út", "út": "út", "útja": "útja",
+    "út": "út", "ut": "út", "út": "út", "útja": "útja", "utja": "útja",
     "tér": "tér", "ter": "tér", "tere": "tere",
     "körút": "krt.", "korut": "krt.", "krt": "krt.", "krt.": "krt.",
     "sétány": "sétány", "setany": "sétány",
@@ -81,6 +85,9 @@ CANONICAL_TYPES = set(STREET_TYPES.values())
 HOUSE_RE = re.compile(
     r"^(?P<num>\d+(?:\s*[-–/]\s*[0-9A-Za-zÁÉÍÓÖŐÚÜŰáéíóöőúüű]+)*)\.?\s*(?P<rest>.*)$")
 RANGE_RE = re.compile(r"^(\d+)\s*[-–]\s*(\d+)$")
+BUILDING_RE = re.compile(
+    r'^[„"\u201d]?([A-Za-zÁÉÍÓÖŐÚÜŰáéíóöőúüű])[„"\u201d]?\.?\s*'
+    r'(?:ép|épület|epulet)\.?$', re.IGNORECASE)
 # "Váci utca" and "Váci út" are one street as the registry types them, and the
 # user of a settlement page means one place by them; "Mártírok útja" is a
 # different street from "Mártírok utca", so only this family is interchangeable
@@ -94,10 +101,15 @@ def _fold(text: str) -> str:
         if not unicodedata.combining(c))
 
 
+ROMAN_RE = re.compile(r"^[IVXLC]+[./]?$")
+
+
 def _fix_caps(word: str) -> str:
-    """"KISKAR" and "kISKAR" -> "Kiskar"; "Dr" and "20/A" left alone."""
+    """"KISKAR" and "kISKAR" -> "Kiskar"; "IV." and "20/A" left alone."""
+    if ROMAN_RE.match(word) or any(c.isdigit() for c in word):
+        return word  # a floor or a door number, not a shouted name
     letters = [c for c in word if c.isalpha()]
-    if len(letters) < 3:
+    if len(letters) < 2:
         return word
     upper = sum(1 for c in letters if c.isupper())
     if upper < len(letters) - 1:
@@ -120,10 +132,45 @@ def _house(part: str) -> str:
         return _house(f"{num}{rest}")
     if not rest:
         return f"{num}."
+    # "47. C. ép.", "2. A. épület.", '21. "E" épület.' — a building letter the
+    # registry hangs behind the number instead of writing "47/C."
+    building = BUILDING_RE.match(rest)
+    if building and "/" not in num:
+        return f"{num}/{building.group(1).upper()}."
     # a floor or a flat behind the number keeps its own closing stop, and is
     # written the way the rest of the address is rather than shouted
-    rest = " ".join(_fix_caps(w) for w in rest.rstrip(".").split(" "))
-    return f"{num}. {rest}."
+    rest = " ".join(_fix_caps(w) for w in _rest_words(rest.rstrip(".")))
+    return f"{num}. {rest.rstrip('.')}."
+
+
+# what stands behind the house number, as the registry spells it -> as we do
+REST_WORDS = {
+    "épület": "ép.", "epulet": "ép.", "ép": "ép.", "ep": "ép.",
+    "emelet": "em.", "em": "em.", "emlet": "em.",
+    "fszt": "fsz.", "fszt.": "fsz.", "fsz": "fsz.", "földszint": "fsz.",
+    "foldszint": "fsz.", "ajto": "ajtó", "lház": "lph.", "lph": "lph.",
+}
+
+
+REST_FOLDED = {_fold(k).rstrip("."): v for k, v in REST_WORDS.items()}
+
+
+def _rest_words(rest: str) -> list[str]:
+    """The floor and the door, spelled one way.
+
+    "fsz,4.", "fszt. 4." and "fsz. 4." are the same ground-floor room, and
+    "A épület", "A. ép." and "A.épület." are the same building.
+    """
+    rest = rest.replace(",", " ")
+    out = []
+    for word in rest.split():
+        key = _fold(word).rstrip(".")
+        word = REST_FOLDED.get(key, word)
+        # a bare building or staircase letter carries its own stop
+        if len(word) == 1 and word.isalpha():
+            word = f"{word.upper()}."
+        out.append(word)
+    return out
 
 
 def _cut(words: list[str]) -> int:
@@ -144,13 +191,39 @@ def _cut(words: list[str]) -> int:
     return len(words)
 
 
+def strip_place(raw: str, settlement: str, postal: str) -> str:
+    """Drop the postal code and settlement the address cell repeats.
+
+    "2626. Nagymaros, Fő tér 10." in the Nagymaros row says the town twice;
+    the page prints the settlement from its own column. A leading place name
+    that is NOT this settlement — "Agárd, Balatoni u. 84." in Gárdony — names
+    a part of the town and stays.
+    """
+    text = " ".join((raw or "").split()).strip()
+    if postal:
+        text = re.sub(rf"^{re.escape(postal)}\.?\s*,?\s*", "", text)
+    head, sep, rest = text.partition(",")
+    if sep and settlement and _fold(head.strip()) == _fold(settlement.strip()):
+        return rest.strip() or text
+    return text
+
+
 def tidy(raw: str) -> str:
     """Spelling-level clean-up of one address, with no knowledge of others."""
     text = " ".join((raw or "").split()).strip(" ,;")
+    # "Kossuth L,. sgt." and "Komakut tér,1." — a comma where a stop belongs
+    text = re.sub(r"\s*,\s*\.", ".", text)
+    text = re.sub(r"(?<=[^\W\d_])\s*,\s*(?=\d)", " ", text)
     if not text:
         return ""
-    # "Pasaréti u.41" — the registry sometimes forgets the space
+    # Hungarian has no ô or û; both are a slip of the keyboard for ő and ű
+    text = text.translate(str.maketrans("ôÔûÛ", "őŐűŰ"))
+    # "Pasaréti u.41", "Dr.Lumniczer", "Dózsa Gy.u." — the registry forgets
+    # the space after a stop as often as it types one
     text = re.sub(r"(?<=[^\W\d_.])(?=\d)|(?<=\.)(?=\d)", " ", text)
+    text = re.sub(r"(?<=\.)(?=[A-Za-zÁÉÍÓÖŐÚÜŰáéíóöőúüű])", " ", text)
+    # "12. -14." is a range the registry broke in two
+    text = re.sub(r"(\d)\.?\s*-\s*(\d)", r"\1-\2", text)
     words = text.split(" ")
     cut = _cut(words)
     # a bare number inside a street name is an ordinal: "Március 15. u."
@@ -198,6 +271,17 @@ def _accents(tidied: str) -> int:
     return sum(1 for c in tidied if c.isalpha() and ord(c) > 127)
 
 
+def _capitals(tidied: str) -> int:
+    """How many words of the street name start with a capital.
+
+    The registry types the same street as "Dr. Lumniczer S. u." and "Dr.
+    lumniczer S. u."; nothing can tell which letters belong in capitals in
+    general, but where both spellings exist the careful one is right.
+    """
+    words = tidied.split(" ")
+    return sum(1 for w in words[:_cut(words)] if w[:1].isupper())
+
+
 def _type_word(tidied: str) -> str:
     """The kind of street this spelling says, or "" where it says none."""
     words = [w for w in tidied.split(" ") if w]
@@ -233,6 +317,16 @@ def _numbers(house: str) -> set[int]:
     return out
 
 
+def _without_initials(stem: str) -> str:
+    """The street name with the middle initials dropped.
+
+    The registry writes one street as "Markusovszky u.", "Markusovszky L. u."
+    and "Markusovszky Lajos u."; the first two differ by an initial, which
+    carries no information the other words do not already carry.
+    """
+    return " ".join(w for w in stem.split() if len(w.rstrip(".")) > 1)
+
+
 def _abbreviates(short: str, full: str) -> bool:
     """Whether "szent m" stands for "szent marton" (same words, one cut short)."""
     a, b = short.split(), full.split()
@@ -255,7 +349,10 @@ def _same_place(a: tuple[str, str], b: tuple[str, str]) -> bool:
         return False
     if stem_a != stem_b and not (_abbreviates(stem_a, stem_b)
                                  or _abbreviates(stem_b, stem_a)):
-        return False
+        # one of them may simply leave the middle initial out
+        bare_a, bare_b = _without_initials(stem_a), _without_initials(stem_b)
+        if not bare_a or bare_a != bare_b:
+            return False
     if house_a == house_b:
         return True
     # Beyond an identical house number, only one merge is safe: a plain number
@@ -327,6 +424,7 @@ def resolve(addresses: list[str]) -> dict[str, str]:
             len(_stem(t)[0]),                  # the written-out street name
             type_vote[keys[t][0]][_type_word(t)],  # what this street is called
             _accents(t),                       # the careful spelling, not the shouted one
+            _capitals(t),                      # "Dr. Lumniczer", not "Dr. lumniczer"
             len(_numbers(_stem(t)[1])),        # the widest range of the building
             counts[t],                         # what most entries already say
             _short_type(t),                    # a coin toss that lands alike
@@ -339,8 +437,18 @@ def resolve(addresses: list[str]) -> dict[str, str]:
 
 # ---------------------------------------------------------------- the cache
 
+def place_key(settlement: str, postal: str) -> str:
+    """The settlement as a key, not as a label.
+
+    NEAK writes the capital's districts both ways — the dental registry says
+    "Budapest 04.", the GP vacancy list "Budapest IV. kerület" — and a
+    surgery on Örs vezér tere must not get two spellings because of it.
+    """
+    return f"{postal} {normalize_settlement(settlement)}"
+
+
 def _key(settlement: str, postal: str, raw: str) -> str:
-    return f"{postal} {settlement}|{raw}"
+    return f"{place_key(settlement, postal)}|{raw}"
 
 
 def load_cache() -> dict:
@@ -390,32 +498,58 @@ def normalize_entries(entries: list, *, cache: dict | None = None,
     overrides = load_overrides()
     known = cache["addresses"]
 
-    by_place: dict[tuple[str, str], list] = defaultdict(list)
+    by_place: dict[str, list] = defaultdict(list)
     for entry in entries:
         settlement = get(entry, "settlement")
         if not settlement or not get(entry, "address"):
             continue
-        by_place[(settlement, get(entry, "postalCode"))].append(entry)
+        by_place[place_key(settlement, get(entry, "postalCode"))].append(entry)
+    # the raw string the rest of this works from has the repeated place
+    # removed first, so two rows that differ only in it meet as one
+    stripped: dict[int, str] = {}
+    for place, rows in by_place.items():
+        postal, _, settlement_key = place.partition(" ")
+        for row in rows:
+            stripped[id(row)] = strip_place(
+                get(row, "address"), get(row, "settlement"), postal)
+
+    # Every address the cache already holds for a place, not only the ones in
+    # this batch. The dental and the GP registry are parsed one after the
+    # other, and "Fő u. 179." in one of them is the same door as "Fő út 179."
+    # in the other: without this the two never met and the settlement kept
+    # both spellings.
+    settled: dict[str, dict[str, str]] = defaultdict(dict)
+    for key, canonical in known.items():
+        place, raw = key.split("|", 1)
+        settled[place][raw] = canonical
 
     changed = 0
-    for (settlement, postal), rows in by_place.items():
-        raws = [get(r, "address") for r in rows]
+    for place, rows in by_place.items():
+        raws = [stripped[id(r)] for r in rows]
         # a decision already made stays made; only the new strings are resolved
-        decided = {raw: known[_key(settlement, postal, raw)] for raw in raws
-                   if _key(settlement, postal, raw) in known}
+        decided = dict(settled[place])
         fresh = [raw for raw in raws if raw not in decided]
         if fresh:
             # the new strings are resolved against the settled ones too, so a
             # new row joins the group it belongs to instead of starting one
             resolved = resolve(sorted(set(fresh) | set(decided)))
+            # A group that already has a settled member keeps that member's
+            # label: a new spelling joins the surgery, it does not rename it.
+            settled_label = {}
+            for raw, canonical in resolved.items():
+                if raw in decided:
+                    settled_label.setdefault(canonical, decided[raw])
             for raw in fresh:
-                decided[raw] = resolved[raw]
-                known[_key(settlement, postal, raw)] = resolved[raw]
+                final = settled_label.get(resolved[raw], resolved[raw])
+                decided[raw] = final
+                known[f"{place}|{raw}"] = final
+                settled[place][raw] = final
         for row in rows:
-            raw = get(row, "address")
-            final = overrides.get(_key(settlement, postal, raw), decided[raw])
-            if final != raw:
-                put(row, "addressRaw", raw)
+            original = get(row, "address")
+            raw = stripped[id(row)]
+            final = overrides.get(f"{place}|{raw}", decided[raw])
+            if final != original:
+                put(row, "addressRaw", original)
                 put(row, "address", final)
                 changed += 1
     return changed

@@ -5,6 +5,52 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.40.0] — 2026-10-14
+
+A címtisztítás második köre, és egy oszlop, ami eddig többet
+állított, mint amit tudott.
+
+### Javítva
+- **„Nincs működési engedély" helyett „✓ illesztett"**, ahol a
+  keresztellenőrzés talált engedélyt. Az automatikus párosítás
+  a körzet saját szervezeti egysége alatt keres; ahol nem talál, a
+  keresztellenőrzés tovább néz (ugyanaz a cím másik egység alatt,
+  egyező adószám, ugyanaz az utca). Országosan **160 körzet**
+  került át ebbe a kategóriába — Szombathelyen az összes ilyen —,
+  és mindössze **két** betöltött körzet maradt, amelyhez egyik
+  módszer sem talál engedélyt. A buborék megmondja, mi alapján
+  illesztett, és melyik engedélyt javasolja.
+- **A római számok visszakapták a nagybetűiket**: az előző kör
+  „III. em."-ből „Iii. em."-et csinált. Számot tartalmazó szót
+  tovább nem írunk át.
+
+### Hozzáadva — címek, második kör
+Végignézve mind a 3177 település: a maradt eltérések **mind** a
+házszám utáni részben (emelet, ajtó) vagy az ajtóbetűben (2/A és
+2/B) különböznek — ezek valóban külön címek. Ami ebben a körben
+egységesült:
+- **A két nyilvántartás együtt dől el.** A fogorvosi és a
+  háziorvosi listát eddig külön oldottuk fel, így a „Fő u. 179."
+  és a „Fő út 179." sosem találkozott.
+- **Budapest kerületei egy helyek**, bárhogy írja a NEAK
+  („Budapest 04." és „Budapest IV. kerület").
+- **Elhagyott középső kezdőbetű**: „Markusovszky u." és
+  „Markusovszky L. u." egy utca; „Szent M." és „Szent István" nem.
+- **Kétbetűs kiabálás** („FŐ u." → „Fő u."), **ô és û**
+  elgépelés (→ ő, ű), **hiányzó szóköz pont után**
+  („Dózsa Gy.u." → „Dózsa Gy. u.", „Dr.Lumniczer" → „Dr. Lumniczer"),
+  **„utja" → „útja"**, **kéttétört házszámtartomány**
+  („12. -14." → „12-14.").
+- **Épületbetű a házszámban**: „47. c. ép." → „47/C.",
+  „21. „E" épület." → „21/E.".
+- **Emelet és ajtó egyféleképp**: „fszt." és „fsz,4." → „fsz. 4.",
+  „A épület" → „A. ép.".
+- **A címből kikerül a megismételt település**: „2626. Nagymaros,
+  Fő tér 10." → „Fő tér 10." — de a városrész marad
+  („Agárd, Balatoni u. 84." Gárdonyban).
+
+Összesen **4109 cím** kapott egységes alakot (előző kör: 3666).
+
 ## [1.39.0] — 2026-10-14
 
 Egy rendelőnek egy címe. A NEAK-nyilvántartást kézzel gépelik,

@@ -77,6 +77,31 @@ const EESZT_REASON = {
   otherTip: 'más szolgálattípus',
 };
 
+// The cross-check: where the automatic pairing found no licence under the
+// district's own unit code, it looks again — the same address under another
+// unit, the same provider's tax number, the same street. Where it comes back
+// with a verdict, the surgery is known to the licence register after all,
+// and saying "nincs működési engedély" would be wrong.
+const crosscheck = (() => {
+  try {
+    const raw = JSON.parse(
+      readFileSync(join(here, '..', '..', 'data', 'crosscheck.json'), 'utf8'));
+    return new Map((raw.records ?? [])
+      .filter((r) => r.verdict && r.verdict !== 'none')
+      .map((r) => [r.id, r]));
+  } catch {
+    return new Map();
+  }
+})();
+const CROSSCHECK_VERDICT = {
+  otherUnitSameProfession: 'ugyanaz a cím, másik szervezeti egység',
+  ownUnitSameProfession: 'ugyanaz a cím, saját szervezeti egység',
+  otherProfessionAtAddress: 'a címen más szakma engedélye van',
+  streetSameProfession: 'ugyanaz az utca, eltérő házszám',
+  providerName: 'a szolgáltató neve egyezik',
+  providerTaxNumber: 'a szolgáltató adószáma egyezik',
+};
+
 /**
  * What the licence register says about one district.
  *
@@ -96,12 +121,24 @@ function eesztLicence(fin) {
       ? { ok: 0, label: 'van', title: `Engedélyezett telephely: ${where}` }
       : { ok: 1, label: 'van (más telephely)', title: `Engedélyezett telephely: ${where}` };
   }
+  const match = crosscheck.get(fin);
+  if (match) {
+    const basis = CROSSCHECK_VERDICT[match.verdict] ?? match.verdict;
+    const where = match.candidates?.[0]
+      ? ` Javasolt engedély: ${[match.candidates[0].settlement,
+    match.candidates[0].address].filter(Boolean).join(', ')
+    .replace(/\s+/g, ' ').replace(/\.*$/, '')}.` : '';
+    return { ok: 2, label: 'illesztett',
+      title: `Az automatikus párosítás nem talált engedélyt a körzet saját `
+        + `szervezeti egysége alatt, a keresztellenőrzés viszont igen `
+        + `(${basis}).${where}` };
+  }
   const un = eeszt.unmatched?.[fin];
   if (un) {
     const reason = EESZT_REASON[un[1]] ?? un[1];
-    return { ok: 2, label: reason, title: `Az EESZT-ben nincs ehhez a körzethez egyértelműen illeszthető működési engedély (${reason}).` };
+    return { ok: 3, label: reason, title: `Sem az automatikus párosítás, sem a keresztellenőrzés nem talált ehhez a körzethez működési engedélyt (${reason}).` };
   }
-  return { ok: 3, label: '–', title: 'Az EESZT törzsében nincs adat erről a kódról.' };
+  return { ok: 4, label: '–', title: 'Az EESZT törzsében nincs adat erről a kódról.' };
 }
 
 // how far back the tenure claim can reach: the oldest monthly snapshot the
@@ -858,7 +895,7 @@ function siteOf(profile, row) {
 function eesztCell(row) {
   const e = row.eeszt;
   if (!e) return '<span class="dt-cell dt-cell--eeszt" role="cell">–</span>';
-  const mark = e.ok === 0 ? '✓' : e.ok === 1 ? '!' : '–';
+  const mark = e.ok === 0 || e.ok === 2 ? '✓' : e.ok === 1 ? '!' : '–';
   return `<span class="dt-cell dt-cell--eeszt dt-eeszt--${e.ok}" role="cell"
     title="${esc(e.title)}"><i aria-hidden="true">${mark}</i> ${esc(e.label)}</span>`;
 }
