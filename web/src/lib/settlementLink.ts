@@ -4,20 +4,23 @@
 // county), and the map of them is small enough to ship.
 import { useEffect, useState } from 'react';
 
-type Row = [name: string, county: string, slug: string];
+type Row = [name: string, county: string, slug: string, population?: number];
 
 export interface SettlementIndex {
   /** "name|county" -> slug */
   bySlugKey: Map<string, string>;
   /** slug -> name and county, for showing what a bare slug in a link means */
   bySlug: Map<string, { name: string; county: string }>;
+  /** every settlement in the country, listed or not — what the search needs */
+  all: { name: string; county: string; slug: string; population: number }[];
 }
 
 let cache: SettlementIndex | null = null;
 let pending: Promise<SettlementIndex> | null = null;
 
 const key = (name: string, county: string) => `${name}|${county}`;
-const empty = (): SettlementIndex => ({ bySlugKey: new Map(), bySlug: new Map() });
+const empty = (): SettlementIndex =>
+  ({ bySlugKey: new Map(), bySlug: new Map(), all: [] });
 
 export function useSettlementIndex(): SettlementIndex | null {
   const [index, setIndex] = useState<SettlementIndex | null>(cache);
@@ -27,9 +30,10 @@ export function useSettlementIndex(): SettlementIndex | null {
       .then((r) => (r.ok ? r.json() : null))
       .then((d: { settlements: Row[] } | null) => {
         const out = empty();
-        for (const [name, county, slug] of d?.settlements ?? []) {
+        for (const [name, county, slug, population] of d?.settlements ?? []) {
           out.bySlugKey.set(key(name, county), slug);
           out.bySlug.set(slug, { name, county });
+          out.all.push({ name, county, slug, population: population ?? 0 });
         }
         cache = out;
         return out;

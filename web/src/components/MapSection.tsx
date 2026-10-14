@@ -11,6 +11,8 @@ import { t } from '../lib/i18n';
 import { formatMonth, formatNumber, formatPercent, monthsBetween } from '../lib/format';
 import { countyRanking, filterPraxes, type TypeFilter } from '../lib/selectors';
 import { readMapState, writeMapState } from '../lib/mapState';
+import { useContextStore } from '../lib/context';
+import { vacancyOf } from '../lib/vacancy';
 import { eesztNow, eesztPraxis, loadEeszt, takesOnCall } from '../lib/eeszt';
 import {
   useAppStore, useHistoryEntries, useMapSnapshot, type MapMetric,
@@ -283,7 +285,11 @@ export function MapSection() {
   const [colorMode, setColorMode] = useState<ColorMode>(initialUrl.colorMode ?? 'status');
   const [minYears, setMinYears] = useState(initialUrl.minYears ?? 0);
   const [level, setLevel] = useState<'county' | 'jaras'>('county');
-  const [showDissolved, setShowDissolved] = useState(true);
+  // the map's old local checkbox is the site-wide reading now: what it hides
+  // here, every other figure on the page leaves out too
+  const showDissolved = useContextStore((s2) => s2.dissolved) === 'with';
+  const setShowDissolved = (on: boolean) =>
+    useContextStore.getState().setDissolved(on ? 'with' : 'without');
   const [playing, setPlaying] = useState(false);
   const [hover, setHover] = useState<{ name: string; x: number; y: number } | null>(null);
   const [geoms, setGeoms] = useState<Map<string, CountyGeom> | null>(null);
@@ -650,7 +656,8 @@ export function MapSection() {
     markersRef.current = [];
     if (level === 'jaras') return; // county labels would clutter the járás view
     if (!showNames && view !== 'columns') return;
-    const maxCount = Math.max(...snapshot.counties.map((c) => c.vacant + c.dissolved), 1);
+    const maxCount = Math.max(
+      ...snapshot.counties.map((c) => vacancyOf(c, showDissolved ? 'with' : 'without').count), 1);
     for (const c of snapshot.counties) {
       const g = geoms.get(c.name);
       if (!g) continue;
@@ -658,15 +665,16 @@ export function MapSection() {
       const el = document.createElement('div');
       el.className = 'county-marker';
       if (view === 'columns') {
-        const count = c.vacant + c.dissolved;
+        const count = vacancyOf(c, showDissolved ? 'with' : 'without').count;
         const bar = document.createElement('div');
         bar.className = 'county-marker__bar';
         bar.style.height = `${Math.round(8 + (count / maxCount) * 64)}px`;
         el.appendChild(bar);
         const value = document.createElement('div');
         value.className = 'county-marker__value';
-        value.textContent = c.vacancyRate !== null
-          ? `${formatNumber(count)} · ${formatPercent(c.vacancyRate)}`
+        const rate = vacancyOf(c, showDissolved ? 'with' : 'without').rate;
+        value.textContent = rate !== null
+          ? `${formatNumber(count)} · ${formatPercent(rate)}`
           : formatNumber(count);
         el.appendChild(value);
       }
@@ -682,7 +690,7 @@ export function MapSection() {
         .addTo(map);
       markersRef.current.push(marker);
     }
-  }, [snapshot, geoms, showNames, view, level, setSelectedCounty]);
+  }, [snapshot, geoms, showNames, view, level, showDissolved, setSelectedCounty]);
 
   const county = snapshot.counties.find((c) => c.name === selectedCounty);
   const hoverCounty = hover ? snapshot.counties.find((c) => c.name === hover.name) : null;
@@ -789,7 +797,7 @@ export function MapSection() {
           <div className="map-tooltip" style={{ left: hover.x, top: hover.y }}>
             <strong>{hoverCounty.name}</strong>
             <span>
-              {formatNumber(hoverCounty.vacant + hoverCounty.dissolved)} / {hoverCounty.total !== null ? formatNumber(hoverCounty.total) : '–'} {t('map.countyDistricts')}
+              {formatNumber(vacancyOf(hoverCounty, showDissolved ? 'with' : 'without').count)} / {hoverCounty.total !== null ? formatNumber(hoverCounty.total) : '–'} {t('map.countyDistricts')}
               {hoverCounty.vacancyRate !== null && ` · ${formatPercent(hoverCounty.vacancyRate)}`}
               {hoverCounty.populationShare !== undefined
                 && ` · ${t('map.countyPopShare')}: ${formatPercent(hoverCounty.populationShare)}`}

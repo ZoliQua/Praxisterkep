@@ -52,3 +52,36 @@ describe('district stock', () => {
     expect(typeRows(null)).toEqual([]);
   });
 });
+
+describe('the two readings of a type row', () => {
+  const snap2 = {
+    national: {
+      totalDistricts: 2776,
+      byType: {
+        adult: { total: 451, vacant: 22 },
+        mixed: { total: 1835, vacant: 215 },
+      },
+    },
+    praxes: Array.from({ length: 42 }, (_, i) => ({
+      id: String(i), type: 'mixed', status: 'dissolved',
+    })),
+  } as unknown as Snapshot;
+
+  it('leaves the dissolved out of both sides when asked to', () => {
+    const rows = typeRows(snap2, 'without');
+    expect(rows[1]).toMatchObject({ total: 1835, vacant: 215, dissolved: 42 });
+    expect(rows[1].rate).toBeCloseTo(215 / 1835, 5);
+  });
+
+  it('puts them back into their own type when asked to', () => {
+    const rows = typeRows(snap2, 'with');
+    // a dissolved district is gone from the registry, so it is missing from
+    // the denominator as well as the numerator
+    expect(rows[1]).toMatchObject({ total: 1877, vacant: 257, dissolved: 42 });
+    expect(rows[1].rate).toBeCloseTo(257 / 1877, 5);
+  });
+
+  it('leaves a type with no dissolved district alone', () => {
+    expect(typeRows(snap2, 'with')[0]).toMatchObject({ total: 451, vacant: 22 });
+  });
+});

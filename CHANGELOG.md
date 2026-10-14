@@ -5,6 +5,55 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.38.0] — 2026-10-14
+
+A megszűnt szerződésű körzetek eddig némán bele voltak
+számolva minden betöltetlenségi számba — vagy nem, lapja
+válogatta. Mostantól az olvasó dönt, és a döntés
+a címsorban utazik.
+
+### Hozzáadva
+- **„Megszűnt körzetek: beleértve / nélkül" kapcsoló**
+  mindenhol, ahol betöltetlenségi szám van: főoldal, statisztika,
+  településkereső, térkép, megyeoldal és rangsor. A
+  választás a címben is ott van (`?msz=0`), így egy megosztott
+  link azt az olvasatot viszi tovább, amelyikben készült. A szöveg
+  követi a számot: 304-nél „betöltetlen vagy megszűnt
+  szerződésű", 262-nél „betöltetlen".
+- A **megye-összehasonlítóban mindkét olvasat egyszerre** látszik:
+  betöltetlen, arány és érintett lakosság megszűnttel és
+  megszűnt nélkül, hat sorban.
+- **A településkeresőben mind a 3177 település** szerepel, az is,
+  amelyik egyetlen NEAK-listán sincs rajta. Ilyenkor a kártya ki is mondja,
+  hogy ez nem ellátáshiány, hanem adathiány.
+- **NEAK kód oszlop** a településlapokon: az orvostáblákban
+  (rendezhetően), a betöltetlen és megszűnt körzeteknél és
+  a „Mi változott egy év alatt?" táblázatban.
+- A **településjegyzéken** a megyeszékhely nagyobb, félkövér
+  és aláhúzott, a járásszékhely nagyobb és
+  félkövér (KSH-rangok a városrétegből).
+- A főoldali **körbejáró kiemelő szűk képernyőn is
+  mutatja az idősávot**, és a csempesor **odább csúszik az
+  éppen aktív csempére**, hogy ne a képernyőn kívül
+  váltson a reflektor.
+
+### Javítva
+- **A megyeoldal két kördiagramja nem reagált az egérre**: a gyűrű
+  közepére írt szám láthatatlanul lefedte az egészét, és
+  elnyelte a hovert. Mostantól a szelet megnevezi magát, a többi
+  elhalványul — és mindkettő mellé kikerült egy
+  **jelmagyarázat**, amelyik ugyanígy működik.
+- **A típusonkénti bontás és a főszám nem ugyanazt mondta**:
+  a táblázat a nyilvántartásból számolt (megszűnt
+  nélkül), a 11,0% viszont megszűnttel. Most mindkettő ugyanazt az
+  olvasatot követi.
+
+### Módosítva
+- A **„Hogyan áll a körzetállomány?"** saját szekció lett,
+  ugyanolyan címmel és szélességgel, mint a többi.
+- A `settlement_slugs.json` a lakosságszámot is viszi (séma: 2), hogy a
+  kereső a listákon kívüli településekről is mondjon valamit.
+
 ## [1.37.0] — 2026-10-14
 
 Rendezhető orvostáblák a településlapokon, és néhány helyre tett dolog a

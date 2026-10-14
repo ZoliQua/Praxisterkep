@@ -17,13 +17,31 @@ export interface SiteContext {
   county: string | null;
   /** settlement slug (the key of its own page), or null */
   settlement: string | null;
+  /**
+   * Whether a vacancy figure counts the dissolved districts too.
+   *
+   * NEAK publishes two lists: districts with no contracted physician, and
+   * districts whose contract ended outright. Every headline number on this
+   * site used to add them together silently, which is defensible — for a
+   * resident both mean "nobody is under contract here" — but it is not the
+   * only honest reading, and the reader could not see which one they were
+   * getting. Now they choose, and the choice travels in the address bar.
+   */
+  dissolved: DissolvedMode;
 }
+
+/** 'with' counts the dissolved districts as vacant, 'without' leaves them out. */
+export type DissolvedMode = 'with' | 'without';
 
 // 'k' and 'm' are what the map has always written, so old links keep working;
 // 't' was already taken by the praxis-type filter, hence 'tel'.
-export const CONTEXT_KEYS = { kind: 'k', county: 'm', settlement: 'tel' } as const;
+export const CONTEXT_KEYS = {
+  kind: 'k', county: 'm', settlement: 'tel', dissolved: 'msz',
+} as const;
 
-export const EMPTY: SiteContext = { kind: 'dental', county: null, settlement: null };
+export const EMPTY: SiteContext = {
+  kind: 'dental', county: null, settlement: null, dissolved: 'with',
+};
 
 const SLUG_RE = /^[a-z0-9-]{2,60}$/;
 
@@ -35,6 +53,7 @@ export function readContext(search: string = window.location.search): SiteContex
     kind: kind === 'gp' ? 'gp' : 'dental',
     county: p.get(CONTEXT_KEYS.county) || null,
     settlement: settlement && SLUG_RE.test(settlement) ? settlement : null,
+    dissolved: p.get(CONTEXT_KEYS.dissolved) === '0' ? 'without' : 'with',
   };
 }
 
@@ -49,6 +68,8 @@ export function writeContext(search: string, ctx: SiteContext): string {
   setOr(CONTEXT_KEYS.kind, ctx.kind === 'gp' ? 'gp' : null);
   setOr(CONTEXT_KEYS.county, ctx.county);
   setOr(CONTEXT_KEYS.settlement, ctx.settlement);
+  // counting the dissolved is the default, so only the other choice is written
+  setOr(CONTEXT_KEYS.dissolved, ctx.dissolved === 'without' ? '0' : null);
   const q = p.toString();
   return q ? `?${q}` : '';
 }
@@ -57,6 +78,7 @@ interface ContextState extends SiteContext {
   setKind: (kind: PraxisKind) => void;
   setCounty: (county: string | null) => void;
   setSettlement: (settlement: string | null) => void;
+  setDissolved: (dissolved: DissolvedMode) => void;
   setContext: (patch: Partial<SiteContext>) => void;
   clear: () => void;
 }
@@ -75,6 +97,7 @@ export const useContextStore = create<ContextState>((set, get) => ({
   setKind: (kind) => get().setContext({ kind }),
   setCounty: (county) => get().setContext({ county }),
   setSettlement: (settlement) => get().setContext({ settlement }),
+  setDissolved: (dissolved) => get().setContext({ dissolved }),
   setContext: (patch) => {
     const next = { ...contextOf(get()), ...patch };
     set(next);
@@ -84,7 +107,10 @@ export const useContextStore = create<ContextState>((set, get) => ({
 }));
 
 function contextOf(s: SiteContext): SiteContext {
-  return { kind: s.kind, county: s.county, settlement: s.settlement };
+  return {
+    kind: s.kind, county: s.county, settlement: s.settlement,
+    dissolved: s.dissolved,
+  };
 }
 
 /** The context as a plain object, for building links outside React. */
@@ -133,5 +159,6 @@ export function useContextHref(): (href: string) => string {
   const kind = useContextStore((s) => s.kind);
   const county = useContextStore((s) => s.county);
   const settlement = useContextStore((s) => s.settlement);
-  return (href: string) => contextHref(href, { kind, county, settlement });
+  const dissolved = useContextStore((s) => s.dissolved);
+  return (href: string) => contextHref(href, { kind, county, settlement, dissolved });
 }

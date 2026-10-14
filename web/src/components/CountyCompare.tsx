@@ -4,6 +4,8 @@ import { useMemo, useState } from 'react';
 import { t } from '../lib/i18n';
 import { formatDecimal, formatNumber, formatPercent } from '../lib/format';
 import { useAppStore, useHistoryEntries, useSnapshot } from '../store/useAppStore';
+import { vacancyOf } from '../lib/vacancy';
+import { useContextStore } from '../lib/context';
 import type { CountyAggregate } from '../types';
 
 const W = 460;
@@ -13,11 +15,18 @@ const COLOR_A = 'var(--accent)';
 const COLOR_B = '#b58cff';
 
 function CountyCard({ county, color }: { county: CountyAggregate; color: string }) {
-  const rate = county.total ? (county.vacant + county.dissolved) / county.total : null;
+  // both readings, side by side and labelled: a comparison of two counties is
+  // exactly where the choice between them must not be made for the reader
+  const withD = vacancyOf(county, 'with');
+  const withoutD = vacancyOf(county, 'without');
+  const pct = (v: number | null) => (v !== null ? formatPercent(v) : '–');
   const rows: [string, string][] = [
-    [t('ranking.compareVacant'), `${county.vacant + county.dissolved} / ${county.total ?? '–'}`],
-    [t('ranking.compareRate'), rate !== null ? formatPercent(rate) : '–'],
-    [t('ranking.comparePop'), formatNumber(county.populationVacant + county.populationDissolved)],
+    [t('ranking.compareVacant'), `${withD.count} / ${county.total ?? '–'}`],
+    [t('ranking.compareRate'), pct(withD.rate)],
+    [t('ranking.comparePopWith'), formatNumber(withD.population)],
+    [t('ranking.compareVacantOnly'), `${withoutD.count} / ${county.total ?? '–'}`],
+    [t('ranking.compareRateOnly'), pct(withoutD.rate)],
+    [t('ranking.comparePopOnly'), formatNumber(withoutD.population)],
   ];
   if (county.populationShare != null) {
     rows.push([t('ranking.comparePopShare'), formatPercent(county.populationShare)]);
@@ -43,6 +52,7 @@ function CountyCard({ county, color }: { county: CountyAggregate; color: string 
 export function CountyCompare() {
   const snapshot = useSnapshot()!;
   const kind = useAppStore((s) => s.kind);
+  const mode = useContextStore((s2) => s2.dissolved);
   const history = useHistoryEntries();
   const counties = useMemo(
     () => [...snapshot.counties].sort((a, b) => a.name.localeCompare(b.name, 'hu')),
@@ -65,10 +75,10 @@ export function CountyCompare() {
   const series = useMemo(() => {
     const pick = (name: string) => history.map((h) => {
       const c = h.byCounty[name];
-      return c ? c.vacant + c.dissolved : null;
+      return c ? vacancyOf(c, mode).count : null;
     });
     return { a: pick(nameA), b: pick(nameB) };
-  }, [history, nameA, nameB]);
+  }, [history, nameA, nameB, mode]);
 
   const maxY = Math.max(1, ...series.a.filter((v): v is number => v !== null),
     ...series.b.filter((v): v is number => v !== null));

@@ -8,6 +8,8 @@ import { formatDecimal, formatDuration, formatMonth, formatNumber, formatPercent
 import { longestVacant, primarySite } from '../lib/selectors';
 import { medianSeries, rateSeries, type HistoryEntry } from '../lib/statsSelectors';
 import { useAppStore } from '../store/useAppStore';
+import { useContextStore, type DissolvedMode } from '../lib/context';
+import { vacancyOf, vacancyRateOf } from '../lib/vacancy';
 import { TimeSeriesChart, type ChartSeries } from './charts/TimeSeriesChart';
 import type { PraxisKind, Snapshot } from '../types';
 
@@ -18,13 +20,15 @@ const LABEL_W = 190;
 const WIDTH = 900;
 
 function metricRows(dental: Snapshot, gp: Snapshot,
-  histDental: HistoryEntry[], histGp: HistoryEntry[]): [string, string, string][] {
+  histDental: HistoryEntry[], histGp: HistoryEntry[],
+  mode: DissolvedMode): [string, string, string][] {
   const f = (s: Snapshot) => {
-    const all = s.national.vacant + s.national.dissolved;
+    const parts = vacancyOf(s.national, mode);
+    const all = parts.count;
     return {
       all,
-      rate: s.national.vacancyRate,
-      pop: s.national.populationVacant + s.national.populationDissolved,
+      rate: parts.rate,
+      pop: parts.population,
       share: s.national.populationShare,
       per10k: s.national.praxesPer10k,
       longTerm: s.national.longTerm,
@@ -61,11 +65,13 @@ function metricRows(dental: Snapshot, gp: Snapshot,
   ];
 }
 
-function CountyDumbbell({ dental, gp }: { dental: Snapshot; gp: Snapshot }) {
+function CountyDumbbell({ dental, gp, mode }: {
+  dental: Snapshot; gp: Snapshot; mode: DissolvedMode;
+}) {
   const rows = useMemo(() => {
     const rateOf = (s: Snapshot, name: string) => {
       const c = s.counties.find((x) => x.name === name);
-      return c && c.total ? (c.vacant + c.dissolved) / c.total : null;
+      return c && c.total ? vacancyRateOf(c, mode) : null;
     };
     const names = new Set([
       ...dental.counties.map((c) => c.name),
@@ -74,7 +80,7 @@ function CountyDumbbell({ dental, gp }: { dental: Snapshot; gp: Snapshot }) {
     return [...names]
       .map((name) => ({ name, a: rateOf(dental, name), b: rateOf(gp, name) }))
       .sort((x, y) => (y.b ?? 0) - (x.b ?? 0));
-  }, [dental, gp]);
+  }, [dental, gp, mode]);
 
   const max = Math.max(0.01, ...rows.flatMap((r) => [r.a ?? 0, r.b ?? 0]));
   const x = (v: number) => LABEL_W + (v / max) * (WIDTH - LABEL_W - 90);
@@ -121,6 +127,7 @@ export function VersusSection() {
   const gp = latest?.kinds.gp;
   const histDental = history?.kinds.dental?.months ?? [];
   const histGp = history?.kinds.gp?.months ?? [];
+  const mode = useContextStore((s2) => s2.dissolved);
   if (!dental || !gp) return null;
 
   const rateChart: ChartSeries[] = [
@@ -147,7 +154,7 @@ export function VersusSection() {
             </tr>
           </thead>
           <tbody>
-            {metricRows(dental, gp, histDental, histGp).map(([label, a, b]) => (
+            {metricRows(dental, gp, histDental, histGp, mode).map(([label, a, b]) => (
               <tr key={label}>
                 <td>{label}</td>
                 <td>{a}</td>
@@ -183,7 +190,7 @@ export function VersusSection() {
           <h3>{t('versus.dumbbellTitle')}</h3>
           <p>{t('versus.dumbbellExplain')}</p>
         </figcaption>
-        <CountyDumbbell dental={dental} gp={gp} />
+        <CountyDumbbell dental={dental} gp={gp} mode={mode} />
       </figure>
     </section>
   );

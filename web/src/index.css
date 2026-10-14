@@ -207,6 +207,18 @@ a:hover { text-decoration: underline; }
 }
 .seg button:hover { color: var(--ink); }
 .seg button[aria-pressed='true'] { background: var(--accent); color: var(--accent-ink); font-weight: 600; }
+.seg--small button { font-size: 12px; padding: 5px 11px; }
+
+/* "megszűnt körzetek: beleértve / nélkül" — the reading every vacancy figure
+   on the page answers to. It sits with the numbers it governs, not in a
+   settings panel, because it changes what they mean. */
+.dsw {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  margin: 10px 0 2px;
+}
+.dsw__label { color: var(--ink-faint); font-size: 12.5px; }
+.dsw--compact { margin: 6px 0 0; }
+.dsw__note { margin: 6px 0 0; color: var(--ink-faint); font-size: 12px; }
 
 .map-legend {
   position: absolute; left: 14px; bottom: 14px; z-index: 5;
@@ -981,6 +993,14 @@ a:hover { text-decoration: underline; }
 }
 @keyframes sc-progress { from { width: 0; } to { width: 100%; } }
 
+/* the same clock, drawn across the whole rail; only a narrow layout shows it,
+   where the per-tile hairline may be scrolled out of sight */
+.showcase__timebar { display: none; }
+.showcase__timebar i {
+  display: block; height: 100%; width: 0; background: var(--accent);
+  animation: sc-progress linear forwards;
+}
+
 .showcase__panel {
   background: var(--bg-raised); padding: 26px 30px 18px;
   animation: rise 0.45s ease backwards;
@@ -1017,9 +1037,19 @@ a:hover { text-decoration: underline; }
 
 @media (max-width: 720px) {
   .showcase { grid-template-columns: 1fr; }
-  .showcase__rail { flex-direction: row; overflow-x: auto; }
-  .showcase__rail button { min-width: 150px; border-bottom: 0; border-left: 0; }
+  .showcase__rail {
+    flex-direction: row; overflow-x: auto;
+    /* the rail follows the spotlight; a tile should come to rest, not drift */
+    scroll-snap-type: x proximity; scroll-behavior: smooth;
+  }
+  .showcase__rail button {
+    min-width: 150px; border-bottom: 0; border-left: 0;
+    scroll-snap-align: center;
+  }
   .showcase__rail button.is-active { box-shadow: inset 0 -3px 0 var(--accent); }
+  .showcase__timebar {
+    display: block; height: 3px; background: var(--line);
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .sc-draw, .sc-fade, .sc-pop, .showcase__progress { animation: none !important; opacity: 1; stroke-dashoffset: 0; }
@@ -1663,6 +1693,14 @@ a:hover { text-decoration: underline; }
 .tp-index-list { line-height: 2; font-size: 14px; }
 .tp-index-list a { color: var(--ink-dim); }
 .tp-index-list a:hover { color: var(--accent); }
+/* a county seat and a district seat carry the places around them; the index
+   says so rather than listing 3177 names at one size */
+.tp-seat { color: var(--ink); }
+.tp-seat--jaras { font-size: 16px; font-weight: 600; }
+.tp-seat--county {
+  font-size: 18px; font-weight: 700; text-decoration: underline;
+  text-underline-offset: 3px;
+}
 .tp-footer { color: var(--ink-faint); font-size: 13px; border-top: 1px solid var(--line); padding-top: 18px; }
 .settlement-card__link { margin: -4px 0 12px; font-size: 14px; }
 .settlement-card__link a { color: var(--accent); }
@@ -1834,7 +1872,11 @@ a:hover { text-decoration: underline; }
 .donut__center {
   position: absolute; inset: 0; display: grid; place-items: center;
   font: 700 17px var(--font-display); color: var(--ink);
+  /* it covers the whole ring; without this it swallowed every hover and the
+     two county donuts looked dead while the age pie beside them answered */
+  pointer-events: none;
 }
+.donut-legend li { cursor: pointer; }
 .agelegend { list-style: none; margin: 8px 0 0; padding: 0; font-size: 12.5px; }
 .agelegend li {
   display: flex; align-items: baseline; gap: 7px; padding: 1px 0;
@@ -1915,13 +1957,12 @@ a:hover { text-decoration: underline; }
 }
 .maplibregl-popup-tip { border-top-color: var(--bg-panel) !important; }
 
-/* "Hogyan áll a körzetállomány?" — the stock the headline number is part of. */
-.balance {
-  margin: 22px 0 10px; padding: 16px 18px; border: 1px solid var(--line);
+/* "Hogyan áll a körzetállomány?" — the stock the headline number is part of.
+   It is a section of its own now, with the same heading as every other one;
+   the panel is what used to carry the heading. */
+.balance__panel {
+  margin: 18px 0 10px; padding: 16px 18px; border: 1px solid var(--line);
   border-radius: 12px; background: var(--bg-raised);
-}
-.balance__heading {
-  margin: 0 0 12px; font: 600 15px var(--font-display); color: var(--ink);
 }
 .balance__main { display: flex; gap: 22px; align-items: center; flex-wrap: wrap; }
 .balance__figures { flex: none; }
@@ -2367,7 +2408,7 @@ body:has(.tp-rail) .tp-map svg { margin-top: 0; }
 
 .dt-list, .dt-grouped { display: flex; flex-direction: column; }
 .dt-row {
-  display: grid; grid-template-columns: 1.3fr 0.7fr 2fr 1fr; gap: 10px;
+  display: grid; grid-template-columns: 0.85fr 1.25fr 0.65fr 1.9fr 0.9fr; gap: 10px;
   padding: 7px 0; border-bottom: 1px solid var(--line); font-size: 13px;
   align-items: baseline;
 }
@@ -2375,6 +2416,12 @@ body:has(.tp-rail) .tp-map svg { margin-top: 0; }
   border-bottom-color: var(--line-strong); order: 0 !important;
   color: var(--ink-faint); font-size: 11px; text-transform: uppercase;
   letter-spacing: 0.05em; font-weight: 600;
+}
+/* the NEAK code is the canonical key of a district: the one identifier that
+   outlives the doctor, the provider and the address */
+.dt-cell--fin, .tp-fin {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px; color: var(--ink-faint); white-space: nowrap;
 }
 .dt-cell--doctor { color: var(--ink); font-weight: 600; }
 .dt-cell--since { color: var(--ink-dim); }
@@ -2388,10 +2435,12 @@ body:has(.tp-rail) .tp-map svg { margin-top: 0; }
 .dt:has(.dt-radio--sort[data-sort="type"]:checked) .dt-row { order: var(--o-type); }
 .dt:has(.dt-radio--sort[data-sort="site"]:checked) .dt-row { order: var(--o-site); }
 .dt:has(.dt-radio--sort[data-sort="tenure"]:checked) .dt-row { order: var(--o-tenure); }
+.dt:has(.dt-radio--sort[data-sort="fin"]:checked) .dt-row { order: var(--o-fin); }
 /* and which column heading says so */
 .dt:has(.dt-radio--sort[data-sort="doctor"]:checked) .dt-sort[data-for="doctor"]::after,
 .dt:has(.dt-radio--sort[data-sort="type"]:checked) .dt-sort[data-for="type"]::after,
 .dt:has(.dt-radio--sort[data-sort="site"]:checked) .dt-sort[data-for="site"]::after,
+.dt:has(.dt-radio--sort[data-sort="fin"]:checked) .dt-sort[data-for="fin"]::after,
 .dt:has(.dt-radio--sort[data-sort="tenure"]:checked) .dt-sort[data-for="tenure"]::after {
   content: ' ↓'; color: var(--accent);
 }
@@ -2416,4 +2465,6 @@ body:has(.tp-rail) .tp-map svg { margin-top: 0; }
 @media (max-width: 700px) {
   .dt-row { grid-template-columns: 1fr 1fr; }
   .dt-row--head { display: none; }
+  /* the code is an identifier, not something to read down a phone screen */
+  .dt-cell--fin { grid-column: 1 / -1; order: -1; }
 }

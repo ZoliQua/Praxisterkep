@@ -2,6 +2,7 @@
 // is the point and the absolute number is the context — "how many of the
 // county's settlements", "how many of its districts".
 import type { ReactNode } from 'react';
+import { formatNumber, formatPercent } from '../../lib/format';
 
 export interface Slice { value: number; color: string; label: string }
 
@@ -49,5 +50,39 @@ export function Donut({
       </svg>
       {children && <div className="donut__center">{children}</div>}
     </div>
+  );
+}
+
+/**
+ * The key beside a ring.
+ *
+ * A ring without one is a decoration: three colours and no way to tell which
+ * is which without hovering every arc in turn. The rows answer to the pointer
+ * the way the arcs do, so either half of the chart can drive the other.
+ */
+export function DonutLegend({ slices, active, onActive, onPick }: {
+  slices: readonly Slice[];
+  active?: string | null;
+  onActive?: (label: string | null) => void;
+  onPick?: (label: string) => void;
+}) {
+  const total = slices.reduce((a, s) => a + s.value, 0);
+  return (
+    <ul className="agelegend donut-legend" onPointerLeave={() => onActive?.(null)}>
+      {slices.filter((s) => s.value > 0).map((s) => (
+        <li key={s.label} className={active === s.label ? 'is-on' : undefined}
+          onPointerEnter={() => onActive?.(s.label)}
+          onFocus={() => onActive?.(s.label)}
+          onClick={onPick ? () => onPick(s.label) : undefined}
+          tabIndex={onActive ? 0 : undefined}>
+          <i style={{ background: s.color }} />
+          <span className="agelegend__label">{s.label}</span>
+          <strong>{formatNumber(s.value)}</strong>
+          <span className="agelegend__count">
+            {total ? formatPercent(s.value / total) : ''}
+          </span>
+        </li>
+      ))}
+    </ul>
   );
 }

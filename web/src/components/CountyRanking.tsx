@@ -7,6 +7,8 @@ import { useSnapshot } from '../store/useAppStore';
 import { AgeBlock } from './AgeBlock';
 import { CountyCompare } from './CountyCompare';
 import { GuessGame } from './GuessGame';
+import { DissolvedSwitch } from './DissolvedSwitch';
+import { useContextStore } from '../lib/context';
 
 const ROW_H = 26;
 const LABEL_W = 190;
@@ -17,9 +19,10 @@ const YEAR_OPTIONS = [0, 1, 2, 3, 5, 10];
 export function CountyRanking() {
   const snapshot = useSnapshot()!;
   const [minYears, setMinYears] = useState(0);
+  const mode = useContextStore((s) => s.dissolved);
   const rows = useMemo(
-    () => countyRanking(snapshot, minYears * 12),
-    [snapshot, minYears],
+    () => countyRanking(snapshot, minYears * 12, mode === 'with'),
+    [snapshot, minYears, mode],
   );
   // the national reference line follows the same duration filter
   const nationalRate = useMemo(() => {
@@ -37,6 +40,7 @@ export function CountyRanking() {
   return (
     <section className="section container" id="rangsor">
       <h2 className="section__heading">{t('ranking.heading')}</h2>
+      <DissolvedSwitch compact />
       <p className="section__explain">
         {t('ranking.explain')}{' '}
         {minYears > 0 && t('ranking.filterNote', { n: minYears })}

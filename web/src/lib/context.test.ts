@@ -4,7 +4,7 @@ import {
 } from './context';
 
 const ctx = (over: Partial<SiteContext> = {}): SiteContext =>
-  ({ kind: 'dental', county: null, settlement: null, ...over });
+  ({ kind: 'dental', county: null, settlement: null, dissolved: 'with', ...over });
 
 describe('site context', () => {
   it('reads what the map has always written', () => {
@@ -29,6 +29,13 @@ describe('site context', () => {
     expect(q).toContain('szin=age');
     expect(q).toContain('k=gp');
     expect(q).toContain('m=Vas');
+  });
+
+  it('carries the dissolved reading, and only when it is not the default', () => {
+    expect(writeContext('', ctx())).toBe('');
+    expect(writeContext('', ctx({ dissolved: 'without' }))).toBe('?msz=0');
+    expect(readContext('?msz=0').dissolved).toBe('without');
+    expect(readContext('').dissolved).toBe('with');
   });
 
   it('drops what is no longer selected', () => {

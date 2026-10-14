@@ -3,6 +3,8 @@
 // straight from the current snapshot.
 import { useMemo, useState } from 'react';
 import { t } from '../lib/i18n';
+import { useContextStore } from '../lib/context';
+import { vacancyOf } from '../lib/vacancy';
 import { useAppStore, useSnapshot } from '../store/useAppStore';
 
 export function GuessGame() {
@@ -12,14 +14,15 @@ export function GuessGame() {
     () => [...snapshot.counties].sort((a, b) => a.name.localeCompare(b.name, 'hu')),
     [snapshot],
   );
+  const mode = useContextStore((s2) => s2.dissolved);
   const [county, setCounty] = useState(counties[0]?.name ?? '');
   const [guess, setGuess] = useState('');
   const [revealed, setRevealed] = useState(false);
 
   const actual = useMemo(() => {
     const c = snapshot.counties.find((x) => x.name === county);
-    return c ? c.vacant + c.dissolved : 0;
-  }, [snapshot, county]);
+    return c ? vacancyOf(c, mode).count : 0;
+  }, [snapshot, county, mode]);
 
   const g = parseInt(guess, 10);
   const valid = Number.isFinite(g) && g >= 0;

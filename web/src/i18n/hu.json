@@ -152,7 +152,9 @@
     "timelineYears": "éve",
     "timelineNote": "A sávok a NEAK által közölt betöltetlenség-kezdettől a legutolsó adatközlésig tartanak; a sötétebb szakasz a jogilag is tartósan betöltetlen időszak (OKFŐ).",
     "openProfile": "{name} teljes adatlapja →",
-    "vacantCount": "betöltetlen vagy megszűnt {kind} körzet tartozik a településhez"
+    "vacantCount": "betöltetlen vagy megszűnt {kind} körzet tartozik a településhez",
+    "vacantCountOnly": "betöltetlen {kind} körzet tartozik a településhez",
+    "unlisted": "Ez a település egyetlen közzétett {kind} körzet listáján sem szerepel. Ez nem azt jelenti, hogy nincs ellátás — azt jelenti, hogy a NEAK nyilvános adataiból nem derül ki, melyik körzet az illetékes. A település saját lapja megmutatja a legközelebbi rendelőt és a menetidőt."
   },
   "ranking": {
     "heading": "Megyei rangsor",
@@ -164,7 +166,7 @@
     "compareTitle": "Megye-összehasonlító",
     "compareExplain": "Válassz két megyét: a kártyákon a jelenlegi mutatók, középen a betöltetlen körzetek számának alakulása az archivált hónapokban.",
     "compareVacant": "Betöltetlen (megszűnttel)",
-    "compareRate": "Betöltetlenségi arány",
+    "compareRate": "Betöltetlenségi arány (megszűnttel)",
     "comparePop": "Érintett lakosság",
     "comparePopShare": "Lakosság aránya",
     "comparePer10k": "Körzet 10 000 lakosra",
@@ -182,7 +184,11 @@
     "guessLow": "A helyzet rosszabb: {n} helyett {actual}.",
     "guessHigh": "A helyzet ennél valamivel jobb: {n} helyett {actual}.",
     "guessAgain": "Új tipp",
-    "guessTotal": "összesen {n} körzet"
+    "guessTotal": "összesen {n} körzet",
+    "comparePopWith": "Érintett lakosság (megszűnttel)",
+    "compareVacantOnly": "Betöltetlen (megszűnt nélkül)",
+    "compareRateOnly": "Betöltetlenségi arány (megszűnt nélkül)",
+    "comparePopOnly": "Érintett lakosság (megszűnt nélkül)"
   },
   "methodology": {
     "heading": "Módszertan",
@@ -397,7 +403,9 @@
     "text3": "A terhelés nem egyenletes — van megye, ahol több mint minden harmadik körzet üres.",
     "text4": "És a betöltetlenség nem átmeneti állapot: van körzet, amely évtizedek óta vár orvosra. Nézd meg a térképen, mi a helyzet nálad.",
     "cta": "Ugrás a térképre ↓",
-    "popLabel": "a lakosság {pct}-a"
+    "popLabel": "a lakosság {pct}-a",
+    "step1LabelWith": "betöltetlen vagy megszűnt szerződésű {kind} körzet van ma Magyarországon",
+    "step2LabelWith": "ember él betöltetlen vagy megszűnt szerződésű {kind} körzetben"
   },
   "embed": {
     "vacantSuffix": "betöltetlen körzet",
@@ -1934,7 +1942,9 @@
         "school": "iskolai, ifjúsági"
       }
     },
-    "dissolvedNote": "A {n} megszűnt körzet nem szerepel a típusonkénti bontásban: megszűnésével a típusa is eltűnt a nyilvántartásból."
+    "dissolvedNote": "A {n} megszűnt körzet nem szerepel a típusonkénti bontásban: megszűnésével a típusa is eltűnt a nyilvántartásból.",
+    "lead": "A {kind} körzetek teljes állománya: {total} körzetből {vacant} a betöltetlen ({rate}). Alatta típusonként is — egy orvos nélküli felnőtt és egy orvos nélküli gyermekkörzet nem ugyanaz a gond.",
+    "dissolvedCounted": "A {n} megszűnt körzet itt a saját típusánál szerepel, a számlálóban és a nevezőben is: a megszűnéssel a körzet kikerült a nyilvántartásból, de a típusát a betöltetlenségi lista megőrzi."
   },
   "threshold": {
     "label": "Mennyi menetidőt tartasz elfogadhatónak?",
@@ -1946,5 +1956,14 @@
     "over": "{minutes} percnél távolabb",
     "under": "{minutes} percen belül",
     "country": "az ország"
+  },
+  "dissolved": {
+    "label": "Megszűnt körzetek:",
+    "with": "beleértve",
+    "without": "nélkül",
+    "noteWith": "A szám a {n} megszűnt szerződésű körzetet is tartalmazza.",
+    "noteWithout": "A számból kimarad a {n} megszűnt szerződésű körzet.",
+    "withShort": "megszűnttel",
+    "withoutShort": "megszűnt nélkül"
   }
 }

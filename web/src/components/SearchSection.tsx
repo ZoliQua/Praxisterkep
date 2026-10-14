@@ -4,6 +4,7 @@ import { formatDuration, formatMonth, formatNumber, monthsBetween } from '../lib
 import { praxesById, primarySite, searchSettlements } from '../lib/selectors';
 import { useSettlementIndex, useSettlementLinks } from '../lib/settlementLink';
 import { useContextStore } from '../lib/context';
+import { DissolvedSwitch } from './DissolvedSwitch';
 import { useAppStore, useSnapshot } from '../store/useAppStore';
 import { DirectoryTableModal } from './DirectoryTableModal';
 import { SettlementTimeline } from './SettlementTimeline';
@@ -95,13 +96,43 @@ export function SearchSection() {
   }, [searchReq?.n, snapshot]);
 
   const byId = useMemo(() => praxesById(snapshot), [snapshot]);
-  const hits = useMemo(
-    () => (selected ? [] : searchSettlements(snapshot.settlements, query)),
-    [snapshot, query, selected],
+  // Every settlement in the country is searchable, not only those that
+  // appear on a NEAK list. Two thirds of them have no published dental
+  // district at all (docs/neak-adatigenyles.md), and a search that answers
+  // "nincs ilyen település" to a real village is wrong in a way a missing
+  // row is not: the place exists, the assignment is simply not public.
+  const allSettlements = useMemo(() => {
+    if (!index) return snapshot.settlements;
+    const listed = new Set(snapshot.settlements.map((s2) => `${s2.name}|${s2.county}`));
+    const unlisted = index.all
+      .filter((row) => !listed.has(`${row.name}|${row.county}`))
+      .map((row): SettlementEntry => ({
+        name: row.name,
+        county: row.county,
+        population: row.population || undefined,
+        filled: 0,
+        vacantPraxisIds: [],
+        dissolvedPraxisIds: [],
+        affectedByDissolved: false,
+      }));
+    return [...snapshot.settlements, ...unlisted];
+  }, [snapshot, index]);
+  const listedNames = useMemo(
+    () => new Set(snapshot.settlements.map((s2) => `${s2.name}|${s2.county}`)),
+    [snapshot],
   );
+  const hits = useMemo(
+    () => (selected ? [] : searchSettlements(allSettlements, query)),
+    [allSettlements, query, selected],
+  );
+  const selectedUnlisted = selected
+    ? !listedNames.has(`${selected.name}|${selected.county}`) : false;
 
+  // the reader decides whether a district whose contract ended counts here
+  const dissolvedMode = useContextStore((s2) => s2.dissolved);
   const vacantHere = selected
-    ? [...selected.vacantPraxisIds, ...selected.dissolvedPraxisIds]
+    ? [...selected.vacantPraxisIds,
+      ...(dissolvedMode === 'with' ? selected.dissolvedPraxisIds : [])]
         .map((id) => byId.get(id))
         .filter((p): p is Praxis => p !== undefined)
     : [];
@@ -136,6 +167,7 @@ export function SearchSection() {
         </button>
       </div>
       <p className="section__explain">{tKind('search.explain', kind)}</p>
+      <DissolvedSwitch compact />
 
       <div className="search-box">
         <input
@@ -191,9 +223,9 @@ export function SearchSection() {
           {vacantHere.length > 0 && (
             <div className="settlement-card__row">
               <span className="badge badge--vacant">{vacantHere.length}</span>
-              <span className="praxis-line">{tKind('search.vacantCount', kind, {
-                n: String(vacantHere.length),
-              })}</span>
+              <span className="praxis-line">{tKind(
+                dissolvedMode === 'with' ? 'search.vacantCount' : 'search.vacantCountOnly',
+                kind, { n: String(vacantHere.length) })}</span>
             </div>
           )}
           {vacantHere.map((p) => (
@@ -204,9 +236,15 @@ export function SearchSection() {
               <span className="praxis-line">{t('search.affectedByDissolved')}</span>
             </div>
           )}
-          {vacantHere.length === 0 && !selected.affectedByDissolved && (
+          {vacantHere.length === 0 && !selected.affectedByDissolved
+            && !selectedUnlisted && (
             <div className="settlement-card__row">
               <span className="praxis-line">{tKind('search.noVacant', kind)}</span>
+            </div>
+          )}
+          {selectedUnlisted && (
+            <div className="settlement-card__row">
+              <span className="praxis-line">{tKind('search.unlisted', kind)}</span>
             </div>
           )}
           {vacantHere.length > 0 && (

@@ -15,6 +15,8 @@ import {
   medianSeries, monthToDate, vacantSeries, type SeriesPoint,
 } from '../lib/statsSelectors';
 import { useAppStore, useHistoryEntries, useSnapshot } from '../store/useAppStore';
+import { useContextStore } from '../lib/context';
+import { vacancyOf } from '../lib/vacancy';
 
 const STEP_MS = 5200;
 const W = 460;
@@ -219,6 +221,7 @@ export function HeroShowcase() {
   const snapshot = useSnapshot()!;
   const kind = useAppStore((s) => s.kind);
   const entries = useHistoryEntries();
+  const dissolvedMode = useContextStore((s) => s.dissolved);
   const [activeState, setActiveState] = useState({ kind, idx: 0 });
   const active = activeState.kind === kind ? activeState.idx : 0;
   const setActive = useCallback(
@@ -231,12 +234,15 @@ export function HeroShowcase() {
   );
   const [paused, setPaused] = useState(false);
   const timer = useRef<number | null>(null);
+  const railRef = useRef<HTMLDivElement>(null);
 
   const items = useMemo<ShowcaseItem[]>(() => {
     const { national, month, praxes } = snapshot;
-    const vacantCount = national.vacant;
-    const rate = national.vacancyRate ?? 0;
-    const popAll = national.populationVacant + national.populationDissolved;
+    // what counts as vacant here is the reader's choice (lib/vacancy)
+    const parts = vacancyOf(national, dissolvedMode);
+    const vacantCount = parts.count;
+    const rate = parts.rate ?? 0;
+    const popAll = parts.population;
     const median = entries.length
       ? entries[entries.length - 1].medianVacancyMonths ?? medianVacancyMonths(praxes, month)
       : medianVacancyMonths(praxes, month);
@@ -252,7 +258,8 @@ export function HeroShowcase() {
     const out: ShowcaseItem[] = [
       {
         key: 'vacant',
-        label: tKind('hero.vacant', kind),
+        label: `${tKind('hero.vacant', kind)} (${t(
+          dissolvedMode === 'with' ? 'dissolved.withShort' : 'dissolved.withoutShort')})`,
         color: 'var(--alert)',
         finalText: formatNumber(vacantCount),
         animText: (p) => formatNumber(Math.round(vacantCount * p)),
@@ -260,7 +267,7 @@ export function HeroShowcase() {
         visual: () => <Spark points={vSeries} color="var(--alert)" yFormat={formatNumber} />,
       },
     ];
-    const vacantAll = national.vacant + national.dissolved;
+    const vacantAll = parts.count || 1;
     if (national.longTerm && vacantAll > 0) {
       const ltShare = national.longTerm / vacantAll;
       out.push({
@@ -349,10 +356,27 @@ export function HeroShowcase() {
       });
     }
     return out;
-  }, [snapshot, entries, kind]);
+  }, [snapshot, entries, kind, dissolvedMode]);
 
   const idx = Math.min(active, items.length - 1);
   const item = items[idx];
+
+  // On a phone the rail is a horizontal scroller, so the spotlight could
+  // advance to a tile that was off the screen: the panel changed and nothing
+  // said why. The rail follows the active tile, and only when it is actually
+  // scrollable — on a wide screen it is a column and must not be touched.
+  useEffect(() => {
+    const rail = railRef.current;
+    if (!rail || rail.scrollWidth <= rail.clientWidth + 4) return;
+    const el = rail.children[idx] as HTMLElement | undefined;
+    if (!el) return;
+    const target = el.offsetLeft - (rail.clientWidth - el.clientWidth) / 2;
+    rail.scrollTo({
+      left: Math.max(0, target),
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        ? 'auto' : 'smooth',
+    });
+  }, [idx, kind]);
 
   useEffect(() => {
     if (paused) return;
@@ -369,7 +393,7 @@ export function HeroShowcase() {
   return (
     <div className="showcase" onPointerEnter={() => setPaused(true)}
       onPointerLeave={() => setPaused(false)}>
-      <div className="showcase__rail" role="tablist">
+      <div className="showcase__rail" role="tablist" ref={railRef}>
         {items.map((it, i) => (
           <button key={it.key} role="tab" aria-selected={i === idx}
             className={i === idx ? 'is-active' : ''}
@@ -382,6 +406,14 @@ export function HeroShowcase() {
             )}
           </button>
         ))}
+      </div>
+      {/* the auto-advance made visible where the per-tile hairline is not:
+          on a phone the rail scrolls, and the bar under it is the only thing
+          that says the spotlight is moving on its own */}
+      <div className="showcase__timebar" aria-hidden="true">
+        {!paused && (
+          <i key={`${kind}-${item.key}`} style={{ animationDuration: `${STEP_MS}ms` }} />
+        )}
       </div>
       <ActivePanel key={`${kind}-${item.key}`} item={item} />
     </div>

@@ -3,6 +3,7 @@
 // vacant and the dissolved are taken off the total, and each type is the
 // same subtraction one level down.
 import type { Snapshot } from '../types';
+import type { DissolvedMode } from './context';
 
 export interface BalanceParts {
   total: number;
@@ -29,19 +30,39 @@ export function stockOf(snapshot: Snapshot | null): BalanceParts | null {
   return { total, vacant, dissolved, filled: Math.max(total - vacant - dissolved, 0) };
 }
 
-export function typeRows(snapshot: Snapshot | null): TypeRow[] {
+/**
+ * The stock split by district type, under one reading of "vacant".
+ *
+ * The snapshot counts the types from the registry, and a dissolved district
+ * is gone from the registry — so this table has always been the "without
+ * dissolved" reading, whatever the headline above it said. The other reading
+ * is exact all the same: the praxis list keeps the type of every dissolved
+ * district, so they can be put back into both the numerator and the
+ * denominator of their own type, which is where they belong.
+ */
+export function typeRows(snapshot: Snapshot | null,
+  mode: DissolvedMode = 'with'): TypeRow[] {
   const byType = (snapshot?.national?.byType ?? {}) as
     Record<string, { total: number; vacant: number }>;
+  const dissolvedByType = new Map<string, number>();
+  for (const p of snapshot?.praxes ?? []) {
+    if (p.status !== 'dissolved') continue;
+    dissolvedByType.set(p.type, (dissolvedByType.get(p.type) ?? 0) + 1);
+  }
+  const counted = mode === 'with';
   return TYPE_ORDER
     .filter((key) => byType[key]?.total)
     .map((key) => {
-      const { total, vacant } = byType[key];
+      const registry = byType[key];
+      const dissolved = dissolvedByType.get(key) ?? 0;
+      const total = registry.total + (counted ? dissolved : 0);
+      const vacant = registry.vacant + (counted ? dissolved : 0);
       return {
         key,
         total,
         vacant,
-        dissolved: 0,
-        filled: Math.max(total - vacant, 0),
+        dissolved,
+        filled: Math.max(registry.total - registry.vacant, 0),
         rate: total ? vacant / total : 0,
       };
     });

@@ -1,6 +1,7 @@
 import { t } from '../lib/i18n';
 import { formatMonth } from '../lib/format';
 import { useAppStore, useSnapshot, useTimeseriesMonths } from '../store/useAppStore';
+import { DissolvedSwitch } from './DissolvedSwitch';
 import type { PraxisKind } from '../types';
 
 export function Hero() {
@@ -23,6 +24,7 @@ export function Hero() {
           </button>
         ))}
       </div>
+      {snapshot.national.dissolved > 0 && <DissolvedSwitch />}
       <p className="hero__lead">{t('site.lead')}</p>
       <p className="hero__meta">
         {t('site.lastUpdate')}: {formatMonth(snapshot.month)}

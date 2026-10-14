@@ -152,7 +152,9 @@
     "timelineYears": "yrs",
     "timelineNote": "The bars run from the vacancy start reported by NEAK to the latest data release; the darker segment is the legally long-term vacant period (OKFŐ).",
     "openProfile": "The full profile of {name} →",
-    "vacantCount": "vacant or dissolved {kind} districts belong to this settlement"
+    "vacantCount": "vacant or dissolved {kind} districts belong to this settlement",
+    "vacantCountOnly": "vacant {kind} district(s) belong to this settlement",
+    "unlisted": "This settlement appears on no published {kind} district list. That does not mean there is no care: NEAK simply does not publish which district is responsible. Its own page shows the nearest surgery and the drive."
   },
   "ranking": {
     "heading": "County ranking",
@@ -164,7 +166,7 @@
     "compareTitle": "County comparison",
     "compareExplain": "Pick two counties: the cards show current indicators, the chart in the middle tracks the number of vacant districts across the archived months.",
     "compareVacant": "Vacant (incl. terminated)",
-    "compareRate": "Vacancy rate",
+    "compareRate": "Vacancy rate (with dissolved)",
     "comparePop": "Affected population",
     "comparePopShare": "Population share",
     "comparePer10k": "Districts per 10,000 residents",
@@ -182,7 +184,11 @@
     "guessLow": "It is worse than that: {actual} instead of {n}.",
     "guessHigh": "It is somewhat better than that: {actual} instead of {n}.",
     "guessAgain": "New guess",
-    "guessTotal": "{n} districts in total"
+    "guessTotal": "{n} districts in total",
+    "comparePopWith": "Population affected (with dissolved)",
+    "compareVacantOnly": "Vacant (without dissolved)",
+    "compareRateOnly": "Vacancy rate (without dissolved)",
+    "comparePopOnly": "Population affected (without dissolved)"
   },
   "methodology": {
     "heading": "Methodology",
@@ -397,7 +403,9 @@
     "text3": "The burden is uneven — there is a county where more than every third district is vacant.",
     "text4": "And vacancy is no passing state: there are districts that have waited decades for a doctor. See how your own town is doing on the map.",
     "cta": "Jump to the map ↓",
-    "popLabel": "{pct} of the population"
+    "popLabel": "{pct} of the population",
+    "step1LabelWith": "{kind} districts are vacant or dissolved in Hungary today",
+    "step2LabelWith": "people live in a vacant or dissolved {kind} district"
   },
   "embed": {
     "vacantSuffix": "vacant districts",
@@ -1934,7 +1942,9 @@
         "school": "school and youth"
       }
     },
-    "dissolvedNote": "The {n} dissolved districts are not in the type breakdown: the register drops their type along with them."
+    "dissolvedNote": "The {n} dissolved districts are not in the type breakdown: the register drops their type along with them.",
+    "lead": "The whole stock of {kind} districts: {vacant} of {total} are vacant ({rate}). Below, the same by type.",
+    "dissolvedCounted": "The {n} dissolved districts are counted here under their own type, in the numerator and the denominator alike."
   },
   "threshold": {
     "label": "How many minutes do you consider acceptable?",
@@ -1946,5 +1956,14 @@
     "over": "further than {minutes} min",
     "under": "within {minutes} min",
     "country": "the country"
+  },
+  "dissolved": {
+    "label": "Dissolved districts:",
+    "with": "included",
+    "without": "excluded",
+    "noteWith": "The figure includes the {n} districts whose contract ended.",
+    "noteWithout": "The figure leaves out the {n} districts whose contract ended.",
+    "withShort": "with dissolved",
+    "withoutShort": "without dissolved"
   }
 }

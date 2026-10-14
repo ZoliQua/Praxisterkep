@@ -18,9 +18,11 @@ import { CountyRanking } from './CountyRanking';
 import { CountyPicker } from './CountyPicker';
 import { CountyChurn } from './CountyChurn';
 import { AgeLegend, AgePie, type AgeKey } from './charts/AgePie';
-import { Donut } from './charts/Donut';
+import { Donut, DonutLegend } from './charts/Donut';
 import { PointGrid } from './charts/PointGrid';
 import { IconTooth } from './icons';
+import { vacancyOf } from '../lib/vacancy';
+import { DissolvedSwitch } from './DissolvedSwitch';
 import { PageNav } from './PageNav';
 import { NextSteps } from './NextSteps';
 import { Footer } from './Footer';
@@ -56,6 +58,7 @@ export function CountyPage() {
   const setCounty = useContextStore((s) => s.setCounty);
   const kind = useContextStore((s) => s.kind);
   const setKind = useContextStore((s) => s.setKind);
+  const mode = useContextStore((s) => s.dissolved);
   const [sort, setSort] = useState<SortKey>('band');
   // what the pointer is on, in each of the two charts: the card says what it
   // is rather than leaving the colour to be decoded against a legend
@@ -92,11 +95,16 @@ export function CountyPage() {
   const active = stateSlices.find((s2) => s2.label === stateOn) ?? null;
 
   // the county's dental districts, as NEAK counts them
+  const dentalParts = vacancyOf(agg?.dentalDistricts, mode);
+  const dentalTotal = mode === 'with'
+    ? agg?.dentalDistricts?.total ?? 0
+    : Math.max((agg?.dentalDistricts?.total ?? 0) - dentalParts.dissolved, 0);
   const dentalSlices = agg?.dentalDistricts ? [
     { value: agg.dentalDistricts.vacant, color: '#ef6461',
       label: t('stats.statusVacant'), state: 'vacantOnly' as State },
-    { value: agg.dentalDistricts.dissolved, color: 'var(--line-strong)',
-      label: t('stats.statusDissolved'), state: '' as State },
+    ...(mode === 'with' ? [{ value: agg.dentalDistricts.dissolved,
+      color: 'var(--line-strong)',
+      label: t('stats.statusDissolved'), state: '' as State }] : []),
     { value: Math.max(agg.dentalDistricts.total - agg.dentalDistricts.vacant
       - agg.dentalDistricts.dissolved, 0), color: '#4fd6c2',
       label: t('stats.statusFilled'), state: 'filled' as State },
@@ -123,6 +131,7 @@ export function CountyPage() {
         <p className="section__lead">{t('county.lead')}</p>
 
         <CountyPicker />
+        <DissolvedSwitch />
 
         <label className="county-picker">
           <span>{t('county.pick')}</span>
@@ -199,6 +208,9 @@ export function CountyPage() {
                       <div className="stat__label">{t('county.gpVacantOnlyOf')}</div>
                     </>
                   )}
+                  <DonutLegend slices={stateSlices} active={stateOn}
+                    onActive={setStateOn}
+                    onPick={(label: string) => pickState('gp', label, stateSlices)} />
                   {gpRank && <div className="stat__context">
                     {t('county.rank', { rank: gpRank.rank, of: gpRank.of })}</div>}
                 </div>
@@ -212,16 +224,14 @@ export function CountyPage() {
                     active={dentalOn} onActive={setDentalOn}
                     onPick={(label: string) => pickState('dental', label, dentalSlices)}>
                     <strong>{formatPercent(
-                      (agg.dentalDistricts?.vacant ?? 0)
-                      / (agg.dentalDistricts?.total || 1))}</strong>
+                      dentalParts.count / (dentalTotal || 1))}</strong>
                   </Donut>
                 </div>
                 <div className="county-card__body">
                   {dentalActive ? (
                     <>
                       <div className="stat__value">{formatNumber(dentalActive.value)}
-                        <span className="stat__of"> / {formatNumber(
-                          agg.dentalDistricts?.total ?? 0)}</span>
+                        <span className="stat__of"> / {formatNumber(dentalTotal)}</span>
                       </div>
                       <div className="stat__label">{t('county.dentalOf', {
                         state: dentalActive.label.toLowerCase(),
@@ -230,13 +240,15 @@ export function CountyPage() {
                   ) : (
                     <>
                       <div className="stat__value">
-                        {formatNumber(agg.dentalDistricts?.vacant ?? 0)}
-                        <span className="stat__of"> / {formatNumber(
-                          agg.dentalDistricts?.total ?? 0)}</span>
+                        {formatNumber(dentalParts.count)}
+                        <span className="stat__of"> / {formatNumber(dentalTotal)}</span>
                       </div>
                       <div className="stat__label">{t('county.dentalDistricts')}</div>
                     </>
                   )}
+                  <DonutLegend slices={dentalSlices} active={dentalOn}
+                    onActive={setDentalOn}
+                    onPick={(label: string) => pickState('dental', label, dentalSlices)} />
                   <div className="stat__context">{t('county.dentalLongTerm', {
                     n: formatNumber(agg.dentalDistricts?.longTerm ?? 0),
                     dissolved: formatNumber(agg.dentalDistricts?.dissolved ?? 0),

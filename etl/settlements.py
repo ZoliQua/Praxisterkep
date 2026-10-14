@@ -30,9 +30,11 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
 OUT = DATA / "settlements.json"
 # the full profiles stay build-side (3.8 MB); the app only needs to know
-# which slug a settlement lives at, so that goes in a file it can load
+# which slug a settlement lives at and how many people live there, so that
+# goes in a file it can load. The settlement search reads it, which is how a
+# village that appears on no NEAK list is findable at all.
 SLUGS = DATA / "settlement_slugs.json"
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 
 
 def slug(name: str) -> str:
@@ -486,7 +488,8 @@ def main() -> None:
     SLUGS.write_text(json.dumps({
         "schemaVersion": SCHEMA_VERSION,
         "dataMonth": out["dataMonth"],
-        "settlements": [[r["settlement"], r["county"], r["slug"]] for r in rows],
+        "settlements": [[r["settlement"], r["county"], r["slug"],
+                         r.get("population", 0)] for r in rows],
     }, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
     withs = lambda k: sum(1 for r in rows if k in r)  # noqa: E731
     print(f"wrote {OUT}: {len(rows)} settlement profiles")

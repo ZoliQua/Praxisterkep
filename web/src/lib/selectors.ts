@@ -35,9 +35,11 @@ export interface CountyRankingRow {
 
 /** County ranking; `minMonths` keeps only districts vacant at least that
  * long (0 = every vacant/dissolved district, matching the aggregates). */
-export function countyRanking(snapshot: Snapshot, minMonths = 0): CountyRankingRow[] {
+export function countyRanking(snapshot: Snapshot, minMonths = 0,
+  withDissolved = true): CountyRankingRow[] {
   const counts = new Map<string, number>();
   for (const p of snapshot.praxes) {
+    if (!withDissolved && p.status === 'dissolved') continue;
     if (monthsBetween(p.vacantSince, snapshot.month) < minMonths) continue;
     counts.set(p.county, (counts.get(p.county) ?? 0) + 1);
   }

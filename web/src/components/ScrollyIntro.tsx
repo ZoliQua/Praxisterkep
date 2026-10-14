@@ -7,6 +7,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { t, tKind } from '../lib/i18n';
 import { formatDuration, formatMonth, formatNumber, formatPercent, monthsBetween } from '../lib/format';
 import { longestVacant, primarySite } from '../lib/selectors';
+import { useContextStore } from '../lib/context';
+import { vacancyOf, vacancyRateOf } from '../lib/vacancy';
 import { useAppStore, useSnapshot } from '../store/useAppStore';
 import { CountryFill, CountyShape, useCountryShapes } from './CountryShapes';
 
@@ -17,13 +19,15 @@ export function ScrollyIntro() {
   const [active, setActive] = useState(0);
   const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  // vacant only — the hero's headline number (dissolved is shown separately)
-  const vacant = snapshot.national.vacant;
-  const popAll = snapshot.national.populationVacant + snapshot.national.populationDissolved;
+  // what counts as vacant is the reader's choice, site-wide (lib/vacancy)
+  const mode = useContextStore((s) => s.dissolved);
+  const national = vacancyOf(snapshot.national, mode);
+  const vacant = national.count;
+  const popAll = national.population;
   const worst = useMemo(() => [...snapshot.counties]
     .filter((c) => c.total)
-    .sort((a, b) => (b.vacant + b.dissolved) / b.total! - (a.vacant + a.dissolved) / a.total!)[0],
-  [snapshot]);
+    .sort((a, b) => (vacancyRateOf(b, mode) ?? 0) - (vacancyRateOf(a, mode) ?? 0))[0],
+  [snapshot, mode]);
   const longest = useMemo(() => longestVacant(snapshot.praxes), [snapshot]);
   const longestSite = longest ? primarySite(longest) : null;
 
@@ -43,22 +47,22 @@ export function ScrollyIntro() {
     return () => io.disconnect();
   }, [kind]);
 
-  const worstRate = worst ? (worst.vacant + worst.dissolved) / worst.total! : null;
+  const worstRate = worst ? vacancyRateOf(worst, mode) : null;
   const stage = [
     {
       value: formatNumber(vacant),
-      label: tKind('intro.step1Label', kind),
+      label: tKind(mode === 'with' && national.dissolved > 0
+        ? 'intro.step1LabelWith' : 'intro.step1Label', kind),
       viz: shapes && (
-        <CountryFill shapes={shapes} pct={snapshot.national.vacancyRate}
+        <CountryFill shapes={shapes} pct={national.rate}
           color="var(--alert)"
-          label={snapshot.national.vacancyRate !== null
-            ? formatPercent(snapshot.national.vacancyRate)
-            : undefined} />
+          label={national.rate !== null ? formatPercent(national.rate) : undefined} />
       ),
     },
     {
       value: formatNumber(popAll),
-      label: tKind('intro.step2Label', kind),
+      label: tKind(mode === 'with' && national.dissolved > 0
+        ? 'intro.step2LabelWith' : 'intro.step2Label', kind),
       viz: shapes && (
         <CountryFill shapes={shapes}
           pct={snapshot.national.populationShare ?? null}

@@ -16,6 +16,9 @@ import { t, tKind } from '../lib/i18n';
 import { formatNumber, formatPercent } from '../lib/format';
 import { useAppStore, useSnapshot } from '../store/useAppStore';
 import { stockOf, typeRows } from '../lib/balance';
+import { useContextStore } from '../lib/context';
+import { vacancyOf } from '../lib/vacancy';
+import { DissolvedSwitch } from './DissolvedSwitch';
 import type { PraxisKind } from '../types';
 
 interface Part { key: string; n: number; color: string; label: string }
@@ -36,6 +39,7 @@ function Bar({ parts, total }: { parts: Part[]; total: number }) {
 export function PraxisBalance() {
   const snapshot = useSnapshot();
   const kind = useAppStore((s) => s.kind) as PraxisKind;
+  const mode = useContextStore((s) => s.dissolved);
   if (!snapshot) return null;
 
   const stock = stockOf(snapshot);
@@ -51,7 +55,7 @@ export function PraxisBalance() {
   // the same code means a different thing in the two branches: "gyermek" is
   // a házi gyermekorvosi körzet in GP care and gyermekfogászat in dental, and
   // the table should say which
-  const rows = typeRows(snapshot).map((row) => {
+  const rows = typeRows(snapshot, mode).map((row) => {
     const named = t(`balance.type.${kind}.${row.key}`);
     return {
       ...row,
@@ -59,11 +63,19 @@ export function PraxisBalance() {
     };
   });
   const worst = rows.length ? Math.max(...rows.map((r) => r.rate)) : 0;
+  const parts2 = vacancyOf(snapshot.national, mode);
 
   return (
-    <section className="balance" id="allomany">
-      <h2 className="balance__heading">{tKind('balance.heading', kind)}</h2>
+    <section className="section container" id="allomany">
+      <h2 className="section__heading">{tKind('balance.heading', kind)}</h2>
+      <p className="section__explain">{tKind('balance.lead', kind, {
+        total: formatNumber(total),
+        vacant: formatNumber(parts2.count),
+        rate: parts2.rate !== null ? formatPercent(parts2.rate) : '–',
+      })}</p>
+      {dissolved > 0 && <DissolvedSwitch />}
 
+      <div className="balance__panel">
       <div className="balance__main">
         <div className="balance__figures">
           <span className="balance__total">{formatNumber(total)}</span>
@@ -91,7 +103,8 @@ export function PraxisBalance() {
             <th className="is-num">{t('balance.thTotal')}</th>
             <th className="is-num">{t('stats.statusFilled')}</th>
             <th className="is-num">{t('stats.statusVacant')}</th>
-            <th>{t('balance.thRate')}</th>
+            <th>{t('balance.thRate')}{dissolved > 0
+              && ` (${t(mode === 'with' ? 'dissolved.withShort' : 'dissolved.withoutShort')})`}</th>
           </tr>
         </thead>
         <tbody>
@@ -118,10 +131,14 @@ export function PraxisBalance() {
       </table>
       <p className="balance__note">
         {tKind('balance.note', kind)}
-        {dissolved > 0 && ` ${t('balance.dissolvedNote', {
+        {dissolved > 0 && mode === 'without' && ` ${t('balance.dissolvedNote', {
+          n: formatNumber(dissolved),
+        })}`}
+        {dissolved > 0 && mode === 'with' && ` ${t('balance.dissolvedCounted', {
           n: formatNumber(dissolved),
         })}`}
       </p>
+      </div>
     </section>
   );
 }

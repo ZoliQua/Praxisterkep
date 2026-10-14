@@ -514,6 +514,19 @@ const VACANCY_TYPE = {
   adult: 'felnőtt', child: 'gyermek', mixed: 'vegyes', school: 'iskolai',
 };
 
+/**
+ * The nine-digit NEAK code of a district, as a cell.
+ *
+ * It is the canonical key of a praxis: the one identifier that survives a
+ * change of doctor, of provider and of address, and the one to quote in a
+ * letter to NEAK or an authority. Every table that names a district carries
+ * it now, in a monospaced column that reads as an identifier rather than a
+ * number to be compared.
+ */
+function finCell(fin) {
+  return fin ? `<td class="tp-fin">${esc(fin)}</td>` : '<td class="tp-fin">–</td>';
+}
+
 function vacancyTable(profile) {
   const rows = profile.vacant ?? [];
   if (!rows.length) return '';
@@ -526,9 +539,10 @@ function vacancyTable(profile) {
     <span class="tp-details__count">${num(rows.length)}</span>
   </summary>
   <table class="info-table">
-    <thead><tr><th>Ág</th><th>Körzet</th><th>Állapot</th><th>Mióta</th>
+    <thead><tr><th>NEAK kód</th><th>Ág</th><th>Körzet</th><th>Állapot</th><th>Mióta</th>
       <th>Székhely</th></tr></thead>
     <tbody>${rows.map((r) => `<tr>
+      ${finCell(r.fin)}
       <td>${r.kind === 'gp' ? 'háziorvosi' : 'fogorvosi'}</td>
       <td>${esc(VACANCY_TYPE[r.type] ?? r.type ?? '')}</td>
       <td>${r.status === 'dissolved' ? 'megszűnt' : (r.longTerm
@@ -691,9 +705,10 @@ function changeBlock(profile) {
       <span class="tp-details__count">${num(details.length)}</span>
     </summary>
     <table class="info-table">
-      <thead><tr><th>Ág</th><th>Körzet</th><th>Mi történt</th><th>Ki / hol</th>
-        <th>Mikortól</th></tr></thead>
+      <thead><tr><th>NEAK kód</th><th>Ág</th><th>Körzet</th><th>Mi történt</th>
+        <th>Ki / hol</th><th>Mikortól</th></tr></thead>
       <tbody>${details.map((d) => `<tr class="tp-row--${d.state}">
+        ${finCell(d.fin)}
         <td>${esc(d.kind)}</td>
         <td>${esc(d.what)}</td>
         <td>${esc(d.verb)}</td>
@@ -817,6 +832,7 @@ function doctorTable(profile, kind, heading) {
   const byDoctor = rank(withSite, (a, b) => (a.doctor || '').localeCompare(b.doctor || '', 'hu'));
   const byType = rank(withSite, (a, b) => (TYPE_ORDER[a.type] ?? 9) - (TYPE_ORDER[b.type] ?? 9));
   const bySite = rank(withSite, (a, b) => a.siteKey.localeCompare(b.siteKey, 'hu'));
+  const byFin = rank(withSite, (a, b) => (a.fin || '').localeCompare(b.fin || ''));
   const byTenure = rank(withSite, (a, b) => {
     // longest first: a spell that reaches the edge of the archive leads
     if (a.fromStart !== b.fromStart) return a.fromStart ? -1 : 1;
@@ -838,7 +854,9 @@ function doctorTable(profile, kind, heading) {
 
   const listRow = (r) => `<div class="dt-row" role="row" style="
       --o-doctor:${byDoctor.get(r)}; --o-type:${byType.get(r)};
-      --o-site:${bySite.get(r)}; --o-tenure:${byTenure.get(r)}">
+      --o-site:${bySite.get(r)}; --o-tenure:${byTenure.get(r)};
+      --o-fin:${byFin.get(r)}">
+    <span class="dt-cell dt-cell--fin" role="cell">${esc(r.fin || '–')}</span>
     <span class="dt-cell dt-cell--doctor" role="cell">${esc(r.doctor || '–')}${
   (perDoctor.get(r.doctor || '—') ?? []).length > 1
     ? '<i class="dt-flag" title="Több körzetben vagy telephelyen rendel">⧉</i>' : ''}</span>
@@ -854,6 +872,7 @@ function doctorTable(profile, kind, heading) {
       <p class="dt-group__head"><strong>${esc(key)}</strong>
         <span>${num(list.length)} ${esc(title)}</span></p>
       ${list.map((r) => `<div class="dt-row dt-row--grouped" role="row">
+        <span class="dt-cell dt-cell--fin" role="cell">${esc(r.fin || '–')}</span>
         <span class="dt-cell dt-cell--doctor" role="cell">${esc(r.doctor || '–')}</span>
         <span class="dt-cell" role="cell">${esc(VACANCY_TYPE[r.type] ?? r.type ?? '')}</span>
         <span class="dt-cell" role="cell">${esc(r.site)}</span>
@@ -871,8 +890,8 @@ function doctorTable(profile, kind, heading) {
     .map(([key, list]) => [key, byName(list)]);
 
   const sortOptions = [
-    ['doctor', 'Orvos'], ['type', 'Körzet'], ['site', 'Rendelő címe'],
-    ['tenure', 'Mióta'],
+    ['fin', 'NEAK kód'], ['doctor', 'Orvos'], ['type', 'Körzet'],
+    ['site', 'Rendelő címe'], ['tenure', 'Mióta'],
   ];
 
   return `<details class="tp-details tp-details--${kind}">
@@ -893,9 +912,9 @@ function doctorTable(profile, kind, heading) {
     .map(([key, label], i) => `<input type="radio" name="g-${id}" id="g-${id}-${key}"
         class="dt-radio dt-radio--group" data-group="${key}"${i === 0 ? ' checked' : ''}>
       <label for="g-${id}-${key}" class="dt-chip">${esc(label)}</label>`).join('')}
-      ${sortOptions.map(([key], i) => `<input type="radio" name="s-${id}"
+      ${sortOptions.map(([key]) => `<input type="radio" name="s-${id}"
         id="s-${id}-${key}" class="dt-radio dt-radio--sort" data-sort="${key}"${
-  i === 0 ? ' checked' : ''}>`).join('')}
+  key === 'doctor' ? ' checked' : ''}>`).join('')}
     </div>
 
     ${sharedSites || busyDoctors ? `<p class="dt-hint">${[
@@ -1237,6 +1256,20 @@ for (const profile of profiles.settlements) {
 }
 
 // an index of every settlement, grouped by county — for people and crawlers
+// Which places are seats, so the index can show the shape of the country
+// rather than 3177 names of one size. Both come from the same city layer the
+// maps are drawn from (KSH ranks, via OSM): 19 county seats and 151 district
+// (járás) seats.
+const seatRank = new Map(
+  geo.cities.features.map((f) => [f.properties.name, f.properties.rank]),
+);
+const seatClass = (name) => {
+  const rank = seatRank.get(name);
+  if (rank === 'seat') return ' class="tp-seat tp-seat--county"';
+  if (rank === 'jarasSeat') return ' class="tp-seat tp-seat--jaras"';
+  return '';
+};
+
 const byCounty = new Map();
 for (const p of profiles.settlements) {
   if (!byCounty.has(p.county)) byCounty.set(p.county, []);
@@ -1255,7 +1288,8 @@ const countyBlocks = [...byCounty.entries()]
     </div>
     <p class="tp-index-list">${list
       .sort((a, b) => a.settlement.localeCompare(b.settlement, 'hu'))
-      .map((p) => `<a href="/telepules/${esc(p.slug)}/">${esc(p.settlement)}</a>`)
+      .map((p) => `<a href="/telepules/${esc(p.slug)}/"${
+  seatClass(p.settlement)}>${esc(p.settlement)}</a>`)
       .join(' · ')}</p>
   </section>`).join('\n');
 
@@ -1279,6 +1313,8 @@ writeFileSync(join(dist, 'telepules', 'index.html'), `<!doctype html>
 <header class="section container">
   <h1 class="section__heading">Települések</h1>
   <p class="section__lead">Mind a ${profiles.settlements.length} település adatlapja, megyénként.</p>
+  <p class="tp-note"><span class="tp-seat tp-seat--county">Megyeszékhely</span> ·
+    <span class="tp-seat tp-seat--jaras">járásszékhely</span> · a többi település</p>
 </header>
 ${countyBlocks}
 </body>

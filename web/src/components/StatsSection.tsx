@@ -26,6 +26,9 @@ import { VacancyTableModal } from './VacancyTableModal';
 import { DelistedList } from './DelistedList';
 import { monthsBetween } from '../lib/format';
 import { downloadCsv } from '../lib/exportChart';
+import { useContextStore } from '../lib/context';
+import { vacancyOf } from '../lib/vacancy';
+import { DissolvedNote, DissolvedSwitch } from './DissolvedSwitch';
 
 
 function single(key: string, label: string, color: string, points: ChartSeries['points']): ChartSeries[] {
@@ -55,6 +58,7 @@ export function StatsSection() {
   const entries = useHistoryEntries();
   const persistence = usePersistence();
   const snapshot = useSnapshot();
+  const dissolvedMode = useContextStore((s2) => s2.dissolved);
   const [county, setCounty] = useState<string>('');
   // page resets when the kind toggles (derived, no effect needed)
   const [pageState, setPageState] = useState({ kind, page: 0 });
@@ -79,6 +83,7 @@ export function StatsSection() {
 
   if (entries.length === 0) return null;
   const latest = entries[entries.length - 1];
+  const nationalParts = vacancyOf(snapshot?.national ?? latest, dissolvedMode);
   const byMonth = new Map<string, HistoryEntry>(entries.map((e) => [e.month, e]));
 
   const types = typeSeries(entries);
@@ -95,6 +100,8 @@ export function StatsSection() {
     <section className="section container" id="statisztika">
       <h2 className="section__heading">{t('stats.heading')}</h2>
       <p className="section__explain">{tKind('stats.explain', kind)}</p>
+      <DissolvedSwitch />
+      <DissolvedNote dissolved={nationalParts.dissolved} />
       <p className="section__explain stats__coverage">
         {t('stats.coverage', {
           n: entries.length,
@@ -122,8 +129,8 @@ export function StatsSection() {
             </div>
           )}
           <div className="stat">
-            <div className={`stat__value ${latest.populationVacant + latest.populationDissolved >= 1_000_000 ? 'stat__value--long' : ''}`}>
-              {formatNumber(latest.populationVacant + latest.populationDissolved)}
+            <div className={`stat__value ${nationalParts.population >= 1_000_000 ? 'stat__value--long' : ''}`}>
+              {formatNumber(nationalParts.population)}
             </div>
             <div className="stat__label">{tKind('stats.populationNow', kind)}</div>
           </div>
@@ -135,8 +142,7 @@ export function StatsSection() {
               <div className="stat__label">
                 {tKind('stats.longTermNow', kind, {
                   pct: formatPercent(
-                    snapshot.national.longTerm
-                      / (snapshot.national.vacant + snapshot.national.dissolved), 0),
+                    snapshot.national.longTerm / (nationalParts.count || 1), 0),
                 })}
               </div>
             </div>
