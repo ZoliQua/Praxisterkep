@@ -37,6 +37,7 @@ from parse_dental import (
     _parse_date,
     _parse_population,
     canonical_county,
+    resolve_capital,
 )
 
 GP_TYPE_MAP = {"F": "adult", "G": "child", "V": "mixed"}
@@ -64,7 +65,9 @@ def parse_vacant(pdf_path: Path) -> list[VacantPraxis]:
             countyCode="",  # the GP list carries no county code column
             sites=[Site(
                 postalCode=_clean(row[3]),
-                settlement=_clean(row[4]),
+                # the GP list names the kerület today; the dental one does not
+                # for every row, and the same slip can appear here next month
+                settlement=resolve_capital(_clean(row[4]), _clean(row[3])),
                 address=_clean(row[5]),
                 district="",  # filled from the registry during build
                 isHeadquarters=False,
@@ -140,13 +143,16 @@ def parse_registry(xls_path: Path) -> list[dict]:
         for item in re.split(r"[;,]", _cell(row[cols["served"]])):
             m = _SERVED_ITEM.match(_clean(item))
             if m:
-                served.append({"kshId": m.group(1), "name": m.group(2)})
+                # the served list spells the capital its own way again
+                served.append({"kshId": m.group(1),
+                               "name": resolve_capital(m.group(2))})
         entry = {
             "id": hsz,
             "kind": "gp",
             "type": GP_TYPE_MAP[type_letter],
             "county": canonical_county(_cell(row[cols["county"]])),
-            "settlement": _clean(row[cols["settlement"]]),
+            "settlement": resolve_capital(_clean(row[cols["settlement"]]),
+                                          _clean(row[cols["postal"]])),
             "postalCode": _clean(row[cols["postal"]]).removesuffix(".0"),
             "address": _clean(row[cols["address"]]),
             "district": _clean(row[cols["district"]]).removesuffix(" járás"),
@@ -195,7 +201,7 @@ def parse_vacant_xlsx(xlsx_path: Path) -> list[VacantPraxis]:
             for item in re.split(r"[;,]", _cell(row[served_col])):
                 m = _SERVED_ITEM.match(_clean(item))
                 if m:
-                    served.append(m.group(2))
+                    served.append(resolve_capital(m.group(2)))
         rec = VacantPraxis(
             id=hsz,
             kind="gp",
@@ -205,7 +211,7 @@ def parse_vacant_xlsx(xlsx_path: Path) -> list[VacantPraxis]:
             countyCode="",
             sites=[Site(
                 postalCode=_clean(row[3]),
-                settlement=_clean(row[4]),
+                settlement=resolve_capital(_clean(row[4]), _clean(row[3])),
                 address=_clean(row[5]),
                 district="",
                 isHeadquarters=False,

@@ -74,6 +74,44 @@ def canonical_county(raw: str) -> str:
     return COUNTY_CANONICAL[name]
 
 
+# "1088" is the VIII. kerület: the second and third digits of a Budapest
+# postal code are the district number. Checked against every capital row that
+# also names its kerület — 1582 of them, all agreeing.
+CAPITAL_POSTAL_RE = re.compile(r"^1(\d{2})\d$")
+CAPITAL_KEY_RE = re.compile(r"^budapest (\d{2}) ker$")
+
+
+def resolve_capital(settlement: str, postal: str = "") -> str:
+    """One spelling for the capital: the gazetteer's.
+
+    NEAK writes the same kerület three ways. The dental registry says
+    "Budapest 08", the GP registry "Budapest VIII. kerület", the vacancy list
+    sometimes plain "Budapest" — and the settlement index is keyed by what it
+    is handed, so Józsefváros arrived as three places: one with the filled
+    districts, one with the vacant ones, one with nothing. Its own page read
+    "no vacant dental district" with 22 of them on NEAK's own list.
+
+    The KSH gazetteer is the authority for settlement names and calls it
+    "Budapest 08. ker."; everything is folded onto that. A bare "Budapest"
+    has its kerület read off the postal code, and only when that names one of
+    the 23. Every other settlement is returned untouched.
+    """
+    # parse_ksh takes ParseError from here, so the import cannot be at the
+    # top of the module; after the first call it is a dict lookup
+    from parse_ksh import normalize_settlement
+
+    name = _clean(settlement)
+    key = normalize_settlement(name)
+    if key == "budapest":
+        match = CAPITAL_POSTAL_RE.match(_clean(postal))
+        if not match:
+            return name  # the capital, and nothing says which kerület
+        number = int(match.group(1))
+        return f"Budapest {number:02d}. ker." if 1 <= number <= 23 else name
+    match = CAPITAL_KEY_RE.match(key)
+    return f"Budapest {match.group(1)}. ker." if match else name
+
+
 HU_MONTHS = {
     "január": 1, "február": 2, "március": 3, "április": 4,
     "május": 5, "június": 6, "július": 7, "augusztus": 8,
@@ -194,9 +232,10 @@ def _rows_to_vacant(rows: list[list], source_name: str) -> list[VacantPraxis]:
             is_hq = bool(sz_i is not None and _clean(row[sz_i]) == "SZ")
             if address.endswith(" SZ"):  # flag embedded in address (site2/3)
                 address, is_hq = address[:-3].rstrip(), True
+            postal = _clean(row[postal_i])
             sites.append(Site(
-                postalCode=_clean(row[postal_i]),
-                settlement=settlement,
+                postalCode=postal,
+                settlement=resolve_capital(settlement, postal),
                 address=address,
                 district=_clean(row[distr_i]),
                 isHeadquarters=is_hq,
@@ -225,7 +264,8 @@ def parse_dissolved(pdf_path: Path) -> list[VacantPraxis]:
             continue
         if len(row) != 9:
             raise ParseError(f"unexpected column count {len(row)} for FIN {row[2]}")
-        served = [s for s in (_clean(p) for p in re.split(r"[,;]", row[6] or "")) if s]
+        served = [resolve_capital(s)
+                  for s in (_clean(p) for p in re.split(r"[,;]", row[6] or "")) if s]
         records.append(VacantPraxis(
             id=_clean(row[2]),
             kind="dental",
@@ -235,7 +275,7 @@ def parse_dissolved(pdf_path: Path) -> list[VacantPraxis]:
             countyCode=_clean(row[0]),
             sites=[Site(
                 postalCode=_clean(row[3]),
-                settlement=_clean(row[4]),
+                settlement=resolve_capital(_clean(row[4]), _clean(row[3])),
                 address=_clean(row[5]),
                 district="",
                 isHeadquarters=True,

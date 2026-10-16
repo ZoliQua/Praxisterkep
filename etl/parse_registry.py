@@ -21,7 +21,13 @@ from typing import TypedDict
 
 import pandas as pd
 
-from parse_dental import TYPE_MAP, ParseError, _clean, canonical_county
+from parse_dental import (
+    TYPE_MAP,
+    ParseError,
+    _clean,
+    canonical_county,
+    resolve_capital,
+)
 
 # header substrings (case-insensitive) -> canonical field
 HEADER_MAP = {
@@ -166,7 +172,8 @@ def parse_extra(xls_path: Path) -> list[dict]:
             "level": level,
             "unitType": type_hu,
             "county": canonical_county(row[cols["county"]]),
-            "settlement": _clean(row[cols["settlement"]]),
+            "settlement": resolve_capital(_clean(row[cols["settlement"]]),
+                                          _clean(row[cols["postal"]])),
             "postalCode": _clean(row[cols["postal"]]).removesuffix(".0"),
             "address": _clean(row[cols["address"]]),
             "doctor": clean_doctor(row[cols["doctor"]]),
@@ -200,7 +207,8 @@ def parse(xls_path: Path) -> list[RegistryEntry]:
             kind="dental",
             type=TYPE_MAP[type_hu],
             county=canonical_county(row[cols["county"]]),
-            settlement=_clean(row[cols["settlement"]]),
+            settlement=resolve_capital(_clean(row[cols["settlement"]]),
+                                       _clean(row[cols["postal"]])),
             postalCode=_clean(row[cols["postal"]]).removesuffix(".0"),
             address=_clean(row[cols["address"]]),
             level=_clean(row[cols["level"]]),

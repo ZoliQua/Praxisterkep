@@ -1,4 +1,9 @@
 {
+ "1011 Budapest 01. ker., MARKOVITS UTCA 2.": {
+  "geoApprox": false,
+  "lat": 47.505646,
+  "lon": 19.037892
+ },
  "1011 Budapest I. kerület, MARKOVITS UTCA 2.": {
   "geoApprox": false,
   "lat": 47.505646,
@@ -43,6 +48,16 @@
   "geoApprox": false,
   "lat": 47.504877,
   "lon": 19.024943
+ },
+ "1012 Budapest 01. ker., Attila út 135-137.": {
+  "geoApprox": false,
+  "lat": 47.504877,
+  "lon": 19.024943
+ },
+ "1012 Budapest 01. ker., MIKÓ UTCA 12.": {
+  "geoApprox": false,
+  "lat": 47.498431,
+  "lon": 19.030351
  },
  "1012 Budapest I. kerület, Attila út 135-137.": {
   "geoApprox": false,
@@ -104,6 +119,36 @@
   "lat": 47.497879,
   "lon": 19.040238
  },
+ "1013 Budapest 01. ker., ATTILA ÚT 63.": {
+  "geoApprox": false,
+  "lat": 47.497903,
+  "lon": 19.033119
+ },
+ "1013 Budapest 01. ker., Attila út 63.": {
+  "geoApprox": false,
+  "lat": 47.497903,
+  "lon": 19.033119
+ },
+ "1013 Budapest 01. ker., Krisztina krt. 37/a.": {
+  "geoApprox": false,
+  "lat": 47.499119,
+  "lon": 19.025839
+ },
+ "1013 Budapest 01. ker., Roham u. 6-8.": {
+  "geoApprox": false,
+  "lat": 47.497299,
+  "lon": 19.031991
+ },
+ "1013 Budapest 01. ker., Roham u. 8.": {
+  "geoApprox": false,
+  "lat": 47.497347,
+  "lon": 19.032234
+ },
+ "1013 Budapest 01. ker., Roham u.8.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
  "1013 Budapest I. kerület, ATTILA ÚT 63.": {
   "geoApprox": false,
   "lat": 47.497903,
@@ -144,6 +189,11 @@
   "lat": 47.495349,
   "lon": 19.037107
  },
+ "1014 Budapest 01. ker., TÁRNOK UTCA 9-11.": {
+  "geoApprox": false,
+  "lat": 47.500792,
+  "lon": 19.03461
+ },
  "1014 Budapest I. kerület, TÁRNOK UTCA 9-11.": {
   "geoApprox": false,
   "lat": 47.500792,
@@ -163,6 +213,16 @@
   "geoApprox": false,
   "lat": 47.498899,
   "lon": 19.036093
+ },
+ "1015 Budapest 01. ker., CSALOGÁNY UTCA 22-24.": {
+  "geoApprox": false,
+  "lat": 47.507748,
+  "lon": 19.032951
+ },
+ "1015 Budapest 01. ker., Csalogány utca 22-24.": {
+  "geoApprox": false,
+  "lat": 47.507715,
+  "lon": 19.033714
  },
  "1015 Budapest I. kerület, CSALOGÁNY UTCA 22-24.": {
   "geoApprox": false,
@@ -244,6 +304,36 @@
   "lat": 47.49568,
   "lon": 19.029964
  },
+ "1016 Budapest 01. ker., Mészáros u. 10.": {
+  "geoApprox": false,
+  "lat": 47.495799,
+  "lon": 19.02994
+ },
+ "1016 Budapest 01. ker., Mészáros u. 10. 1.em. 4.": {
+  "geoApprox": false,
+  "lat": 47.491678,
+  "lon": 19.030372
+ },
+ "1016 Budapest 01. ker., Mészáros u. 10. I/5.": {
+  "geoApprox": false,
+  "lat": 47.496229,
+  "lon": 19.030367
+ },
+ "1016 Budapest 01. ker., Mészáros utca 10. I.em": {
+  "geoApprox": false,
+  "lat": 47.49568,
+  "lon": 19.029964
+ },
+ "1016 Budapest 01. ker., ZSOLT U. 6/a.": {
+  "geoApprox": false,
+  "lat": 47.490203,
+  "lon": 19.03173
+ },
+ "1016 Budapest 01. ker., ZSOLT UTCA 6/A": {
+  "geoApprox": false,
+  "lat": 47.490203,
+  "lon": 19.03173
+ },
  "1016 Budapest I. kerület, Mészáros u. 10.": {
   "geoApprox": false,
   "lat": 47.495799,
@@ -314,6 +404,16 @@
   "lat": 47.49093,
   "lon": 19.031254
  },
+ "1021 Budapest 02. ker., SZÉHER ÚT 73.": {
+  "geoApprox": false,
+  "lat": 47.526895,
+  "lon": 18.975693
+ },
+ "1021 Budapest 02. ker., Széher út 73.": {
+  "geoApprox": false,
+  "lat": 47.526895,
+  "lon": 18.975693
+ },
  "1021 Budapest II. kerület, Budenz út 20-22.": {
   "geoApprox": false,
   "lat": 47.519492,
@@ -363,6 +463,26 @@
   "geoApprox": false,
   "lat": 47.512617,
   "lon": 19.021241
+ },
+ "1022 Budapest 02. ker., Gyorskocsi u. 25-27.": {
+  "geoApprox": false,
+  "lat": 47.509577,
+  "lon": 19.037216
+ },
+ "1022 Budapest 02. ker., Marczibányi tér 1-3.": {
+  "geoApprox": false,
+  "lat": 47.512617,
+  "lon": 19.021241
+ },
+ "1022 Budapest 02. ker., RÉT U. 3.": {
+  "geoApprox": false,
+  "lat": 47.513438,
+  "lon": 19.02445
+ },
+ "1022 Budapest 02. ker., Rét u. 3": {
+  "geoApprox": false,
+  "lat": 47.513438,
+  "lon": 19.02445
  },
  "1022 Budapest II. kerület, Fillér u. 70-76.": {
   "geoApprox": false,
@@ -438,6 +558,21 @@
   "geoApprox": false,
   "lat": 47.513438,
   "lon": 19.02445
+ },
+ "1023 Budapest 02. ker., KOMJADI BÉLA U. 3.": {
+  "geoApprox": false,
+  "lat": 47.520815,
+  "lon": 19.037088
+ },
+ "1023 Budapest 02. ker., KOMJÁDI BÉLA U. 3.": {
+  "geoApprox": false,
+  "lat": 47.520815,
+  "lon": 19.037088
+ },
+ "1023 Budapest 02. ker., Komjádi Béla u. 3.": {
+  "geoApprox": false,
+  "lat": 47.520815,
+  "lon": 19.037088
  },
  "1023 Budapest II. kerület, KOMJADI BÉLA U. 3.": {
   "geoApprox": false,
@@ -549,6 +684,21 @@
   "lat": 47.525708,
   "lon": 19.035746
  },
+ "1024 Budapest 02. ker., FILLÉR U. 12.": {
+  "geoApprox": false,
+  "lat": 47.509519,
+  "lon": 19.022147
+ },
+ "1024 Budapest 02. ker., Fillér utca 12.": {
+  "geoApprox": false,
+  "lat": 47.509955,
+  "lon": 19.021628
+ },
+ "1024 Budapest 02. ker., RÉT U. 3.": {
+  "geoApprox": false,
+  "lat": 47.513438,
+  "lon": 19.02445
+ },
  "1024 Budapest II. kerület, Ady Endre utca 1.": {
   "geoApprox": false,
   "lat": 47.513574,
@@ -653,6 +803,21 @@
   "geoApprox": false,
   "lat": 47.508436,
   "lon": 19.025583
+ },
+ "1025 Budapest 02. ker., CSATARKA UTCA 51.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1025 Budapest 02. ker., CSATÁRKA UTCA 51.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1025 Budapest 02. ker., VÉRHALOM TÉR 10.": {
+  "geoApprox": false,
+  "lat": 47.520399,
+  "lon": 19.024497
  },
  "1025 Budapest II. kerület, CSATARKA UTCA 51.": {
   "geoApprox": true,
@@ -793,6 +958,71 @@
   "geoApprox": false,
   "lat": 47.513113,
   "lon": 19.00766
+ },
+ "1026 Budapest 02. ker., ADY ENDRE UTCA 1.": {
+  "geoApprox": false,
+  "lat": 47.513665,
+  "lon": 19.029882
+ },
+ "1026 Budapest 02. ker., Gyorskocsi u. 31.": {
+  "geoApprox": false,
+  "lat": 47.509963,
+  "lon": 19.037113
+ },
+ "1026 Budapest 02. ker., LOTZ KAROLY UTCA 8-10.": {
+  "geoApprox": false,
+  "lat": 47.518393,
+  "lon": 18.998716
+ },
+ "1026 Budapest 02. ker., LOTZ KÁROLY UTCA 10.": {
+  "geoApprox": false,
+  "lat": 47.518369,
+  "lon": 18.998658
+ },
+ "1026 Budapest 02. ker., LOTZ KÁROLY UTCA 8-10.": {
+  "geoApprox": false,
+  "lat": 47.518393,
+  "lon": 18.998716
+ },
+ "1026 Budapest 02. ker., Lotz Károly u. 8-10.": {
+  "geoApprox": false,
+  "lat": 47.518393,
+  "lon": 18.998716
+ },
+ "1026 Budapest 02. ker., PASARÉTI U. 67-69.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1026 Budapest 02. ker., PASARÉTI ÚT 67-69.": {
+  "geoApprox": false,
+  "lat": 47.518276,
+  "lon": 19.002641
+ },
+ "1026 Budapest 02. ker., Pasaréti u.41": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1026 Budapest 02. ker., Pasaréti út 41-43.": {
+  "geoApprox": false,
+  "lat": 47.513923,
+  "lon": 19.007558
+ },
+ "1026 Budapest 02. ker., Pasaréti út 67-69.": {
+  "geoApprox": false,
+  "lat": 47.518276,
+  "lon": 19.002641
+ },
+ "1026 Budapest 02. ker., Pasaréti út. 41-43": {
+  "geoApprox": false,
+  "lat": 47.513113,
+  "lon": 19.00766
+ },
+ "1026 Budapest 02. ker., SZÉHER ÚT 73": {
+  "geoApprox": false,
+  "lat": 47.526895,
+  "lon": 18.975693
  },
  "1026 Budapest II. kerület, ADY ENDRE UTCA 1.": {
   "geoApprox": false,
@@ -974,6 +1204,36 @@
   "lat": 47.51261,
   "lon": 19.035823
  },
+ "1027 Budapest 02. ker., FAZEKAS UTCA 19-23.": {
+  "geoApprox": false,
+  "lat": 47.508592,
+  "lon": 19.034605
+ },
+ "1027 Budapest 02. ker., Fazeas u. 19-23.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1027 Budapest 02. ker., Fazekas u. 19-23.": {
+  "geoApprox": false,
+  "lat": 47.508592,
+  "lon": 19.034605
+ },
+ "1027 Budapest 02. ker., Tölgyfa u. 10.": {
+  "geoApprox": false,
+  "lat": 47.51261,
+  "lon": 19.035823
+ },
+ "1027 Budapest 02. ker., Tölgyfa u.10.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1027 Budapest 02. ker., Tölgyfa utca 10.": {
+  "geoApprox": false,
+  "lat": 47.51261,
+  "lon": 19.035823
+ },
  "1027 Budapest II. kerület, FAZEKAS UTCA 19-23.": {
   "geoApprox": false,
   "lat": 47.508592,
@@ -1119,6 +1379,26 @@
   "lat": 47.561102,
   "lon": 18.958789
  },
+ "1028 Budapest 02. ker., HUNYADI U. 81-85.": {
+  "geoApprox": false,
+  "lat": 47.58783,
+  "lon": 19.057097
+ },
+ "1028 Budapest 02. ker., KÖZSÉGHÁZ UTCA 12.": {
+  "geoApprox": false,
+  "lat": 47.561639,
+  "lon": 18.960317
+ },
+ "1028 Budapest 02. ker., Községház u. 12.": {
+  "geoApprox": false,
+  "lat": 47.561639,
+  "lon": 18.960317
+ },
+ "1028 Budapest 02. ker., Szabadság u. 23.": {
+  "geoApprox": false,
+  "lat": 47.561102,
+  "lon": 18.958789
+ },
  "1028 Budapest II. kerület, HUNYADI U. 81-85.": {
   "geoApprox": false,
   "lat": 47.58783,
@@ -1214,6 +1494,16 @@
   "lat": 47.548012,
   "lon": 18.953718
  },
+ "1029 Budapest 02. ker., HUNYADI U. 81-85.": {
+  "geoApprox": false,
+  "lat": 47.58783,
+  "lon": 19.057097
+ },
+ "1029 Budapest 02. ker., KÚTFÖLDI ÚT 1/A. HUNYADI U.81-83.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
  "1029 Budapest II. kerület, HUNYADI U. 81-85.": {
   "geoApprox": false,
   "lat": 47.58783,
@@ -1245,6 +1535,21 @@
   "lon": 18.961651
  },
  "1031 Budapest 03, Ányos u. 2.": {
+  "geoApprox": false,
+  "lat": 47.572486,
+  "lon": 19.049684
+ },
+ "1031 Budapest 03. ker., MONOSTORI ÚT 27.": {
+  "geoApprox": false,
+  "lat": 47.572649,
+  "lon": 19.054951
+ },
+ "1031 Budapest 03. ker., ÁNYOS UTCA 2.": {
+  "geoApprox": false,
+  "lat": 47.572486,
+  "lon": 19.049684
+ },
+ "1031 Budapest 03. ker., Ányos u. 2.": {
   "geoApprox": false,
   "lat": 47.572486,
   "lon": 19.049684
@@ -1350,6 +1655,46 @@
   "lon": 19.040238
  },
  "1032 Budapest 03, Vörösvári út.88-96. 3/313.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1032 Budapest 03. ker., VÁLYOG UTCA 9.": {
+  "geoApprox": false,
+  "lat": 47.541037,
+  "lon": 19.032241
+ },
+ "1032 Budapest 03. ker., VÁRADI UTCA 15/A": {
+  "geoApprox": false,
+  "lat": 47.544524,
+  "lon": 19.031301
+ },
+ "1032 Budapest 03. ker., Vörösvári út 88-92.": {
+  "geoApprox": false,
+  "lat": 47.541577,
+  "lon": 19.039529
+ },
+ "1032 Budapest 03. ker., Vörösvári út 88-96.": {
+  "geoApprox": false,
+  "lat": 47.544931,
+  "lon": 19.033491
+ },
+ "1032 Budapest 03. ker., Vörösvári út 88-96. 3.em. 314.": {
+  "geoApprox": false,
+  "lat": 47.544931,
+  "lon": 19.033491
+ },
+ "1032 Budapest 03. ker., Vörösvári út 88-96. III. 313.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1032 Budapest 03. ker., Vörösvári út.88-96. 3/313.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1032 Budapest 03. ker., ÓBUDA UTCA 6.": {
   "geoApprox": true,
   "lat": 47.497879,
   "lon": 19.040238
@@ -1493,6 +1838,51 @@
   "geoApprox": false,
   "lat": 47.542865,
   "lon": 19.044224
+ },
+ "1033 Budapest 03. ker., PETHE FERENC TÉR 3.": {
+  "geoApprox": false,
+  "lat": 47.55736,
+  "lon": 19.044492
+ },
+ "1033 Budapest 03. ker., Pethe Ferenc tér 3.": {
+  "geoApprox": false,
+  "lat": 47.55736,
+  "lon": 19.044492
+ },
+ "1033 Budapest 03. ker., SZENTENDREI ÚT 2/A": {
+  "geoApprox": false,
+  "lat": 47.543651,
+  "lon": 19.041632
+ },
+ "1033 Budapest 03. ker., Szentendrei út 2/A": {
+  "geoApprox": false,
+  "lat": 47.543651,
+  "lon": 19.041632
+ },
+ "1033 Budapest 03. ker., VÖRÖSKERESZT UTCA 9-11.": {
+  "geoApprox": false,
+  "lat": 47.542865,
+  "lon": 19.044224
+ },
+ "1033 Budapest 03. ker., Vöröskereszt u. 9-11.": {
+  "geoApprox": false,
+  "lat": 47.542865,
+  "lon": 19.044224
+ },
+ "1033 Budapest 03. ker., ÓBUDA UTCA 6.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1033 Budapest 03. ker., ÓBUDAI UTCA 6.": {
+  "geoApprox": false,
+  "lat": 47.538012,
+  "lon": 19.044674
+ },
+ "1033 Budapest 03. ker., Óbudai utca 6.": {
+  "geoApprox": false,
+  "lat": 47.538012,
+  "lon": 19.044674
  },
  "1033 Budapest III. kerület, Laktanya utca 4 4": {
   "geoApprox": false,
@@ -1669,6 +2059,46 @@
   "lat": 47.544931,
   "lon": 19.033491
  },
+ "1035 Budapest 03. ker., SZENTENDREI ÚT 2/A": {
+  "geoApprox": false,
+  "lat": 47.543651,
+  "lon": 19.041632
+ },
+ "1035 Budapest 03. ker., Szentendrei út 2/A.": {
+  "geoApprox": false,
+  "lat": 47.543651,
+  "lon": 19.041632
+ },
+ "1035 Budapest 03. ker., Szentendrei út 2/a": {
+  "geoApprox": false,
+  "lat": 47.543651,
+  "lon": 19.041632
+ },
+ "1035 Budapest 03. ker., Szentendrei út 2/a.": {
+  "geoApprox": false,
+  "lat": 47.543651,
+  "lon": 19.041632
+ },
+ "1035 Budapest 03. ker., VÁRADI UTCA 15/A": {
+  "geoApprox": false,
+  "lat": 47.544524,
+  "lon": 19.031301
+ },
+ "1035 Budapest 03. ker., VÖRÖSVÁRI ÚT 88-96.": {
+  "geoApprox": false,
+  "lat": 47.544931,
+  "lon": 19.033491
+ },
+ "1035 Budapest 03. ker., VÖRÖSVÁRI ÚT 88.": {
+  "geoApprox": false,
+  "lat": 47.544931,
+  "lon": 19.033491
+ },
+ "1035 Budapest 03. ker., Vörösvári út 88-96": {
+  "geoApprox": false,
+  "lat": 47.544931,
+  "lon": 19.033491
+ },
  "1035 Budapest III. kerület, SZENTENDREI ÚT 2/A": {
   "geoApprox": false,
   "lat": 47.543651,
@@ -1819,6 +2249,21 @@
   "lat": 47.564441,
   "lon": 19.022142
  },
+ "1037 Budapest 03. ker., BÉCSI U. 268.": {
+  "geoApprox": false,
+  "lat": 47.496533,
+  "lon": 19.051933
+ },
+ "1037 Budapest 03. ker., BÉCSI ÚT 268.": {
+  "geoApprox": false,
+  "lat": 47.564441,
+  "lon": 19.022142
+ },
+ "1037 Budapest 03. ker., Bécsi út 268.": {
+  "geoApprox": false,
+  "lat": 47.564441,
+  "lon": 19.022142
+ },
  "1037 Budapest III. kerület, BÉCSI U. 268.": {
   "geoApprox": false,
   "lat": 47.496533,
@@ -1919,6 +2364,21 @@
   "lat": 47.572486,
   "lon": 19.049684
  },
+ "1038 Budapest 03. ker., CSOBÁNKA TÉR 6.": {
+  "geoApprox": false,
+  "lat": 47.597592,
+  "lon": 19.051866
+ },
+ "1038 Budapest 03. ker., VASÚT SOR 1.": {
+  "geoApprox": false,
+  "lat": 47.586394,
+  "lon": 19.044747
+ },
+ "1038 Budapest 03. ker., Vasút sor 1.": {
+  "geoApprox": false,
+  "lat": 47.586394,
+  "lon": 19.044747
+ },
  "1038 Budapest III. kerület, CSOBÁNKA TÉR 6.": {
   "geoApprox": false,
   "lat": 47.597592,
@@ -1990,6 +2450,46 @@
   "lon": 19.053048
  },
  "1039 Budapest 03, Víziorgona u. 8.": {
+  "geoApprox": false,
+  "lat": 47.59724,
+  "lon": 19.047967
+ },
+ "1039 Budapest 03. ker., CSOBÁNKA TÉR 6.": {
+  "geoApprox": false,
+  "lat": 47.597592,
+  "lon": 19.051866
+ },
+ "1039 Budapest 03. ker., Csobánka tér 6.": {
+  "geoApprox": false,
+  "lat": 47.597592,
+  "lon": 19.051866
+ },
+ "1039 Budapest 03. ker., Csobánka tér 6. 2.em. 205. A.": {
+  "geoApprox": false,
+  "lat": 47.598425,
+  "lon": 19.053048
+ },
+ "1039 Budapest 03. ker., FÜST MILÁN UTCA 28.": {
+  "geoApprox": false,
+  "lat": 47.601039,
+  "lon": 19.05966
+ },
+ "1039 Budapest 03. ker., Füst Milán utca 28.": {
+  "geoApprox": false,
+  "lat": 47.601039,
+  "lon": 19.05966
+ },
+ "1039 Budapest 03. ker., VÍZIORGONA UTCA 8.": {
+  "geoApprox": false,
+  "lat": 47.59724,
+  "lon": 19.047967
+ },
+ "1039 Budapest 03. ker., Víziorgona u. 8.": {
+  "geoApprox": false,
+  "lat": 47.59724,
+  "lon": 19.047967
+ },
+ "1039 Budapest 03. ker., Víziorgona utca 8.": {
   "geoApprox": false,
   "lat": 47.59724,
   "lon": 19.047967
@@ -2184,6 +2684,56 @@
   "lat": 47.497879,
   "lon": 19.040238
  },
+ "1041 Budapest 04. ker., Deák Ferenc utca 93./B": {
+  "geoApprox": false,
+  "lat": 47.562902,
+  "lon": 19.101981
+ },
+ "1041 Budapest 04. ker., Görgey A. u.30.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1041 Budapest 04. ker., Görgey Artúr u. 30.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1041 Budapest 04. ker., Görgey Artúr u.30.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1041 Budapest 04. ker., Görgey Artúr u.30. VI. 604.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1041 Budapest 04. ker., KIRÁLY UTCA 19-21.": {
+  "geoApprox": false,
+  "lat": 47.561624,
+  "lon": 19.095859
+ },
+ "1041 Budapest 04. ker., LISZT F. UTCA 23/A": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1041 Budapest 04. ker., LISZT FERENC UTCA 23/A": {
+  "geoApprox": false,
+  "lat": 47.562707,
+  "lon": 19.084348
+ },
+ "1041 Budapest 04. ker., LISZT FERENC UTCA 23/B": {
+  "geoApprox": false,
+  "lat": 47.562707,
+  "lon": 19.084348
+ },
+ "1041 Budapest 04. ker., LISZT FERENC UTCA 23/B.": {
+  "geoApprox": false,
+  "lat": 47.562707,
+  "lon": 19.084348
+ },
  "1041 Budapest IV. kerület, Deák 93/b.": {
   "geoApprox": false,
   "lat": 47.562902,
@@ -2349,6 +2899,31 @@
   "lat": 47.56223,
   "lon": 19.092391
  },
+ "1042 Budapest 04. ker., DEÁK FERENC UTCA 93/B": {
+  "geoApprox": false,
+  "lat": 47.562902,
+  "lon": 19.101981
+ },
+ "1042 Budapest 04. ker., DEÁK FERENC UTCA 93/B.": {
+  "geoApprox": false,
+  "lat": 47.562902,
+  "lon": 19.101981
+ },
+ "1042 Budapest 04. ker., ISTVÁN UTCA 27/B": {
+  "geoApprox": false,
+  "lat": 47.506535,
+  "lon": 19.085469
+ },
+ "1042 Budapest 04. ker., KIRÁLY UTCA 19-21.": {
+  "geoApprox": false,
+  "lat": 47.561624,
+  "lon": 19.095859
+ },
+ "1042 Budapest 04. ker., Király u. 9.": {
+  "geoApprox": false,
+  "lat": 47.56223,
+  "lon": 19.092391
+ },
  "1042 Budapest IV. kerület, DEÁK FERENC UTCA 93/B": {
   "geoApprox": false,
   "lat": 47.562902,
@@ -2474,6 +3049,16 @@
   "lat": 47.560872,
   "lon": 19.086106
  },
+ "1043 Budapest 04. ker., POZSONYI UTCA 23.": {
+  "geoApprox": false,
+  "lat": 47.557021,
+  "lon": 19.089232
+ },
+ "1043 Budapest 04. ker., POZSONYI ÚT 23.": {
+  "geoApprox": false,
+  "lat": 47.51579,
+  "lon": 19.04993
+ },
  "1043 Budapest IV. kerület, Berda József utca 48/C ": {
   "geoApprox": false,
   "lat": 47.557386,
@@ -2539,6 +3124,16 @@
   "lat": 47.557419,
   "lon": 19.09148
  },
+ "1044 Budapest 04. ker., VASVÁRI PÁL UTCA 20-22.": {
+  "geoApprox": false,
+  "lat": 47.577893,
+  "lon": 19.089231
+ },
+ "1044 Budapest 04. ker., Vasvári Pál utca 20-22.": {
+  "geoApprox": false,
+  "lat": 47.577893,
+  "lon": 19.089231
+ },
  "1044 Budapest IV. kerület, Ugró Gy sor 1-3": {
   "geoApprox": true,
   "lat": 47.497879,
@@ -2593,6 +3188,26 @@
   "geoApprox": false,
   "lat": 47.544208,
   "lon": 19.071702
+ },
+ "1045 Budapest 04. ker., POZSONYI UTCA 23.": {
+  "geoApprox": false,
+  "lat": 47.557021,
+  "lon": 19.089232
+ },
+ "1045 Budapest 04. ker., POZSONYI UTCA 23. I./1.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1045 Budapest 04. ker., POZSONYI UTCA 23. I./5": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1045 Budapest 04. ker., POZSONYI ÚT 23.": {
+  "geoApprox": false,
+  "lat": 47.51579,
+  "lon": 19.04993
  },
  "1045 Budapest IV. kerület, Deák F. u. 93/B": {
   "geoApprox": true,
@@ -2733,6 +3348,71 @@
   "geoApprox": true,
   "lat": 47.497879,
   "lon": 19.040238
+ },
+ "1046 Budapest 04. ker., ERDŐSOR UTCA 1.": {
+  "geoApprox": false,
+  "lat": 47.507939,
+  "lon": 19.072249
+ },
+ "1046 Budapest 04. ker., ERDŐSOR ÚT 1.": {
+  "geoApprox": false,
+  "lat": 47.580347,
+  "lon": 19.097551
+ },
+ "1046 Budapest 04. ker., GALOPP UTCA 6.": {
+  "geoApprox": false,
+  "lat": 47.5808,
+  "lon": 19.11503
+ },
+ "1046 Budapest 04. ker., Galopp u. 6.": {
+  "geoApprox": false,
+  "lat": 47.5808,
+  "lon": 19.11503
+ },
+ "1046 Budapest 04. ker., Galopp utca 6.": {
+  "geoApprox": false,
+  "lat": 47.5808,
+  "lon": 19.11503
+ },
+ "1046 Budapest 04. ker., Görgey Artúr u 30. VI.em.602.ajtó": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1046 Budapest 04. ker., Görgey Artúr u. 30. VI. 602.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1046 Budapest 04. ker., Görgey Artúr u. 30. VI. em. 603.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1046 Budapest 04. ker., Görgey Artúr u.30.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1046 Budapest 04. ker., Görgey Artúr u.30. VI. em. 605.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1046 Budapest 04. ker., Görgey Artúr utca 30.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1046 Budapest 04. ker., HARGITA UTCA 1.": {
+  "geoApprox": false,
+  "lat": 47.595328,
+  "lon": 19.118717
+ },
+ "1046 Budapest 04. ker., VADGESZTENYE UTCA 43/B": {
+  "geoApprox": false,
+  "lat": 47.574518,
+  "lon": 19.10303
  },
  "1046 Budapest IV. kerület, ERDŐSOR UTCA 1.": {
   "geoApprox": false,
@@ -2899,6 +3579,31 @@
   "lat": 47.567456,
   "lon": 19.095365
  },
+ "1047 Budapest 04. ker., DEÁK FERENC UTCA 93/B": {
+  "geoApprox": false,
+  "lat": 47.562902,
+  "lon": 19.101981
+ },
+ "1047 Budapest 04. ker., LISZT FERENC U. 23/A": {
+  "geoApprox": false,
+  "lat": 47.562961,
+  "lon": 19.082589
+ },
+ "1047 Budapest 04. ker., Liszt Ferenc utca 23/A.": {
+  "geoApprox": false,
+  "lat": 47.562961,
+  "lon": 19.082589
+ },
+ "1047 Budapest 04. ker., VASVÁRI PÁL U. 20-22": {
+  "geoApprox": false,
+  "lat": 47.577893,
+  "lon": 19.089231
+ },
+ "1047 Budapest 04. ker., VASVÁRI PÁL UTCA 20-22": {
+  "geoApprox": false,
+  "lat": 47.577893,
+  "lon": 19.089231
+ },
  "1047 Budapest IV. kerület, Baross utca 44.": {
   "geoApprox": false,
   "lat": 47.569371,
@@ -3013,6 +3718,36 @@
   "geoApprox": false,
   "lat": 47.5808,
   "lon": 19.11503
+ },
+ "1048 Budapest 04. ker., Galopp utca 6.": {
+  "geoApprox": false,
+  "lat": 47.5808,
+  "lon": 19.11503
+ },
+ "1048 Budapest 04. ker., HARGITA UTCA 1": {
+  "geoApprox": false,
+  "lat": 47.595328,
+  "lon": 19.118717
+ },
+ "1048 Budapest 04. ker., HARGITA UTCA 1.": {
+  "geoApprox": false,
+  "lat": 47.595328,
+  "lon": 19.118717
+ },
+ "1048 Budapest 04. ker., Hargita utca 1": {
+  "geoApprox": false,
+  "lat": 47.595328,
+  "lon": 19.118717
+ },
+ "1048 Budapest 04. ker., KORDOVÁN TÉR 1.": {
+  "geoApprox": false,
+  "lat": 47.586861,
+  "lon": 19.114019
+ },
+ "1048 Budapest 04. ker., SÁRPATAK U. 10-12.": {
+  "geoApprox": false,
+  "lat": 47.595197,
+  "lon": 19.117426
  },
  "1048 Budapest IV. kerület, Bőrfestő utca 5-9": {
   "geoApprox": false,
@@ -3154,6 +3889,46 @@
   "lat": 47.497879,
   "lon": 19.040238
  },
+ "1051 Budapest 05. ker., Hercegprimás u. 14-16. IV. 412.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1051 Budapest 05. ker., Hercegprimás u. 14-16. IV./402": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1051 Budapest 05. ker., Hercegprimás u. 14-16. IV./402.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1051 Budapest 05. ker., Hercegprimás u. 14-16. IV./405.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1051 Budapest 05. ker., Hercegprimás u. 14-16. IV.em. 406.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1051 Budapest 05. ker., Hercegprimás u. 14-16. IV/404.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1051 Budapest 05. ker., Hercegprímás u. 14-16.": {
+  "geoApprox": false,
+  "lat": 47.501777,
+  "lon": 19.052539
+ },
+ "1051 Budapest 05. ker., Hercegprímás u. 14-16. IV./401.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
  "1051 Budapest V. kerület, Hercegprimás utca 14-16. 4. em. 2 ajtó": {
   "geoApprox": false,
   "lat": 47.501833,
@@ -3249,6 +4024,16 @@
   "lat": 47.495284,
   "lon": 19.051888
  },
+ "1052 Budapest 05. ker., SEMMELWEIS U.14.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1052 Budapest 05. ker., Semmelweis u. 14.": {
+  "geoApprox": false,
+  "lat": 47.495368,
+  "lon": 19.056815
+ },
  "1052 Budapest V. kerület, SEMMELWEIS U.14.": {
   "geoApprox": true,
   "lat": 47.497879,
@@ -3294,6 +4079,11 @@
   "lat": 47.497879,
   "lon": 19.040238
  },
+ "1053 Budapest 05. ker., Kecskeméti u.9.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
  "1053 Budapest V. kerület, Kecskeméti u. 9.": {
   "geoApprox": false,
   "lat": 47.490218,
@@ -3330,6 +4120,31 @@
   "lon": 19.040238
  },
  "1054 Budapest 05, Steindl Imre u.8. fsz.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1054 Budapest 05. ker., AKADÉMIA U. 8.": {
+  "geoApprox": false,
+  "lat": 47.502348,
+  "lon": 19.046413
+ },
+ "1054 Budapest 05. ker., AKADÉMIA U.8.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1054 Budapest 05. ker., HOLD U. 8.": {
+  "geoApprox": false,
+  "lat": 47.505275,
+  "lon": 19.052094
+ },
+ "1054 Budapest 05. ker., HOLD U.8.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1054 Budapest 05. ker., Steindl Imre u.8. fsz.": {
   "geoApprox": true,
   "lat": 47.497879,
   "lon": 19.040238
@@ -3434,6 +4249,16 @@
   "lat": 47.497879,
   "lon": 19.040238
  },
+ "1055 Budapest 05. ker., Markó u. 7.": {
+  "geoApprox": false,
+  "lat": 47.509393,
+  "lon": 19.048554
+ },
+ "1055 Budapest 05. ker., Markó u.7.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
  "1055 Budapest V. kerület, Markó u. 7.": {
   "geoApprox": false,
   "lat": 47.509393,
@@ -3458,6 +4283,11 @@
   "geoApprox": false,
   "lat": 47.512173,
   "lon": 19.049475
+ },
+ "1056 Budapest 05. ker., VÁCI UTCA 40.": {
+  "geoApprox": false,
+  "lat": 47.491265,
+  "lon": 19.05449
  },
  "1056 Budapest V. kerület, VÁCI UTCA 40.": {
   "geoApprox": false,
@@ -3525,6 +4355,26 @@
   "lon": 19.040238
  },
  "1062 Budapest 06, Podmaniczky u. 109. 547. szoba.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1062 Budapest 06. ker., Podmaniczky u. 109-111. 531. szoba": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1062 Budapest 06. ker., Podmaniczky u. 109.": {
+  "geoApprox": false,
+  "lat": 47.516284,
+  "lon": 19.071267
+ },
+ "1062 Budapest 06. ker., Podmaniczky u. 109. 531. szoba": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1062 Budapest 06. ker., Podmaniczky u. 109. 547. szoba": {
   "geoApprox": true,
   "lat": 47.497879,
   "lon": 19.040238
@@ -3599,6 +4449,11 @@
   "lat": 47.514868,
   "lon": 19.060168
  },
+ "1063 Budapest 06. ker., SZÍV UTCA 16.": {
+  "geoApprox": false,
+  "lat": 47.50818,
+  "lon": 19.070184
+ },
  "1063 Budapest VI. kerület, SZÍV UTCA 16.": {
   "geoApprox": false,
   "lat": 47.50818,
@@ -3629,6 +4484,11 @@
   "lat": 47.512956,
   "lon": 19.069205
  },
+ "1064 Budapest 06. ker., SZONDI UTCA 49.": {
+  "geoApprox": false,
+  "lat": 47.512121,
+  "lon": 19.067307
+ },
  "1064 Budapest VI. kerület, Bajcsy-Zsilinszky út 33.": {
   "geoApprox": false,
   "lat": 47.504844,
@@ -3658,6 +4518,21 @@
   "geoApprox": false,
   "lat": 47.508346,
   "lon": 19.064633
+ },
+ "1065 Budapest 06. ker., BAJCSY-ZSILINSZKY ÚT 33": {
+  "geoApprox": false,
+  "lat": 47.504834,
+  "lon": 19.055199
+ },
+ "1065 Budapest 06. ker., BAJCSY-ZSILINSZKY ÚT 33.": {
+  "geoApprox": false,
+  "lat": 47.504834,
+  "lon": 19.055199
+ },
+ "1065 Budapest 06. ker., BAJCSY-ZSILINSZKY ÚT 33., Ó UTCA 6.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
  },
  "1065 Budapest VI. kerület, BAJCSY-ZSILINSZKY ÚT 33": {
   "geoApprox": false,
@@ -3714,6 +4589,11 @@
   "lat": 47.502278,
   "lon": 19.056099
  },
+ "1066 Budapest 06. ker., EÖTVÖS UTCA 4.": {
+  "geoApprox": false,
+  "lat": 47.50436,
+  "lon": 19.066285
+ },
  "1066 Budapest VI. kerület, EÖTVÖS UTCA 4.": {
   "geoApprox": false,
   "lat": 47.50436,
@@ -3748,6 +4628,26 @@
   "geoApprox": true,
   "lat": 47.497879,
   "lon": 19.040238
+ },
+ "1067 Budapest 06. ker., EÖTVÖS UTCA 4.": {
+  "geoApprox": false,
+  "lat": 47.50436,
+  "lon": 19.066285
+ },
+ "1067 Budapest 06. ker., SZONDI UTCA 11": {
+  "geoApprox": false,
+  "lat": 47.508425,
+  "lon": 19.060968
+ },
+ "1067 Budapest 06. ker., SZONDI UTCA 11.": {
+  "geoApprox": false,
+  "lat": 47.508425,
+  "lon": 19.060968
+ },
+ "1067 Budapest 06. ker., Teréz krt. 27.": {
+  "geoApprox": false,
+  "lat": 47.506909,
+  "lon": 19.061544
  },
  "1067 Budapest VI. kerület, EÖTVÖS UTCA 4.": {
   "geoApprox": false,
@@ -3844,6 +4744,21 @@
   "lat": 47.515696,
   "lon": 19.073758
  },
+ "1071 Budapest 07. ker., DEMBINSZKY U. 7.": {
+  "geoApprox": false,
+  "lat": 47.505222,
+  "lon": 19.078105
+ },
+ "1071 Budapest 07. ker., DEMBINSZKY U.7.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1071 Budapest 07. ker., DÓZSA GYÖRGY ÚT 60.": {
+  "geoApprox": false,
+  "lat": 47.507123,
+  "lon": 19.08497
+ },
  "1071 Budapest VII. kerület, DEMBINSZKY U. 7.": {
   "geoApprox": false,
   "lat": 47.505222,
@@ -3909,6 +4824,21 @@
   "lat": 47.497879,
   "lon": 19.040238
  },
+ "1072 Budapest 07. ker., Csányi u.3. fsz.2": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1072 Budapest 07. ker., KLAUZÁL U. 23.": {
+  "geoApprox": false,
+  "lat": 47.498465,
+  "lon": 19.066184
+ },
+ "1072 Budapest 07. ker., KLAUZÁL UTCA 23.": {
+  "geoApprox": false,
+  "lat": 47.498465,
+  "lon": 19.066184
+ },
  "1072 Budapest VII. kerület, Csányi utca 3.": {
   "geoApprox": false,
   "lat": 47.500892,
@@ -3948,6 +4878,11 @@
   "geoApprox": false,
   "lat": 47.496667,
   "lon": 19.068671
+ },
+ "1073 Budapest 07. ker., AKÁCFA UTCA 62.": {
+  "geoApprox": false,
+  "lat": 47.501582,
+  "lon": 19.063688
  },
  "1073 Budapest VII. kerület, AKÁCFA UTCA 62.": {
   "geoApprox": false,
@@ -4128,6 +5063,106 @@
   "geoApprox": true,
   "lat": 47.497879,
   "lon": 19.040238
+ },
+ "1074 Budapest 07. ker., CSENGERY UTCA 25": {
+  "geoApprox": false,
+  "lat": 47.504233,
+  "lon": 19.068388
+ },
+ "1074 Budapest 07. ker., CSENGERY UTCA 25.": {
+  "geoApprox": false,
+  "lat": 47.504233,
+  "lon": 19.068388
+ },
+ "1074 Budapest 07. ker., Csengery u. 25.": {
+  "geoApprox": false,
+  "lat": 47.504233,
+  "lon": 19.068388
+ },
+ "1074 Budapest 07. ker., Csengery u. 25. 4.em. 404.": {
+  "geoApprox": false,
+  "lat": 47.503186,
+  "lon": 19.069304
+ },
+ "1074 Budapest 07. ker., Csengery u. 25. 5.em. 507.": {
+  "geoApprox": false,
+  "lat": 47.503186,
+  "lon": 19.069304
+ },
+ "1074 Budapest 07. ker., Csengery u. 25. IV. 404.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1074 Budapest 07. ker., Csengery u. 25. V. em. 506.": {
+  "geoApprox": false,
+  "lat": 47.503186,
+  "lon": 19.069304
+ },
+ "1074 Budapest 07. ker., Csengery u. 25. V./504.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1074 Budapest 07. ker., Csengery u. 25. V.em. 501.": {
+  "geoApprox": false,
+  "lat": 47.503186,
+  "lon": 19.069304
+ },
+ "1074 Budapest 07. ker., Csengery u. 25. V.em. 503.": {
+  "geoApprox": false,
+  "lat": 47.503186,
+  "lon": 19.069304
+ },
+ "1074 Budapest 07. ker., Csengery u. 25. V.em. 507": {
+  "geoApprox": false,
+  "lat": 47.503186,
+  "lon": 19.069304
+ },
+ "1074 Budapest 07. ker., Csengery u. 25. V/502.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1074 Budapest 07. ker., Csengery u. 25. V/505.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1074 Budapest 07. ker., Csengery u. 25., IV.em. 405.": {
+  "geoApprox": false,
+  "lat": 47.503186,
+  "lon": 19.069304
+ },
+ "1074 Budapest 07. ker., Csengery u.25": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1074 Budapest 07. ker., Csengery u.25. V.em.511": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1074 Budapest 07. ker., HEVESI SÁNDOR TÉR 1.": {
+  "geoApprox": false,
+  "lat": 47.50415,
+  "lon": 19.072348
+ },
+ "1074 Budapest 07. ker., ROTTENBILLER UTCA 12.": {
+  "geoApprox": false,
+  "lat": 47.501337,
+  "lon": 19.077702
+ },
+ "1074 Budapest 07. ker., ROTTENBILLER UTCA12.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1074 Budapest 07. ker., VÖRÖSMARTY UTCA 14.": {
+  "geoApprox": false,
+  "lat": 47.504191,
+  "lon": 19.069743
  },
  "1074 Budapest VII. kerület, CSENGERY UTCA 25": {
   "geoApprox": false,
@@ -4334,6 +5369,21 @@
   "lat": 47.498522,
   "lon": 19.065315
  },
+ "1076 Budapest 07. ker., ISTVÁN UTCA 35.": {
+  "geoApprox": false,
+  "lat": 47.505335,
+  "lon": 19.083128
+ },
+ "1076 Budapest 07. ker., PÉTERFY SÁNDOR UTCA 47": {
+  "geoApprox": false,
+  "lat": 47.503571,
+  "lon": 19.083364
+ },
+ "1076 Budapest 07. ker., PÉTERFY SÁNDOR UTCA 47.": {
+  "geoApprox": false,
+  "lat": 47.503571,
+  "lon": 19.083364
+ },
  "1076 Budapest VII. kerület, ISTVÁN UTCA 35.": {
   "geoApprox": false,
   "lat": 47.505335,
@@ -4414,6 +5464,31 @@
   "lat": 47.502639,
   "lon": 19.076547
  },
+ "1077 Budapest 07. ker., HEVESI SÁNDOR TÉR 1": {
+  "geoApprox": false,
+  "lat": 47.50415,
+  "lon": 19.072348
+ },
+ "1077 Budapest 07. ker., HEVESI SÁNDOR TÉR 1.": {
+  "geoApprox": false,
+  "lat": 47.50415,
+  "lon": 19.072348
+ },
+ "1077 Budapest 07. ker., Hevesi Sándor tér 1.": {
+  "geoApprox": false,
+  "lat": 47.50415,
+  "lon": 19.072348
+ },
+ "1077 Budapest 07. ker., WESSELÉNYI UTCA 11": {
+  "geoApprox": false,
+  "lat": 47.497018,
+  "lon": 19.062159
+ },
+ "1077 Budapest 07. ker., WESSELÉNYI UTCA 11.": {
+  "geoApprox": false,
+  "lat": 47.497018,
+  "lon": 19.062159
+ },
  "1077 Budapest VII. kerület, HEVESI SÁNDOR TÉR 1": {
   "geoApprox": false,
   "lat": 47.50415,
@@ -4479,6 +5554,11 @@
   "lat": 47.501549,
   "lon": 19.070748
  },
+ "1078 Budapest 07. ker., ISTVÁN UTCA 35.": {
+  "geoApprox": false,
+  "lat": 47.505335,
+  "lon": 19.083128
+ },
  "1078 Budapest VII. kerület, ISTVÁN UTCA 35.": {
   "geoApprox": false,
   "lat": 47.505335,
@@ -4500,6 +5580,11 @@
   "lon": 19.083128
  },
  "1081 Budapest 08, Dologház u. 1.": {
+  "geoApprox": false,
+  "lat": 47.49572,
+  "lon": 19.081747
+ },
+ "1081 Budapest 08. ker., Dologház u. 1.": {
   "geoApprox": false,
   "lat": 47.49572,
   "lon": 19.081747
@@ -4573,6 +5658,16 @@
   "geoApprox": false,
   "lat": 47.484753,
   "lon": 19.073062
+ },
+ "1083 Budapest 08. ker., SZIGONY UTCA 2/A.": {
+  "geoApprox": false,
+  "lat": 47.483416,
+  "lon": 19.079739
+ },
+ "1083 Budapest 08. ker., SZIGONY UTCA 2/B.": {
+  "geoApprox": false,
+  "lat": 47.48838,
+  "lon": 19.080444
  },
  "1083 Budapest VIII. kerület, SZIGONY UTCA 2/A.": {
   "geoApprox": false,
@@ -4674,6 +5769,11 @@
   "lat": 47.485044,
   "lon": 19.0818
  },
+ "1084 Budapest 08. ker., AURÓRA UTCA 22-28.": {
+  "geoApprox": false,
+  "lat": 47.492883,
+  "lon": 19.077093
+ },
  "1084 Budapest VIII. kerület, AURÓRA UTCA 22-28.": {
   "geoApprox": false,
   "lat": 47.492883,
@@ -4748,6 +5848,16 @@
   "geoApprox": false,
   "lat": 47.488541,
   "lon": 19.066319
+ },
+ "1085 Budapest 08. ker., JÓZSEF KÖRÚT 36.": {
+  "geoApprox": false,
+  "lat": 47.491955,
+  "lon": 19.071352
+ },
+ "1085 Budapest 08. ker., JÓZSEF KÖRÚT36.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
  },
  "1085 Budapest VIII. kerület, JÓZSEF KÖRÚT 36.": {
   "geoApprox": false,
@@ -4909,6 +6019,11 @@
   "lat": 47.492638,
   "lon": 19.08306
  },
+ "1087 Budapest 08. ker., HUNGÁRIA KÖRÚT 30/A.": {
+  "geoApprox": false,
+  "lat": 47.499439,
+  "lon": 19.108247
+ },
  "1087 Budapest VIII. kerület, HUNGÁRIA KÖRÚT 30/A.": {
   "geoApprox": false,
   "lat": 47.499439,
@@ -4970,6 +6085,21 @@
   "lon": 19.040238
  },
  "1088 Budapest 08, Szentkirályi utca 47.": {
+  "geoApprox": false,
+  "lat": 47.488541,
+  "lon": 19.066319
+ },
+ "1088 Budapest 08. ker., GUTENBERG TÉR 3.": {
+  "geoApprox": false,
+  "lat": 47.492757,
+  "lon": 19.069639
+ },
+ "1088 Budapest 08. ker., MIKSZÁTH KÁLMÁN TÉR 4.": {
+  "geoApprox": false,
+  "lat": 47.489955,
+  "lon": 19.066946
+ },
+ "1088 Budapest 08. ker., Szentkirályi u. 47.": {
   "geoApprox": false,
   "lat": 47.488541,
   "lon": 19.066319
@@ -5089,6 +6219,16 @@
   "lat": 47.495046,
   "lon": 19.065865
  },
+ "1089 Budapest 08. ker., KÁLVÁRIA TÉR 18.": {
+  "geoApprox": false,
+  "lat": 47.489447,
+  "lon": 19.086589
+ },
+ "1089 Budapest 08. ker., ORCZY ÚT 31.": {
+  "geoApprox": false,
+  "lat": 47.486023,
+  "lon": 19.092424
+ },
  "1089 Budapest VIII. kerület, KÁLVÁRIA TÉR 18.": {
   "geoApprox": false,
   "lat": 47.489447,
@@ -5184,6 +6324,11 @@
   "lat": 47.497879,
   "lon": 19.040238
  },
+ "1091 Budapest 09. ker., ÜLLŐI ÚT 65-67.": {
+  "geoApprox": false,
+  "lat": 47.483886,
+  "lon": 19.075005
+ },
  "1091 Budapest IX. kerület, ÜLLŐI ÚT 65-67.": {
   "geoApprox": false,
   "lat": 47.483886,
@@ -5254,6 +6399,11 @@
   "lat": 47.484045,
   "lon": 19.066956
  },
+ "1092 Budapest 09. ker., LÓNYAY U. 19.": {
+  "geoApprox": false,
+  "lat": 47.485453,
+  "lon": 19.061554
+ },
  "1092 Budapest IX. kerület, Bakáts tér 12.": {
   "geoApprox": false,
   "lat": 47.484045,
@@ -5300,6 +6450,26 @@
   "lon": 19.100277
  },
  "1093 Budapest 09, Pipa u. 4.": {
+  "geoApprox": false,
+  "lat": 47.487161,
+  "lon": 19.05917
+ },
+ "1093 Budapest 09. ker., KÖZRAKTÁR U. 24.": {
+  "geoApprox": false,
+  "lat": 47.482091,
+  "lon": 19.064314
+ },
+ "1093 Budapest 09. ker., LÓNYAI U. 46.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1093 Budapest 09. ker., LÓNYAY U. 19.": {
+  "geoApprox": false,
+  "lat": 47.485453,
+  "lon": 19.061554
+ },
+ "1093 Budapest 09. ker., Pipa u. 4.": {
   "geoApprox": false,
   "lat": 47.487161,
   "lon": 19.05917
@@ -5383,6 +6553,11 @@
   "geoApprox": false,
   "lat": 47.488084,
   "lon": 19.059868
+ },
+ "1094 Budapest 09. ker., FERENC TÉR 1.": {
+  "geoApprox": false,
+  "lat": 47.481427,
+  "lon": 19.072895
  },
  "1094 Budapest IX. kerület, FERENC TÉR 1.": {
   "geoApprox": false,
@@ -5470,6 +6645,36 @@
   "lon": 19.040238
  },
  "1095 Budapest 09, Mester u.45. III/3011.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1095 Budapest 09. ker., MESTER U. 49.": {
+  "geoApprox": false,
+  "lat": 47.476656,
+  "lon": 19.076244
+ },
+ "1095 Budapest 09. ker., Mester u. 19.": {
+  "geoApprox": false,
+  "lat": 47.479108,
+  "lon": 19.071789
+ },
+ "1095 Budapest 09. ker., Mester u. 45.": {
+  "geoApprox": false,
+  "lat": 47.476863,
+  "lon": 19.075945
+ },
+ "1095 Budapest 09. ker., Mester u. 45. 3.em. 332.": {
+  "geoApprox": false,
+  "lat": 47.478942,
+  "lon": 19.0732
+ },
+ "1095 Budapest 09. ker., Mester u. 45. III.em. 332.": {
+  "geoApprox": false,
+  "lat": 47.478942,
+  "lon": 19.0732
+ },
+ "1095 Budapest 09. ker., Mester u.45. III/3011.": {
   "geoApprox": true,
   "lat": 47.497879,
   "lon": 19.040238
@@ -5644,6 +6849,21 @@
   "lat": 47.469253,
   "lon": 19.089817
  },
+ "1097 Budapest 09. ker., ECSERI ÚT 19.": {
+  "geoApprox": false,
+  "lat": 47.463958,
+  "lon": 19.101888
+ },
+ "1097 Budapest 09. ker., Fék u. 3-5.": {
+  "geoApprox": false,
+  "lat": 47.469253,
+  "lon": 19.089817
+ },
+ "1097 Budapest 09. ker., VASKAPU U. 23-29.": {
+  "geoApprox": false,
+  "lat": 47.476195,
+  "lon": 19.072574
+ },
  "1097 Budapest IX. kerület, ECSERI ÚT 19.": {
   "geoApprox": false,
   "lat": 47.463958,
@@ -5774,6 +6994,41 @@
   "lat": 47.466034,
   "lon": 19.11754
  },
+ "1098 Budapest 09. ker., BÖRZSÖNY U. 19.": {
+  "geoApprox": false,
+  "lat": 47.461809,
+  "lon": 19.112249
+ },
+ "1098 Budapest 09. ker., BÖRZSÖNY UTCA 19.": {
+  "geoApprox": false,
+  "lat": 47.461809,
+  "lon": 19.112249
+ },
+ "1098 Budapest 09. ker., CSENGETTYŰ U. 23.": {
+  "geoApprox": false,
+  "lat": 47.463515,
+  "lon": 19.117462
+ },
+ "1098 Budapest 09. ker., Csengettyű u. 23.": {
+  "geoApprox": false,
+  "lat": 47.463515,
+  "lon": 19.117462
+ },
+ "1098 Budapest 09. ker., DÉSI HUBER U. 20.": {
+  "geoApprox": false,
+  "lat": 47.466104,
+  "lon": 19.114539
+ },
+ "1098 Budapest 09. ker., DÉSI HUBER U.20.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1098 Budapest 09. ker., Toronyház u. 3/b.": {
+  "geoApprox": false,
+  "lat": 47.466034,
+  "lon": 19.11754
+ },
  "1098 Budapest IX. kerület, BÖRZSÖNY U. 19.": {
   "geoApprox": false,
   "lat": 47.461809,
@@ -5880,6 +7135,46 @@
   "lon": 19.117665
  },
  "1101 Budapest 10, Zách u. 4.": {
+  "geoApprox": false,
+  "lat": 47.489187,
+  "lon": 19.114488
+ },
+ "1101 Budapest 10. ker., GYÖNGYIKE UTCA 4.": {
+  "geoApprox": false,
+  "lat": 47.490175,
+  "lon": 19.118218
+ },
+ "1101 Budapest 10. ker., Kerepesi út 47-49.": {
+  "geoApprox": false,
+  "lat": 47.500231,
+  "lon": 19.110548
+ },
+ "1101 Budapest 10. ker., Kőbányai út 47.": {
+  "geoApprox": false,
+  "lat": 47.483186,
+  "lon": 19.117665
+ },
+ "1101 Budapest 10. ker., MÁV-TELEP 39.": {
+  "geoApprox": false,
+  "lat": 47.489514,
+  "lon": 19.112609
+ },
+ "1101 Budapest 10. ker., PONGRÁC ÚT 19.": {
+  "geoApprox": false,
+  "lat": 47.520924,
+  "lon": 19.091707
+ },
+ "1101 Budapest 10. ker., PONGRÁC ÚT 9.": {
+  "geoApprox": false,
+  "lat": 47.519899,
+  "lon": 19.091354
+ },
+ "1101 Budapest 10. ker., PONGRÁCZ ÚT 19.": {
+  "geoApprox": false,
+  "lat": 47.484303,
+  "lon": 19.125131
+ },
+ "1101 Budapest 10. ker., Zách u. 4.": {
   "geoApprox": false,
   "lat": 47.489187,
   "lon": 19.114488
@@ -6064,6 +7359,11 @@
   "lat": 47.479712,
   "lon": 19.161763
  },
+ "1105 Budapest 10. ker., ZSIVAJ UTCA 2.": {
+  "geoApprox": false,
+  "lat": 47.488203,
+  "lon": 19.13615
+ },
  "1105 Budapest X. kerület, ZSIVAJ UTCA 2.": {
   "geoApprox": false,
   "lat": 47.488203,
@@ -6105,6 +7405,21 @@
   "lon": 19.132609
  },
  "1106 Budapest 10, Maglódi út 89-91.": {
+  "geoApprox": false,
+  "lat": 47.478441,
+  "lon": 19.162152
+ },
+ "1106 Budapest 10. ker., HÁRSLEVELŰ UTCA 19.": {
+  "geoApprox": false,
+  "lat": 47.484814,
+  "lon": 19.203662
+ },
+ "1106 Budapest 10. ker., KEREPESI ÚT 67.": {
+  "geoApprox": false,
+  "lat": 47.503922,
+  "lon": 19.146224
+ },
+ "1106 Budapest 10. ker., Maglódi út 89-91.": {
   "geoApprox": false,
   "lat": 47.478441,
   "lon": 19.162152
@@ -6214,6 +7529,16 @@
   "lat": 47.502886,
   "lon": 19.1402
  },
+ "1107 Budapest 10. ker., SZÁRNYAS UTCA 3.": {
+  "geoApprox": false,
+  "lat": 47.467759,
+  "lon": 19.121284
+ },
+ "1107 Budapest 10. ker., SZÁRNYAS UTCA 3. FÖLDSZINT": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
  "1107 Budapest X. kerület, SZÁRNYAS UTCA 3.": {
   "geoApprox": false,
   "lat": 47.467759,
@@ -6280,6 +7605,31 @@
   "lon": 19.040238
  },
  "1108 Budapest 10, Újhegyi sétány 16.": {
+  "geoApprox": false,
+  "lat": 47.470811,
+  "lon": 19.16309
+ },
+ "1108 Budapest 10. ker., Kozma u. 13.": {
+  "geoApprox": false,
+  "lat": 47.471989,
+  "lon": 19.174216
+ },
+ "1108 Budapest 10. ker., Maglódi út 24.": {
+  "geoApprox": false,
+  "lat": 47.476921,
+  "lon": 19.168089
+ },
+ "1108 Budapest 10. ker., ÚJHEGYI SÉTÁNY 13-15.": {
+  "geoApprox": false,
+  "lat": 47.470106,
+  "lon": 19.16294
+ },
+ "1108 Budapest 10. ker., Újhegy sétány 16.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1108 Budapest 10. ker., Újhegyi sétány 16.": {
   "geoApprox": false,
   "lat": 47.470811,
   "lon": 19.16309
@@ -6354,6 +7704,11 @@
   "lat": 47.480764,
   "lon": 19.053671
  },
+ "1111 Budapest 11. ker., Zenta u. 1.": {
+  "geoApprox": false,
+  "lat": 47.480764,
+  "lon": 19.053671
+ },
  "1111 Budapest XI. kerület, KARINTHY FRIGYES út 24.": {
   "geoApprox": false,
   "lat": 47.476579,
@@ -6403,6 +7758,41 @@
   "geoApprox": false,
   "lat": 47.461829,
   "lon": 19.016709
+ },
+ "1112 Budapest 11. ker., BAZSALIKOM UTCA 60.": {
+  "geoApprox": false,
+  "lat": 47.453648,
+  "lon": 19.021886
+ },
+ "1112 Budapest 11. ker., Fehérvári út 12.": {
+  "geoApprox": false,
+  "lat": 47.475452,
+  "lon": 19.047261
+ },
+ "1112 Budapest 11. ker., MENYECSKE UTCA 17.": {
+  "geoApprox": false,
+  "lat": 47.461829,
+  "lon": 19.016709
+ },
+ "1112 Budapest 11. ker., MENYECSKE UTCA 17. MADÁRHEGYI ÚT 21.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1112 Budapest 11. ker., MENYECSKE UTCA17.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1112 Budapest 11. ker., Menyecske u. 17.": {
+  "geoApprox": false,
+  "lat": 47.461829,
+  "lon": 19.016709
+ },
+ "1112 Budapest 11. ker., ÉRDI ÚT 2.": {
+  "geoApprox": false,
+  "lat": 47.480496,
+  "lon": 19.003973
  },
  "1112 Budapest XI. kerület, BAZSALIKOM UTCA 60.": {
   "geoApprox": false,
@@ -6524,6 +7914,31 @@
   "lat": 47.478882,
   "lon": 19.030524
  },
+ "1113 Budapest 11. ker., HAMZSABÉGI ÚT 60.": {
+  "geoApprox": false,
+  "lat": 47.473193,
+  "lon": 19.025877
+ },
+ "1113 Budapest 11. ker., Karolina út 27.": {
+  "geoApprox": false,
+  "lat": 47.478882,
+  "lon": 19.030524
+ },
+ "1113 Budapest 11. ker., KŐRÖSY JÓZSEF utca 3-5.": {
+  "geoApprox": false,
+  "lat": 47.475586,
+  "lon": 19.048127
+ },
+ "1113 Budapest 11. ker., VILLÁNYI ÚT 74.": {
+  "geoApprox": false,
+  "lat": 47.482557,
+  "lon": 19.030259
+ },
+ "1113 Budapest 11. ker., VÁGFARKASD UTCA 6.": {
+  "geoApprox": false,
+  "lat": 47.476013,
+  "lon": 19.026527
+ },
  "1113 Budapest XI. kerület, Bartók Béla út 92-94.": {
   "geoApprox": false,
   "lat": 47.473762,
@@ -6633,6 +8048,31 @@
   "geoApprox": false,
   "lat": 47.475822,
   "lon": 19.037284
+ },
+ "1114 Budapest 11. ker., ULÁSZLÓ U. 32-36.": {
+  "geoApprox": false,
+  "lat": 47.473952,
+  "lon": 19.040898
+ },
+ "1114 Budapest 11. ker., ULÁSZLÓ U. 32-36. FSZT. 2.": {
+  "geoApprox": false,
+  "lat": 47.473952,
+  "lon": 19.040898
+ },
+ "1114 Budapest 11. ker., ULÁSZLÓ UTCA 32-36.": {
+  "geoApprox": false,
+  "lat": 47.473952,
+  "lon": 19.040898
+ },
+ "1114 Budapest 11. ker., Ulászló utca 32-36.": {
+  "geoApprox": false,
+  "lat": 47.473952,
+  "lon": 19.040898
+ },
+ "1114 Budapest 11. ker., Ulászló utca 32-36. fszt.5.": {
+  "geoApprox": false,
+  "lat": 47.473952,
+  "lon": 19.040898
  },
  "1114 Budapest XI. kerület, Kőrösy József utca 3-5 fsz": {
   "geoApprox": false,
@@ -6750,6 +8190,31 @@
   "lon": 19.040238
  },
  "1115 Budapest 11, Keveháza utca 10.": {
+  "geoApprox": false,
+  "lat": 47.465319,
+  "lon": 19.027431
+ },
+ "1115 Budapest 11. ker., Bartók Béla út 92-94.": {
+  "geoApprox": false,
+  "lat": 47.474182,
+  "lon": 19.037785
+ },
+ "1115 Budapest 11. ker., KEVEHÁZA UTCA 10.": {
+  "geoApprox": false,
+  "lat": 47.465319,
+  "lon": 19.027431
+ },
+ "1115 Budapest 11. ker., Keveháza u. 10.": {
+  "geoApprox": false,
+  "lat": 47.465319,
+  "lon": 19.027431
+ },
+ "1115 Budapest 11. ker., Keveháza u.10 .": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1115 Budapest 11. ker., Keveháza utca 10.": {
   "geoApprox": false,
   "lat": 47.465319,
   "lon": 19.027431
@@ -6878,6 +8343,16 @@
   "geoApprox": false,
   "lat": 47.467576,
   "lon": 19.034662
+ },
+ "1116 Budapest 11. ker., ALBERTFALVA UTCA 3.": {
+  "geoApprox": false,
+  "lat": 47.448533,
+  "lon": 19.036656
+ },
+ "1116 Budapest 11. ker., HENGERMALOM UTCA 14.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
  },
  "1116 Budapest XI. kerület, ALBERTFALVA UTCA 3.": {
   "geoApprox": false,
@@ -7018,6 +8493,46 @@
   "geoApprox": true,
   "lat": 47.497879,
   "lon": 19.040238
+ },
+ "1117 Budapest 11. ker., ERŐMŰ UTCA 8.": {
+  "geoApprox": false,
+  "lat": 47.471337,
+  "lon": 19.049142
+ },
+ "1117 Budapest 11. ker., FEHÉRVÁRI ÚT 12.": {
+  "geoApprox": false,
+  "lat": 47.475452,
+  "lon": 19.047261
+ },
+ "1117 Budapest 11. ker., Fehérvári út 12.": {
+  "geoApprox": false,
+  "lat": 47.475452,
+  "lon": 19.047261
+ },
+ "1117 Budapest 11. ker., Karinthy F. út 5. I.em. 14.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1117 Budapest 11. ker., KŐRÖSI JÓZSEF UTCA 3-5.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1117 Budapest 11. ker., KŐRÖSY JÓZSEF UTCA 3-5.": {
+  "geoApprox": false,
+  "lat": 47.475586,
+  "lon": 19.048127
+ },
+ "1117 Budapest 11. ker., SZERÉMI SOR 4.": {
+  "geoApprox": false,
+  "lat": 47.472556,
+  "lon": 19.051719
+ },
+ "1117 Budapest 11. ker., Szerémi sor 4.": {
+  "geoApprox": false,
+  "lat": 47.472556,
+  "lon": 19.051719
  },
  "1117 Budapest XI. kerület, ERŐMŰ UTCA 8.": {
   "geoApprox": false,
@@ -7259,6 +8774,41 @@
   "lat": 47.482229,
   "lon": 19.033455
  },
+ "1118 Budapest 11. ker., GAZDAGRÉTI TÉR 1.": {
+  "geoApprox": false,
+  "lat": 47.472486,
+  "lon": 18.993249
+ },
+ "1118 Budapest 11. ker., GAZDAGRÉTI TÉR 5.": {
+  "geoApprox": false,
+  "lat": 47.473842,
+  "lon": 18.994498
+ },
+ "1118 Budapest 11. ker., Gazdagréti tér 1.": {
+  "geoApprox": false,
+  "lat": 47.472486,
+  "lon": 18.993249
+ },
+ "1118 Budapest 11. ker., Köbölkút u. 27.": {
+  "geoApprox": false,
+  "lat": 47.483056,
+  "lon": 19.034205
+ },
+ "1118 Budapest 11. ker., Nagyszeben tér 2.": {
+  "geoApprox": false,
+  "lat": 47.466227,
+  "lon": 19.003832
+ },
+ "1118 Budapest 11. ker., Regős köz 6.": {
+  "geoApprox": false,
+  "lat": 47.468324,
+  "lon": 19.002559
+ },
+ "1118 Budapest 11. ker., SASADI ÚT 13.": {
+  "geoApprox": false,
+  "lat": 47.46833,
+  "lon": 19.014705
+ },
  "1118 Budapest XI. kerület, Csíki-hegyek utca 13-15.": {
   "geoApprox": false,
   "lat": 47.472131,
@@ -7389,6 +8939,31 @@
   "lat": 47.462398,
   "lon": 19.043708
  },
+ "1119 Budapest 11. ker., BAZSALIKOM U.60.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1119 Budapest 11. ker., HENGERMALOM UTCA 14.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1119 Budapest 11. ker., HENGERMALOM ÚT 14.": {
+  "geoApprox": false,
+  "lat": 47.462253,
+  "lon": 19.046766
+ },
+ "1119 Budapest 11. ker., Hadak útja 2 .fsz.1.": {
+  "geoApprox": false,
+  "lat": 47.462937,
+  "lon": 19.026626
+ },
+ "1119 Budapest 11. ker., Hengermalom út 2/D. fsz. 1.": {
+  "geoApprox": false,
+  "lat": 47.462398,
+  "lon": 19.043708
+ },
  "1119 Budapest XI. kerület, BAZSALIKOM U.60.": {
   "geoApprox": true,
   "lat": 47.497879,
@@ -7513,6 +9088,36 @@
   "geoApprox": true,
   "lat": 47.497879,
   "lon": 19.040238
+ },
+ "1121 Budapest 12. ker., NORMAFA ÚT 4.": {
+  "geoApprox": false,
+  "lat": 47.498452,
+  "lon": 18.987334
+ },
+ "1121 Budapest 12. ker., RÁCZ ALADÁR U. 3-5.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1121 Budapest 12. ker., RÁCZ ALADÁR U. 5.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1121 Budapest 12. ker., RÁCZ ALADÁR ÚT 5.": {
+  "geoApprox": false,
+  "lat": 47.482956,
+  "lon": 18.996556
+ },
+ "1121 Budapest 12. ker., Rácz Aladáru. 5.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1121 Budapest 12. ker., ZUGLIGETI ÚT 58.": {
+  "geoApprox": false,
+  "lat": 47.517503,
+  "lon": 18.98274
  },
  "1121 Budapest XII. kerület, Budakeszi 48.": {
   "geoApprox": false,
@@ -7674,6 +9279,11 @@
   "lat": 47.503256,
   "lon": 19.023299
  },
+ "1122 Budapest 12. ker., Maros u. 3-5.": {
+  "geoApprox": false,
+  "lat": 47.503256,
+  "lon": 19.023299
+ },
  "1122 Budapest XII. kerület, Maros utca 3-5.": {
   "geoApprox": false,
   "lat": 47.503256,
@@ -7784,6 +9394,11 @@
   "lat": 47.497879,
   "lon": 19.040238
  },
+ "1124 Budapest 12. ker., FODOR UTCA 2/C.": {
+  "geoApprox": false,
+  "lat": 47.498728,
+  "lon": 19.008454
+ },
  "1124 Budapest XII. kerület, FODOR UTCA 2/C.": {
   "geoApprox": false,
   "lat": 47.498728,
@@ -7863,6 +9478,51 @@
   "geoApprox": true,
   "lat": 47.497879,
   "lon": 19.040238
+ },
+ "1125 Budapest 12. ker., Diós árok u. 1-3. 10.ép. 1.em.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1125 Budapest 12. ker., Diós árok u. 1-3. X.ép. 1.em.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1125 Budapest 12. ker., Diós árok u. 1.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1125 Budapest 12. ker., Diós árok út 1-3. X.ép I. em.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1125 Budapest 12. ker., NORMAFA ÚT 4.": {
+  "geoApprox": false,
+  "lat": 47.498452,
+  "lon": 18.987334
+ },
+ "1125 Budapest 12. ker., SZILÁGYI ERZSÉBET FASOR 18.": {
+  "geoApprox": false,
+  "lat": 47.509771,
+  "lon": 19.008403
+ },
+ "1125 Budapest 12. ker., Szilágyi Erzsébet fasor 18.": {
+  "geoApprox": false,
+  "lat": 47.509771,
+  "lon": 19.008403
+ },
+ "1125 Budapest 12. ker., Szilágyi Erzsébet fasor 18. 1. emelet": {
+  "geoApprox": false,
+  "lat": 47.517039,
+  "lon": 18.996546
+ },
+ "1125 Budapest 12. ker., ZUGLIGETI ÚT 58.": {
+  "geoApprox": false,
+  "lat": 47.517858,
+  "lon": 18.98361
  },
  "1125 Budapest XII. kerület,  Diós  árok 1-3.": {
   "geoApprox": false,
@@ -8023,6 +9683,66 @@
   "geoApprox": false,
   "lat": 47.493319,
   "lon": 19.018565
+ },
+ "1126 Budapest 12. ker., BEETHOVEN U.8.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1126 Budapest 12. ker., Beethoven u. 8.": {
+  "geoApprox": false,
+  "lat": 47.493319,
+  "lon": 19.018565
+ },
+ "1126 Budapest 12. ker., BÖSZÖRMÉNYI ÚT 42.": {
+  "geoApprox": false,
+  "lat": 47.491351,
+  "lon": 19.016592
+ },
+ "1126 Budapest 12. ker., Böszörményi út 42.": {
+  "geoApprox": false,
+  "lat": 47.491351,
+  "lon": 19.016592
+ },
+ "1126 Budapest 12. ker., FODOR UTCA 2/C.": {
+  "geoApprox": false,
+  "lat": 47.498728,
+  "lon": 19.008454
+ },
+ "1126 Budapest 12. ker., Fodor utca 2/C.": {
+  "geoApprox": false,
+  "lat": 47.498728,
+  "lon": 19.008454
+ },
+ "1126 Budapest 12. ker., KISS JANOS ALTABORNAGY UTCA 38.": {
+  "geoApprox": false,
+  "lat": 47.492336,
+  "lon": 19.020096
+ },
+ "1126 Budapest 12. ker., KISS JANOS ALTÁBORNAGY UTCA 38.": {
+  "geoApprox": false,
+  "lat": 47.492336,
+  "lon": 19.020096
+ },
+ "1126 Budapest 12. ker., Kiss János altábornagy u. 38.": {
+  "geoApprox": false,
+  "lat": 47.492336,
+  "lon": 19.020096
+ },
+ "1126 Budapest 12. ker., Kiss János altábornagy utca 38.": {
+  "geoApprox": false,
+  "lat": 47.492336,
+  "lon": 19.020096
+ },
+ "1126 Budapest 12. ker., UGOCSA ÚT 6/B.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1126 Budapest 12. ker., Ugocsa utca 6/B.": {
+  "geoApprox": false,
+  "lat": 47.494203,
+  "lon": 19.02075
  },
  "1126 Budapest XII. kerület, BEETHOVEN U.8.": {
   "geoApprox": true,
@@ -8199,6 +9919,16 @@
   "lat": 47.5486,
   "lon": 19.074958
  },
+ "1131 Budapest 13. ker., GÖNCÖL UTCA 28-30.": {
+  "geoApprox": false,
+  "lat": 47.547428,
+  "lon": 19.08001
+ },
+ "1131 Budapest 13. ker., NŐVÉR UTCA 19.": {
+  "geoApprox": false,
+  "lat": 47.546833,
+  "lon": 19.08641
+ },
  "1131 Budapest XIII. kerület, GÖNCÖL UTCA 28-30.": {
   "geoApprox": false,
   "lat": 47.547428,
@@ -8329,6 +10059,41 @@
   "lat": 47.518345,
   "lon": 19.058382
  },
+ "1132 Budapest 13. ker., BESSENYEI UTCA 27.": {
+  "geoApprox": false,
+  "lat": 47.52124,
+  "lon": 19.061011
+ },
+ "1132 Budapest 13. ker., VISEGRÁDI UTCA 47/C.": {
+  "geoApprox": false,
+  "lat": 47.518345,
+  "lon": 19.058382
+ },
+ "1132 Budapest 13. ker., Visegrádi u. 47. c.ép": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1132 Budapest 13. ker., Visegrádi u. 47/C": {
+  "geoApprox": false,
+  "lat": 47.518345,
+  "lon": 19.058382
+ },
+ "1132 Budapest 13. ker., Visegrádi u. 47/C.": {
+  "geoApprox": false,
+  "lat": 47.518345,
+  "lon": 19.058382
+ },
+ "1132 Budapest 13. ker., Visegrádi u. 47/C. 1. 127.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1132 Budapest 13. ker., Visegrádi u. 47/c.": {
+  "geoApprox": false,
+  "lat": 47.518345,
+  "lon": 19.058382
+ },
  "1132 Budapest XIII. kerület, BESSENYEI UTCA 27.": {
   "geoApprox": false,
   "lat": 47.52124,
@@ -8434,6 +10199,16 @@
   "lat": 47.52119,
   "lon": 19.061378
  },
+ "1133 Budapest 13. ker., BESSENYEI UTCA 27.": {
+  "geoApprox": false,
+  "lat": 47.52124,
+  "lon": 19.061011
+ },
+ "1133 Budapest 13. ker., IPOLY UTCA 3.": {
+  "geoApprox": false,
+  "lat": 47.520195,
+  "lon": 19.053493
+ },
  "1133 Budapest XIII. kerület, BESSENYEI UTCA 27.": {
   "geoApprox": false,
   "lat": 47.52124,
@@ -8495,6 +10270,31 @@
   "lon": 19.07265
  },
  "1134 Budapest 13, Róbert Károly krt. 44.": {
+  "geoApprox": false,
+  "lat": 47.530672,
+  "lon": 19.07265
+ },
+ "1134 Budapest 13. ker., BESSENYEI UTCA 27.": {
+  "geoApprox": false,
+  "lat": 47.52124,
+  "lon": 19.061011
+ },
+ "1134 Budapest 13. ker., KLAPKA UTCA 17-19.": {
+  "geoApprox": false,
+  "lat": 47.525065,
+  "lon": 19.070649
+ },
+ "1134 Budapest 13. ker., KLAPKA UTCA 17-19. I. EMELET 2.": {
+  "geoApprox": false,
+  "lat": 47.525748,
+  "lon": 19.07035
+ },
+ "1134 Budapest 13. ker., Róbert Károly krt. 44": {
+  "geoApprox": false,
+  "lat": 47.530672,
+  "lon": 19.07265
+ },
+ "1134 Budapest 13. ker., Róbert Károly krt. 44.": {
   "geoApprox": false,
   "lat": 47.530672,
   "lon": 19.07265
@@ -8624,6 +10424,11 @@
   "lat": 47.52517,
   "lon": 19.063515
  },
+ "1135 Budapest 13. ker., BÉKE ÚT 7.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
  "1135 Budapest XIII. kerület, BÉKE ÚT 7.": {
   "geoApprox": true,
   "lat": 47.497879,
@@ -8724,6 +10529,11 @@
   "lat": 47.497879,
   "lon": 19.040238
  },
+ "1136 Budapest 13. ker., TÁTRA UTCA 11.": {
+  "geoApprox": false,
+  "lat": 47.514407,
+  "lon": 19.051314
+ },
  "1136 Budapest XIII. kerület, TÁTRA UTCA 11.": {
   "geoApprox": false,
   "lat": 47.514407,
@@ -8813,6 +10623,16 @@
   "geoApprox": false,
   "lat": 47.518667,
   "lon": 19.052117
+ },
+ "1138 Budapest 13. ker., KARIKÁS FRIGYES UTCA 1/B.": {
+  "geoApprox": false,
+  "lat": 47.5352,
+  "lon": 19.0663
+ },
+ "1138 Budapest 13. ker., RÉVÉSZ UTCA 10-12.": {
+  "geoApprox": false,
+  "lat": 47.527232,
+  "lon": 19.058952
  },
  "1138 Budapest XIII. kerület, Gyöngyösi sétány 7.": {
   "geoApprox": false,
@@ -8950,6 +10770,31 @@
   "lon": 19.073152
  },
  "1139 Budapest 13, Teve u. 4-6.": {
+  "geoApprox": false,
+  "lat": 47.532886,
+  "lon": 19.069551
+ },
+ "1139 Budapest 13. ker., ESKÜVŐ KÖZ 1-3.": {
+  "geoApprox": false,
+  "lat": 47.541201,
+  "lon": 19.082387
+ },
+ "1139 Budapest 13. ker., KLAPKA UTCA 17-19. I. EMELET 4.": {
+  "geoApprox": false,
+  "lat": 47.525748,
+  "lon": 19.07035
+ },
+ "1139 Budapest 13. ker., PAP KÁROLY UTCA 10.": {
+  "geoApprox": false,
+  "lat": 47.531888,
+  "lon": 19.071078
+ },
+ "1139 Budapest 13. ker., SZEGEDI ÚT 17.": {
+  "geoApprox": false,
+  "lat": 47.529594,
+  "lon": 19.080752
+ },
+ "1139 Budapest 13. ker., Teve u. 4-6.": {
   "geoApprox": false,
   "lat": 47.532886,
   "lon": 19.069551
@@ -9109,6 +10954,11 @@
   "lat": 47.536784,
   "lon": 19.068874
  },
+ "1141 Budapest 14. ker., VEZÉR UTCA 95.FSZ.2": {
+  "geoApprox": false,
+  "lat": 47.514766,
+  "lon": 19.135427
+ },
  "1141 Budapest XIV. kerület, VEZÉR UTCA 95.FSZ.2": {
   "geoApprox": false,
   "lat": 47.514766,
@@ -9143,6 +10993,46 @@
   "geoApprox": false,
   "lat": 47.517468,
   "lon": 19.116561
+ },
+ "1142 Budapest 14. ker., ERZSÉBET KIRALYNÉ ÚTJA 47.": {
+  "geoApprox": false,
+  "lat": 47.523982,
+  "lon": 19.103347
+ },
+ "1142 Budapest 14. ker., Erzsébet Kirkályné útja 47.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1142 Budapest 14. ker., Erzsébet Királyné útja 47.": {
+  "geoApprox": false,
+  "lat": 47.523982,
+  "lon": 19.103347
+ },
+ "1142 Budapest 14. ker., Erzsébet királyné útja 47.": {
+  "geoApprox": false,
+  "lat": 47.523982,
+  "lon": 19.103347
+ },
+ "1142 Budapest 14. ker., RÁSKAI LEA UTCA 69-73.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1142 Budapest 14. ker., RÁSKAI LEA UTCA 69.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1142 Budapest 14. ker., RÁSKAY LEA UTCA 69-73.": {
+  "geoApprox": false,
+  "lat": 47.528557,
+  "lon": 19.106261
+ },
+ "1142 Budapest 14. ker., RÁSKAY LEA UTCA 69.": {
+  "geoApprox": false,
+  "lat": 47.528557,
+  "lon": 19.106261
  },
  "1142 Budapest XIV. kerület, ERZSÉBET KIRALYNÉ ÚTJA 47.": {
   "geoApprox": false,
@@ -9269,6 +11159,21 @@
   "lat": 47.497879,
   "lon": 19.040238
  },
+ "1144 Budapest 14. ker., CSERTŐ PARK 3.": {
+  "geoApprox": false,
+  "lat": 47.511274,
+  "lon": 19.143276
+ },
+ "1144 Budapest 14. ker., FÜREDI U. 34. FSZ/1.": {
+  "geoApprox": false,
+  "lat": 47.50828,
+  "lon": 19.141716
+ },
+ "1144 Budapest 14. ker., FÜREDI ÚT 34.": {
+  "geoApprox": false,
+  "lat": 47.390399,
+  "lon": 19.097475
+ },
  "1144 Budapest XIV. kerület, CSERTŐ PARK 3.": {
   "geoApprox": false,
   "lat": 47.511274,
@@ -9338,6 +11243,26 @@
   "geoApprox": false,
   "lat": 47.507376,
   "lon": 19.150833
+ },
+ "1145 Budapest 14. ker., TORONTAL UTCA 49.": {
+  "geoApprox": false,
+  "lat": 47.514662,
+  "lon": 19.108366
+ },
+ "1145 Budapest 14. ker., TORONTAL UTCA 55.": {
+  "geoApprox": false,
+  "lat": 47.515162,
+  "lon": 19.109116
+ },
+ "1145 Budapest 14. ker., Torontál u. 55.": {
+  "geoApprox": false,
+  "lat": 47.515162,
+  "lon": 19.109116
+ },
+ "1145 Budapest 14. ker., Torontál utca 49.": {
+  "geoApprox": false,
+  "lat": 47.514662,
+  "lon": 19.108366
  },
  "1145 Budapest XIV. kerület, Laky Adolf utca 38-40.": {
   "geoApprox": false,
@@ -9494,6 +11419,36 @@
   "lat": 47.497879,
   "lon": 19.040238
  },
+ "1146 Budapest 14. ker., Dózsa György út 7.": {
+  "geoApprox": false,
+  "lat": 47.504584,
+  "lon": 19.088883
+ },
+ "1146 Budapest 14. ker., HERMINA ÚT 7.": {
+  "geoApprox": false,
+  "lat": 47.511667,
+  "lon": 19.096292
+ },
+ "1146 Budapest 14. ker., Hermina út 7.": {
+  "geoApprox": false,
+  "lat": 47.511667,
+  "lon": 19.096292
+ },
+ "1146 Budapest 14. ker., Hermina út 7. II.em. 114.": {
+  "geoApprox": false,
+  "lat": 47.511667,
+  "lon": 19.096292
+ },
+ "1146 Budapest 14. ker., Hermina út 7. II.em. 116.": {
+  "geoApprox": false,
+  "lat": 47.511667,
+  "lon": 19.096292
+ },
+ "1146 Budapest 14. ker., Hermina út 7. II/115.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
  "1146 Budapest XIV. kerület, Cházár András u. 10.": {
   "geoApprox": false,
   "lat": 47.506082,
@@ -9644,6 +11599,31 @@
   "lat": 47.518867,
   "lon": 19.116959
  },
+ "1147 Budapest 14. ker., LŐCSEI UTCA 24-26.": {
+  "geoApprox": false,
+  "lat": 47.573008,
+  "lon": 19.105394
+ },
+ "1147 Budapest 14. ker., LŐCSEI UTCA 4/B.": {
+  "geoApprox": false,
+  "lat": 47.573008,
+  "lon": 19.105394
+ },
+ "1147 Budapest 14. ker., Lőcsei utca 4/B.": {
+  "geoApprox": false,
+  "lat": 47.573008,
+  "lon": 19.105394
+ },
+ "1147 Budapest 14. ker., Lőcsei út 24-26.": {
+  "geoApprox": false,
+  "lat": 47.518867,
+  "lon": 19.116959
+ },
+ "1147 Budapest 14. ker., Öv utca 151/b.": {
+  "geoApprox": false,
+  "lat": 47.530786,
+  "lon": 19.122439
+ },
  "1147 Budapest XIV. kerület, LŐCSEI UTCA 24-26.": {
   "geoApprox": false,
   "lat": 47.573008,
@@ -9770,6 +11750,46 @@
   "lon": 19.040238
  },
  "1148 Budapest 14, Örs vezér tér 23.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1148 Budapest 14. ker., KEREPESI ÚT 78/C": {
+  "geoApprox": false,
+  "lat": 47.503357,
+  "lon": 19.130228
+ },
+ "1148 Budapest 14. ker., ÖRS VEZÉR TERE 23.": {
+  "geoApprox": false,
+  "lat": 47.504936,
+  "lon": 19.13909
+ },
+ "1148 Budapest 14. ker., ÖRS VEZÉR TÉR 23.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1148 Budapest 14. ker., Örs vezér tere 23.": {
+  "geoApprox": false,
+  "lat": 47.504936,
+  "lon": 19.13909
+ },
+ "1148 Budapest 14. ker., Örs vezér tere 23. I/114.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1148 Budapest 14. ker., Örs vezér tere 23. II.em. 217.": {
+  "geoApprox": false,
+  "lat": 47.504936,
+  "lon": 19.13909
+ },
+ "1148 Budapest 14. ker., Örs vezér tere 23. II/220.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1148 Budapest 14. ker., Örs vezér tér 23.": {
   "geoApprox": true,
   "lat": 47.497879,
   "lon": 19.040238
@@ -9984,6 +12004,41 @@
   "lat": 47.503947,
   "lon": 19.114206
  },
+ "1149 Budapest 14. ker., Angol utca 51. fszt/4.": {
+  "geoApprox": false,
+  "lat": 47.51418,
+  "lon": 19.118132
+ },
+ "1149 Budapest 14. ker., ERZSÉBET KIRALYNÉ ÚTJA 47.": {
+  "geoApprox": false,
+  "lat": 47.523982,
+  "lon": 19.103347
+ },
+ "1149 Budapest 14. ker., Mogyoródi út 43.": {
+  "geoApprox": false,
+  "lat": 47.507753,
+  "lon": 19.118911
+ },
+ "1149 Budapest 14. ker., PILLANGÓ UTCA 32.": {
+  "geoApprox": false,
+  "lat": 47.505111,
+  "lon": 19.115519
+ },
+ "1149 Budapest 14. ker., TÁBORNOK UTCA 8.": {
+  "geoApprox": false,
+  "lat": 47.502257,
+  "lon": 19.109959
+ },
+ "1149 Budapest 14. ker., TÁBORNOK UTCA 8/A.": {
+  "geoApprox": false,
+  "lat": 47.503947,
+  "lon": 19.114206
+ },
+ "1149 Budapest 14. ker., Tábornok u. 8/a.": {
+  "geoApprox": false,
+  "lat": 47.503947,
+  "lon": 19.114206
+ },
  "1149 Budapest XIV. kerület, Angol u. 51. fszt/4.": {
   "geoApprox": false,
   "lat": 47.51418,
@@ -10119,6 +12174,16 @@
   "lat": 47.408487,
   "lon": 19.005083
  },
+ "1151 Budapest 15. ker., KOSSUTH LAJOS UTCA 3.": {
+  "geoApprox": false,
+  "lat": 47.580329,
+  "lon": 19.057775
+ },
+ "1151 Budapest 15. ker., SZŐDLIGET UTCA 32.": {
+  "geoApprox": false,
+  "lat": 47.565275,
+  "lon": 19.114782
+ },
  "1151 Budapest XV. kerület, KOSSUTH LAJOS UTCA 3.": {
   "geoApprox": false,
   "lat": 47.580329,
@@ -10209,6 +12274,31 @@
   "lat": 47.553626,
   "lon": 19.117836
  },
+ "1152 Budapest 15. ker., RÁKOS ÚT 58.": {
+  "geoApprox": false,
+  "lat": 47.553488,
+  "lon": 19.11877
+ },
+ "1152 Budapest 15. ker., RÁKOS ÚT 77/A.": {
+  "geoApprox": false,
+  "lat": 47.553626,
+  "lon": 19.117836
+ },
+ "1152 Budapest 15. ker., Rákos u.77/A": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1152 Budapest 15. ker., Rákos út 77/A.": {
+  "geoApprox": false,
+  "lat": 47.553626,
+  "lon": 19.117836
+ },
+ "1152 Budapest 15. ker., Rákos út 77/A. III./306.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
  "1152 Budapest XV. kerület, RÁKOS ÚT 58.": {
   "geoApprox": false,
   "lat": 47.553488,
@@ -10294,6 +12384,11 @@
   "lat": 47.553979,
   "lon": 19.141851
  },
+ "1153 Budapest 15. ker., HUBAY JENŐ TÉR 8.": {
+  "geoApprox": false,
+  "lat": 47.56383,
+  "lon": 19.116008
+ },
  "1153 Budapest XV. kerület, HUBAY JENŐ TÉR 8.": {
   "geoApprox": false,
   "lat": 47.56383,
@@ -10308,6 +12403,11 @@
   "geoApprox": false,
   "lat": 47.55533,
   "lon": 19.12906
+ },
+ "1154 Budapest 15. ker., NÉPFELKELŐ UTCA 76.": {
+  "geoApprox": false,
+  "lat": 47.553359,
+  "lon": 19.119515
  },
  "1154 Budapest XV. kerület, NÉPFELKELŐ UTCA 76.": {
   "geoApprox": false,
@@ -10328,6 +12428,11 @@
   "geoApprox": true,
   "lat": 47.497879,
   "lon": 19.040238
+ },
+ "1155 Budapest 15. ker., OPÁL UTCA 11.": {
+  "geoApprox": false,
+  "lat": 47.541603,
+  "lon": 19.115433
  },
  "1155 Budapest XV. kerület, OPÁL UTCA 11.": {
   "geoApprox": false,
@@ -10383,6 +12488,21 @@
   "geoApprox": false,
   "lat": 47.540875,
   "lon": 19.14302
+ },
+ "1157 Budapest 15. ker., ZSÓKAVÁR UTCA 42-44.": {
+  "geoApprox": false,
+  "lat": 47.540335,
+  "lon": 19.144305
+ },
+ "1157 Budapest 15. ker., Zsókavár u. 42-44.": {
+  "geoApprox": false,
+  "lat": 47.540335,
+  "lon": 19.144305
+ },
+ "1157 Budapest 15. ker., Zsókavár utca 42-44.": {
+  "geoApprox": false,
+  "lat": 47.540335,
+  "lon": 19.144305
  },
  "1157 Budapest XV. kerület, Hösők  útja 1-3": {
   "geoApprox": false,
@@ -10483,6 +12603,46 @@
   "geoApprox": false,
   "lat": 47.539057,
   "lon": 19.135988
+ },
+ "1158 Budapest 15. ker., HŐSÖK ÚTJA 3.": {
+  "geoApprox": false,
+  "lat": 47.539057,
+  "lon": 19.135988
+ },
+ "1158 Budapest 15. ker., Hősök útja 1.": {
+  "geoApprox": false,
+  "lat": 47.539275,
+  "lon": 19.135154
+ },
+ "1158 Budapest 15. ker., Hősök útja 1. I.em. 104.": {
+  "geoApprox": false,
+  "lat": 47.539275,
+  "lon": 19.135154
+ },
+ "1158 Budapest 15. ker., Hősök útja 1. szám": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1158 Budapest 15. ker., Hősök útja 3.": {
+  "geoApprox": false,
+  "lat": 47.539057,
+  "lon": 19.135988
+ },
+ "1158 Budapest 15. ker., ZSÓKAVÁR UTCA 42-44.": {
+  "geoApprox": false,
+  "lat": 47.542459,
+  "lon": 19.140342
+ },
+ "1158 Budapest 15. ker., ŐRJÁRAT UTCA 1-5.": {
+  "geoApprox": false,
+  "lat": 47.539127,
+  "lon": 19.123262
+ },
+ "1158 Budapest 15. ker., ŐRJÁRAT UTCA 4/B.": {
+  "geoApprox": false,
+  "lat": 47.540417,
+  "lon": 19.123392
  },
  "1158 Budapest XV. kerület, HŐSÖK ÚTJA 3.": {
   "geoApprox": false,
@@ -10639,6 +12799,16 @@
   "lat": 47.523102,
   "lon": 19.162577
  },
+ "1161 Budapest 16. ker., HŐSÖK TERE 7-8.": {
+  "geoApprox": false,
+  "lat": 47.522904,
+  "lon": 19.163731
+ },
+ "1161 Budapest 16. ker., Hősök tere 7-8.": {
+  "geoApprox": false,
+  "lat": 47.522904,
+  "lon": 19.163731
+ },
  "1161 Budapest XVI. kerület, HŐSÖK TERE 7-8.": {
   "geoApprox": false,
   "lat": 47.522904,
@@ -10693,6 +12863,21 @@
   "geoApprox": false,
   "lat": 47.519709,
   "lon": 19.163862
+ },
+ "1162 Budapest 16. ker., CSÖMÖRI ÚT 177.": {
+  "geoApprox": false,
+  "lat": 47.533786,
+  "lon": 19.178903
+ },
+ "1162 Budapest 16. ker., DÉLCEG U. 33.": {
+  "geoApprox": false,
+  "lat": 47.532964,
+  "lon": 19.19846
+ },
+ "1162 Budapest 16. ker., DÉLCEG U. 35.": {
+  "geoApprox": false,
+  "lat": 47.532964,
+  "lon": 19.19846
  },
  "1162 Budapest XVI. kerület, CSÖMÖRI UT 177": {
   "geoApprox": false,
@@ -10790,6 +12975,51 @@
   "lon": 19.189229
  },
  "1163 Budapest 16, Tekla u. 2/c.": {
+  "geoApprox": false,
+  "lat": 47.510111,
+  "lon": 19.189229
+ },
+ "1163 Budapest 16. ker., CSÖMÖRI ÚT. 177.": {
+  "geoApprox": false,
+  "lat": 47.527827,
+  "lon": 19.165862
+ },
+ "1163 Budapest 16. ker., JÓKAI UTCA 5/A. (TEKLA UTCA 2/C.)": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1163 Budapest 16. ker., Jókai u. 3.": {
+  "geoApprox": false,
+  "lat": 47.506152,
+  "lon": 19.060673
+ },
+ "1163 Budapest 16. ker., MARGIT U. 33.": {
+  "geoApprox": false,
+  "lat": 47.510035,
+  "lon": 19.171878
+ },
+ "1163 Budapest 16. ker., MARGIT UTCA 33.": {
+  "geoApprox": false,
+  "lat": 47.511215,
+  "lon": 19.174945
+ },
+ "1163 Budapest 16. ker., TEKLA UTCA 2/C.": {
+  "geoApprox": false,
+  "lat": 47.510111,
+  "lon": 19.189229
+ },
+ "1163 Budapest 16. ker., Tekla u. 2/C": {
+  "geoApprox": false,
+  "lat": 47.510111,
+  "lon": 19.189229
+ },
+ "1163 Budapest 16. ker., Tekla u. 2/C.": {
+  "geoApprox": false,
+  "lat": 47.510111,
+  "lon": 19.189229
+ },
+ "1163 Budapest 16. ker., Tekla u. 2/c.": {
   "geoApprox": false,
   "lat": 47.510111,
   "lon": 19.189229
@@ -10949,6 +13179,26 @@
   "lat": 47.525817,
   "lon": 19.22854
  },
+ "1164 Budapest 16. ker., DÉLCEG UTCA 33.": {
+  "geoApprox": false,
+  "lat": 47.532964,
+  "lon": 19.19846
+ },
+ "1164 Budapest 16. ker., HŐSÖK TERE 7-8.": {
+  "geoApprox": false,
+  "lat": 47.522904,
+  "lon": 19.163731
+ },
+ "1164 Budapest 16. ker., SZABADFÖLD ÚT 18.": {
+  "geoApprox": false,
+  "lat": 47.525817,
+  "lon": 19.22854
+ },
+ "1164 Budapest 16. ker., Szabadföld út 18.": {
+  "geoApprox": false,
+  "lat": 47.532696,
+  "lon": 19.239288
+ },
  "1164 Budapest XVI. kerület, Centenáriumi sétány 24": {
   "geoApprox": true,
   "lat": 47.497879,
@@ -11003,6 +13253,36 @@
   "geoApprox": false,
   "lat": 47.520318,
   "lon": 19.220134
+ },
+ "1165 Budapest 16. ker., CENTENÁRIUMI ST. 24.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1165 Budapest 16. ker., CENTENÁRIUMI SÉTÁNY 24.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1165 Budapest 16. ker., GÉZA U. 55.": {
+  "geoApprox": false,
+  "lat": 47.51884,
+  "lon": 19.188427
+ },
+ "1165 Budapest 16. ker., HUNYADVÁR U. 43/B.": {
+  "geoApprox": false,
+  "lat": 47.510099,
+  "lon": 19.204194
+ },
+ "1165 Budapest 16. ker., HUNYADVÁR UTCA 43/B.": {
+  "geoApprox": false,
+  "lat": 47.510099,
+  "lon": 19.204194
+ },
+ "1165 Budapest 16. ker., Hunyadvár utca 43/B.": {
+  "geoApprox": false,
+  "lat": 47.510099,
+  "lon": 19.204194
  },
  "1165 Budapest XVI. kerület, Arany János utca 100.": {
   "geoApprox": false,
@@ -11154,6 +13434,51 @@
   "lat": 47.488844,
   "lon": 19.288722
  },
+ "1171 Budapest 17. ker., CSONGRÁD UTCA 2": {
+  "geoApprox": false,
+  "lat": 47.472409,
+  "lon": 19.301111
+ },
+ "1171 Budapest 17. ker., PÉCELI ÚT 190": {
+  "geoApprox": false,
+  "lat": 47.488844,
+  "lon": 19.288722
+ },
+ "1171 Budapest 17. ker., PÉCELI ÚT 190.": {
+  "geoApprox": false,
+  "lat": 47.488844,
+  "lon": 19.288722
+ },
+ "1171 Budapest 17. ker., Péceli u. 190.": {
+  "geoApprox": false,
+  "lat": 47.46946,
+  "lon": 19.097814
+ },
+ "1171 Budapest 17. ker., Péceli út 190.": {
+  "geoApprox": false,
+  "lat": 47.483452,
+  "lon": 19.275959
+ },
+ "1171 Budapest 17. ker., SISAKOS SÁSKA U. 1/b": {
+  "geoApprox": false,
+  "lat": 47.470841,
+  "lon": 19.291447
+ },
+ "1171 Budapest 17. ker., Sisakos sáska utca 1/B": {
+  "geoApprox": false,
+  "lat": 47.470841,
+  "lon": 19.291447
+ },
+ "1171 Budapest 17. ker., ZRINYI UTCA 226.": {
+  "geoApprox": false,
+  "lat": 47.460178,
+  "lon": 19.299716
+ },
+ "1171 Budapest 17. ker., ZRÍNYI U. 226.": {
+  "geoApprox": false,
+  "lat": 47.460178,
+  "lon": 19.299716
+ },
  "1171 Budapest XVII. kerület, 525. u. 4.": {
   "geoApprox": false,
   "lat": 47.498049,
@@ -11289,6 +13614,31 @@
   "lat": 47.460178,
   "lon": 19.299716
  },
+ "1172 Budapest 17. ker., DIADAL UTCA 40": {
+  "geoApprox": false,
+  "lat": 47.493752,
+  "lon": 19.270104
+ },
+ "1172 Budapest 17. ker., DIADAL UTCA 40.": {
+  "geoApprox": false,
+  "lat": 47.493752,
+  "lon": 19.270104
+ },
+ "1172 Budapest 17. ker., HŐSÖK TERE 3.": {
+  "geoApprox": false,
+  "lat": 47.49014,
+  "lon": 19.259115
+ },
+ "1172 Budapest 17. ker., IX. U. 2-4.": {
+  "geoApprox": false,
+  "lat": 47.489516,
+  "lon": 19.258288
+ },
+ "1172 Budapest 17. ker., NAPLÁS UTCA 58.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
  "1172 Budapest XVII. kerület, DIADAL UTCA 40": {
   "geoApprox": false,
   "lat": 47.493752,
@@ -11418,6 +13768,66 @@
   "geoApprox": false,
   "lat": 47.482057,
   "lon": 19.270445
+ },
+ "1173 Budapest 17. ker., 525 TÉR 4.": {
+  "geoApprox": false,
+  "lat": 47.481361,
+  "lon": 19.218418
+ },
+ "1173 Budapest 17. ker., EGÉSZSÉGHÁZ UTCA 3.": {
+  "geoApprox": false,
+  "lat": 47.479379,
+  "lon": 19.252148
+ },
+ "1173 Budapest 17. ker., EGÉSZSÉGHÁZ UTCA 40": {
+  "geoApprox": false,
+  "lat": 47.479754,
+  "lon": 19.248826
+ },
+ "1173 Budapest 17. ker., EGÉSZSÉGHÁZ UTCA 40.": {
+  "geoApprox": false,
+  "lat": 47.479754,
+  "lon": 19.248826
+ },
+ "1173 Budapest 17. ker., Egészségház u. 40.": {
+  "geoApprox": false,
+  "lat": 47.479754,
+  "lon": 19.248826
+ },
+ "1173 Budapest 17. ker., FERIHEGYI ÚT 81": {
+  "geoApprox": false,
+  "lat": 47.481162,
+  "lon": 19.256978
+ },
+ "1173 Budapest 17. ker., FERIHEGYI ÚT 81.": {
+  "geoApprox": false,
+  "lat": 47.481162,
+  "lon": 19.256978
+ },
+ "1173 Budapest 17. ker., Ferihegyi út 81.": {
+  "geoApprox": false,
+  "lat": 47.481162,
+  "lon": 19.256978
+ },
+ "1173 Budapest 17. ker., USZODA U.3.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1173 Budapest 17. ker., ÚJLAK UTCA 11.": {
+  "geoApprox": false,
+  "lat": 47.480939,
+  "lon": 19.23898
+ },
+ "1173 Budapest 17. ker., ÚJLAK UTCA 13": {
+  "geoApprox": false,
+  "lat": 47.48103,
+  "lon": 19.23833
+ },
+ "1173 Budapest 17. ker., ÚJLAK UTCA 13.": {
+  "geoApprox": false,
+  "lat": 47.48103,
+  "lon": 19.23833
  },
  "1173 Budapest XVII. kerület, 525 TÉR 4.": {
   "geoApprox": false,
@@ -11704,6 +14114,16 @@
   "lat": 47.48215,
   "lon": 19.237986
  },
+ "1174 Budapest 17. ker., BAROSS UTCA 18.": {
+  "geoApprox": false,
+  "lat": 47.46648,
+  "lon": 19.242841
+ },
+ "1174 Budapest 17. ker., KÉP UTCA 1/B.": {
+  "geoApprox": false,
+  "lat": 47.46763,
+  "lon": 19.241996
+ },
  "1174 Budapest XVII. kerület, BAROSS UTCA 18.": {
   "geoApprox": false,
   "lat": 47.46648,
@@ -11755,6 +14175,46 @@
   "lon": 19.172185
  },
  "1181 Budapest 18, Vándor Sándor. u. 1.": {
+  "geoApprox": false,
+  "lat": 47.434469,
+  "lon": 19.172185
+ },
+ "1181 Budapest 18. ker., KONDOR BÉLA SÉTANY 13/A.": {
+  "geoApprox": false,
+  "lat": 47.438365,
+  "lon": 19.16589
+ },
+ "1181 Budapest 18. ker., KONDOR BÉLA SÉTANY 13/B.": {
+  "geoApprox": false,
+  "lat": 47.436537,
+  "lon": 19.164631
+ },
+ "1181 Budapest 18. ker., KONDOR BÉLA SÉTÁNY 13/A.": {
+  "geoApprox": false,
+  "lat": 47.438365,
+  "lon": 19.16589
+ },
+ "1181 Budapest 18. ker., KONDOR BÉLA SÉTÁNY 13/B.": {
+  "geoApprox": false,
+  "lat": 47.436537,
+  "lon": 19.164631
+ },
+ "1181 Budapest 18. ker., VÁNDOR SÁNDOR UTCA 1.": {
+  "geoApprox": false,
+  "lat": 47.434469,
+  "lon": 19.172185
+ },
+ "1181 Budapest 18. ker., Vándor Sándor u. 1.": {
+  "geoApprox": false,
+  "lat": 47.434469,
+  "lon": 19.172185
+ },
+ "1181 Budapest 18. ker., Vándor Sándor utca 1.": {
+  "geoApprox": false,
+  "lat": 47.434469,
+  "lon": 19.172185
+ },
+ "1181 Budapest 18. ker., Vándor Sándor. u. 1.": {
   "geoApprox": false,
   "lat": 47.434469,
   "lon": 19.172185
@@ -11894,6 +14354,41 @@
   "lat": 47.428072,
   "lon": 19.21974
  },
+ "1182 Budapest 18. ker., CZIFFRA GYÖRGY UTCA 53.": {
+  "geoApprox": false,
+  "lat": 47.432682,
+  "lon": 19.189234
+ },
+ "1182 Budapest 18. ker., CZIFFRA GYÖRGY UTCA 53/A.": {
+  "geoApprox": false,
+  "lat": 47.432682,
+  "lon": 19.189234
+ },
+ "1182 Budapest 18. ker., CZIFRA GYÖRGY UTCA 53.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1182 Budapest 18. ker., KONDOR BÉLA SÉTANY 13/B.": {
+  "geoApprox": false,
+  "lat": 47.440179,
+  "lon": 19.168074
+ },
+ "1182 Budapest 18. ker., KONDOR BÉLA SÉTÁNY 13/B.": {
+  "geoApprox": false,
+  "lat": 47.440179,
+  "lon": 19.168074
+ },
+ "1182 Budapest 18. ker., ÜLLŐI ÚT 761.": {
+  "geoApprox": false,
+  "lat": 47.428072,
+  "lon": 19.21974
+ },
+ "1182 Budapest 18. ker., Üllői út 761.": {
+  "geoApprox": false,
+  "lat": 47.428072,
+  "lon": 19.21974
+ },
  "1182 Budapest XVIII. kerület, Bercsényi utca 73.": {
   "geoApprox": false,
   "lat": 47.449274,
@@ -12014,6 +14509,41 @@
   "lat": 47.497879,
   "lon": 19.040238
  },
+ "1183 Budapest 18. ker., ATTILA UTCA 9.": {
+  "geoApprox": false,
+  "lat": 47.457287,
+  "lon": 19.184182
+ },
+ "1183 Budapest 18. ker., DOLGOZÓ ÚT 12.": {
+  "geoApprox": false,
+  "lat": 47.450564,
+  "lon": 19.173559
+ },
+ "1183 Budapest 18. ker., THÖKÖLY ÚT 3.": {
+  "geoApprox": false,
+  "lat": 47.443639,
+  "lon": 19.181765
+ },
+ "1183 Budapest 18. ker., Thököly út 3.": {
+  "geoApprox": false,
+  "lat": 47.443639,
+  "lon": 19.181765
+ },
+ "1183 Budapest 18. ker., Thököly út. 3.": {
+  "geoApprox": false,
+  "lat": 47.443639,
+  "lon": 19.181765
+ },
+ "1183 Budapest 18. ker., VAJK UTCA 4.": {
+  "geoApprox": false,
+  "lat": 47.456539,
+  "lon": 19.123659
+ },
+ "1183 Budapest 18. ker., Vándor Sándot u.1.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
  "1183 Budapest XVIII. kerület, ATTILA UTCA 9.": {
   "geoApprox": false,
   "lat": 47.457287,
@@ -12129,6 +14659,21 @@
   "lat": 47.497879,
   "lon": 19.040238
  },
+ "1184 Budapest 18. ker., DOLGOZÓ UTCA 12.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1184 Budapest 18. ker., DOLGOZÓ ÚT 12.": {
+  "geoApprox": false,
+  "lat": 47.450564,
+  "lon": 19.173559
+ },
+ "1184 Budapest 18. ker., Dolgozó utca 12.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
  "1184 Budapest XVIII. kerület, DOLGOZÓ UTCA 12.": {
   "geoApprox": true,
   "lat": 47.497879,
@@ -12189,6 +14734,16 @@
   "lat": 47.439817,
   "lon": 19.22383
  },
+ "1185 Budapest 18. ker., Ferihegy": {
+  "geoApprox": false,
+  "lat": 47.439817,
+  "lon": 19.22383
+ },
+ "1185 Budapest 18. ker., ÜLLŐI ÚT 761.": {
+  "geoApprox": false,
+  "lat": 47.428072,
+  "lon": 19.21974
+ },
  "1185 Budapest XVIII. kerület, BUD Liszt Ferenc Nemzetközi Repülőtér repülőtér": {
   "geoApprox": false,
   "lat": 47.439817,
@@ -12243,6 +14798,46 @@
   "geoApprox": false,
   "lat": 47.497733,
   "lon": 19.162576
+ },
+ "1188 Budapest 18. ker., BERCSÉNYI MIKLÓS UTCA 73.": {
+  "geoApprox": false,
+  "lat": 47.405831,
+  "lon": 19.179108
+ },
+ "1188 Budapest 18. ker., BERCSÉNYI UTCA 73": {
+  "geoApprox": false,
+  "lat": 47.449274,
+  "lon": 19.127475
+ },
+ "1188 Budapest 18. ker., BERCSÉNYI UTCA 73.": {
+  "geoApprox": false,
+  "lat": 47.449274,
+  "lon": 19.127475
+ },
+ "1188 Budapest 18. ker., NEMES UTCA 18-20.": {
+  "geoApprox": false,
+  "lat": 47.405915,
+  "lon": 19.188578
+ },
+ "1188 Budapest 18. ker., NEMES UTCA 22.": {
+  "geoApprox": false,
+  "lat": 47.405184,
+  "lon": 19.188053
+ },
+ "1188 Budapest 18. ker., Nemes u. 18 - 20.": {
+  "geoApprox": false,
+  "lat": 47.405915,
+  "lon": 19.188578
+ },
+ "1188 Budapest 18. ker., Nemes u. 18-20.": {
+  "geoApprox": false,
+  "lat": 47.405915,
+  "lon": 19.188578
+ },
+ "1188 Budapest 18. ker., Nemes u. 22.": {
+  "geoApprox": false,
+  "lat": 47.405184,
+  "lon": 19.188053
  },
  "1188 Budapest XVIII. kerület, BERCSÉNYI MIKLÓS UTCA 73.": {
   "geoApprox": false,
@@ -12344,6 +14939,21 @@
   "lat": 47.405915,
   "lon": 19.188578
  },
+ "1191 Budapest 19. ker., BERZSENYI UTCA 3.": {
+  "geoApprox": false,
+  "lat": 47.460363,
+  "lon": 19.13368
+ },
+ "1191 Budapest 19. ker., Berzsenyi utca 3.": {
+  "geoApprox": false,
+  "lat": 47.460363,
+  "lon": 19.13368
+ },
+ "1191 Budapest 19. ker., Berzsenyi út 3.": {
+  "geoApprox": false,
+  "lat": 47.460395,
+  "lon": 19.134671
+ },
  "1191 Budapest XIX. kerület, BERZSENYI UTCA 3.": {
   "geoApprox": false,
   "lat": 47.460363,
@@ -12444,6 +15054,31 @@
   "lat": 47.459522,
   "lon": 19.124534
  },
+ "1192 Budapest 19. ker., MADÁCH UTCA 5/A.": {
+  "geoApprox": false,
+  "lat": 47.459522,
+  "lon": 19.124534
+ },
+ "1192 Budapest 19. ker., Madách u. 5.": {
+  "geoApprox": false,
+  "lat": 47.573029,
+  "lon": 19.098144
+ },
+ "1192 Budapest 19. ker., Madách utca 5/A.": {
+  "geoApprox": false,
+  "lat": 47.459522,
+  "lon": 19.124534
+ },
+ "1192 Budapest 19. ker., Madách utca 5/a": {
+  "geoApprox": false,
+  "lat": 47.459522,
+  "lon": 19.124534
+ },
+ "1192 Budapest 19. ker., Madách utca 5/a.": {
+  "geoApprox": false,
+  "lat": 47.459522,
+  "lon": 19.124534
+ },
  "1192 Budapest XIX. kerület, Gutenberg krt. 6.": {
   "geoApprox": false,
   "lat": 47.454437,
@@ -12508,6 +15143,36 @@
   "geoApprox": false,
   "lat": 47.459522,
   "lon": 19.124534
+ },
+ "1193 Budapest 19. ker., CSOKONAI UTCA 1-3": {
+  "geoApprox": false,
+  "lat": 47.457019,
+  "lon": 19.148189
+ },
+ "1193 Budapest 19. ker., CSOKONAI UTCA 1-3.": {
+  "geoApprox": false,
+  "lat": 47.457019,
+  "lon": 19.148189
+ },
+ "1193 Budapest 19. ker., Csokonai u.1-3.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1193 Budapest 19. ker., Csokonai utca 1-3.": {
+  "geoApprox": false,
+  "lat": 47.457019,
+  "lon": 19.148189
+ },
+ "1193 Budapest 19. ker., Madách u. 5/a.": {
+  "geoApprox": false,
+  "lat": 47.459522,
+  "lon": 19.124534
+ },
+ "1193 Budapest 19. ker., TÁNCSICS MIHÁLY UTCA 3": {
+  "geoApprox": false,
+  "lat": 47.458525,
+  "lon": 19.156494
  },
  "1193 Budapest XIX. kerület, CSOKONAI UTCA 1-3": {
   "geoApprox": false,
@@ -12588,6 +15253,21 @@
   "geoApprox": false,
   "lat": 47.454635,
   "lon": 19.153272
+ },
+ "1194 Budapest 19. ker., CSENGÖ UTCA 3.": {
+  "geoApprox": false,
+  "lat": 47.439372,
+  "lon": 19.138628
+ },
+ "1194 Budapest 19. ker., CSENGŐ UTCA 3.": {
+  "geoApprox": false,
+  "lat": 47.439372,
+  "lon": 19.138628
+ },
+ "1194 Budapest 19. ker., Csengő utca 3.": {
+  "geoApprox": false,
+  "lat": 47.439372,
+  "lon": 19.138628
  },
  "1194 Budapest XIX. kerület, CSENGÖ UTCA 3.": {
   "geoApprox": false,
@@ -12709,6 +15389,66 @@
   "lat": 47.452398,
   "lon": 19.144047
  },
+ "1195 Budapest 19. ker., ADY ENDRE UTCA 122.": {
+  "geoApprox": false,
+  "lat": 47.428756,
+  "lon": 19.116877
+ },
+ "1195 Budapest 19. ker., ADY ENRDE UTCA 122.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1195 Budapest 19. ker., Ady Endre u. 122.": {
+  "geoApprox": false,
+  "lat": 47.428756,
+  "lon": 19.116877
+ },
+ "1195 Budapest 19. ker., Ady Endre Út 122-124": {
+  "geoApprox": false,
+  "lat": 47.45211,
+  "lon": 19.143749
+ },
+ "1195 Budapest 19. ker., Ady Endre út 122-124.": {
+  "geoApprox": false,
+  "lat": 47.452438,
+  "lon": 19.143594
+ },
+ "1195 Budapest 19. ker., Ady Endre út 122-124. 3.em. 305.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1195 Budapest 19. ker., Ady Endre út 122-124. III.em.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1195 Budapest 19. ker., Ady Endre út 122-124. III.em. 305.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1195 Budapest 19. ker., Ady Endre út 122-124. III.em. 309.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1195 Budapest 19. ker., Ady Endre út 122-124. III/307.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1195 Budapest 19. ker., Ady Endre út 122-124. III/310.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1195 Budapest 19. ker., Ady Endre út 122.": {
+  "geoApprox": false,
+  "lat": 47.452398,
+  "lon": 19.144047
+ },
  "1195 Budapest XIX. kerület, ADY ENDRE UTCA 122.": {
   "geoApprox": false,
   "lat": 47.428756,
@@ -12804,6 +15544,11 @@
   "lat": 47.458142,
   "lon": 19.142508
  },
+ "1196 Budapest 19. ker., NAGYSÁNDOR J.U.72. CSENGŐ U.TCA 3.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
  "1196 Budapest XIX. kerület, NAGYSÁNDOR J.U.72. CSENGŐ U.TCA 3.": {
   "geoApprox": true,
   "lat": 47.497879,
@@ -12848,6 +15593,26 @@
   "geoApprox": false,
   "lat": 47.435838,
   "lon": 19.125729
+ },
+ "1201 Budapest 20. ker., Bácska tér 3.": {
+  "geoApprox": false,
+  "lat": 47.435838,
+  "lon": 19.125729
+ },
+ "1201 Budapest 20. ker., VIRÁG BENEDEK UTCA 44.": {
+  "geoApprox": false,
+  "lat": 47.428636,
+  "lon": 19.124222
+ },
+ "1201 Budapest 20. ker., VÖRÖSMARTY UTCA 5-7.": {
+  "geoApprox": false,
+  "lat": 47.424248,
+  "lon": 19.116027
+ },
+ "1201 Budapest 20. ker., VÖRÖSMARTY UTCA 5.": {
+  "geoApprox": false,
+  "lat": 47.436076,
+  "lon": 19.103649
  },
  "1201 Budapest XX. kerület, Ady Endre utca 1.": {
   "geoApprox": false,
@@ -12949,6 +15714,21 @@
   "lat": 47.435838,
   "lon": 19.125729
  },
+ "1202 Budapest 20. ker., BÁCSKA TÉR 3.": {
+  "geoApprox": false,
+  "lat": 47.435838,
+  "lon": 19.125729
+ },
+ "1202 Budapest 20. ker., Bácska tér 3.": {
+  "geoApprox": false,
+  "lat": 47.435838,
+  "lon": 19.125729
+ },
+ "1202 Budapest 20. ker., SZABADKA UTCA 47-49.": {
+  "geoApprox": false,
+  "lat": 47.433778,
+  "lon": 19.138398
+ },
  "1202 Budapest XX. kerület, BÁCSKA TÉR 3.": {
   "geoApprox": false,
   "lat": 47.435838,
@@ -13018,6 +15798,46 @@
   "geoApprox": false,
   "lat": 47.440952,
   "lon": 19.102076
+ },
+ "1203 Budapest 20. ker., ADY ENDRE UTCA 1.": {
+  "geoApprox": false,
+  "lat": 47.440952,
+  "lon": 19.102076
+ },
+ "1203 Budapest 20. ker., Ady E. u. 1.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1203 Budapest 20. ker., Ady E. u.1.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1203 Budapest 20. ker., Ady Endre u. 1.": {
+  "geoApprox": false,
+  "lat": 47.440952,
+  "lon": 19.102076
+ },
+ "1203 Budapest 20. ker., Ady Endre utca. 1.": {
+  "geoApprox": false,
+  "lat": 47.440952,
+  "lon": 19.102076
+ },
+ "1203 Budapest 20. ker., VAS GERBEN UTCA 1.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1203 Budapest 20. ker., VAS GEREBEN UTCA 1.": {
+  "geoApprox": false,
+  "lat": 47.443068,
+  "lon": 19.110509
+ },
+ "1203 Budapest 20. ker., ZAMÁRDI UTCA 11.": {
+  "geoApprox": false,
+  "lat": 47.434011,
+  "lon": 19.092308
  },
  "1203 Budapest XX. kerület, ADY ENDRE UTCA 1.": {
   "geoApprox": false,
@@ -13154,6 +15974,11 @@
   "lat": 47.434381,
   "lon": 19.092841
  },
+ "1204 Budapest 20. ker., PACSÍRTA UTCA 157.": {
+  "geoApprox": false,
+  "lat": 47.429,
+  "lon": 19.127881
+ },
  "1204 Budapest XX. kerület, Köves  út 1. ": {
   "geoApprox": false,
   "lat": 47.425048,
@@ -13234,6 +16059,11 @@
   "lat": 47.432262,
   "lon": 19.118396
  },
+ "1205 Budapest 20. ker., JÓKAI MÓR UTCA 74-76.": {
+  "geoApprox": false,
+  "lat": 47.442541,
+  "lon": 19.113243
+ },
  "1205 Budapest XX. kerület, JÓKAI MÓR U. 74-76.": {
   "geoApprox": false,
   "lat": 47.442541,
@@ -13283,6 +16113,26 @@
   "geoApprox": false,
   "lat": 47.423965,
   "lon": 19.070519
+ },
+ "1211 Budapest 21. ker., Görgey Artúr tér 8.": {
+  "geoApprox": false,
+  "lat": 47.423965,
+  "lon": 19.070519
+ },
+ "1211 Budapest 21. ker., KOSSUTH L. U. 95.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1211 Budapest 21. ker., KOSSUTH LAJOS UTCA 70-86.": {
+  "geoApprox": false,
+  "lat": 47.433631,
+  "lon": 19.070644
+ },
+ "1211 Budapest 21. ker., KOSSUTH LAJOS UTCA 95.": {
+  "geoApprox": false,
+  "lat": 47.425754,
+  "lon": 19.069544
  },
  "1211 Budapest XXI. kerület, Görgey Artúr tér 8.": {
   "geoApprox": false,
@@ -13404,6 +16254,46 @@
   "lat": 47.497879,
   "lon": 19.040238
  },
+ "1212 Budapest 21. ker., GÖRGEY ARTÚR TÉR 6.": {
+  "geoApprox": false,
+  "lat": 47.423691,
+  "lon": 19.072468
+ },
+ "1212 Budapest 21. ker., GÖRGEY ARTÚR TÉR 8.": {
+  "geoApprox": false,
+  "lat": 47.423965,
+  "lon": 19.070519
+ },
+ "1212 Budapest 21. ker., Gögey Artúr tér 8.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1212 Budapest 21. ker., Görgey Artúr tér 6.": {
+  "geoApprox": false,
+  "lat": 47.423691,
+  "lon": 19.072468
+ },
+ "1212 Budapest 21. ker., Görgey Artúr tér 8.": {
+  "geoApprox": false,
+  "lat": 47.423965,
+  "lon": 19.070519
+ },
+ "1212 Budapest 21. ker., Görgey Artúr tér 8. III/308,": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1212 Budapest 21. ker., Görgey Artúr tér 8. III/310.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1212 Budapest 21. ker., SZÉCHENYI U. 88.": {
+  "geoApprox": false,
+  "lat": 47.422656,
+  "lon": 19.086618
+ },
  "1212 Budapest XXI. kerület, GÖRGEY ARTÚR TÉR 6.": {
   "geoApprox": false,
   "lat": 47.423691,
@@ -13509,6 +16399,21 @@
   "lat": 47.412218,
   "lon": 19.062505
  },
+ "1213 Budapest 21. ker., CSIKÓ SÉTÁNY 9.": {
+  "geoApprox": false,
+  "lat": 47.407678,
+  "lon": 19.071448
+ },
+ "1213 Budapest 21. ker., SZENT ISTVÁN ÚT 217-219": {
+  "geoApprox": false,
+  "lat": 47.404533,
+  "lon": 19.090913
+ },
+ "1213 Budapest 21. ker., SZENT ISTVÁN ÚT 217-219.": {
+  "geoApprox": false,
+  "lat": 47.404533,
+  "lon": 19.090913
+ },
  "1213 Budapest XXI. kerület, CSIKÓ SÉTÁNY 9.": {
   "geoApprox": false,
   "lat": 47.407678,
@@ -13589,6 +16494,31 @@
   "lat": 47.412478,
   "lon": 19.061571
  },
+ "1214 Budapest 21. ker., GÖRGEY ARTÚR TÉR 6.": {
+  "geoApprox": false,
+  "lat": 47.422106,
+  "lon": 19.070821
+ },
+ "1214 Budapest 21. ker., VÉNUSZ UTCA 2.": {
+  "geoApprox": false,
+  "lat": 47.412218,
+  "lon": 19.062505
+ },
+ "1214 Budapest 21. ker., Vénusz u. 2.": {
+  "geoApprox": false,
+  "lat": 47.412218,
+  "lon": 19.062505
+ },
+ "1214 Budapest 21. ker., Vénusz u. 2. 1/1": {
+  "geoApprox": false,
+  "lat": 47.412478,
+  "lon": 19.061571
+ },
+ "1214 Budapest 21. ker., Vénusz u. 2. 1/2.": {
+  "geoApprox": false,
+  "lat": 47.412478,
+  "lon": 19.061571
+ },
  "1214 Budapest XXI. kerület, Csikó sétány 9.": {
   "geoApprox": false,
   "lat": 47.407678,
@@ -13658,6 +16588,16 @@
   "geoApprox": false,
   "lat": 47.411728,
   "lon": 19.061868
+ },
+ "1215 Budapest 21. ker., TÁNCSICS MIHÁLY UTCA 4.": {
+  "geoApprox": false,
+  "lat": 47.434344,
+  "lon": 19.073679
+ },
+ "1215 Budapest 21. ker., TÁNCSICS MIHÁLY ÚT 4.": {
+  "geoApprox": false,
+  "lat": 47.492053,
+  "lon": 19.093867
  },
  "1215 Budapest XXI. kerület, TÁNCSICS MIHÁLY UTCA 4.": {
   "geoApprox": false,
@@ -13730,6 +16670,51 @@
   "lon": 19.040238
  },
  "1221 Budapest 22, Tolcsvai u. 7.": {
+  "geoApprox": false,
+  "lat": 47.414317,
+  "lon": 19.031967
+ },
+ "1221 Budapest 22. ker., Duna u. 1-3. I.em. M 120": {
+  "geoApprox": false,
+  "lat": 47.430164,
+  "lon": 19.040586
+ },
+ "1221 Budapest 22. ker., KÁLDOR ADOLF U. 5-9.": {
+  "geoApprox": false,
+  "lat": 47.429565,
+  "lon": 19.038617
+ },
+ "1221 Budapest 22. ker., KÁLDOR ADOLF UTCA 3-5.": {
+  "geoApprox": false,
+  "lat": 47.429483,
+  "lon": 19.038707
+ },
+ "1221 Budapest 22. ker., KÁLDOR ADOLF UTCA 3-7.": {
+  "geoApprox": false,
+  "lat": 47.429459,
+  "lon": 19.039586
+ },
+ "1221 Budapest 22. ker., KÁLDOR ADOLF UTCA 5-9.": {
+  "geoApprox": false,
+  "lat": 47.429565,
+  "lon": 19.038617
+ },
+ "1221 Budapest 22. ker., Káldor Adolf u. 5-9.": {
+  "geoApprox": false,
+  "lat": 47.429565,
+  "lon": 19.038617
+ },
+ "1221 Budapest 22. ker., Káldor Adolf u.5-9.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1221 Budapest 22. ker., Káldor Adolf utca 5-9": {
+  "geoApprox": false,
+  "lat": 47.429565,
+  "lon": 19.038617
+ },
+ "1221 Budapest 22. ker., Tolcsvai u. 7.": {
   "geoApprox": false,
   "lat": 47.414317,
   "lon": 19.031967
@@ -13889,6 +16874,26 @@
   "lat": 47.497879,
   "lon": 19.040238
  },
+ "1222 Budapest 22. ker., MAGASHÁZ UTCA 2.": {
+  "geoApprox": false,
+  "lat": 47.414606,
+  "lon": 19.031648
+ },
+ "1222 Budapest 22. ker., MAGASHÁZ UTCA 3.": {
+  "geoApprox": false,
+  "lat": 47.414346,
+  "lon": 19.031767
+ },
+ "1222 Budapest 22. ker., Tolcsvai utca 7.": {
+  "geoApprox": false,
+  "lat": 47.414317,
+  "lon": 19.031967
+ },
+ "1222 Budapest 22. ker., Tolcsvay u.6/c": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
  "1222 Budapest XXII. kerület, Gádor utca 79.": {
   "geoApprox": false,
   "lat": 47.424167,
@@ -13974,6 +16979,31 @@
   "lat": 47.497879,
   "lon": 19.040238
  },
+ "1223 Budapest 22. ker., GÁDOR U. 79.": {
+  "geoApprox": false,
+  "lat": 47.424167,
+  "lon": 19.020679
+ },
+ "1223 Budapest 22. ker., GÁDOR UTCA 79.": {
+  "geoApprox": false,
+  "lat": 47.424167,
+  "lon": 19.020679
+ },
+ "1223 Budapest 22. ker., KAPU UTCA 2.": {
+  "geoApprox": false,
+  "lat": 47.416412,
+  "lon": 19.012912
+ },
+ "1223 Budapest 22. ker., KAPU UTCA 4.": {
+  "geoApprox": false,
+  "lat": 47.416669,
+  "lon": 19.012921
+ },
+ "1223 Budapest 22. ker., Tolcsvay u.6/c": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
  "1223 Budapest XXII. kerület, GÁDOR U. 79.": {
   "geoApprox": false,
   "lat": 47.424167,
@@ -14028,6 +17058,31 @@
   "geoApprox": false,
   "lat": 47.406764,
   "lon": 19.006377
+ },
+ "1224 Budapest 22. ker., BAROSS G. TELEP III. UTCA 1.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1224 Budapest 22. ker., BAROSS G. TELEP XII.UTCA 28.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1224 Budapest 22. ker., BAROSS G.TELEP III. UTCA 1.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1224 Budapest 22. ker., BAROSS GÁBOR TELEP III. UTCA 1.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1224 Budapest 22. ker., III. UTCA 1.": {
+  "geoApprox": false,
+  "lat": 47.402793,
+  "lon": 19.002632
  },
  "1224 Budapest XXII. kerület, BAROSS G. TELEP III. UTCA 1.": {
   "geoApprox": true,
@@ -14109,6 +17164,11 @@
   "lat": 47.417461,
   "lon": 18.986857
  },
+ "1225 Budapest 22. ker., BATTHYÁNY UTCA 10-12.": {
+  "geoApprox": false,
+  "lat": 47.394703,
+  "lon": 18.985423
+ },
  "1225 Budapest XXII. kerület, BATTHYÁNY UTCA 10-12.": {
   "geoApprox": false,
   "lat": 47.394703,
@@ -14160,6 +17220,31 @@
   "lon": 18.996375
  },
  "1237 Budapest 23, Újtelep út 4.": {
+  "geoApprox": false,
+  "lat": 47.416416,
+  "lon": 19.134663
+ },
+ "1237 Budapest 23. ker., Dinnyehegyi köz 1.": {
+  "geoApprox": false,
+  "lat": 47.415616,
+  "lon": 19.136501
+ },
+ "1237 Budapest 23. ker., SÓSMOCSÁR UTCA 1-3.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1237 Budapest 23. ker., Sósmocsár utca 1-3.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1237 Budapest 23. ker., Sósmocsár út 1-3.": {
+  "geoApprox": false,
+  "lat": 47.415551,
+  "lon": 19.134981
+ },
+ "1237 Budapest 23. ker., Újtelep út 4.": {
   "geoApprox": false,
   "lat": 47.416416,
   "lon": 19.134663
@@ -14239,6 +17324,31 @@
   "lat": 47.398637,
   "lon": 19.112596
  },
+ "1238 Budapest 23. ker., TÁNCSICS M. U. 104.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1238 Budapest 23. ker., TÁNCSICS M. UTCA 104.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1238 Budapest 23. ker., Táncsics M u. 104.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1238 Budapest 23. ker., Táncsics M. utca 104.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1238 Budapest 23. ker., Táncsics Mihály. u. 104.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
  "1238 Budapest XXIII. kerület, TÁNCSICS M. U. 104.": {
   "geoApprox": true,
   "lat": 47.497879,
@@ -14310,6 +17420,21 @@
   "lon": 19.112596
  },
  "1239 Budapest 23, Táncsics Mihály u. 104. II.em. 214.": {
+  "geoApprox": false,
+  "lat": 47.398637,
+  "lon": 19.112596
+ },
+ "1239 Budapest 23. ker., Táncsics M. u. 104.": {
+  "geoApprox": true,
+  "lat": 47.497879,
+  "lon": 19.040238
+ },
+ "1239 Budapest 23. ker., Táncsics Mihály u. 104.": {
+  "geoApprox": false,
+  "lat": 47.398637,
+  "lon": 19.112596
+ },
+ "1239 Budapest 23. ker., Táncsics Mihály u. 104. II.em. 214.": {
   "geoApprox": false,
   "lat": 47.398637,
   "lon": 19.112596

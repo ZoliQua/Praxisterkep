@@ -78,9 +78,17 @@ def download(name: str, entity_id: str, size: int, sleep: float) -> Path:
     RAW_DIR.mkdir(parents=True, exist_ok=True)
     out = RAW_DIR / f"{name}_{today}.jsonl.gz"
     meta_file = RAW_DIR / f"{name}_{today}.meta.json"
-    if out.exists():
+    part = RAW_DIR / f"{name}_{today}.jsonl.gz.part"
+    # A download is complete only when both files are there. The data used to
+    # be written straight to its final name, so a portal that dropped the
+    # connection on page 55 left a half register behind — and the next run
+    # said "already downloaded today" and kept it. The meta file is the
+    # receipt, so it decides.
+    if out.exists() and meta_file.exists():
         print(f"[{name}] already downloaded today — keeping {out.name}")
         return out
+    out.unlink(missing_ok=True)
+    part.unlink(missing_ok=True)
 
     first = fetch_page(entity_id, 0, size)
     fields = [f["fieldId"] for f in first["fieldNames"]]
@@ -90,7 +98,31 @@ def download(name: str, entity_id: str, size: int, sleep: float) -> Path:
 
     seen: set[str] = set()
     rows_written = 0
-    with gzip.open(out, "wt", encoding="utf-8") as fh:
+    try:
+        rows_written = _write_rows(part, entity_id, first, total, pages,
+                                    size, sleep, name, seen)
+    except BaseException:
+        # anything at all — a 404, a key that repeats, a keyboard interrupt:
+        # what is on disk is not a register and must not look like one
+        part.unlink(missing_ok=True)
+        raise
+    if rows_written != total:
+        part.unlink(missing_ok=True)
+        raise RuntimeError(f"{name}: wrote {rows_written} rows, expected {total}")
+    part.replace(out)
+    meta_file.write_text(json.dumps({
+        "entityId": entity_id, "date": today, "fields": fields,
+        "totalRowCount": total,
+    }, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(f"[{name}] OK — {rows_written} rows -> {out.name}")
+    return out
+
+
+def _write_rows(part, entity_id, first, total, pages, size, sleep,
+                name, seen) -> int:
+    """The page loop, writing to a temporary file. Returns the rows written."""
+    rows_written = 0
+    with gzip.open(part, "wt", encoding="utf-8") as fh:
         page = 0
         data = first
         while True:
@@ -113,16 +145,7 @@ def download(name: str, entity_id: str, size: int, sleep: float) -> Path:
                 print(f"[{name}] page {page}/{pages} ({rows_written} rows)")
             time.sleep(sleep)
             data = fetch_page(entity_id, page, size)
-
-    if rows_written != total:
-        out.unlink()
-        raise RuntimeError(f"{name}: wrote {rows_written} rows, expected {total}")
-    meta_file.write_text(json.dumps({
-        "entityId": entity_id, "date": today, "fields": fields,
-        "totalRowCount": total,
-    }, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"[{name}] OK — {rows_written} rows -> {out.name}")
-    return out
+    return rows_written
 
 
 def main() -> None:

@@ -21,7 +21,14 @@ from pathlib import Path
 import pandas as pd
 import requests
 
-from parse_dental import HU_MONTHS, ParseError, TYPE_MAP, _clean, canonical_county
+from parse_dental import (
+    HU_MONTHS,
+    TYPE_MAP,
+    ParseError,
+    _clean,
+    canonical_county,
+    resolve_capital,
+)
 from parse_gp import GP_TYPE_MAP
 from parse_ksh import normalize_settlement
 
@@ -93,7 +100,10 @@ def parse(html_path: Path, kind: str) -> tuple[str, list[dict]]:
                 "county": canonical_county(cells[0]),
                 "type": type_map[type_raw],
                 "postalCode": cells[2],
-                "settlement": cells[3],
+                # the OKFŐ list writes the capital as one town exactly as the
+                # NEAK vacancy list does; both sides are resolved the same way
+                # so the match key still meets (parse_dental.resolve_capital)
+                "settlement": resolve_capital(cells[3], cells[2]),
                 "vacantSince": _month(cells[4]),
                 "longTermSince": _month(cells[5]),
             })

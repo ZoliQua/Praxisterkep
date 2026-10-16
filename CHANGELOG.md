@@ -5,6 +5,42 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.42.0] — 2026-10-16
+
+A fővárosnak három neve volt, és emiatt Józsefváros három hely.
+
+### Javítva
+- **Egy írásmód a fővárosra, a helységnévtáré.** A NEAK ugyanazt a
+  kerületet háromféleképpen írja: a fogorvosi nyilvántartás
+  „Budapest 08”, a háziorvosi „Budapest VIII. kerület”, a
+  betöltetlenségi lista néhol csak „Budapest”. A településindex
+  azt a nevet használta, amit kapott — így Józsefváros három helyként
+  érkezett: az egyikben a betöltött körzet, a másikban a
+  betöltetlenek, a harmadikban semmi. **A saját lapja azt írta, hogy
+  nincs betöltetlen fogorvosi körzete, miközben a NEAK listáján 22 van
+  ott.** Mostantól minden forrás a KSH helységnévtárának alakjára
+  íródik át („Budapest 08. ker.”): mindkét nyilvántartás, mindkét
+  betöltetlenségi lista, a megszűnt lista ellátott települései, a
+  háziorvosi ellátott-település lista és az OKFŐ jegyzék.
+- **A kerület nélküli „Budapest" kerületet kap az irányítószámból.**
+  38 fogorvosi szolgálat (36 betöltetlen, 2 megszűnt) így szerepelt —
+  22 közülük egyetlen címen, az 1088 Szentkirályi u. 47. alatt. A
+  budapesti irányítószám 2–3. jegye a kerület; ellenőrizve azon az
+  1582 fővárosi soron, amelyik maga is megnevezi a kerületét: mind
+  egyezett. (A FIN-kód előtagja is kódolja, de **nem** általánosan —
+  1162 sor ellentmond neki —, ezért arra nem építünk.)
+- **Hatás:** a járáslapon már **nincs besorolatlan szolgálat**;
+  Józsefváros 23 fogorvosi körzetéből **22 betöltetlen (95,7%)** — ez
+  az ország legrosszabb fogorvosi járása, eddig sehol nem látszott. Az
+  országos és a megyei számok nem változtak (262/42, illetve 1026): azok
+  mindig is helyesek voltak, csak a főváros belső bontása nem.
+- **A félbemaradt EESZT-letöltés többé nem néz ki késznek.** A letöltés
+  eddig közvetlenül a végleges fájlba írt, így egy megszakadt
+  kapcsolat fél regisztert hagyott maga után — a következő futás pedig
+  „már letöltöttük ma” alapon elfogadta. Mostantól ideiglenes fájlba
+  tölt, és csak hibátlan befejezés után nevezi át; a meta-fájl a
+  nyugta. Négy félkész fájl törölve (egyikük már a git-ben volt).
+
 ## [1.41.0] — 2026-10-14
 
 **Járás szint.** A megye húsz sor, a település háromezer — a

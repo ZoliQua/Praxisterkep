@@ -9,6 +9,7 @@ from parse_dental import (
     extract_statement_month,
     parse_dissolved,
     parse_vacant,
+    resolve_capital,
 )
 
 FIXTURES = Path(__file__).parent / "fixtures"
@@ -77,3 +78,40 @@ def test_parse_date():
 def test_parse_population():
     assert _parse_population("2 928") == 2928
     assert _parse_population("") is None
+
+class TestResolveCapital:
+    """One spelling for the capital, whichever way NEAK types it.
+
+    The dental registry says "Budapest 08", the GP registry "Budapest VIII.
+    kerület", the vacancy list sometimes plain "Budapest" — and the
+    settlement index is keyed by what it is handed, so Józsefváros arrived as
+    three places and its own page read "no vacant dental district" with 22 of
+    them on NEAK's own list. The KSH gazetteer is the authority for the name.
+    """
+
+    @pytest.mark.parametrize("written", [
+        "Budapest 08", "Budapest VIII. kerület", "Budapest 08. ker.",
+        "BUDAPEST 08", "Budapest 8.",
+    ])
+    def test_every_spelling_lands_on_the_gazetteer_name(self, written):
+        assert resolve_capital(written) == "Budapest 08. ker."
+
+    @pytest.mark.parametrize("postal,expected", [
+        ("1088", "Budapest 08. ker."),
+        ("1051", "Budapest 05. ker."),
+        ("1239", "Budapest 23. ker."),
+        ("1118", "Budapest 11. ker."),
+    ])
+    def test_a_bare_budapest_takes_its_kerület_from_the_postal_code(
+            self, postal, expected):
+        assert resolve_capital("Budapest", postal) == expected
+
+    def test_leaves_every_other_town_alone(self):
+        assert resolve_capital("Szombathely", "9700") == "Szombathely"
+        assert resolve_capital("Budapesti úti telep", "2600") \
+            == "Budapesti úti telep"
+
+    @pytest.mark.parametrize("postal", ["", "9700", "1990", "108"])
+    def test_refuses_to_guess_without_a_usable_postal_code(self, postal):
+        # 1990 would be a 99th kerület; there are 23
+        assert resolve_capital("Budapest", postal) == "Budapest"
