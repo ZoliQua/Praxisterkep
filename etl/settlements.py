@@ -271,6 +271,9 @@ def build() -> dict:
             "county": e["county"],
             "district": e["district"],
             "population": e["population"],
+            # hectares, from the gazetteer: the one size measure our sources
+            # publish, and what a Budapest kerület is compared on
+            "area": e.get("area") or 0,
             "benefit": f"{county_key(e['county'])}|{normalize(e['name'])}" in benefit,
         }
 

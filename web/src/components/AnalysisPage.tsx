@@ -12,6 +12,7 @@ import { StatsSection } from './StatsSection';
 import { VersusSection } from './VersusSection';
 import { AccessSection } from './AccessSection';
 import { RiskSection } from './RiskSection';
+import { DistrictAnalysis } from './DistrictAnalysis';
 import { SurvivalSection } from './SurvivalSection';
 import { CoverageSection } from './CoverageSection';
 import { CompositeSection } from './CompositeSection';
@@ -42,7 +43,7 @@ export function AnalysisPage() {
       <nav className="page-toc">
         {(['statisztika', 'osszevetes', 'kockazat', 'tulel', 'orvosok',
            'lefedettseg', 'ugyelet', 'tavolsag', 'menetido', 'busz', 'index',
-           'hianyteruletek'] as const).map((id) => (
+           'jarasok', 'hianyteruletek'] as const).map((id) => (
           <a key={id} href={`#${id}`}>{t(`analysis.toc.${id}`)}</a>
         ))}
       </nav>
@@ -52,6 +53,7 @@ export function AnalysisPage() {
       <SurvivalSection kind={kind} />
       <WorkforceSection kind={kind} />
       <CoverageSection kind={kind} />
+      <DistrictAnalysis />
       <EmergencySection kind={kind} />
       <AccessSection />
       <TravelTimeSection />

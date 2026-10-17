@@ -19,6 +19,7 @@ import { CountyPicker } from './CountyPicker';
 import { CountyChurn } from './CountyChurn';
 import { AgeLegend, AgePie, type AgeKey } from './charts/AgePie';
 import { Donut, DonutLegend } from './charts/Donut';
+import { CompareBars } from './charts/DistrictFigures';
 import { PointGrid } from './charts/PointGrid';
 import { IconTooth } from './icons';
 import { vacancyOf } from '../lib/vacancy';
@@ -119,6 +120,19 @@ export function CountyPage() {
       ? null : { branch, state }));
   };
 
+  // what an average county looks like, so the card can say how this one
+  // compares — twenty rows, cheap enough to sum in the browser
+  const average = useMemo(() => {
+    const rows = data?.counties ?? [];
+    if (!rows.length) return null;
+    const mean = (f: (c: typeof rows[number]) => number) =>
+      rows.reduce((a, c) => a + f(c), 0) / rows.length;
+    return {
+      population: mean((c) => c.population),
+      settlements: mean((c) => c.settlements),
+    };
+  }, [data]);
+
   const gpRank = rankOf(data, county, (c) => vacantShare(c, 'gp'));
   const oncallRank = rankOf(data, county, (c) => c.medianOncallMinutes);
 
@@ -177,6 +191,36 @@ export function CountyPage() {
                   )}
                 </div>
               </article>
+
+              {/* how big a county this is, which a bare number never says */}
+              {agg && average && (
+                <article className="county-card county-card--wide">
+                  <div className="county-card__body">
+                    <div className="stat__value">{formatNumber(agg.settlements)}
+                      <span className="stat__of"> {t('county.settlementsOf')}</span>
+                    </div>
+                    <div className="stat__label">{t('county.sizeLabel')}</div>
+                    <CompareBars rows={[
+                      {
+                        key: 'settlements',
+                        label: t('county.benchSettlements'),
+                        value: agg.settlements,
+                        reference: average.settlements,
+                        referenceLabel: t('county.benchAverage'),
+                        format: (v) => formatDecimal(v.toFixed(v < 10 ? 1 : 0)),
+                      },
+                      {
+                        key: 'population',
+                        label: t('county.benchPopulation'),
+                        value: agg.population,
+                        reference: average.population,
+                        referenceLabel: t('county.benchAverage'),
+                        format: (v) => formatNumber(Math.round(v)),
+                      },
+                    ]} />
+                  </div>
+                </article>
+              )}
 
               {/* how many of its settlements have nobody under contract */}
               <article className="county-card">

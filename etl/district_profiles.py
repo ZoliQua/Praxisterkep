@@ -194,13 +194,15 @@ def build() -> dict:
     ages: dict[str, collections.Counter] = collections.defaultdict(collections.Counter)
     for p in profiles:
         age = p.get("age") or {}
-        total = age.get("total")
+        # the settlement profile carries the census counts under census*;
+        # `young`/`old` there are the shares applied to today's population
+        total = age.get("censusTotal")
         if not total:
             continue
         cell = ages[p["district"]]
         cell["total"] += total
-        cell["young"] += age.get("young") or 0
-        cell["old"] += age.get("old") or 0
+        cell["young"] += age.get("censusYoung") or 0
+        cell["old"] += age.get("censusOld") or 0
 
     # where the on-call points and the ambulance stations actually are
     points: dict[str, list[dict]] = {}
@@ -221,8 +223,10 @@ def build() -> dict:
         rows.sort(key=lambda r: (r["group"], r["settlement"]))
 
     pharmacies: collections.Counter = collections.Counter()
+    area: collections.Counter = collections.Counter()
     for p in profiles:
         pharmacies[p["district"]] += len(p.get("pharmacies") or [])
+        area[p["district"]] += p.get("area") or 0
 
     # How many of a járás's settlements the state itself classes as lagging
     # behind (105/2015. Korm. rendelet). The decree's complex indicator says
@@ -281,6 +285,7 @@ def build() -> dict:
                                        if r["group"] == "ambulance")
         out["emergency"] = points.get(name, [])
         out["pharmacies"] = pharmacies.get(name, 0)
+        out["area"] = area.get(name, 0)
         scores = index_scores.get(name) or []
         out["medianIndex"] = round(statistics.median(scores), 1) if scores else None
         # the state's own measure of how developed the járás is
@@ -301,9 +306,33 @@ def build() -> dict:
             }
         districts.append(out)
 
+    # What "an average járás" is, so a page can say how this one compares
+    # without every browser summing 197 rows. The capital's kerület are kept
+    # apart on purpose: a kerület is not a járás in any sense a reader means
+    # — 23 of them share one town — and averaging them together would make
+    # both numbers meaningless.
+    def mean_of(rows: list[dict], field: str) -> float | None:
+        values = [r[field] for r in rows if r.get(field)]
+        return round(sum(values) / len(values), 1) if values else None
+
+    country = [d for d in districts if not d["isCapital"]]
+    capital = [d for d in districts if d["isCapital"]]
+    benchmarks = {
+        scope: {
+            "count": len(rows),
+            "population": mean_of(rows, "population"),
+            "settlements": mean_of(rows, "settlements"),
+            "area": mean_of(rows, "area"),
+            "populationTotal": sum(r["population"] for r in rows),
+            "areaTotal": sum(r.get("area") or 0 for r in rows),
+        }
+        for scope, rows in (("jaras", country), ("capital", capital))
+    }
+
     result = {
         "schemaVersion": SCHEMA_VERSION,
         "dataMonth": src.get("dataMonth", ""),
+        "benchmarks": benchmarks,
         # what the development figures are, and as of when: the decree is a
         # standing classification from 2014, not a reading of today
         "development": {

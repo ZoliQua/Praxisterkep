@@ -1122,7 +1122,8 @@
       "busz": "Busszal elérhető?",
       "statisztika": "Országos trendek",
       "osszevetes": "Háziorvos vs Fogorvos",
-      "tavolsag": "Távolság légvonalban"
+      "tavolsag": "Távolság légvonalban",
+      "jarasok": "Járási kép"
     }
   },
   "vedono": {
@@ -1854,7 +1855,12 @@
     },
     "filtered": "Csak azok a települések látszanak, ahol a {branch} ellátás: {state} ({n} település).",
     "clearFilter": "Mind",
-    "pointUnknownShort": "telephely nélkül"
+    "pointUnknownShort": "telephely nélkül",
+    "settlementsOf": "település",
+    "sizeLabel": "mekkora megye ez?",
+    "benchSettlements": "Települések száma",
+    "benchPopulation": "Lakosság",
+    "benchAverage": "átlagos megye"
   },
   "next": {
     "heading": "Mit nézz meg ezután?",
@@ -2032,7 +2038,7 @@
     "laggingParts": "{socio} társadalmi-gazdasági, {unemployment} munkanélküliséggel sújtott, {temporary} átmenetileg",
     "laggingPopulation": "a lakosság {share}-a él bennük",
     "distHeading": "Hol áll ez a 197 járás között?",
-    "distExplain": "Minden pont egy járás, a kiválasztott kiemelve. A rangsorszám önmagában félrevezet: a 103. lehet hajszálnyira a mediántól és félúton a mélypontig is. Válts mértéket, vigyéd rá az egeret, vagy kattints egy másik járásra.",
+    "distExplain": "Minden oszlop egy sáv: hány járás esik bele. A kiválasztott járás oszlopa kiemelve, alatta a pálcika mutatja a pontos értékét. A rangsorszám önmagában félrevezet: a 103. lehet hajszálnyira a mediántól és félúton a mélypontig is. Válts mértéket, vagy vigyéd rá az egeret egy oszlopra — alatta megjelennek a járások, és át lehet kattintani rájuk.",
     "distMedian": "medián: {n}",
     "distWorse": "ez a rosszabb vég",
     "distRank": "{rank}. a {of} mérhető járás között",
@@ -2051,6 +2057,48 @@
     "scatterAxis": {
       "travel": "Menetidő szerint",
       "development": "Fejlettség szerint"
-    }
+    },
+    "capitalInset": "Budapest kerületei",
+    "readSeat": "székhely: {seat}",
+    "readValue": "betöltetlen körzet",
+    "readHint": "Vidd rá az egeret egy járásra",
+    "benchPopulation": "Lakosság",
+    "benchSettlements": "Települések száma",
+    "benchAverage": "átlagos járás",
+    "benchArea": "Terület",
+    "benchCapitalPopulation": "A kerület lakossága",
+    "benchCapitalTotal": "Budapest összesen",
+    "benchCapitalAverage": "átlagos kerület",
+    "hectares": "{n} ha",
+    "timesMore": "{n}× akkora",
+    "timesLess": "{n}× kisebb",
+    "devThresholdShort": "kedvezményezettség határa",
+    "laggingDots": "{n} elmaradott a {of} településből",
+    "distBin": "{n} járás, {from} és {to} között",
+    "distBinLabel": "{n} járás ebben a sávban ({from}–{to}):",
+    "distMore": "és még {n}",
+    "distNoValue": "{name} járásra ez a mérték nem értelmezhető."
+  },
+  "districtAnalysis": {
+    "heading": "Járási kép: együtt jár a szegénység az orvoshiánnyal?",
+    "explain": "Az országos szám nem tudja feltenni ezt a kérdést — egy arány és egy mutató egyetlen pont. A húsz megye elmossa: egy megyében elfér egy ingazóövezet és egy fogyó kistérség is. A 197 járás már elég megfigyelés ahhoz, hogy látsszon, együtt mozog-e a kettő — és elég kevés ahhoz, hogy a kivételeket néven lehessen nevezni. Minden pont egy járás, függőlegesen a {kind} betöltetlenség.",
+    "axis": {
+      "development": "a fejlettség",
+      "travel": "a menetidő"
+    },
+    "up": "együtt nő",
+    "down": "ellentétesen mozog",
+    "r": {
+      "none": "Nincs érdemi összefüggés: {axis} és a betöltetlenség korrelációja r = {r} ({n} járáson). Az orvoshiány tehát nem egyszerűen a szegénység tükre.",
+      "weak": "Gyenge összefüggés: {axis} és a betöltetlenség {direction}, r = {r} ({n} járáson). Irány van benne, de sok minden más is.",
+      "moderate": "Közepes összefüggés: {axis} és a betöltetlenség {direction}, r = {r} ({n} járáson).",
+      "strong": "Erős összefüggés: {axis} és a betöltetlenség {direction}, r = {r} ({n} járáson)."
+    },
+    "caveat": "A korreláció nem ok-okozat, és a fejlettségi mutató 2014-es besorolás.",
+    "poorButCovered": "Elmaradott, mégis ellátott",
+    "poorButCoveredExplain": "A 40 legelmaradottabb járás közül azok, ahol mégis a legkevesebb a betöltetlen körzet.",
+    "richButShort": "Jómódú, mégis orvoshiányos",
+    "richButShortExplain": "A fejlettebb harmadból azok, ahol a legtöbb körzetben nincs orvos.",
+    "devRank": "fejlettség: {rank}."
   }
 }

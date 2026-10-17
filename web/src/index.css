@@ -969,8 +969,12 @@ a:hover { text-decoration: underline; }
   display: grid; grid-template-columns: minmax(240px, 300px) 1fr;
   gap: 1px; background: var(--line);
   border: 1px solid var(--line); border-radius: var(--radius);
-  overflow: hidden; margin: 40px 0 8px;
+  overflow: hidden;
+  /* inset from the rest of the page on both sides: it is a panel, not a
+     section, and the breathing room is what makes it read as one */
+  margin: 40px clamp(0px, 3.5vw, 56px) 8px;
 }
+.showcase__rail button { padding-left: 22px; padding-right: 22px; }
 .showcase__rail { display: flex; flex-direction: column; background: var(--bg-raised); }
 .showcase__rail button {
   appearance: none; border: 0; text-align: left; cursor: pointer;
@@ -2511,6 +2515,27 @@ body:has(.tp-rail) .tp-map svg { margin-top: 0; }
 .district-map__read {
   margin: 2px 0 0; font-size: 13px; color: var(--ink-dim); min-height: 1.4em;
 }
+/* the hover readout, in the empty corner of the frame */
+.district-map__readout { pointer-events: none; }
+.district-map__readout rect {
+  fill: color-mix(in srgb, var(--bg) 88%, transparent);
+  stroke: var(--line); stroke-width: 1;
+}
+.district-map__read-name {
+  fill: var(--ink); font: 700 17px var(--font-display);
+}
+.district-map__read-seat { fill: var(--ink-dim); font-size: 12.5px; }
+.district-map__read-value {
+  fill: var(--alert); font: 800 36px var(--font-display);
+  font-variant-numeric: tabular-nums;
+}
+.district-map__read-label { fill: var(--ink-faint); font-size: 11.5px; }
+.district-map__read-hint { fill: var(--line-strong); font-size: 12.5px; }
+/* the capital, blown up: 0.6% of the country's area, a tenth of its people */
+.district-map__inset rect {
+  fill: var(--bg-panel); stroke: var(--line); stroke-width: 1;
+}
+.district-map__inset-label { fill: var(--ink-faint); font-size: 11px; }
 .district-map__read strong { color: var(--ink); }
 
 .district-pickers { display: flex; gap: 18px; flex-wrap: wrap; margin: 12px 0 4px; }
@@ -2562,24 +2587,37 @@ body:has(.tp-rail) .tp-map svg { margin-top: 0; }
   width: 11px; height: 11px; border-radius: 2px; border: 1px solid var(--line);
 }
 
-/* all 197 on one line: a rank says nothing about distance, the spread does */
+/* all 197 on one chart: a rank says nothing about distance, the spread does.
+   A histogram and not a dot swarm because two measures have a mass point —
+   69 járás with no vacant dental district — that a stack of dots cannot draw. */
 .district-dist { margin: 18px 0 2px; }
 .district-dist svg { width: 100%; height: auto; display: block; }
-.district-dist__dot {
-  fill: #ef6461; fill-opacity: 0.5; stroke: var(--bg); stroke-width: 0.5;
-  transition: fill-opacity 120ms;
+.district-dist__bin rect:first-child {
+  fill: #ef6461; fill-opacity: 0.55; transition: fill-opacity 120ms;
 }
-.district-dist__dot.is-clickable { cursor: pointer; }
-.district-dist__dot:hover { fill-opacity: 1; }
-.district-dist__dot.is-on {
-  fill: var(--accent); fill-opacity: 1; stroke: var(--ink); stroke-width: 1.1;
-}
+.district-dist__bin:hover rect:first-child { fill-opacity: 0.9; }
+.district-dist__bin.is-on rect:first-child { fill: var(--accent); fill-opacity: 1; }
 .district-dist__axis { stroke: var(--line); stroke-width: 1; }
 .district-dist__median {
   stroke: var(--ink-faint); stroke-width: 1; stroke-dasharray: 3 3;
 }
-.district-dist__pin { stroke: var(--accent); stroke-width: 1.4; }
+.district-dist__pin { stroke: var(--accent); stroke-width: 1.6; }
+.district-dist__pindot { fill: var(--accent); }
 .district-dist__tick { fill: var(--ink-faint); font-size: 11px; }
+.district-dist__chips {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 8px;
+}
+.district-dist__chips-label { font-size: 12px; color: var(--ink-faint); }
+.district-dist__chip {
+  appearance: none; border: 1px solid var(--line-strong); background: var(--bg-raised);
+  color: var(--ink-dim); border-radius: 999px; padding: 3px 10px;
+  font: 500 12px var(--font-body); cursor: pointer;
+}
+.district-dist__chip:hover { color: var(--ink); border-color: var(--accent); }
+.district-dist__chip.is-on {
+  background: var(--accent); color: var(--accent-ink); border-color: var(--accent);
+  font-weight: 600;
+}
 
 /* the state's grade for a járás */
 .dev-badge {
@@ -2592,3 +2630,139 @@ body:has(.tp-rail) .tp-map svg { margin-top: 0; }
   background: color-mix(in srgb, #f0b429 28%, transparent); color: var(--ink);
 }
 .dev-badge--none { color: var(--ink-faint); }
+
+/* this against the average, as a length rather than a division */
+.cmpbars { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 10px; }
+.cmpbars__head {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 10px;
+  font-size: 12.5px;
+}
+.cmpbars__label { color: var(--ink-dim); }
+.cmpbars__head strong { font-variant-numeric: tabular-nums; color: var(--ink); }
+.cmpbars__track {
+  position: relative; height: 9px; margin: 6px 0 4px;
+  background: var(--bg-panel); border-radius: 5px;
+}
+.cmpbars__value {
+  display: block; height: 100%; background: var(--accent); border-radius: 5px;
+}
+/* the average as a tick standing clear of the bar: inside it, an accent fill
+   swallowed the line at exactly the ratios worth seeing */
+.cmpbars__ref {
+  position: absolute; top: -5px; height: 19px; width: 2px;
+  background: var(--ink); border-radius: 1px;
+}
+.cmpbars__ref::after {
+  content: ''; position: absolute; left: -2px; top: -3px;
+  width: 6px; height: 6px; border-radius: 50%; background: var(--ink);
+}
+.cmpbars__foot {
+  display: flex; justify-content: space-between; gap: 10px;
+  font-size: 11.5px; color: var(--ink-faint);
+}
+.cmpbars__foot .is-more { color: var(--alert-soft); }
+.cmpbars__foot .is-less { color: var(--accent); }
+
+/* one value on the scale it lives on, with the line the state drew */
+.scalemark { margin: 12px 0 6px; }
+.scalemark__track {
+  position: relative; height: 8px; border-radius: 4px;
+  background: linear-gradient(90deg,
+    color-mix(in srgb, #ef6461 70%, transparent), var(--bg-panel));
+}
+.scalemark__fill { display: block; height: 100%; }
+.scalemark__threshold {
+  position: absolute; top: -4px; bottom: -4px; width: 2px;
+  background: var(--ink-faint);
+}
+.scalemark__pin {
+  position: absolute; top: 50%; width: 13px; height: 13px; margin: -6.5px 0 0 -6.5px;
+  border-radius: 50%; background: var(--accent); border: 2px solid var(--bg);
+}
+.scalemark__ends {
+  display: flex; justify-content: space-between; gap: 8px;
+  margin-top: 7px; font-size: 11px; color: var(--ink-faint);
+}
+.scalemark__thresholdLabel { color: var(--ink-dim); }
+
+/* a few dozen things, as the things themselves */
+.sharedots { display: flex; flex-wrap: wrap; gap: 3px; margin: 10px 0 2px; }
+.sharedots i {
+  width: 8px; height: 8px; border-radius: 2px; background: var(--line-strong);
+}
+.sharedots i.is-on { background: var(--alert-soft); }
+
+/* where the correlation stops being a sentence and becomes a question */
+.district-outliers {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 22px; margin-top: 18px;
+}
+.district-outliers__list { list-style: none; margin: 8px 0 0; padding: 0; }
+.district-outliers__list li {
+  display: flex; align-items: baseline; gap: 10px; padding: 5px 0;
+  border-bottom: 1px solid var(--line); font-size: 13.5px;
+}
+.district-outliers__list a { color: var(--ink); flex: 1 1 auto; }
+.district-outliers__list a:hover { color: var(--accent); }
+.district-outliers__list span {
+  font-variant-numeric: tabular-nums; color: var(--alert-soft); font-weight: 600;
+}
+.district-outliers__list em {
+  font-style: normal; color: var(--ink-faint); font-size: 12px;
+}
+
+/* the settlement against its járás and the country */
+.tp-bench {
+  margin: 18px auto 0; max-width: 560px; padding: 16px 18px;
+  border: 1px solid var(--line); border-radius: 12px; background: var(--bg-raised);
+}
+.tp-bench__title {
+  margin: 0 0 4px; font: 600 14px var(--font-display); color: var(--ink);
+}
+.cmpbars__value.is-worse { background: var(--alert); }
+
+/* the two halves of a branch's state, on one line */
+.tp-state--ok { color: #4fd6c2; }
+.tp-state--bad { color: var(--alert); }
+.tp-state--dim { color: var(--ink-faint); }
+.tp-card__state { display: flex; flex-wrap: wrap; gap: 6px 10px; }
+
+/* ---------- small screens ---------- */
+/* One rule for the gutter, so nothing on any page ever touches the edge of a
+   phone. The wide charts keep a readable minimum width and scroll inside
+   their own box — the page itself never moves sideways, which is what made
+   reading a column of text on a phone so unpleasant. */
+@media (max-width: 640px) {
+  .container { padding-left: 16px; padding-right: 16px; }
+  .showcase { margin-left: 0; margin-right: 0; }
+  .section { padding-top: 40px; }
+
+  .district-dist,
+  .district-scatter,
+  .ranking-chart,
+  .compare-chart,
+  .chart-card,
+  .choropleth {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .district-dist > svg,
+  .district-scatter > svg,
+  .ranking-chart > svg { min-width: 520px; }
+  /* the country map is the one chart that must fit: it is read as a shape,
+     not a scale, and a map you scroll is a map you cannot see */
+  .district-map svg { min-width: 0; }
+
+  .county-cards { grid-template-columns: 1fr; }
+  .county-card { gap: 10px; }
+  .district-pickers { gap: 10px; }
+  .district-pickers .county-picker { flex: 1 1 100%; }
+  .map-controls .seg { max-width: 100%; }
+  .dsw { gap: 8px; }
+  .hero__switches { gap: 10px; }
+}
+@media (max-width: 420px) {
+  .container { padding-left: 12px; padding-right: 12px; }
+  .section__heading { font-size: 25px; }
+}

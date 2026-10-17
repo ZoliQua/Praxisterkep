@@ -1122,7 +1122,8 @@
       "busz": "By bus?",
       "statisztika": "National trends",
       "osszevetes": "GP vs dental",
-      "tavolsag": "Distance as the crow flies"
+      "tavolsag": "Distance as the crow flies",
+      "jarasok": "Districts"
     }
   },
   "vedono": {
@@ -1854,7 +1855,12 @@
     },
     "filtered": "Showing only settlements where {branch} care is: {state} ({n} settlements).",
     "clearFilter": "All",
-    "pointUnknownShort": "no premises"
+    "pointUnknownShort": "no premises",
+    "settlementsOf": "settlements",
+    "sizeLabel": "how big a county is this?",
+    "benchSettlements": "Settlements",
+    "benchPopulation": "Population",
+    "benchAverage": "average county"
   },
   "next": {
     "heading": "Where to next?",
@@ -2032,7 +2038,7 @@
     "laggingParts": "{socio} socio-economic, {unemployment} hit by unemployment, {temporary} temporarily",
     "laggingPopulation": "{share} of the population lives in them",
     "distHeading": "Where it stands among the 197",
-    "distExplain": "Every dot is a district, the selected one marked. A rank alone misleads: 103rd can be a hair from the median or halfway to the bottom. Switch the measure, hover, or click another district.",
+    "distExplain": "Every column is a band: how many districts fall into it. The selected district's column is marked and the pin below shows its exact value. Switch the measure, or hover a column — the districts in it appear underneath and can be clicked.",
     "distMedian": "median: {n}",
     "distWorse": "the worse end",
     "distRank": "{rank} of {of} measurable districts",
@@ -2051,6 +2057,48 @@
     "scatterAxis": {
       "travel": "By drive",
       "development": "By development"
-    }
+    },
+    "capitalInset": "Budapest districts",
+    "readSeat": "seat: {seat}",
+    "readValue": "districts vacant",
+    "readHint": "Hover a district",
+    "benchPopulation": "Population",
+    "benchSettlements": "Settlements",
+    "benchAverage": "average district",
+    "benchArea": "Area",
+    "benchCapitalPopulation": "Population of the kerület",
+    "benchCapitalTotal": "Budapest in total",
+    "benchCapitalAverage": "average kerület",
+    "hectares": "{n} ha",
+    "timesMore": "{n}× as large",
+    "timesLess": "{n}× smaller",
+    "devThresholdShort": "beneficiary threshold",
+    "laggingDots": "{n} lagging of {of} settlements",
+    "distBin": "{n} districts, between {from} and {to}",
+    "distBinLabel": "{n} districts in this band ({from}–{to}):",
+    "distMore": "and {n} more",
+    "distNoValue": "This measure does not apply to {name}."
+  },
+  "districtAnalysis": {
+    "heading": "Districts: does the shortage follow the poverty?",
+    "explain": "The national number cannot ask this — one rate against one indicator is a single point, and twenty counties blur it. 197 districts are enough observations to see whether the two move together. Every dot is a district; up is {kind} vacancy.",
+    "axis": {
+      "development": "development",
+      "travel": "the drive"
+    },
+    "up": "rise together",
+    "down": "move against each other",
+    "r": {
+      "none": "No real relationship: {axis} and vacancy correlate at r = {r} across {n} districts.",
+      "weak": "A weak relationship: {axis} and vacancy {direction}, r = {r} across {n} districts.",
+      "moderate": "A moderate relationship: {axis} and vacancy {direction}, r = {r} across {n} districts.",
+      "strong": "A strong relationship: {axis} and vacancy {direction}, r = {r} across {n} districts."
+    },
+    "caveat": "Correlation is not cause, and the development indicator is a 2014 classification.",
+    "poorButCovered": "Lagging, yet covered",
+    "poorButCoveredExplain": "Of the 40 least developed districts, those with the fewest vacant districts.",
+    "richButShort": "Well off, yet short of doctors",
+    "richButShortExplain": "Of the better-off third, those with the most vacant districts.",
+    "devRank": "development: {rank}"
   }
 }

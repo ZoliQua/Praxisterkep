@@ -58,6 +58,8 @@ export interface DistrictRow {
   medianInpatientMinutes: number | null;
   withoutDirectBus: number;
   age?: { young: number; working: number; old: number; total: number };
+  /** hectares, from the gazetteer */
+  area?: number;
   oncallPoints: number;
   ambulanceStations: number;
   emergency: EmergencyPoint[];
@@ -73,6 +75,15 @@ export interface DistrictRow {
 export interface DistrictsRaw {
   schemaVersion: number;
   dataMonth: string;
+  /** what an average járás and an average kerület look like */
+  benchmarks?: Record<'jaras' | 'capital', {
+    count: number;
+    population: number | null;
+    settlements: number | null;
+    area: number | null;
+    populationTotal: number;
+    areaTotal: number;
+  }>;
   /** where the development figures come from, and as of when */
   development?: {
     source: string; sourceUrl: string; measuredYear: number | null;

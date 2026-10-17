@@ -21,6 +21,7 @@ import { DistrictMap } from './charts/DistrictMap';
 import { DistrictRanking } from './charts/DistrictRanking';
 import { DistrictScatter, type ScatterX } from './charts/DistrictScatter';
 import { DistrictDistribution } from './charts/DistrictDistribution';
+import { CompareBars, ScaleMark, ShareDots } from './charts/DistrictFigures';
 import { PageNav } from './PageNav';
 import { NextSteps } from './NextSteps';
 import { Footer } from './Footer';
@@ -148,6 +149,60 @@ export function DistrictPage() {
 
   const measure = MEASURES.find((m) => m.key === measureKey) ?? MEASURES[0];
 
+  // What this járás is read against. A kerület is not a járás in any sense a
+  // reader means — 23 of them share one town — so the capital is compared
+  // with itself: its share of Budapest, and its size against an average
+  // kerület. Everywhere else the yardstick is the average of the 174 járás,
+  // with the kerület left out of that average for the same reason.
+  // the range the complex indicator actually lives in, so the mark means
+  // something: 45.6 on a 0..100 scale looks middling, on 18.6..84.0 it is not
+  const devRange = useMemo(() => {
+    const vals = (data?.districts ?? [])
+      .map((x) => x.development?.complex)
+      .filter((v): v is number => v !== undefined);
+    return vals.length
+      ? { lo: Math.min(...vals), hi: Math.max(...vals) } : { lo: 0, hi: 100 };
+  }, [data]);
+  const marks = data?.benchmarks;
+  const hectares = (v: number) => t('district.hectares', {
+    n: formatNumber(Math.round(v)),
+  });
+  const bench = !d || !marks ? null : d.isCapital ? [
+    ...(marks.capital.populationTotal ? [{
+      key: 'pop',
+      label: t('district.benchCapitalPopulation'),
+      value: d.population,
+      reference: marks.capital.populationTotal,
+      referenceLabel: t('district.benchCapitalTotal'),
+      format: (v: number) => formatNumber(v),
+    }] : []),
+    ...(d.area && marks.capital.area ? [{
+      key: 'area',
+      label: t('district.benchArea'),
+      value: d.area,
+      reference: marks.capital.area,
+      referenceLabel: t('district.benchCapitalAverage'),
+      format: hectares,
+    }] : []),
+  ] : [
+    ...(marks.jaras.population ? [{
+      key: 'pop',
+      label: t('district.benchPopulation'),
+      value: d.population,
+      reference: marks.jaras.population,
+      referenceLabel: t('district.benchAverage'),
+      format: (v: number) => formatNumber(Math.round(v)),
+    }] : []),
+    ...(marks.jaras.settlements ? [{
+      key: 'settlements',
+      label: t('district.benchSettlements'),
+      value: d.settlements,
+      reference: marks.jaras.settlements,
+      referenceLabel: t('district.benchAverage'),
+      format: (v: number) => formatDecimal(v.toFixed(v < 10 ? 1 : 0)),
+    }] : []),
+  ];
+
   const gpSlices = d?.gpDistricts ? [
     { value: d.gpDistricts.total - d.gpDistricts.vacant - d.gpDistricts.dissolved,
       color: '#4fd6c2', label: t('stats.statusFilled') },
@@ -175,6 +230,7 @@ export function DistrictPage() {
 
         <DistrictMap values={values} selected={district} onPick={pick}
           total={data?.districts.length}
+          seatOf={(name) => districtOf(data, name)?.seat}
           legendFormat={(v) => formatPercent(v, 0)}
           format={(name, v) => `${name}: ${v === undefined ? '–' : formatPercent(v)}`} />
         <p className="tp-note">{t('district.mapNote', {
@@ -240,6 +296,7 @@ export function DistrictPage() {
                   <div className="stat__context">{t('district.seatLine', {
                     seat: d.seat, county: d.county,
                   })}</div>
+                  {bench && <CompareBars rows={bench} />}
                 </div>
               </article>
 
@@ -366,6 +423,11 @@ export function DistrictPage() {
                       )}
                     </div>
                     <div className="stat__label">{t('district.devValue')}</div>
+                    <ScaleMark value={d.development.complex}
+                      lo={devRange.lo} hi={devRange.hi}
+                      threshold={data?.development?.beneficiaryBelow ?? null}
+                      thresholdLabel={t('district.devThresholdShort')}
+                      format={(v) => formatDecimal(v.toFixed(1))} />
                     <div className="stat__context">
                       {d.development.grade ? (
                         <span className={`dev-badge dev-badge--${d.development.grade}`}>
@@ -394,6 +456,12 @@ export function DistrictPage() {
                           d.lagging.settlements)} / {formatNumber(d.settlements)}</span>
                       </div>
                       <div className="stat__label">{t('district.laggingLabel')}</div>
+                      <ShareDots total={d.settlements}
+                        marked={d.lagging.settlements}
+                        title={t('district.laggingDots', {
+                          n: formatNumber(d.lagging.settlements),
+                          of: formatNumber(d.settlements),
+                        })} />
                       <div className="stat__context">{t('district.laggingParts', {
                         socio: formatNumber(d.lagging.socio),
                         unemployment: formatNumber(d.lagging.unemployment),

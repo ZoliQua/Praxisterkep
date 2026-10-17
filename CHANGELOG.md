@@ -5,6 +5,67 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.44.0] — 2026-10-17
+
+### Javítva
+- **A járásoknak eddig nem volt korfájuk.** A települési adatlap a
+  népszámlálási számokat `censusTotal`/`censusYoung`/`censusOld`
+  néven viszi, az összegzés viszont `total`-t keresett — így
+  egyetlen járás sem kapott korfát, és a „65 év felettiek
+  aránya" mértékhez nem tartozott grafika. Most mind a 197-nek van.
+- **A mérték-eloszlás többé nem csúszik el.** A „Fogorvosi
+  betöltetlenség" és az „Elmaradott települések" mértéknél
+  69, illetve 52 járás áll pontosan nullán — egy pontrajban ez
+  69 pont magas oszlop, ami lenyomta az egész lapot. Hisztogram lett
+  belőle: a nullán álló harmad most a chart legbeszédesebb
+  eleme, a magasság pedig minden mértéknél ugyanaz. Egy sávra
+  rávive a benne lévő járások névre kilátszanak és
+  át lehet kattintani rájuk.
+
+### Hozzáadva
+- **A járástérkép megszólal.** A keret üres északnyugati
+  sarkában hoverre kiírja a járás nevét, a székhelyét és a
+  betöltetlenségi arányát, középre rendezve, saját
+  panelen (a kereten belül ide ér be Győr-Moson-Sopron, és egy
+  szám egy vonal fölött olvashatatlan).
+- **Budapest kerületei kinagyítva**, a jobb alsó sarokban: az
+  ország területének 0,6%-a, lakosságának egytizede és az
+  ország legrosszabb fogorvosi járása.
+- **A számok mellé mérce.** A járás lakossága és
+  településszáma sávban áll az átlagos járás mellett
+  (a főváros kerületei nélkül számolva); kerületnél a
+  saját összehasonlítása: lakosság Budapest egészéhez, terület
+  az átlagos kerülethez. A terület (hektár) a KSH
+  helységnévtárából jön.
+- **A fejlettségi kártyák grafikusak**: a komplex mutató a
+  tényleges országos sávon (18,6–84,0) áll, rajta a
+  kedvezményezettség határával; az elmaradott települések
+  pedig pontonként, egy pont egy település.
+- **Elemző: „Járási kép" szekció, saját menüponttal.** 197
+  járás elég megfigyelés ahhoz, hogy látsszon, együtt
+  mozog-e a fejlettség és az orvoshiány: a lap ki is számolja a
+  korrelációt (r = −0,26 a fogorvosi ágon), és néven nevezi a
+  kivételeket — „elmaradott, mégis ellátott" és
+  „jómódú, mégis orvoshiányos".
+- **Megyelapon**: mekkora megye ez — településszám és
+  lakosság az átlagos megyéhez mérve.
+- **Településlapokon „Hol áll ez a település?"**: lakosság a
+  járás átlagos településéhez, menetidő a járási
+  mediánhoz, kockázati index az országos járási mediánhoz —
+  végig script nélkül.
+- A „Van-e orvos?" kártyán a két állapot külön színnel, egy
+  sorban: **„Van betöltött körzete." zölden, „Van betöltetlen
+  körzete." pirosan**. Ami egyik listán sincs, az továbbra sem
+  jelenik meg.
+
+### Módosítva
+- A főoldali kiemelő **beljebb került mindkét oldalon** a többi
+  szekcióhoz képest.
+- **Mobilra egységes oldalsó margó** (640 px alatt 16, 420 px alatt
+  12 pixel), és a széles grafikák a saját dobozukban gördülnek,
+  nem viszik oldalra az egész lapot. A járástérkép kivétel:
+  azt alakként olvassa az ember, nem skálaként, így mindig befér.
+
 ## [1.43.0] — 2026-10-17
 
 A járáslap megmondja, hány körzetben nincs orvos. Mostantól azt is,

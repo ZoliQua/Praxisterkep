@@ -73,11 +73,12 @@ def parse(xlsx_path: Path) -> KshRef:
     cols = list(df.columns)
     df = df.rename(columns={
         cols[0]: "name", cols[1]: "ksh", cols[3]: "county",
-        cols[5]: "district", cols[6]: "districtSeat", cols[10]: "pop",
+        cols[5]: "district", cols[6]: "districtSeat", cols[9]: "area",
+        cols[10]: "pop",
     })
     entries: list[dict] = []
     for r in df[["name", "ksh", "county", "district", "districtSeat",
-                 "pop"]].itertuples():
+                 "area", "pop"]].itertuples():
         if pd.isna(r.name) or pd.isna(r.ksh):
             continue
         name = str(r.name).strip()
@@ -100,6 +101,9 @@ def parse(xlsx_path: Path) -> KshRef:
             "districtSeat": ("" if pd.isna(r.districtSeat)
                              else str(r.districtSeat).strip()),
             "population": 0 if pd.isna(r.pop) else int(float(r.pop)),
+            # hectares, as the gazetteer gives it: the only size measure any
+            # of our sources publishes, and the one a kerület is compared on
+            "area": 0 if pd.isna(r.area) else int(float(r.area)),
             "isDistrictOfCapital": is_ker,
         })
     if len(entries) < 3000:

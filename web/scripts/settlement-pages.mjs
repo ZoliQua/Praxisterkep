@@ -21,6 +21,37 @@ const profiles = JSON.parse(
   readFileSync(join(here, '..', '..', 'data', 'settlements.json'), 'utf8'),
 );
 
+// the járás this settlement sits in, for the comparisons: a number on its own
+// ("4,1 perc") says nothing until it is held against the járás it belongs to
+// and the country as a whole
+const districts = (() => {
+  try {
+    const raw = JSON.parse(
+      readFileSync(join(here, '..', '..', 'data', 'districts.json'), 'utf8'));
+    return {
+      byName: new Map((raw.districts ?? []).map((d) => [d.name, d])),
+      benchmarks: raw.benchmarks ?? null,
+    };
+  } catch {
+    return { byName: new Map(), benchmarks: null };
+  }
+})();
+// the country's median of each measure, from the járás rows
+const national = (() => {
+  const med = (pick) => {
+    const v = [...districts.byName.values()].map(pick)
+      .filter((x) => x !== null && x !== undefined).sort((a, b) => a - b);
+    if (!v.length) return null;
+    const m = Math.floor(v.length / 2);
+    return v.length % 2 ? v[m] : (v[m - 1] + v[m]) / 2;
+  };
+  return {
+    gpMin: med((d) => d.medianGpMinutes),
+    oncallMin: med((d) => d.medianOncallMinutes),
+    index: med((d) => d.medianIndex),
+  };
+})();
+
 // the geometry the little county map is drawn from; all three are files the
 // pipeline already produces and the build already copies to public/data
 const geoDir = join(here, '..', '..', 'data', 'geo');
@@ -285,11 +316,17 @@ const article = (n) => {
   return n === 1 || n === 5 ? 'az' : 'a';
 };
 
+// The state as its two halves, so a settlement that has both reads as both:
+// "Van betöltött körzete." in green and "Van betöltetlen körzete." in red on
+// one line says more than one sentence that merges them.
 const STATE = {
-  filled: ['Van betöltött körzete', 'ok'],
-  partial: ['Van betöltött és betöltetlen körzete is', 'warn'],
-  vacantOnly: ['Csak betöltetlen körzet tartozik hozzá', 'bad'],
-  absent: ['Egyik körzet listáján sem szerepel', 'dim'],
+  filled: [['Van betöltött körzete.', 'ok']],
+  partial: [['Van betöltött körzete.', 'ok'], ['Van betöltetlen körzete.', 'bad']],
+  vacantOnly: [['Csak betöltetlen körzet tartozik hozzá.', 'bad']],
+  absent: [['Egyik körzet listáján sem szerepel.', 'dim']],
+};
+const CARD_TONE = {
+  filled: 'ok', partial: 'warn', vacantOnly: 'bad', absent: 'dim',
 };
 const BAND = {
   kiemelt: ['kiemelt kockázat', 'bad'],
@@ -324,13 +361,15 @@ function branchCard(title, branch) {
     return `<div class="tp-card tp-card--dim"><h3>${esc(title)}</h3>
       <p>Erről az ágról nincs adatunk erre a településre.</p></div>`;
   }
-  const [label, tone] = STATE[branch.state] ?? ['–', 'dim'];
+  const parts = STATE[branch.state] ?? [['–', 'dim']];
+  const tone = CARD_TONE[branch.state] ?? 'dim';
   const detail = branch.state === 'absent'
     ? 'A nyilvántartás egyetlen körzetnél sem sorolja fel ezt a települést.'
     : `${num(branch.filled)} betöltött, ${num(branch.vacant)} betöltetlen vagy megszűnt körzet szolgálja.`;
   return `<div class="tp-card tp-card--${tone}">
     <h3>${esc(title)}</h3>
-    <p class="tp-card__state">${esc(label)}</p>
+    <p class="tp-card__state">${parts.map(([text, part]) =>
+    `<span class="tp-state tp-state--${part}">${esc(text)}</span>`).join(' ')}</p>
     <p>${esc(detail)}</p>
     ${branch.isSeat ? '<p class="tp-note">Itt van egy körzet székhelye.</p>' : ''}
   </div>`;
@@ -835,6 +874,64 @@ function transitBlock(profile) {
       érhető el. A „nincs közvetlen járat” nem azt jelenti, hogy nem lehet odajutni.</p>`;
 }
 
+/**
+ * Where this settlement stands against its járás and the country.
+ *
+ * Every number on this page is about one place, and one place has nothing to
+ * be read against. Three bars fix that: what the settlement is, what the
+ * járás around it typically is, and what the country's middle looks like.
+ * No script — the bar is a width, the marker is a left offset.
+ */
+function benchBlock(profile) {
+  const district = districts.byName.get(profile.district);
+  if (!district) return '';
+  const avgSettlement = district.settlements
+    ? Math.round(district.population / district.settlements) : null;
+  const rows = [
+    avgSettlement ? {
+      label: 'Lakosság',
+      value: profile.population,
+      ref: avgSettlement,
+      refLabel: `a ${profile.district} járás átlagos települése`,
+      format: (v) => num(Math.round(v)),
+    } : null,
+    profile.travel?.gp?.minutes != null && district.medianGpMinutes != null ? {
+      label: 'Menetidő háziorvoshoz',
+      value: profile.travel.gp.minutes,
+      ref: district.medianGpMinutes,
+      refLabel: 'a járás mediánja',
+      format: (v) => minutes(v),
+      lowerIsBetter: true,
+    } : null,
+    profile.index?.value != null && national.index != null ? {
+      label: 'Összetett kockázati index',
+      value: profile.index.value,
+      ref: national.index,
+      refLabel: 'országos járási medián',
+      format: (v) => String(Math.round(v * 10) / 10).replace('.', ','),
+      lowerIsBetter: true,
+    } : null,
+  ].filter(Boolean);
+  if (!rows.length) return '';
+  return `<div class="tp-bench">
+    <p class="tp-bench__title">Hol áll ez a település?</p>
+    <ul class="cmpbars">${rows.map((r) => {
+    const max = Math.max(r.value, r.ref) || 1;
+    const worse = r.lowerIsBetter ? r.value > r.ref : r.value < r.ref;
+    return `<li>
+      <div class="cmpbars__head"><span class="cmpbars__label">${esc(r.label)}</span>
+        <strong>${esc(r.format(r.value))}</strong></div>
+      <div class="cmpbars__track">
+        <span class="cmpbars__value${worse ? ' is-worse' : ''}"
+          style="width:${((r.value / max) * 100).toFixed(1)}%"></span>
+        <span class="cmpbars__ref" style="left:${((r.ref / max) * 100).toFixed(1)}%"></span>
+      </div>
+      <div class="cmpbars__foot"><span>${esc(r.refLabel)}: ${esc(r.format(r.ref))}</span></div>
+    </li>`;
+  }).join('')}</ul>
+  </div>`;
+}
+
 function indexBlock(profile) {
   const index = profile.index;
   if (!index) return '';
@@ -1204,11 +1301,13 @@ function page(profile) {
     'gyogyszertar', 'kozlekedes', 'kockazat']);
   if (streetHtml) present.add('elerhetoseg');
   if (changeHtml) present.add('valtozas');
-  const gpState = profile.gp ? (STATE[profile.gp.state] ?? [''])[0] : '';
+  // the meta description wants one sentence, not the two coloured halves
+  const gpState = profile.gp
+    ? (STATE[profile.gp.state] ?? []).map(([text]) => text).join(' ') : '';
   const drive = profile.travel?.gp;
   const desc = [
     `${settlement} (${county}${district ? `, ${district} járás` : ''}), ${num(profile.population)} lakos.`,
-    gpState ? `Háziorvos: ${gpState.toLowerCase()}.` : '',
+    gpState ? `Háziorvos: ${gpState.toLowerCase()}` : '',
     drive ? `A legközelebbi háziorvosi rendelő ${minutes(drive.minutes)}.` : '',
     `Praxistérkép, ${monthLabel}.`,
   ].filter(Boolean).join(' ');
@@ -1322,6 +1421,7 @@ ${streetHtml}
     ${helpTip('Nyolc nyilvános mutató súlyozott átlaga, mindegyik országos rangsorszázalékra váltva: betöltetlenség, menetidő háziorvoshoz, fogorvoshoz, ügyelethez, járóbeteg- és fekvőbeteg-ellátáshoz, buszelérés, korösszetétel, kockázati előrejelzés és a kedvezményezett települési besorolás. A 100 a legrosszabb helyzetű települést jelenti, nem azt, hogy ott nincs ellátás.')}</h2>
   ${indexCompare(profile)}
   ${indexBlock(profile)}
+  ${benchBlock(profile)}
   ${cluster ? `<p>Ez a település egy <strong>összefüggő ellátási hiányterület</strong> része
     (${esc(cluster.name)} környéke: ${num(cluster.settlements)} település,
     ${num(cluster.population)} lakos).</p>` : ''}
