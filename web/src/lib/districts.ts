@@ -14,6 +14,30 @@ export interface DistrictCounts {
   rate: number | null;
 }
 
+/** The state's own measure of how developed a járás is (290/2014 Korm. r.). */
+export interface Development {
+  region: string;
+  /** the complex indicator KSH builds; higher is better off */
+  complex: number;
+  /** 1 = the least developed of the 197 */
+  rank: number | null;
+  population2013: number | null;
+  beneficiary: boolean;
+  /** '' where the decree gives no grade */
+  grade?: 'kedvezmenyezett' | 'fejlesztendo' | 'komplex' | '';
+}
+
+/** How much of a járás the 105/2015 decree classes as lagging behind. */
+export interface Lagging {
+  settlements: number;
+  socio: number;
+  unemployment: number;
+  temporary: number;
+  population: number;
+  share: number;
+  populationShare: number | null;
+}
+
 export interface DistrictRow {
   name: string;
   slug: string;
@@ -42,11 +66,18 @@ export interface DistrictRow {
   medianIndex: number | null;
   gpDistricts?: DistrictCounts;
   dentalDistricts?: DistrictCounts;
+  development?: Development;
+  lagging?: Lagging;
 }
 
 export interface DistrictsRaw {
   schemaVersion: number;
   dataMonth: string;
+  /** where the development figures come from, and as of when */
+  development?: {
+    source: string; sourceUrl: string; measuredYear: number | null;
+    beneficiaryBelow: number | null; benefitSource: string; benefitUrl: string;
+  };
   fields: string[];
   districts: DistrictRow[];
   /** services the registry puts in "Budapest" with no kerület */
@@ -133,6 +164,30 @@ number | null {
   const known = d.settlements - absent;
   return known > 0 ? vacantOnly / known : null;
 }
+
+/**
+ * The measures a járás can be held against the others on.
+ *
+ * `worseHigh` says which end is the bad one, so one chart can draw them all
+ * without the reader having to remember which way each runs.
+ */
+export interface Measure {
+  key: string;
+  value: (d: DistrictRow) => number | null;
+  worseHigh: boolean;
+}
+
+export const MEASURES: Measure[] = [
+  { key: 'gpVacancy', worseHigh: true, value: (d) => vacancyRate(d, 'gp') },
+  { key: 'dentalVacancy', worseHigh: true, value: (d) => vacancyRate(d, 'dental') },
+  { key: 'development', worseHigh: false, value: (d) => d.development?.complex ?? null },
+  { key: 'lagging', worseHigh: true, value: (d) => d.lagging?.share ?? null },
+  { key: 'gpMin', worseHigh: true, value: (d) => d.medianGpMinutes },
+  { key: 'oncallMin', worseHigh: true, value: (d) => d.medianOncallMinutes },
+  { key: 'ageing', worseHigh: true,
+    value: (d) => (d.age && d.age.total ? d.age.old / d.age.total : null) },
+  { key: 'index', worseHigh: true, value: (d) => d.medianIndex },
+];
 
 /** Contracted districts per 10 000 inhabitants — how thin the cover is. */
 export function per10k(d: DistrictRow | null, branch: 'gp' | 'dental'):

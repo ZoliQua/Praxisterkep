@@ -11,14 +11,16 @@ import { useContextStore } from '../lib/context';
 import { useHashScroll } from '../lib/useHashScroll';
 import { settlementHref } from '../lib/settlementLink';
 import {
-  districtOf, per10k, rankOf, settlementRows, useDistricts, vacancyRate,
-  type Band, type DistrictRow, type SettlementRow, type State,
+  MEASURES, districtOf, per10k, rankOf, settlementRows, useDistricts,
+  vacancyRate,
+  type Band, type DistrictRow, type Measure, type SettlementRow, type State,
 } from '../lib/districts';
 import { AgeLegend, AgePie, type AgeKey } from './charts/AgePie';
 import { Donut, DonutLegend } from './charts/Donut';
 import { DistrictMap } from './charts/DistrictMap';
 import { DistrictRanking } from './charts/DistrictRanking';
-import { DistrictScatter } from './charts/DistrictScatter';
+import { DistrictScatter, type ScatterX } from './charts/DistrictScatter';
+import { DistrictDistribution } from './charts/DistrictDistribution';
 import { PageNav } from './PageNav';
 import { NextSteps } from './NextSteps';
 import { Footer } from './Footer';
@@ -34,6 +36,15 @@ type SortKey = 'name' | 'population' | 'band' | 'gpMin' | 'oncallMin';
 const BAND_ORDER: Record<Band, number> = {
   kiemelt: 0, magas: 1, kozepes: 2, alacsony: 3, '': 4,
 };
+
+/** How a measure writes a value: a share, a number of minutes, or a score. */
+function measureFormat(measure: Measure): (value: number) => string {
+  if (measure.key === 'development' || measure.key === 'index') {
+    return (v) => formatDecimal(v.toFixed(1));
+  }
+  if (measure.key.endsWith('Min')) return (v) => minutes(v);
+  return (v) => formatPercent(v);
+}
 
 function minutes(value: number | null): string {
   return value === null ? '–' : t('county.minutes', { n: formatDecimal(value.toFixed(1)) });
@@ -95,6 +106,8 @@ export function DistrictPage() {
   const [ageOn, setAgeOn] = useState<AgeKey | null>(null);
   const [gpOn, setGpOn] = useState<string | null>(null);
   const [dentalOn, setDentalOn] = useState<string | null>(null);
+  const [measureKey, setMeasureKey] = useState('development');
+  const [scatterX, setScatterX] = useState<ScatterX>('travel');
 
   const d = districtOf(data, district);
   const counties = useMemo(
@@ -133,6 +146,8 @@ export function DistrictPage() {
     setDistrict(name);
   };
 
+  const measure = MEASURES.find((m) => m.key === measureKey) ?? MEASURES[0];
+
   const gpSlices = d?.gpDistricts ? [
     { value: d.gpDistricts.total - d.gpDistricts.vacant - d.gpDistricts.dissolved,
       color: '#4fd6c2', label: t('stats.statusFilled') },
@@ -159,6 +174,8 @@ export function DistrictPage() {
         <p className="section__lead">{t('district.lead')}</p>
 
         <DistrictMap values={values} selected={district} onPick={pick}
+          total={data?.districts.length}
+          legendFormat={(v) => formatPercent(v, 0)}
           format={(name, v) => `${name}: ${v === undefined ? '–' : formatPercent(v)}`} />
         <p className="tp-note">{t('district.mapNote', {
           kind: t(`kinds.${kind}.adj`),
@@ -329,6 +346,88 @@ export function DistrictPage() {
               </tbody>
             </table>
 
+            <h2 className="section__subheading" id="fejlettseg">
+              {t('district.devHeading')}
+            </h2>
+            <p className="section__explain">{t('district.devExplain', {
+              year: String(data?.development?.measuredYear ?? ''),
+            })}</p>
+            {d.development && (
+              <div className="county-cards">
+                <article className="county-card county-card--wide">
+                  <div className="county-card__body">
+                    <div className="stat__value">
+                      {formatDecimal(d.development.complex.toFixed(2))}
+                      {d.development.rank !== null && (
+                        <span className="stat__of"> · {t('district.devRank', {
+                          rank: formatNumber(d.development.rank),
+                          of: formatNumber(data?.districts.length ?? 0),
+                        })}</span>
+                      )}
+                    </div>
+                    <div className="stat__label">{t('district.devValue')}</div>
+                    <div className="stat__context">
+                      {d.development.grade ? (
+                        <span className={`dev-badge dev-badge--${d.development.grade}`}>
+                          {t(`district.devGrade.${d.development.grade}`)}
+                        </span>
+                      ) : (
+                        <span className="dev-badge dev-badge--none">
+                          {t('district.devGrade.none')}
+                        </span>
+                      )}
+                      {data?.development?.beneficiaryBelow != null && (
+                        <> · {t('district.devThreshold', {
+                          n: formatDecimal(
+                            data.development.beneficiaryBelow.toFixed(2)),
+                        })}</>
+                      )}
+                    </div>
+                  </div>
+                </article>
+                {d.lagging && d.lagging.settlements > 0 && (
+                  <article className="county-card county-card--wide">
+                    <div className="county-card__body">
+                      <div className="stat__value">
+                        {formatPercent(d.lagging.share)}
+                        <span className="stat__of"> · {formatNumber(
+                          d.lagging.settlements)} / {formatNumber(d.settlements)}</span>
+                      </div>
+                      <div className="stat__label">{t('district.laggingLabel')}</div>
+                      <div className="stat__context">{t('district.laggingParts', {
+                        socio: formatNumber(d.lagging.socio),
+                        unemployment: formatNumber(d.lagging.unemployment),
+                        temporary: formatNumber(d.lagging.temporary),
+                      })}{d.lagging.populationShare !== null && ` · ${
+                        t('district.laggingPopulation', {
+                          share: formatPercent(d.lagging.populationShare),
+                        })}`}</div>
+                    </div>
+                  </article>
+                )}
+              </div>
+            )}
+
+            <h3 className="why__chain-title">{t('district.distHeading')}</h3>
+            <p className="section__explain">{t('district.distExplain')}</p>
+            <div className="map-controls">
+              <div className="seg" role="group">
+                {MEASURES.map((m) => (
+                  <button key={m.key} aria-pressed={m.key === measureKey}
+                    onClick={() => setMeasureKey(m.key)}>
+                    {t(`district.measure.${m.key}`)}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <DistrictDistribution rows={data?.districts ?? []}
+              measure={measure} selected={d.name} onPick={pick}
+              format={measureFormat(measure)} />
+            <p className="extra-note">{t('district.devSource', {
+              source: data?.development?.source ?? '',
+              benefit: data?.development?.benefitSource ?? '',
+            })}</p>
+
             <h2 className="section__subheading" id="rangsor">
               {t('district.rankingHeading')}
             </h2>
@@ -339,11 +438,22 @@ export function DistrictPage() {
               onPick={pick} />
 
             <h2 className="section__subheading" id="osszefugges">
-              {t('district.scatterHeading')}
+              {t(`district.scatterHeading.${scatterX}`)}
             </h2>
-            <p className="section__explain">{t('district.scatterExplain')}</p>
+            <p className="section__explain">{t(
+              `district.scatterExplain.${scatterX}`)}</p>
+            <div className="map-controls">
+              <div className="seg" role="group">
+                {(['travel', 'development'] as ScatterX[]).map((x) => (
+                  <button key={x} aria-pressed={x === scatterX}
+                    onClick={() => setScatterX(x)}>
+                    {t(`district.scatterAxis.${x}`)}
+                  </button>
+                ))}
+              </div>
+            </div>
             <DistrictScatter data={data} branch={kind} selected={d.name}
-              onPick={pick} />
+              onPick={pick} axis={scatterX} />
 
             <h2 className="section__subheading" id="telepulesek">
               {t('district.tableHeading', { name: d.name })}

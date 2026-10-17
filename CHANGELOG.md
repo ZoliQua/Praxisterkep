@@ -5,6 +5,52 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.43.0] — 2026-10-17
+
+A járáslap megmondja, hány körzetben nincs orvos. Mostantól azt is,
+hogy milyen járásban.
+
+### Hozzáadva
+- **Színskála a járástérkép alatt**: mit jelent a sötét és a
+  világos árnyalat, hol a skála teteje (90. percentilis), és melyik
+  alakzatnak nincs adata.
+- **„Milyen járás ez?" — fejlettség a másik oldalon.** Egy
+  betöltetlenségi arány önmagában nem mondja meg, hogy gazdag
+  ingazóövezetről vagy az ország legszegényebb sarkáról van-e
+  szó. Erre van hivatalos válasz, és nem a mi dolgunk kitalálni:
+  a **290/2014. (XI. 26.) Korm. rendelet** minden járást egy KSH-építette
+  **komplex mutató** szerint rangsorol (társadalmi, demográfiai,
+  lakás-, munkaerőpiaci és gazdasági mutatókból), és három
+  fokozatba sorolja őket. A lap kiírja a mutatót, a rangsorszámot
+  (1. = legelmaradottabb) és a besorolást.
+- **Mennyi a járásból elmaradott**: a 105/2015. Korm. rendelet szerint
+  hány települése kedvezményezett (társadalmi-gazdasági,
+  munkanélküliséggel sújtott, átmeneti), és a lakosság mekkora
+  része él bennük. A járás egészéről szóló mutató és ez két
+  külön kérdés egy olyan járásban, ahol egy város van és harminc falu.
+- **„Hol áll ez a 197 járás között?" — mind a 197 egy vonalon.**
+  Egy rangsorszám nem mond távolságot: a 103. lehet hajszálnyira a
+  mediántól és félúton a mélypontig is. A pontfelhő megmutatja,
+  melyik — **nyolc mérték között válthatsz** (háziorvosi és
+  fogorvosi betöltetlenség, fejlettség, elmaradott települések,
+  menetidők, öregedés, kockázati index), a medián be van jelölve,
+  és minden pont egy másik járás, amire át lehet kattintani.
+- A **pontfelhő vízszintes tengelye váltható**: menetidő vagy
+  fejlettség. „Az orvoshiány a szegénységet követi?” — a felhő
+  alakja válaszol.
+- ETL: **`etl/district_development.py`** → `data/district_development.json`.
+  A rendelet szövege a Nemzeti Jogszabálytárból jön, a
+  `data/raw/kedvezmenyezett/` alá archiválva (a git-történet az
+  audit nyoma). Mind a 197 járás illeszkedik; egyetlen néveltérés
+  van (a rendelet „Jánoshalmi”, a KSH „Jánoshalmai”), ez névre
+  szólóan, kommentben indokolva került be — a többi nem
+  illeszkedő név hibát dobna, nem tippül kapna szomszédot.
+
+### Megjegyzés
+A komplex mutató 2014-es mérés és ma is érvényes besorolás: ez
+dönti el, melyik járás mire pályázhat. Nem a mai állapot
+mérése, és a lap ezt ki is mondja.
+
 ## [1.42.0] — 2026-10-16
 
 A fővárosnak három neve volt, és emiatt Józsefváros három hely.

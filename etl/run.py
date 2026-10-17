@@ -343,12 +343,17 @@ def main() -> None:
                     describe=lambda r: f", {len(r['counties'])} counties"),
              needs=("settlements", "fluctuation", "emergency", "ksh_age"),
              output=ROOT / "data" / "counties.json"),
+        # how developed each járás is, by the state's own standing measure
+        Step("district_development", "járás development",
+             simple("district_development",
+                    describe=lambda r: f", {r['counts']['districts']} districts"),
+             output=ROOT / "data" / "district_development.json"),
         # and one level further down: the járás, which is where the district
         # seat and the on-call point actually are
         Step("district_profiles", "járás profiles",
              simple("district_profiles",
                     describe=lambda r: f", {len(r['districts'])} districts"),
-             needs=("settlements", "emergency"),
+             needs=("settlements", "emergency", "district_development"),
              output=ROOT / "data" / "districts.json"),
     ]
     run_steps(steps, month)

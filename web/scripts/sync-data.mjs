@@ -48,6 +48,8 @@ const optional = [
   [join(repo, 'data', 'licence_history.json'), join(out, 'licence_history.json')],
   [join(repo, 'data', 'counties.json'), join(out, 'counties.json')],
   [join(repo, 'data', 'districts.json'), join(out, 'districts.json')],
+  [join(repo, 'data', 'district_development.json'),
+    join(out, 'district_development.json')],
   [join(repo, 'data', 'tenure.json'), join(out, 'tenure.json')],
   [join(repo, 'data', 'fluctuation.json'), join(out, 'fluctuation.json')],
   [join(repo, 'data', 'geo', 'settlements.geojson'), join(out, 'settlements.geojson')],

@@ -176,6 +176,8 @@ def build() -> dict:
     profiles = src["settlements"]
     latest = read("latest.json")
     emergency = read("emergency.json")
+    development = read("district_development.json")
+    benefit = read("kedvezmenyezett.json")
 
     seats = seat_of_district()
     district_of = {normalize_settlement(p["settlement"]): p["district"]
@@ -222,6 +224,30 @@ def build() -> dict:
     for p in profiles:
         pharmacies[p["district"]] += len(p.get("pharmacies") or [])
 
+    # How many of a járás's settlements the state itself classes as lagging
+    # behind (105/2015. Korm. rendelet). The decree's complex indicator says
+    # how the járás as a whole stands; this says how much of it is in that
+    # position, which is not the same question in a járás with one town and
+    # thirty villages.
+    from kedvezmenyezett import county_key, normalize as benefit_key
+    flags = {}
+    for entry in (benefit.get("settlements") or {}).values():
+        flags[f'{county_key(entry["c"])}|{benefit_key(entry["n"])}'] = entry
+    lagging: dict[str, collections.Counter] = collections.defaultdict(
+        collections.Counter)
+    for p in profiles:
+        cell = lagging[p["district"]]
+        entry = flags.get(f'{county_key(p["county"])}|{benefit_key(p["settlement"])}')
+        cell["settlements"] += 1
+        if not entry:
+            continue
+        cell["socio"] += 1 if entry.get("s") else 0
+        cell["unemployment"] += 1 if entry.get("u") else 0
+        cell["temporary"] += 1 if entry.get("t") else 0
+        if entry.get("s") or entry.get("u") or entry.get("t"):
+            cell["any"] += 1
+            cell["population"] += p["population"]
+
     # the composite index of a járás is the median of its settlements'
     by_district: dict[str, list[list]] = {}
     index_scores: dict[str, list[float]] = collections.defaultdict(list)
@@ -257,11 +283,37 @@ def build() -> dict:
         out["pharmacies"] = pharmacies.get(name, 0)
         scores = index_scores.get(name) or []
         out["medianIndex"] = round(statistics.median(scores), 1) if scores else None
+        # the state's own measure of how developed the járás is
+        dev = (development.get("districts") or {}).get(name)
+        if dev:
+            out["development"] = dev
+        cell = lagging.get(name)
+        if cell and cell["settlements"]:
+            out["lagging"] = {
+                "settlements": cell["any"],
+                "socio": cell["socio"],
+                "unemployment": cell["unemployment"],
+                "temporary": cell["temporary"],
+                "population": cell["population"],
+                "share": round(cell["any"] / cell["settlements"], 4),
+                "populationShare": (round(cell["population"] / out["population"], 4)
+                                    if out["population"] else None),
+            }
         districts.append(out)
 
     result = {
         "schemaVersion": SCHEMA_VERSION,
         "dataMonth": src.get("dataMonth", ""),
+        # what the development figures are, and as of when: the decree is a
+        # standing classification from 2014, not a reading of today
+        "development": {
+            "source": development.get("source", ""),
+            "sourceUrl": development.get("sourceUrl", ""),
+            "measuredYear": development.get("measuredYear"),
+            "beneficiaryBelow": development.get("beneficiaryBelow"),
+            "benefitSource": benefit.get("source", ""),
+            "benefitUrl": benefit.get("sourceUrl", ""),
+        } if development else {},
         "fields": list(FIELDS),
         "districts": districts,
         # services the registry puts in "Budapest" with no kerület: they are

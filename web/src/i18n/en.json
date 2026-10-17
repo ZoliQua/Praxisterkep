@@ -1989,11 +1989,23 @@
     "rankingHeading": "Where it stands",
     "rankingExplain": "The worst and best eight districts by {branch} vacancy, with the selected one between them. The dashed line is the national median. The bars are clickable.",
     "medianLine": "national median: {n}",
-    "scatterHeading": "Does distance go with it?",
-    "scatterExplain": "Every dot is a district: the median drive to the nearest surgery across, the vacancy rate up. Dot size is population.",
-    "scatterX": "median drive to a surgery (minutes)",
+    "scatterHeading": {
+      "travel": "Does distance go with it?",
+      "development": "Does development go with it?"
+    },
+    "scatterExplain": {
+      "travel": "Every dot is a district: the median drive to the nearest surgery across, the vacancy rate up. Dot size is population.",
+      "development": "The same cloud, but across is the district's complex development indicator: the less developed are to the left."
+    },
+    "scatterX": {
+      "travel": "median drive to a surgery (minutes)",
+      "development": "complex development indicator (left: less developed)"
+    },
     "scatterY": "vacancy",
-    "scatterRead": "{rate} vacancy, {minutes} minutes median drive",
+    "scatterRead": {
+      "travel": "{rate} vacancy, {x} minutes median drive",
+      "development": "{rate} vacancy, {x} complex indicator"
+    },
     "tableHeading": "Settlements of {name}",
     "caveat": "Every number comes from the settlement profiles and NEAK's monthly lists; nothing is recomputed. A district belongs to the jaras its surgery stands in.",
     "unplaced": "A further {n} dental services name only Budapest with no district.",
@@ -2002,6 +2014,43 @@
       "better": "{rate} of {branch} districts in {name} are vacant — {rank} of {of}, below the national median ({median}).",
       "county": "Within {county} county it is {rank} of {of}.",
       "travel": "The median drive to the nearest GP surgery is {n}, the {rank} longest of {of}."
+    },
+    "legendTop": "and above",
+    "legendEmpty": "no data",
+    "devHeading": "What kind of district is this?",
+    "devExplain": "A vacancy rate says nothing about whether this is a prosperous commuter belt or the poorest corner of the country. There is an official answer: the government ranks districts by a complex indicator KSH builds from social, demographic, housing, labour-market and economic measures. The classification is from {year} and still stands.",
+    "devValue": "complex indicator (higher is better off)",
+    "devRank": "{rank} of {of} districts (1 = least developed)",
+    "devThreshold": "the beneficiary threshold is {n}",
+    "devGrade": {
+      "kedvezmenyezett": "beneficiary district",
+      "fejlesztendo": "district to be developed",
+      "komplex": "district for a complex development programme",
+      "none": "not a beneficiary district"
+    },
+    "laggingLabel": "of its settlements are classed as lagging behind",
+    "laggingParts": "{socio} socio-economic, {unemployment} hit by unemployment, {temporary} temporarily",
+    "laggingPopulation": "{share} of the population lives in them",
+    "distHeading": "Where it stands among the 197",
+    "distExplain": "Every dot is a district, the selected one marked. A rank alone misleads: 103rd can be a hair from the median or halfway to the bottom. Switch the measure, hover, or click another district.",
+    "distMedian": "median: {n}",
+    "distWorse": "the worse end",
+    "distRank": "{rank} of {of} measurable districts",
+    "distHint": "Hover a dot.",
+    "devSource": "Source: {source}; and {benefit}. The complex indicator is a standing classification, not a reading of today.",
+    "measure": {
+      "gpVacancy": "GP vacancy",
+      "dentalVacancy": "Dental vacancy",
+      "development": "Development",
+      "lagging": "Lagging settlements",
+      "gpMin": "Drive to a GP",
+      "oncallMin": "Drive to on-call",
+      "ageing": "Share aged 65+",
+      "index": "Care-risk index"
+    },
+    "scatterAxis": {
+      "travel": "By drive",
+      "development": "By development"
     }
   }
 }

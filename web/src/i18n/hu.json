@@ -1989,11 +1989,23 @@
     "rankingHeading": "Hol áll a többihez képest?",
     "rankingExplain": "A legrosszabb és a legjobb nyolc járás a {branch} betöltetlenség szerint, közöttük a kiválasztott. A szaggatott vonal az országos medián. A sávok kattinthatók.",
     "medianLine": "országos medián: {n}",
-    "scatterHeading": "Összefügg a távolsággal?",
-    "scatterExplain": "Minden pont egy járás: vízszintesen a települések medián menetideje a legközelebbi rendelőig, függőlegesen a betöltetlenségi arány. A pont mérete a lakosság. Két külön baj, vagy egy — a felhő megmutatja.",
-    "scatterX": "medián menetidő a rendelőig (perc)",
+    "scatterHeading": {
+      "travel": "Összefügg a távolsággal?",
+      "development": "Összefügg a fejlettséggel?"
+    },
+    "scatterExplain": {
+      "travel": "Minden pont egy járás: vízszintesen a települések medián menetideje a legközelebbi rendelőig, függőlegesen a betöltetlenségi arány. A pont mérete a lakosság. Két külön baj, vagy egy — a felhő megmutatja.",
+      "development": "Ugyanaz a felhő, de vízszintesen a járás komplex fejlettségi mutatója: balra az elmaradottabbak. Ha az orvoshiány a szegénységet követi, a pontok balról jobbra lejtenek."
+    },
+    "scatterX": {
+      "travel": "medián menetidő a rendelőig (perc)",
+      "development": "komplex fejlettségi mutató (balra: elmaradottabb)"
+    },
     "scatterY": "betöltetlenség",
-    "scatterRead": "{rate} betöltetlenség, {minutes} perc medián menetidő",
+    "scatterRead": {
+      "travel": "{rate} betöltetlenség, {x} perc medián menetidő",
+      "development": "{rate} betöltetlenség, {x} komplex mutató"
+    },
     "tableHeading": "{name} járás települései",
     "caveat": "A járás minden száma a települési adatlapokból és a NEAK havi listáiból jön — semmit nem számolunk újra, így a járáslap és a településlap nem mondhat mást. Egy körzet ahhoz a járáshoz tartozik, amelyikben a rendelője áll.",
     "unplaced": "További {n} fogorvosi szolgálat címében csak „Budapest” szerepel kerület nélkül; ezek egyik kerületi sorban sem szerepelnek.",
@@ -2002,6 +2014,43 @@
       "better": "{name} járásban a {branch} körzetek {rate}-a betöltetlen — {art} {rank}. a {of} mérhető járás rangsorában, az országos medián ({median}) alatt.",
       "county": "A megyén belül ({county}) a {of} járásból {art} {rank}.",
       "travel": "A települések medián menetideje a legközelebbi háziorvosi rendelőig {n}, ami {art} {rank}. leghosszabb a {of} járás között."
+    },
+    "legendTop": "és fölötte",
+    "legendEmpty": "nincs adat",
+    "devHeading": "Milyen járás ez?",
+    "devExplain": "A betöltetlenségi arány önmagában nem mond semmit arról, hogy gazdag ingazóövezetről vagy az ország legszegényebb sarkáról van-e szó. Erre van hivatalos válasz: a kormány a járásokat egy komplex mutató szerint sorolja be, amit a KSH társadalmi, demográfiai, lakás-, munkaerőpiaci és gazdasági mutatókból épít. A besorolás {year}-es állapot és ma is érvényes: ez dönti el, melyik járás mire pályázhat.",
+    "devValue": "komplex mutató (minél nagyobb, annál fejlettebb)",
+    "devRank": "{rank}. a {of} járás között (1. = legelmaradottabb)",
+    "devThreshold": "a kedvezményezettség határa {n}",
+    "devGrade": {
+      "kedvezmenyezett": "kedvezményezett járás",
+      "fejlesztendo": "fejlesztendő járás",
+      "komplex": "komplex programmal fejlesztendő járás",
+      "none": "nem kedvezményezett járás"
+    },
+    "laggingLabel": "a járás településeiből elmaradott besorolású",
+    "laggingParts": "{socio} társadalmi-gazdasági, {unemployment} munkanélküliséggel sújtott, {temporary} átmenetileg",
+    "laggingPopulation": "a lakosság {share}-a él bennük",
+    "distHeading": "Hol áll ez a 197 járás között?",
+    "distExplain": "Minden pont egy járás, a kiválasztott kiemelve. A rangsorszám önmagában félrevezet: a 103. lehet hajszálnyira a mediántól és félúton a mélypontig is. Válts mértéket, vigyéd rá az egeret, vagy kattints egy másik járásra.",
+    "distMedian": "medián: {n}",
+    "distWorse": "ez a rosszabb vég",
+    "distRank": "{rank}. a {of} mérhető járás között",
+    "distHint": "Vidd rá az egeret egy pontra.",
+    "devSource": "Forrás: {source}; illetve {benefit}. A komplex mutató álló besorolás, nem a mai állapot mérése.",
+    "measure": {
+      "gpVacancy": "Háziorvosi betöltetlenség",
+      "dentalVacancy": "Fogorvosi betöltetlenség",
+      "development": "Fejlettség",
+      "lagging": "Elmaradott települések",
+      "gpMin": "Menetidő háziorvoshoz",
+      "oncallMin": "Menetidő ügyeletre",
+      "ageing": "65 év felettiek aránya",
+      "index": "Kockázati index"
+    },
+    "scatterAxis": {
+      "travel": "Menetidő szerint",
+      "development": "Fejlettség szerint"
     }
   }
 }
