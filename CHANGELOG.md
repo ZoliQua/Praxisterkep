@@ -5,6 +5,38 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.49.0] — 2026-10-18
+
+Tisztább archívum, igazságosabb összevetés, előrejelzés településre.
+
+### Hozzáadva
+- **Illesztett összevetés a letelepedési támogatásoknál.** Minden támogatott
+  körzet mellé legfeljebb öt, támogatást nem kapott körzet ugyanabból a
+  hónapból, azonos üresedési és településméret-sávban, lehetőleg azonos
+  megyében. A támogatott háziorvosi körzetek 91%-ában van ma orvos, a
+  párjaikban 17%-ban; fogorvosnál 91% és 23%.
+- **Előrejelzés településre.** Minden településlapon: mekkora az esélye,
+  hogy egy év múlva a települést ellátó körzetek közül legalább egy
+  betöltetlen lesz, és hány ellátó körzet tartozik az ország legkockázatosabb
+  tizedébe — a településről, nem egy-egy orvosról. Az elemző oldalon a
+  legveszélyeztetettebb, ma még ellátott kistelepülések listája.
+
+### Javítva
+- **Az egész archívum a Helységnévtár írásmódjával.** A régi havi
+  pillanatképekben 58 584 településnév szerepelt a NEAK eredeti alakjában
+  („Budapest XI. kerület”, „Budapest 11”, „Gyor”); egy kerület így két-három
+  külön helyként is megjelent. Egy egyszeri átírás (`etl/respell_archive.py`)
+  újraolvasás nélkül egységesítette a neveket és összevonta a kettévált
+  bejegyzéseket; minden hónap átment a pillanatkép-ellenőrzésen. Ettől a
+  támogatások párosítása is pontosabb lett (a nem egyértelmű esetek 61-ről
+  42-re csökkentek).
+
+### Módosítva
+- A havi munkafolyamat kézzel indítva a felhőben is végigfutott az összes új
+  lépéssel (tesztek, pipeline, `pipeline.py --check` hibátlan); a felhőben
+  épült hónap már átírás nélkül is a Helységnévtár neveit viseli. A
+  CLAUDE.md-ből kikerült a régóta nem létező Cloudflare-munkafolyamat.
+
 ## [1.48.0] — 2026-10-18
 
 Kik élnek ott, ahol nincs orvos; milyen messze a sürgősségi osztály; megérte-e
