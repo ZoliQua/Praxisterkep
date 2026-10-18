@@ -37,7 +37,7 @@ function countySeries(o: OutcomesRaw, key: 'incomePerResident' | 'naturalChange'
   };
 }
 
-function MapAndList({ o, measure, picked, onPick, scale, top = 'worst' }: {
+export function MapAndList({ o, measure, picked, onPick, scale, top = 'worst' }: {
   o: OutcomesRaw; measure: string; picked: string | null; onPick: (n: string) => void;
   scale: Parameters<typeof DistrictMap>[0]['scale']; top?: 'worst' | 'best';
 }) {

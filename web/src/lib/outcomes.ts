@@ -46,6 +46,20 @@ export interface OutcomeDistrict {
   jobseekers: number | null;
   jobseekersLongShare: number | null;
   jobseekersTrend: number | null;
+  /** census 2022 shares (0–1), the kerület's own */
+  degree: number | null;
+  employed: number | null;
+  noDigital: number | null;
+  poorHousing: number | null;
+  elderlyOnly: number | null;
+  /** median settlement minutes to the nearest emergency department */
+  sboMinutes: number | null;
+  /** share of residents 30 minutes or more from one */
+  sboBeyond30: number | null;
+  gpRateIn12: number | null;
+  gpVacantIn12: number | null;
+  gpExpectedNew: number | null;
+  grants: { gp: number; dental: number; practice: number };
   /** the TIMEA fields of a kerület are the capital's, not its own */
   capitalWide: boolean;
 }
@@ -60,6 +74,59 @@ export interface OutcomeCounty {
   naturalChange: number | null;
   migration: number | null;
   jobseekers: number | null;
+  degree: number | null;
+  employed: number | null;
+  noDigital: number | null;
+  poorHousing: number | null;
+  elderlyOnly: number | null;
+  sboMinutes: number | null;
+  sboBeyond30: number | null;
+  gpRateNow: number | null;
+  gpRateIn12: number | null;
+  dentalRateIn12: number | null;
+}
+
+export type GrantStatus = 'filled' | 'vacant' | 'gone' | null;
+
+export interface GrantSummary {
+  winners: number; noContract: number; matched: number; ambiguous: number;
+  unmatched: number; filled: number; vacant: number; gone: number;
+}
+
+export interface GrantKind {
+  latestMonth: string;
+  years: number[];
+  byProgrammeYear: ({ programme: 'settle' | 'practice'; year: number } & GrantSummary)[];
+  byCounty: ({ county: string } & GrantSummary)[];
+  total: { settle?: GrantSummary; practice?: GrantSummary };
+  comparison: { year: number; month: string; districts: number; filled?: number;
+    vacant?: number; gone?: number }[];
+  winners: { year: number; programme: 'settle' | 'practice'; settlement: string;
+    county: string; district: string; contract: boolean; status: GrantStatus;
+    matchedBy: string; vacantSince: string | null; lat: number | null; lon: number | null }[];
+}
+
+export interface ForecastArea {
+  districts: number; vacantNow: number; expectedNew: number; expectedRefills: number;
+  vacantIn12: number; vacantIn12Band: [number, number]; rateNow: number | null;
+  rateIn12: number | null; path?: number[];
+}
+
+export interface ForecastKind {
+  month: string;
+  national: ForecastArea & { expectedNewBand: [number, number];
+    expectedRefillsBand: [number, number]; path: number[] };
+  counties: Record<string, ForecastArea & { path: number[] }>;
+  districts: Record<string, ForecastArea>;
+  backtest: { from: string; to: string; months: number; openAtStart: number;
+    refillsPredicted: number; refillsActual: number; newPredicted: number;
+    newActual: number } | null;
+  riskValidation: { auc: number; lift: number; baseRate12: number; topDecileRate12: number } | null;
+}
+
+export interface SboSettlement {
+  slug: string; name?: string; county?: string; minutes: number; population: number;
+  gpState: string; at?: string;
 }
 
 export interface Pair {
@@ -144,7 +211,20 @@ export interface OutcomesRaw {
     };
     deserts: { stats?: Record<string, number> };
   };
+  emergency: {
+    points: number; medianMin: number; maxMin: number;
+    population: Record<string, number>; bands: string[]; beyond30: number;
+    settlements: SboSettlement[];
+    farthest: SboSettlement[];
+    doubly: { settlements: number; population: number; list: SboSettlement[] };
+  };
+  grants: { sourceUrl: string; kinds: Record<'gp' | 'dental', GrantKind> };
+  forecast: { horizonMonths: number; kinds: Record<'gp' | 'dental', ForecastKind> };
+  census: { year: number; country: Record<string, number> };
 }
+
+/** what the correlations hold still: nothing, income, or income and education */
+export type Control = 'none' | 'income' | 'incomeDegree';
 
 let cache: OutcomesRaw | null = null;
 let pending: Promise<OutcomesRaw | null> | null = null;
@@ -233,6 +313,22 @@ export const MEASURES: Record<string, MeasureMeta> = {
     format: (v) => `${num(0)(v)}%` },
   development: { key: 'development', direction: 'higherBetter', color: AMBER,
     format: num(1) },
+  degree: { key: 'degree', direction: 'higherBetter', color: AMBER,
+    format: (v) => `${num(1)(v * 100)}%` },
+  employed: { key: 'employed', direction: 'higherBetter', color: AMBER,
+    format: (v) => `${num(1)(v * 100)}%` },
+  noDigital: { key: 'noDigital', direction: 'higherWorse', color: VIOLET,
+    format: (v) => `${num(1)(v * 100)}%` },
+  poorHousing: { key: 'poorHousing', direction: 'higherWorse', color: VIOLET,
+    format: (v) => `${num(1)(v * 100)}%` },
+  elderlyOnly: { key: 'elderlyOnly', direction: 'higherWorse', color: VIOLET,
+    format: (v) => `${num(1)(v * 100)}%` },
+  sboMinutes: { key: 'sboMinutes', direction: 'higherWorse', color: RED,
+    format: (v) => `${num(1)(v)} ${locale === 'en' ? 'min' : 'perc'}` },
+  sboBeyond30: { key: 'sboBeyond30', direction: 'higherWorse', color: RED,
+    format: (v) => `${num(0)(v * 100)}%` },
+  gpRateIn12: { key: 'gpRateIn12', direction: 'higherWorse', color: RED,
+    format: (v) => `${num(1)(v * 100)}%` },
 };
 
 /** The value of a measure for a district row, or null. */

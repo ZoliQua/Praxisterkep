@@ -26,6 +26,10 @@ import { MortalitySection } from './MortalitySection';
 import { LivingSection } from './LivingSection';
 import { LinksSection } from './LinksSection';
 import { CrossSection } from './CrossSection';
+import { CensusSection } from './CensusSection';
+import { SboSection } from './SboSection';
+import { GrantsSection } from './GrantsSection';
+import { ForecastSection } from './ForecastSection';
 
 /** One hand-off between two analyses, in the page's own rhythm. */
 function Next({ items }: { items: Parameters<typeof NextSteps>[0]['items'] }) {
@@ -46,10 +50,10 @@ export function AnalysisPage() {
         <p className="section__lead">{t('analysis.lead')}</p>
       </header>
       <nav className="page-toc">
-        {(['statisztika', 'osszevetes', 'kockazat', 'tulel', 'orvosok',
-           'lefedettseg', 'jarasok', 'halalozas', 'jovedelem', 'allaskeresok',
-           'nepesseg', 'osszefuggesek', 'ugyelet', 'tavolsag', 'menetido', 'busz',
-           'index', 'keresztmetszet', 'hianyteruletek'] as const).map((id) => (
+        {(['statisztika', 'osszevetes', 'kockazat', 'tulel', 'elorejelzes', 'tamogatasok',
+           'orvosok', 'lefedettseg', 'jarasok', 'halalozas', 'jovedelem', 'allaskeresok',
+           'nepesseg', 'nepszamlalas', 'osszefuggesek', 'ugyelet', 'tavolsag', 'menetido',
+           'surgosseg', 'busz', 'index', 'keresztmetszet', 'hianyteruletek'] as const).map((id) => (
           <a key={id} href={`#${id}`}>{t(`analysis.toc.${id}`)}</a>
         ))}
       </nav>
@@ -57,6 +61,10 @@ export function AnalysisPage() {
       <VersusSection />
       <RiskSection kind={kind} />
       <SurvivalSection kind={kind} />
+      {/* the two above, put together: how many will be vacant in a year —
+          and whether paying a doctor to settle has filled districts so far */}
+      <ForecastSection key={kind} kind={kind} />
+      <GrantsSection />
       <WorkforceSection kind={kind} />
       <CoverageSection kind={kind} />
       <DistrictAnalysis />
@@ -64,10 +72,12 @@ export function AnalysisPage() {
           circumstances that make a district hard to fill */}
       <MortalitySection />
       <LivingSection />
+      <CensusSection />
       <LinksSection />
       <EmergencySection kind={kind} />
       <AccessSection />
       <TravelTimeSection />
+      <SboSection />
       <Next items={[
         { href: '/elemzo.html#busz', titleKey: 'next.bus.title', textKey: 'next.bus.text' },
         { href: '/megye.html', titleKey: 'next.county.title', textKey: 'next.county.text' },

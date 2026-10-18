@@ -19,6 +19,7 @@ import {
   districtHref, incomeThird, metaOf, partialOf, pairOf, pValue, ruralMedian, strengthOf,
   useOutcomes, valueOf,
 } from '../lib/outcomes';
+import { PartialSteps } from './charts/PartialSteps';
 import { DistrictMap } from './charts/DistrictMap';
 import { OutcomeScatter, type ScatterPoint } from './charts/OutcomeScatter';
 import { TertileGrid } from './charts/TertileGrid';
@@ -52,6 +53,7 @@ export function MortalitySection() {
 
   const pair = pairOf(data, 'gpRate', measure);
   const part = partialOf(data, 'gpRate', measure, 'income');
+  const part2 = partialOf(data, 'gpRate', measure, 'incomeDegree');
   const incPair = pairOf(data, 'income', measure);
 
   const gridKey = measure === 'amenable' ? 'amenable' : 'avoidable';
@@ -146,6 +148,20 @@ export function MortalitySection() {
             r: formatDecimal(incPair.r.toFixed(2)),
           })}`}
         </p>
+      )}
+      {pair && part && part2 && (
+        <div className="outcome__steps">
+          <h3 className="outcome__sub">{t('outcomes.steps.heading')}</h3>
+          <PartialSteps steps={[
+            { key: 'raw', r: pair.r, p: pair.p },
+            { key: 'income', r: part.partial, p: part.p },
+            { key: 'incomeDegree', r: part2.partial, p: part2.p },
+          ]} />
+          <p className="outcome__finding">{t(part2.p < 0.05
+            ? 'outcomes.mortality.findingPartial2' : 'outcomes.mortality.findingPartial2None', {
+            r: formatDecimal(part2.partial.toFixed(2)), p: pValue(part2.p),
+          })}</p>
+        </div>
       )}
 
       <div className="outcome__gridblock">

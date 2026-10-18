@@ -3160,3 +3160,119 @@ body:has(.tp-rail) .tp-map svg { margin-top: 0; }
 .tp-source { color: var(--ink-faint); font-size: 12px; margin: 10px 0 0; }
 .method__item { max-width: 86ch; }
 .method__item p { color: var(--ink-dim); line-height: 1.65; }
+.tp-living__item--wide { grid-column: 1 / -1; }
+.tp-dot { display: grid; grid-template-columns: minmax(180px, 2fr) 3fr 58px; gap: 10px; align-items: center; font-size: 12.5px; color: var(--ink-dim); margin: 2px 0; }
+.tp-dot__svg { width: 100%; height: 30px; }
+.tp-dot__axis { stroke: var(--line-strong); }
+.tp-dot__self { fill: var(--alert-soft); stroke: var(--bg-raised); stroke-width: 2; }
+.tp-dot__district { stroke: #8ab4ff; stroke-width: 2.5; }
+.tp-dot__county { stroke: #f0b429; stroke-width: 2.5; }
+.tp-dot__country { stroke: var(--ink); stroke-width: 2.5; opacity: 0.75; }
+.tp-dot b { text-align: right; color: var(--ink); font-variant-numeric: tabular-nums; }
+.tp-dot__legend { font-size: 12px; color: var(--ink-faint); margin: 0 0 6px; }
+.tp-dot__legend .is-self { color: var(--alert-soft); } .tp-dot__legend .is-district { color: #8ab4ff; font-weight: 700; }
+.tp-dot__legend .is-county { color: #f0b429; font-weight: 700; } .tp-dot__legend .is-country { color: var(--ink); font-weight: 700; }
+.tp-grants { list-style: none; padding: 0; margin: 4px 0 8px; display: grid; gap: 6px; font-size: 13px; color: var(--ink); }
+.tp-grants li { border-left: 3px solid var(--line-strong); padding-left: 8px; }
+.tp-grants li span { display: block; font-size: 12px; color: var(--ink-faint); }
+.tp-grants li.is-filled { border-color: #5fb3a1; } .tp-grants li.is-vacant { border-color: var(--alert); }
+.tp-forecast { display: grid; gap: 6px; margin: 4px 0 8px; font-size: 12px; color: var(--ink-faint); }
+.tp-forecast div { display: grid; grid-template-columns: 96px 1fr 44px; align-items: center; gap: 8px; }
+.tp-forecast__track { position: relative; height: 12px; background: var(--bg-panel); border-radius: 2px; }
+.tp-forecast i { position: absolute; left: 0; top: 1px; height: 10px; background: var(--line-strong); border-radius: 2px; }
+.tp-forecast i.is-later { background: var(--alert-soft); }
+.tp-forecast em { position: absolute; top: -1px; height: 14px; border: 1px dashed var(--ink-dim); border-radius: 2px; pointer-events: none; }
+.tp-forecast b { text-align: right; color: var(--ink); }
+@media (max-width: 560px) { .tp-dot { grid-template-columns: 1fr 52px; } .tp-dot__svg { grid-column: 1 / -1; grid-row: 2; } }
+
+/* partial-correlation steps */
+.outcome__steps { margin-top: 18px; }
+.partial-steps { display: grid; gap: 8px; max-width: 720px; margin: 8px 0 12px; }
+.partial-steps__row { display: grid; grid-template-columns: minmax(170px, 1.3fr) 2fr 56px; gap: 10px; align-items: center; font-size: 13px; color: var(--ink-dim); }
+.partial-steps__track { height: 14px; background: var(--bg-panel); border-radius: 3px; overflow: hidden; }
+.partial-steps__track i { display: block; height: 100%; background: var(--alert-soft); border-radius: 3px; transition: width .4s ease; }
+.partial-steps__track i.is-neg { background: #5fb3a1; }
+.partial-steps__row.is-weak .partial-steps__track i { opacity: .35; }
+.partial-steps__row b { text-align: right; color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* stacked bars */
+.stacked { display: grid; gap: 4px; margin: 8px 0 14px; }
+.stacked__row { all: unset; display: grid; grid-template-columns: 140px 1fr 48px; gap: 10px; align-items: center; font-size: 12.5px; color: var(--ink-dim); padding: 2px 4px; border-radius: 4px; cursor: default; }
+.stacked__row:not(:disabled) { cursor: pointer; }
+.stacked__row:not(:disabled):hover, .stacked__row.is-on { background: var(--bg-panel); color: var(--ink); }
+.stacked__label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stacked__track { display: flex; height: 14px; background: var(--bg-panel); border-radius: 3px; overflow: hidden; }
+.stacked__track i { display: block; height: 100%; }
+.stacked__row b { text-align: right; color: var(--ink); font-variant-numeric: tabular-nums; }
+.stacked__legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12px; color: var(--ink-faint); margin-top: 6px; }
+.stacked__legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+
+/* grants */
+.outcome__switches { display: flex; flex-wrap: wrap; gap: 10px; }
+.outcome__kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 14px 0 6px; }
+.outcome__kpis div { border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg-raised); padding: 12px 14px; }
+.outcome__kpis b { display: block; font: 800 28px var(--font-display); color: var(--ink); }
+.outcome__kpis span { font-size: 12.5px; color: var(--ink-dim); }
+.grant-compare { display: grid; gap: 8px; max-width: 760px; margin: 8px 0 18px; }
+.grant-compare__row { display: grid; grid-template-columns: 52px 1fr; gap: 10px; align-items: center; }
+.grant-compare__year { font: 700 13px var(--font-body); color: var(--ink); }
+.grant-compare__bars { display: grid; gap: 3px; }
+.grant-compare__bars > span { position: relative; display: grid; grid-template-columns: 1fr 52px; gap: 8px; align-items: center; }
+.grant-compare__bars i { display: block; height: 11px; border-radius: 2px; }
+.grant-compare__bars b { font-size: 12px; text-align: right; color: var(--ink-dim); font-variant-numeric: tabular-nums; }
+.grant-compare i.is-with { background: #5fb3a1; } .grant-compare i.is-without { background: #8b8fa3; }
+.grant-compare__legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: var(--ink-faint); }
+.grant-compare__legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; }
+
+/* forecast */
+.forecast-path { width: 100%; height: auto; display: block; }
+.forecast-path__grid { stroke: var(--line); }
+.forecast-path__tick { fill: var(--ink-faint); font-size: 11px; }
+.forecast-path__line { fill: none; stroke: var(--alert-soft); stroke-width: 2.5; }
+.forecast-path__compare { fill: none; stroke: var(--ink-faint); stroke-width: 1.5; stroke-dasharray: 4 3; }
+.forecast-path__band { stroke: var(--ink); stroke-width: 1.5; }
+.forecast-path__now { fill: var(--bg-raised); stroke: var(--ink); stroke-width: 2; }
+.forecast-path__end { fill: var(--alert-soft); }
+.forecast-path__label { fill: var(--ink); font: 700 12px var(--font-body); }
+.outcome__backtest { margin-top: 12px; border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 12px; background: var(--bg-raised); }
+.outcome__backtest h4 { margin: 0 0 8px; font: 600 13px var(--font-body); color: var(--ink-dim); }
+.backtest__row { display: grid; grid-template-columns: 120px 1fr 90px; gap: 8px; align-items: center; font-size: 12.5px; color: var(--ink-dim); margin: 4px 0; }
+.backtest__bars { display: grid; gap: 2px; }
+.backtest__bars i { display: block; height: 8px; border-radius: 2px; }
+.backtest__bars i.is-pred { background: var(--alert-soft); } .backtest__bars i.is-act { background: var(--ink-faint); }
+.backtest__row b { text-align: right; color: var(--ink); font-variant-numeric: tabular-nums; }
+.dumbbell { display: grid; gap: 3px; }
+.dumbbell__legend { display: flex; gap: 14px; font-size: 12px; color: var(--ink-faint); margin-bottom: 4px; }
+.dumbbell__legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; }
+.dumbbell__legend i.is-from, .dumbbell__dot.is-from { background: var(--bg-raised); border: 2px solid var(--ink-dim); }
+.dumbbell__legend i.is-to, .dumbbell__dot.is-to { background: var(--alert-soft); }
+.dumbbell__row { display: grid; grid-template-columns: 150px 1fr 52px; gap: 8px; align-items: center; font-size: 12.5px; color: var(--ink-dim); padding: 1px 4px; border-radius: 4px; }
+.dumbbell__row.is-on, .dumbbell__row:hover { background: var(--bg-panel); color: var(--ink); }
+.dumbbell__label a { color: inherit; }
+.dumbbell__track { position: relative; height: 14px; }
+.dumbbell__track em { position: absolute; top: 4px; height: 6px; background: color-mix(in srgb, var(--alert) 18%, transparent); border-radius: 3px; }
+.dumbbell__bar { position: absolute; top: 6px; height: 2px; }
+.dumbbell__bar.is-up { background: var(--alert-soft); } .dumbbell__bar.is-down { background: #5fb3a1; }
+.dumbbell__dot { position: absolute; top: 2px; width: 10px; height: 10px; border-radius: 50%; margin-left: -5px; box-sizing: border-box; }
+.dumbbell__row b { text-align: right; color: var(--ink); font-variant-numeric: tabular-nums; }
+.linklike { all: unset; color: var(--accent, #4fd6c2); cursor: pointer; text-decoration: underline; }
+
+/* emergency */
+.outcome__callout { margin: 18px 0; padding: 14px 16px; border-left: 3px solid var(--alert); background: color-mix(in srgb, var(--alert) 7%, var(--bg-raised)); border-radius: 0 var(--radius) var(--radius) 0; }
+.outcome__callout p { color: var(--ink); margin: 0 0 8px; }
+.outcome__ranking-list { margin: 0; padding-left: 20px; columns: 2 280px; font-size: 13px; color: var(--ink-dim); }
+.outcome__ranking-list li { break-inside: avoid; margin-bottom: 4px; }
+.outcome__ranking-list span { display: block; font-size: 12px; color: var(--ink-faint); }
+@media (max-width: 640px) {
+  .stacked__row { grid-template-columns: 92px 1fr 40px; }
+  .dumbbell__row { grid-template-columns: 104px 1fr 46px; }
+  .partial-steps__row { grid-template-columns: 1fr 56px; }
+  .partial-steps__track { grid-column: 1 / -1; grid-row: 2; }
+}
+.district-grants { margin-top: 18px; }
+.county-grants { list-style: none; padding: 0; margin: 6px 0 10px; display: grid; gap: 6px; font-size: 12.5px; color: var(--ink-dim); }
+.county-grants li { display: grid; grid-template-columns: 44px 1fr; grid-template-rows: auto auto; column-gap: 10px; }
+.county-grants li b { grid-row: 1 / 3; color: var(--ink); align-self: center; }
+.county-grants__track { position: relative; height: 10px; background: var(--bg-panel); border-radius: 2px; }
+.county-grants__track i { position: absolute; left: 0; top: 0; height: 100%; background: var(--line-strong); border-radius: 2px; }
+.county-grants__track i.is-filled { background: #5fb3a1; }

@@ -7,6 +7,10 @@ fix, for every járás and county:
   mortality.json    deaths that care or prevention should have averted (M)
   territorial.json  income, births and deaths, people moving out (N)
   jobseekers.json   registered jobseekers (O)
+  census.json       education, work, digital skills, housing, households (F2)
+  traveltime.json   driving minutes to the nearest emergency department (J)
+  grants.json       NEAK's settlement grants and what became of them (P)
+  forecast.json     the vacancies expected a year from now
 
 and adds the four cross-readings that need no new source at all, from the
 settlement profiles already built: how long a vacancy lasts against how far
@@ -22,6 +26,10 @@ poverty. Two things are computed so the page can say more than that:
 
   * the partial correlation of vacancy with each outcome, income held
     constant (r_xy·z = (r_xy − r_xz r_yz) / √((1 − r_xz²)(1 − r_yz²)));
+  * the same with income *and* education (the share of adults with a
+    degree) held constant together — the second-order partial
+    r_xy·zw = (r_xy·z − r_xw·z r_yw·z) / √((1 − r_xw·z²)(1 − r_yw·z²)),
+    because a járás can be poor for reasons its schooling also explains;
   * a 3 × 3 grid — income tertile by vacancy tertile — with the median
     avoidable mortality in each cell, so a reader can see whether, among
     járás equally poor, those with more vacancies die more.
@@ -130,6 +138,17 @@ def partial(rxy: float, rxz: float, ryz: float) -> float | None:
     return None if den == 0 else (rxy - rxz * ryz) / den
 
 
+def partial2(rxy: float, rxz: float, ryz: float,
+             rxw: float, ryw: float, rzw: float) -> float | None:
+    """r_xy·zw: the first-order partials on z, then partialled on w."""
+    a = partial(rxy, rxz, ryz)      # r_xy·z
+    b = partial(rxw, rxz, rzw)      # r_xw·z
+    c = partial(ryw, ryz, rzw)      # r_yw·z
+    if None in (a, b, c):
+        return None
+    return partial(a, b, c)
+
+
 def fit(xs, ys) -> dict:
     n = len(xs)
     mx, my = sum(xs) / n, sum(ys) / n
@@ -150,6 +169,13 @@ def district_rows() -> list[dict]:
     mortality = read("mortality.json")
     territorial = read("territorial.json")
     jobs = read("jobseekers.json")
+
+    census = read("census.json")["districts"]
+    travel = read("traveltime.json")["settlements"]
+    forecast = read("forecast.json")["kinds"]["gp"]["districts"]
+    grants = read("grants.json")["kinds"]
+    sbo = _district_sbo(travel)
+    granted = _district_grants(grants)
 
     mort = mortality["districts"]
     terr = territorial["districts"]
@@ -178,6 +204,10 @@ def district_rows() -> list[dict]:
         j = jd.get(name)
         if j is None:
             raise ParseError(f"no jobseeker row for járás {name}")
+        cen = census.get(name)
+        if cen is None:
+            raise ParseError(f"no census row for járás {name}")
+        fc = forecast.get(name) or {}
         sha, shh = m["sha"], m["shh"]
         gp, dental = d.get("gpDistricts") or {}, d.get("dentalDistricts") or {}
         wap_now, reg_now = j["workingAge"][i_now], j["registered"][i_now]
@@ -224,12 +254,55 @@ def district_rows() -> list[dict]:
                                     if reg_now else None),
             "jobseekersTrend": (round(100 * reg_now / wap_now - 100 * reg_then / wap_then, 2)
                                 if wap_now and wap_then else None),
+            # the census, per kerület too (the census has its own kerület level)
+            **{k: cen[k] for k in CENSUS},
+            # the nearest emergency department, by road
+            "sboMinutes": sbo.get(name, {}).get("median"),
+            "sboBeyond30": sbo.get(name, {}).get("beyond30"),
+            # the forecast, a year from now (GP)
+            "gpRateIn12": fc.get("rateIn12"),
+            "gpVacantIn12": fc.get("vacantIn12"),
+            "gpExpectedNew": fc.get("expectedNew"),
+            # settlement grants taken up here
+            "grants": granted.get(name, {"gp": 0, "dental": 0, "practice": 0}),
             "capitalWide": cap,
         }
         rows.append(row)
     if len(rows) != 197:
         raise ParseError(f"{len(rows)} járás rows, expected 197")
     return rows
+
+
+CENSUS = ("degree", "employed", "noDigital", "poorHousing", "elderlyOnly")
+
+
+def _district_sbo(travel: list[dict]) -> dict[str, dict]:
+    """Median settlement minutes to an emergency department, and the share of
+    residents 30 minutes or more away, per járás."""
+    groups: dict[str, list[dict]] = {}
+    for r in travel:
+        if r.get("sboMin") is not None:
+            groups.setdefault(r["district"], []).append(r)
+    out = {}
+    for name, rows in groups.items():
+        pop = sum(r["population"] for r in rows)
+        out[name] = {
+            "median": round(statistics.median(r["sboMin"] for r in rows), 1),
+            "beyond30": round(sum(r["population"] for r in rows if r["sboMin"] >= 30) / pop, 4)
+            if pop else None,
+        }
+    return out
+
+
+def _district_grants(kinds: dict) -> dict[str, dict]:
+    out: dict[str, dict] = {}
+    for kind, k in kinds.items():
+        for w in k["winners"]:
+            if not w["contract"]:
+                continue
+            d = out.setdefault(w["district"], {"gp": 0, "dental": 0, "practice": 0})
+            d["practice" if w["programme"] == "practice" else kind] += 1
+    return out
 
 
 def _shift(month: str, delta: int) -> str:
@@ -240,10 +313,11 @@ def _shift(month: str, delta: int) -> str:
 
 # the pairs the page reads; x is always something about care, y an outcome
 # or a circumstance
-CARE = ("gpRate", "gpLongTerm", "dentalRate", "gpMinutes")
+CARE = ("gpRate", "gpLongTerm", "dentalRate", "gpMinutes", "sboMinutes")
 OUTCOMES = ("avoidable", "amenable", "treatable", "preventable", "both", "allCause",
             "income", "taxpayers", "jobseekers", "naturalChange", "migration",
-            "diabetes", "hypertension", "ischaemic", "gpLoad", "ageing", "development")
+            "diabetes", "hypertension", "ischaemic", "gpLoad", "ageing", "development",
+            "degree", "employed", "noDigital", "poorHousing", "elderlyOnly")
 
 
 def correlations(rows: list[dict]) -> dict:
@@ -272,7 +346,7 @@ def correlations(rows: list[dict]) -> dict:
         return m["r"] if m else None
 
     for control in ("income", "development"):
-        for x in ("gpRate", "gpLongTerm"):
+        for x in CARE:
             for y in OUTCOMES:
                 if y in (control,) or y == x:
                     continue
@@ -287,6 +361,22 @@ def correlations(rows: list[dict]) -> dict:
                 partials.append({"x": x, "y": y, "control": control, "n": n,
                                  "r": round(rxy, 3), "partial": round(pr, 3),
                                  "p": float(f"{p_value(pr, n, controls=1):.2g}")})
+    # income and education held still together
+    for x in CARE:
+        for y in OUTCOMES:
+            if y in ("income", "degree"):
+                continue
+            rs = [r_of(*pair) for pair in ((x, y), (x, "income"), (y, "income"),
+                                           (x, "degree"), (y, "degree"), ("income", "degree"))]
+            if None in rs:
+                continue
+            pr = partial2(*rs)
+            if pr is None:
+                continue
+            n = by_pair.get((x, y), by_pair.get((y, x), {"n": 0}))["n"]
+            partials.append({"x": x, "y": y, "control": "incomeDegree", "n": n,
+                             "r": round(rs[0], 3), "partial": round(pr, 3),
+                             "p": float(f"{p_value(pr, n, controls=2):.2g}")})
     return {"population": "174 járás outside the capital", "pairs": matrix,
             "partials": partials}
 
@@ -321,6 +411,9 @@ def county_rows() -> list[dict]:
     mort = read("mortality.json")["counties"]
     terr = read("territorial.json")["counties"]
     jobs = read("jobseekers.json")
+    census = read("census.json")["counties"]
+    travel = {c["county"]: c for c in read("traveltime.json")["counties"]}
+    forecast = read("forecast.json")["kinds"]
     i_now = len(jobs["months"]) - 1
     out = []
     for c in counties:
@@ -337,6 +430,12 @@ def county_rows() -> list[dict]:
             "naturalChange": _mean(t.get("naturalChange", {}), SMOOTH_YEARS),
             "migration": _mean(t.get("migration", {}), SMOOTH_YEARS),
             "jobseekers": round(100 * j["registered"][i_now] / j["workingAge"][i_now], 2),
+            **{k: census[name][k] for k in CENSUS},
+            "sboMinutes": travel[name]["sboMedianMin"],
+            "sboBeyond30": round(travel[name]["sboBeyond30"] / travel[name]["population"], 4),
+            "gpRateNow": forecast["gp"]["counties"][name]["rateNow"],
+            "gpRateIn12": forecast["gp"]["counties"][name]["rateIn12"],
+            "dentalRateIn12": forecast["dental"]["counties"][name]["rateIn12"],
         })
     return out
 
@@ -461,6 +560,71 @@ def cross_readings(data_month: str) -> dict:
     }
 
 
+# ------------------------------------------- emergency, grants, forecast
+
+def emergency(rows: list[dict]) -> dict:
+    """The nearest emergency department: who is far, and who is far *and*
+    has no GP of their own."""
+    travel = read("traveltime.json")
+    profiles = {r["kshId"]: r for r in read("settlements.json")["settlements"]}
+    far = []
+    for t in travel["settlements"]:
+        p = profiles.get(t["kshId"])
+        if t.get("sboMin") is None or p is None:
+            continue
+        far.append({"slug": p["slug"], "name": t["settlement"], "county": t["county"],
+                    "population": t["population"], "minutes": t["sboMin"],
+                    "at": t.get("sboAt"), "gpState": p["gp"]["state"]})
+    double = [f for f in far if f["minutes"] >= 30 and f["gpState"] == "vacantOnly"]
+    stats = travel["stats"]["sbo"]
+    return {
+        "points": stats["points"],
+        "medianMin": stats["medianMin"], "maxMin": stats["maxMin"],
+        "population": stats["population"], "bands": travel["bands"],
+        "beyond30": stats["populationBeyond30"],
+        "settlements": [{k: f[k] for k in ("slug", "minutes", "population", "gpState")}
+                        for f in far],
+        "farthest": sorted(far, key=lambda f: -f["minutes"])[:25],
+        "doubly": {"settlements": len(double),
+                   "population": sum(f["population"] for f in double),
+                   "list": sorted(double, key=lambda f: -f["population"])[:30]},
+    }
+
+
+def grants_summary() -> dict:
+    g = read("grants.json")
+    geo = {f["properties"]["kshId"]: f["geometry"]["coordinates"]
+           for f in read("geo/settlements.geojson")["features"]}
+    out = {"sourceUrl": g["sourceUrl"], "kinds": {}}
+    for kind, k in g["kinds"].items():
+        points = []
+        for w in k["winners"]:
+            lon, lat = geo.get(w["kshId"], (None, None))
+            points.append({"year": w["year"], "programme": w["programme"],
+                           "settlement": w["settlement"], "county": w["county"],
+                           "district": w["district"], "contract": w["contract"],
+                           "status": w["status"], "matchedBy": w["matchedBy"],
+                           "vacantSince": w["vacantSince"], "lat": lat, "lon": lon})
+        out["kinds"][kind] = {key: k[key] for key in ("latestMonth", "years", "byProgrammeYear",
+                                                      "byCounty", "total", "comparison")}
+        out["kinds"][kind]["winners"] = points
+    return out
+
+
+def forecast_summary() -> dict:
+    f = read("forecast.json")
+    keep = ("districts", "vacantNow", "expectedNew", "expectedRefills", "vacantIn12",
+            "vacantIn12Band", "rateNow", "rateIn12")
+    return {"horizonMonths": f["horizonMonths"], "kinds": {
+        kind: {
+            "month": k["month"], "national": k["national"],
+            "counties": {n: {**{x: c[x] for x in keep}, "path": c["path"]}
+                         for n, c in k["counties"].items()},
+            "districts": {n: {x: d[x] for x in keep} for n, d in k["districts"].items()},
+            "backtest": k["backtest"], "riskValidation": k["riskValidation"],
+        } for kind, k in f["kinds"].items()}}
+
+
 def build() -> dict:
     latest = read("latest.json")
     data_month = latest.get("month") or latest["kinds"]["gp"]["month"]
@@ -477,6 +641,7 @@ def build() -> dict:
                             "url": territorial["sourceUrl"]},
             "jobseekers": {"latest": jobs["latest"], "first": jobs["months"][0],
                            "url": jobs["sourceUrl"]},
+            "census": {"year": 2022, "url": read("census.json")["sourceUrl"]},
         },
         "smoothYears": list(SMOOTH_YEARS),
         "districts": rows,
@@ -485,6 +650,10 @@ def build() -> dict:
         "grid": {"avoidable": grid(rows, "avoidable"), "amenable": grid(rows, "amenable")},
         "series": series(),
         "cross": cross_readings(data_month),
+        "emergency": emergency(rows),
+        "grants": grants_summary(),
+        "forecast": forecast_summary(),
+        "census": {"year": 2022, "country": read("census.json")["country"]},
     }
 
 
