@@ -22,7 +22,6 @@ export function Hero() {
 
   return (
     <header className="hero container">
-      <div className="hero__kicker">{t('site.title')}</div>
       <h1>
         {t(`kinds.${kind}.question`).replace('?', '')}
         <span className="accent">?</span>

@@ -52,7 +52,7 @@ megmarad.
 | [Megye](https://praxisterkep.hu/megye.html) (`megye.html`) | Egy megye a többi tizenkilenc között: betöltetlenség, járásai, települései, és az **Egészség és életkörülmények** rész — kilenc rangsor (elkerülhető halálozás, jövedelem, álláskeresők, népmozgalom, vándorlás, végzettség, digitális inaktivitás, sürgősségi menetidő, várható betöltetlenség), 12 hónapos előrejelzési görbe, letelepedési támogatások évenként |
 | [Járás](https://praxisterkep.hu/jaras.html) (`jaras.html`) | A 197 egység (174 járás + 23 kerület) mindegyike: körzetek, ügyelet, rangsor, és mérőszalag-kártyák a 174 vidéki járás között (halálozás halálokonként, jövedelem, álláskeresők, népszámlálás, sürgősségi elérés, előrejelzés), a járásban elnyert támogatások |
 | [Település](https://praxisterkep.hu/telepules/) (`/telepules/<slug>/`) | 3177 statikus oldal, JavaScript nélkül olvasható: van-e orvos és ki az (betöltött körzetnél), mióta üres, milyen messze az ellátás autóval és busszal, gyógyszertár, védőnő, korösszetétel, **Hogyan élnek itt?** (jövedelem, álláskeresők idősorral, születés és halálozás, vándorlás, betegforgalom, népszámlálási pontdiagram, támogatással betöltött körzet, a járás előrejelzése és elkerülhető halálozása), egy év változása |
-| [Elemző](https://praxisterkep.hu/elemzo.html) (`elemzo.html`) | Országos trendek, háziorvos és fogorvos összevetése, kockázati modell, túlélés-elemzés, **előrejelzés egy évre**, **a letelepedési támogatások sorsa**, orvosi fluktuáció, települési lefedettség, járási kép, **elkerülhető halálozás**, jövedelem, álláskeresők, népesség, **népszámlálás**, összefüggés-mátrix (nyers / jövedelem / jövedelem + végzettség kiszűrve), ügyelet és mentő, távolság, menetidő, **sürgősségi osztály**, busz, összetett index, keresztmetszetek, hiányterületek |
+| [Elemző](https://praxisterkep.hu/elemzo.html) (`elemzo.html`) | Országos trendek, háziorvos és fogorvos összevetése, kockázati modell, túlélés-elemzés, **előrejelzés egy évre**, **a letelepedési támogatások sorsa**, települési lefedettség, járási kép, **elkerülhető halálozás**, jövedelem, álláskeresők, népesség, **népszámlálás**, összefüggés-mátrix (nyers / jövedelem / jövedelem + végzettség kiszűrve), ügyelet és mentő, távolság, menetidő, **sürgősségi osztály**, busz, összetett index, keresztmetszetek, hiányterületek |
 | [Ki lát el még?](https://praxisterkep.hu/szakellato.html) (`szakellato.html`) | Védőnői ellátás, járóbeteg- és fekvőbeteg-szakellátás, gyógyszertárak, gyógyászati segédeszköz-forgalmazók |
 | [Módszertan](https://praxisterkep.hu/modszertan.html) (`modszertan.html`) | Minden szám eredete és korlátai, a letölthető adatfájlok, beágyazási kód |
 | [Adatkezelés](https://praxisterkep.hu/adatkezeles.html) (`adatkezeles.html`) | Adatkezelési tájékoztató |
@@ -221,7 +221,7 @@ megbuktatja a munkafolyamatot, ha bármi hibázott vagy kimaradt.
 | `eeszt`, `crosscheck`, `providers`, `operating`, `officialmap`, `licence_history` | EESZT-összevetés, szolgáltatók, működési szint, a NEAK saját FIN-összerendelése, egységek kora | H, C |
 | `dental_extra`, `referral`, `pharmacy`, `gyse`, `specialist`, `vedono` | nem-körzeti fogászat, beutalási törzs, gyógyszertárak, gyse, szakellátás, védőnők | A, C, H, I |
 | `access`, `centroids`, `emergency`, `roads`, `traveltime`, `transit` | légvonal, település-középpontok, ügyelet/mentő, úthálózat, menetidő, busz | G, H, I, J, K |
-| `risk`, `survival`, **`forecast`**, `workforce`, `tenure`, `fluctuation` | kockázat, túlélés, előrejelzés, fluktuáció | a havi archívum |
+| `risk`, `survival`, **`forecast`**, `tenure`, `fluctuation` | kockázat, túlélés, előrejelzés, fluktuáció | a havi archívum |
 | `ksh_age`, **`census`**, `coverage`, `composite`, `clusters` | kor, népszámlálás, lefedettség, index, sivatagok | F, F2 |
 | `mortality`, `territorial`, `jobseekers`, **`grants`** | halálozás, TIMEA, álláskeresők, támogatások | M, N, O, P |
 | `settlements`, `county_profiles`, `district_development`, `district_profiles`, `outcomes` | település-, megye-, járásprofilok, kimenetek | minden fenti |
@@ -250,7 +250,7 @@ Mind a [`data/`](data/) alatt, a webes build a `web/public/data/`-ba másolja
 | `outcomes.json` | halálozás, körülmények, népszámlálás, sürgősségi elérés, támogatások, előrejelzés — járásonként, megyénként, korrelációkkal |
 | `mortality.json`, `territorial.json`, `jobseekers.json`, `census.json` | az M, N, O és F2 forrás feldolgozva |
 | `grants.json`, `forecast.json` | a támogatások sorsa; az egyéves előrejelzés |
-| `risk.json`, `survival.json`, `workforce.json`, `tenure.json`, `fluctuation.json` | archívumra épülő elemzések |
+| `risk.json`, `survival.json`, `tenure.json`, `fluctuation.json` | archívumra épülő elemzések |
 | `coverage.json`, `composite.json`, `clusters.json`, `age.json` | lefedettség, összetett index, sivatagok, korösszetétel |
 | `traveltime.json`, `transit.json`, `access.json`, `emergency.json` | menetidő, busz, légvonal, ügyelet és mentő |
 | `eeszt.json`, `crosscheck.json`, `officialmap.json`, `providers.json`, `operating.json`, `licence_history.json` | EESZT-összevetés és nyilvántartási kiegészítők |

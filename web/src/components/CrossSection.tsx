@@ -21,29 +21,43 @@ function settlementHref(slug: string): string {
   return contextHref(`/telepules/${slug}/`, currentContext());
 }
 
-export function CrossSection() {
+/** The four readings for the whole country, or — on a county or a járás
+ *  page — for that area's own settlements. */
+export function CrossSection({ area }: { area?: { level: 'county' | 'district'; name: string } }) {
   const o = useOutcomes();
-  const pts = useMemo(() => o?.cross.durationTravel ?? [], [o]);
+  const pts = useMemo(() => (o?.cross.durationTravel ?? [])
+    .filter((p) => !area || p[area.level] === area.name), [o, area]);
   const bands = useMemo(() => BANDS.map(([lo, hi]) => {
     const b = pts.filter((p) => p.months >= lo && p.months < hi && p.minutes !== null);
     return { lo, hi, n: b.length, minutes: median(b.map((p) => p.minutes as number)),
       noBus: b.filter((p) => p.bus === false).length };
   }), [pts]);
   if (!o) return null;
-  const c = o.cross;
+  const local = area ? o.cross.areas[`${area.level}:${area.name}`] : null;
+  if (area && !local) return null;
+  const c = { ...o.cross, ...(local ? { ageBands: local.ageBands, bus: local.bus } : {}) };
   const scatter: ScatterPoint[] = pts.filter((p) => p.minutes !== null).map((p) => ({
     id: p.slug, label: p.name, sub: `${p.county} · ${formatDuration(p.months)}`,
     x: p.months / 12, y: p.minutes as number, size: p.population,
     group: p.bus === false ? 0 : p.state === 'vacantOnly' ? 1 : 2,
   }));
   const maxBand = Math.max(...bands.map((b) => b.minutes ?? 0), 1);
-  const ageMax = Math.max(...c.ageBands.map((b) => b.vacantOnly / b.settlements));
+  const ageMax = Math.max(0.01, ...c.ageBands.map((b) => b.vacantOnly / b.settlements));
   const d = c.deserts.stats ?? {};
 
   return (
-    <section className="section container outcome" id="keresztmetszet">
-      <h2 className="section__heading">{t('outcomes.cross.heading')}</h2>
-      <p className="section__lead">{t('outcomes.cross.lead')}</p>
+    <section className={area ? 'outcome cross-local' : 'section container outcome'} id="keresztmetszet">
+      {area ? (
+        <>
+          <h2 className="section__subheading">{t('outcomes.cross.localHeading', { name: area.name })}</h2>
+          <p className="section__explain">{t('outcomes.cross.localLead')}</p>
+        </>
+      ) : (
+        <>
+          <h2 className="section__heading">{t('outcomes.cross.heading')}</h2>
+          <p className="section__lead">{t('outcomes.cross.lead')}</p>
+        </>
+      )}
 
       <div className="cross-grid">
         <article className="cross-card cross-card--wide">
@@ -112,18 +126,32 @@ export function CrossSection() {
 
         <article className="cross-card cross-card--wide cross-card--row">
           <h3>{t('outcomes.cross.desertHeading')}</h3>
-          <p className="cross-card__big">
-            <b>{formatNumber(d.clusters ?? 0)}</b>
-            <span>{t('outcomes.cross.desertBig', {
-              settlements: formatNumber(d.settlementsInClusters ?? 0),
-              people: formatNumber(d.populationInClusters ?? 0),
-            })}</span>
-          </p>
-          <p>{t('outcomes.cross.desertText', {
-            isolated: formatNumber(d.isolated ?? 0),
-            isolatedPeople: formatNumber(d.isolatedPopulation ?? 0),
-          })}</p>
-          <a className="cross-card__more" href="#hianyteruletek">{t('outcomes.cross.desertMore')}</a>
+          {local ? (
+            <p className="cross-card__big">
+              <b>{formatNumber(local.deserts.settlements)}</b>
+              <span>{local.deserts.settlements
+                ? t('outcomes.cross.desertLocal', {
+                  people: formatNumber(local.deserts.population),
+                  clusters: formatNumber(local.deserts.clusters), of: formatNumber(local.settlements) })
+                : t('outcomes.cross.desertNone')}</span>
+            </p>
+          ) : (
+            <>
+              <p className="cross-card__big">
+                <b>{formatNumber(d.clusters ?? 0)}</b>
+                <span>{t('outcomes.cross.desertBig', {
+                  settlements: formatNumber(d.settlementsInClusters ?? 0),
+                  people: formatNumber(d.populationInClusters ?? 0),
+                })}</span>
+              </p>
+              <p>{t('outcomes.cross.desertText', {
+                isolated: formatNumber(d.isolated ?? 0),
+                isolatedPeople: formatNumber(d.isolatedPopulation ?? 0),
+              })}</p>
+            </>
+          )}
+          <a className="cross-card__more" href={area ? '/elemzo.html#hianyteruletek' : '#hianyteruletek'}>
+            {t('outcomes.cross.desertMore')}</a>
         </article>
       </div>
     </section>

@@ -26,6 +26,7 @@ import { CompareBars, ScaleMark, ShareDots } from './charts/DistrictFigures';
 import { PageNav } from './PageNav';
 import { NextSteps } from './NextSteps';
 import { Footer } from './Footer';
+import { VulnerableDistricts } from './VulnerableDistricts';
 
 const NEXT = [
   { href: 'megye.html', titleKey: 'next.county.title', textKey: 'next.county.text' },
@@ -573,6 +574,7 @@ export function DistrictPage() {
 
         <NextSteps items={NEXT} />
       </section>
+      <VulnerableDistricts />
       <Footer />
     </>
   );

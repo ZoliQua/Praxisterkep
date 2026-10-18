@@ -4,6 +4,7 @@
 // so the page cannot advertise a file that is not there.
 import { useEffect, useState } from 'react';
 import { t } from '../lib/i18n';
+import { SITE_URL } from '../lib/site';
 import { formatNumber } from '../lib/format';
 
 interface ManifestFile {
@@ -29,7 +30,7 @@ const DESCRIBED = new Set([
   'operating.json', 'kedvezmenyezett.json', 'counties.geojson', 'jaras.geojson',
   'cities.geojson', 'budapest.geojson', 'vedono.json', 'specialist.json',
   'risk.json', 'survival.json', 'coverage.json', 'composite.json', 'age.json',
-  'settlements.geojson', 'emergency.json', 'workforce.json', 'clusters.json',
+  'settlements.geojson', 'emergency.json', 'clusters.json',
   'traveltime.json', 'transit.json', 'officialmap.json', 'gyse.json',
   'settlement_slugs.json', 'pipeline.json', 'referral.json', 'pharmacy.json',
   'licence_history.json', 'counties.json', 'tenure.json',
@@ -60,7 +61,7 @@ export function DataSection() {
   }, []);
 
   if (!manifest?.files?.length) return null;
-  const base = `${window.location.origin}${import.meta.env.BASE_URL}data/`;
+  const base = `${SITE_URL}/data/`;
 
   return (
     <section className="section container" id="adatok">

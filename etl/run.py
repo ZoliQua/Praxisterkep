@@ -170,6 +170,17 @@ def main() -> None:
             encoding="utf-8")
         return module.OUT.name
 
+    def outcomes_step() -> str:
+        """outcomes.json, and the landing's two headline findings beside it."""
+        import outcomes
+        result = outcomes.build()
+        name = write(outcomes, result)
+        outcomes.HIGHLIGHTS.write_text(
+            json.dumps(outcomes.highlights(result), ensure_ascii=False) + "\n",
+            encoding="utf-8")
+        return (f"{name} + {outcomes.HIGHLIGHTS.name}, {len(result['districts'])} járás, "
+                f"{len(result['correlations']['pairs'])} pairs")
+
     def step_eeszt() -> str:
         nonlocal eeszt_date
         import build_eeszt
@@ -313,8 +324,6 @@ def main() -> None:
         # risk and survival together: how many districts will be vacant in a year
         Step("forecast", "twelve-month vacancy forecast", simple("forecast"),
              needs=("risk", "survival"), output=ROOT / "data" / "forecast.json"),
-        Step("workforce", "physician turnover", simple("workforce"),
-             output=ROOT / "data" / "workforce.json"),
         Step("coverage", "settlement coverage", simple("coverage"),
              needs=("ksh_age",), output=ROOT / "data" / "coverage.json"),
         Step("transit", "public-transport reach", transit_step,
@@ -391,10 +400,7 @@ def main() -> None:
              output=ROOT / "data" / "districts.json"),
         # what a vacancy goes with: deaths, money, work, people leaving —
         # and the four cross-readings of the existing data
-        Step("outcomes", "outcomes against vacancy",
-             simple("outcomes",
-                    describe=lambda r: f", {len(r['districts'])} járás, "
-                                       f"{len(r['correlations']['pairs'])} pairs"),
+        Step("outcomes", "outcomes against vacancy", outcomes_step,
              needs=("mortality", "territorial", "jobseekers", "district_profiles",
                     "county_profiles", "settlements", "clusters", "census", "grants",
                     "forecast", "traveltime"),

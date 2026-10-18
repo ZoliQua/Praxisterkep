@@ -35,7 +35,6 @@ const optional = [
   [join(repo, 'data', 'coverage.json'), join(out, 'coverage.json')],
   [join(repo, 'data', 'composite.json'), join(out, 'composite.json')],
   [join(repo, 'data', 'emergency.json'), join(out, 'emergency.json')],
-  [join(repo, 'data', 'workforce.json'), join(out, 'workforce.json')],
   [join(repo, 'data', 'clusters.json'), join(out, 'clusters.json')],
   [join(repo, 'data', 'traveltime.json'), join(out, 'traveltime.json')],
   [join(repo, 'data', 'transit.json'), join(out, 'transit.json')],
@@ -59,6 +58,8 @@ const optional = [
   // small enough to offer for download on their own: the census shares, the
   // grant follow-up and the forecast that outcomes.json is cut from
   [join(repo, 'data', 'census.json'), join(out, 'census.json')],
+  // the landing's two headline findings, a few hundred bytes
+  [join(repo, 'data', 'highlights.json'), join(out, 'highlights.json')],
   [join(repo, 'data', 'grants.json'), join(out, 'grants.json')],
   [join(repo, 'data', 'forecast.json'), join(out, 'forecast.json')],
   [join(repo, 'data', 'geo', 'settlements.geojson'), join(out, 'settlements.geojson')],

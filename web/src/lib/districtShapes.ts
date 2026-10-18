@@ -69,7 +69,10 @@ function project(features: Feature[], box: Box): DistrictShape[] {
   });
 }
 
-export function useDistrictShapes(width: number, height: number, inset?: Box): {
+export function useDistrictShapes(width: number, height: number, inset?: Box,
+  /** where the country is drawn; the whole frame unless the caller keeps
+   *  room for a readout or an inset beside it */
+  country?: Box): {
   shapes: DistrictShape[];
   /** the kerület again, blown up into the inset box */
   capital: DistrictShape[];
@@ -103,9 +106,9 @@ export function useDistrictShapes(width: number, height: number, inset?: Box): {
     }
     const all = [...features, ...capitalFeatures];
     return {
-      shapes: project(all, { x: 0, y: 0, width, height }),
+      shapes: project(all, country ?? { x: 0, y: 0, width, height }),
       capital: inset && capitalFeatures.length
         ? project(capitalFeatures, inset) : [],
     };
-  }, [jaras, capitalGeo, width, height, inset]);
+  }, [jaras, capitalGeo, width, height, inset, country]);
 }

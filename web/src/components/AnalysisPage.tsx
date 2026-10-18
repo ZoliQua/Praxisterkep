@@ -18,7 +18,6 @@ import { SurvivalSection } from './SurvivalSection';
 import { CoverageSection } from './CoverageSection';
 import { CompositeSection } from './CompositeSection';
 import { EmergencySection } from './EmergencySection';
-import { WorkforceSection } from './WorkforceSection';
 import { ClusterSection } from './ClusterSection';
 import { TravelTimeSection } from './TravelTimeSection';
 import { TransitSection } from './TransitSection';
@@ -30,6 +29,26 @@ import { CensusSection } from './CensusSection';
 import { SboSection } from './SboSection';
 import { GrantsSection } from './GrantsSection';
 import { ForecastSection } from './ForecastSection';
+import { SideNav, type SideGroup } from './SideNav';
+import sections from '../lib/pageSections.json';
+
+// the page's groups, in order: the same list builds the top table of
+// contents, the side menu and the dropdown in the top bar
+const GROUPS: SideGroup[] = (sections.analysis as { key: string; items: string[] }[]).map((g) => ({
+  titleKey: `analysis.group.${g.key}`,
+  items: g.items.map((id) => ({ id, labelKey: `analysis.toc.${id}` })),
+}));
+
+/** A group's heading between its sections. */
+function GroupHead({ id }: { id: string }) {
+  return (
+    <div className="section container analysis-group" id={`csoport-${id}`}>
+      <p className="analysis-group__kicker">{t('analysis.groupKicker')}</p>
+      <h2 className="analysis-group__title">{t(`analysis.group.${id}`)}</h2>
+      <p className="analysis-group__lead">{t(`analysis.groupLead.${id}`)}</p>
+    </div>
+  );
+}
 
 /** One hand-off between two analyses, in the page's own rhythm. */
 function Next({ items }: { items: Parameters<typeof NextSteps>[0]['items'] }) {
@@ -49,24 +68,30 @@ export function AnalysisPage() {
         <h1 className="section__heading">{t('analysis.heading')}</h1>
         <p className="section__lead">{t('analysis.lead')}</p>
       </header>
-      <nav className="page-toc">
-        {(['statisztika', 'osszevetes', 'kockazat', 'tulel', 'elorejelzes', 'tamogatasok',
-           'orvosok', 'lefedettseg', 'jarasok', 'halalozas', 'jovedelem', 'allaskeresok',
-           'nepesseg', 'nepszamlalas', 'osszefuggesek', 'ugyelet', 'tavolsag', 'menetido',
-           'surgosseg', 'busz', 'index', 'keresztmetszet', 'hianyteruletek'] as const).map((id) => (
-          <a key={id} href={`#${id}`}>{t(`analysis.toc.${id}`)}</a>
+      <nav className="page-toc page-toc--grouped">
+        {GROUPS.map((g) => (
+          <div key={g.titleKey} className="page-toc__group">
+            <span className="page-toc__title">{t(g.titleKey)}</span>
+            {g.items.map((i) => <a key={i.id} href={`#${i.id}`}>{t(i.labelKey)}</a>)}
+          </div>
         ))}
       </nav>
+      <SideNav groups={GROUPS} labelKey="analysis.sideNav" />
+
+      <GroupHead id="national" />
       <StatsSection />
       <VersusSection />
+      <CoverageSection kind={kind} />
+
+      <GroupHead id="future" />
       <RiskSection kind={kind} />
       <SurvivalSection kind={kind} />
       {/* the two above, put together: how many will be vacant in a year —
           and whether paying a doctor to settle has filled districts so far */}
       <ForecastSection key={kind} kind={kind} />
       <GrantsSection />
-      <WorkforceSection kind={kind} />
-      <CoverageSection kind={kind} />
+
+      <GroupHead id="districts" />
       <DistrictAnalysis />
       {/* what a vacancy goes with: the deaths it may cost, and the
           circumstances that make a district hard to fill */}
@@ -74,30 +99,22 @@ export function AnalysisPage() {
       <LivingSection />
       <CensusSection />
       <LinksSection />
+
+      <GroupHead id="access" />
       <EmergencySection kind={kind} />
       <AccessSection />
       <TravelTimeSection />
       <SboSection />
-      <Next items={[
-        { href: '/elemzo.html#busz', titleKey: 'next.bus.title', textKey: 'next.bus.text' },
-        { href: '/megye.html', titleKey: 'next.county.title', textKey: 'next.county.text' },
-      ]} />
       <TransitSection />
+
+      <GroupHead id="settlements" />
       <CompositeSection />
-      <Next items={[
-        { href: '/elemzo.html#hianyteruletek', titleKey: 'next.deserts.title',
-          textKey: 'next.deserts.text' },
-        { href: '/megye.html#telepulesek', titleKey: 'next.settlement.title',
-          textKey: 'next.settlement.text' },
-        { href: '/modszertan.html', titleKey: 'next.method.title',
-          textKey: 'next.method.text' },
-      ]} />
       <CrossSection />
       <ClusterSection />
       <Next items={[
         { href: '/megye.html', titleKey: 'next.county.title', textKey: 'next.county.text' },
-        { href: '/eeszt.html', titleKey: 'next.registry.title',
-          textKey: 'next.registry.text' },
+        { href: '/jaras.html#veszelyeztetett', titleKey: 'next.district.title',
+          textKey: 'next.district.text' },
         { href: '/szakellato.html', titleKey: 'next.specialist.title',
           textKey: 'next.specialist.text' },
       ]} />

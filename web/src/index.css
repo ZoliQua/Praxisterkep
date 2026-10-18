@@ -2291,7 +2291,9 @@ a:hover { text-decoration: underline; }
    for the panels, plain anchors for the rail. */
 
 .tp-rail {
-  position: fixed; left: 14px; top: 50%; transform: translateY(-50%); z-index: 40;
+  position: fixed; left: 12px; top: 50%; transform: translateY(-50%); z-index: 40;
+  padding: 6px; border-radius: 16px; background: color-mix(in srgb, var(--bg-panel) 92%, transparent);
+  border: 1px solid var(--line-strong); box-shadow: 0 8px 24px rgb(0 0 0 / 30%);
 }
 .tp-rail ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
 .tp-rail a {
@@ -2301,7 +2303,9 @@ a:hover { text-decoration: underline; }
   background: color-mix(in srgb, var(--bg) 80%, transparent);
   backdrop-filter: blur(4px);
 }
-.tp-rail a svg { width: 16px; height: 16px; flex: none; }
+.tp-rail a svg { width: 18px; height: 18px; flex: none; }
+.tp-rail a[aria-current] { color: var(--bg); background: var(--accent, #4fd6c2); border-color: transparent; font-weight: 600; }
+.tp-rail a[aria-current] span { max-width: 150px; opacity: 1; }
 .tp-rail a span {
   max-width: 0; overflow: hidden; opacity: 0; transition: max-width 160ms, opacity 160ms;
 }
@@ -2311,8 +2315,12 @@ a:hover { text-decoration: underline; }
 }
 @media (max-width: 1100px) {
   .tp-rail {
-    position: sticky; top: 56px; left: 0; transform: none; margin: 0 0 8px;
-    background: var(--bg); border-bottom: 1px solid var(--line); padding: 6px 0;
+    /* under the top bar, whatever its height: the script measures it; the
+       fallback is the bar's height on one row, then on two */
+    position: sticky; top: var(--topnav-h, 56px); left: 0; transform: none; margin: 0 0 8px;
+    background: color-mix(in srgb, var(--bg) 94%, transparent); backdrop-filter: blur(6px);
+    border: 0; border-bottom: 1px solid var(--line-strong); border-radius: 0; box-shadow: none;
+    padding: 6px 0;
   }
   .tp-rail ul {
     grid-auto-flow: column; grid-auto-columns: max-content;
@@ -2597,11 +2605,11 @@ body:has(.tp-rail) .tp-map svg { margin-top: 0; }
   stroke: var(--line); stroke-width: 1;
 }
 .district-map__read-name {
-  fill: var(--ink); font: 700 17px var(--font-display);
+  fill: var(--ink); font: 700 15px var(--font-display);
 }
 .district-map__read-seat { fill: var(--ink-dim); font-size: 12.5px; }
 .district-map__read-value {
-  fill: var(--alert); font: 800 36px var(--font-display);
+  fill: var(--alert); font: 800 22px var(--font-display);
   font-variant-numeric: tabular-nums;
 }
 .district-map__read-label { fill: var(--ink-faint); font-size: 11.5px; }
@@ -3291,3 +3299,90 @@ body:has(.tp-rail) .tp-map svg { margin-top: 0; }
 .grant-matched__track i.is-with { background: #5fb3a1; } .grant-matched__track i.is-without { background: #8b8fa3; }
 .grant-matched__bars b { text-align: right; color: var(--ink); font: 800 16px var(--font-display); }
 @media (max-width: 640px) { .grant-matched__bars > div { grid-template-columns: 1fr 52px; } .grant-matched__track { grid-column: 1 / -1; grid-row: 2; } }
+.tp-compare__label a { color: inherit; text-decoration: underline; text-decoration-color: var(--line-strong); text-underline-offset: 2px; }
+.tp-compare__label a:hover { color: var(--ink); text-decoration-color: currentColor; }
+/* footer: sources and legal notes fold away until asked for */
+.footer__fold { border-top: 1px solid var(--line); padding: 4px 0; }
+.footer__fold > summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+.footer__fold > summary::-webkit-details-marker { display: none; }
+.footer__fold > summary h3 { margin: 10px 0; }
+.footer__fold > summary::after { content: '+'; margin-left: auto; font: 600 18px var(--font-body); color: var(--ink-faint); }
+.footer__fold[open] > summary::after { content: '−'; }
+.footer__fold > summary:focus-visible { outline: 2px solid var(--accent, #4fd6c2); outline-offset: 2px; }
+
+/* side navigation (elemzo, modszertan) */
+.side-nav { position: fixed; left: 0; top: 96px; bottom: 16px; z-index: 40; width: 212px; display: flex; flex-direction: column; }
+.side-nav__toggle { display: none; }
+.side-nav__panel { overflow-y: auto; padding: 6px 12px 16px 18px; scrollbar-width: thin; }
+.side-nav__group + .side-nav__group { margin-top: 12px; }
+.side-nav__title { margin: 0 0 4px; font: 700 10.5px var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); }
+.side-nav ul { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--line); }
+.side-nav li a { display: block; padding: 3px 0 3px 10px; margin-left: -1px; border-left: 2px solid transparent; font-size: 12.5px; color: var(--ink-dim); text-decoration: none; line-height: 1.3; }
+.side-nav li a:hover { color: var(--ink); }
+.side-nav li a[aria-current] { color: var(--ink); border-left-color: var(--accent, #4fd6c2); font-weight: 600; background: linear-gradient(90deg, color-mix(in srgb, var(--accent, #4fd6c2) 12%, transparent), transparent); }
+@media (max-width: 720px) { .tp-rail { top: var(--topnav-h, 99px); } }
+/* where the content reaches the left edge, it leaves room for the dot rail */
+@media (max-width: 1240px) { body.has-side-nav .container { padding-left: max(30px, var(--gutter, 16px)); } }
+/* the content leaves room for the menu where both fit side by side */
+@media (min-width: 1500px) { body.has-side-nav .section.container, body.has-side-nav .page-toc { margin-left: max(232px, calc((100vw - 1100px) / 2)); } }
+@media (max-width: 1499px) {
+  .side-nav { width: auto; top: auto; bottom: auto; top: 50%; transform: translateY(-50%); }
+  .side-nav__toggle { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 6px; background: color-mix(in srgb, var(--bg-panel) 88%, transparent); border: 1px solid var(--line-strong); border-left: 0; border-radius: 0 10px 10px 0; cursor: pointer; color: var(--ink-dim); }
+  .side-nav__toggle-label { writing-mode: vertical-rl; transform: rotate(180deg); font: 700 10.5px var(--font-body); letter-spacing: .08em; text-transform: uppercase; }
+  .side-nav__dots { display: flex; flex-direction: column; gap: 4px; }
+  .side-nav__dots i { width: 6px; height: 6px; border-radius: 50%; background: var(--line-strong); }
+  .side-nav__dots i.is-on { background: var(--accent, #4fd6c2); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent, #4fd6c2) 25%, transparent); }
+  .side-nav__panel { display: none; }
+  .side-nav.is-open { top: 70px; bottom: 12px; transform: none; flex-direction: row; }
+  .side-nav.is-open .side-nav__panel { display: block; width: min(280px, 78vw); background: var(--bg-panel); border: 1px solid var(--line-strong); border-left: 0; border-radius: 0 12px 12px 0; box-shadow: 0 10px 30px rgb(0 0 0 / 45%); padding-top: 14px; order: -1; }
+  .side-nav.is-open .side-nav__toggle { align-self: center; }
+}
+/* the analysis dropdown: 22 sections in five headed columns */
+.topnav__submenu.is-grouped { display: flex; flex-direction: row; flex-wrap: wrap; align-items: flex-start; gap: 0 6px; min-width: 0; width: max-content; max-width: min(92vw, 1020px); left: -300px; padding: 8px 6px; }
+.topnav__submenu.is-grouped[hidden] { display: none; }
+.topnav__group:hover > .topnav__submenu.is-grouped[hidden] { display: flex; }
+.topnav__subcol { display: flex; flex-direction: column; gap: 2px; min-width: 170px; }
+.topnav__submenu:not(.is-grouped) > .topnav__subcol { min-width: 0; }
+.topnav__subhead { font-weight: 700 !important; color: var(--ink) !important; text-transform: uppercase !important; font-size: 11px !important; letter-spacing: .07em !important; padding-top: 10px !important; }
+@media (max-width: 720px) {
+  .topnav__submenu.is-grouped { display: flex; flex-direction: column; left: 0; width: auto; max-width: none; padding: 4px 0 4px 12px; }
+  .topnav__subcol { min-width: 0; }
+  .topnav__group:hover > .topnav__submenu.is-grouped[hidden] { display: none; }
+}
+/* the analysis page's group headings and grouped table of contents */
+.analysis-group { padding-top: 56px; padding-bottom: 0; border-top: 1px solid var(--line); margin-top: 32px; }
+.analysis-group__kicker { margin: 0; font: 700 11px var(--font-body); letter-spacing: .1em; text-transform: uppercase; color: var(--accent, #4fd6c2); }
+.analysis-group__title { margin: 4px 0 6px; font: 800 clamp(26px, 4vw, 38px) var(--font-display); color: var(--ink); }
+.analysis-group__lead { margin: 0; max-width: 72ch; color: var(--ink-dim); }
+.page-toc--grouped { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px 22px; }
+.page-toc__group { display: flex; flex-direction: column; gap: 3px; }
+.page-toc__title { font: 700 11px var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 2px; }
+/* landing: two headline findings */
+.highlights__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 12px; }
+.highlight { display: flex; flex-direction: column; gap: 8px; padding: 20px 22px; border-radius: var(--radius); border: 1px solid var(--line-strong); background: linear-gradient(160deg, color-mix(in srgb, var(--alert) 9%, var(--bg-raised)), var(--bg-raised)); color: var(--ink); text-decoration: none; transition: transform .15s, border-color .15s; }
+.highlight:hover { transform: translateY(-2px); border-color: var(--alert-soft); }
+.highlight__kind { font: 700 11px var(--font-body); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-faint); }
+.highlight__numbers { display: flex; align-items: baseline; gap: 10px; }
+.highlight__numbers b { font: 800 clamp(40px, 6vw, 58px) var(--font-display); line-height: 1; color: var(--alert-soft); }
+.highlight__numbers b.is-dim { color: var(--ink-faint); font-size: clamp(28px, 4vw, 40px); }
+.highlight__vs { font: 600 15px var(--font-body); color: var(--ink-faint); }
+.highlight__text { color: var(--ink-dim); line-height: 1.5; }
+.highlight__more { margin-top: auto; font-size: 13px; color: var(--accent, #4fd6c2); }
+/* járás page: the most vulnerable districts */
+.vulnerable { display: grid; gap: 2px; margin: 14px 0 10px; overflow-x: auto; }
+.vulnerable__head, .vulnerable__row { display: grid; grid-template-columns: minmax(170px, 1.4fr) repeat(4, minmax(110px, 1fr)) 64px; gap: 10px; align-items: center; min-width: 760px; }
+.vulnerable__head { font: 700 11px var(--font-body); letter-spacing: .05em; text-transform: uppercase; color: var(--ink-faint); padding: 0 8px 6px; }
+.vulnerable__row { padding: 7px 8px; border-radius: 6px; color: var(--ink-dim); text-decoration: none; font-size: 13px; }
+.vulnerable__row:hover { background: var(--bg-raised); color: var(--ink); }
+.vulnerable__name { color: var(--ink); font-weight: 600; }
+.vulnerable__name em { font-style: normal; color: var(--ink-faint); margin-right: 4px; }
+.vulnerable__name small { display: block; font-weight: 400; font-size: 11.5px; color: var(--ink-faint); }
+.vulnerable__cell { position: relative; display: grid; grid-template-columns: 1fr 52px; gap: 6px; align-items: center; }
+.vulnerable__cell i { display: block; height: 8px; border-radius: 2px; background: var(--alert-soft); }
+.vulnerable__cell b { font-weight: 500; text-align: right; font-variant-numeric: tabular-nums; font-size: 12px; }
+.vulnerable__score { font: 800 18px var(--font-display); color: var(--alert-soft); text-align: right; }
+.cross-local { margin-top: 26px; }
+
+/* an anchor jump lands below the sticky bars, not under them */
+body:has(.tp-rail) section[id] { scroll-margin-top: calc(var(--topnav-h, 56px) + 12px); }
+@media (max-width: 1100px) { body:has(.tp-rail) section[id] { scroll-margin-top: calc(var(--topnav-h, 99px) + 60px); } }

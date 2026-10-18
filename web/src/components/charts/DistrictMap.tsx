@@ -15,9 +15,16 @@ import { useDistrictShapes, type Box, type DistrictShape } from '../../lib/distr
 
 const W = 760;
 const H = 440;
-const INSET: Box = { x: W - 184, y: H - 178, width: 168, height: 150 };
+// three regions that never overlap: the readout strip along the top, the
+// country under it, and the capital's inset in a column of its own on the
+// right — the inset used to sit on the Great Plain and the readout on the
+// north-west counties
+const READ_H = 50;
+const SIDE = 172;
+const COUNTRY: Box = { x: 0, y: READ_H + 6, width: W - SIDE - 8, height: H - READ_H - 6 };
+const INSET: Box = { x: W - SIDE + 9, y: H - 168, width: SIDE - 18, height: 140 };
 // the empty north-west corner, where no járás is ever drawn
-const READ = { x: 14, y: 18, width: 236 };
+const READ = { x: 6, y: 6, width: W - 12 };
 
 /**
  * The ramp.
@@ -141,7 +148,8 @@ export function DistrictMap({
   scale?: MapScale;
 }) {
   const inset = useMemo(() => INSET, []);
-  const { shapes, capital } = useDistrictShapes(W, H, inset);
+  const country = useMemo(() => COUNTRY, []);
+  const { shapes, capital } = useDistrictShapes(W, H, inset, country);
   const [hover, setHover] = useState<string | null>(null);
   if (!shapes.length) return null;
   const sorted = [...values.values()].sort((a, b) => a - b);
@@ -195,35 +203,32 @@ export function DistrictMap({
           </g>
         )}
 
-        {/* the readout, in the empty corner above the Danube. It gets a panel
-            of its own: the corner is empty at the top but the north-west
-            counties reach into it, and a number over an outline is unreadable
-            at exactly the moment it matters. */}
+        {/* the readout: a strip above the country, never over a shape — a
+            number over an outline is unreadable at exactly the moment it
+            matters */}
         <g className="district-map__readout" aria-hidden="true">
-          <rect x={READ.x - 6} y={READ.y - 14} width={READ.width + 12}
-            height={shownName ? 120 : 34} rx={8} />
+          <rect x={READ.x} y={READ.y} width={READ.width} height={READ_H - 6} rx={8} />
           {shownName ? (
             <>
-              <text x={READ.x + READ.width / 2} y={READ.y + 16} textAnchor="middle"
-                className="district-map__read-name">{shownName}</text>
+              <text x={READ.x + 14} y={READ.y + 20} className="district-map__read-name">
+                {shownName}</text>
               {seat && seat !== shownName && (
-                <text x={READ.x + READ.width / 2} y={READ.y + 36} textAnchor="middle"
-                  className="district-map__read-seat">
+                <text x={READ.x + 14} y={READ.y + 37} className="district-map__read-seat">
                   {t('district.readSeat', { seat })}
                 </text>
               )}
-              <text x={READ.x + READ.width / 2} y={READ.y + 82} textAnchor="middle"
+              <text x={READ.x + READ.width - 14} y={READ.y + 26} textAnchor="end"
                 className="district-map__read-value">
                 {value === undefined ? '–'
                   : legendFormat ? legendFormat(value) : String(value)}
               </text>
-              <text x={READ.x + READ.width / 2} y={READ.y + 101} textAnchor="middle"
+              <text x={READ.x + READ.width - 14} y={READ.y + 39} textAnchor="end"
                 className="district-map__read-label">
                 {t('district.readValue')}
               </text>
             </>
           ) : (
-            <text x={READ.x + READ.width / 2} y={READ.y + 16} textAnchor="middle"
+            <text x={READ.x + READ.width / 2} y={READ.y + 27} textAnchor="middle"
               className="district-map__read-hint">{t('district.readHint')}</text>
           )}
         </g>

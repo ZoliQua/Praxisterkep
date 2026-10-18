@@ -21,6 +21,9 @@ function detectLocale(): Locale {
 }
 
 export const locale: Locale = typeof window === 'undefined' ? 'hu' : detectLocale();
+// every page, not only the landing: screen readers and the browser's own
+// translation offer read this
+if (typeof document !== 'undefined') document.documentElement.lang = locale;
 
 const dict: Dict = (locale === 'en' ? en : hu) as unknown as Dict;
 const fallback: Dict = hu as unknown as Dict;

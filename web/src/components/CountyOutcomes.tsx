@@ -9,6 +9,7 @@ import { formatDecimal } from '../lib/format';
 import { districtHref, metaOf, useOutcomes, valueOf, type OutcomeCounty } from '../lib/outcomes';
 import { TrendLines } from './charts/TrendLines';
 import { ForecastPath } from './charts/ForecastPath';
+import { CrossSection } from './CrossSection';
 
 const RANKS = ['avoidable', 'income', 'jobseekers', 'naturalChange', 'migration', 'degree',
   'noDigital', 'sboMinutes', 'gpRateIn12'] as const;
@@ -159,6 +160,7 @@ export function CountyOutcomes({ county }: { county: string }) {
         </table>
       </div>
       {county === 'Budapest' && <p className="outcome__hint">{t('outcomes.living.capitalWide')}</p>}
+      <CrossSection area={{ level: 'county', name: county }} />
       <p className="section__source">{t('outcomes.district.source')}</p>
     </>
   );

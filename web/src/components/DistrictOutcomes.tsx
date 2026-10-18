@@ -18,6 +18,7 @@ import {
 import { StripYardstick } from './charts/StripYardstick';
 import { TrendLines } from './charts/TrendLines';
 import { AvoidableBar } from './AvoidableBar';
+import { CrossSection } from './CrossSection';
 
 const CARDS = ['avoidable', 'amenable', 'allCause', 'income', 'jobseekers',
   'naturalChange', 'migration', 'gpLoad', 'degree', 'employed', 'noDigital', 'poorHousing',
@@ -149,6 +150,7 @@ export function DistrictOutcomes({ name }: { name: string }) {
         )}
       </div>
       <DistrictGrants o={o} name={d.name} />
+      <CrossSection area={{ level: 'district', name: d.name }} />
       <p className="section__source">{t('outcomes.district.source')}</p>
     </>
   );

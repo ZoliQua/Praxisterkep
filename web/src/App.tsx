@@ -14,6 +14,8 @@ import { MapSection } from './components/MapSection';
 import { WhySection } from './components/WhySection';
 import { SearchSection } from './components/SearchSection';
 import { Footer } from './components/Footer';
+import { LangToggle } from './components/LangToggle';
+import { Highlights } from './components/Highlights';
 import { NavMenu } from './components/NavMenu';
 import { IconStethoscope, IconTooth } from './components/icons';
 import type { PraxisKind } from './types';
@@ -21,9 +23,9 @@ import type { PraxisKind } from './types';
 /** Where the landing hands the reader on, now that it is only the question. */
 const LANDING_NEXT = [
   { href: '/megye.html', titleKey: 'next.county.title', textKey: 'next.county.text' },
+  { href: '/jaras.html', titleKey: 'next.myDistrict.title', textKey: 'next.myDistrict.text' },
   { href: '/elemzo.html', titleKey: 'next.analysis.title', textKey: 'next.analysis.text' },
   { href: '/miert.html', titleKey: 'next.why.title', textKey: 'next.why.text' },
-  { href: '/modszertan.html', titleKey: 'next.method.title', textKey: 'next.method.text' },
 ] as const;
 
 export default function App() {
@@ -64,12 +66,6 @@ export default function App() {
     if (target) window.location.replace(contextHref(target));
   }, []);
 
-  function switchLocale() {
-    const url = new URL(window.location.href);
-    url.searchParams.set('lang', locale === 'hu' ? 'en' : 'hu');
-    window.location.href = url.toString();
-  }
-
   if (loadError) return <div className="error">{loadError}</div>;
   if (!snapshot) return <div className="loading">…</div>;
 
@@ -90,10 +86,7 @@ export default function App() {
               <IconStethoscope />
             </button>
           </div>
-          <button className="topnav__lang" onClick={switchLocale}
-            aria-label={locale === 'hu' ? 'Switch to English' : 'Váltás magyarra'}>
-            {locale === 'hu' ? 'EN' : 'HU'}
-          </button>
+          <LangToggle />
           <NavMenu entries={withContext(SITE_NAV)} />
         </div>
       </nav>
@@ -102,6 +95,7 @@ export default function App() {
           <ScrollyIntro />
           <HeroShowcase />
           <PraxisBalance />
+          <Highlights />
           <SearchSection />
           {/* the search narrows the map, so it comes after the question it
               answers rather than before it */}

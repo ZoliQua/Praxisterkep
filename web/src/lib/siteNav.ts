@@ -36,6 +36,7 @@ export function withContext(entries: readonly NavEntry[]): NavEntry[] {
   return entries.map((e) => ({
     ...e,
     href: contextHref(resolve(e.href)),
-    children: e.children?.map(([href, key]) => [contextHref(resolve(href)), key] as const),
+    children: e.children?.map((c) => [contextHref(resolve(c[0])), ...c.slice(1)] as
+      unknown as readonly [string, string, string]),
   }));
 }
