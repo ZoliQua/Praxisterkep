@@ -8,6 +8,7 @@ import { useContextStore } from '../lib/context';
 import { useHashScroll } from '../lib/useHashScroll';
 import { NextSteps } from './NextSteps';
 import { PageNav } from './PageNav';
+import { Footer } from './Footer';
 import { StatsSection } from './StatsSection';
 import { VersusSection } from './VersusSection';
 import { AccessSection } from './AccessSection';
@@ -79,6 +80,7 @@ export function AnalysisPage() {
         { href: '/szakellato.html', titleKey: 'next.specialist.title',
           textKey: 'next.specialist.text' },
       ]} />
+      <Footer />
     </>
   );
 }

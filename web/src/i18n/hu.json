@@ -207,16 +207,26 @@
     "p9": "Az EESZT-kiegészítés (H forrás) az EESZT törzspublikáció három nyilvános törzséből épül: NEAK_FINSZOLG (finanszírozott szolgálatok), EUSZOLG_PUBLIKUS (egészségügyi szolgáltatók) és EUSZOLG_ENGEDELY_PUBLIKUS (működési engedélyek). Az illesztés kizárólag hivatalos kódokkal történik: a NEAK FIN-kódból a szervezeti egység kódján át a körzet saját szakmájú (háziorvosi 6301–6303, fogorvosi 1300/1304/1305) engedélyéhez. Ellenőrizzük, hogy az engedély telephelye a körzet településén van-e, és hogy az engedélyes adószáma egyezik-e a finanszírozott szolgáltatóéval; az eltéréseket jelöljük, az ellentmondó (több telephelyre mutató) eseteknél nem mutatunk telephelyet. A körzet sorszámát szigorú mintával nyerjük ki a hivatalos szolgálatnévből. A szolgáltató nevét csak betöltött körzetnél közöljük; betöltetlen körzetnél semmilyen szabad szöveges névmezőt nem veszünk át, mert a szervezeti egységek neve gyakran a korábbi orvos nevét hordozza. Az EESZT-térképen minden körzet az engedélyezett telephelyén jelenik meg; a címeket az OpenStreetMap Nominatim szolgáltatásával geokódoljuk (legfeljebb 1 kérés/másodperc, gyorsítótárral). Ahol a cím utcaszinten nem azonosítható, a település középpontját használjuk, és ezt a térképen halványabb ponttal, a táblázatban „hozzávetőleges hely” oszloppal jelöljük; koordináta nélküli körzet nem kerül a térképre."
   },
   "footer": {
-    "sources": "Források",
-    "sourceNeak": "NEAK — Betöltetlen fogorvosi szolgálatok; Betöltetlen (megszűnt) fogorvosi szolgálatok; Betöltetlen háziorvosi szolgálatok; Szerződött szolgáltatók (fogorvosi rendelők, háziorvosi szolgálatok)",
-    "sourceOsm": "Térképi alapadatok: © OpenStreetMap közreműködők (ODbL) — határok és geokódolás (Nominatim)",
-    "disclaimer": "A NEAK adatai tájékoztató jellegűek, a havi finanszírozási szerződésadatok alapján kerültek közzétételre.",
-    "license": "Kód: MIT licenc · Feldolgozott adatok: CC BY 4.0 · Forrásadatok az eredeti kibocsátó feltételei szerint",
-    "author": "Készítette: Dr. Dul Zoltán",
-    "updated": "Adatállapot",
-    "sourceKsh": "Lakónépesség: KSH Helységnévtár, 2025. január 1. (www.ksh.hu/apps/hntr.egyeb)",
+    "publicOnly": "Ez az oldal kizárólag nyilvánosan közzétett hatósági és statisztikai adatokat használ, és azokat összesítve elemzi. Saját adatgyűjtést nem végez, beteg- vagy más személyes egészségügyi adatot nem tartalmaz.",
+    "sources": "Felhasznált források",
+    "sourceNeak": "NEAK — Betöltetlen fogorvosi szolgálatok; Betöltetlen (megszűnt) fogorvosi szolgálatok; Betöltetlen háziorvosi szolgálatok; Szerződött szolgáltatók (neak.gov.hu)",
     "sourceOkfo": "Tartósan betöltetlen körzetek: OKFŐ Alapellátási Igazgatóság (alapellatas.okfo.gov.hu)",
-    "sourceEeszt": "Kiegészítő adatok: EESZT törzspublikáció — NEAK_FINSZOLG, EUSZOLG_PUBLIKUS, EUSZOLG_ENGEDELY_PUBLIKUS (www.eeszt.gov.hu)"
+    "sourceEeszt": "Kiegészítő adatok: EESZT törzspublikáció — NEAK_FINSZOLG, EUSZOLG_PUBLIKUS, EUSZOLG_ENGEDELY_PUBLIKUS (www.eeszt.gov.hu)",
+    "sourceKsh": "KSH — Helységnévtár (lakónépesség, járás, terület) és a 2022. évi népszámlálás korösszetétele (CC BY 4.0, www.ksh.hu)",
+    "sourceDecree": "Jogszabályi besorolások: 290/2014. (XI. 26.) és 105/2015. (IV. 23.) Korm. rendelet (Nemzeti Jogszabálytár, njt.hu)",
+    "sourceOsm": "Térképi alapadatok: © OpenStreetMap közreműködők (ODbL), geokódolás: Nominatim; menetrend: Vólánbusz GTFS (CC0)",
+    "legal": "Jogi tudnivalók",
+    "disclaimer": "A NEAK adatai saját közlése szerint tájékoztató jellegűek, a havi finanszírozási szerződésadatok alapján kerülnek közzétételre. Az itt közölt számok ellátásszervezési, hatósági vagy jogi döntés megalapozására nem alkalmasak.",
+    "vacantNotUnserved": "A betöltetlen körzet nem jelenti azt, hogy ott nincs ellátás: a lakosokat jellemzően helyettesítő orvos látja el, ami a nyilvános adatokból nem látszik. Konkrét rendelési időt és ellátási helyet mindig a szolgáltatónál vagy az önkormányzatnál érdemes ellenőrizni.",
+    "names": "Orvosnév kizárólag ott szerepel, ahol azt a NEAK maga is közzéteszi: a szerződött szolgáltatói listán szereplő, betöltött körzeteknél. Betöltetlen és megszűnt körzetnél, valamint helyettesítő orvosnál soha.",
+    "noPersonal": "Az oldal nem kér regisztrációt, nem használ nyomkövető sütit és nem működtet látogatói statisztikát; látogatói adatot nem gyűjtünk és nem tárolunk. A nyelvválasztást és a térképrétegek beállítását a böngésződ saját tárolójában őrzi, ez hozzánk nem jut el. Két külső szolgáltató van beágyazva: a betűtípusokat a Google Fonts adja, az utcaszintű térképet pedig — csak ha rákattintasz — a MapTiler és az OpenStreetMap; ezek megnyitásakor a böngésződ kapcsolatba lép velük.",
+    "notOfficial": "Magánkezdeményezés: nem a NEAK, az OKFŐ, az NNGYK vagy bármely más hatóság hivatalos kiadványa, és nem minősül hivatalos állásfoglalásnak. A szerző szakmai beosztása azonosítási célú, nem jelent intézményi jóváhagyást.",
+    "correction": "Hibás vagy elavult adatot találtál? A forrás javítását a kibocsátónál érdemes kezdeményezni; az oldal hibáját a GitHubon (@ZoliQua) lehet jelezni, és a következő havi frissítéssel javítjuk.",
+    "authorBy": "Készítette:",
+    "authorName": "Dr. Dul Zoltán",
+    "authorTitle": ", országos kollegiális szakmai vezető fogorvos",
+    "license": "Kód: MIT licenc · Feldolgozott adatok: CC BY 4.0 · A forrásadatok az eredeti kibocsátó feltételei szerint használhatók",
+    "updated": "Adatállapot"
   },
   "praxisTypes": {
     "adult": "felnőtt",
@@ -513,7 +523,8 @@
     "colNeakCode": "NEAK kód",
     "mapDistrictNames": "Körzetnevek",
     "mapSavePng": "Térkép mentése (PNG)",
-    "colAddress": "Cím"
+    "colAddress": "Cím",
+    "internalNote": "Ez az oldal belső elemzési célt szolgál, és nem a fő menüből érhető el. Két nyilvános nyilvántartást — a NEAK szerződött szolgáltatói listáját és az EESZT törzspublikációját — veti össze, és azt mutatja meg, hol térnek el egymástól. Az eltérések a nyilvántartások közötti inkonzisztenciák: adminisztrációs különbségek, nem orvosra, szolgáltatóra vagy ellátásra vonatkozó megállapítások. Semmilyen hibát vagy mulasztást nem állítunk senkiről; az összevetés célja, hogy a két forrás együttes használatának korlátai látsszanak."
   },
   "dataTable": {
     "searchAll": "Keresés minden oszlopban…",
@@ -1174,7 +1185,8 @@
     "note": "Forrás: EESZT törzspublikáció, {asOf}. Működési engedély {licence} szolgálathoz található, {missing}-hoz nem. Geokódolt telephely: {geocoded}. Védőnő neve sehol nem jelenik meg.",
     "colYoung": "0–14 éves lakos",
     "colYoungPerService": "0–14 éves / területi szolgálat",
-    "statYoungPerService": "0–14 éves jut egy területi szolgálatra"
+    "statYoungPerService": "0–14 éves jut egy területi szolgálatra",
+    "navLabel": "Védőnői ellátás"
   },
   "specialist": {
     "heading": "Szakellátó intézmények",

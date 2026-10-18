@@ -2721,6 +2721,20 @@ body:has(.tp-rail) .tp-map svg { margin-top: 0; }
 }
 .cmpbars__value.is-worse { background: var(--alert); }
 
+/* the footer: what the site is, and what it is not */
+.footer__lead {
+  margin: 0 0 20px; max-width: 72ch; font-size: 15px; color: var(--ink);
+  border-left: 3px solid var(--accent); padding-left: 14px;
+}
+.footer__legal { max-width: 86ch; }
+.footer__legal li { margin-bottom: 7px; }
+.footer__author { margin-top: 18px; color: var(--ink-dim); }
+.footer__author a { color: var(--accent); font-weight: 600; }
+.tp-footer__links { margin-top: 14px; }
+.notice--strong {
+  border-left-width: 4px; color: var(--ink); max-width: 86ch;
+}
+
 /* the two halves of a branch's state, on one line */
 .tp-state--ok { color: #4fd6c2; }
 .tp-state--bad { color: var(--alert); }

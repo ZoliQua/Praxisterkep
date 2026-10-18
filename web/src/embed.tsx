@@ -133,7 +133,10 @@ function EmbedApp() {
   }, [snapshot, county]);
 
   if (!snapshot) return <div className="loading">…</div>;
-  const vacantAll = snapshot.national.vacant + snapshot.national.dissolved;
+  // the narrow reading, the same the site now defaults to: "betöltetlen"
+  // means what NEAK's vacancy list means, and the dissolved are a separate
+  // thing the widget has no room to name
+  const vacantAll = snapshot.national.vacant;
   return (
     <div className="embed">
       <div className="embed__map" ref={containerRef} />

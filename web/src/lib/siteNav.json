@@ -57,13 +57,13 @@
       ]
     },
     {
-      "href": "/eeszt.html",
-      "labelKey": "nav.registry"
-    },
-    {
       "href": "/szakellato.html",
       "labelKey": "nav.whoElse",
       "children": [
+        [
+          "/szakellato.html#vedono",
+          "vedono.navLabel"
+        ],
         [
           "/szakellato.html#szakellatas",
           "specialist.navLabel"

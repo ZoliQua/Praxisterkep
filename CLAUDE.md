@@ -89,11 +89,21 @@ dissolved (megszűnt) list for GP; the GP registry is the source of district
   rebuild, the outcome lands in `data/pipeline.json`, and
   `python etl/pipeline.py --check` fails the workflow if anything failed or
   was skipped. A failure must be loud, never silent.
-- Pages: `index.html` (landing, with the health-visitor view behind its own
-  icon and a grouped top nav), `megye.html` (county), `jaras.html` (járás),
-  `elemzo.html` (the analyses), `eeszt.html` (the EESZT complex),
-  `szakellato.html` (specialist care and medical-aid retailers), `embed.html`.
-  The zoom levels run country → megye → járás → település.
+- Pages: `index.html` (landing), `megye.html` (county), `jaras.html` (járás),
+  `elemzo.html` (the analyses), `szakellato.html` ("Ki lát el még?" — the
+  health-visitor branch first, then specialist care, pharmacies and
+  medical-aid retailers), `modszertan.html`, `embed.html`, and `eeszt.html`,
+  which is **not in the menu**: it is a working note comparing two public
+  registers, reachable only from the sources list in the footer, and it says
+  so at the top. The zoom levels run country → megye → járás → település.
+- Every page carries the same footer (`components/Footer.tsx`, mirrored for
+  the static pages by `siteFooter()` in `settlement-pages.mjs`, both reading
+  `i18n/hu.json`): the public-data-only statement first, the sources, then
+  the legal notes — informational data, vacant ≠ unserved, names only where
+  NEAK publishes them, what the site does and does not store, that it is a
+  private initiative and not an official publication, and where to report an
+  error. Changing any of those claims means checking they are still true
+  (no names on vacant praxes, no trackers in the bundle).
 - Frontend: React 18 + Vite + TypeScript in `web/`, Zustand for state,
   MapLibre GL JS for the map, D3 for charts. No Tailwind; hand-rolled CSS
   matching the dark holadelej-style theme.

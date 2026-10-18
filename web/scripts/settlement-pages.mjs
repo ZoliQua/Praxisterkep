@@ -1192,6 +1192,51 @@ const railIcon = (key) => `<svg viewBox="0 0 24 24" fill="none"
   stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
   stroke-linejoin="round" aria-hidden="true">${RAIL_ICONS[key] ?? ''}</svg>`;
 
+/**
+ * The footer every page carries, static ones included.
+ *
+ * A reader who lands on one settlement's page from a search engine has to see
+ * the same three things as one who came through the landing: that every
+ * number comes from data the state itself published, that a vacant district
+ * is not an unserved one, and that this is a private analysis and not an
+ * official register. The wording is kept in step with web/src/i18n/hu.json by
+ * reading it from there — one text, two renderers.
+ */
+function siteFooter(homeHref, analysisHref) {
+  const f = hu.footer;
+  return `<footer class="footer" id="forrasok">
+  <div class="container">
+    <p class="footer__lead">${esc(f.publicOnly)}</p>
+    <h3>${esc(f.sources)}</h3>
+    <ul>
+      <li>${esc(f.sourceNeak)}</li>
+      <li>${esc(f.sourceOkfo)}</li>
+      <li><a href="/eeszt.html">${esc(f.sourceEeszt)}</a></li>
+      <li>${esc(f.sourceKsh)}</li>
+      <li>${esc(f.sourceDecree)}</li>
+      <li>${esc(f.sourceOsm)}</li>
+    </ul>
+    <h3>${esc(f.legal)}</h3>
+    <ul class="footer__legal">
+      <li>${esc(f.disclaimer)}</li>
+      <li>${esc(f.vacantNotUnserved)}</li>
+      <li>${esc(f.names)}</li>
+      <li>${esc(f.noPersonal)}</li>
+      <li>${esc(f.notOfficial)}</li>
+      <li>${esc(f.correction)}</li>
+    </ul>
+    <p class="footer__author">${esc(f.authorBy)}
+      <a href="https://dulzoltan.hu" rel="noopener">${esc(f.authorName)}</a>${
+  esc(f.authorTitle)}</p>
+    <p>${esc(f.updated)}: ${esc(monthLabel)} · ${esc(f.license)}</p>
+    <p class="tp-footer__links"><a href="${esc(homeHref)}">Vissza a térképhez</a> ·
+      <a href="/telepules/">Minden település</a> ·
+      <a href="${esc(analysisHref)}">Elemző</a> ·
+      <a href="/#adatok">Adat export</a></p>
+  </div>
+</footer>`;
+}
+
 function sectionRail(present) {
   // a rail that points at a section the page does not have is worse than no
   // rail: the blocks decide, not the list
@@ -1433,15 +1478,7 @@ ${streetHtml}
 
 ${changeHtml}
 
-<footer class="section container tp-footer">
-  <p>Adatállapot: ${esc(monthLabel)}. Források: NEAK szerződött szolgáltatók és betöltetlen
-    körzetek, EESZT törzspublikáció, KSH Helységnévtár és 2022. évi népszámlálás,
-    OpenStreetMap, Volánbusz menetrend. A NEAK adatai tájékoztató jellegűek.</p>
-  <p><a href="${esc(ctx('/', profile))}">Vissza a térképhez</a> ·
-    <a href="/telepules/">Minden település</a> ·
-    <a href="${esc(ctx('/elemzo.html', profile))}">Elemző</a> ·
-    <a href="/#adatok">Adat export</a></p>
-</footer>
+${siteFooter(ctx('/', profile), ctx('/elemzo.html', profile))}
 </body>
 </html>
 `;
@@ -1517,6 +1554,7 @@ writeFileSync(join(dist, 'telepules', 'index.html'), `<!doctype html>
     <span class="tp-seat tp-seat--jaras">járásszékhely</span> · a többi település</p>
 </header>
 ${countyBlocks}
+${siteFooter('/', '/elemzo.html')}
 </body>
 </html>
 `, 'utf8');

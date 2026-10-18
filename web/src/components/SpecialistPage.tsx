@@ -19,6 +19,8 @@ import { CountyChoropleth } from './charts/CountyChoropleth';
 import { GyseSection } from './GyseSection';
 import { PharmacySection } from './PharmacySection';
 import { PageNav } from './PageNav';
+import { Footer } from './Footer';
+import { VedonoSection } from './VedonoSection';
 import { useHashScroll } from '../lib/useHashScroll';
 import { renderExtraCell } from './EesztCells';
 
@@ -91,6 +93,10 @@ export function SpecialistPage() {
   return (
     <>
       <PageNav />
+      {/* the third branch of primary care: it was behind an icon on the
+          landing page, where a reader looking for "who else cares for me"
+          never found it */}
+      <VedonoSection />
       <header className="section container" id="szakellatas">
         <h1 className="section__heading">{t('specialist.heading')}</h1>
         <p className="section__lead">{t('specialist.lead')}</p>
@@ -316,6 +322,7 @@ export function SpecialistPage() {
         filename={`praxisterkep-szakellatas-lefedettseg-${coverageCare}`}
         countUnit="rows"
       />
+      <Footer />
     </>
   );
 }
