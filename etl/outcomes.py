@@ -228,6 +228,8 @@ def district_rows() -> list[dict]:
             # mortality (NNGYK, SHA per 100 000 and SHH, both sexes)
             "avoidable": sha["avoidable"]["t"],
             "amenable": sha["amenable"]["t"],
+            "treatableEU": sha["treatableEU"]["t"],
+            "preventableEU": sha["preventableEU"]["t"],
             "treatable": sha["treatable"]["t"],
             "preventable": sha["preventable"]["t"],
             "both": sha["both"]["t"],
@@ -705,6 +707,28 @@ def forecast_summary() -> dict:
         } for kind, k in f["kinds"].items()}}
 
 
+def europe() -> dict:
+    """Hungary and the EU-27 (Eurostat), and the NNGYK national figure in
+    Eurostat's split beside it — two sources, kept apart and both named."""
+    e = read("eurostat.json")
+    m = read("mortality.json")
+    pop = {c["name"]: c["population"] for c in read("counties.json")["counties"]}
+    total = sum(pop.values())
+
+    def national(key: str) -> float:
+        # a population-weighted mean of the county rates: close to, not the
+        # same as, a rate standardised for the country as a whole
+        return round(sum(m["counties"][n]["sha"][key]["t"] * p for n, p in pop.items()) / total, 1)
+
+    return {
+        "source": e["source"], "sourceUrl": e["sourceUrl"], "years": e["years"],
+        "series": e["series"],
+        "nngyk": {"year": m["year"], "avoidable": national("avoidable"),
+                  "treatableEU": national("treatableEU"),
+                  "preventableEU": national("preventableEU"), "all": national("all")},
+    }
+
+
 def build() -> dict:
     latest = read("latest.json")
     data_month = latest.get("month") or latest["kinds"]["gp"]["month"]
@@ -734,6 +758,7 @@ def build() -> dict:
         "grants": grants_summary(),
         "forecast": forecast_summary(),
         "census": {"year": 2022, "country": read("census.json")["country"]},
+        "europe": europe(),
     }
 
 

@@ -289,6 +289,14 @@ def build(refresh: bool = False) -> dict:
                     vals = [sha.get(p, {}).get(sex) for p in parts]
                     out[sex] = None if any(v is None for v in vals) else round(sum(vals), 2)
                 sha[name] = out
+            # the same deaths divided the way Eurostat divides them: a cause
+            # on both lists counts half to each (OECD/Eurostat 2022 method)
+            for name, own in (("treatableEU", "treatable"), ("preventableEU", "preventable")):
+                out = {}
+                for sex in SEXES.values():
+                    a, b = sha.get(own, {}).get(sex), sha.get("both", {}).get(sex)
+                    out[sex] = None if a is None or b is None else round(a + b / 2, 2)
+                sha[name] = out
 
     if len(districts) != DISTRICTS or len(counties) != COUNTIES:
         # one spelling drifting between maps would split a place in two
@@ -299,6 +307,8 @@ def build(refresh: bool = False) -> dict:
     combine(counties)
     measures["avoidable"] = {"label": "Elkerülhető halálozás összesen (11+12+13)", "kinds": ["sha"]}
     measures["amenable"] = {"label": "Ellátással befolyásolható (11+13)", "kinds": ["sha"]}
+    measures["treatableEU"] = {"label": "Kezelhető, Eurostat-módszer (11+½·13)", "kinds": ["sha"]}
+    measures["preventableEU"] = {"label": "Megelőzhető, Eurostat-módszer (12+½·13)", "kinds": ["sha"]}
 
     return {
         "schemaVersion": SCHEMA_VERSION,

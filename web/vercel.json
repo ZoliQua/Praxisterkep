@@ -1,0 +1,11 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "oep-ellatas.vercel.app" }],
+      "destination": "https://praxisterkep.hu/:path*",
+      "permanent": true
+    }
+  ]
+}

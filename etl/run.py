@@ -355,6 +355,11 @@ def main() -> None:
              simple("nngyk_mortality",
                     describe=lambda r: f", {r['year']}, {r['counts']['districts']} járás"),
              output=ROOT / "data" / "mortality.json"),
+        # where Hungary stands in Europe — the country, never the járás
+        Step("eurostat", "avoidable mortality, Hungary and the EU (Eurostat)",
+             simple("eurostat_avoidable",
+                    describe=lambda r: f", {r['years'][0]}–{r['years'][-1]}"),
+             output=ROOT / "data" / "eurostat.json"),
         Step("territorial", "income, births, migration (KSH TIMEA)",
              simple("ksh_timea",
                     describe=lambda r: f", {r['counts']['settlements']} settlements, "
@@ -403,7 +408,7 @@ def main() -> None:
         Step("outcomes", "outcomes against vacancy", outcomes_step,
              needs=("mortality", "territorial", "jobseekers", "district_profiles",
                     "county_profiles", "settlements", "clusters", "census", "grants",
-                    "forecast", "traveltime"),
+                    "forecast", "traveltime", "eurostat"),
              output=ROOT / "data" / "outcomes.json"),
     ]
     run_steps(steps, month)
