@@ -658,11 +658,9 @@ a:hover { text-decoration: underline; }
 .ps-scene text { font: 700 30px var(--font-display); }
 
 .story__caption {
-  /* centered with auto margins, NOT translateX — the rise animation
-     animates transform and would override the centering (caption would
-     jump from right to center when the animation ends) */
-  position: absolute; top: 12px; left: 0; right: 0; margin-inline: auto;
-  width: min(92%, 620px); text-align: center; pointer-events: none;
+  /* in normal flow now: it used to float over the top of the stage, far
+     from the picture it describes, which is what left the box looking empty */
+  padding: 18px 20px 4px; text-align: center;
   animation: rise 0.5s ease backwards;
 }
 .story__caption h4 {
@@ -675,20 +673,78 @@ a:hover { text-decoration: underline; }
   margin: 0 auto; color: var(--ink-dim); font-size: clamp(12px, 1.6vw, 14px);
   line-height: 1.45; max-width: 62ch;
 }
-.story__steps {
-  position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
-  display: flex; gap: 8px;
+/* The chain itself: four named links joined by a rail that fills up to
+   where the story has got to. The old version was four numbered dots under
+   the picture, which showed neither the order nor what any step was. */
+.story__chain {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 0; margin: 0 0 14px; padding: 0; list-style: none;
 }
-.story__steps button {
-  appearance: none; cursor: pointer; width: 26px; height: 26px;
-  border-radius: 50%; border: 1px solid var(--line-strong);
-  background: var(--bg-raised); color: var(--ink-faint);
-  font: 600 12px var(--font-body); display: grid; place-items: center;
+.story__chain li { position: relative; min-width: 0; }
+/* the rail segment leading into this link */
+.story__chain li::before {
+  content: ''; position: absolute; top: 13px; right: 50%; left: -50%;
+  height: 2px; background: var(--line-strong); z-index: 0;
 }
-.story__steps button.is-active {
-  background: var(--accent); border-color: var(--accent); color: var(--accent-ink);
+.story__chain li:first-child::before { display: none; }
+.story__chain li.is-done::before,
+.story__chain li.is-active::before { background: var(--accent); }
+.story--broken .story__chain li.is-done::before,
+.story--broken .story__chain li.is-active::before { background: var(--alert); }
+.story__chain button {
+  position: relative; z-index: 1; appearance: none; border: 0; cursor: pointer;
+  background: transparent; width: 100%; padding: 0 6px;
+  display: grid; justify-items: center; gap: 7px; text-align: center;
 }
-.story--broken .story__steps button.is-active { background: var(--alert); border-color: var(--alert); color: #14060a; }
+.story__chain-dot {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 2px solid var(--line-strong); background: var(--bg-raised);
+  color: var(--ink-faint); font: 700 12px var(--font-body);
+  display: grid; place-items: center;
+  transition: background 0.3s, border-color 0.3s, color 0.3s, transform 0.3s;
+}
+.story__chain-label {
+  font: 600 12.5px var(--font-body); color: var(--ink-faint);
+  line-height: 1.3; transition: color 0.3s;
+}
+.story__chain li.is-done .story__chain-dot {
+  border-color: var(--accent); color: var(--accent);
+}
+.story__chain li.is-active .story__chain-dot {
+  background: var(--accent); border-color: var(--accent);
+  color: var(--accent-ink); transform: scale(1.14);
+}
+.story__chain li.is-active .story__chain-label { color: var(--ink); }
+.story__chain li.is-done .story__chain-label { color: var(--ink-dim); }
+.story--broken .story__chain li.is-done .story__chain-dot {
+  border-color: var(--alert); color: var(--alert);
+}
+.story--broken .story__chain li.is-active .story__chain-dot {
+  background: var(--alert); border-color: var(--alert); color: #14060a;
+}
+.story__chain button:hover .story__chain-label { color: var(--ink); }
+
+/* how long until the scene turns over */
+.story__timer {
+  position: absolute; top: 0; left: 0; height: 2px; width: 100%;
+  transform-origin: 0 50%; background: var(--accent); opacity: 0.55;
+  animation: story-timer linear forwards; z-index: 2;
+}
+.story--broken .story__timer { background: var(--alert); }
+@keyframes story-timer { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@media (prefers-reduced-motion: reduce) { .story__timer { display: none; } }
+
+.story__tie {
+  margin: 12px 0 0; color: var(--ink-dim); font-size: 14px;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .story__chain { grid-template-columns: repeat(4, 1fr); }
+  .story__chain-label { font-size: 10.5px; }
+  .story__chain-dot { width: 24px; height: 24px; font-size: 11px; }
+  .story__chain li::before { top: 11px; }
+}
 
 /* scene element animations — transform-box so origins follow the element */
 .ps-scene * { transform-box: fill-box; }

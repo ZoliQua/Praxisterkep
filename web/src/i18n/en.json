@@ -435,7 +435,9 @@
       "Screenings are missed — nobody notices the tiny decay.",
       "Decay spreads quietly and announces itself with pain and swelling.",
       "A tooth beyond saving must be extracted — replacement is longer, more painful and far more expensive."
-    ]
+    ],
+    "storyTieBroken": "Today this chain breaks in {count} {kind} districts — {people} people.",
+    "storyTieOk": "Today this chain holds in {count} of the country's {total} {kind} districts."
   },
   "showcase": {
     "sparkNote": "based on the archived months ({first} – {last})",

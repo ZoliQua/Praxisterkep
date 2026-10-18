@@ -5,7 +5,8 @@
 // (mustard sweater) is followed through every scene of both arcs.
 import { useEffect, useRef, useState, type ReactElement } from 'react';
 import { t } from '../lib/i18n';
-import { useAppStore } from '../store/useAppStore';
+import { formatNumber } from '../lib/format';
+import { useAppStore, useSnapshot } from '../store/useAppStore';
 import imgChair from '../assets/story/dental-chair.svg';
 import imgPain from '../assets/story/dental-pain.svg';
 import imgTreatment from '../assets/story/dental-treatment.svg';
@@ -838,6 +839,7 @@ const SCENES_DENTAL: Record<Variant, (() => ReactElement)[]> = {
 
 export function PreventionStory() {
   const kind = useAppStore((s) => s.kind);
+  const snapshot = useSnapshot();
   const [variant, setVariant] = useState<Variant>('ok');
   const [scene, setScene] = useState(0);
   // bumped on every manual selection so the auto-advance timer restarts
@@ -896,28 +898,63 @@ export function PreventionStory() {
         </button>
       </div>
 
+      {/* The section is called a chain, so it is drawn as one: four named
+          links, joined, filling up to where the story has got to. It used to
+          be four numbered dots tucked under the picture, which showed neither
+          the order nor what each step was. */}
+      <ol className="story__chain">
+        {titles.map((title, i) => (
+          <li key={title}
+            className={`${i === scene ? 'is-active' : ''} ${i < scene ? 'is-done' : ''}`}>
+            <button onClick={() => selectScene(i)}
+              aria-current={i === scene ? 'step' : undefined}>
+              <span className="story__chain-dot">{i + 1}</span>
+              <span className="story__chain-label">{title}</span>
+            </button>
+          </li>
+        ))}
+      </ol>
+
       <div className="story__stage">
-        <svg viewBox="0 0 640 330" role="img" aria-label={titles[scene]}>
+        {/* restarts on every scene change, so the wait before the next one is
+            visible instead of feeling like a random jump */}
+        <span className="story__timer" key={`t-${variant}-${scene}-${timerGen}`}
+          style={{ animationDuration: `${SCENE_MS}ms` }} aria-hidden="true" />
+        <div className="story__caption" key={`${variant}-${scene}`}>
+          <h4>{titles[scene]}</h4>
+          <p>{descs[scene]}</p>
+        </div>
+        {/* the viewBox is cropped to where the scenes actually draw (y 44–270):
+            the old one left a third of the box empty above the illustration */}
+        <svg viewBox="0 44 640 226" role="img" aria-label={titles[scene]}>
           {scenes[variant].map((Scene, i) => (
-            <g key={`${kind}-${variant}-${i}`} transform="translate(0 48)"
+            <g key={`${kind}-${variant}-${i}`}
               className={`ps-scene ${i === scene ? 'is-active' : ''}`}>
               <Scene />
             </g>
           ))}
         </svg>
-        <div className="story__caption" key={`${variant}-${scene}`}>
-          <h4>{titles[scene]}</h4>
-          <p>{descs[scene]}</p>
-        </div>
-        <div className="story__steps">
-          {titles.map((title, i) => (
-            <button key={title} className={i === scene ? 'is-active' : ''}
-              onClick={() => selectScene(i)} aria-label={title}>
-              <span>{i + 1}</span>
-            </button>
-          ))}
-        </div>
       </div>
+
+      {/* The chain is an illustration, so it ends on the measured thing it
+          illustrates: how many districts are on each side of it today. Both
+          numbers come from the snapshot — nothing here is drawn from the air. */}
+      {snapshot && (variant === 'broken' || snapshot.national.totalDistricts) && (
+        <p className="story__tie">
+          {variant === 'broken'
+            ? t('why.storyTieBroken', {
+              count: formatNumber(snapshot.national.vacant),
+              people: formatNumber(snapshot.national.populationVacant),
+              kind: t(`kinds.${kind}.adj`),
+            })
+            : t('why.storyTieOk', {
+              count: formatNumber((snapshot.national.totalDistricts ?? 0)
+                - snapshot.national.vacant),
+              total: formatNumber(snapshot.national.totalDistricts ?? 0),
+              kind: t(`kinds.${kind}.adj`),
+            })}
+        </p>
+      )}
     </div>
   );
 }
