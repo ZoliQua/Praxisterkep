@@ -124,9 +124,9 @@ export const SERVICE_COLUMNS: ColDef[] = [
   { key: 'provider', labelKey: 'vedono.colProvider', type: 'text', visible: true },
   { key: 'neakCode', labelKey: 'operating.colNeakCode', type: 'text', visible: false },
   { key: 'unit', labelKey: 'eeszt.colUnit', type: 'text', visible: false },
-  { key: 'licenceId', labelKey: 'eeszt.colLicence', type: 'text', visible: false },
+  { key: 'licenceId', labelKey: 'eeszt.colLicenceId', type: 'text', visible: false },
   { key: 'publicFunded', labelKey: 'eeszt.colFunded', type: 'bool', visible: false },
-  { key: 'geoApprox', labelKey: 'eeszt.colApprox', type: 'bool', visible: false },
+  { key: 'geoApprox', labelKey: 'eeszt.colGeoApprox', type: 'bool', visible: false },
 ];
 
 export const COUNTY_COLUMNS: ColDef[] = [

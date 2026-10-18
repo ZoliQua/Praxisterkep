@@ -148,7 +148,7 @@ class Tally:
             "rateNow": round(self.vacant / total, 4) if total else None,
             "rateIn12": round(expected / total, 4) if total else None,
             "path": [round(self.vacant - r + n, 1)
-                     for n, r in zip(self.path_new, self.path_refill)],
+                     for n, r in zip(self.path_new, self.path_refill, strict=True)],
         }
 
 

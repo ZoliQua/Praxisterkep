@@ -596,7 +596,8 @@
     "mapDistrictNames": "Körzetnevek",
     "mapSavePng": "Térkép mentése (PNG)",
     "colAddress": "Cím",
-    "internalNote": "Ez az oldal belső elemzési célt szolgál, és nem a fő menüből érhető el. Két nyilvános nyilvántartást — a NEAK szerződött szolgáltatói listáját és az EESZT törzspublikációját — veti össze, és azt mutatja meg, hol térnek el egymástól. Az eltérések a nyilvántartások közötti inkonzisztenciák: adminisztrációs különbségek, nem orvosra, szolgáltatóra vagy ellátásra vonatkozó megállapítások. Semmilyen hibát vagy mulasztást nem állítunk senkiről; az összevetés célja, hogy a két forrás együttes használatának korlátai látsszanak."
+    "internalNote": "Ez az oldal belső elemzési célt szolgál, és nem a fő menüből érhető el. Két nyilvános nyilvántartást — a NEAK szerződött szolgáltatói listáját és az EESZT törzspublikációját — veti össze, és azt mutatja meg, hol térnek el egymástól. Az eltérések a nyilvántartások közötti inkonzisztenciák: adminisztrációs különbségek, nem orvosra, szolgáltatóra vagy ellátásra vonatkozó megállapítások. Semmilyen hibát vagy mulasztást nem állítunk senkiről; az összevetés célja, hogy a két forrás együttes használatának korlátai látsszanak.",
+    "colFunded": "Közfinanszírozott"
   },
   "dataTable": {
     "searchAll": "Keresés minden oszlopban…",
@@ -2268,7 +2269,8 @@
       "sboBeyond30": "30 percnél messzebb élők a sürgősségitől",
       "gpRateIn12": "Várható háziorvosi betöltetlenség 12 hónap múlva",
       "treatableEU": "Kezelhető (Eurostat-módszer)",
-      "preventableEU": "Megelőzhető (Eurostat-módszer)"
+      "preventableEU": "Megelőzhető (Eurostat-módszer)",
+      "noBusShare": "Közvetlen busz nélküli települések aránya"
     },
     "measureText": {
       "avoidable": "75 év alatti halálozás olyan okból, amelyet időben kapott ellátás vagy hatékony megelőzés megakadályozhatott volna — a három NNGYK-csoport összege, 100 ezer lakosra, az európai standard népességre korrigálva.",

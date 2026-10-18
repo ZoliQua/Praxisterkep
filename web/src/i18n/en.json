@@ -596,7 +596,8 @@
     "mapDistrictNames": "District names",
     "mapSavePng": "Save map (PNG)",
     "colAddress": "Address",
-    "internalNote": "This page is a working note for internal analysis and is not in the main menu. It holds two public registers against each other — NEAK's contracted provider list and the EESZT master publication — and shows where they disagree. The differences are inconsistencies between the registers: administrative discrepancies, not findings about any physician, provider or the care given. Nothing here asserts fault on anyone's part; the point is to make the limits of using the two sources together visible."
+    "internalNote": "This page is a working note for internal analysis and is not in the main menu. It holds two public registers against each other — NEAK's contracted provider list and the EESZT master publication — and shows where they disagree. The differences are inconsistencies between the registers: administrative discrepancies, not findings about any physician, provider or the care given. Nothing here asserts fault on anyone's part; the point is to make the limits of using the two sources together visible.",
+    "colFunded": "Publicly funded"
   },
   "dataTable": {
     "searchAll": "Search all columns…",
@@ -2268,7 +2269,8 @@
       "sboBeyond30": "Residents 30+ minutes from emergency",
       "gpRateIn12": "Expected GP vacancy in 12 months",
       "treatableEU": "Treatable (Eurostat method)",
-      "preventableEU": "Preventable (Eurostat method)"
+      "preventableEU": "Preventable (Eurostat method)",
+      "noBusShare": "Settlements without a direct bus"
     },
     "measureText": {
       "avoidable": "Deaths under 75 from causes that timely care or effective prevention should have averted — the three NNGYK groups together, per 100,000, age-standardised to the European Standard Population.",

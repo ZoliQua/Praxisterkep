@@ -92,7 +92,6 @@ def parse_registry(xls_path: Path) -> list[dict]:
     obligation and never appear on the vacant list, so including them would
     dilute the vacancy rate.
     """
-    import pandas as pd
 
     from parse_dental import _cell
 
@@ -176,7 +175,6 @@ def parse_vacant_xlsx(xlsx_path: Path) -> list[VacantPraxis]:
     - 2025- (8 columns): the modern PDF layout as a spreadsheet, without the
       served column; HSZ arrives as a number (leading zero lost).
     """
-    import pandas as pd
 
     from parse_dental import _cell
 

@@ -345,6 +345,8 @@ export const MEASURES: Record<string, MeasureMeta> = {
     format: (v) => `${num(1)(v * 100)}%` },
   sboMinutes: { key: 'sboMinutes', direction: 'higherWorse', color: RED,
     format: (v) => `${num(1)(v)} ${locale === 'en' ? 'min' : 'perc'}` },
+  noBusShare: { key: 'noBusShare', direction: 'higherWorse', color: AMBER,
+    format: (v) => `${num(0)(v * 100)}%` },
   sboBeyond30: { key: 'sboBeyond30', direction: 'higherWorse', color: RED,
     format: (v) => `${num(0)(v * 100)}%` },
   gpRateIn12: { key: 'gpRateIn12', direction: 'higherWorse', color: RED,

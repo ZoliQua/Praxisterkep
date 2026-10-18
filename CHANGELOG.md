@@ -5,6 +5,31 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [Unreleased]
+
+### Hozzáadva
+- **`CITATION.cff`** a Zenodo-kiadáshoz (a szerző ORCID-jával és a fő
+  adatforrásokkal; a DOI az archiválás után kerül bele).
+- **Kétnyelvű README:** elöl angolul, utána magyarul.
+
+### Javítva (kódáttekintés)
+- Négy táblázatoszlop és két részletsor a fordítási kulcsát írta ki a
+  felirat helyett (`eeszt.colLicence`, `eeszt.colApprox`,
+  `eeszt.colFunded`) az ügyeleti, védőnői, szakellátási, gyógyszertári és
+  gyse-táblákban.
+- A havi munkafolyamat a geokódolási és a címdöntési gyorsítótárat nem
+  mentette: a felhőben lekért koordináták elvesztek, a következő futás újra
+  lekérdezte őket, egy helyi újraépítésből pedig hiányoztak (19 település
+  rendelőinél). Most a `data/` mellett a két gyorsítótár is commitolódik.
+- Az Eurostat-adatot egy archivált válasz után soha nem kérte le újra; most
+  30 napnál régebbi archívumnál újra letölti, hiba esetén figyelmeztetéssel
+  az archívumból dolgozik.
+- Az új elemzőmodulok párhuzamos sorai (`zip`) szigorú módban futnak:
+  eltérő hosszúságnál hibát dobnak, nem csonkolnak csendben.
+- A főoldal „Miért fontos?” kártyája egy átirányító oldalon át vezetett
+  vissza önmagához; most közvetlenül a szakaszra mutat.
+- Fel nem használt importok az ETL-ben.
+
 ## [1.50.0] — 2026-10-18
 
 Két nyelven mindenhol, áttekinthetőbb elemző, és Magyarország Európában.

@@ -1,5 +1,4 @@
 """The county slice: it may only repeat what the settlement profiles say."""
-import json
 import sys
 from pathlib import Path
 

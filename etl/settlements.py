@@ -187,7 +187,7 @@ def living_block(ksh: str, district: str, county: str, ctx: dict) -> dict | None
             # the whole series for the line on the page, as NFSZ sampled it
             "months": jobs["months"],
             "series": [round(100 * a / b, 2) if a is not None and b else None
-                       for a, b in zip(js["registered"], js["workingAge"])],
+                       for a, b in zip(js["registered"], js["workingAge"], strict=True)],
         }
     cen = ctx.get("census")
     if cen:
@@ -570,7 +570,7 @@ def build() -> dict:
                 {"months": living["jobs"]["months"],
                  "series": [round(100 * a / b, 2) if b else None
                             for a, b in zip(living["jobs"]["national"]["registered"],
-                                            living["jobs"]["national"]["workingAge"])]}
+                                            living["jobs"]["national"]["workingAge"], strict=True)]}
                 if living.get("jobs") else None),
         },
         "comparedWith": year_ago["month"],

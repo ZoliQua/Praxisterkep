@@ -1,12 +1,166 @@
 # Praxistérkép
 
-[![Havi ETL](https://github.com/ZoliQua/Praxisterkep/actions/workflows/monthly-etl.yml/badge.svg)](https://github.com/ZoliQua/Praxisterkep/actions/workflows/monthly-etl.yml)
-[![Verzió](https://img.shields.io/badge/verzi%C3%B3-1.50.0-blue)](CHANGELOG.md)
-[![Licenc: MIT](https://img.shields.io/badge/licenc-MIT-green.svg)](LICENSE.md)
+[![Monthly ETL](https://github.com/ZoliQua/Praxisterkep/actions/workflows/monthly-etl.yml/badge.svg)](https://github.com/ZoliQua/Praxisterkep/actions/workflows/monthly-etl.yml)
+[![Version](https://img.shields.io/badge/version-1.50.0-blue)](CHANGELOG.md)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE.md)
 [![Python 3.12](https://img.shields.io/badge/Python-3.12-3776ab?logo=python&logoColor=white)](etl/)
 [![React 19](https://img.shields.io/badge/React-19-61dafb?logo=react&logoColor=black)](web/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6-3178c6?logo=typescript&logoColor=white)](web/)
-[![Élő oldal](https://img.shields.io/badge/%C3%A9l%C5%91-praxisterkep.hu-e34948)](https://praxisterkep.hu)
+[![Live site](https://img.shields.io/badge/live-praxisterkep.hu-e34948)](https://praxisterkep.hu)
+
+**[praxisterkep.hu](https://praxisterkep.hu)** — an interactive, public
+map and analysis of Hungarian primary care: where there is no contracted
+**general practitioner** or **dentist**, since when, how many people are
+affected, what to expect a year from now, and what goes with the shortage —
+avoidable mortality, poverty, low schooling, unemployment, people moving away.
+
+Every number is built from public state data: NEAK's monthly lists and the
+publications of OKFŐ, EESZT, KSH, NNGYK, NFSZ and Eurostat, plus the
+OpenStreetMap road network. The site collects no data of its own and is not
+an official publication. The interface is bilingual (Hungarian/English) on
+every page.
+
+> NEAK's data is informational. **Vacant ≠ unserved:** residents of a vacant
+> district are usually seen by a substitute doctor, which public data does not
+> show.
+
+**Languages:** [English](#english) · [Magyarul](#magyarul)
+
+---
+
+<a id="english"></a>
+
+## English
+
+### What the site shows
+
+Four levels — **country → county → district (járás) → settlement** — with the
+chosen branch (GP or dental) and place kept across the whole site.
+
+| Page | What it does |
+|---|---|
+| [Map](https://praxisterkep.hu/) | Vacant and dissolved districts as points and bars, county and district choropleths, a time slider, shareable URLs, a settlement search, the prevention chain explained, two headline findings |
+| [County](https://praxisterkep.hu/megye.html) | A county among the other nineteen: vacancy, its districts and settlements, nine rankings (avoidable mortality, income, jobseekers, natural change, migration, education, digital inactivity, emergency drive time, expected vacancy), a 12-month forecast path, settlement grants by year, the four cross-sections |
+| [District](https://praxisterkep.hu/jaras.html) | Each of the 197 units (174 járás + the capital's 23 kerület): districts, on-call care, yardstick cards among the 174 rural járás, mortality by cause, census, emergency access, forecast, grants, the four cross-sections — and a ranking of **the most vulnerable districts** by access |
+| [Settlement](https://praxisterkep.hu/en/telepules/) | 3,177 static pages in Hungarian and English, readable without JavaScript: is there a doctor (named only for staffed districts, from NEAK), how long a district has been vacant, how far care is by car and bus, pharmacies, health visitors, age structure, how people live (income, jobseekers, births and deaths, migration, census), grants, a one-year chance that a serving district falls vacant, a year of change |
+| [Analysis](https://praxisterkep.hu/elemzo.html?lang=en) | 22 sections in five groups — the national picture, what comes next (risk, survival, forecast, grants), districts and counties (mortality, income, jobs, population, census, associations), access (on-call, distance, drive time, emergency department, bus), settlements (composite index, cross-sections, care deserts) |
+| [Who else provides care?](https://praxisterkep.hu/szakellato.html?lang=en) | Health visitors, outpatient and inpatient specialist care, pharmacies, medical-aid retailers |
+| [Methodology](https://praxisterkep.hu/modszertan.html?lang=en) | Where every number comes from and what it cannot say; the downloadable files; the embed code |
+
+### Data sources
+
+| ID | Source | What it gives | Module |
+|----|--------|---------------|--------|
+| A, B, C | [NEAK](https://www.neak.gov.hu/letoltheto/altfin_dok/szerzodott_szolgaltatok) — vacant dental and GP districts, contracted providers | the districts, the denominator, named doctors of staffed districts | `parse_dental.py`, `parse_gp.py`, `parse_registry.py` |
+| E | [OKFŐ](https://alapellatas.okfo.gov.hu/) — persistently vacant districts | the legal long-term flag | `parse_okfo.py` |
+| F, F2 | [KSH](https://www.ksh.hu/apps/hntr.egyeb) gazetteer; [2022 census](https://nepszamlalas2022.ksh.hu/adatbazis/) (CC BY 4.0) | settlements and population; age, education, work, digital skills, housing, households | `parse_ksh.py`, `ksh_age.py`, `ksh_census.py` |
+| G, J | [OpenStreetMap](https://www.openstreetmap.org/copyright) (ODbL), [Geofabrik](https://download.geofabrik.de/europe/hungary.html) | boundaries; the drivable road network | `fetch_geo.py`, `roads.py`, `traveltime.py` |
+| H | [EESZT](https://www.eeszt.gov.hu/hu/torzspublikacio) public registers | funded services, providers, operating licences | `fetch_eeszt.py`, `build_eeszt.py` |
+| I | [NEAK](https://www.neak.gov.hu/letoltheto/altfin_dok/szerzodott_szolgaltatok) specialist institutions | hospitals, outpatient care, emergency departments | `specialist.py` |
+| K | [Volánbusz GTFS](https://gtfs.kti.hu/) (CC0) | scheduled buses | `transit.py` |
+| L | [Government Decrees 290/2014 and 105/2015](https://njt.hu/jogszabaly/2014-290-20-22) | district development ranking, beneficiary settlements | `district_development.py`, `kedvezmenyezett.py` |
+| M | [NNGYK mortality database](https://nngyk.gov.hu/hu/halandosagi-adatbazis.html) | standardised and avoidable mortality by district and county | `nngyk_mortality.py` |
+| N | [KSH TIMEA](https://map.ksh.hu/timea/) | income (NAV data), natural change, migration, GP workload | `ksh_timea.py` |
+| O | [NFSZ settlement data](https://nfsz.munka.hu/tart/stat_telepulessoros_adatok) | registered jobseekers | `nfsz_jobseekers.py` |
+| P | [NEAK settlement grants](https://neak.gov.hu/felso_menu/szakmai_oldalak/gyogyito_megeleozo_ellatas/alapellatas/haziorvosi_ellatas/archivum) | where and when grants were won (no names) | `neak_grants.py` |
+| Q | [Eurostat hlth_cd_apr](https://ec.europa.eu/eurostat/databrowser/view/hlth_cd_apr/default/table) | Hungary's avoidable mortality against the EU-27 | `eurostat_avoidable.py` |
+
+Every downloaded file is archived under [`data/raw/`](data/raw/) — **the git
+history is the audit trail**. Screening participation and vaccination coverage
+would belong here, but no institution publishes them by district or
+settlement in public, machine-readable form; no estimate is shown instead.
+
+### Data policy
+
+1. **No invented data.** Every number traces to an archived source file. If a
+   source is missing or does not read back as its publisher states, the
+   pipeline fails loudly — no partial or estimated figure is published.
+2. **Public data only; names only where NEAK publishes them** — the
+   contracted doctor of a staffed district, never of a vacant or dissolved
+   one, never a substitute, never a grant winner.
+3. **Vacant ≠ unserved**, in code, data model and wording.
+4. **Association ≠ cause.** Associations are measured between places, not
+   people; the main ones are also given with income, and with income and
+   education, held constant. Findings that did not hold are reported too.
+
+### Main findings (October 2026 data)
+
+- Across the 174 rural districts, the share of vacant GP districts and
+  avoidable mortality correlate at r = 0.44; 0.36 with income held constant;
+  0.17 (p ≈ 0.02) with income and education held constant together.
+- Of GP districts filled with a state settlement grant, 91% have a doctor
+  today, against 17% of matched districts without a grant (vacant as long, in
+  settlements of the same size, in the same county where possible). The groups
+  still differ: a doctor chose the granted district.
+- Hungary's avoidable mortality is twice the EU average (Eurostat, 2023:
+  472.7 against 237.7 per 100,000).
+- Distance to an emergency department does not go with mortality once income
+  and education are held constant — reported as a null result.
+
+### Architecture
+
+No backend: a static site and a monthly batch ETL.
+
+```
+etl/ (Python 3.12)                               web/ (React 19 + Vite + TypeScript)
+download → parse → address normalisation →       MapLibre GL map, D3 and SVG charts,
+geocoding → validation → snapshot →        →     Zustand state, hand-written CSS,
+supplements and analyses (declared steps)        + 2 × 3,177 static settlement pages
+```
+
+Each analysis is a declared step in [`etl/run.py`](etl/run.py) with its own
+guard; `python etl/pipeline.py --check` fails the monthly workflow if anything
+failed or was skipped. All interface text lives in
+[`web/src/i18n/hu.json`](web/src/i18n/hu.json) and `en.json`.
+
+### Running it
+
+```bash
+python -m venv .venv && source .venv/bin/activate
+pip install -r etl/requirements.txt
+python etl/run.py --month 2026-10 --skip-geocode   # one month, cached coordinates only
+python etl/pipeline.py --check
+python -m pytest etl/tests
+
+cd web && npm install
+npm run dev        # development server
+npm test           # Vitest
+npm run build      # data copy, build and the static settlement pages
+```
+
+Environment (Vercel project settings): `VITE_GA_ID` (Google Analytics 4,
+consent-gated; without it nothing loads), `VITE_MAP_STYLE` (street-map tiles),
+`VITE_SITE_URL` (the sitemap address).
+
+### Deployment and privacy
+
+The monthly workflow ([`.github/workflows/monthly-etl.yml`](.github/workflows/monthly-etl.yml))
+runs twice a month and opens an issue instead of publishing when validation
+fails. Vercel deploys every push to `main` to
+[praxisterkep.hu](https://praxisterkep.hu). The site collects no personal
+data; analytics load only after consent (`web/public/consent.js`); see the
+[privacy notice](https://praxisterkep.hu/adatkezeles.html).
+
+### Citation
+
+If you use the code or the processed data, please cite it as given in
+[`CITATION.cff`](CITATION.cff) (GitHub's “Cite this repository” reads it). The
+Zenodo DOI is added once the first release is archived.
+
+### Contributing and licence
+
+Issues with data errors or new public sources are welcome — see
+[CONTRIBUTORS.md](CONTRIBUTORS.md) and the [code of conduct](CODE_OF_CONDUCT.md).
+Code: [MIT](LICENSE.md). Processed data (`data/*.json`): CC BY 4.0, with the
+original source credited; raw source files (`data/raw/`) remain under their
+publishers' terms (KSH census CC BY 4.0, OpenStreetMap ODbL, Volánbusz GTFS
+CC0) — details in [LICENSE.md](LICENSE.md).
+
+---
+
+<a id="magyarul"></a>
+
+## Magyarul
 
 **[praxisterkep.hu](https://praxisterkep.hu)** — interaktív, nyilvános
 térkép és elemzés a magyar egészségügyi alapellátásról: hol nincs
@@ -24,7 +178,7 @@ az EESZT, a KSH, az NNGYK és az NFSZ közléseiből, valamint az OpenStreetMap
 
 ---
 
-## Tartalom
+### Tartalom
 
 - [Mit mutat az oldal?](#mit-mutat-az-oldal)
 - [Adatforrások](#adatforrások)
@@ -36,11 +190,11 @@ az EESZT, a KSH, az NNGYK és az NFSZ közléseiből, valamint az OpenStreetMap
 - [Futtatás és fejlesztés](#futtatás-és-fejlesztés)
 - [Telepítés és üzemeltetés](#telepítés-és-üzemeltetés)
 - [Adatkezelés](#adatkezelés)
-- [Közreműködés, licenc, szerző](#közreműködés)
+- [Hivatkozás, közreműködés, licenc](#hivatkozás)
 
 ---
 
-## Mit mutat az oldal?
+### Mit mutat az oldal?
 
 A nézőpont négy szinten fut: **ország → megye → járás → település**. A
 kiválasztott ág (háziorvos vagy fogorvos) és a hely az egész oldalon
@@ -67,7 +221,7 @@ kiemeléssel, kattintható mátrix, megyére váltó előrejelzési görbe, tér
 
 ---
 
-## Adatforrások
+### Adatforrások
 
 A kanonikus lista a [`CLAUDE.md`](CLAUDE.md)-ben él; másik forrás nem kerül be.
 A NEAK-URL-ek az [`etl/sources.py`](etl/sources.py)-ban vannak, a többi forrásé
@@ -109,7 +263,7 @@ sem közli géppel olvasható, nyilvános formában; becslést nem teszünk köz
 
 ---
 
-## Adatpolitika (nem alku tárgya)
+### Adatpolitika (nem alku tárgya)
 
 1. **Nincs kitalált adat.** Minden szám visszavezethető egy archivált
    forrásfájlra. Ha egy forrás hiányzik, vagy a beolvasás nem olyan
@@ -130,7 +284,7 @@ sem közli géppel olvasható, nyilvános formában; becslést nem teszünk köz
 
 ---
 
-## Elemzések és módszerek
+### Elemzések és módszerek
 
 Részletesen: [módszertan](https://praxisterkep.hu/modszertan.html). Röviden:
 
@@ -184,7 +338,7 @@ együtt a halálozással.
 
 ---
 
-## Architektúra
+### Architektúra
 
 Nincs backend: statikus oldal + havi kötegelt ETL.
 
@@ -205,12 +359,13 @@ data/*.json (kiegészítők és elemzések) · data/raw/ (minden forrásfájl)
 - **Településnevek** — mindenhol a KSH Helységnévtár írásmódja; a NEAK
   ékezet nélküli alakjait („Gyor”) csak akkor javítjuk, ha az ékezet nélküli
   név egyetlen települést jelöl.
-- **Felület** — minden magyar szöveg a [`web/src/i18n/hu.json`](web/src/i18n/hu.json)-ban
-  (angol: `en.json`), a komponensekben nincs beégetett szöveg.
+- **Felület** — minden szöveg a [`web/src/i18n/hu.json`](web/src/i18n/hu.json)-ban
+  és az `en.json`-ban; a komponensekben és a statikus lapok generátorában
+  nincs beégetett szöveg. Minden oldal két nyelvű.
 
 ---
 
-## Az ETL-pipeline lépései
+### Az ETL-pipeline lépései
 
 A [`etl/run.py`](etl/run.py) a havi NEAK-adatból épít, majd deklarált
 lépésekben futtatja a kiegészítőket és az elemzéseket. Minden lépés megnevezi,
@@ -226,7 +381,7 @@ megbuktatja a munkafolyamatot, ha bármi hibázott vagy kimaradt.
 | `access`, `centroids`, `emergency`, `roads`, `traveltime`, `transit` | légvonal, település-középpontok, ügyelet/mentő, úthálózat, menetidő, busz | G, H, I, J, K |
 | `risk`, `survival`, **`forecast`**, `tenure`, `fluctuation` | kockázat, túlélés, előrejelzés, fluktuáció | a havi archívum |
 | `ksh_age`, **`census`**, `coverage`, `composite`, `clusters` | kor, népszámlálás, lefedettség, index, sivatagok | F, F2 |
-| `mortality`, `territorial`, `jobseekers`, **`grants`** | halálozás, TIMEA, álláskeresők, támogatások | M, N, O, P |
+| `mortality`, `eurostat`, `territorial`, `jobseekers`, **`grants`** | halálozás, európai összevetés, TIMEA, álláskeresők, támogatások | M, N, O, P, Q |
 | `settlements`, `county_profiles`, `district_development`, `district_profiles`, `outcomes` | település-, megye-, járásprofilok, kimenetek | minden fenti |
 
 Kötelező ellenőrzések (`validate.py` és a modulok saját `guard()`-jai):
@@ -239,7 +394,7 @@ számát.
 
 ---
 
-## Adatfájlok
+### Adatfájlok
 
 Mind a [`data/`](data/) alatt, a webes build a `web/public/data/`-ba másolja
 (`web/scripts/sync-data.mjs`).
@@ -251,8 +406,8 @@ Mind a [`data/`](data/) alatt, a webes build a `web/public/data/`-ba másolja
 | `settlements.json`, `settlement_slugs.json` | 3177 település-profil (ebből épülnek a statikus lapok) |
 | `counties.json`, `districts.json` | a profilok megyei és járási (197) szelete |
 | `outcomes.json` | halálozás, körülmények, népszámlálás, sürgősségi elérés, támogatások, előrejelzés — járásonként, megyénként, korrelációkkal |
-| `mortality.json`, `territorial.json`, `jobseekers.json`, `census.json` | az M, N, O és F2 forrás feldolgozva |
-| `grants.json`, `forecast.json` | a támogatások sorsa; az egyéves előrejelzés |
+| `mortality.json`, `eurostat.json`, `territorial.json`, `jobseekers.json`, `census.json` | az M, Q, N, O és F2 forrás feldolgozva |
+| `grants.json`, `forecast.json`, `highlights.json` | a támogatások sorsa; az egyéves előrejelzés; a főoldal két kiemelt eredménye |
 | `risk.json`, `survival.json`, `tenure.json`, `fluctuation.json` | archívumra épülő elemzések |
 | `coverage.json`, `composite.json`, `clusters.json`, `age.json` | lefedettség, összetett index, sivatagok, korösszetétel |
 | `traveltime.json`, `transit.json`, `access.json`, `emergency.json` | menetidő, busz, légvonal, ügyelet és mentő |
@@ -268,7 +423,7 @@ Gitben nem tárolt, URL-ből és dátumból újraépíthető: az OSM-kivonat
 
 ---
 
-## Futtatás és fejlesztés
+### Futtatás és fejlesztés
 
 ```bash
 # ETL (Python 3.12+)
@@ -302,7 +457,7 @@ utcaszintű térképe nem készül el), `VITE_SITE_URL` (a sitemap címe).
 
 ---
 
-## Telepítés és üzemeltetés
+### Telepítés és üzemeltetés
 
 - **Havi frissítés** — [`.github/workflows/monthly-etl.yml`](.github/workflows/monthly-etl.yml)
   havonta kétszer fut; validálási hibánál nem publikál, hanem issue-t nyit.
@@ -314,7 +469,7 @@ utcaszintű térképe nem készül el), `VITE_SITE_URL` (a sitemap címe).
 
 ---
 
-## Adatkezelés
+### Adatkezelés
 
 Az oldal személyes adatot nem gyűjt. Látogatói statisztika (Google
 Analytics 4) **csak hozzájárulás után** töltődik be: a
@@ -325,14 +480,21 @@ beágyazható nézet (`embed.html`) semmilyen sütit nem használ.
 
 ---
 
-## Közreműködés
+### Hivatkozás
+
+Ha a kódot vagy a feldolgozott adatokat felhasználod, kérlek, hivatkozz rá a
+[`CITATION.cff`](CITATION.cff) szerint (a GitHub „Cite this repository”
+gombja ebből dolgozik). A Zenodón archivált kiadás DOI-ja a megjelenés után
+kerül a fájlba.
+
+### Közreműködés
 
 Hibajelentést, adatészrevételt, új nyilvános forrást issue-ban szívesen
 fogadok; részletek a [CONTRIBUTORS.md](CONTRIBUTORS.md)-ben. Kérlek, tartsd be a
 [magatartási kódexet](CODE_OF_CONDUCT.md). Fejlesztési terv:
 [`docs/PLAN.md`](docs/PLAN.md).
 
-## Licenc
+### Licenc
 
 A kód [MIT licencű](LICENSE.md). A feldolgozott adatok (`data/*.json`) CC BY
 4.0 licencűek, az eredeti forrás megjelölésével; a `data/raw/` alatti

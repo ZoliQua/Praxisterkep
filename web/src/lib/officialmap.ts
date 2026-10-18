@@ -80,7 +80,7 @@ export const OFFICIAL_COLUMNS: ColDef[] = [
   { key: 'officialProvider', labelKey: 'officialmap.colOfficial', type: 'text', visible: true },
   { key: 'ourProviderId', labelKey: 'officialmap.colOurId', type: 'text', visible: false },
   { key: 'officialProviderId', labelKey: 'officialmap.colOfficialId', type: 'text', visible: false },
-  { key: 'ourLicence', labelKey: 'eeszt.colLicence', type: 'text', visible: false },
+  { key: 'ourLicence', labelKey: 'eeszt.colLicenceId', type: 'text', visible: false },
   { key: 'officialTax', labelKey: 'operating.colTax', type: 'text', visible: false },
   { key: 'groupLabel', labelKey: 'operating.colGroup', type: 'enum', visible: false },
 ];

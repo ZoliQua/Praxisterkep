@@ -82,7 +82,7 @@ export const SITE_COLUMNS: ColDef[] = [
   { key: 'provider', labelKey: 'vedono.colProvider', type: 'text', visible: true },
   { key: 'siteId', labelKey: 'gyse.colSiteId', type: 'text', visible: false },
   { key: 'authority', labelKey: 'gyse.colAuthority', type: 'text', visible: false },
-  { key: 'geoApprox', labelKey: 'eeszt.colApprox', type: 'bool', visible: false },
+  { key: 'geoApprox', labelKey: 'eeszt.colGeoApprox', type: 'bool', visible: false },
 ];
 
 export const COUNTY_COLUMNS: ColDef[] = [

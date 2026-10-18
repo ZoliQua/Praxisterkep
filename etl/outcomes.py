@@ -102,7 +102,7 @@ def pearson(xs: list[float], ys: list[float]) -> float | None:
     syy = sum((y - my) ** 2 for y in ys)
     if sxx == 0 or syy == 0:
         return None
-    return sum((x - mx) * (y - my) for x, y in zip(xs, ys)) / math.sqrt(sxx * syy)
+    return sum((x - mx) * (y - my) for x, y in zip(xs, ys, strict=True)) / math.sqrt(sxx * syy)
 
 
 def _ranks(vals: list[float]) -> list[float]:
@@ -153,7 +153,7 @@ def fit(xs, ys) -> dict:
     n = len(xs)
     mx, my = sum(xs) / n, sum(ys) / n
     sxx = sum((x - mx) ** 2 for x in xs)
-    slope = sum((x - mx) * (y - my) for x, y in zip(xs, ys)) / sxx if sxx else 0.0
+    slope = sum((x - mx) * (y - my) for x, y in zip(xs, ys, strict=True)) / sxx if sxx else 0.0
     return {"slope": round(slope, 4), "intercept": round(my - slope * mx, 4)}
 
 
@@ -466,7 +466,7 @@ def series() -> dict:
         "incomeIndex": {
             n: [round(100 * r["incomePerResident"][y] / m, 1)
                 if y in r.get("incomePerResident", {}) and m else None
-                for y, m in zip(inc["years"], inc["medianDistrict"])]
+                for y, m in zip(inc["years"], inc["medianDistrict"], strict=True)]
             for n, r in sorted(terr["districts"].items())},
         "popYears": out["migration"]["years"],
         "migration": {n: [r.get("migration", {}).get(y) for y in out["migration"]["years"]]
@@ -474,18 +474,18 @@ def series() -> dict:
         "naturalChange": {n: [r.get("naturalChange", {}).get(y) for y in out["migration"]["years"]]
                           for n, r in sorted(terr["districts"].items())},
         "jobseekers": {n: [round(100 * a / b, 2) if b else None
-                           for a, b in zip(r["registered"], r["workingAge"])]
+                           for a, b in zip(r["registered"], r["workingAge"], strict=True)]
                        for n, r in sorted(jobs["districts"].items())},
     }
     nat = jobs["national"]
     out["jobseekers"] = {
         "months": jobs["months"],
         "national": [round(100 * a / b, 3) if b else None
-                     for a, b in zip(nat["registered"], nat["workingAge"])],
+                     for a, b in zip(nat["registered"], nat["workingAge"], strict=True)],
         "nationalCount": nat["registered"],
         "nationalLong": nat["longTerm"],
         "counties": {n: [round(100 * a / b, 3) if b else None
-                         for a, b in zip(r["registered"], r["workingAge"])]
+                         for a, b in zip(r["registered"], r["workingAge"], strict=True)]
                      for n, r in sorted(jobs["counties"].items())},
     }
     return out

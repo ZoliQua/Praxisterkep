@@ -70,10 +70,9 @@ export function VulnerableDistricts() {
             {ACCESS_FACTORS.map((k) => {
               const raw = v.district[k] as number;
               return (
-                <span key={k} className="vulnerable__cell" title={`${t(`vulnerable.factor.${k}`)}: ${metaOf(k === 'noBusShare' ? 'gpRate' : k).format(raw)}`}>
+                <span key={k} className="vulnerable__cell" title={`${t(`vulnerable.factor.${k}`)}: ${metaOf(k).format(raw)}`}>
                   <i style={{ width: `${Math.max(4, v.ranks[k] * 100)}%` }} />
-                  <b>{k === 'noBusShare' || k === 'gpRate'
-                    ? `${formatNumber(Math.round(raw * 100))}%` : metaOf(k).format(raw)}</b>
+                  <b>{metaOf(k).format(raw)}</b>
                 </span>
               );
             })}

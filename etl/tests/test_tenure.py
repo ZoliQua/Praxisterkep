@@ -1,5 +1,4 @@
 """How long a district has been filled — and where the claim has to stop."""
-import json
 import sys
 from pathlib import Path
 

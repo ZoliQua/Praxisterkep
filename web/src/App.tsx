@@ -25,7 +25,7 @@ const LANDING_NEXT = [
   { href: '/megye.html', titleKey: 'next.county.title', textKey: 'next.county.text' },
   { href: '/jaras.html', titleKey: 'next.myDistrict.title', textKey: 'next.myDistrict.text' },
   { href: '/elemzo.html', titleKey: 'next.analysis.title', textKey: 'next.analysis.text' },
-  { href: '/miert.html', titleKey: 'next.why.title', textKey: 'next.why.text' },
+  { href: '/#alapellatas', titleKey: 'next.why.title', textKey: 'next.why.text' },
 ] as const;
 
 export default function App() {

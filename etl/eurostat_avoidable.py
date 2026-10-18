@@ -57,14 +57,29 @@ GEOS = {"HU": "hu", "EU27_2020": "eu"}
 MEASURES = {"TOTAL": "avoidable", "TRT": "treatable", "PRVT": "preventable"}
 
 
+# Eurostat adds a year about once a year; a month-old copy is fresh enough,
+# and anything older is fetched again so a new year is not missed for good
+MAX_AGE_DAYS = 30
+
+
 def fetch(refresh: bool = False) -> tuple[dict, str]:
     RAW.mkdir(parents=True, exist_ok=True)
     archived = sorted(RAW.glob("hlth_cd_apr_*.json.gz"))
     if archived and not refresh:
         path = archived[-1]
+        when = path.name[12:22]
+        if (date.today() - date.fromisoformat(when)).days <= MAX_AGE_DAYS:
+            return json.loads(gzip.decompress(path.read_bytes())), when
+    try:
+        resp = requests.get(URL, timeout=120, headers=HEADERS)
+        resp.raise_for_status()
+    except requests.RequestException as exc:
+        if not archived:
+            raise
+        # an archived answer is still a published fact: use it, and say how old
+        path = archived[-1]
+        print(f"      WARNING: Eurostat did not answer ({exc}); keeping {path.name}")
         return json.loads(gzip.decompress(path.read_bytes())), path.name[12:22]
-    resp = requests.get(URL, timeout=120, headers=HEADERS)
-    resp.raise_for_status()
     data = resp.json()
     if "error" in data:
         raise ParseError(f"Eurostat answered with an error: {data['error']}")
@@ -89,7 +104,7 @@ def parse(data: dict) -> dict:
                 pos.update({"geo": index["geo"][geo], "mortalit": index["mortalit"][mort],
                             "time": index["time"][year]})
                 flat = 0
-                for d, size in zip(dims, sizes):
+                for d, size in zip(dims, sizes, strict=True):
                     flat = flat * size + pos[d]
                 v = data["value"].get(str(flat))
                 if v is not None:

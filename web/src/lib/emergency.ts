@@ -135,8 +135,8 @@ export const POINT_COLUMNS: ColDef[] = [
   { key: 'address', labelKey: 'eeszt.colAddress', type: 'text', visible: true },
   { key: 'provider', labelKey: 'vedono.colProvider', type: 'text', visible: true },
   { key: 'fin', labelKey: 'eeszt.colFin', type: 'text', visible: false },
-  { key: 'licenceId', labelKey: 'eeszt.colLicence', type: 'text', visible: false },
-  { key: 'geoApprox', labelKey: 'eeszt.colApprox', type: 'bool', visible: false },
+  { key: 'licenceId', labelKey: 'eeszt.colLicenceId', type: 'text', visible: false },
+  { key: 'geoApprox', labelKey: 'eeszt.colGeoApprox', type: 'bool', visible: false },
 ];
 
 export const SETTLEMENT_COLUMNS: ColDef[] = [

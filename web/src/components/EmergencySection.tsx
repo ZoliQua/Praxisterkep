@@ -22,7 +22,7 @@ function detailRows(row: MapRow): [string, string][] {
     [t('emergency.colGroup'), String(row.groupLabel ?? '–')],
     [t('vedono.colProvider'), String(row.provider ?? '–')],
     [t('eeszt.colAddress'), `${row.postalCode ?? ''} ${row.settlement ?? ''}, ${row.address ?? ''}`],
-    [t('eeszt.colLicence'), String(row.licenceId || '–')],
+    [t('eeszt.colLicenceId'), String(row.licenceId || '–')],
     [t('eeszt.colFin'), String(row.fin)],
   ];
 }

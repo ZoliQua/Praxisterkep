@@ -141,7 +141,7 @@ export const SITE_COLUMNS: ColDef[] = [
   { key: 'units', labelKey: 'specialist.colUnits', type: 'number', visible: true },
   { key: 'professions', labelKey: 'specialist.colProfessions', type: 'number', visible: true },
   { key: 'neakCode', labelKey: 'operating.colNeakCode', type: 'text', visible: false },
-  { key: 'geoApprox', labelKey: 'eeszt.colApprox', type: 'bool', visible: false },
+  { key: 'geoApprox', labelKey: 'eeszt.colGeoApprox', type: 'bool', visible: false },
 ];
 
 export const ROW_COLUMNS: ColDef[] = [

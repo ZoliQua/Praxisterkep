@@ -55,7 +55,7 @@ export const PHARMACY_COLUMNS: ColDef[] = [
   { key: 'postalCode', labelKey: 'pharmacy.colPostal', type: 'text', visible: false },
   { key: 'address', labelKey: 'eeszt.colAddress', type: 'text', visible: true },
   { key: 'operator', labelKey: 'pharmacy.colOperator', type: 'text', visible: false },
-  { key: 'geoApprox', labelKey: 'eeszt.colApprox', type: 'bool', visible: false },
+  { key: 'geoApprox', labelKey: 'eeszt.colGeoApprox', type: 'bool', visible: false },
 ];
 
 export const PHARMACY_COUNTY_COLUMNS: ColDef[] = [

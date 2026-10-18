@@ -142,7 +142,7 @@ def archive(refresh: bool = False) -> dict:
 
 def _roman(text: str) -> int:
     total = 0
-    for a, b in zip(text, text[1:] + " "):
+    for a, b in zip(text, text[1:] + " ", strict=True):
         v = ROMAN[a]
         total += -v if b != " " and ROMAN.get(b, 0) > v else v
     return total

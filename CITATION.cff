@@ -1,0 +1,91 @@
+cff-version: 1.2.0
+message: "If you use this software or its processed data, please cite it as below."
+type: software
+title: "Praxistérkép — An Open Map and Analysis of Hungarian Primary Care Vacancies"
+abstract: >-
+  An open, reproducible map and analysis of Hungary's primary care districts
+  (general practice and dentistry), rebuilt every month from public data of
+  the National Health Insurance Fund (NEAK) and other state publishers. It
+  shows which districts have no contracted physician, for how long, how many
+  residents they serve, how far the nearest care is by road and by bus, and
+  what goes with vacancy across the country's 197 districts (járás): avoidable
+  mortality, income, education, unemployment and out-migration, with partial
+  correlations that hold income and education constant. It follows each
+  state settlement grant through the monthly archive to what became of the
+  district, forecasts vacancies a year ahead with a back-test, and publishes
+  a static, bilingual page for each of the 3,177 settlements. Every figure
+  traces to an archived source file; the pipeline fails rather than publish
+  a partial or estimated number. Informational, not an official publication.
+version: 1.50.0
+date-released: 2026-10-18
+url: "https://praxisterkep.hu"
+repository-code: "https://github.com/ZoliQua/Praxisterkep"
+license: MIT
+# Zenodo: once the first release is archived, add the concept (all-versions)
+# DOI here as `doi:` and under `identifiers:`, with the version-specific DOI
+# beside it, as in the other projects of this author. No DOI has been minted
+# yet, so none is given.
+authors:
+  - family-names: Dul
+    given-names: Zoltán
+    orcid: "https://orcid.org/0000-0002-9523-3450"
+keywords:
+  - primary care
+  - general practice
+  - dentistry
+  - healthcare workforce
+  - vacant practices
+  - health services accessibility
+  - avoidable mortality
+  - health inequalities
+  - Hungary
+  - open data
+  - geographic information
+  - travel time
+  - survival analysis
+  - React
+  - Python
+references:
+  - type: data
+    title: "Betöltetlen háziorvosi és fogorvosi szolgálatok; Szerződött szolgáltatók"
+    authors:
+      - name: "Nemzeti Egészségbiztosítási Alapkezelő (NEAK)"
+    url: "https://www.neak.gov.hu/letoltheto/altfin_dok/szerzodott_szolgaltatok"
+    notes: "Monthly lists of vacant districts and contracted providers; informational (tájékoztató jellegű)."
+  - type: data
+    title: "Háziorvosi és fogorvosi letelepedési, illetve praxisjog-vásárlási pályázatok nyertesei"
+    authors:
+      - name: "Nemzeti Egészségbiztosítási Alapkezelő (NEAK)"
+    url: "https://neak.gov.hu/felso_menu/szakmai_oldalak/gyogyito_megeleozo_ellatas/alapellatas/haziorvosi_ellatas/archivum"
+  - type: data
+    title: "2022. évi népszámlálás"
+    authors:
+      - name: "Központi Statisztikai Hivatal (KSH)"
+    url: "https://nepszamlalas2022.ksh.hu/adatbazis/"
+    license: CC-BY-4.0
+  - type: data
+    title: "TIMEA — Területi Információs és Megjelenítő Alkalmazás"
+    authors:
+      - name: "Központi Statisztikai Hivatal (KSH)"
+    url: "https://map.ksh.hu/timea/"
+  - type: data
+    title: "Halandósági adatbázis"
+    authors:
+      - name: "Nemzeti Népegészségügyi és Gyógyszerészeti Központ (NNGYK)"
+    url: "https://nngyk.gov.hu/hu/halandosagi-adatbazis.html"
+  - type: data
+    title: "Treatable and preventable mortality of residents (hlth_cd_apr)"
+    authors:
+      - name: "Eurostat"
+    url: "https://ec.europa.eu/eurostat/databrowser/view/hlth_cd_apr/default/table"
+  - type: data
+    title: "Településsoros adatok — nyilvántartott álláskeresők"
+    authors:
+      - name: "Nemzeti Foglalkoztatási Szolgálat (NFSZ)"
+    url: "https://nfsz.munka.hu/tart/stat_telepulessoros_adatok"
+  - type: data
+    title: "OpenStreetMap"
+    authors:
+      - name: "OpenStreetMap contributors"
+    url: "https://www.openstreetmap.org/copyright"
+    license: ODbL-1.0
