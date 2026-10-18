@@ -47,6 +47,14 @@
         {
           "key": "listing",
           "href": "https://www.neak.gov.hu/letoltheto/altfin_dok/szerzodott_szolgaltatok"
+        },
+        {
+          "key": "grantsGp",
+          "href": "https://neak.gov.hu/felso_menu/szakmai_oldalak/gyogyito_megeleozo_ellatas/alapellatas/haziorvosi_ellatas/archivum"
+        },
+        {
+          "key": "grantsDental",
+          "href": "https://neak.gov.hu/felso_menu/szakmai_oldalak/gyogyito_megeleozo_ellatas/alapellatas/fogaszati_ellatas/Fogaszati_archivum"
         }
       ]
     },
@@ -87,6 +95,10 @@
         {
           "key": "census",
           "href": "https://nepszamlalas2022.ksh.hu/"
+        },
+        {
+          "key": "censusDb",
+          "href": "https://nepszamlalas2022.ksh.hu/adatbazis/"
         },
         {
           "key": "timea",

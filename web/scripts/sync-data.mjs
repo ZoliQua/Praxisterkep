@@ -56,8 +56,12 @@ const optional = [
   // source files behind it (mortality, territorial, jobseekers) stay on the
   // ETL side — the pages read the slice they need, not 10 MB of inputs
   [join(repo, 'data', 'outcomes.json'), join(out, 'outcomes.json')],
+  // small enough to offer for download on their own: the census shares, the
+  // grant follow-up and the forecast that outcomes.json is cut from
+  [join(repo, 'data', 'census.json'), join(out, 'census.json')],
+  [join(repo, 'data', 'grants.json'), join(out, 'grants.json')],
+  [join(repo, 'data', 'forecast.json'), join(out, 'forecast.json')],
   [join(repo, 'data', 'geo', 'settlements.geojson'), join(out, 'settlements.geojson')],
-  [join(repo, 'data', 'geo', 'jaras.geojson'), join(out, 'jaras.geojson')],
 ];
 
 mkdirSync(out, { recursive: true });
