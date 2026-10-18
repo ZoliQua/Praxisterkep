@@ -1,0 +1,215 @@
+{
+ "source": "https://nngyk.gov.hu/hu/halandosagi-adatbazis.html",
+ "year": 2024,
+ "fetched": "2026-10-18",
+ "note": "Each entry keeps the htmlwidgets JSON payload of one NNGYK map byte for byte; sha256 is of the whole original page, which also carries the base64 map geometry this project does not archive.",
+ "files": [
+  {
+   "kind": "SHA",
+   "number": "01",
+   "url": "https://nngyk.gov.hu/dokumentumok/halandosagi-adatbazis-2024-terkepek/2024_SHA_Halalokonkent/01_%C3%96sszes%20hal%C3%A1loz%C3%A1s%20SHA%20-%202024.html",
+   "archived": "SHA_01.widget.json.gz",
+   "bytes": 22472515,
+   "sha256": "7dff4231e3629cbae5b118023ab5c210fc1489297f0848848b7eaadf1784b039",
+   "widgetSha256": "f83c5a31b344576df638fb2bdea3f9ccec27b60051beec14f3c3c2568ec53c3d"
+  },
+  {
+   "kind": "SHA",
+   "number": "02",
+   "url": "https://nngyk.gov.hu/dokumentumok/halandosagi-adatbazis-2024-terkepek/2024_SHA_Halalokonkent/02_Az%20em%C3%A9szt%C5%91rendszer%20betegs%C3%A9gei%20SHA%20-%202024.html",
+   "archived": "SHA_02.widget.json.gz",
+   "bytes": 22481127,
+   "sha256": "f4bccdf3e49b12d830a7a2e0ed320461224cd26b6bef0456afa35e2b665e4a46",
+   "widgetSha256": "c442a0f0577ca3633adb39b7bddaa93deae6e2cb4e77ce502e998aaa7025d5b3"
+  },
+  {
+   "kind": "SHA",
+   "number": "03",
+   "url": "https://nngyk.gov.hu/dokumentumok/halandosagi-adatbazis-2024-terkepek/2024_SHA_Halalokonkent/03_Cerebrovascul%C3%A1ris%20betegs%C3%A9gek%20SHA%20-%202024.html",
+   "archived": "SHA_03.widget.json.gz",
+   "bytes": 22480114,
+   "sha256": "b3ec586d154571a6bc61ed07b64c2e1ce7bd5f0123b7b78a8b0820bf840616bf",
+   "widgetSha256": "471a04c38de5f70aa21a9c43d081695e21cf7d60f5660900c1f7da8085423621"
+  },
+  {
+   "kind": "SHA",
+   "number": "04",
+   "url": "https://nngyk.gov.hu/dokumentumok/halandosagi-adatbazis-2024-terkepek/2024_SHA_Halalokonkent/04_Id%C3%BClt%20als%C3%B3%20l%C3%A9g%C3%BAti%20betegs%C3%A9gek%20SHA%20-%202024.html",
+   "archived": "SHA_04.widget.json.gz",
+   "bytes": 22482042,
+   "sha256": "e3635f8f148daa47ed27ddb14104e38afbd89ec5d757327f02b464d3045268ae",
+   "widgetSha256": "18e52df024a3c1c537b27a9bce5b75e335f02245e0705de5a887f0c756d9dbc3"
+  },
+  {
+   "kind": "SHA",
+   "number": "05",
+   "url": "https://nngyk.gov.hu/dokumentumok/halandosagi-adatbazis-2024-terkepek/2024_SHA_Halalokonkent/05_Ischaemi%C3%A1s%20sz%C3%ADvbetegs%C3%A9g%20SHA%20-%202024.html",
+   "archived": "SHA_05.widget.json.gz",
+   "bytes": 22476639,
+   "sha256": "847c40ef7d60c09fac00246423da9eedaf728ec46f56ed56ecab81cc25814887",
+   "widgetSha256": "fec6485850f8eb60ac930899f56c6e943d2bdf51bc15045f78744cfc50f76ce2"
+  },
+  {
+   "kind": "SHA",
+   "number": "06",
+   "url": "https://nngyk.gov.hu/dokumentumok/halandosagi-adatbazis-2024-terkepek/2024_SHA_Halalokonkent/06_Kering%C3%A9si%20rendszer%20betegs%C3%A9gei%20SHA%20-%202024.html",
+   "archived": "SHA_06.widget.json.gz",
+   "bytes": 22480349,
+   "sha256": "13529f61d105a8bf43ff2758222e358ffd0aa0e8943bdfef0e773d8543cdd99f",
+   "widgetSha256": "628a936777ecbaa3ceb88a1b956a1b18ec64037f0c95594ea129cde539d08bcc"
+  },
+  {
+   "kind": "SHA",
+   "number": "07",
+   "url": "https://nngyk.gov.hu/dokumentumok/halandosagi-adatbazis-2024-terkepek/2024_SHA_Halalokonkent/07_A%20l%C3%A9gz%C5%91rendszer%20betegs%C3%A9gei%20SHA%20-%202024.html",
+   "archived": "SHA_07.widget.json.gz",
+   "bytes": 22479242,
+   "sha256": "8ea77f02ee5007490deea48cbfa76bf4bc6d3bcde0066a8b50237f69a33cb6ea",
+   "widgetSha256": "bea2b899a1f0b3d574bf8c2a6a70c48aa9dfff9c81cdeeb2008126f75dea95e5"
+  },
+  {
+   "kind": "SHA",
+   "number": "08",
+   "url": "https://nngyk.gov.hu/dokumentumok/halandosagi-adatbazis-2024-terkepek/2024_SHA_Halalokonkent/08_Ment%C3%A1lis%20%C3%A9s%20viselked%C3%A9szavarok%20SHA%20-%202024.html",
+   "archived": "SHA_08.widget.json.gz",
+   "bytes": 22481530,
+   "sha256": "b0722aee5241df9f85f330a79b5fc7c43816280398e43aab8312f6c0f2f0a741",
+   "widgetSha256": "3db3ac22558ff436c391726232cf9ba58032f611dd6bf56325a8b4e839739c13"
+  },
+  {
+   "kind": "SHA",
+   "number": "09",
+   "url": "https://nngyk.gov.hu/dokumentumok/halandosagi-adatbazis-2024-terkepek/2024_SHA_Halalokonkent/09_A%20morbidit%C3%A1s%20%C3%A9s%20mortalit%C3%A1s%20k%C3%BCls%C5%91%20okai%20SHA%20-%202024.html",
+   "archived": "SHA_09.widget.json.gz",
+   "bytes": 22487730,
+   "sha256": "dcfbbb8f7fbe66c7518e7dfcc74e1f991584721e75f8454543255bc612344eef",
+   "widgetSha256": "f092971bee4dd502738c0a155a04292a94812f441ecc635ca690292097e2ad60"
+  },
+  {
+   "kind": "SHA",
+   "number": "10",
+   "url": "https://nngyk.gov.hu/dokumentumok/halandosagi-adatbazis-2024-terkepek/2024_SHA_Halalokonkent/10_Rosszindulat%C3%BA%20daganatok%20SHA%20-%202024.html",
+   "archived": "SHA_10.widget.json.gz",
+   "bytes": 22475283,
+   "sha256": "3510bdb54cea1846f5300b6b4a55964b0b86c8c3174cf508dd481afba9963154",
+   "widgetSha256": "3ede4d2a3bf2fd6b7d0cfc471678ea40becac8d52820e803cdab75f4bb61d48e"
+  },
+  {
+   "kind": "SHA",
+   "number": "11",
+   "url": "https://nngyk.gov.hu/dokumentumok/halandosagi-adatbazis-2024-terkepek/2024_SHA_Halalokonkent/11_Elker%C3%BClhet%C5%91%20hal%C3%A1loz%C3%A1s%20SHA%20-%202024.html",
+   "archived": "SHA_11.widget.json.gz",
+   "bytes": 22411733,
+   "sha256": "13a04ea0e26523086b417d7b516762e306142b3ec0a3de1514d751d8a7b803c2",
+   "widgetSha256": "5aa8b7008c231ee966bb7290ea095ccbfbca86692891bd9c32d14d0ffa0eb6f8"
+  },
+  {
+   "kind": "SHA",
+   "number": "12",
+   "url": "https://nngyk.gov.hu/dokumentumok/halandosagi-adatbazis-2024-terkepek/2024_SHA_Halalokonkent/12_Megel%C5%91zhet%C5%91%20hal%C3%A1loz%C3%A1s%20SHA%20-%202024.html",
+   "archived": "SHA_12.widget.json.gz",
+   "bytes": 22411778,
+   "sha256": "5f387de2ec92ad48b7357d253ebc81fd2074d74d85d846c41ec7056bf6654de4",
+   "widgetSha256": "27de8e37014cac2eed02ddfe43257629470f1398f9566cc13a8021f1c98ee0bd"
+  },
+  {
+   "kind": "SHA",
+   "number": "13",
+   "url": "https://nngyk.gov.hu/dokumentumok/halandosagi-adatbazis-2024-terkepek/2024_SHA_Halalokonkent/13_R%C3%A9szben%20elker%C3%BClhet%C5%91%20r%C3%A9szben%20megel%C5%91zhet%C5%91%20hal%C3%A1loz%C3%A1s%20SHA%20-%202024.html",
+   "archived": "SHA_13.widget.json.gz",
+   "bytes": 22432600,
+   "sha256": "047f33539598b89512168fae682ba7366b93ef54b12b163003ec734f1e2b8944",
+   "widgetSha256": "3fcfb582cbbc83e080e97f792da2b550496c15e878e8733e066be22f98e7e494"
+  },
+  {
+   "kind": "SHH",
+   "number": "01",
+   "url": "https://nngyk.gov.hu/dokumentumok/halandosagi-adatbazis-2024-terkepek/2024_SHH_Halalokonkent/01_%C3%96sszes%20hal%C3%A1loz%C3%A1s%20SHH%20-%202024.html",
+   "archived": "SHH_01.widget.json.gz",
+   "bytes": 22470783,
+   "sha256": "608cf1c28228d9c2d54f763a18b5af147dd28d7b00465eab42de52fd8b0aa3a9",
+   "widgetSha256": "80708ab1eeedca18f05476da3fc06187f73e36a3ee9ec55d7369ffbd99c4e77e"
+  },
+  {
+   "kind": "SHH",
+   "number": "02",
+   "url": "https://nngyk.gov.hu/dokumentumok/halandosagi-adatbazis-2024-terkepek/2024_SHH_Halalokonkent/02_Az%20em%C3%A9szt%C5%91rendszer%20betegs%C3%A9gei%20SHH%20-%202024.html",
+   "archived": "SHH_02.widget.json.gz",
+   "bytes": 22479279,
+   "sha256": "2c89b4133af8ad972eefd367d519181ec53f064e8610aac663ccbff58fe16b5b",
+   "widgetSha256": "8be5a1e70d7bb37bfca0a875dca72200c914129ea21fddc9e6225197f5e0ab72"
+  },
+  {
+   "kind": "SHH",
+   "number": "03",
+   "url": "https://nngyk.gov.hu/dokumentumok/halandosagi-adatbazis-2024-terkepek/2024_SHH_Halalokonkent/03_Cerebrovascul%C3%A1ris%20betegs%C3%A9gek%20SHH%20-%202024.html",
+   "archived": "SHH_03.widget.json.gz",
+   "bytes": 22477908,
+   "sha256": "17fd4eb7ab58e2d95e830f12dfa5d0c9021cf0b2efd2ae24e56b7236ce044fa1",
+   "widgetSha256": "4cc58bb948d598ef4d6488af075910e53cb020c4d2f7953cbf96f61fae8b7c0d"
+  },
+  {
+   "kind": "SHH",
+   "number": "04",
+   "url": "https://nngyk.gov.hu/dokumentumok/halandosagi-adatbazis-2024-terkepek/2024_SHH_Halalokonkent/04_Id%C3%BClt%20als%C3%B3%20l%C3%A9g%C3%BAti%20betegs%C3%A9gek%20SHH%20-%202024.html",
+   "archived": "SHH_04.widget.json.gz",
+   "bytes": 22479963,
+   "sha256": "a5e754112dcf6faf69cd3c6d6446b2c6b26bc1120c6e4310f99f810bf3e5d53d",
+   "widgetSha256": "d3f61b232e1b2dfe68eaf2885496d0ac7f15f741800301234233603a1e9db198"
+  },
+  {
+   "kind": "SHH",
+   "number": "05",
+   "url": "https://nngyk.gov.hu/dokumentumok/halandosagi-adatbazis-2024-terkepek/2024_SHH_Halalokonkent/05_Ischaemi%C3%A1s%20sz%C3%ADvbetegs%C3%A9g%20SHH%20-%202024.html",
+   "archived": "SHH_05.widget.json.gz",
+   "bytes": 22475345,
+   "sha256": "4aee5ecff867207bd98a54a1d6222d0c4dfad5ca33d7a544fcdc469b489cf9ad",
+   "widgetSha256": "92551dd975d278148d9fbb2e13d741f2fbfc50dc1459624d5dcec7d402873299"
+  },
+  {
+   "kind": "SHH",
+   "number": "06",
+   "url": "https://nngyk.gov.hu/dokumentumok/halandosagi-adatbazis-2024-terkepek/2024_SHH_Halalokonkent/06_Kering%C3%A9si%20rendszer%20betegs%C3%A9gei%20SHH%20-%202024.html",
+   "archived": "SHH_06.widget.json.gz",
+   "bytes": 22478619,
+   "sha256": "cc3d7a8c4be205e1c3bb52b2d4484efd1434cdcabbcfc6d3e307067d10447e8e",
+   "widgetSha256": "c656509ddd71abdaa2396df1d87209e3bf06dffa36d185574c9488439fac4f8d"
+  },
+  {
+   "kind": "SHH",
+   "number": "07",
+   "url": "https://nngyk.gov.hu/dokumentumok/halandosagi-adatbazis-2024-terkepek/2024_SHH_Halalokonkent/07_A%20l%C3%A9gz%C5%91rendszer%20betegs%C3%A9gei%20SHH%20-%202024.html",
+   "archived": "SHH_07.widget.json.gz",
+   "bytes": 22477377,
+   "sha256": "527ebf913c93010ec15a30d1f0f92f9d0f4e0b8bc5a415115dc4f663b14a86d4",
+   "widgetSha256": "85fb7071f3769662fcf7d28ebb9d483a1753e870c322d275e223767d4354df69"
+  },
+  {
+   "kind": "SHH",
+   "number": "08",
+   "url": "https://nngyk.gov.hu/dokumentumok/halandosagi-adatbazis-2024-terkepek/2024_SHH_Halalokonkent/08_Ment%C3%A1lis%20%C3%A9s%20viselked%C3%A9szavarok%20SHH%20-%202024.html",
+   "archived": "SHH_08.widget.json.gz",
+   "bytes": 22479315,
+   "sha256": "0f317f4309ccda975cb73bda052d422d67c943681abf3b52724f579a1be3fccd",
+   "widgetSha256": "28b51295b155d7206c7554a4a7fef6d10fc94166240db8f2fc4059d89d7a216c"
+  },
+  {
+   "kind": "SHH",
+   "number": "09",
+   "url": "https://nngyk.gov.hu/dokumentumok/halandosagi-adatbazis-2024-terkepek/2024_SHH_Halalokonkent/09_A%20morbidit%C3%A1s%20%C3%A9s%20mortalit%C3%A1s%20k%C3%BCls%C5%91%20okai%20SHH%20-%202024.html",
+   "archived": "SHH_09.widget.json.gz",
+   "bytes": 22485889,
+   "sha256": "c5f2bea7cecf77dd4dc8e064d1a72e30fc7bf29aa6d7aece0f050d8c3f5532d9",
+   "widgetSha256": "7b3071aeba915e7b4e1e63513177960b3dd80054e4d262f137807866bd3c2e22"
+  },
+  {
+   "kind": "SHH",
+   "number": "10",
+   "url": "https://nngyk.gov.hu/dokumentumok/halandosagi-adatbazis-2024-terkepek/2024_SHH_Halalokonkent/10_Rosszindulat%C3%BA%20daganatok%20SHH%20-%202024.html",
+   "archived": "SHH_10.widget.json.gz",
+   "bytes": 22474027,
+   "sha256": "12b43de8a82558e724427f57fc75c1d70281edf7416bb3eaa2f4d60fcb5e7e6f",
+   "widgetSha256": "5d70e041c4c7fa8d11a2cfd5d09307de54d1c3a31c868a7109d66c36e424b3ba"
+  }
+ ]
+}
