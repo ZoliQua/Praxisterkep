@@ -116,6 +116,14 @@ export interface OutcomesRaw {
     migration: YearSeries;
     births: YearSeries;
     deaths: YearSeries;
+    byDistrict: {
+      incomeYears: string[];
+      incomeIndex: Record<string, (number | null)[]>;
+      popYears: string[];
+      migration: Record<string, (number | null)[]>;
+      naturalChange: Record<string, (number | null)[]>;
+      jobseekers: Record<string, (number | null)[]>;
+    };
     jobseekers: {
       months: string[];
       national: (number | null)[];

@@ -357,6 +357,25 @@ def series() -> dict:
                                                          if n != "Budapest" and y in r.get(key, {})]) else None
                 for y in years],
         }
+    # per járás, for the line on each járás page: income as a share of the
+    # median járás (inflation-free), and the two population balances
+    inc = out["incomePerResident"]
+    out["byDistrict"] = {
+        "incomeYears": inc["years"],
+        "incomeIndex": {
+            n: [round(100 * r["incomePerResident"][y] / m, 1)
+                if y in r.get("incomePerResident", {}) and m else None
+                for y, m in zip(inc["years"], inc["medianDistrict"])]
+            for n, r in sorted(terr["districts"].items())},
+        "popYears": out["migration"]["years"],
+        "migration": {n: [r.get("migration", {}).get(y) for y in out["migration"]["years"]]
+                      for n, r in sorted(terr["districts"].items())},
+        "naturalChange": {n: [r.get("naturalChange", {}).get(y) for y in out["migration"]["years"]]
+                          for n, r in sorted(terr["districts"].items())},
+        "jobseekers": {n: [round(100 * a / b, 2) if b else None
+                           for a, b in zip(r["registered"], r["workingAge"])]
+                       for n, r in sorted(jobs["districts"].items())},
+    }
     nat = jobs["national"]
     out["jobseekers"] = {
         "months": jobs["months"],

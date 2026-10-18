@@ -3087,3 +3087,47 @@ body:has(.tp-rail) .tp-map svg { margin-top: 0; }
 .agebars__bar[data-small] { background: repeating-linear-gradient(45deg, #a78bfa 0 4px, color-mix(in srgb, #a78bfa 45%, transparent) 4px 8px); }
 .agebars__lab { font-size: 10.5px; color: var(--ink-faint); white-space: nowrap; }
 .agebars__col small { font-size: 10px; color: var(--line-strong); }
+
+/* the járás page: one card per measure, with a strip of all 174 */
+.yard-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin: 14px 0 6px; }
+.yard-card { border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg-raised); padding: 14px 15px 12px; }
+.yard-card.is-bad { border-color: color-mix(in srgb, var(--alert) 55%, var(--line)); background: color-mix(in srgb, var(--alert) 6%, var(--bg-raised)); }
+.yard-card.is-good { border-color: color-mix(in srgb, #5fb3a1 50%, var(--line)); }
+.yard-card h3 { font: 600 12.5px var(--font-body); color: var(--ink-dim); margin: 0 0 4px; }
+.yard-card__value { font: 800 26px var(--font-display); color: var(--ink); line-height: 1.15; }
+.yard-card__value small { display: block; font: 500 11px var(--font-body); color: var(--ink-faint); }
+.yard-card__compare { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 4px 0 0; font-size: 12px; color: var(--ink-faint); }
+.yard-card__compare b { color: var(--ink-dim); font-weight: 600; }
+.yard-card__rank { margin: 4px 0 0; font-size: 12px; color: var(--ink-dim); }
+.strip { width: 100%; height: auto; display: block; margin: 6px 0 2px; }
+.strip__axis { stroke: var(--line-strong); }
+.strip__tick { stroke: var(--ink-faint); stroke-width: 1; opacity: 0.45; }
+.strip__median { stroke: var(--ink); stroke-width: 1.6; opacity: 0.7; }
+.strip__mid { stroke: var(--ink-faint); stroke-dasharray: 2 2; }
+.strip__dot { fill: var(--alert); stroke: var(--bg); stroke-width: 2; }
+.yard-card.is-good .strip__dot { fill: #5fb3a1; }
+.cause-bars { display: grid; gap: 6px; }
+.cause-bars__row { display: grid; grid-template-columns: 170px 1fr 44px; gap: 10px; align-items: center; }
+.cause-bars__label { font-size: 13px; color: var(--ink-dim); }
+.cause-bars__track { position: relative; height: 14px; background: var(--bg-panel); border-radius: 3px; }
+.cause-bars__bar { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; }
+.cause-bars__bar.is-over { background: #ef6461; }
+.cause-bars__bar.is-under { background: #5fb3a1; }
+.cause-bars__hundred { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--ink); opacity: 0.6; z-index: 1; }
+.cause-bars__row b { text-align: right; font-variant-numeric: tabular-nums; }
+@media (max-width: 560px) { .cause-bars__row { grid-template-columns: 1fr 44px; } .cause-bars__track { grid-column: 1 / -1; order: 3; } }
+
+/* the county page: five small rankings of twenty */
+.county-ranks { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 12px; margin: 14px 0; }
+.county-rank { border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg-raised); padding: 13px 14px; }
+.county-rank h3 { margin: 0; font: 600 13px var(--font-body); color: var(--ink); }
+.county-rank__place { margin: 2px 0 8px; font-size: 12px; color: var(--alert-soft); }
+.county-rank ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.county-rank li { display: grid; grid-template-columns: 118px 1fr 58px; gap: 8px; align-items: center; font-size: 11.5px; color: var(--ink-faint); }
+.county-rank li.is-on { color: var(--ink); font-weight: 600; }
+.county-rank__name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.county-rank__track { position: relative; height: 8px; background: var(--bg-panel); border-radius: 2px; }
+.county-rank__track i { position: absolute; top: 0; bottom: 0; background: var(--line-strong); border-radius: 2px; }
+.county-rank li.is-on .county-rank__track i { background: var(--alert); }
+.county-rank li b { text-align: right; font-weight: 500; font-variant-numeric: tabular-nums; }
+.outcome-table td, .outcome-table th { font-variant-numeric: tabular-nums; }
