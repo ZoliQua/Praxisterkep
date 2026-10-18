@@ -38,7 +38,7 @@ OSM_DIR = ROOT / "data" / "raw" / "osm"
 GEO_DIR = ROOT / "data" / "geo"
 OUT = GEO_DIR / "road_graph.npz"
 EXTRACT_URL = "https://download.geofabrik.de/europe/hungary-latest.osm.pbf"
-HEADERS = {"User-Agent": "Praxisterkep/1.0 (+https://github.com/ZoliQua/OEP-Alapellatas)"}
+HEADERS = {"User-Agent": "Praxisterkep/1.0 (+https://github.com/ZoliQua/Praxisterkep)"}
 
 # free-flow speed in km/h when the way carries no usable maxspeed tag
 DEFAULT_SPEED = {

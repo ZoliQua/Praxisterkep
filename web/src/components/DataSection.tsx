@@ -20,7 +20,7 @@ interface Manifest {
   files: ManifestFile[];
 }
 
-const REPO = 'https://github.com/ZoliQua/OEP-Alapellatas';
+const REPO = 'https://github.com/ZoliQua/Praxisterkep';
 
 /** the files we can describe; anything else is listed without a description */
 const DESCRIBED = new Set([

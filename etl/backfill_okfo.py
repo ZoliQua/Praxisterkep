@@ -38,7 +38,7 @@ CDX_URL = ("https://web.archive.org/cdx/search/cdx?url=alapellatas.okfo.gov.hu/"
 SNAP_URL = ("https://web.archive.org/web/{ts}id_/https://alapellatas.okfo.gov.hu/"
             "tajekoztato-a-tartosan-betoltetlen-{slug}-korzetekrol/")
 SLUGS = {"dental": "fogorvosi", "gp": "haziorvosi"}
-HEADERS = {"User-Agent": "OEP-Alapellatas/1.0 (+https://github.com/ZoliQua/OEP-Alapellatas)"}
+HEADERS = {"User-Agent": "Praxisterkep/1.0 (+https://github.com/ZoliQua/Praxisterkep)"}
 
 
 def cdx_list(kind: str, cdx_dir: Path | None) -> list[str]:

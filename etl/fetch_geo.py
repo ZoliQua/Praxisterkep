@@ -71,7 +71,7 @@ COUNTY_SEATS = {
 COUNTY_RANK = {"Dunaújváros", "Érd", "Hódmezővásárhely", "Nagykanizsa", "Sopron"}
 # everything else needs this many residents to earn a label
 TOWN_MIN_POPULATION = 20000
-HEADERS = {"User-Agent": "OEP-Alapellatas/1.0 (+https://github.com/ZoliQua/OEP-Alapellatas)"}
+HEADERS = {"User-Agent": "Praxisterkep/1.0 (+https://github.com/ZoliQua/Praxisterkep)"}
 SIMPLIFY_TOLERANCE = 0.0025  # degrees; matches the counties layer's weight
 
 
