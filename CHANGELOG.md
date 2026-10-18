@@ -5,6 +5,22 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.46.1] — 2026-10-18
+
+### Módosítva
+- **Az adatkezelő megnevezése pontosabb lett.** A praxisterkep.hu domain a
+  Mackó Dental Kft. nevén van bejegyezve, a tájékoztató viszont csak
+  Dr. Dul Zoltánt nevezte meg — aki a whois-t megnézi, egy olyan
+  társaságot talál, amiről a tájékoztató hallgat. Az új szöveg
+  mindkettőt kimondja, és szétválasztja a szerepeket: a célokról és
+  eszközökről Dr. Dul Zoltán dönt, így a GDPR szerint ő az adatkezelő;
+  a társaság a domaint és a technikai hátteret adja, a látogatók
+  adatait nem használja saját célra. A bekezdés azt is kimondja, hogy
+  az oldal nem szolgál üzleti célt: nincs rajta hirdetés, nem
+  értékesít és nem gyűjt ügyfeleket.
+- A domain éles üzembe állítása: a névszerverek a Vercelre mutatnak
+  (`ns1`/`ns2.vercel-dns.com`), a `www` 308-cal az apexre irányít.
+
 ## [1.46.0] — 2026-10-18
 
 Saját domén (praxisterkep.hu), látogatói statisztika hozzájárulással,
