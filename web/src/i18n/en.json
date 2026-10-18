@@ -249,7 +249,8 @@
       "ksh": {
         "title": "KSH — Hungarian Central Statistical Office:",
         "hntr": "Gazetteer (population, district, area)",
-        "census": "2022 census (CC BY 4.0)"
+        "census": "2022 census (CC BY 4.0)",
+        "timea": "TIMEA — income, vital events, migration by settlement"
       },
       "law": {
         "title": "National Legislation Database:",
@@ -267,6 +268,15 @@
         "repo": "the full source code",
         "data": "the processed data (JSON)",
         "raw": "the original source files, archived monthly"
+      },
+      "nngyk": {
+        "title": "NNGYK — National Centre for Public Health and Pharmacy:",
+        "database": "mortality database",
+        "avoidable": "avoidable mortality by járás (SHA)"
+      },
+      "nfsz": {
+        "title": "NFSZ — National Employment Service:",
+        "settlements": "registered jobseekers by settlement, monthly"
       }
     },
     "sourcesNote": "Every figure is linked to its source: all of these are public files and pages anyone can download. The NEAK files always serve the current month; earlier months are archived here and downloadable too."
@@ -2451,6 +2461,51 @@
       "avoidableLink": "The járás's health data →",
       "noise": "In a small settlement a few births or moves shift the rate a lot, so the vital statistics are four-year averages; for the smallest villages they still need reading with care.",
       "source": "Sources: KSH TIMEA (income from NAV data), NFSZ settlement data, NNGYK mortality database."
+    },
+    "methodLink": "Method →"
+  },
+  "outcomeMethod": {
+    "heading": "Outcomes and circumstances — how they are made",
+    "lead": "The mortality, income, labour and population figures on the analysis page come from three outside public sources, bound by the same rule as the rest of the site: every number traces to an archived source file, and a half-read source fails rather than being published.",
+    "mortality": {
+      "title": "Avoidable mortality — NNGYK",
+      "text": "The national public-health centre publishes, per járás and county, the standardised death rate (SHA, per 100,000, 2013 European Standard Population) and the standardised mortality ratio (SHH, 100 = what national rates predict). Avoidable mortality follows Eurostat's two lists for deaths under 75; NNGYK sorts causes into three groups that do not overlap — treatable only, preventable only, and both. Their sum is total avoidable mortality, treatable-only plus both is the care-sensitive part; rates on one standard population add up. NNGYK ships each cause as a ~22 MB interactive map; the ~270 KB part carrying the numbers is archived byte for byte with the SHA-256 of the whole original."
+    },
+    "whyNotKsh": {
+      "title": "Why not KSH's district death table?",
+      "text": "KSH publishes district deaths by cause, age and year too (Statinfo NH3A07), and avoidable mortality could be computed from it. But KSH hides every cell under three for confidentiality and draws it exactly like a zero. Broken down by járás × cause × age × year most cells are that small, so the hidden deaths would vanish — and the small rural járás would look healthiest. NNGYK works from the unmasked microdata."
+    },
+    "income": {
+      "title": "Income — KSH TIMEA, NAV data",
+      "text": "Yearly domestic income forming the personal income tax base, per permanent resident, by settlement, járás and county, from KSH's public TIMEA map service. Forints are not comparable across years — inflation ran at 15–25% in 2022–23 — so comparisons over time are always as a share of that year's median járás."
+    },
+    "jobs": {
+      "title": "Jobseekers — NFSZ",
+      "text": "The National Employment Service publishes settlement figures monthly: registered jobseekers by place of residence on the 20th, and the 15–64 population (KSH, previous 1 January). The share is one over the other. Before 2024 the data is quarterly, back to 2019, so the chart runs on a true time axis. Every sheet must add up to its own printed county total or it is rejected."
+    },
+    "population": {
+      "title": "Births, deaths, migration — KSH TIMEA",
+      "text": "Natural change (live births minus deaths) and the domestic migration balance (permanent and temporary moves together), both per 1,000. For járás and settlements the 2022–2025 average is used: the 2020–21 pandemic excess is not to be read as a local trait, and in a small village one event moves the rate by several per thousand."
+    },
+    "stats": {
+      "title": "Associations — what is computed",
+      "text": "Correlations are Pearson's r across the 174 rural járás, with Spearman's rank correlation beside it; p comes from the t-distribution. The partial correlation shows what remains once income differences are taken out: r_xy·z = (r_xy − r_xz·r_yz) / √((1 − r_xz²)(1 − r_yz²)). Scatter lines are least-squares fits to the dots shown, computed by the page, not taken from stored values."
+    },
+    "grid": {
+      "title": "The 3 × 3 grid",
+      "text": "Rural járás are split into thirds by income and by GP vacancy, and each of the nine cells shows the median avoidable mortality. Within a row income is nearly constant: if the numbers rise left to right, mortality is higher where more districts are empty even among equally poor or rich places."
+    },
+    "capital": {
+      "title": "Why the capital is left out of the associations",
+      "text": "KSH TIMEA publishes the capital as one settlement and one járás, so a kerület has no income or migration balance of its own. Kerület appear with their own mortality, jobseeker and vacancy figures; where a number is Budapest's as a whole, the page says so."
+    },
+    "cross": {
+      "title": "The four cross-sections",
+      "text": "No new source, only the settlement profiles: when a district fell vacant from NEAK's monthly lists, the driving time to the nearest staffed surgery on the OpenStreetMap road network, direct buses from the Volánbusz timetable, age structure from the 2022 census, care deserts from the existing cluster analysis. Affected population is not summed here, because one empty district in a town would count the whole town."
+    },
+    "limits": {
+      "title": "What these numbers do not say",
+      "text": "They measure associations between places, not causes and not people: that more avoidable deaths go with more vacancies across járás does not mean a given empty district causes a given death. A vacant district is not unserved — public data does not show substitution. A missing association is a result too: registered chronic patients are unrelated to vacancy."
     }
   }
 }

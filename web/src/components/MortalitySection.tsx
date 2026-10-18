@@ -191,7 +191,7 @@ export function MortalitySection() {
       <p className="notice">{t('outcomes.mortality.caveat')}</p>
       <p className="section__source">{t('outcomes.mortality.source', {
         year: data.sources.mortality.year,
-      })}</p>
+      })} <a href="modszertan.html#kimenetek">{t('outcomes.methodLink')}</a></p>
     </section>
   );
 }

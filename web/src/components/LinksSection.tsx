@@ -69,7 +69,8 @@ export function LinksSection() {
           {part && ` ${t('outcomes.links.pairPartial', { r: formatDecimal(part.partial.toFixed(2)) })}`}
         </p>
       )}
-      <p className="notice">{t('outcomes.links.caveat')}</p>
+      <p className="notice">{t('outcomes.links.caveat')}{' '}
+        <a href="modszertan.html#kimenetek">{t('outcomes.methodLink')}</a></p>
     </section>
   );
 }

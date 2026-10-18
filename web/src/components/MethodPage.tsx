@@ -4,6 +4,7 @@
 import { useHashScroll } from '../lib/useHashScroll';
 import { PageNav } from './PageNav';
 import { Methodology } from './Methodology';
+import { OutcomeMethod } from './OutcomeMethod';
 import { DataSection } from './DataSection';
 import { NextSteps } from './NextSteps';
 import { Footer } from './Footer';
@@ -20,6 +21,7 @@ export function MethodPage() {
     <>
       <PageNav />
       <Methodology />
+      <OutcomeMethod />
       <DataSection />
       <div className="section container"><NextSteps items={NEXT} /></div>
       <Footer />
