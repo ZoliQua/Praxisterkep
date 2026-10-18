@@ -3131,3 +3131,30 @@ body:has(.tp-rail) .tp-map svg { margin-top: 0; }
 .county-rank li.is-on .county-rank__track i { background: var(--alert); }
 .county-rank li b { text-align: right; font-weight: 500; font-variant-numeric: tabular-nums; }
 .outcome-table td, .outcome-table th { font-variant-numeric: tabular-nums; }
+
+/* settlement pages: how people live here (no script) */
+.tp-living { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; margin-top: 12px; }
+.tp-living__item { border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg-raised); padding: 15px 16px; }
+.tp-living__item h3 { margin: 0 0 4px; font: 600 13px var(--font-body); color: var(--ink-dim); }
+.tp-living__value { margin: 0 0 8px; font: 800 26px var(--font-display); color: var(--ink); line-height: 1.15; }
+.tp-living__value small { display: block; font: 500 12px var(--font-body); color: var(--ink-faint); margin-top: 2px; }
+.tp-compare { display: grid; gap: 4px; margin: 4px 0 8px; }
+.tp-compare__row { display: grid; grid-template-columns: 128px 1fr 74px; gap: 8px; align-items: center; font-size: 12px; color: var(--ink-faint); }
+.tp-compare__row.is-self { color: var(--ink); font-weight: 600; }
+.tp-compare__label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tp-compare__track { position: relative; height: 10px; background: var(--bg-panel); border-radius: 2px; }
+.tp-compare__track i { position: absolute; top: 0; bottom: 0; left: 0; background: var(--line-strong); border-radius: 2px; }
+.tp-compare__row.is-self .tp-compare__track i { background: var(--alert-soft); }
+.tp-compare.is-diverging .tp-compare__track::after { content: ''; position: absolute; left: 50%; top: -2px; bottom: -2px; width: 1px; background: var(--ink-faint); }
+.tp-compare.is-diverging .tp-compare__row.is-self .tp-compare__track i.is-neg { background: #a78bfa; }
+.tp-compare.is-diverging .tp-compare__row.is-self .tp-compare__track i:not(.is-neg) { background: #5fb3a1; }
+.tp-compare__row b { text-align: right; font-weight: 500; font-variant-numeric: tabular-nums; }
+.tp-line { width: 100%; height: auto; display: block; margin-top: 6px; }
+.tp-line__axis { stroke: var(--line-strong); }
+.tp-line__tick { fill: var(--ink-faint); font-size: 9.5px; }
+.tp-line__self { fill: none; stroke: var(--alert-soft); stroke-width: 2; }
+.tp-line__nat { fill: none; stroke: var(--ink); stroke-width: 1.3; stroke-dasharray: 5 3; opacity: 0.7; }
+.tp-living__avoid { margin-top: 14px; padding: 13px 16px; border-left: 3px solid var(--alert); background: color-mix(in srgb, var(--alert) 7%, var(--bg-raised)); border-radius: 0 var(--radius) var(--radius) 0; }
+.tp-living__avoid p { margin: 0 0 6px; color: var(--ink); }
+.tp-living__avoid .tp-note { margin: 0; color: var(--ink-dim); }
+.tp-source { color: var(--ink-faint); font-size: 12px; margin: 10px 0 0; }

@@ -2423,6 +2423,34 @@
       "incomeHeading": "Income as % of the median járás",
       "districtsHeading": "The járás of {county} side by side",
       "colDistrict": "Járás"
+    },
+    "settlement": {
+      "heading": "How do people live here?",
+      "lead": "Income, work, births and deaths, moving away — the settlement beside its járás, its county and the median Hungarian settlement. These are the reasons a district is hard to fill, and the reasons people here die sooner.",
+      "medianSettlement": "median settlement",
+      "districtSuffix": "járás",
+      "national": "country",
+      "incomeHeading": "Income per resident",
+      "perYear": "a year, {year}",
+      "capitalWide": "KSH publishes the capital as one settlement, so this figure is Budapest's as a whole, not the kerület's.",
+      "taxpayers": "{n} in every 1,000 residents pay personal income tax.",
+      "jobsHeading": "Share of jobseekers",
+      "jobsOf": "{n} registered jobseekers of {of} of working age, {month}",
+      "jobsLong": "{share}% of them have been looking for over a year.",
+      "jobsLineAria": "Share of jobseekers in the settlement and nationally since 2019",
+      "naturalChangeHeading": "Births and deaths",
+      "migrationHeading": "Moving in and out",
+      "perThousand": "per 1,000 residents, {from}–{to} average",
+      "naturalChangeText": "Births minus deaths. A negative number means more people die than are born.",
+      "migrationText": "People moving in minus people moving out, within the country. A negative number means more leave than arrive.",
+      "loadHeading": "Patient visits per GP",
+      "loadUnit": "a year, {year}",
+      "loadText": "Surgery visits, home visits and telemedicine together. Where districts nearby are empty, the remaining doctors carry more.",
+      "avoidable": "Avoidable mortality in {district}: {value} per 100,000 ({year}); the rural median is {median}.",
+      "avoidableNote": "This is a járás figure: NNGYK publishes no settlement-level avoidable mortality, because so few deaths cannot give a reliable rate.",
+      "avoidableLink": "The járás's health data →",
+      "noise": "In a small settlement a few births or moves shift the rate a lot, so the vital statistics are four-year averages; for the smallest villages they still need reading with care.",
+      "source": "Sources: KSH TIMEA (income from NAV data), NFSZ settlement data, NNGYK mortality database."
     }
   }
 }
