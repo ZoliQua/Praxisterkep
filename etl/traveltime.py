@@ -13,6 +13,9 @@ OpenStreetMap road network (see roads.py), for:
     oncall           the nearest central on-call surgery
     ambulance        the nearest ambulance station
     inpatient        the nearest contracted hospital site
+    sbo              the nearest emergency department (sürgősségi betegellátó
+                     osztály: NEAK profession 4602 for adults, 4605 for
+                     children) — where a heart attack or a stroke is taken
     outpatient       the nearest contracted outpatient site
     gyse             the nearest medical-aid dispensing premises (GYS1-3;
                      a repair shop is not a substitute for a supplier)
@@ -78,7 +81,9 @@ EARTH_KM = 6371.0088
 # nearest neighbour would come out wrong
 REFERENCE_LAT = 47.0
 LAYERS = ("gp", "dental", "oncall", "ambulance", "inpatient", "outpatient",
-          "gyse", "pharmacy")
+          "gyse", "pharmacy", "sbo")
+# the NEAK profession codes of an emergency department
+SBO_PROFESSIONS = ("4602", "4605")
 
 
 def band_of(minutes: float) -> str:
@@ -141,6 +146,12 @@ def care_points() -> dict[str, list[tuple[float, float, str]]]:
         for s in specialist["sites"]:
             if s["lat"] is not None:
                 out[s["care"]].append((s["lat"], s["lon"], s["settlement"]))
+        seen = set()
+        for r in specialist["rows"]:
+            if (r["care"] == "inpatient" and r["professionCode"] in SBO_PROFESSIONS
+                    and r["lat"] is not None and (r["lat"], r["lon"]) not in seen):
+                seen.add((r["lat"], r["lon"]))
+                out["sbo"].append((r["lat"], r["lon"], r["settlement"]))
     return out
 
 
@@ -285,7 +296,7 @@ def district_rows(results: dict, snap, entries: list[dict]) -> list[dict]:
     lon = np.asarray([t[2] for t in todo])
     _km, nodes = snap(lat, lon)
     for (row, _lat, _lon), node in zip(todo, nodes):
-        for layer in ("gp", "dental", "oncall", "ambulance", "inpatient"):
+        for layer in ("gp", "dental", "oncall", "ambulance", "inpatient", "sbo"):
             result = results.get(layer)
             if not result:
                 continue
@@ -353,7 +364,7 @@ def by_county(rows: list[dict]) -> list[dict]:
     for county, list_ in groups.items():
         row = {"county": county, "settlements": len(list_),
                "population": sum(r["population"] for r in list_)}
-        for layer in ("gp", "oncall", "inpatient"):
+        for layer in ("gp", "oncall", "inpatient", "sbo"):
             values = [r[f"{layer}Min"] for r in list_ if r.get(f"{layer}Min") is not None]
             row[f"{layer}MedianMin"] = round(statistics.median(values), 1) if values else None
             row[f"{layer}MaxMin"] = round(max(values), 1) if values else None

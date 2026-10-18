@@ -292,6 +292,12 @@ def main() -> None:
              output=ROOT / "data" / "risk.json"),
         Step("ksh_age", "age composition", simple("ksh_age"),
              output=ROOT / "data" / "age.json"),
+        # the rest of the census: education, work, digital skills, housing,
+        # households of only the old
+        Step("census", "census living conditions",
+             simple("ksh_census",
+                    describe=lambda r: f", {len(r['settlements'])} settlements"),
+             output=ROOT / "data" / "census.json"),
         Step("centroids", "settlement coordinates", simple("centroids"),
              output=ROOT / "data" / "geo" / "settlements.geojson"),
         Step("emergency", "on-call and emergency points", simple("emergency"),
@@ -304,6 +310,9 @@ def main() -> None:
              output=ROOT / "data" / "traveltime.json"),
         Step("survival", "survival analysis", simple("survival"),
              output=ROOT / "data" / "survival.json"),
+        # risk and survival together: how many districts will be vacant in a year
+        Step("forecast", "twelve-month vacancy forecast", simple("forecast"),
+             needs=("risk", "survival"), output=ROOT / "data" / "forecast.json"),
         Step("workforce", "physician turnover", simple("workforce"),
              output=ROOT / "data" / "workforce.json"),
         Step("coverage", "settlement coverage", simple("coverage"),
@@ -347,11 +356,19 @@ def main() -> None:
                     describe=lambda r: f", {r['counts']['settlements']} settlements, "
                                        f"latest {r['latest']}"),
              output=ROOT / "data" / "jobseekers.json"),
+        # NEAK's settlement and practice-right grants, followed through the
+        # monthly archive to what became of each district
+        Step("grants", "settlement grants and their outcome (NEAK)",
+             simple("neak_grants",
+                    describe=lambda r: ", " + ", ".join(
+                        f"{k} {len(v['winners'])}" for k, v in r["kinds"].items())),
+             output=ROOT / "data" / "grants.json"),
         # the analyses turned inside out: one record per settlement, which
         # the build then bakes into a static page for each of them
         Step("settlements", "settlement profiles", simple("settlements"),
              needs=("coverage", "composite", "traveltime", "transit", "ksh_age",
-                    "clusters", "gyse", "vedono", "pharmacy", "tenure"),
+                    "clusters", "gyse", "vedono", "pharmacy", "tenure", "census",
+                    "grants", "mortality", "territorial", "jobseekers"),
              output=ROOT / "data" / "settlements.json"),
         # the same profiles sliced by county and cut to what a county page
         # shows: the middle level the site jumped over
@@ -379,7 +396,8 @@ def main() -> None:
                     describe=lambda r: f", {len(r['districts'])} járás, "
                                        f"{len(r['correlations']['pairs'])} pairs"),
              needs=("mortality", "territorial", "jobseekers", "district_profiles",
-                    "county_profiles", "settlements", "clusters"),
+                    "county_profiles", "settlements", "clusters", "census", "grants",
+                    "forecast", "traveltime"),
              output=ROOT / "data" / "outcomes.json"),
     ]
     run_steps(steps, month)
