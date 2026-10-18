@@ -53,7 +53,16 @@ def normalize_settlement(name: str) -> str:
 class KshRef:
     def __init__(self, entries: list[dict]):
         self.entries = entries
-        self.by_key = {normalize_settlement(e["name"]): e for e in entries}
+        # exact names first; the accent-folded key only where it names one
+        # place — "Kömlő" and "Komló", "Kömörő" and "Komoró" fold together,
+        # and a lookup that let the last of the pair win gave one of them the
+        # other's population
+        self.by_name = {e["name"]: e for e in entries}
+        keys: dict[str, list[dict]] = {}
+        for e in entries:
+            keys.setdefault(normalize_settlement(e["name"]), []).append(e)
+        self.by_key = {k: v[0] for k, v in keys.items() if len(v) == 1}
+        self.collided = {k: v for k, v in keys.items() if len(v) > 1}
         # county populations: Budapest counted once, via its aggregate row
         self.county_population: dict[str, int] = {}
         for e in entries:
@@ -65,7 +74,22 @@ class KshRef:
         self.country_population = sum(self.county_population.values())
 
     def lookup(self, name: str) -> dict | None:
-        return self.by_key.get(normalize_settlement(name))
+        name = name.strip()
+        hit = self.by_name.get(name) or self.by_key.get(normalize_settlement(name))
+        if hit:
+            return hit
+        # a folded key two places share: the accents the source did write
+        # decide — "Kömlo" keeps its ö, which only Kömlő has
+        options = [e for e in self.collided.get(normalize_settlement(name), [])
+                   if len(e["name"]) == len(name)
+                   and all(a == b for a, b in zip(name, e["name"]) if not a.isascii())]
+        return options[0] if len(options) == 1 else None
+
+    def canonical(self, name: str) -> str:
+        """The gazetteer's spelling of a settlement NEAK wrote without its
+        accents ("Gyor", "Hejokeresztúr", "Csengod"), else the name unchanged."""
+        hit = self.lookup(name)
+        return hit["name"] if hit else name
 
 
 def parse(xlsx_path: Path) -> KshRef:

@@ -262,6 +262,13 @@ def _same(a: str, b: str) -> bool:
     return address._same_place(address._stem(address.tidy(a)), address._stem(address.tidy(b)))
 
 
+def _here(settlement: str, w: dict) -> bool:
+    """The archive's spelling of a settlement against the gazetteer's: older
+    snapshots and the 2026 dental list write "Gyor" for Győr. The address must
+    match as well, so two places that fold together cannot be confused."""
+    return _bare(settlement or "") == _bare(w["settlement"])
+
+
 def _left_vacancy(fin: str, snaps: list[dict], first: str, last: str) -> bool:
     """Whether the district was vacant before `last` and filled by the end of it."""
     seen_vacant = was_filled = False
@@ -293,8 +300,8 @@ def match(w: dict, snaps: list[dict]) -> tuple[list[str], str, str | None]:
             continue
         for p in s["vacant"]:
             for site in p.get("sites") or []:
-                if site.get("settlement") == w["settlement"] and _same(site.get("address", ""),
-                                                                      w["address"]):
+                if _here(site.get("settlement"), w) and _same(site.get("address", ""),
+                                                             w["address"]):
                     since.setdefault(p["id"], p.get("vacantSince"))
     if since:
         fins = sorted(since)
@@ -313,7 +320,7 @@ def match(w: dict, snaps: list[dict]) -> tuple[list[str], str, str | None]:
         if s["month"] < f"{w['year']}-01" or not s["filled"]:
             continue
         here = sorted({p["id"] for p in s["filled"]
-                       if p.get("settlement") == w["settlement"]
+                       if _here(p.get("settlement"), w)
                        and _same(p.get("address", ""), w["address"])})
         if here:
             return (here, "registry", None) if len(here) == 1 else (here, "ambiguous", None)

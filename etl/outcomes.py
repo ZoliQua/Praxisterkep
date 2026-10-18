@@ -582,8 +582,6 @@ def emergency(rows: list[dict]) -> dict:
         "medianMin": stats["medianMin"], "maxMin": stats["maxMin"],
         "population": stats["population"], "bands": travel["bands"],
         "beyond30": stats["populationBeyond30"],
-        "settlements": [{k: f[k] for k in ("slug", "minutes", "population", "gpState")}
-                        for f in far],
         "farthest": sorted(far, key=lambda f: -f["minutes"])[:25],
         "doubly": {"settlements": len(double),
                    "population": sum(f["population"] for f in double),
