@@ -1,7 +1,7 @@
 # Praxistérkép
 
 [![Havi ETL](https://github.com/ZoliQua/Praxisterkep/actions/workflows/monthly-etl.yml/badge.svg)](https://github.com/ZoliQua/Praxisterkep/actions/workflows/monthly-etl.yml)
-[![Verzió](https://img.shields.io/badge/verzi%C3%B3-1.48.0-blue)](CHANGELOG.md)
+[![Verzió](https://img.shields.io/badge/verzi%C3%B3-1.49.0-blue)](CHANGELOG.md)
 [![Licenc: MIT](https://img.shields.io/badge/licenc-MIT-green.svg)](LICENSE.md)
 [![Python 3.12](https://img.shields.io/badge/Python-3.12-3776ab?logo=python&logoColor=white)](etl/)
 [![React 19](https://img.shields.io/badge/React-19-61dafb?logo=react&logoColor=black)](web/)
@@ -144,12 +144,14 @@ Részletesen: [módszertan](https://praxisterkep.hu/modszertan.html). Röviden:
 - **Előrejelzés** (`forecast.py`) — egy év múlva betöltetlen = most
   betöltetlen − várható betöltődés (Kaplan–Meier, megyénként) + várható új
   üresedés (a kockázatok összege), 90%-os sávval és visszaméréssel két
-  archivált hónap között.
+  archivált hónap között; településenként annak esélye, hogy egy év múlva
+  legalább egy ellátó körzet üres lesz.
 - **Letelepedési támogatások** (`neak_grants.py`) — minden nyertes címe a
   havi archívumban egy körzethez kötve, a körzet mai állapota (betöltött /
   újra üres / megszűnt) a támogatás nélküli, legalább egy éve üres
   körzetekkel összevetve. Közös rendelőcím, amely nem dönthető el,
-  „nem egyértelmű”, és kimarad minden arányból.
+  „nem egyértelmű”, és kimarad minden arányból. Illesztett összevetés: minden
+  támogatott körzet mellé legfeljebb öt hasonló, támogatás nélküli körzet.
 - **Menetidő** (`traveltime.py`) — szabad forgalmú percek az OSM-úthálózaton
   kilenc ellátástípusig (háziorvos, fogorvos, ügyelet, mentő, kórház,
   szakrendelés, gyse, gyógyszertár, sürgősségi osztály); a légvonal mellette.
@@ -171,9 +173,10 @@ A fő eredmények (2026. októberi adat): a 174 vidéki járásban a betöltetle
 háziorvosi körzetek aránya és az elkerülhető halálozás között r = 0,44; a
 jövedelmet kiszűrve 0,36; a jövedelmet és a végzettséget együtt kiszűrve
 0,17 (p ≈ 0,02). A letelepedési támogatással betöltött háziorvosi körzetek
-90%-ában ma is van orvos; a támogatás nélkül, legalább egy éve üres körzetek
-6–17%-a töltődött be azóta (a két csoport nem véletlenül különbözik — lásd a
-módszertant). A sürgősségi osztály távolsága a két kontroll után nem jár
+91%-ában ma is van orvos; a hozzájuk illesztett — ugyanannyi ideje üres,
+ugyanakkora településen lévő, lehetőleg azonos megyei — támogatás nélküli
+körzeteknek csak 17%-ában (a két csoport így sem teljesen összevethető —
+lásd a módszertant). A sürgősségi osztály távolsága a két kontroll után nem jár
 együtt a halálozással.
 
 ---

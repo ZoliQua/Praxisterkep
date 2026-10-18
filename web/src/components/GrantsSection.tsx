@@ -102,6 +102,25 @@ export function GrantsSection() {
       <StackedBars rows={years.map((r) => ({ key: String(r.year), label: String(r.year), parts: parts(r) }))}
         order={ORDER} colors={COLORS} labelPrefix="outcomes.grants.part" />
 
+      {prog === 'settle' && g.matched.pairs > 0 && (
+        <div className="outcome__callout grant-matched">
+          <h3 className="outcome__sub">{t('outcomes.grants.matchedHeading')}</h3>
+          <div className="grant-matched__bars">
+            {([['with', g.matched.treatedFilled], ['without', g.matched.controlFilled]] as const).map(([k, v]) => (
+              <div key={k}>
+                <span>{t(`outcomes.grants.matched.${k}`)}</span>
+                <span className="grant-matched__track"><i className={`is-${k}`} style={{ width: `${(v ?? 0) * 100}%` }} /></span>
+                <b>{v === null ? '–' : formatPercent(v, 0)}</b>
+              </div>
+            ))}
+          </div>
+          <p>{t('outcomes.grants.matchedText', {
+            pairs: formatNumber(g.matched.pairs), per: formatNumber(Math.round(g.matched.controlsPerDistrict)),
+            same: formatPercent(g.matched.sameCountyShare, 0), excluded: formatNumber(g.matched.excluded),
+          })}</p>
+        </div>
+      )}
+
       {prog === 'settle' && (
         <>
           <h3 className="outcome__sub">{t('outcomes.grants.compareHeading')}</h3>

@@ -2534,7 +2534,19 @@
       "forecastUnit": "GP districts expected vacant in 12 months; {now} of {of} today",
       "forecastNow": "now",
       "forecastLater": "in 12 months",
-      "forecastNote": "Expected: {add} districts falling vacant and {fill} filled; the 90% band is {lo}–{hi}. A forecast, not a promise: from the past risk of filled districts and the past refill pace of vacant ones."
+      "forecastNote": "Expected: {add} districts falling vacant and {fill} filled; the 90% band is {lo}–{hi}. A forecast, not a promise: from the past risk of filled districts and the past refill pace of vacant ones.",
+      "here": {
+        "heading": "What to expect here in a year?",
+        "gp": "GP care",
+        "dental": "Dental care",
+        "chance": "{pct}% chance that in 12 months at least one of the {n} districts serving this settlement is vacant.",
+        "sure": "{n} of the {of} serving districts are vacant today; it is near certain that one of them will still be vacant in a year.",
+        "topDecile": "{n} of the serving districts are in the country's riskiest tenth.",
+        "note": "A forecast, not a prophecy: from the past risk of filled districts and the past refill pace of vacant ones. It is about the settlement, never about a particular doctor.",
+        "chanceOne": "{pct}% chance that the district serving this settlement is vacant in 12 months.",
+        "chanceNow": "{pct}% chance that in 12 months at least one of the {n} districts serving this settlement is vacant; {now} are vacant today.",
+        "chanceOneNow": "The district serving this settlement is vacant today; {pct}% chance it still will be in 12 months."
+      }
     },
     "methodLink": "Method →",
     "steps": {
@@ -2616,7 +2628,13 @@
       "mapHeading": "Winning districts per járás",
       "countyHeading": "By county",
       "caveat": "The groups do not differ at random: a granted district was chosen by a doctor who wanted to work there, so the gap is not the grant's effect alone. Matching is by surgery address; where one address hosts several districts and the monthly data cannot tell which one the winner took, it is not counted. Winners' names are not shown.",
-      "source": "Source: NEAK, winners of the GP and dental settlement and practice-right grants (2019, 2021–2025; the 2020 list is not available), district outcomes from NEAK's monthly data."
+      "source": "Source: NEAK, winners of the GP and dental settlement and practice-right grants (2019, 2021–2025; the 2020 list is not available), district outcomes from NEAK's monthly data.",
+      "matchedHeading": "Matched to similar districts",
+      "matched": {
+        "with": "filled with a grant",
+        "without": "similar district, no grant"
+      },
+      "matchedText": "Each of {pairs} granted districts is set against up to {per} districts without a grant from the same month, vacant as long (12–24 months, 2–5 years, over 5 years) and in a settlement of the same size; in the same county where enough existed ({same} of the pairs). The fairest comparison public data allows — and still not the grant's pure effect, since a doctor chose the granted district. {excluded} granted districts could not be matched."
     },
     "forecast": {
       "heading": "What to expect a year from now?",
@@ -2640,7 +2658,10 @@
       "pathAria": "Vacant districts: {now} now, {later} expected in a year",
       "mapHeading": "Expected vacancy by járás in 12 months",
       "caveat": "A forecast, not a prophecy: what happens if next year is like the past. The band treats districts as independent; they are not (one retirement can empty two districts), so the true uncertainty is larger. The risk model's ranking power is moderate (AUC = {auc}).",
-      "source": "Source: the vacancy risk model and the Kaplan–Meier survival curves on this page, both from the monthly NEAK archive."
+      "source": "Source: the vacancy risk model and the Kaplan–Meier survival curves on this page, both from the monthly NEAK archive.",
+      "atRiskHeading": "Where there is a doctor today — and the highest chance there will not be within a year",
+      "atRiskText": "Settlements served by one or two districts, each with a contracted doctor today. Here a single vacancy takes the settlement's doctor.",
+      "atRiskChance": "{pct} chance within a year"
     }
   },
   "outcomeMethod": {
@@ -2700,11 +2721,11 @@
     },
     "grants": {
       "title": "Settlement and practice-right grants — NEAK",
-      "text": "NEAK publishes each year's winners of the GP and dental settlement grants and the GP practice-right grant: county, settlement, surgery address (2019, 2021–2025; the 2020 list is not on NEAK's site). Winners' names are neither stored nor shown. Each winner's address is matched to a district (FIN) in NEAK's monthly data: first a district listed vacant at that address in the grant year or the two before; where one address has several, the one that left the vacant list in the grant year or the next; where that does not decide, the winner is marked ambiguous and left out of every share. Obvious slips in NEAK's lists (wrong county, misspelt settlement) are corrected by rule or by a flagged hand correction. Comparison group: districts vacant 12+ months at the end of the year without a grant. The groups do not differ at random — a doctor chose the granted district — so the gap is not the grant's pure effect."
+      "text": "NEAK publishes each year's winners of the GP and dental settlement grants and the GP practice-right grant: county, settlement, surgery address (2019, 2021–2025; the 2020 list is not on NEAK's site). Winners' names are neither stored nor shown. Each winner's address is matched to a district (FIN) in NEAK's monthly data: first a district listed vacant at that address in the grant year or the two before; where one address has several, the one that left the vacant list in the grant year or the next; where that does not decide, the winner is marked ambiguous and left out of every share. Obvious slips in NEAK's lists (wrong county, misspelt settlement) are corrected by rule or by a flagged hand correction. Comparison group: districts vacant 12+ months at the end of the year without a grant. The groups do not differ at random — a doctor chose the granted district — so the gap is not the grant's pure effect. On top of this, a matched comparison: each granted district is set against up to five districts without a grant from the month it was itself still vacant, same branch, same vacancy band (12–24 months, 2–5 years, over 5 years) and same settlement-size band (cut at 1,000, 3,000 and 10,000), in the same county where possible; selection is deterministic (nearest vacancy length, then FIN)."
     },
     "forecast": {
       "title": "Forecast: a year from now",
-      "text": "A flow model: vacant in 12 months = vacant now − expected refills + expected new vacancies. Expected new vacancies are the sum of the filled districts' 12-month risk (from the risk model); each vacant district's refill chance is 1 − S(e + 12) / S(e), e the months it has been vacant, S its county's Kaplan–Meier curve (the national one below 60 spells). No refill is assumed beyond the curve's end. The 90% band treats districts as independent, so it is narrower than the true uncertainty. Back-test between two archived months — refills by the same method, new vacancies at the model's base rate, since past per-district risk is not kept (GP: {from} → {to}) — new vacancies {newPred} expected / {newAct} actual, refills {fillPred} / {fillAct}; the forecast leans slightly pessimistic. Not a clean test: the survival curve has seen that period."
+      "text": "A flow model: vacant in 12 months = vacant now − expected refills + expected new vacancies. Expected new vacancies are the sum of the filled districts' 12-month risk (from the risk model); each vacant district's refill chance is 1 − S(e + 12) / S(e), e the months it has been vacant, S its county's Kaplan–Meier curve (the national one below 60 spells). No refill is assumed beyond the curve's end. The 90% band treats districts as independent, so it is narrower than the true uncertainty. Back-test between two archived months — refills by the same method, new vacancies at the model's base rate, since past per-district risk is not kept (GP: {from} → {to}) — new vacancies {newPred} expected / {newAct} actual, refills {fillPred} / {fillAct}; the forecast leans slightly pessimistic. Not a clean test: the survival curve has seen that period. Per settlement one probability is published: that in 12 months at least one district serving it is vacant, P = 1 − Π(1 − pᵢ) · Π qⱼ, pᵢ the filled districts' risk, qⱼ the vacant ones' refill chance. A GP district counts for every settlement it serves, a dental one for its seat. The chance is said of the settlement, never of a named doctor's district."
     },
     "notAvailable": {
       "title": "What is missing, because no public data exists",

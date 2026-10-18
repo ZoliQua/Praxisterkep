@@ -101,6 +101,10 @@ export interface GrantKind {
   total: { settle?: GrantSummary; practice?: GrantSummary };
   comparison: { year: number; month: string; districts: number; filled?: number;
     vacant?: number; gone?: number }[];
+  matched: { pairs: number; treatedFilled: number | null; controlFilled: number | null;
+    controlsPerDistrict: number; sameCountyShare: number; excluded: number;
+    byYear: { year: number; pairs: number; treatedFilled: number | null;
+      controlFilled: number | null }[] };
   winners: { year: number; programme: 'settle' | 'practice'; settlement: string;
     county: string; district: string; contract: boolean; status: GrantStatus;
     matchedBy: string; vacantSince: string | null; lat: number | null; lon: number | null }[];
@@ -122,6 +126,8 @@ export interface ForecastKind {
     refillsPredicted: number; refillsActual: number; newPredicted: number;
     newActual: number } | null;
   riskValidation: { auc: number; lift: number; baseRate12: number; topDecileRate12: number } | null;
+  atRisk: { slug: string; name: string; county: string; district: string; population: number;
+    districts: number; chance: number; topDecile: number }[];
 }
 
 export interface SboSettlement {

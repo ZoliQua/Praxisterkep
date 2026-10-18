@@ -359,6 +359,100 @@ def comparison(kind: str, snaps: list[dict], granted: set[str], latest: dict,
     return out
 
 
+# ------------------------------------------------------- matched comparison
+#
+# "All districts vacant 12+ months without a grant" mixes a village vacant
+# for fifteen years with a town vacant for one; the granted ones are not
+# like that mix. Each granted district is therefore set against up to
+# CONTROLS districts from the same month's vacant list that are alike in
+# what most predicts a refill: the branch, how long the vacancy has lasted
+# and how big the settlement is — in the same county where enough exist,
+# else anywhere — drawn from the last month the granted district itself was
+# still vacant. A district vacant under a year by then is left out: the
+# grant is for twelve months or more, so there is nothing like it to compare. Selection is deterministic (closest vacancy length, then
+# FIN), so the published number can be reproduced.
+CONTROLS = 5
+DURATION_BANDS = ((12, 24), (24, 60), (60, 10_000))
+POPULATION_BANDS = ((0, 1000), (1000, 3000), (3000, 10_000), (10_000, 10**9))
+
+
+def _band(value: int | None, bands) -> int | None:
+    if value is None:
+        return None
+    return next((i for i, (lo, hi) in enumerate(bands) if lo <= value < hi), None)
+
+
+def matched_comparison(rows: list[dict], snaps: list[dict], latest: dict,
+                       granted: set[str], places: "Places") -> dict:
+    pop = {e["name"]: e["population"] for e in places.entries.values()}
+    by_bare = {_bare(e["name"]): e["population"] for e in places.entries.values()}
+
+    def size_of(p: dict) -> int | None:
+        site = (p.get("sites") or [{}])[0]
+        name = site.get("settlement", "")
+        return pop.get(name, by_bare.get(_bare(name)))
+
+    treated = [r for r in rows if r["programme"] == "settle" and r["contract"]
+               and r["matchedBy"] == "vacant" and r["vacantSince"] and r["status"]]
+    pairs = []
+    excluded = 0
+    for r in treated:
+        # the last month, up to the end of the grant year, in which the
+        # granted district was still on the vacant list: the moment the
+        # choice was made, and the pool the alternatives come from
+        still = [s for s in snaps if s["month"] <= f"{r['year']}-12"
+                 and any(p["id"] in r["fins"] for p in s["vacant"])]
+        if not still:
+            excluded += 1
+            continue
+        s = still[-1]
+        months = _months(r["vacantSince"], s["month"])
+        d_band = _band(months, DURATION_BANDS)
+        me = next((p for p in s["vacant"] if p["id"] in r["fins"]), None)
+        p_band = _band(size_of(me), POPULATION_BANDS) if me else None
+        if d_band is None or p_band is None:
+            excluded += 1
+            continue
+        pool = []
+        for p in s["vacant"]:
+            if p["id"] in granted or not p.get("vacantSince"):
+                continue
+            m = _months(p["vacantSince"], s["month"])
+            if _band(m, DURATION_BANDS) == d_band and _band(size_of(p), POPULATION_BANDS) == p_band:
+                pool.append((abs(m - months), p["id"], p.get("county")))
+        same = sorted(x for x in pool if x[2] == r["county"])
+        chosen = same[:CONTROLS]
+        if len(chosen) < CONTROLS:
+            chosen += sorted(x for x in pool if x[2] != r["county"])[:CONTROLS - len(chosen)]
+        if not chosen:
+            excluded += 1
+            continue
+        controls = [status_now([fid], latest) for _d, fid, _c in chosen]
+        pairs.append({"year": r["year"], "treated": r["status"],
+                      "controlFilled": sum(c == "filled" for c in controls) / len(controls),
+                      "controls": len(controls),
+                      "sameCounty": sum(1 for x in chosen if x[2] == r["county"])})
+
+    def share(ps: list[dict]) -> dict:
+        if not ps:
+            return {"pairs": 0, "treatedFilled": None, "controlFilled": None}
+        return {"pairs": len(ps),
+                "treatedFilled": round(sum(p["treated"] == "filled" for p in ps) / len(ps), 4),
+                "controlFilled": round(sum(p["controlFilled"] for p in ps) / len(ps), 4)}
+
+    return {
+        **share(pairs),
+        "controlsPerDistrict": round(sum(p["controls"] for p in pairs) / len(pairs), 2) if pairs else 0,
+        "sameCountyShare": (round(sum(p["sameCounty"] for p in pairs)
+                                  / max(1, sum(p["controls"] for p in pairs)), 3)),
+        "excluded": excluded,
+        "byYear": [{"year": y, **share([p for p in pairs if p["year"] == y])}
+                   for y in sorted({p["year"] for p in pairs})],
+        "rules": {"controls": CONTROLS, "durationBands": DURATION_BANDS,
+                  "populationBands": POPULATION_BANDS},
+    }
+
+
 def summarise(rows: list[dict]) -> dict:
     c = collections.Counter(r["status"] for r in rows if r["contract"] and r["status"])
     return {
@@ -412,6 +506,7 @@ def build(refresh: bool = False) -> dict:
             "total": {p: summarise([r for r in rows if r["programme"] == p])
                       for p in ("settle", "practice") if any(r["programme"] == p for r in rows)},
             "comparison": comparison(kind, snaps, granted, latest, years),
+            "matched": matched_comparison(rows, snaps, latest, granted, places),
             "winners": rows,
         }
     out = {

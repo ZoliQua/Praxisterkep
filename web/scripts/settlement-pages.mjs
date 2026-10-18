@@ -1460,6 +1460,31 @@ function grantsCard(grants) {
   </article>`;
 }
 
+/** This settlement a year from now, per branch, as one chance each. */
+function hereCard(here) {
+  if (!here) return '';
+  const rows = ['gp', 'dental'].filter((k) => here[k]).map((k) => {
+    const h = here[k];
+    const pct = Math.round(100 * h.pAnyVacant);
+    // a vacancy the curve gives almost no chance of filling within the year
+    const sure = h.vacantNow > 0 && h.pAnyVacant >= 0.995;
+    return `<div class="tp-chance">
+      <div class="tp-chance__dial" style="--p:${pct}"><b>${sure ? '!' : `${pct}%`}</b></div>
+      <div><h4>${esc(L(`here.${k}`))}</h4>
+        <p>${esc(sure ? L('here.sure', { n: num(h.vacantNow), of: num(h.districts) })
+          : L(h.districts === 1 ? (h.vacantNow ? 'here.chanceOneNow' : 'here.chanceOne')
+            : h.vacantNow ? 'here.chanceNow' : 'here.chance',
+            { pct, n: num(h.districts), now: num(h.vacantNow) }))}</p>
+        ${h.topDecile ? `<p class="tp-note">${esc(L('here.topDecile', { n: num(h.topDecile) }))}</p>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+  return `<article class="tp-living__item">
+    <h3>${esc(L('here.heading'))}</h3>${rows}
+    <p class="tp-note">${esc(L('here.note'))}</p>
+  </article>`;
+}
+
 function forecastCard(fc, district) {
   if (!fc) return '';
   const max = Math.max(fc.vacantIn12Band[1], fc.vacantNow, 1);
@@ -1555,6 +1580,7 @@ function livingBlock(profile, nationalJobs) {
     </div>` : '';
   if (l.census) parts.push(censusPlot(l.census));
   parts.push(grantsCard(l.grants));
+  parts.push(hereCard(l.forecastHere));
   if (l.forecast) parts.push(forecastCard(l.forecast, `${district}${profile.county === 'Budapest' ? '' : ` ${L('districtSuffix')}`}`));
   return `<div class="tp-living">${parts.join('')}</div>${avoid}
     <p class="tp-note">${esc(L('noise'))}</p>

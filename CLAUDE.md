@@ -142,6 +142,18 @@ dissolved (megszűnt) list for GP; the GP registry is the source of district
 - Screening participation and vaccination coverage are wanted and absent:
   no institution publishes them by járás or settlement in a public,
   machine-readable form. Do not estimate them.
+- The archive was respelt once (`etl/respell_archive.py`): every snapshot's
+  settlement names now follow the gazetteer, the split index entries of one
+  place merged, nothing re-parsed. `--check` reports without writing; run it
+  after any change to `resolve_capital` or `KshRef.lookup`. Never rebuild an
+  old month with `run.py` — NEAK's URLs are unversioned, and a missing raw
+  file would be filled with today's.
+- grants.json also carries a matched comparison: each granted district
+  against up to five ungranted ones from the last month it was itself still
+  vacant, same branch, vacancy band and settlement-size band, same county
+  where possible. forecast.json carries a per-settlement chance that a
+  district serving it is vacant in a year (P = 1 − Π(1 − p) · Π q) — said of
+  the settlement, never shown beside a named doctor's district.
 - Not in git, reproducible from their URL and date: the OSM extract under
   `data/raw/osm/`, the GTFS zip under `data/raw/gtfs/` and the derived
   `data/geo/road_graph.npz`.
@@ -265,6 +277,4 @@ the registry means `dissolved`, never silently dropped or counted as filled.
   `VITE_SITE_URL` overrides what the sitemap writes. `npm run build` runs `scripts/sync-data.mjs` first, so the JSON in
   `data/` reaches `web/public/data/` on the build machine (that directory is
   git-ignored on purpose).
-  `.github/workflows/deploy.yml` still targets Cloudflare Pages and fails on
-  every push for want of its two secrets; it is dead weight unless Cloudflare
-  is actually wanted.
+  There is no other deploy workflow (the old Cloudflare `deploy.yml` is gone).

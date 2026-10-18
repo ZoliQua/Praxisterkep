@@ -3277,3 +3277,17 @@ body:has(.tp-rail) .tp-map svg { margin-top: 0; }
 .county-grants__track { position: relative; height: 10px; background: var(--bg-panel); border-radius: 2px; }
 .county-grants__track i { position: absolute; left: 0; top: 0; height: 100%; background: var(--line-strong); border-radius: 2px; }
 .county-grants__track i.is-filled { background: #5fb3a1; }
+.tp-chance { display: grid; grid-template-columns: 64px 1fr; gap: 12px; align-items: center; margin: 6px 0 10px; }
+.tp-chance h4 { margin: 0 0 2px; font: 600 13px var(--font-body); color: var(--ink); }
+.tp-chance p { margin: 0; font-size: 12.5px; color: var(--ink-dim); }
+.tp-chance__dial { width: 60px; height: 60px; border-radius: 50%; display: grid; place-items: center;
+  background: conic-gradient(var(--alert-soft) calc(var(--p) * 1%), var(--bg-panel) 0); position: relative; }
+.tp-chance__dial::before { content: ''; position: absolute; inset: 7px; border-radius: 50%; background: var(--bg-raised); }
+.tp-chance__dial b { position: relative; font: 800 14px var(--font-display); color: var(--ink); }
+.grant-matched__bars { display: grid; gap: 6px; max-width: 620px; margin: 4px 0 10px; }
+.grant-matched__bars > div { display: grid; grid-template-columns: 210px 1fr 52px; gap: 10px; align-items: center; font-size: 13px; color: var(--ink-dim); }
+.grant-matched__track { height: 16px; background: var(--bg-panel); border-radius: 3px; overflow: hidden; }
+.grant-matched__track i { display: block; height: 100%; border-radius: 3px; }
+.grant-matched__track i.is-with { background: #5fb3a1; } .grant-matched__track i.is-without { background: #8b8fa3; }
+.grant-matched__bars b { text-align: right; color: var(--ink); font: 800 16px var(--font-display); }
+@media (max-width: 640px) { .grant-matched__bars > div { grid-template-columns: 1fr 52px; } .grant-matched__track { grid-column: 1 / -1; grid-row: 2; } }
