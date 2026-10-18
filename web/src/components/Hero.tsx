@@ -1,3 +1,11 @@
+// The landing's opening. This is where a cold visitor decides whether the
+// site is worth their attention, so it says one thing in one voice: the
+// question, the branch it is asked about, and the one caveat that keeps the
+// answer honest.
+//
+// It deliberately carries no figures — the showcase rail directly below is
+// where the numbers live, and repeating them here would make the first screen
+// read twice.
 import { t } from '../lib/i18n';
 import { formatMonth } from '../lib/format';
 import { useAppStore, useSnapshot, useTimeseriesMonths } from '../store/useAppStore';
@@ -9,6 +17,8 @@ export function Hero() {
   const kind = useAppStore((s) => s.kind);
   const setKind = useAppStore((s) => s.setKind);
   const monthCount = useTimeseriesMonths().length;
+  const doctor = t(`kinds.${kind}.doctor`);
+  const adj = t(`kinds.${kind}.adj`);
 
   return (
     <header className="hero container">
@@ -21,7 +31,7 @@ export function Hero() {
           what every number below them counts */}
       <div className="hero__switches">
         <div className="seg seg--kind" role="group">
-          {(['dental', 'gp'] as PraxisKind[]).map((k) => (
+          {(['gp', 'dental'] as PraxisKind[]).map((k) => (
             <button key={k} aria-pressed={kind === k} onClick={() => setKind(k)}>
               {t(`kinds.${k}.label`)}
             </button>
@@ -29,13 +39,23 @@ export function Hero() {
         </div>
         {snapshot.national.dissolved > 0 && <DissolvedSwitch compact />}
       </div>
-      <p className="hero__lead">{t('site.lead')}</p>
-      <p className="hero__meta">
-        {t('site.lastUpdate')}: {formatMonth(snapshot.month)}
-        {monthCount === 1 && <> · {t('site.firstMonthNote')}</>}
-      </p>
 
-      <p className="notice">{t('hero.vacantVsUnserved')}</p>
+      {/* One block, one type scale. The lead states what the site is, the
+          caveat states what "vacant" does not mean — rule 4 of the project —
+          and the date says how fresh it all is. They used to be three
+          paragraphs in three different styles. */}
+      <div className="hero__intro">
+        <p className="hero__lead">{t('site.lead', { doctor })}</p>
+        <p className="hero__caveat">
+          <strong>{t('hero.caveatLabel')}</strong>{' '}
+          {t('hero.vacantVsUnserved', { doctor, kind: adj })}
+        </p>
+        <p className="hero__meta">
+          {t('site.lastUpdate')}: <b>{formatMonth(snapshot.month)}</b>
+          {' · '}{t('site.sourceShort')}
+          {monthCount === 1 && <> · {t('site.firstMonthNote')}</>}
+        </p>
+      </div>
     </header>
   );
 }

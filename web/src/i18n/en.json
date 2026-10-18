@@ -1,10 +1,11 @@
 {
   "site": {
     "title": "Praxis Map",
-    "lead": "Interactive map of vacant dental and GP districts in Hungary — built from official NEAK data, updated monthly.",
+    "lead": "An interactive map of where there is no contracted {doctor} in Hungary — from public NEAK data, refreshed monthly, district by district.",
     "lastUpdate": "Last data update",
     "firstMonthNote": "First month of data collection — monthly change appears from the next update.",
-    "monthDelta": "compared to the previous month"
+    "monthDelta": "compared to the previous month",
+    "sourceShort": "source: NEAK"
   },
   "kinds": {
     "dental": {
@@ -54,8 +55,9 @@
     "years": "years",
     "since": "since",
     "populationContext": "That is roughly {count} times the population of Szombathely.",
-    "vacantVsUnserved": "Important: a vacant district is not necessarily unserved — most residents are covered by a substitute physician, typically based in another settlement with limited consulting hours.",
-    "longTerm": "legally long-term vacant {kind} districts"
+    "vacantVsUnserved": "a vacant district is not necessarily an unserved one: most residents are seen by a substitute {doctor}, usually from another settlement and in limited hours.",
+    "longTerm": "legally long-term vacant {kind} districts",
+    "caveatLabel": "Important:"
   },
   "map": {
     "heading": "Vacancies on the map",

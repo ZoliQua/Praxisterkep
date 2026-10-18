@@ -1,15 +1,26 @@
 import { describe, expect, it } from 'vitest';
 import {
-  contextHref, readContext, writeContext, type SiteContext,
+  contextHref, readContext, writeContext, EMPTY, type SiteContext,
 } from './context';
 
 const ctx = (over: Partial<SiteContext> = {}): SiteContext =>
-  ({ kind: 'dental', county: null, settlement: null, dissolved: 'without',
+  ({ kind: 'gp', county: null, settlement: null, dissolved: 'without',
     district: null, ...over });
 
 describe('site context', () => {
+  // Which branch a cold visitor lands on is a product decision, not an
+  // accident of the code, so it is pinned here: an address with no branch in
+  // it means GP, and dental has to say so.
+  it('opens on the GP branch', () => {
+    expect(EMPTY.kind).toBe('gp');
+    expect(readContext('').kind).toBe('gp');
+    expect(readContext('?k=dental').kind).toBe('dental');
+    expect(readContext('?k=nonsense').kind).toBe('gp');
+  });
+
   it('reads what the map has always written', () => {
-    expect(readContext('?k=gp&m=Baranya')).toEqual(ctx({ kind: 'gp', county: 'Baranya' }));
+    expect(readContext('?k=dental&m=Baranya'))
+      .toEqual(ctx({ kind: 'dental', county: 'Baranya' }));
     expect(readContext('')).toEqual(ctx());
   });
 
@@ -21,14 +32,14 @@ describe('site context', () => {
 
   it('leaves the default branch out of the address', () => {
     expect(writeContext('', ctx())).toBe('');
-    expect(writeContext('', ctx({ kind: 'gp' }))).toBe('?k=gp');
+    expect(writeContext('', ctx({ kind: 'dental' }))).toBe('?k=dental');
   });
 
   it('keeps query parameters it does not own', () => {
-    const q = writeContext('?ho=2026-08&szin=age', ctx({ kind: 'gp', county: 'Vas' }));
+    const q = writeContext('?ho=2026-08&szin=age', ctx({ kind: 'dental', county: 'Vas' }));
     expect(q).toContain('ho=2026-08');
     expect(q).toContain('szin=age');
-    expect(q).toContain('k=gp');
+    expect(q).toContain('k=dental');
     expect(q).toContain('m=Vas');
   });
 
@@ -40,24 +51,24 @@ describe('site context', () => {
   });
 
   it('drops what is no longer selected', () => {
-    expect(writeContext('?k=gp&m=Vas&tel=sarvar', ctx())).toBe('');
+    expect(writeContext('?k=dental&m=Vas&tel=sarvar', ctx())).toBe('');
   });
 
   it('carries the context to another page, anchor and all', () => {
-    const c = ctx({ kind: 'gp', county: 'Baranya' });
+    const c = ctx({ kind: 'dental', county: 'Baranya' });
     expect(contextHref('elemzo.html#menetido', c))
-      .toBe('elemzo.html?k=gp&m=Baranya#menetido');
-    expect(contextHref('elemzo.html', c)).toBe('elemzo.html?k=gp&m=Baranya');
+      .toBe('elemzo.html?k=dental&m=Baranya#menetido');
+    expect(contextHref('elemzo.html', c)).toBe('elemzo.html?k=dental&m=Baranya');
   });
 
   it('keeps the current query when the link stays on this page', () => {
     // an anchor on this page must not throw away the map's own state
-    expect(contextHref('#nalam', ctx({ kind: 'gp' }), '?ho=2026-08'))
-      .toBe('?ho=2026-08&k=gp#nalam');
+    expect(contextHref('#nalam', ctx({ kind: 'dental' }), '?ho=2026-08'))
+      .toBe('?ho=2026-08&k=dental#nalam');
   });
 
   it('survives a round trip', () => {
-    const c = ctx({ kind: 'gp', county: 'Zala', settlement: 'zalaegerszeg' });
+    const c = ctx({ kind: 'dental', county: 'Zala', settlement: 'zalaegerszeg' });
     expect(readContext(writeContext('', c))).toEqual(c);
   });
 });
