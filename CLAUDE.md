@@ -111,8 +111,37 @@ dissolved (megszűnt) list for GP; the GP registry is the source of district
   optional `living` block of settlements.json — every static settlement
   page (#eletkorulmenyek). The method is written out on modszertan.html
   (#kimenetek); any change to how a number is made changes that text too.
+  Numbers the method text quotes are filled from outcomes.json, never typed
+  into hu.json.
   A finding that did not hold is reported, not dropped: GP-registered
-  chronic patients do not fall where GPs are missing.
+  chronic patients do not fall where GPs are missing, and distance to an
+  emergency department does not go with mortality once income and
+  education are held still.
+- Four more, built the same way: `census.json` (ksh_census.py, source F2 —
+  five shares of two published counts each; suppressed cells stay null,
+  except poor dwellings, recovered by the identity total − full − plain
+  comfort, which is checked on every complete row; járás and county values
+  are the census's own, never summed; ethnicity is not used),
+  `grants.json` (neak_grants.py, source P — each winner's address matched
+  to a FIN through the monthly archive; a shared health-centre address the
+  archive cannot resolve is "ambiguous" and kept out of every share; the
+  comparison group is districts vacant 12+ months without a grant; names
+  are read past and a test asserts none reaches the output),
+  `forecast.json` (forecast.py — vacant in 12 months = vacant now −
+  Σ Kaplan–Meier refill chance + Σ 12-month risk, a 90% band that assumes
+  independence and says so, and a back-test between archived months), and
+  the `sbo` layer of traveltime.json (NEAK inpatient professions 4602 and
+  4605: the emergency departments). outcomes.json carries all four, plus
+  the second-order partial correlation with income and education held
+  still together (`control: "incomeDegree"`).
+- Settlement names follow the KSH gazetteer everywhere. NEAK's 2026 dental
+  list drops ő and ű ("Gyor"); `parse_dental.resolve_capital` maps every
+  site name onto the gazetteer's spelling, but only where the accent-folded
+  name is unique — Kömlő/Komló and Kömörő/Komoró fold together, and
+  `KshRef.lookup` matches exact names first for the same reason.
+- Screening participation and vaccination coverage are wanted and absent:
+  no institution publishes them by járás or settlement in a public,
+  machine-readable form. Do not estimate them.
 - Not in git, reproducible from their URL and date: the OSM extract under
   `data/raw/osm/`, the GTFS zip under `data/raw/gtfs/` and the derived
   `data/geo/road_graph.npz`.
@@ -173,7 +202,7 @@ dissolved (megszűnt) list for GP; the GP registry is the source of district
 | D | NEAK havi finanszírozási adatok (performance) | XLS | monthly (v1) |
 | E | OKFŐ tartósan betöltetlen körzetek | HTML/PDF | cross-check |
 | F | KSH settlement population (Helységnévtár) | XLS | yearly |
-| F2 | KSH 2022 census age composition (settlement level, CC BY 4.0) | REST JSON | one-off |
+| F2 | KSH 2022 census (settlement, járás and county, CC BY 4.0) — age composition; education, economic activity, digital activity, dwelling comfort, households of only the 65+ | REST JSON | one-off |
 | G | Settlement/district/county boundaries (OSM/KSH) | GeoJSON | static |
 | H | EESZT törzspublikáció (NEAK_FINSZOLG, EUSZOLG_PUBLIKUS, EUSZOLG_ENGEDELY_PUBLIKUS, NEAK_FINSZOLG_EXT, GYSE_FORGALMAZO) | REST JSON | supplement (monthly) |
 | I | NEAK fekvő- és járóbeteg-szakellátó intézmények (XLSX only — the outpatient PDF is truncated) | XLSX | monthly |
@@ -183,6 +212,7 @@ dissolved (megszűnt) list for GP; the GP registry is the source of district
 | M | NNGYK Halandósági adatbázis (nngyk.gov.hu) — SHA (direct, 2013 European Standard Population) and SHH (indirect, 100 = national) per járás and county, by sex: 10 cause groups and Eurostat's avoidable mortality split into treatable-only / preventable-only / both | HTML (htmlwidgets; the JSON payload is archived, the base64 map geometry is not) | yearly |
 | N | KSH TIMEA (map.ksh.hu ArcGIS service, NAV/KSH data) — SZJA-alapot képező jövedelem per resident and per taxpayer, taxpayers, natural change, births, deaths, domestic migration balance, a GP's yearly patient count, GP-registered diabetes / hypertension / ischaemic heart disease (járás), ageing index; settlement, járás and county layers, the capital as one | REST JSON | yearly |
 | O | NFSZ településsoros adatai — registered jobseekers per settlement and kerület (total, > 1 year, benefit, assistance, supported, working-age population) | XLSX | monthly (quarterly before 2024, back to 2019) |
+| P | NEAK háziorvosi és fogorvosi letelepedési, illetve háziorvosi praxisjog-vásárlási pályázatok nyertesei (2019, 2021–2025; NEAK publishes no 2020 list) — county, settlement and surgery address; the winner's name is never kept | PDF | yearly |
 
 NEAK source URLs are configured in `etl/sources.py` — update there only. The
 other sources keep their URL as a constant in the one module that reads them

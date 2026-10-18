@@ -25,10 +25,12 @@ export function StackedBars({ rows, order, colors, labelPrefix, max, onPick, sel
     <div className="stacked">
       {rows.map((r) => {
         const total = order.reduce((a, k) => a + (r.parts[k] ?? 0), 0);
+        // a row is a button only when choosing it does something
+        const Row = onPick ? 'button' : 'div';
         return (
-          <button key={r.key} type="button"
-            className={`stacked__row${selected === r.key ? ' is-on' : ''}`}
-            onClick={onPick ? () => onPick(r.key) : undefined} disabled={!onPick}>
+          <Row key={r.key} {...(onPick ? { type: 'button' as const, onClick: () => onPick(r.key),
+            'aria-pressed': selected === r.key } : {})}
+            className={`stacked__row${onPick ? ' is-pickable' : ''}${selected === r.key ? ' is-on' : ''}`}>
             <span className="stacked__label">{r.label}</span>
             <span className="stacked__track">
               {order.map((k) => (r.parts[k] ? (
@@ -37,7 +39,7 @@ export function StackedBars({ rows, order, colors, labelPrefix, max, onPick, sel
               ) : null))}
             </span>
             <b>{formatNumber(total)}</b>
-          </button>
+          </Row>
         );
       })}
       <div className="stacked__legend">

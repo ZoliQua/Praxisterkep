@@ -26,7 +26,10 @@ export function Dumbbell({ rows, format, fromLabel, toLabel, selected, onPick }:
         const up = r.to >= r.from;
         return (
           <div key={r.key} className={`dumbbell__row${selected === r.key ? ' is-on' : ''}`}
-            onMouseEnter={onPick ? () => onPick(r.key) : undefined}>
+            // hover shows a county's path; focus does the same from the keyboard
+            onMouseEnter={onPick ? () => onPick(r.key) : undefined}
+            onFocus={onPick ? () => onPick(r.key) : undefined}
+            tabIndex={onPick ? 0 : undefined}>
             <span className="dumbbell__label">
               {r.href ? <a href={r.href}>{r.label}</a> : r.label}
             </span>

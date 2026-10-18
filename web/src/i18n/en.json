@@ -234,7 +234,9 @@
         "referral": "Nine-digit referral master list",
         "inpatient": "Inpatient specialist institutions",
         "outpatient": "Outpatient specialist institutions",
-        "listing": "all in one place: NEAK downloads"
+        "listing": "all in one place: NEAK downloads",
+        "grantsGp": "winners of the GP settlement and practice-right grants",
+        "grantsDental": "winners of the dental settlement grants"
       },
       "okfo": {
         "title": "OKFŐ Primary Care Directorate — long-term vacant districts:",
@@ -250,7 +252,8 @@
         "title": "KSH — Hungarian Central Statistical Office:",
         "hntr": "Gazetteer (population, district, area)",
         "census": "2022 census (CC BY 4.0)",
-        "timea": "TIMEA — income, vital events, migration by settlement"
+        "timea": "TIMEA — income, vital events, migration by settlement",
+        "censusDb": "2022 census database — education, work, digital skills, housing, households"
       },
       "law": {
         "title": "National Legislation Database:",
@@ -996,7 +999,13 @@
       "licence_history_json": "Since when the organisational unit a service works under has existed (from EESZT snapshots)",
       "counties_json": "Per-county aggregates and their settlements in compact rows (from the settlement profiles)",
       "tenure_json": "How long the physician now holding a district has held it, from our own monthly archive",
-      "fluctuation_json": "Physician turnover: how many districts changed doctor, by county and year"
+      "fluctuation_json": "Physician turnover: how many districts changed doctor, by county and year",
+      "districts_json": "Summary of the 197 units (174 járás and 23 kerület), from the settlement profiles",
+      "district_development_json": "The járás development ranking of Government Decree 290/2014",
+      "outcomes_json": "Mortality, income, jobseekers, population change, census, emergency access, grants and the forecast by járás and county, with correlations",
+      "census_json": "Census shares (KSH 2022, CC BY 4.0) by settlement, járás and county: education, work, digital skills, housing, households",
+      "grants_json": "Winners of NEAK's settlement and practice-right grants (no names) and where their district stands today",
+      "forecast_json": "Vacant districts in 12 months: national, county and járás forecast with a band and a back-test"
     },
     "useHeading": "How to use them",
     "use1": "The files are static and versioned: a finished month stays in months/, while latest.json always points at the current one.",
@@ -1199,7 +1208,7 @@
       "nepszamlalas": "Census",
       "surgosseg": "Emergency",
       "tamogatasok": "Grants",
-      "elorejelzes": "Forecast"
+      "elorejelzes": "A year from now"
     }
   },
   "vedono": {
@@ -2295,7 +2304,7 @@
       "findingIncome": "Income itself is more strongly associated (r = {r}).",
       "caveat": "This is an association between places, not proof that a given vacancy causes deaths. Vacancy, poverty, ageing and mortality reinforce one another; holding income constant reduces that, it does not remove it. A vacant district is not unserved: a substitute doctor covers it.",
       "source": "Source: NNGYK mortality database, {year}; standardised death rate (SHA) per 100,000, 2013 European Standard Population. GP vacancy from NEAK's monthly lists.",
-      "findingPartial2": "Holding education (the share of graduates) constant as well as income weakens the association markedly, but it does not vanish: partial r = {r} (p {p}). Vacancy is largely a sign of poverty and low schooling — but part of it goes with mortality beyond them.",
+      "findingPartial2": "Holding education (the share of graduates) constant as well as income leaves partial r = {r} (p {p}): part of the link mirrors poverty and low schooling, but something of it remains beyond them.",
       "findingPartial2None": "Holding education (the share of graduates) constant as well as income, the association is no longer distinguishable from chance: partial r = {r} (p {p}). Poverty and low schooling explain the raw association."
     },
     "grid": {
@@ -2490,7 +2499,7 @@
       "avoidableNote": "This is a járás figure: NNGYK publishes no settlement-level avoidable mortality, because so few deaths cannot give a reliable rate.",
       "avoidableLink": "The járás's health data →",
       "noise": "In a small settlement a few births or moves shift the rate a lot, so the vital statistics are four-year averages; for the smallest villages they still need reading with care.",
-      "source": "Sources: KSH TIMEA (income from NAV data), NFSZ settlement data, NNGYK mortality database.",
+      "source": "Sources: KSH TIMEA (income from NAV data), KSH 2022 census, NFSZ settlement data, NNGYK mortality database, NEAK grant winners and monthly data; the forecast is our own calculation.",
       "sboLayer": "Emergency department",
       "thisSettlement": "this settlement",
       "countyWord": "county",
@@ -2636,7 +2645,7 @@
   },
   "outcomeMethod": {
     "heading": "Outcomes and circumstances — how they are made",
-    "lead": "The mortality, income, labour and population figures on the analysis page come from three outside public sources, bound by the same rule as the rest of the site: every number traces to an archived source file, and a half-read source fails rather than being published.",
+    "lead": "The mortality, income, labour and population figures on the analysis page come from outside public sources (NNGYK, KSH TIMEA, the KSH census, NFSZ, NEAK), bound by the same rule as the rest of the site: every number traces to an archived source file, and a half-read source fails rather than being published.",
     "mortality": {
       "title": "Avoidable mortality — NNGYK",
       "text": "The national public-health centre publishes, per járás and county, the standardised death rate (SHA, per 100,000, 2013 European Standard Population) and the standardised mortality ratio (SHH, 100 = what national rates predict). Avoidable mortality follows Eurostat's two lists for deaths under 75; NNGYK sorts causes into three groups that do not overlap — treatable only, preventable only, and both. Their sum is total avoidable mortality, treatable-only plus both is the care-sensitive part; rates on one standard population add up. NNGYK ships each cause as a ~22 MB interactive map; the ~270 KB part carrying the numbers is archived byte for byte with the SHA-256 of the whole original."
@@ -2676,6 +2685,30 @@
     "limits": {
       "title": "What these numbers do not say",
       "text": "They measure associations between places, not causes and not people: that more avoidable deaths go with more vacancies across járás does not mean a given empty district causes a given death. A vacant district is not unserved — public data does not show substitution. A missing association is a result too: registered chronic patients are unrelated to vacancy."
+    },
+    "census": {
+      "title": "Census — KSH, 2022",
+      "text": "From the public database of the 2022 KSH census, by settlement, járás and county (CC BY 4.0). Each measure is one published count over another: graduates per resident 20+ (education is published from age 7, so schoolchildren sit in the lowest bands; a degree before 20 is negligible, which keeps this one share clean), the employed per resident 15+, the digitally inactive per resident 6+, half-comfort, no-comfort and emergency dwellings per occupied dwelling, and households of only the 65+. KSH hides small cells; the measure is then empty, except for dwellings, where the comfort levels add up exactly to the occupied dwellings, so the poor ones can be taken from the total — an identity checked on every complete row. Járás and county values are KSH's own, not sums of settlements. Ethnicity data is deliberately not used."
+    },
+    "education": {
+      "title": "Two controls: income and education",
+      "text": "Poor járás are short of income and schooling at once, and each goes with mortality on its own. The main association is therefore also given as a second-order partial correlation: r_xy·zw = (r_xy·z − r_xw·z · r_yw·z) / √((1 − r_xw·z²)(1 − r_yw·z²)), z income, w the share of graduates. GP vacancy and avoidable mortality: r = {raw} raw, {income} with income held still, {both} (p {p}) with both: most of the link is poverty and low schooling, but part of it remains. All three numbers are shown so the reader can see how much rests on the control."
+    },
+    "sbo": {
+      "title": "Distance to an emergency department",
+      "text": "From NEAK's inpatient list, the sites with a unit of profession 4602 (care organised in an emergency unit) or 4605 (the same for children) — 67 sites. Driving time is made like every other: on the OpenStreetMap road network, free flow, from the settlement centre. A járás's value is the median of its settlements. The raw association with treatable mortality vanishes once income and education are held still — reported as a null result."
+    },
+    "grants": {
+      "title": "Settlement and practice-right grants — NEAK",
+      "text": "NEAK publishes each year's winners of the GP and dental settlement grants and the GP practice-right grant: county, settlement, surgery address (2019, 2021–2025; the 2020 list is not on NEAK's site). Winners' names are neither stored nor shown. Each winner's address is matched to a district (FIN) in NEAK's monthly data: first a district listed vacant at that address in the grant year or the two before; where one address has several, the one that left the vacant list in the grant year or the next; where that does not decide, the winner is marked ambiguous and left out of every share. Obvious slips in NEAK's lists (wrong county, misspelt settlement) are corrected by rule or by a flagged hand correction. Comparison group: districts vacant 12+ months at the end of the year without a grant. The groups do not differ at random — a doctor chose the granted district — so the gap is not the grant's pure effect."
+    },
+    "forecast": {
+      "title": "Forecast: a year from now",
+      "text": "A flow model: vacant in 12 months = vacant now − expected refills + expected new vacancies. Expected new vacancies are the sum of the filled districts' 12-month risk (from the risk model); each vacant district's refill chance is 1 − S(e + 12) / S(e), e the months it has been vacant, S its county's Kaplan–Meier curve (the national one below 60 spells). No refill is assumed beyond the curve's end. The 90% band treats districts as independent, so it is narrower than the true uncertainty. Back-test between two archived months — refills by the same method, new vacancies at the model's base rate, since past per-district risk is not kept (GP: {from} → {to}) — new vacancies {newPred} expected / {newAct} actual, refills {fillPred} / {fillAct}; the forecast leans slightly pessimistic. Not a clean test: the survival curve has seen that period."
+    },
+    "notAvailable": {
+      "title": "What is missing, because no public data exists",
+      "text": "We wanted to set screening participation (breast, cervical, colorectal) and vaccination coverage beside vacancy — the measurable part of prevention. No institution publishes them by járás or settlement in a public, machine-readable form: we went through NNGYK's whole public file list and the NEAK and KSH sites. No estimate is published; when the data becomes public, it goes in."
     }
   }
 }

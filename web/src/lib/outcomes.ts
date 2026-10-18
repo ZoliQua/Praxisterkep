@@ -214,7 +214,6 @@ export interface OutcomesRaw {
   emergency: {
     points: number; medianMin: number; maxMin: number;
     population: Record<string, number>; bands: string[]; beyond30: number;
-    settlements: SboSettlement[];
     farthest: SboSettlement[];
     doubly: { settlements: number; population: number; list: SboSettlement[] };
   };
