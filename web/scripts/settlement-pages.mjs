@@ -355,6 +355,7 @@ const LAYERS = [
   ['outpatient', 'Járóbeteg-szakrendelés'],
   ['gyse', 'Gyógyászati segédeszköz'],
   ['pharmacy', 'Gyógyszertár'],
+  ['sbo', label('outcomes.settlement.sboLayer')],
 ];
 
 // name -> slug, so every settlement named anywhere on the page can be opened
@@ -1278,6 +1279,7 @@ function helpTip(text) {
 const TRAVEL_COLORS = {
   gp: '#4fd6c2', dental: '#8ab4ff', oncall: '#f0b429', ambulance: '#ef8354',
   inpatient: '#ef6461', outpatient: '#9bd4a5', gyse: '#b8a4ff', pharmacy: '#c88ff0',
+  sbo: '#ff4d6d',
 };
 
 /** The drive to each kind of care, as bars, before the table says it again. */
@@ -1411,6 +1413,71 @@ const formatMonth = (m) => {
 };
 const nationalJobs = profiles.national?.jobseekers ?? null;
 
+
+/** Five census shares on one dot plot each: this settlement as a dot, the
+ *  járás, the county and the country as ticks along the same line. */
+function censusPlot(census) {
+  const keys = Object.keys(census);
+  if (!keys.length) return '';
+  const W = 300; const H = 30; const P = 8;
+  const rows = keys.map((k) => {
+    const c = census[k];
+    const vals = [c.value, c.district, c.county, c.country].filter((v) => v !== null && v !== undefined);
+    const hi = Math.max(...vals) * 1.15 || 1;
+    const x = (v) => P + (v / hi) * (W - 2 * P);
+    const tick = (v, cls, lab) => (v === null || v === undefined ? ''
+      : `<line x1="${x(v).toFixed(1)}" x2="${x(v).toFixed(1)}" y1="7" y2="23" class="tp-dot__${cls}"><title>${esc(lab)}: ${dec(100 * v)}%</title></line>`);
+    return `<div class="tp-dot">
+      <span class="tp-dot__label">${esc(L(`census.${k}`))}</span>
+      <svg viewBox="0 0 ${W} ${H}" class="tp-dot__svg" role="img" aria-label="${esc(L(`census.${k}`))}: ${dec(100 * c.value)}%">
+        <line x1="${P}" x2="${W - P}" y1="15" y2="15" class="tp-dot__axis"/>
+        ${tick(c.country, 'country', L('national'))}${tick(c.county, 'county', L('countyWord'))}${tick(c.district, 'district', L('districtSuffix'))}
+        <circle cx="${x(c.value).toFixed(1)}" cy="15" r="6" class="tp-dot__self"><title>${dec(100 * c.value)}%</title></circle>
+      </svg>
+      <b>${dec(100 * c.value)}%</b>
+    </div>`;
+  }).join('');
+  return `<article class="tp-living__item tp-living__item--wide">
+    <h3>${esc(L('censusHeading'))}</h3>
+    <p class="tp-dot__legend"><span class="is-self">●</span> ${esc(L('thisSettlement'))}
+      <span class="is-district">|</span> ${esc(L('districtSuffix'))}
+      <span class="is-county">|</span> ${esc(L('countyWord'))}
+      <span class="is-country">|</span> ${esc(L('national'))}</p>
+    ${rows}
+    <p class="tp-note">${esc(L('censusNote'))}</p>
+  </article>`;
+}
+
+function grantsCard(grants) {
+  if (!grants?.length) return '';
+  return `<article class="tp-living__item">
+    <h3>${esc(L('grantsHeading'))}</h3>
+    <ul class="tp-grants">${grants.map((g) => `<li class="is-${esc(g.status ?? 'unknown')}">
+      <b>${esc(String(g.year))}</b> · ${esc(L(`grants.${g.kind}.${g.programme}`))}
+      <span>${esc(g.contract ? L(`grants.status.${g.status ?? 'unknown'}`) : L('grants.noContract'))}</span>
+    </li>`).join('')}</ul>
+    <p class="tp-note">${esc(L('grantsNote'))}</p>
+  </article>`;
+}
+
+function forecastCard(fc, district) {
+  if (!fc) return '';
+  const max = Math.max(fc.vacantIn12Band[1], fc.vacantNow, 1);
+  const w = (v) => `${((v / max) * 100).toFixed(1)}%`;
+  return `<article class="tp-living__item">
+    <h3>${esc(L('forecastHeading', { district }))}</h3>
+    <p class="tp-living__value">${esc(dec(fc.vacantIn12))}<small>${esc(L('forecastUnit', {
+      now: num(fc.vacantNow), of: num(fc.districts) }))}</small></p>
+    <div class="tp-forecast">
+      <div><span>${esc(L('forecastNow'))}</span><span class="tp-forecast__track"><i style="width:${w(fc.vacantNow)}"></i></span><b>${num(fc.vacantNow)}</b></div>
+      <div><span>${esc(L('forecastLater'))}</span><span class="tp-forecast__track"><i class="is-later" style="width:${w(fc.vacantIn12)}"></i>
+        <em style="left:${w(fc.vacantIn12Band[0])};width:${((fc.vacantIn12Band[1] - fc.vacantIn12Band[0]) / max * 100).toFixed(1)}%"></em></span><b>${esc(dec(fc.vacantIn12))}</b></div>
+    </div>
+    <p class="tp-note">${esc(L('forecastNote', { add: dec(fc.expectedNew), fill: dec(fc.expectedRefills),
+      lo: dec(fc.vacantIn12Band[0]), hi: dec(fc.vacantIn12Band[1]) }))}</p>
+  </article>`;
+}
+
 function livingBlock(profile, nationalJobs) {
   const l = profile.living;
   if (!l) return '';
@@ -1486,6 +1553,9 @@ function livingBlock(profile, nationalJobs) {
       <p class="tp-note">${esc(L('avoidableNote'))}
         <a href="${esc(ctx(`/jaras.html?jar=${encodeURIComponent(district)}#egeszseg`, profile))}">${esc(L('avoidableLink'))}</a></p>
     </div>` : '';
+  if (l.census) parts.push(censusPlot(l.census));
+  parts.push(grantsCard(l.grants));
+  if (l.forecast) parts.push(forecastCard(l.forecast, `${district}${profile.county === 'Budapest' ? '' : ` ${L('districtSuffix')}`}`));
   return `<div class="tp-living">${parts.join('')}</div>${avoid}
     <p class="tp-note">${esc(L('noise'))}</p>
     <p class="tp-source">${esc(L('source'))}</p>`;

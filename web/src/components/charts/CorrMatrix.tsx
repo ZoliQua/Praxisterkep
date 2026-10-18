@@ -5,24 +5,25 @@
 // coloured red where the two rise together and teal where one falls as the
 // other rises. A cell is faded when it is not distinguishable from chance
 // (p ≥ 0.05) — a colour that means nothing should not look like one that
-// does. With "income held still" on, the cells show the partial correlation
-// instead, for the two vacancy rows where it is computed.
+// does. With a control chosen, the cells show the partial correlation
+// instead — income held still, or income and education together — for the
+// rows where it is computed.
 import { t } from '../../lib/i18n';
 import { formatDecimal } from '../../lib/format';
-import type { OutcomesRaw } from '../../lib/outcomes';
+import type { Control, OutcomesRaw } from '../../lib/outcomes';
 import { pairOf, partialOf } from '../../lib/outcomes';
 
-export function CorrMatrix({ data, rows, cols, controlled, active, onPick }: {
+export function CorrMatrix({ data, rows, cols, control, active, onPick }: {
   data: OutcomesRaw;
   rows: string[];
   cols: string[];
-  controlled: boolean;
+  control: Control;
   active?: { x: string; y: string } | null;
   onPick?: (x: string, y: string) => void;
 }) {
   const cell = (x: string, y: string) => {
-    if (controlled) {
-      const p = partialOf(data, x, y, 'income');
+    if (control !== 'none') {
+      const p = partialOf(data, x, y, control);
       return p ? { r: p.partial, p: p.p } : null;
     }
     const p = pairOf(data, x, y);

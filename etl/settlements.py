@@ -16,6 +16,7 @@ Usage:
 """
 from __future__ import annotations
 
+import collections
 import json
 import statistics
 import sys
@@ -103,9 +104,19 @@ def _last(series: dict | None) -> tuple[str, float] | tuple[None, None]:
 
 
 def living_context(territorial: dict | None, jobs: dict | None,
-                   mortality: dict | None) -> dict:
+                   mortality: dict | None, census: dict | None = None,
+                   grants: dict | None = None, forecast: dict | None = None) -> dict:
     """What every settlement's block is compared with, computed once."""
-    ctx: dict = {"territorial": territorial, "jobs": jobs, "mortality": mortality}
+    ctx: dict = {"territorial": territorial, "jobs": jobs, "mortality": mortality,
+                 "census": census, "forecast": forecast}
+    # the grants taken up in each settlement — place, year and outcome only,
+    # never the winner (CLAUDE.md rule 3)
+    ctx["grants"] = collections.defaultdict(list)
+    for kind, k in ((grants or {}).get("kinds") or {}).items():
+        for w in k["winners"]:
+            ctx["grants"][w["kshId"]].append({
+                "kind": kind, "programme": w["programme"], "year": w["year"],
+                "contract": w["contract"], "status": w["status"]})
     if territorial:
         rural = [v for k, v in territorial["settlements"].items()]
         def med(key, fn):
@@ -178,6 +189,25 @@ def living_block(ksh: str, district: str, county: str, ctx: dict) -> dict | None
             "series": [round(100 * a / b, 2) if a is not None and b else None
                        for a, b in zip(js["registered"], js["workingAge"])],
         }
+    cen = ctx.get("census")
+    if cen:
+        mine = cen["settlements"].get(ksh) or {}
+        d = cen["districts"].get(district) or {}
+        c = cen["counties"].get(county) or {}
+        block = {k: {"value": mine.get(k), "district": d.get(k), "county": c.get(k),
+                     "country": cen["country"].get(k)}
+                 for k in cen["measures"] if mine.get(k) is not None}
+        if block:
+            out["census"] = block
+    if ctx["grants"].get(ksh):
+        out["grants"] = sorted(ctx["grants"][ksh], key=lambda g: (g["year"], g["kind"]))
+    fc = ctx.get("forecast")
+    if fc:
+        row = fc["kinds"]["gp"]["districts"].get(district)
+        if row and row["districts"]:
+            out["forecast"] = {k: row[k] for k in ("districts", "vacantNow", "vacantIn12",
+                                                   "vacantIn12Band", "expectedNew",
+                                                   "expectedRefills")}
     if mort and district in mort["districts"]:
         sha = mort["districts"][district]["sha"]
         out["avoidable"] = {"year": mort["year"], "district": sha["avoidable"]["t"],
@@ -205,7 +235,8 @@ def build() -> dict:
     emergency = read("emergency.json")
     specialist = read("specialist.json")
     living = living_context(read("territorial.json"), read("jobseekers.json"),
-                            read("mortality.json"))
+                            read("mortality.json"), read("census.json"),
+                            read("grants.json"), read("forecast.json"))
     # the coordinates of the surgeries that have a doctor, for the street-level
     # map; geocode_filled.py fills this cache
     coords = json.loads((ROOT / "etl" / "geocode_cache.json").read_text(encoding="utf-8"))
@@ -404,7 +435,7 @@ def build() -> dict:
                         "km": drive.get(f"{layer}Km"),
                         "at": drive.get(f"{layer}At")}
                 for layer in ("gp", "dental", "oncall", "ambulance",
-                              "inpatient", "outpatient", "gyse", "pharmacy")
+                              "inpatient", "outpatient", "gyse", "pharmacy", "sbo")
                 if drive.get(f"{layer}Min") is not None
             }
 

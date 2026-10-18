@@ -1195,7 +1195,11 @@
       "allaskeresok": "Álláskeresők",
       "nepesseg": "Fogyó népesség",
       "osszefuggesek": "Összefüggések",
-      "keresztmetszet": "Keresztmetszetek"
+      "keresztmetszet": "Keresztmetszetek",
+      "nepszamlalas": "Népszámlálás",
+      "surgosseg": "Sürgősségi",
+      "tamogatasok": "Támogatások",
+      "elorejelzes": "Előrejelzés"
     }
   },
   "vedono": {
@@ -2249,7 +2253,15 @@
       "ischaemic": "Nyilvántartott ischaemiás szívbetegek",
       "gpLoad": "Egy háziorvosra jutó betegforgalom",
       "ageing": "Öregedési index",
-      "development": "Fejlettség (komplex mutató, 2014)"
+      "development": "Fejlettség (komplex mutató, 2014)",
+      "degree": "Felsőfokú végzettségűek aránya (20+)",
+      "employed": "Foglalkoztatottak aránya (15+)",
+      "noDigital": "Digitálisan inaktívak aránya",
+      "poorHousing": "Rossz minőségű lakások aránya",
+      "elderlyOnly": "Csak idősekből álló háztartások",
+      "sboMinutes": "Menetidő a sürgősségi osztályig",
+      "sboBeyond30": "30 percnél messzebb élők a sürgősségitől",
+      "gpRateIn12": "Várható háziorvosi betöltetlenség 12 hónap múlva"
     },
     "measureText": {
       "avoidable": "75 év alatti halálozás olyan okból, amelyet időben kapott ellátás vagy hatékony megelőzés megakadályozhatott volna — a három NNGYK-csoport összege, 100 ezer lakosra, az európai standard népességre korrigálva.",
@@ -2282,7 +2294,9 @@
       "findingPartial": "A jövedelmi különbségeket kiszűrve is megmarad: parciális r = {r} (p {p}) — tehát nem csak arról van szó, hogy a szegényebb járásokban egyszerre több az üres körzet és a halál.",
       "findingIncome": "A jövedelem maga erősebben jár együtt vele (r = {r}).",
       "caveat": "Ez járások közötti összefüggés, nem bizonyíték arra, hogy egy adott betöltetlen körzet okozza a halálozást. A betöltetlenség, a szegénység, az elöregedés és a halálozás egymást erősítik; a jövedelem kiszűrése ezt csökkenti, de nem szünteti meg. A betöltetlen körzet nem ellátatlan: a lakosokat helyettesítő orvos látja el.",
-      "source": "Forrás: NNGYK Halandósági adatbázis, {year}; standardizált halálozási arányszám (SHA) 100 ezer lakosra, az európai standard népességgel (2013). A háziorvosi betöltetlenség a NEAK havi listáiból."
+      "source": "Forrás: NNGYK Halandósági adatbázis, {year}; standardizált halálozási arányszám (SHA) 100 ezer lakosra, az európai standard népességgel (2013). A háziorvosi betöltetlenség a NEAK havi listáiból.",
+      "findingPartial2": "Ha a jövedelem mellett a végzettséget (a diplomások arányát) is kiszűrjük, az összefüggés jelentősen gyengül, de nem tűnik el: parciális r = {r} (p {p}). A betöltetlenség tehát nagyrészt a szegénység és az iskolázatlanság jele — de egy része ezeken túl is együtt jár a halálozással.",
+      "findingPartial2None": "Ha a jövedelem mellett a végzettséget (a diplomások arányát) is kiszűrjük, az összefüggés a véletlentől már nem különböztethető meg: parciális r = {r} (p {p}). A nyers összefüggést tehát a szegénység és az iskolázatlanság magyarázza."
     },
     "grid": {
       "aria": "Elkerülhető halálozás jövedelmi és betöltetlenségi harmadok szerint",
@@ -2356,17 +2370,26 @@
     },
     "links": {
       "heading": "Mi függ össze mivel?",
-      "lead": "A teljes kép egy táblázatban: a sorokban az ellátás négy jellemzője, az oszlopokban a következmények és a körülmények. Minden cella egy korrelációs együttható a 174 vidéki járás között; egy cellára kattintva alatta megjelenik a pontfelhő, így egyetlen szám sem kell, hogy hitből elfogadd.",
-      "controlled": "Jövedelem kiszűrve",
-      "controlledExplain": "Parciális korreláció: mennyi marad az összefüggésből, ha a járások jövedelmi különbségét kivesszük. A betöltetlenségi sorokra számolva.",
-      "rawExplain": "Nyers korreláció (Pearson-féle r). Piros: együtt nőnek; türkiz: az egyik nő, ahogy a másik csökken; halvány: a véletlentől nem különböztethető meg (p ≥ 0,05).",
+      "lead": "A teljes kép egy táblázatban: a sorokban az ellátás öt jellemzője, az oszlopokban a következmények és a körülmények. Minden cella egy korrelációs együttható a 174 vidéki járás között; egy cellára kattintva alatta megjelenik a pontfelhő, így egyetlen szám sem kell, hogy hitből elfogadd.",
       "keyPos": "együtt nőnek",
       "keyNeg": "ellentétesen mozognak",
       "keyWeak": "nem szignifikáns",
       "pairHeading": "{x} és {y}",
       "pairFinding": "Az összefüggés {strength}: r = {r} (rangkorreláció: {rho}), {n} járás.",
       "pairPartial": "A jövedelmet kiszűrve: {r}.",
-      "caveat": "Egy korreláció a járások közötti együttmozgást méri, nem okot. Ami több változóval egyszerre összefügg — a szegénység, az elöregedés —, az összefüggést mutathat ott is, ahol nincs közvetlen kapcsolat. Egy eredmény, ami nem jött ki, ugyanúgy eredmény: a nyilvántartott krónikus betegek aránya például nem függ össze a betöltetlenséggel."
+      "caveat": "Egy korreláció a járások közötti együttmozgást méri, nem okot. Ami több változóval egyszerre összefügg — a szegénység, az elöregedés —, az összefüggést mutathat ott is, ahol nincs közvetlen kapcsolat. Egy eredmény, ami nem jött ki, ugyanúgy eredmény: a nyilvántartott krónikus betegek aránya például nem függ össze a betöltetlenséggel.",
+      "controlLabel": "Mit szűrjünk ki?",
+      "control": {
+        "none": "Nyers",
+        "income": "Jövedelem kiszűrve",
+        "incomeDegree": "Jövedelem és végzettség kiszűrve"
+      },
+      "controlExplain": {
+        "none": "Nyers korreláció (Pearson-féle r). Piros: együtt nőnek; türkiz: az egyik nő, ahogy a másik csökken; halvány: a véletlentől nem különböztethető meg (p ≥ 0,05).",
+        "income": "Parciális korreláció: mennyi marad az összefüggésből, ha a járások jövedelmi különbségét kivesszük.",
+        "incomeDegree": "Másodrendű parciális korreláció: mennyi marad, ha a jövedelmet és a diplomások arányát egyszerre kivesszük. Ez a legszigorúbb olvasat — ami itt is megmarad, az nem csak a szegénység és az iskolázottság tükre."
+      },
+      "pairPartial2": "A jövedelmet és a végzettséget is kiszűrve: {r}."
     },
     "cross": {
       "heading": "Négy keresztmetszet — a meglévő adatok egymás tükrében",
@@ -2411,7 +2434,9 @@
       "shhNote": "Standardizált halálozási hányados (SHH): 100 az, amennyi halált az országos arányok a járás kor- és nemszerkezete alapján előre jeleznének. 140 = 40%-kal több a vártnál.",
       "jobsHeading": "Álláskeresők aránya — a járás és az ország",
       "incomeHeading": "Jövedelem a medián járás százalékában",
-      "source": "Források: NNGYK Halandósági adatbázis; KSH TIMEA (NAV-adatok); NFSZ településsoros adatai."
+      "source": "Források: NNGYK Halandósági adatbázis; KSH TIMEA (NAV-adatok); NFSZ településsoros adatai.",
+      "grantsHeading": "Állami támogatással betöltött körzetek a járásban ({n})",
+      "grantsLink": "Hogyan alakultak a támogatott körzetek országosan? →"
     },
     "cause": {
       "all": "Összes halálozás",
@@ -2432,7 +2457,12 @@
       "jobsHeading": "Álláskeresők aránya — a megye és az ország",
       "incomeHeading": "Jövedelem a medián járás százalékában",
       "districtsHeading": "{county} járásai egymás mellett",
-      "colDistrict": "Járás"
+      "colDistrict": "Járás",
+      "forecastHeading": "Betöltetlen háziorvosi körzetek a következő 12 hónapban",
+      "forecastLink": "Az előrejelzés módszere →",
+      "grantsHeading": "Háziorvosi letelepedési támogatások évenként",
+      "grantsRow": "{n} nyertes, ma {filled} körzetben van orvos",
+      "grantsNone": "A megyében nem volt szerződést kötött nyertes."
     },
     "settlement": {
       "heading": "Hogyan élnek itt?",
@@ -2460,9 +2490,149 @@
       "avoidableNote": "Ez járási adat: településenként az NNGYK nem közöl elkerülhető halálozást, mert ennyi kis számból nem lehetne megbízható arányt számolni.",
       "avoidableLink": "A járás egészségi adatai →",
       "noise": "Egy kis településen néhány születés vagy költözés is nagyot mozdít az arányon, ezért a népmozgalmi számok négy év átlagai; a nagyon kis falvaknál így is óvatosan kell olvasni őket.",
-      "source": "Források: KSH TIMEA (a jövedelem a NAV adataiból), NFSZ településsoros adatai, NNGYK Halandósági adatbázis."
+      "source": "Források: KSH TIMEA (a jövedelem a NAV adataiból), NFSZ településsoros adatai, NNGYK Halandósági adatbázis.",
+      "sboLayer": "Sürgősségi osztály",
+      "thisSettlement": "a település",
+      "countyWord": "megye",
+      "censusHeading": "A népszámlálás szerint (2022)",
+      "census": {
+        "degree": "Felsőfokú végzettségű a 20 év felettiek közül",
+        "employed": "Foglalkoztatott a 15 év felettiek közül",
+        "noDigital": "Semmilyen digitális tevékenységet nem végez (6 év felett)",
+        "poorHousing": "Félkomfortos, komfort nélküli vagy szükséglakás",
+        "elderlyOnly": "Háztartás, ahol mindenki 65 év feletti"
+      },
+      "censusNote": "A KSH 2022-es népszámlálásának települési adatai. A digitális jártasság azt jelzi, mennyire pótolhatja egy telefonos konzultáció vagy e-recept a rendelőt; a csak idősekből álló háztartásban nincs, aki autóval elvigye a beteget.",
+      "grantsHeading": "Állami támogatással betöltött körzet",
+      "grants": {
+        "gp": {
+          "settle": "háziorvosi letelepedési támogatás",
+          "practice": "háziorvosi praxisjog-vásárlási támogatás"
+        },
+        "dental": {
+          "settle": "fogorvosi letelepedési támogatás"
+        },
+        "status": {
+          "filled": "ma is betöltött",
+          "vacant": "azóta újra betöltetlen",
+          "gone": "a körzet azóta megszűnt",
+          "unknown": "a körzet nem azonosítható egyértelműen"
+        },
+        "noContract": "nyertes, de szerződés nem jött létre"
+      },
+      "grantsNote": "A NEAK évente közzéteszi a letelepedési és praxisjog-vásárlási pályázatok nyerteseit. A nyertes nevét nem közöljük; azt, hogy a körzetben ma van-e orvos, a havi NEAK-adatokból követjük.",
+      "forecastHeading": "{district} egy év múlva",
+      "forecastUnit": "várhatóan betöltetlen háziorvosi körzet 12 hónap múlva (ma {now} / {of})",
+      "forecastNow": "most",
+      "forecastLater": "12 hónap múlva",
+      "forecastNote": "Várhatóan {add} körzet üresedik meg és {fill} töltődik be; a 90%-os sáv {lo}–{hi}. Előrejelzés, nem ígéret: a betöltött körzetek eddigi kockázatából és az üres körzetek eddigi betöltődési üteméből számolva."
     },
-    "methodLink": "Módszertan →"
+    "methodLink": "Módszertan →",
+    "steps": {
+      "heading": "Mennyi marad az összefüggésből?",
+      "raw": "Nyers összefüggés",
+      "income": "A jövedelmet kiszűrve",
+      "incomeDegree": "A jövedelmet és a végzettséget is kiszűrve"
+    },
+    "census": {
+      "heading": "Kik élnek ott, ahol nincs orvos?",
+      "lead": "A 2022-es népszámlálás minden járásra és kerületre közli, kik élnek ott. Országosan a 20 év felettiek {degree}-a diplomás, a 6 év felettiek {noDigital}-a semmilyen digitális tevékenységet nem végez, és a háztartások {elderlyOnly}-ában mindenki 65 év feletti. Ahol ezek rosszabbak, ott nehezebb orvost találni — és ott van rá a legnagyobb szükség.",
+      "explain": {
+        "degree": "Az egyetemi vagy főiskolai oklevéllel rendelkezők a 20 év felettiek arányában. A végzettséget a népszámlálás 7 éves kortól közli, így a legalacsonyabb kategóriákban az iskolás gyerekek is benne vannak; a diploma 20 év alatt elhanyagolható, ezért ez az egy arány tiszta.",
+        "employed": "A foglalkoztatottak a 15 év feletti népesség arányában (foglalkoztatott, munkanélküli, ellátásban részesülő inaktív és eltartott együtt).",
+        "noDigital": "Akik semmilyen digitális tevékenységet nem végeznek, a 6 év felettiek arányában. Nekik egy telefonos konzultáció vagy egy e-recept nem pótolja a rendelőt.",
+        "poorHousing": "A félkomfortos, komfort nélküli és szükséglakások a lakott lakások arányában. Ahol a népszámlálás a kis cellákat elrejtette, a számot az összes lakásból vezetjük le pontos azonossággal, becslés nélkül.",
+        "elderlyOnly": "Azok a háztartások, ahol mindenki 65 év feletti. Bennük nincs fiatalabb, aki autóval elvigye a beteget a szomszéd faluba."
+      },
+      "scatterHeading": "A betöltetlenség és {what}",
+      "finding": "{what} és a betöltetlen háziorvosi körzetek aránya közötti összefüggés {strength}: r = {r} (p {p}).",
+      "findingPartial": "A jövedelmet kiszűrve: {r} (p {p}).",
+      "findingAvoid": "Az elkerülhető halálozással r = {r}.",
+      "source": "Forrás: KSH, 2022. évi népszámlálás (CC BY 4.0), járási és kerületi adatok a KSH saját közlése szerint."
+    },
+    "sbo": {
+      "heading": "Milyen messze a sürgősségi osztály?",
+      "lead": "Szívinfarktusnál vagy stroke-nál nem a háziorvos, hanem a sürgősségi osztály az első ajtó. Az országban {points} sürgősségi betegellátó helyszín van; a medián település {median} percre van a legközelebbitől autóval, a legtávolabbi {max} percre, és {far} ember él 30 percnél messzebb.",
+      "band": {
+        "0-10": "10 percen belül",
+        "10-20": "10–20 perc",
+        "20-30": "20–30 perc",
+        "30+": "30 perc vagy több"
+      },
+      "mapHeading": "A járás középső települése, percben",
+      "doublyHeading": "Se saját háziorvos, se közeli sürgősségi",
+      "doubly": "{n} településen — {people} lakossal — egyszerre igaz, hogy a település egyetlen háziorvosi körzete betöltetlen, és a legközelebbi sürgősségi osztály legalább 30 percre van.",
+      "people": "lakos",
+      "linkHeading": "Együtt jár-e a távolság a halálozással?",
+      "findingKept": "A sürgősségi osztály távolsága és az ellátással befolyásolható halálozás nyersen r = {r} (p {p}); a jövedelmet és a végzettséget kiszűrve is megmarad: {r2} (p {p2}).",
+      "findingGone": "A sürgősségi osztály távolsága és az ellátással befolyásolható halálozás nyersen együtt jár (r = {r}, p {p}), de a jövedelmet és a végzettséget kiszűrve az összefüggés eltűnik: {r2} (p {p2}). A távoli járások azért halnak többen, mert szegényebbek és iskolázatlanabbak — a távolság maga ebben az adatban nem látszik külön oknak. Ez is eredmény.",
+      "source": "Forrás: NEAK fekvőbeteg-szakellátási lista (4602 és 4605 szakmakód: sürgősségi betegellátó egység), menetidő az OpenStreetMap úthálózatán, szabad forgalom mellett; NNGYK halandósági adatbázis."
+    },
+    "grants": {
+      "heading": "Megérte? Az állami letelepedési támogatások sorsa",
+      "lead": "A NEAK minden évben pályázatot ír ki: aki egy legalább egy éve betöltetlen körzetet elvállal, egyösszegű letelepedési támogatást kap, és a háziorvosok a praxisjog megvásárlásához is kaphatnak támogatást. A nyerteseket a NEAK közzéteszi — azt viszont nem, mi lett utána a körzettel. Mi minden nyertes címét a havi NEAK-adatokban egy körzethez kötöttük, és megnéztük, van-e ma orvosa.",
+      "kind": {
+        "gp": "Háziorvos",
+        "dental": "Fogorvos"
+      },
+      "programme": {
+        "settle": "Letelepedési támogatás",
+        "practice": "Praxisjog-vásárlás"
+      },
+      "programmeExplain": {
+        "settle": "Legalább 12 hónapja betöltetlen körzet betöltésére. Összehasonlításképp: azok a körzetek, amelyek ugyanakkor szintén legalább egy éve üresen álltak, de nem kaptak támogatást.",
+        "practice": "A praxisjog megvásárlásához, jellemzően egy nyugdíjba vonuló orvos körzetének átvételére. Ezek a körzetek többnyire nem voltak üresek, ezért itt nincs összehasonlító csoport."
+      },
+      "kpi": {
+        "winners": "nyertes az összes évben",
+        "filled": "körzetében ma is van orvos ({n} / {of} egyértelműen azonosított, szerződött nyertes)",
+        "comparison": "a támogatás nélküli, legalább egy éve üres körzetekből töltődött be azóta, évtől függően",
+        "unknown": "nyertes körzete nem azonosítható egyértelműen (közös rendelőcím vagy cím nélküli egyezés)"
+      },
+      "yearsHeading": "A nyertesek évenként — és hol tart ma a körzetük ({month})",
+      "part": {
+        "filled": "ma is betöltött",
+        "vacant": "újra betöltetlen",
+        "gone": "a körzet megszűnt",
+        "ambiguous": "nem egyértelmű (közös rendelőcím)",
+        "unmatched": "nem azonosított",
+        "noContract": "nem kötött szerződést"
+      },
+      "compareHeading": "Támogatással és támogatás nélkül",
+      "compareExplain": "Az adott év végén legalább egy éve üres körzetek közül: hányban van ma orvos, ha kaptak támogatást, és hányban, ha nem.",
+      "compareWith": "támogatással: {share} ({n} körzet)",
+      "compareWithout": "támogatás nélkül: {share} ({n} körzet)",
+      "with": "támogatással betöltött körzetek",
+      "without": "támogatás nélkül, legalább egy éve üres körzetek",
+      "mapHeading": "Hány nyertes körzet jutott egy-egy járásba",
+      "countyHeading": "Megyénként",
+      "caveat": "A két csoport nem véletlenül különbözik: a támogatott körzetet egy orvos választotta, mert ott akart dolgozni, így a különbség nem csak a támogatás hatása. A párosítás a rendelő címén alapul; ahol egy címen több körzet működik (egészségház), és a havi adatokból nem dönthető el, melyiket töltötte be a nyertes, ott nem számolunk. A nyertesek nevét nem közöljük.",
+      "source": "Forrás: NEAK, háziorvosi és fogorvosi letelepedési, illetve praxisjog-vásárlási pályázatok nyertesei (2019, 2021–2025; a 2020-as lista nem elérhető), a körzetek sorsa a havi NEAK-adatokból."
+    },
+    "forecast": {
+      "heading": "Mi várható egy év múlva?",
+      "lead": "A legutóbbi adat szerint ({month}) {now} körzet betöltetlen ({rateNow}). Ha a következő évben a betöltött körzetek ugyanakkora eséllyel üresednek meg, és az üresek ugyanolyan ütemben töltődnek be, mint eddig, egy év múlva várhatóan {later} lesz betöltetlen ({rateLater}; 90%-os sáv {lo}–{hi}): {add} új üresedés és {fill} betöltődés.",
+      "pathHeading": "Az ország a következő 12 hónapban",
+      "pathCounty": "{county} a következő 12 hónapban",
+      "countyLine": "Ma {now}, egy év múlva várhatóan {later} betöltetlen körzet: {add} új üresedés, {fill} betöltődés.",
+      "backToCountry": "vissza az országhoz",
+      "backtestHeading": "Visszamérés: a módszer {from} → {to} ({months} hónap)",
+      "backtest": {
+        "new": "új üresedések",
+        "refills": "betöltődések"
+      },
+      "predicted": "várt: {v}",
+      "actual": "tényleges: {v}",
+      "backtestNote": "Ugyanez a számítás egy korábbi hónapból indítva, összevetve azzal, ami az archívum szerint valóban történt. Nem tiszta teszt: a túlélési görbe ezt az időszakot is látta. Ha a várt betöltődés kevesebb a ténylegesnél, az előrejelzés kissé borúlátó.",
+      "countiesHeading": "Megyénként: ma és egy év múlva",
+      "now": "ma",
+      "later": "12 hónap múlva",
+      "dumbbellTitle": "{name}: ma {from}, egy év múlva várhatóan {to}",
+      "pathAria": "Betöltetlen körzetek: ma {now}, egy év múlva várhatóan {later}",
+      "mapHeading": "Várható betöltetlenség járásonként, 12 hónap múlva",
+      "caveat": "Előrejelzés, nem jóslat: azt mutatja, mi lesz, ha a következő év olyan lesz, mint az eddigiek. A sáv a körzeteket egymástól független eseményként kezeli; a valóságban nem azok (egy orvos nyugdíjba vonulása két körzetet is kiüríthet), ezért a valódi bizonytalanság nagyobb. A kockázati modell rangsoroló ereje mérsékelt (AUC = {auc}).",
+      "source": "Forrás: a betöltetlenségi kockázati modell és a Kaplan–Meier-túlélési görbék ezen az oldalon, mindkettő a havi NEAK-archívumból."
+    }
   },
   "outcomeMethod": {
     "heading": "Kimenetek és körülmények — hogyan készülnek",

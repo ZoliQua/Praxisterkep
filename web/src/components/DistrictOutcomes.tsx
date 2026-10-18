@@ -20,7 +20,8 @@ import { TrendLines } from './charts/TrendLines';
 import { AvoidableBar } from './AvoidableBar';
 
 const CARDS = ['avoidable', 'amenable', 'allCause', 'income', 'jobseekers',
-  'naturalChange', 'migration', 'gpLoad'] as const;
+  'naturalChange', 'migration', 'gpLoad', 'degree', 'employed', 'noDigital', 'poorHousing',
+  'elderlyOnly', 'sboMinutes', 'gpRateIn12'] as const;
 const CAUSES = ['all', 'circulatory', 'ischaemicHeart', 'cerebrovascular', 'cancer',
   'respiratory', 'chronicRespiratory', 'digestive', 'external', 'mental'];
 
@@ -147,7 +148,31 @@ export function DistrictOutcomes({ name }: { name: string }) {
           </div>
         )}
       </div>
+      <DistrictGrants o={o} name={d.name} />
       <p className="section__source">{t('outcomes.district.source')}</p>
     </>
+  );
+}
+
+/** The grants taken up in this járás: where, when, and what became of them. */
+function DistrictGrants({ o, name }: { o: OutcomesRaw; name: string }) {
+  const rows = (['gp', 'dental'] as const).flatMap((kind) => o.grants.kinds[kind].winners
+    .filter((w) => w.district === name).map((w) => ({ ...w, kind })))
+    .sort((a, b) => b.year - a.year);
+  if (!rows.length) return null;
+  return (
+    <div className="district-grants">
+      <h3 className="outcome__sub">{t('outcomes.district.grantsHeading', { n: rows.length })}</h3>
+      <ul className="tp-grants">
+        {rows.map((w, i) => (
+          <li key={i} className={`is-${w.status ?? 'unknown'}`}>
+            <b>{w.year}</b> · {w.settlement} · {t(`outcomes.settlement.grants.${w.kind}.${w.programme}`)}
+            <span>{w.contract ? t(`outcomes.settlement.grants.status.${w.status ?? 'unknown'}`)
+              : t('outcomes.settlement.grants.noContract')}</span>
+          </li>
+        ))}
+      </ul>
+      <p className="outcome__hint"><a href="elemzo.html#tamogatasok">{t('outcomes.district.grantsLink')}</a></p>
+    </div>
   );
 }

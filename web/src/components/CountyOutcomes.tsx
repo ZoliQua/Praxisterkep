@@ -8,8 +8,10 @@ import { t } from '../lib/i18n';
 import { formatDecimal } from '../lib/format';
 import { districtHref, metaOf, useOutcomes, valueOf, type OutcomeCounty } from '../lib/outcomes';
 import { TrendLines } from './charts/TrendLines';
+import { ForecastPath } from './charts/ForecastPath';
 
-const RANKS = ['avoidable', 'income', 'jobseekers', 'naturalChange', 'migration'] as const;
+const RANKS = ['avoidable', 'income', 'jobseekers', 'naturalChange', 'migration', 'degree',
+  'noDigital', 'sboMinutes', 'gpRateIn12'] as const;
 
 function Ranking({ counties, k, selected }: {
   counties: OutcomeCounty[]; k: (typeof RANKS)[number]; selected: string;
@@ -60,6 +62,18 @@ export function CountyOutcomes({ county }: { county: string }) {
   const districts = o.districts.filter((d) => d.county === county)
     .sort((a, b) => (b.avoidable ?? 0) - (a.avoidable ?? 0));
   const fmtA = metaOf('avoidable').format;
+  const fc = o.forecast.kinds.gp.counties[county];
+  // GP settlement grants here, by year: how many, and how many still filled
+  const grantRows = (() => {
+    const by = new Map<number, [number, number]>();
+    for (const w of o.grants.kinds.gp.winners) {
+      if (w.county !== county || w.programme !== 'settle' || !w.contract) continue;
+      const [n, f] = by.get(w.year) ?? [0, 0];
+      by.set(w.year, [n + 1, f + (w.status === 'filled' ? 1 : 0)]);
+    }
+    return [...by.entries()].sort((a, b) => a[0] - b[0]).map(([y, [n, f]]) => [y, n, f] as const);
+  })();
+  const grantMax = Math.max(1, ...grantRows.map((r) => r[1]));
 
   return (
     <>
@@ -89,6 +103,33 @@ export function CountyOutcomes({ county }: { county: string }) {
           </div>
         )}
       </div>
+
+      {fc && (
+        <div className="outcome__pair">
+          <div>
+            <h3 className="outcome__sub">{t('outcomes.county.forecastHeading')}</h3>
+            <ForecastPath start={o.forecast.kinds.gp.month} path={fc.path} band={fc.vacantIn12Band} />
+            <p className="outcome__hint">{t('outcomes.forecast.countyLine', {
+              now: formatDecimal(String(fc.vacantNow)), later: formatDecimal(fc.vacantIn12.toFixed(1)),
+              add: formatDecimal(fc.expectedNew.toFixed(1)), fill: formatDecimal(fc.expectedRefills.toFixed(1)),
+            })} <a href="elemzo.html#elorejelzes">{t('outcomes.county.forecastLink')}</a></p>
+          </div>
+          <div>
+            <h3 className="outcome__sub">{t('outcomes.county.grantsHeading')}</h3>
+            {grantRows.length ? (
+              <ul className="county-grants">
+                {grantRows.map(([year, n, filled]) => (
+                  <li key={year}><b>{year}</b><span className="county-grants__track">
+                    <i style={{ width: `${(n / grantMax) * 100}%` }} />
+                    <i className="is-filled" style={{ width: `${(filled / grantMax) * 100}%` }} />
+                  </span><span>{t('outcomes.county.grantsRow', { n, filled })}</span></li>
+                ))}
+              </ul>
+            ) : <p className="outcome__hint">{t('outcomes.county.grantsNone')}</p>}
+            <p className="outcome__hint"><a href="elemzo.html#tamogatasok">{t('outcomes.district.grantsLink')}</a></p>
+          </div>
+        </div>
+      )}
 
       <h3 className="outcome__sub">{t('outcomes.county.districtsHeading', { county })}</h3>
       <div className="table-wrap">

@@ -13,7 +13,10 @@ const row = (over: Partial<OutcomeDistrict>): OutcomeDistrict => ({
   avoidableWomen: null, shh: {}, income: null, incomeIndex: null, incomeIndex2012: null,
   taxpayers: null, naturalChange: null, migration: null, diabetes: null, hypertension: null,
   ischaemic: null, gpLoad: null, ageing: null, jobseekers: null, jobseekersLongShare: null,
-  jobseekersTrend: null, capitalWide: false, ...over,
+  jobseekersTrend: null, capitalWide: false,
+  degree: null, employed: null, noDigital: null, poorHousing: null, elderlyOnly: null,
+  sboMinutes: null, sboBeyond30: null, gpRateIn12: null, gpVacantIn12: null,
+  gpExpectedNew: null, grants: { gp: 0, dental: 0, practice: 0 }, ...over,
 });
 
 describe('outcome measures', () => {
