@@ -116,6 +116,10 @@
         {
           "key": "avoidable",
           "href": "https://nngyk.gov.hu/hu/halandosagi-adatbazis-terkepek/2024/standatrdizalt-halalozasi-aranyszam.html"
+        },
+        {
+          "key": "eurostat",
+          "href": "https://ec.europa.eu/eurostat/databrowser/view/hlth_cd_apr/default/table"
         }
       ]
     },

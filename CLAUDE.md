@@ -138,6 +138,12 @@ dissolved (megszűnt) list for GP; the GP registry is the source of district
   site name onto the gazetteer's spelling, but only where the accent-folded
   name is unique — Kömlő/Komló and Kömörő/Komoró fold together, and
   `KshRef.lookup` matches exact names first for the same reason.
+- Avoidable mortality has two sources with different levels: NNGYK (M)
+  for everything inside Hungary, Eurostat (Q) for Hungary against the EU.
+  NNGYK's national figure is ~15 % below Eurostat's in both halves while
+  all-cause rates agree — never draw one line from both. Eurostat splits
+  causes on both lists 50/50; mortality.json carries NNGYK in that split
+  too (`treatableEU` = 11 + ½·13, `preventableEU` = 12 + ½·13).
 - No analysis may match physicians across districts by name. The old
   "Ki tartja a körzeteket?" section (workforce.py) did, and two doctors who
   share a common surname and given name cannot be told apart: no public
@@ -228,6 +234,7 @@ dissolved (megszűnt) list for GP; the GP registry is the source of district
 | N | KSH TIMEA (map.ksh.hu ArcGIS service, NAV/KSH data) — SZJA-alapot képező jövedelem per resident and per taxpayer, taxpayers, natural change, births, deaths, domestic migration balance, a GP's yearly patient count, GP-registered diabetes / hypertension / ischaemic heart disease (járás), ageing index; settlement, járás and county layers, the capital as one | REST JSON | yearly |
 | O | NFSZ településsoros adatai — registered jobseekers per settlement and kerület (total, > 1 year, benefit, assistance, supported, working-age population) | XLSX | monthly (quarterly before 2024, back to 2019) |
 | P | NEAK háziorvosi és fogorvosi letelepedési, illetve háziorvosi praxisjog-vásárlási pályázatok nyertesei (2019, 2021–2025; NEAK publishes no 2020 list) — county, settlement and surgery address; the winner's name is never kept | PDF | yearly |
+| Q | Eurostat hlth_cd_apr — treatable and preventable mortality, Hungary and the EU-27 (the national comparison only; inside Hungary NNGYK, never mixed) | REST JSON-stat | yearly |
 
 NEAK source URLs are configured in `etl/sources.py` — update there only. The
 other sources keep their URL as a constant in the one module that reads them

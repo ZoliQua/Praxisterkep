@@ -25,6 +25,8 @@ export interface OutcomeDistrict {
   development: number | null;
   avoidable: number | null;
   amenable: number | null;
+  treatableEU: number | null;
+  preventableEU: number | null;
   treatable: number | null;
   preventable: number | null;
   both: number | null;
@@ -232,6 +234,11 @@ export interface OutcomesRaw {
   grants: { sourceUrl: string; kinds: Record<'gp' | 'dental', GrantKind> };
   forecast: { horizonMonths: number; kinds: Record<'gp' | 'dental', ForecastKind> };
   census: { year: number; country: Record<string, number> };
+  europe: {
+    source: string; sourceUrl: string; years: string[];
+    series: Record<'hu' | 'eu', Record<'avoidable' | 'treatable' | 'preventable', Record<string, number>>>;
+    nngyk: { year: number; avoidable: number; treatableEU: number; preventableEU: number; all: number };
+  };
 }
 
 /** what the correlations hold still: nothing, income, or income and education */
@@ -297,6 +304,8 @@ export const MEASURES: Record<string, MeasureMeta> = {
   avoidable: { key: 'avoidable', direction: 'higherWorse', color: RED, format: num(0) },
   amenable: { key: 'amenable', direction: 'higherWorse', color: RED, format: num(0) },
   treatable: { key: 'treatable', direction: 'higherWorse', color: RED, format: num(0) },
+  treatableEU: { key: 'treatableEU', direction: 'higherWorse', color: RED, format: num(0) },
+  preventableEU: { key: 'preventableEU', direction: 'higherWorse', color: RED, format: num(0) },
   preventable: { key: 'preventable', direction: 'higherWorse', color: RED, format: num(0) },
   both: { key: 'both', direction: 'higherWorse', color: RED, format: num(0) },
   allCause: { key: 'allCause', direction: 'higherWorse', color: RED, format: num(0) },

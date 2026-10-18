@@ -44,6 +44,7 @@ is kötelező, és az OpenStreetMapből származó részekre az ODbL feltételei
 | [KSH 2022. évi népszámlálás](https://nepszamlalas2022.ksh.hu/adatbazis/) | korösszetétel, végzettség, foglalkoztatás, digitális jártasság, lakás, háztartás | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.hu) |
 | [KSH TIMEA](https://map.ksh.hu/timea/) | jövedelem (NAV-adatokból), népmozgalom, vándorlás, háziorvosi betegforgalom | nyilvános közadat, forrásmegjelöléssel |
 | [NNGYK Halandósági adatbázis](https://nngyk.gov.hu/hu/halandosagi-adatbazis.html) | standardizált és elkerülhető halálozás járásonként | nyilvános közadat, forrásmegjelöléssel |
+| [Eurostat](https://ec.europa.eu/eurostat/databrowser/view/hlth_cd_apr/default/table) | Magyarország és az EU-27 elkerülhető halálozása | [Eurostat szerzői jogi közlemény](https://ec.europa.eu/eurostat/help/copyright-notice): az adatok újrafelhasználása a forrás megjelölésével engedélyezett |
 | [NFSZ településsoros adatok](https://nfsz.munka.hu/tart/stat_telepulessoros_adatok) | nyilvántartott álláskeresők | nyilvános közadat, forrásmegjelöléssel |
 | [Nemzeti Jogszabálytár](https://njt.hu/) | 290/2014. és 105/2015. Korm. rendelet: járásfejlettség, kedvezményezett települések | jogszabályszöveg, szabadon felhasználható |
 | [OpenStreetMap](https://www.openstreetmap.org/copyright) (a [Geofabrik](https://download.geofabrik.de/europe/hungary.html) kivonatán át) | határok, úthálózat, geokódolás (Nominatim) | © OpenStreetMap közreműködők, [ODbL 1.0](https://opendatacommons.org/licenses/odbl/1-0/) |

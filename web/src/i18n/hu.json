@@ -288,7 +288,8 @@
       "nngyk": {
         "title": "NNGYK — Nemzeti Népegészségügyi és Gyógyszerészeti Központ:",
         "database": "halandósági adatbázis",
-        "avoidable": "elkerülhető halálozás járásonként (SHA)"
+        "avoidable": "elkerülhető halálozás járásonként (SHA)",
+        "eurostat": "Eurostat: kezelhető és megelőzhető halálozás, Magyarország és az EU-27"
       },
       "nfsz": {
         "title": "NFSZ — Nemzeti Foglalkoztatási Szolgálat:",
@@ -839,7 +840,7 @@
     "part": "{n}. Keresztellenőrzés",
     "explain": "Ahol a kódlánc (FIN → szervezeti egység → engedély) nem vezetett eredményre, ott másik oldalról is megnézzük: szerepel-e ugyanaz a rendelő vagy ugyanaz a szolgáltató az EESZT-ben — esetleg másik szervezeti egység alatt. A címeket és a neveket normálva hasonlítjuk össze (ékezetek, rövidítések, házszám), és minden sornál kiírjuk, mi alapján jött a találat. Ezek javaslatok, nem hivatalos megfeleltetések.",
     "total": "nem illeszthető {kind} rekord",
-    "summary": "{n} rekordra ({share}) találtunk értelmezhető megfeleltetési javaslatot a(z) {total}-ből.",
+    "summary": "{n} rekordra ({share}) találtunk értelmezhető megfeleltetési javaslatot (összesen {total} rekord).",
     "note": "Az összehasonlítás a NEAK szerződött szolgáltatói listája, az EESZT finanszírozott szolgálatok törzse, a szolgáltatói törzs és az engedélytörzs között fut, a {asOf} állapot szerint.",
     "openTable": "Keresztellenőrzés táblázata ({n} sor)",
     "openEesztOnly": "Csak az EESZT-ben szerepel ({n})",
@@ -1427,7 +1428,7 @@
     "heading": "Összetett ellátási kockázati index",
     "explain": "Minden elemzés egy kérdésre felel: van-e orvos, milyen messze a következő rendelő, milyen idős a lakosság, mennyire valószínű az üresedés. Baj akkor van, ha ezek egyszerre mutatnak ugyanarra. Az index nyolc összetevő súlyozott átlaga, minden településre kiszámolva, és minden pontszám szétszedhető az őt alkotó összetevőkre.",
     "caveat": "Ez összehasonlítás, nem ítélet: a magas index annyit jelent, hogy több nyilvános mutató ugyanabba az irányba mutat — nem azt, hogy ott nincs ellátás. A távolságok légvonalban értendők a település középpontjától, nem menetidőben. Minden összetevő országos rangsorszázalékká alakítva kerül be, hogy a kilométer és az arányszám összeadódhasson.",
-    "lead": "település esik a két legmagasabb sávba {total}-ből ({people} lakos)",
+    "lead": "település esik a két legmagasabb sávba (összesen {total} település; {people} lakos)",
     "band": {
       "kiemelt": "kiemelt (felső 5%)",
       "magas": "magas (5–20%)",
@@ -1650,7 +1651,7 @@
   },
   "transit": {
     "heading": "Busszal is elérhető?",
-    "explain": "A menetidő annak a háztartásnak felel, amelyiknek van autója. Abban a faluban, ahová ez az oldal folyton mutat, pont ez az, amit nem lehet feltételezni. Egy átlagos szerdán ({day}) {settlements} településről indul menetrend szerinti busz a {total}-ből — a kérdés az, hogy visz-e átszállás nélkül oda, ahol az ellátás van.",
+    "explain": "A menetidő annak a háztartásnak felel, amelyiknek van autója. Abban a faluban, ahová ez az oldal folyton mutat, pont ez az, amit nem lehet feltételezni. Egy átlagos szerdán ({day}) {settlements} településről indul menetrend szerinti busz (összesen {total} település) — a kérdés az, hogy visz-e átszállás nélkül oda, ahol az ellátás van.",
     "caveat": "A „nincs közvetlen járat” nem azt jelenti, hogy nem lehet odajutni: átszállással gyakran igen. De az átszállás pont az, amit egy nyolcvanéves nem mindig tud megtenni. Vonat nincs az adatban (a MÁV csak regisztrációhoz kötötten adja ki a menetrendjét), a budapesti hálózat pedig külön adatforrás — a főváros kerületei ezért kimaradnak ebből a részből.",
     "target": {
       "gp": "Háziorvos",
@@ -1697,7 +1698,7 @@
     "heading": "Hivatalos összerendelés — második vélemény",
     "explain": "A keresztellenőrzés címből, adószámból és névből találja ki, melyik működési engedély alatt dolgozik egy praxis. A NEAK bővített finanszírozási törzse (NEAK_FINSZOLG_EXT) viszont megmondja: minden FIN-kódhoz odateszi a szolgáltató hatjegyű azonosítóját, nevét és adószámát. Itt a kettő egymás mellett van.",
     "policy": "A saját láncunkat nem cseréljük le az övékre: ez egy másik elemzés, nem végső igazság. Ahol eltérnek, az eltérés maga az eredmény — az oldal továbbra is a saját útját mutatja, ez a táblázat pedig megmondja, mennyire bízhat benne az olvasó.",
-    "lead": "egyezés ott, ahol mindkét oldal mond valamit ({decidable} praxis a {praxes}-ből)",
+    "lead": "egyezés ott, ahol mindkét oldal mond valamit ({decidable} / {praxes} praxis)",
     "verdict": {
       "agree": "Egyezik",
       "differ": "Eltér",
@@ -1796,7 +1797,7 @@
   },
   "pharmacy": {
     "heading": "Gyógyszertárak",
-    "explain": "A NEAK-kal szerződött {n} gyógyszertár {settlements} településen a {total}-ből. A recept csak akkor ér valamit, ha van hol kiváltani — a menetidő részben a gyógyszertár is külön réteg.",
+    "explain": "A NEAK-kal szerződött {n} gyógyszertár {settlements} településen működik (összesen {total} település). A recept csak akkor ér valamit, ha van hol kiváltani — a menetidő részben a gyógyszertár is külön réteg.",
     "caveat": "Ez a szerződött hálózat: szerződés nélküli patika nincs benne, és a lista nem mondja meg a típust (közforgalmú, fiók, kézi) sem a nyitvatartást. Az a nyilvántartás, amelyik ezeket közli (OGYÉI gyógyszertár-kereső), a robots.txt-jében és a szerzői jogi nyilatkozatában is tiltja a gépi, adatbázis-szerű feldolgozást — ezért nem onnan dolgozunk.",
     "statPer": "lakos jut egy gyógyszertárra",
     "statCovered": "a települések ennyi százalékán van patika",
@@ -2265,7 +2266,9 @@
       "elderlyOnly": "Csak idősekből álló háztartások",
       "sboMinutes": "Menetidő a sürgősségi osztályig",
       "sboBeyond30": "30 percnél messzebb élők a sürgősségitől",
-      "gpRateIn12": "Várható háziorvosi betöltetlenség 12 hónap múlva"
+      "gpRateIn12": "Várható háziorvosi betöltetlenség 12 hónap múlva",
+      "treatableEU": "Kezelhető (Eurostat-módszer)",
+      "preventableEU": "Megelőzhető (Eurostat-módszer)"
     },
     "measureText": {
       "avoidable": "75 év alatti halálozás olyan okból, amelyet időben kapott ellátás vagy hatékony megelőzés megakadályozhatott volna — a három NNGYK-csoport összege, 100 ezer lakosra, az európai standard népességre korrigálva.",
@@ -2661,6 +2664,20 @@
       "atRiskHeading": "Ahol ma még van orvos — de egy éven belül a legnagyobb az esélye, hogy nem lesz",
       "atRiskText": "Olyan települések, amelyeket egy vagy két körzet lát el, és ma mindegyikben van szerződött orvos. Itt egyetlen üresedés a település orvosát viszi el.",
       "atRiskChance": "{pct} esély egy éven belül"
+    },
+    "europe": {
+      "heading": "Hol áll Magyarország Európában?",
+      "key": {
+        "avoidable": "Elkerülhető összesen",
+        "treatable": "Kezelhető",
+        "preventable": "Megelőzhető"
+      },
+      "hu": "Magyarország",
+      "eu": "EU-27 átlag",
+      "ratio": "Magyarországon {hu}, az EU-27 átlagában {eu} {what} halálozás jutott 100 ezer lakosra ({year}).",
+      "nngyk": "Az NNGYK járási adataiból számolt országos érték ({year}): {value} — ugyanazokkal a halálokokkal, az Eurostat felosztása szerint (a mindkét listán szereplő okok fele-fele arányban).",
+      "note": "A két forrás szintje eltér: az NNGYK értékei mintegy 15%-kal alacsonyabbak az Eurostaténál, mindkét összetevőben, miközben az összhalálozásuk egyezik. Valószínű oka a halálok-lista változata (az Eurostat 2022-es listáján a COVID-19 is megelőzhető ok) vagy a korhatár; az NNGYK módszertani leírása PDF-ben érhető el. Ezért Európára az Eurostat, az országon belül az NNGYK számait használjuk — a kettőt nem keverjük.",
+      "source": "Forrás: Eurostat, Treatable and preventable mortality of residents (75 év alatt, 2013-as európai standard népesség, 100 ezer lakosra);"
     }
   },
   "outcomeMethod": {
@@ -2668,7 +2685,7 @@
     "lead": "Az elemző oldal halálozási, jövedelmi, munkaerőpiaci és népességi számai külső, nyilvános forrásokból jönnek (NNGYK, KSH TIMEA, KSH népszámlálás, NFSZ, NEAK), és mindegyiket ugyanaz a szabály köti, mint az oldal többi adatát: minden szám archivált forrásfájlra vezethető vissza, és egy félig beolvasott forrás inkább hibát dob, mint hogy megjelenjen.",
     "mortality": {
       "title": "Elkerülhető halálozás — NNGYK",
-      "text": "A Nemzeti Népegészségügyi és Gyógyszerészeti Központ halandósági adatbázisa járásonként és megyénként közli a standardizált halálozási arányszámot (SHA, 100 ezer lakosra, a 2013-as európai standard népességgel) és a standardizált halálozási hányadost (SHH, ahol 100 az országos arányokból várt érték). Az elkerülhető halálozás az Eurostat két listáját követi, a 75 év alatti halálozásra: az NNGYK a halálokokat három, egymást nem fedő csoportba sorolja — csak ellátással elkerülhető, csak megelőzéssel elkerülhető, és mindkettő. A három összege az összes elkerülhető halálozás, a csak ellátással és a mindkettő összege az ellátással befolyásolható rész; azonos standard népességre számolt arányok ezért összeadhatók. Az NNGYK minden halálokot egy-egy, kb. 22 MB-os interaktív térképként közöl; ebből az adatot hordozó, kb. 270 KB-os rész bájtpontosan archiválva van, a teljes eredeti fájl SHA-256 lenyomatával együtt."
+      "text": "A Nemzeti Népegészségügyi és Gyógyszerészeti Központ halandósági adatbázisa járásonként és megyénként közli a standardizált halálozási arányszámot (SHA, 100 ezer lakosra, a 2013-as európai standard népességgel) és a standardizált halálozási hányadost (SHH, ahol 100 az országos arányokból várt érték). Az elkerülhető halálozás az Eurostat két listáját követi, a 75 év alatti halálozásra: az NNGYK a halálokokat három, egymást nem fedő csoportba sorolja — csak ellátással elkerülhető, csak megelőzéssel elkerülhető, és mindkettő. A három összege az összes elkerülhető halálozás, a csak ellátással és a mindkettő összege az ellátással befolyásolható rész; azonos standard népességre számolt arányok ezért összeadhatók. Az NNGYK minden halálokot egy-egy, kb. 22 MB-os interaktív térképként közöl; ebből az adatot hordozó, kb. 270 KB-os rész bájtpontosan archiválva van, a teljes eredeti fájl SHA-256 lenyomatával együtt. Európai összevetéshez az Eurostat hlth_cd_apr táblájának magyar és EU-27 idősorát használjuk (Q forrás). Az Eurostat a mindkét listán szereplő okokat fele-fele arányban osztja a kezelhető és a megelőzhető között; az NNGYK ugyanezeket külön csoportként közli. Ezért az NNGYK-adatokat az Eurostat felosztása szerint is megadjuk (kezelhető: csak kezelhető + a „mindkettő” fele; megelőzhető: csak megelőzhető + a „mindkettő” fele). A két forrás szintje eltér: az NNGYK 2024-es országos értéke mintegy 15%-kal alacsonyabb az Eurostat 2023-asánál, mindkét összetevőben, miközben az összhalálozás egyezik; a valószínű ok a halálok-lista változata vagy a korhatár. Ezért a két forrást nem keverjük."
     },
     "whyNotKsh": {
       "title": "Miért nem a KSH járási halálozási táblája?",

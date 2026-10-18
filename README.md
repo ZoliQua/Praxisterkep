@@ -92,6 +92,7 @@ audit-nyomvonal**.
 | N | [KSH TIMEA](https://map.ksh.hu/timea/) | jövedelem (NAV), adózók, népmozgalom, vándorlás, háziorvosi betegforgalom, nyilvántartott krónikus betegek | REST JSON | évi | `ksh_timea.py` |
 | O | [NFSZ — településsoros adatok](https://nfsz.munka.hu/tart/stat_telepulessoros_adatok) | nyilvántartott álláskeresők településenként | XLSX | havi (2024 előtt negyedéves) | `nfsz_jobseekers.py` |
 | P | [NEAK — letelepedési és praxisjog-pályázatok](https://neak.gov.hu/felso_menu/szakmai_oldalak/gyogyito_megeleozo_ellatas/alapellatas/haziorvosi_ellatas/archivum) | a nyertesek helye és éve (név nélkül) | PDF | évi | `neak_grants.py` |
+| Q | [Eurostat — hlth_cd_apr](https://ec.europa.eu/eurostat/databrowser/view/hlth_cd_apr/default/table) | kezelhető és megelőzhető halálozás, Magyarország és az EU-27 | JSON-stat | évi | `eurostat_avoidable.py` |
 
 További nyilvános források, amelyeket egy-egy kiegészítő épít: a NEAK
 [gyógyszertári partnerlistája](https://www.neak.gov.hu/felso_menu/lakossagnak/)

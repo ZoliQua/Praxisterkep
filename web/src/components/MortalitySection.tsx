@@ -20,6 +20,7 @@ import {
   useOutcomes, valueOf,
 } from '../lib/outcomes';
 import { PartialSteps } from './charts/PartialSteps';
+import { EuropeBlock } from './EuropeBlock';
 import { DistrictMap } from './charts/DistrictMap';
 import { OutcomeScatter, type ScatterPoint } from './charts/OutcomeScatter';
 import { TertileGrid } from './charts/TertileGrid';
@@ -205,6 +206,7 @@ export function MortalitySection() {
       </div>
 
       <p className="notice">{t('outcomes.mortality.caveat')}</p>
+      <EuropeBlock o={data} />
       <p className="section__source">{t('outcomes.mortality.source', {
         year: data.sources.mortality.year,
       })} <a href="modszertan.html#kimenetek">{t('outcomes.methodLink')}</a></p>

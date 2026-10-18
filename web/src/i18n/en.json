@@ -288,7 +288,8 @@
       "nngyk": {
         "title": "NNGYK — National Centre for Public Health and Pharmacy:",
         "database": "mortality database",
-        "avoidable": "avoidable mortality by járás (SHA)"
+        "avoidable": "avoidable mortality by járás (SHA)",
+        "eurostat": "Eurostat: treatable and preventable mortality, Hungary and the EU-27"
       },
       "nfsz": {
         "title": "NFSZ — National Employment Service:",
@@ -2265,7 +2266,9 @@
       "elderlyOnly": "Households of only the 65+",
       "sboMinutes": "Driving time to emergency department",
       "sboBeyond30": "Residents 30+ minutes from emergency",
-      "gpRateIn12": "Expected GP vacancy in 12 months"
+      "gpRateIn12": "Expected GP vacancy in 12 months",
+      "treatableEU": "Treatable (Eurostat method)",
+      "preventableEU": "Preventable (Eurostat method)"
     },
     "measureText": {
       "avoidable": "Deaths under 75 from causes that timely care or effective prevention should have averted — the three NNGYK groups together, per 100,000, age-standardised to the European Standard Population.",
@@ -2661,6 +2664,20 @@
       "atRiskHeading": "Where there is a doctor today — and the highest chance there will not be within a year",
       "atRiskText": "Settlements served by one or two districts, each with a contracted doctor today. Here a single vacancy takes the settlement's doctor.",
       "atRiskChance": "{pct} chance within a year"
+    },
+    "europe": {
+      "heading": "Where does Hungary stand in Europe?",
+      "key": {
+        "avoidable": "Avoidable, total",
+        "treatable": "Treatable",
+        "preventable": "Preventable"
+      },
+      "hu": "Hungary",
+      "eu": "EU-27 average",
+      "ratio": "In {year}, Hungary had {hu} and the EU-27 average {eu} {what} deaths per 100,000.",
+      "nngyk": "The national figure from NNGYK's district data for {year} is {value} — the same causes, divided as Eurostat divides them (causes on both lists half to each).",
+      "note": "The two sources differ in level: NNGYK's figures are some 15% below Eurostat's in both halves, while their all-cause rates agree. The cause list (Eurostat's 2022 list adds COVID-19 as preventable) or the age limit is the likely reason; NNGYK's method note is a PDF. So Eurostat is used for Europe and NNGYK inside the country — never mixed.",
+      "source": "Source: Eurostat, Treatable and preventable mortality of residents (under 75, 2013 European Standard Population, per 100,000);"
     }
   },
   "outcomeMethod": {
@@ -2668,7 +2685,7 @@
     "lead": "The mortality, income, labour and population figures on the analysis page come from outside public sources (NNGYK, KSH TIMEA, the KSH census, NFSZ, NEAK), bound by the same rule as the rest of the site: every number traces to an archived source file, and a half-read source fails rather than being published.",
     "mortality": {
       "title": "Avoidable mortality — NNGYK",
-      "text": "The national public-health centre publishes, per járás and county, the standardised death rate (SHA, per 100,000, 2013 European Standard Population) and the standardised mortality ratio (SHH, 100 = what national rates predict). Avoidable mortality follows Eurostat's two lists for deaths under 75; NNGYK sorts causes into three groups that do not overlap — treatable only, preventable only, and both. Their sum is total avoidable mortality, treatable-only plus both is the care-sensitive part; rates on one standard population add up. NNGYK ships each cause as a ~22 MB interactive map; the ~270 KB part carrying the numbers is archived byte for byte with the SHA-256 of the whole original."
+      "text": "The national public-health centre publishes, per járás and county, the standardised death rate (SHA, per 100,000, 2013 European Standard Population) and the standardised mortality ratio (SHH, 100 = what national rates predict). Avoidable mortality follows Eurostat's two lists for deaths under 75; NNGYK sorts causes into three groups that do not overlap — treatable only, preventable only, and both. Their sum is total avoidable mortality, treatable-only plus both is the care-sensitive part; rates on one standard population add up. NNGYK ships each cause as a ~22 MB interactive map; the ~270 KB part carrying the numbers is archived byte for byte with the SHA-256 of the whole original. For the European comparison Eurostat's hlth_cd_apr series for Hungary and the EU-27 are used (source Q). Eurostat splits the causes on both lists half to treatable and half to preventable; NNGYK publishes them as a group of their own, so the NNGYK figures are also given in Eurostat's split (treatable: treatable-only + half of both; preventable: preventable-only + half of both). The levels differ: NNGYK's national 2024 figure is some 15% below Eurostat's 2023 one in both halves while all-cause mortality agrees; the cause-list version or the age limit is the likely reason. The two sources are never mixed."
     },
     "whyNotKsh": {
       "title": "Why not KSH's district death table?",
