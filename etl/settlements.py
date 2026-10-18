@@ -17,6 +17,7 @@ Usage:
 from __future__ import annotations
 
 import json
+import statistics
 import sys
 import unicodedata
 from pathlib import Path
@@ -77,6 +78,113 @@ def read(name: str) -> dict | None:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+
+# --------------------------------------------------- how people live here
+#
+# Income, births and deaths, migration (KSH TIMEA), jobseekers (NFSZ) and the
+# avoidable mortality of the járás (NNGYK). These files are optional inputs:
+# a supplement must never block the monthly release, so a missing one leaves
+# its part of the block out instead of failing the settlement pages, and each
+# figure carries its own year or month so a stale one says so on the page.
+LIVING_YEARS = ("2022", "2023", "2024", "2025")
+
+
+def _mean(series: dict | None, years=LIVING_YEARS) -> float | None:
+    vals = [series[y] for y in years if series and series.get(y) is not None]
+    # one missing year is tolerated; a village with two is not averaged
+    return round(sum(vals) / len(vals), 2) if len(vals) >= len(years) - 1 else None
+
+
+def _last(series: dict | None) -> tuple[str, float] | tuple[None, None]:
+    if not series:
+        return None, None
+    y = max(series)
+    return y, series[y]
+
+
+def living_context(territorial: dict | None, jobs: dict | None,
+                   mortality: dict | None) -> dict:
+    """What every settlement's block is compared with, computed once."""
+    ctx: dict = {"territorial": territorial, "jobs": jobs, "mortality": mortality}
+    if territorial:
+        rural = [v for k, v in territorial["settlements"].items()]
+        def med(key, fn):
+            vals = sorted(x for x in (fn(r.get(key)) for r in rural) if x is not None)
+            return statistics.median(vals) if vals else None
+        ctx["median"] = {
+            "income": med("incomePerResident", lambda s: (s or {}).get("2024")),
+            "naturalChange": med("naturalChange", _mean),
+            "migration": med("migration", _mean),
+        }
+        ctx["gpLoadYear"] = max((y for r in rural for y in (r.get("gpVisitsPerGp") or {})),
+                                default=None)
+    if jobs:
+        nat = jobs["national"]
+        ctx["jobsNational"] = round(100 * nat["registered"][-1] / nat["workingAge"][-1], 2)
+    if mortality:
+        vals = sorted(r["sha"]["avoidable"]["t"] for n, r in mortality["districts"].items()
+                      if not n.startswith("Budapest") and r["sha"]["avoidable"]["t"] is not None)
+        ctx["avoidableMedian"] = statistics.median(vals)
+    return ctx
+
+
+def living_block(ksh: str, district: str, county: str, ctx: dict) -> dict | None:
+    out: dict = {}
+    capital = county == "Budapest"
+    terr, jobs, mort = ctx["territorial"], ctx["jobs"], ctx["mortality"]
+    if terr:
+        s = terr["capital"] if capital else terr["settlements"].get(ksh, {})
+        d = terr["districts"].get("Budapest" if capital else district, {})
+        c = terr["counties"].get(county, {})
+        y, inc = _last(s.get("incomePerResident"))
+        if inc is not None:
+            out["income"] = {
+                "value": inc, "year": y,
+                "district": (d.get("incomePerResident") or {}).get(y),
+                "county": (c.get("incomePerResident") or {}).get(y),
+                "median": ctx["median"]["income"] if y == "2024" else None,
+                "taxpayers": (s.get("taxpayersPer1000") or {}).get(y),
+            }
+        for key in ("naturalChange", "migration"):
+            v = _mean(s.get(key))
+            if v is not None:
+                out[key] = {"value": v, "years": [LIVING_YEARS[0], LIVING_YEARS[-1]],
+                            "district": _mean(d.get(key)), "county": _mean(c.get(key)),
+                            "median": ctx["median"][key]}
+        # a GP's yearly patient count, only when it is this year's and there
+        # is a GP: a village whose surgery closed keeps a zero from the last
+        # year it had one, and the capital's two KSH layers disagree (9 938
+        # as a settlement, 20 249 as a járás), so a kerület gets neither
+        y, load = _last(s.get("gpVisitsPerGp"))
+        if load and not capital and y == ctx.get("gpLoadYear"):
+            out["gpLoad"] = {"value": load, "year": y,
+                             "district": (d.get("gpVisitsPerGp") or {}).get(y)}
+        if capital and out:
+            out["capitalWide"] = True
+    if jobs and ksh in jobs["settlements"]:
+        js = jobs["settlements"][ksh]
+        dj = jobs["districts"].get(district)
+        cj = jobs["counties"].get(county)
+        rate = lambda r, i=-1: (round(100 * r["registered"][i] / r["workingAge"][i], 2)
+                                if r and r["workingAge"][i] else None)
+        reg, wap = js["registered"][-1], js["workingAge"][-1]
+        out["jobseekers"] = {
+            "month": jobs["latest"],
+            "value": rate(js), "registered": reg, "workingAge": wap,
+            "longShare": round(100 * js["longTerm"][-1] / reg, 1) if reg else None,
+            "district": rate(dj), "county": rate(cj), "national": ctx.get("jobsNational"),
+            # the whole series for the line on the page, as NFSZ sampled it
+            "months": jobs["months"],
+            "series": [round(100 * a / b, 2) if a is not None and b else None
+                       for a, b in zip(js["registered"], js["workingAge"])],
+        }
+    if mort and district in mort["districts"]:
+        sha = mort["districts"][district]["sha"]
+        out["avoidable"] = {"year": mort["year"], "district": sha["avoidable"]["t"],
+                            "amenable": sha["amenable"]["t"],
+                            "median": ctx.get("avoidableMedian")}
+    return out or None
+
 def build() -> dict:
     ksh = load_reference()
     if ksh is None:
@@ -96,6 +204,8 @@ def build() -> dict:
     ages = read("age.json")
     emergency = read("emergency.json")
     specialist = read("specialist.json")
+    living = living_context(read("territorial.json"), read("jobseekers.json"),
+                            read("mortality.json"))
     # the coordinates of the surgeries that have a doctor, for the street-level
     # map; geocode_filled.py fills this cache
     coords = json.loads((ROOT / "etl" / "geocode_cache.json").read_text(encoding="utf-8"))
@@ -393,6 +503,10 @@ def build() -> dict:
                 "sites": visitor_sites.get(name_key, []),
             }
 
+        block = living_block(key, e["district"], e["county"], living)
+        if block:
+            record["living"] = block
+
         rows.append(record)
 
     country = (ages or {}).get("country") or {}
@@ -413,6 +527,13 @@ def build() -> dict:
                 "female": country.get("female"),
                 "bySex": country.get("bySex"),
             },
+            # the country's jobseeker share, for the line on each page
+            "jobseekers": (
+                {"months": living["jobs"]["months"],
+                 "series": [round(100 * a / b, 2) if b else None
+                            for a, b in zip(living["jobs"]["national"]["registered"],
+                                            living["jobs"]["national"]["workingAge"])]}
+                if living.get("jobs") else None),
         },
         "comparedWith": year_ago["month"],
         "settlements": rows,

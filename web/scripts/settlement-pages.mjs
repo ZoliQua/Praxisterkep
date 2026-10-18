@@ -1179,6 +1179,7 @@ function pharmacyBlock(profile) {
 const SECTIONS = [
   ['elhelyezkedes', 'Elhelyezkedés', 'map'],
   ['lakossag', 'Lakosság', 'people'],
+  ['eletkorulmenyek', 'Életkörülmények', 'delta'],
   ['elerhetoseg', 'Elérhetőség', 'pin'],
   ['orvosok', 'Orvosok', 'doctor'],
   ['tavolsag', 'Távolság', 'road'],
@@ -1347,6 +1348,149 @@ function indexCompare(profile) {
   </div>`;
 }
 
+
+/* ------------------------------------------------------------------
+   "Hogyan élnek itt?" — income, work, births and deaths, people
+   leaving, and the járás's avoidable mortality. No script: every bar
+   and line is drawn here, as HTML or inline SVG. Every word comes from
+   i18n (outcomes.settlement.*), read through label().
+   ------------------------------------------------------------------ */
+const L = (key, vars = {}) => Object.entries(vars).reduce(
+  (txt, [k, v]) => txt.replaceAll(`{${k}}`, String(v)), label(`outcomes.settlement.${key}`));
+const dec = (v, d = 1) => (v === null || v === undefined ? '–'
+  : `${v < 0 ? '−' : ''}${Math.abs(v).toFixed(d).replace('.', ',')}`);
+const signedPm = (v) => (v === null || v === undefined ? '–'
+  : `${v > 0 ? '+' : ''}${dec(v)}‰`);
+const mFt = (v) => (v === null || v === undefined ? '–' : `${dec(v / 1000, 2)} M Ft`);
+
+/** Up to four bars on one scale: the settlement first, then what it is
+ *  measured against. Diverging values grow from a centre line. */
+function compareRows(rows, fmt, diverging = false) {
+  const vals = rows.map((r) => r.v).filter((v) => v !== null && v !== undefined);
+  if (!vals.length) return '';
+  const span = diverging ? Math.max(...vals.map(Math.abs), 0.0001)
+    : Math.max(...vals, 0.0001);
+  return `<div class="tp-compare${diverging ? ' is-diverging' : ''}">${rows.map((r) => {
+    if (r.v === null || r.v === undefined) return '';
+    const w = (Math.abs(r.v) / span) * (diverging ? 50 : 100);
+    const style = diverging
+      ? (r.v >= 0 ? `left:50%;width:${w.toFixed(1)}%` : `left:${(50 - w).toFixed(1)}%;width:${w.toFixed(1)}%`)
+      : `width:${w.toFixed(1)}%`;
+    return `<div class="tp-compare__row${r.self ? ' is-self' : ''}">
+      <span class="tp-compare__label">${esc(r.label)}</span>
+      <span class="tp-compare__track"><i class="${diverging && r.v < 0 ? 'is-neg' : ''}" style="${style}"></i></span>
+      <b>${esc(fmt(r.v))}</b></div>`;
+  }).join('')}</div>`;
+}
+
+/** The settlement's jobseeker share over time, against the country. */
+function jobsLine(js, nat) {
+  const W = 520; const H = 120; const P = { l: 34, r: 8, t: 8, b: 18 };
+  const mon = (m) => { const [y, mo] = m.split('-').map(Number); return y * 12 + mo - 1; };
+  const xs = js.months.map(mon);
+  const all = [...js.series, ...(nat ? nat.series : [])].filter((v) => v !== null);
+  if (all.length < 3) return '';
+  const hi = Math.max(...all) * 1.1 || 1;
+  const x = (m) => P.l + ((m - xs[0]) / (xs[xs.length - 1] - xs[0])) * (W - P.l - P.r);
+  const y = (v) => H - P.b - (v / hi) * (H - P.t - P.b);
+  const path = (series) => series.map((v, i) => (v === null ? '' : `${i && series[i - 1] !== null ? 'L' : 'M'}${x(xs[i]).toFixed(1)},${y(v).toFixed(1)}`)).join('');
+  const years = [];
+  for (let yy = Math.ceil(xs[0] / 12); yy * 12 <= xs[xs.length - 1]; yy++) years.push(yy);
+  return `<svg class="tp-line" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(L('jobsLineAria'))}">
+    <line x1="${P.l}" x2="${W - P.r}" y1="${y(0)}" y2="${y(0)}" class="tp-line__axis"/>
+    ${[hi / 2, hi / 1.1].map((v) => `<text x="${P.l - 4}" y="${y(v) + 3}" text-anchor="end" class="tp-line__tick">${dec(v, 0)}%</text>`).join('')}
+    ${years.map((yy) => `<text x="${x(yy * 12).toFixed(1)}" y="${H - 4}" text-anchor="middle" class="tp-line__tick">${yy}</text>`).join('')}
+    ${nat ? `<path d="${path(nat.series)}" class="tp-line__nat"/>` : ''}
+    <path d="${path(js.series)}" class="tp-line__self"/>
+  </svg>`;
+}
+
+const formatMonth = (m) => {
+  const [y, mo] = String(m).split('-').map(Number);
+  return `${y}. ${HU_MONTHS[(mo || 1) - 1]}`;
+};
+const nationalJobs = profiles.national?.jobseekers ?? null;
+
+function livingBlock(profile, nationalJobs) {
+  const l = profile.living;
+  if (!l) return '';
+  const name = profile.settlement;
+  const district = profile.district;
+  const county = profile.county;
+  const cap = !!l.capitalWide;
+  const parts = [];
+  const median = L('medianSettlement');
+  if (l.income) {
+    const i = l.income;
+    parts.push(`<article class="tp-living__item">
+      <h3>${esc(L('incomeHeading'))}</h3>
+      <p class="tp-living__value">${esc(mFt(i.value))}<small>${esc(L('perYear', { year: i.year }))}</small></p>
+      ${cap ? `<p class="tp-note">${esc(L('capitalWide'))}</p>` : compareRows([
+        { label: name, v: i.value, self: true },
+        { label: `${district} ${L('districtSuffix')}`, v: i.district },
+        { label: county, v: i.county },
+        { label: median, v: i.median },
+      ], mFt)}
+      ${i.taxpayers ? `<p class="tp-note">${esc(L('taxpayers', { n: dec(i.taxpayers, 0) }))}</p>` : ''}
+    </article>`);
+  }
+  if (l.jobseekers) {
+    const j = l.jobseekers;
+    parts.push(`<article class="tp-living__item">
+      <h3>${esc(L('jobsHeading'))}</h3>
+      <p class="tp-living__value">${esc(dec(j.value))}%<small>${esc(L('jobsOf', {
+        n: num(j.registered), of: num(j.workingAge), month: formatMonth(j.month) }))}</small></p>
+      ${compareRows([
+        { label: name, v: j.value, self: true },
+        ...(profile.county === 'Budapest' ? [] : [{ label: `${district} ${L('districtSuffix')}`, v: j.district }]),
+        { label: county, v: j.county },
+        { label: L('national'), v: j.national },
+      ], (v) => `${dec(v)}%`)}
+      ${j.longShare !== null ? `<p class="tp-note">${esc(L('jobsLong', { share: dec(j.longShare, 0) }))}</p>` : ''}
+      ${jobsLine(j, nationalJobs)}
+    </article>`);
+  }
+  for (const key of ['naturalChange', 'migration']) {
+    const v = l[key];
+    if (!v) continue;
+    parts.push(`<article class="tp-living__item">
+      <h3>${esc(L(`${key}Heading`))}</h3>
+      <p class="tp-living__value">${esc(signedPm(v.value))}<small>${esc(L('perThousand', {
+        from: v.years[0], to: v.years[1] }))}</small></p>
+      ${cap ? `<p class="tp-note">${esc(L('capitalWide'))}</p>` : compareRows([
+        { label: name, v: v.value, self: true },
+        { label: `${district} ${L('districtSuffix')}`, v: v.district },
+        { label: county, v: v.county },
+        { label: median, v: v.median },
+      ], signedPm, true)}
+      <p class="tp-note">${esc(L(`${key}Text`))}</p>
+    </article>`);
+  }
+  if (l.gpLoad) {
+    parts.push(`<article class="tp-living__item">
+      <h3>${esc(L('loadHeading'))}</h3>
+      <p class="tp-living__value">${esc(num(Math.round(l.gpLoad.value)))}<small>${esc(L('loadUnit', { year: l.gpLoad.year }))}</small></p>
+      ${compareRows([
+        { label: name, v: l.gpLoad.value, self: true },
+        { label: `${district} ${L('districtSuffix')}`, v: l.gpLoad.district },
+      ], (v) => num(Math.round(v)))}
+      <p class="tp-note">${esc(L('loadText'))}</p>
+    </article>`);
+  }
+  const avoid = l.avoidable ? `<div class="tp-living__avoid">
+      <p>${esc(L('avoidable', {
+        // "Az Ajkai járás", "A Pápai járás": the article follows the name
+        article: /^[aáeéiíoóöőuúüű]/i.test(district) ? 'Az' : 'A',
+        district: `${district}${profile.county === 'Budapest' ? '' : ` ${L('districtSuffix')}`}`,
+        value: dec(l.avoidable.district, 0), median: dec(l.avoidable.median, 0), year: l.avoidable.year }))}</p>
+      <p class="tp-note">${esc(L('avoidableNote'))}
+        <a href="${esc(ctx(`/jaras.html?jar=${encodeURIComponent(district)}#egeszseg`, profile))}">${esc(L('avoidableLink'))}</a></p>
+    </div>` : '';
+  return `<div class="tp-living">${parts.join('')}</div>${avoid}
+    <p class="tp-note">${esc(L('noise'))}</p>
+    <p class="tp-source">${esc(L('source'))}</p>`;
+}
+
 function page(profile) {
   const { settlement, county } = profile;
   // Budapest's districts are their own járás ("Budapest 03. ker."), and
@@ -1360,6 +1504,8 @@ function page(profile) {
   const present = new Set(['elhelyezkedes', 'lakossag', 'orvosok', 'tavolsag',
     'gyogyszertar', 'kozlekedes', 'kockazat']);
   if (streetHtml) present.add('elerhetoseg');
+  const livingHtml = livingBlock(profile, nationalJobs);
+  if (livingHtml) present.add('eletkorulmenyek');
   if (changeHtml) present.add('valtozas');
   // the meta description wants one sentence, not the two coloured halves
   const gpState = profile.gp
@@ -1421,6 +1567,12 @@ ${sectionRail(present)}
   <h2 class="section__subheading">Kik laknak itt?</h2>
   ${ageBlock(profile)}
 </section>
+
+${livingHtml ? `<section class="section container" id="eletkorulmenyek">
+  <h2 class="section__subheading">${esc(L('heading'))}</h2>
+  <p class="section__explain">${esc(L('lead'))}</p>
+  ${livingHtml}
+</section>` : ''}
 
 ${streetHtml}
 

@@ -2423,6 +2423,34 @@
       "incomeHeading": "Jövedelem a medián járás százalékában",
       "districtsHeading": "{county} járásai egymás mellett",
       "colDistrict": "Járás"
+    },
+    "settlement": {
+      "heading": "Hogyan élnek itt?",
+      "lead": "Jövedelem, munka, születés és halálozás, elköltözés — a település a járása, a megyéje és a magyar települések középértéke mellett. Ezek okai annak is, miért nehéz egy körzetet betölteni, és annak is, miért halnak meg itt korábban az emberek.",
+      "medianSettlement": "középső település",
+      "districtSuffix": "járás",
+      "national": "ország",
+      "incomeHeading": "Jövedelem egy lakosra",
+      "perYear": "évente, {year}",
+      "capitalWide": "A KSH a fővárost egyetlen településként közli, ezért ez a szám Budapest egészére vonatkozik, nem a kerületre.",
+      "taxpayers": "Ezer lakosból {n} fizet személyi jövedelemadót.",
+      "jobsHeading": "Álláskeresők aránya",
+      "jobsOf": "{n} nyilvántartott álláskereső {of} munkaképes korúból, {month}",
+      "jobsLong": "Közülük {share}% több mint egy éve keres munkát.",
+      "jobsLineAria": "Az álláskeresők aránya a településen és országosan, 2019 óta",
+      "naturalChangeHeading": "Születések és halálozások",
+      "migrationHeading": "Ide- és elköltözők",
+      "perThousand": "ezer lakosra, {from}–{to} átlaga",
+      "naturalChangeText": "Születések mínusz halálozások. A negatív szám azt jelenti, hogy többen halnak meg, mint ahányan születnek.",
+      "migrationText": "Az ideköltözők mínusz az elköltözők, országon belül. A negatív szám azt jelenti, hogy többen mennek el, mint jönnek.",
+      "loadHeading": "Egy háziorvosra jutó betegforgalom",
+      "loadUnit": "eset egy év alatt, {year}",
+      "loadText": "A rendelőben megjelentek, a beteglátogatások és a telemedicinális ellátások együtt. Ahol a környéken üres körzet van, a megmaradt orvosokra több jut.",
+      "avoidable": "{article} {district} elkerülhető halálozása {value} / 100 ezer lakos ({year}); a vidéki járások mediánja {median}.",
+      "avoidableNote": "Ez járási adat: településenként az NNGYK nem közöl elkerülhető halálozást, mert ennyi kis számból nem lehetne megbízható arányt számolni.",
+      "avoidableLink": "A járás egészségi adatai →",
+      "noise": "Egy kis településen néhány születés vagy költözés is nagyot mozdít az arányon, ezért a népmozgalmi számok négy év átlagai; a nagyon kis falvaknál így is óvatosan kell olvasni őket.",
+      "source": "Források: KSH TIMEA (a jövedelem a NAV adataiból), NFSZ településsoros adatai, NNGYK Halandósági adatbázis."
     }
   }
 }
