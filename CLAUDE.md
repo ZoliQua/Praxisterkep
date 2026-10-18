@@ -107,6 +107,19 @@ dissolved (megszűnt) list for GP; the GP registry is the source of district
 - Frontend: React 18 + Vite + TypeScript in `web/`, Zustand for state,
   MapLibre GL JS for the map, D3 for charts. No Tailwind; hand-rolled CSS
   matching the dark holadelej-style theme.
+- Analytics: Google Analytics 4, **behind consent**. `web/public/consent.js`
+  is a hand-written file (not bundled) that every page — including the 3177
+  static ones — includes: it sets `analytics_storage: denied` as the consent
+  default, shows the bar, and only loads gtag after a yes. The measurement id
+  comes from `VITE_GA_ID` (Vite fills `%VITE_GA_ID%` in the HTML entries, the
+  generator writes the same meta tag); without it nothing loads and no bar
+  appears. `adatkezeles.html` is the privacy notice and must stay true to the
+  code. embed.html is deliberately excluded: a cookie there would be the
+  embedding site's consent problem.
+- Sources: `web/src/lib/sources.json` holds one row per downloadable file,
+  with labels in `i18n` under `footer.src.*`. The Footer component and the
+  static generator both render it, so the app and the 3177 pages cannot
+  disagree about where a number came from.
 - Geocoding: Nominatim, 1 req/s, results cached in `etl/geocode_cache.json`
   (git-tracked). Only query addresses not in cache.
 - Addresses: the registry is typed by hand and spells one surgery several
@@ -178,8 +191,9 @@ the registry means `dissolved`, never silently dropped or counted as filled.
   everything else works unchanged. MapTiler/Stadia keys are domain-restricted;
   a self-hosted Protomaps file would need no key at all.
 - Deploy: **Vercel**, through its GitHub integration — every push to `main`
-  builds `web/` and goes live on https://oep-ellatas.vercel.app in a minute
-  or two. `npm run build` runs `scripts/sync-data.mjs` first, so the JSON in
+  builds `web/` and goes live in a minute or two. The site's own domain is
+  **https://praxisterkep.hu** (the vercel.app address still serves it);
+  `VITE_SITE_URL` overrides what the sitemap writes. `npm run build` runs `scripts/sync-data.mjs` first, so the JSON in
   `data/` reaches `web/public/data/` on the build machine (that directory is
   git-ignored on purpose).
   `.github/workflows/deploy.yml` still targets Cloudflare Pages and fails on

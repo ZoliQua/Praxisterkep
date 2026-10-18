@@ -9,6 +9,7 @@
 // the author, so it stands next to the name rather than in a separate page
 // nobody opens.
 import { t } from '../lib/i18n';
+import sources from '../lib/sources.json';
 import { formatMonth } from '../lib/format';
 import { useSnapshot } from '../store/useAppStore';
 
@@ -23,17 +24,25 @@ export function Footer({ month }: { month?: string }) {
         <p className="footer__lead">{t('footer.publicOnly')}</p>
 
         <h3>{t('footer.sources')}</h3>
-        <ul>
-          <li>{t('footer.sourceNeak')}</li>
-          <li>{t('footer.sourceOkfo')}</li>
-          <li>
-            {/* the register comparison lives behind this line and nowhere
-                else: it is a working note, not a public register */}
-            <a href="/eeszt.html">{t('footer.sourceEeszt')}</a>
-          </li>
-          <li>{t('footer.sourceKsh')}</li>
-          <li>{t('footer.sourceDecree')}</li>
-          <li>{t('footer.sourceOsm')}</li>
+        <p className="footer__note">{t('footer.sourcesNote')}</p>
+        {/* every figure on the site, with the place anyone can fetch it from */}
+        <ul className="footer__sources">
+          {sources.groups.map((g) => (
+            <li key={g.key}>
+              <strong>{t(`footer.src.${g.key}.title`)}</strong>{' '}
+              {g.items.map((item, i) => (
+                <span key={item.key}>
+                  {i > 0 && <span className="footer__sep"> · </span>}
+                  <a href={item.href}
+                    rel={item.href.startsWith('/') ? undefined : 'noopener'}>
+                    {t(`footer.src.${g.key}.${item.key}`)}
+                  </a>
+                  {'format' in item && item.format
+                    && <span className="footer__format"> {item.format}</span>}
+                </span>
+              ))}
+            </li>
+          ))}
         </ul>
 
         <h3>{t('footer.legal')}</h3>
@@ -46,6 +55,12 @@ export function Footer({ month }: { month?: string }) {
           <li>{t('footer.correction')}</li>
         </ul>
 
+        <p className="footer__privacy">
+          <a href="/adatkezeles.html">{t('privacy.navLabel')}</a>
+          {' · '}
+          {/* consent.js finds this and reopens the bar */}
+          <a href="#" data-consent-reopen>{t('privacy.reopen')}</a>
+        </p>
         <p className="footer__author">
           {t('footer.authorBy')}{' '}
           <a href={AUTHOR_URL} rel="noopener">{t('footer.authorName')}</a>

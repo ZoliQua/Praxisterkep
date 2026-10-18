@@ -5,6 +5,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import nav from './siteNav.json';
+import srcList from './sources.json';
 import hu from '../i18n/hu.json';
 import en from '../i18n/en.json';
 
@@ -32,9 +33,9 @@ describe('site navigation', () => {
     // It is still built and still linked — from the sources list in the
     // footer — but it is not one of the site's seven pages.
     expect(allHrefs.some((h) => h.startsWith('/eeszt.html'))).toBe(false);
-    const footer = readFileSync(
-      join(root, 'src', 'components', 'Footer.tsx'), 'utf8');
-    expect(footer).toContain('"/eeszt.html"');
+    const sources = readFileSync(
+      join(root, 'src', 'lib', 'sources.json'), 'utf8');
+    expect(sources).toContain('"/eeszt.html"');
   });
 
   it('has a label in both locales for every entry', () => {
@@ -65,5 +66,30 @@ describe('site navigation', () => {
     expect(generator).toContain('nav.entries');
     expect(generator).toContain('${navBar(profile)}');
     expect(generator).not.toContain('class="topnav__group"><a href="/">');
+  });
+
+  it('links every source it names, in both locales', () => {
+    for (const group of srcList.groups) {
+      expect(typeof lookup(hu, `footer.src.${group.key}.title`),
+        `hu title: ${group.key}`).toBe('string');
+      expect(typeof lookup(en, `footer.src.${group.key}.title`),
+        `en title: ${group.key}`).toBe('string');
+      expect(group.items.length).toBeGreaterThan(0);
+      for (const item of group.items) {
+        // a source nobody can fetch is not a source
+        expect(item.href, `${group.key}.${item.key}`).toMatch(/^(https:\/\/|\/)/);
+        for (const [name, dict] of [['hu', hu], ['en', en]] as const) {
+          expect(typeof lookup(dict, `footer.src.${group.key}.${item.key}`),
+            `${name}: ${group.key}.${item.key}`).toBe('string');
+        }
+      }
+    }
+  });
+
+  it('is the same list the generated pages render', () => {
+    const generator = readFileSync(
+      join(root, 'scripts', 'settlement-pages.mjs'), 'utf8');
+    expect(generator).toContain("'sources.json'");
+    expect(generator).toContain('sources.groups');
   });
 });

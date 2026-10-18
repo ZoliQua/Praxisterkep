@@ -5,6 +5,51 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.46.0] — 2026-10-18
+
+Saját domén (praxisterkep.hu), látogatói statisztika hozzájárulással,
+és minden forrás letölthető helye kilinkelve.
+
+### Hozzáadva
+- **Google Analytics 4, de csak igenre.** A `web/public/consent.js` egy
+  kézzel írt fájl (nem bundle), amit **mind a 3182 oldal** betölt —
+  a 3177 statikus településlap is, mert a keresők oda küldik az
+  embereket. A működése: `analytics_storage: denied` a consent
+  alapértelmezés, így a mérőkód nem is töltődik be és süti sem
+  kerül a gépre, amíg nincs kifejezett elfogadás. A két gomb
+  egyformán néz ki és egyik sincs előre kiválasztva; a döntés
+  bármikor visszavonható a lábléc „Sütibeállítás" linkjéről.
+  A mérési azonosító a `VITE_GA_ID` környezeti változóból jön —
+  **ha nincs beállítva, semmi nem töltődik és sáv sem jelenik meg.**
+  A beágyazható minitérkép szándékosan kimarad: ott a süti a
+  beágyazó oldal hozzájárulási kérdése lenne, nem a miénk.
+- **Adatkezelési tájékoztató** (`adatkezeles.html`): ki az adatkezelő,
+  mit kezelünk, mi a jogalap, meddig, kinek adjuk tovább, mit őriz a
+  böngésző, milyen jogaid vannak. Rövid és konkrét, mert az oldal
+  majdnem semmit nem mér.
+- **Minden forrás kilinkelve, onnan, ahonnan letölthető.** A lábléc
+  forráslistája hét csoportban **22 közvetlen linket** ad: a nyolc
+  NEAK-állomány külön-külön (betöltetlen fogorvosi és
+  háziorvosi listák, szerződött szolgáltatók, beutalási
+  törzslista, szakellátó intézmények) és a NEAK letöltőoldala, az
+  OKFŐ két tájékoztatója, az EESZT törzspublikáció, a KSH
+  helységnévtár és népszámlálás, a két kormányrendelet, az OSM,
+  a Geofabrik-kivonat és a GTFS — végül **a mi saját feldolgozott
+  adataink és a havonta archivált eredeti fájlok**. Mind a 22 link
+  ellenőrizve (HTTP 200). A lista egy fájlból
+  (`src/lib/sources.json`) jön, amit a React lábléc és a statikus
+  generátor is olvas, így nem térhetnek el egymástól.
+
+### Módosítva
+- **A nyitó mondat pontosabb lett.** A korábbi „saját adatgyűjtést nem
+  végez" elhallgatta, hogy az oldal havonta letölti és archiválja a
+  nyilvános állományokat — ami nem szégyellni való, hanem éppen az
+  ellenőrizhetőség alapja. Az új szöveg ezt ki is mondja, és a
+  „nem gyűjtünk adatot" állítás oda került, ahol igaz: a
+  látogatókra és a betegekre.
+- A sitemap a **praxisterkep.hu** címet írja (`VITE_SITE_URL`
+  felülbírja).
+
 ## [1.45.0] — 2026-10-18
 
 Nyilvánosságra készülés: mit mond magáról az oldal, és mit nem.

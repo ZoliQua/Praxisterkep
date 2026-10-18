@@ -193,6 +193,15 @@ const cssFile = readdirSync(join(dist, 'assets')).filter((f) => f.endsWith('.css
 // VITE_MAP_STYLE the bundle would have nothing to draw on, so the button is
 // not offered at all (src/streetmap.ts makes the same check at runtime)
 const env = loadEnv('production', join(here, '..'), 'VITE_');
+// the same consent-gated analytics the app pages carry: these 3177 pages are
+// where a search engine sends people, so leaving them out would measure the
+// site's least-used half
+const gaId = /^[A-Za-z0-9_-]{4,32}$/.test((env.VITE_GA_ID || '').trim())
+  ? env.VITE_GA_ID.trim() : '';
+const gaMeta = gaId ? `\n<meta name="ga-id" content="${gaId}">` : '';
+const consentScript = gaId ? '\n<script src="/consent.js" defer></script>' : '';
+// where the site lives, for the sitemap; VITE_SITE_URL overrides it
+const site = (env.VITE_SITE_URL || 'https://praxisterkep.hu').replace(/\/$/, '');
 const streetFile = env.VITE_MAP_STYLE
   ? readdirSync(join(dist, 'assets')).find((f) => /^streetmap-.*\.js$/.test(f))
   : null;
@@ -278,6 +287,9 @@ function streetBlock(profile, opts = {}) {
 // 3177 static pages cannot disagree with the app about which pages exist
 const nav = JSON.parse(readFileSync(join(here, '..', 'src', 'lib', 'siteNav.json'), 'utf8'));
 const hu = JSON.parse(readFileSync(join(here, '..', 'src', 'i18n', 'hu.json'), 'utf8'));
+// the same list the Footer component renders: one file, two renderers
+const sources = JSON.parse(
+  readFileSync(join(here, '..', 'src', 'lib', 'sources.json'), 'utf8'));
 const label = (key) => key.split('.').reduce((o, k) => (o ?? {})[k], hu) ?? key;
 
 const navBar = (profile) => nav.entries.map((e) => {
@@ -1208,14 +1220,15 @@ function siteFooter(homeHref, analysisHref) {
   <div class="container">
     <p class="footer__lead">${esc(f.publicOnly)}</p>
     <h3>${esc(f.sources)}</h3>
-    <ul>
-      <li>${esc(f.sourceNeak)}</li>
-      <li>${esc(f.sourceOkfo)}</li>
-      <li><a href="/eeszt.html">${esc(f.sourceEeszt)}</a></li>
-      <li>${esc(f.sourceKsh)}</li>
-      <li>${esc(f.sourceDecree)}</li>
-      <li>${esc(f.sourceOsm)}</li>
-    </ul>
+    <p class="footer__note">${esc(f.sourcesNote)}</p>
+    <ul class="footer__sources">${sources.groups.map((g) => {
+    const labels = hu.footer.src[g.key];
+    return `<li><strong>${esc(labels.title)}</strong> ${g.items.map((item, i) =>
+      `${i ? '<span class="footer__sep"> · </span>' : ''}<a href="${esc(item.href)}"${
+        item.href.startsWith('/') ? '' : ' rel="noopener"'}>${esc(labels[item.key])}</a>${
+        item.format ? `<span class="footer__format"> ${esc(item.format)}</span>` : ''}`)
+      .join('')}</li>`;
+  }).join('')}</ul>
     <h3>${esc(f.legal)}</h3>
     <ul class="footer__legal">
       <li>${esc(f.disclaimer)}</li>
@@ -1225,6 +1238,8 @@ function siteFooter(homeHref, analysisHref) {
       <li>${esc(f.notOfficial)}</li>
       <li>${esc(f.correction)}</li>
     </ul>
+    <p class="footer__privacy"><a href="/adatkezeles.html">${esc(hu.privacy.navLabel)}</a>
+      · <a href="#" data-consent-reopen>${esc(hu.privacy.reopen)}</a></p>
     <p class="footer__author">${esc(f.authorBy)}
       <a href="https://dulzoltan.hu" rel="noopener">${esc(f.authorName)}</a>${
   esc(f.authorTitle)}</p>
@@ -1371,7 +1386,7 @@ function page(profile) {
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:image" content="/og.png">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">${gaMeta}
 <link rel="canonical" href="/telepules/${esc(profile.slug)}/">
 <link rel="stylesheet" href="/assets/${esc(cssFile)}">${streetFile ? `
 <script type="module" src="/assets/${esc(streetFile)}" defer></script>` : ''}
@@ -1479,6 +1494,7 @@ ${streetHtml}
 ${changeHtml}
 
 ${siteFooter(ctx('/', profile), ctx('/elemzo.html', profile))}
+${consentScript}
 </body>
 </html>
 `;
@@ -1537,7 +1553,7 @@ writeFileSync(join(dist, 'telepules', 'index.html'), `<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Települések — Praxistérkép</title>
 <meta name="description" content="Mind a ${profiles.settlements.length} magyar település alapellátási adatlapja: van-e orvos, milyen messze az ellátás, eljut-e oda busz.">
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">${gaMeta}
 <link rel="stylesheet" href="/assets/${esc(cssFile)}">
 </head>
 <body>
@@ -1555,6 +1571,7 @@ writeFileSync(join(dist, 'telepules', 'index.html'), `<!doctype html>
 </header>
 ${countyBlocks}
 ${siteFooter('/', '/elemzo.html')}
+${consentScript}
 </body>
 </html>
 `, 'utf8');
@@ -1564,7 +1581,7 @@ const urls = ['/', '/elemzo.html', '/eeszt.html', '/szakellato.html', '/telepule
   .concat(profiles.settlements.map((p) => `/telepules/${p.slug}/`));
 writeFileSync(join(dist, 'sitemap.xml'),
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`
-  + urls.map((u) => `<url><loc>https://oep-ellatas.vercel.app${u}</loc></url>`).join('\n')
+  + urls.map((u) => `<url><loc>${site}${u}</loc></url>`).join('\n')
   + '\n</urlset>\n', 'utf8');
 
 console.log(`settlement pages generated: ${written} + index + sitemap (${urls.length} urls)`);
