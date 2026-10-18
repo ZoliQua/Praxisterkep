@@ -2789,5 +2789,369 @@
     },
     "how": "The rank score is the mean of the four measures' percentile ranks among the 174 rural járás (0 = best, 100 = worst on all four); nothing is weighted or fitted. Driving time is free-flow from the járás's median settlement on the OpenStreetMap road network; the bus measure is the share of its settlements with no direct scheduled bus to the nearest doctor. The capital's kerület are left out, as transport and care work differently there.",
     "source": "Sources: NEAK monthly data, OpenStreetMap road network, Volánbusz GTFS, NNGYK mortality database, KSH TIMEA, NFSZ."
+  },
+  "static": {
+    "months": [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ],
+    "unit": {
+      "min": "min",
+      "people": "people",
+      "mFt": "m Ft"
+    },
+    "here": "here",
+    "eeszt": {
+      "reason": {
+        "noFin": "not in EESZT",
+        "noUnitLicence": "no operating licence",
+        "ambiguous": "ambiguous site",
+        "otherProfession": "licence for another profession",
+        "otherTip": "another service type"
+      },
+      "verdict": {
+        "otherUnitSameProfession": "same address, another organisational unit",
+        "ownUnitSameProfession": "same address, its own unit",
+        "otherProfessionAtAddress": "another profession is licensed at the address",
+        "streetSameProfession": "same street, different house number",
+        "providerName": "the provider's name matches",
+        "providerTaxNumber": "the provider's tax number matches"
+      },
+      "has": "yes",
+      "hasElsewhere": "yes (another site)",
+      "siteTitle": "Licensed site: {where}",
+      "matched": "matched",
+      "matchedTitle": "The automatic pairing found no licence under the district's own organisational unit, but the cross-check did ({basis}).{where}",
+      "suggested": " Suggested licence: {where}.",
+      "unmatchedTitle": "Neither the automatic pairing nor the cross-check found an operating licence for this district ({reason}).",
+      "noData": "The EESZT register holds nothing on this code."
+    },
+    "street": {
+      "label": {
+        "gp": "GP surgery",
+        "dental": "Dental surgery",
+        "pharmacy": "Pharmacy",
+        "oncall": "Central on-call service",
+        "ambulance": "Ambulance station",
+        "inpatient": "Hospital",
+        "outpatient": "Outpatient clinic",
+        "gyse": "Medical aids",
+        "transport": "Patient transport",
+        "dialysis": "Dialysis"
+      },
+      "heading": "At street level",
+      "explain": "Exactly where they are: the staffed surgeries with the doctor's name, the pharmacies, and whatever else is in the settlement. The map loads only on a click, so the page stays readable at once.",
+      "loading": "Loading map…",
+      "failed": "The map did not load",
+      "open": "Open the map",
+      "full": "Street-level map",
+      "points": "{n} points",
+      "note": "The points are geocoded addresses (Nominatim/OpenStreetMap), not a survey on the ground: where an address is imprecise the marker falls on the settlement centre, and its bubble says so. Map: {maptiler}, data: {osm}.",
+      "osm": "© OpenStreetMap contributors"
+    },
+    "state": {
+      "filled": "Has a staffed district.",
+      "vacant": "Has a vacant district.",
+      "vacantOnly": "Only vacant districts serve it.",
+      "absent": "Not on any district's list."
+    },
+    "band": {
+      "kiemelt": "very high risk",
+      "magas": "high risk",
+      "kozepes": "medium risk",
+      "alacsony": "low risk"
+    },
+    "bandShort": {
+      "alacsony": "low",
+      "kozepes": "medium",
+      "magas": "high",
+      "kiemelt": "very high"
+    },
+    "layer": {
+      "gp": "GP surgery",
+      "dental": "Dental surgery",
+      "oncall": "Central on-call service",
+      "ambulance": "Ambulance station",
+      "inpatient": "Hospital",
+      "outpatient": "Outpatient clinic",
+      "gyse": "Medical aids",
+      "pharmacy": "Pharmacy"
+    },
+    "branch": {
+      "noData": "We have no data on this branch for this settlement.",
+      "absentDetail": "The register lists this settlement under no district.",
+      "detail": "Served by {filled} staffed and {vacant} vacant or dissolved districts.",
+      "seat": "A district has its seat here.",
+      "gpTitle": "GP care",
+      "dentalTitle": "Dental care",
+      "gpAdj": "GP",
+      "dentalAdj": "dental"
+    },
+    "age": {
+      "young": "aged 0–14",
+      "working": "aged 15–64",
+      "old": "over 65",
+      "aria": "Age structure",
+      "hover": "hover",
+      "hundredAria": "How many of a hundred residents fall into each age group",
+      "hundredNote": "Of a hundred residents, this many fall into each age group. Hover or click: the centre of the pie shows the exact number.",
+      "nationalTitle": "national: {v}",
+      "compareNote": "The dark line is the national share — where the bar reaches past it, the settlement has more.",
+      "maleTitle": "{group} · men: {n} ({share} of the group)",
+      "femaleTitle": "{group} · women: {n} ({share} of the group)",
+      "pyramidAria": "Population pyramid by sex",
+      "suppressed": "The census publishes no age breakdown for this settlement (it withholds it for small populations).",
+      "perWorking": "/ 100 of working age",
+      "oldLabel": "older people (over 65)",
+      "nationally": "{n} nationally",
+      "youngLabel": "children (aged 0–14)",
+      "perChild": "/ 100 children",
+      "ageingLabel": "older people — ageing index",
+      "moreOld": "more older people than children",
+      "moreYoung": "more children than older people",
+      "femaleLabel": "of residents are women",
+      "sexSplit": "{m} men · {f} women",
+      "groupsCaption": "{name}: age groups",
+      "pyramidCaption": "Pyramid: men and women",
+      "pyramidNote": "Bar lengths are measured against the settlement's largest group.",
+      "hundredCaption": "Of a hundred residents",
+      "compareCaption": "Against the national shares",
+      "source": "Source: KSH, 2022 census (CC BY 4.0). The shares above refer to the census population of {census}; the {pop} at the top of the page comes from KSH's latest gazetteer, so the two differ."
+    },
+    "type": {
+      "adult": "adult",
+      "child": "children's",
+      "mixed": "mixed",
+      "school": "school"
+    },
+    "vacancy": {
+      "title": "Vacant and dissolved districts that serve this settlement",
+      "th": {
+        "fin": "NEAK code",
+        "branch": "Branch",
+        "type": "District",
+        "status": "Status",
+        "since": "Since",
+        "seat": "Seat"
+      },
+      "dissolved": "dissolved",
+      "longTerm": "persistently vacant",
+      "vacant": "vacant",
+      "note": "“Since” is the first month on NEAK's vacancy list. A vacant district is never named with a doctor, and substitution does not show in public data."
+    },
+    "since": {
+      "lessThanYear": "{label} (< 1 year)",
+      "years": "{label} ({n} years)"
+    },
+    "vedono": {
+      "title": "Health visitor service",
+      "preview": "{t} territorial · {s} school",
+      "th": {
+        "address": "Address",
+        "provider": "Provider",
+        "services": "Services"
+      },
+      "note": "No public register names the health visitor — the service and its provider, yes; the person, no. (Doctors' names, too, are shown only for staffed districts, from NEAK's own publication.)"
+    },
+    "catchment": {
+      "heading": "Which dental district does it belong to?",
+      "explain": "No dental district's list names this settlement. Not because it has no care, but because <strong>for dentistry NEAK publishes only the district's seat</strong>, not the settlements it serves — the GP register carries them, the dental one does not. The actual district boundary is set by municipal decree, which is not published centrally in machine-readable form.",
+      "nearest": "The nearest dental surgery is in <strong>{where}</strong>, {min} by car. That is the nearest one, not necessarily the one the settlement officially belongs to."
+    },
+    "change": {
+      "same": "In {branch} care, {n} vacant or dissolved districts serve this settlement — the same as a year ago.",
+      "moved": "In {branch} care, {now} vacant or dissolved districts serve this settlement, against {then} a year ago.",
+      "district": "{type} district",
+      "seatAt": "seated in {seat}",
+      "dissolved": "dissolved",
+      "becameVacant": "fell vacant",
+      "filled": "was filled",
+      "newDoctor": "got a new doctor",
+      "newDoctors": "A new doctor started in {n} districts over the past year.",
+      "none": "Nothing has changed over the past year that public data shows.",
+      "heading": "What changed in a year?",
+      "explain": "Compared with the {month} snapshot from our own archive.",
+      "detailsTitle": "What happened to which district",
+      "th": {
+        "fin": "NEAK code",
+        "branch": "Branch",
+        "type": "District",
+        "what": "What happened",
+        "who": "Who / where",
+        "when": "From"
+      },
+      "note": "Only changes today's snapshot confirms are listed: a district “fell vacant” if its vacancy began within the year, and “was filled” if a doctor works in it today. The archive's gaps do not show up as changes.",
+      "scope": "We compare only what every month has data for: vacant and dissolved districts and changes of doctor. Driving times, bus access and the pharmacy network are not available back in time, so no change is claimed for them. At county level, {link} shows how often doctors change.",
+      "fluct": "turnover"
+    },
+    "transit": {
+      "capital": "Budapest runs on a separate timetable source; this part does not cover the capital.",
+      "to": {
+        "gp": "to the GP",
+        "oncall": "to the on-call service",
+        "inpatient": "to the hospital"
+      },
+      "direct": "a direct bus{m}",
+      "indirect": "no direct bus, only with a change",
+      "lead": "On an average Wednesday there are <strong>{dep}</strong> scheduled departures from the settlement, and <strong>{reach}</strong> other settlements can be reached directly.",
+      "train": "Trains are not in the data: MÁV's timetable is available only after registration. “No direct bus” does not mean there is no way to get there.",
+      "short": {
+        "gp": "GP",
+        "oncall": "on-call",
+        "inpatient": "hospital"
+      },
+      "departures": "departures on the reference day",
+      "reachable": "settlements reachable without a change"
+    },
+    "bench": {
+      "population": "Population",
+      "avgSettlement": "the average settlement of the {district} district",
+      "gpMinutes": "Drive to the GP",
+      "districtMedian": "the district median",
+      "index": "Composite risk index",
+      "nationalMedian": "national district median",
+      "title": "Where does this settlement stand?"
+    },
+    "index": {
+      "rank": "Ranked <strong>{rank}</strong> highest of the country's {of} settlements on the composite care-risk index.",
+      "bandTitle": "{label} band",
+      "best": "0 — the best-placed settlement",
+      "worst": "100 — the worst",
+      "place": "{name} ranks <strong>{rank}</strong> of {of} settlements{better}.",
+      "better": " — better placed than {share} of the country",
+      "heading": "Composite care-risk index",
+      "help": "A weighted mean of eight public measures, each turned into a national percentile: vacancy, driving time to the GP, the dentist, the on-call service, outpatient and inpatient care, bus access, age structure, the risk forecast and the beneficiary-settlement status. 100 is the worst-placed settlement, not one without care.",
+      "cluster": "This settlement is part of a <strong>contiguous care desert</strong> (around {name}: {n} settlements, {pop} residents).",
+      "note": "The index is a weighted mean of eight public measures, from national percentiles. A comparison, not a verdict: a high value means several measures point the same way — not that there is no care. {link}.",
+      "method": "The method in detail"
+    },
+    "tenure": {
+      "fromStart": "{n} years or longer",
+      "lessThanYear": "< 1 year",
+      "years": "{n} years"
+    },
+    "doctors": {
+      "multiFlag": "Works in several districts or sites",
+      "sharedFlag": "Several doctors work at this address",
+      "raw": "In the register: {raw}",
+      "groupDoctor": "doctors",
+      "groupDistrict": "districts",
+      "sort": {
+        "fin": "NEAK code",
+        "doctor": "Doctor",
+        "type": "District",
+        "site": "Surgery address",
+        "tenure": "Since",
+        "eeszt": "EESZT licence"
+      },
+      "grouping": "Group by:",
+      "group": {
+        "list": "List",
+        "site": "By site",
+        "doctor": "By doctor"
+      },
+      "sharedSites": "several doctors work at {n} addresses",
+      "busyDoctors": "{n} doctors work in several districts or sites",
+      "hintTail": "— marked ⧉; grouping shows them.",
+      "gpHeading": "GPs in the settlement",
+      "dentalHeading": "Dentists in the settlement",
+      "note": "The doctor's name comes from NEAK's register of contracted providers and is shown only for staffed districts. “Since” comes from our own archive (monthly NEAK snapshots kept since {from}), not from a start date NEAK publishes; no public source gives surgery hours.",
+      "none": "No staffed district has a surgery in this settlement — below are the districts that serve it, and where the nearest care is."
+    },
+    "pharmacy": {
+      "th": {
+        "name": "Pharmacy",
+        "address": "Address"
+      },
+      "nearest": "There is no contracted pharmacy in the settlement. The nearest is in {where}, {min} by car.",
+      "none": "There is no contracted pharmacy in the settlement.",
+      "heading": "Pharmacy",
+      "mapLead": "The pharmacies on the map, at street level."
+    },
+    "rail": {
+      "aria": "Sections",
+      "elhelyezkedes": "Location",
+      "lakossag": "Population",
+      "eletkorulmenyek": "Living conditions",
+      "elerhetoseg": "Street map",
+      "orvosok": "Doctors",
+      "tavolsag": "Distance",
+      "gyogyszertar": "Pharmacy",
+      "kozlekedes": "Transport",
+      "kockazat": "Risk index",
+      "valtozas": "Change"
+    },
+    "footerLinks": {
+      "map": "Back to the map",
+      "all": "All settlements",
+      "analysis": "Analysis",
+      "data": "Data export"
+    },
+    "page": {
+      "title": "{name} — primary care at a glance",
+      "desc": "{name} ({where}), population {pop}.",
+      "descDistrict": "{county}, {district} district",
+      "descGp": "GP: {state}",
+      "descDrive": "The nearest GP surgery: {min}.",
+      "descSite": "Praxis map, {month}.",
+      "kickerDistrict": "{district} district",
+      "kickerPop": "population {n}",
+      "kickerBenefit": "beneficiary settlement",
+      "lead": "Everything public data tells about this settlement: whether it has a doctor, how far care is, whether a bus gets there, and where it stands in the national ranking.",
+      "where": "Where is it?",
+      "who": "Who lives here?",
+      "doctors": "Is there a doctor?",
+      "vacantDivider": "What is vacant",
+      "vacantNote": "Vacant is not the same as unserved: substitution does not show in public data.",
+      "vedonoDivider": "Health visitors",
+      "distance": "How far?",
+      "distanceExplain": "By car in free-flowing traffic on the OpenStreetMap road network — with the straight-line distance beside it, because the two are not the same.",
+      "th": {
+        "care": "Care",
+        "drive": "Drive",
+        "air": "Straight line",
+        "where": "Where"
+      },
+      "gyse": "{n} medical-aid outlets operate in the settlement.",
+      "bus": "Can you get there by bus?",
+      "lang": "HU",
+      "langLabel": "Váltás magyarra"
+    },
+    "list": {
+      "title": "Settlements — Praxis map",
+      "desc": "A primary-care page for each of Hungary's {n} settlements: is there a doctor, how far is care, does a bus get there.",
+      "heading": "Settlements",
+      "lead": "A page for each of the {n} settlements, by county.",
+      "countyData": "the county's data",
+      "settlements": "{n} settlements",
+      "seatCounty": "County seat",
+      "seatJaras": "district seat",
+      "rest": "other settlements"
+    },
+    "map": {
+      "links": {
+        "gp": "GP",
+        "dental": "Dentist",
+        "oncall": "Central on-call",
+        "inpatient": "Hospital",
+        "pharmacy": "Pharmacy"
+      },
+      "jarasSeats": "District seats",
+      "aria": "Location of {name} in {county} county",
+      "caption": "{county} county{district}. Thin lines are district (járás) borders, small dots district seats. A dashed line is not a route but a connection: its label gives the driving time by road.{inPlace}",
+      "captionDistrict": ", {district} district (highlighted)",
+      "inPlace": " Here in the settlement: {list}.",
+      "thumbAria": "{county} county"
+    }
   }
 }

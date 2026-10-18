@@ -2789,5 +2789,369 @@
     },
     "how": "A rangszám a négy mutató percentilis-rangjának átlaga a 174 vidéki járás között (0 = a legjobb, 100 = a legrosszabb minden mutatóban); súlyozás és illesztés nincs. A menetidő a járás medián településéről mért szabad forgalmú autós idő az OpenStreetMap úthálózatán; a buszmutató a járás azon településeinek aránya, ahonnan nincs közvetlen menetrendi járat a legközelebbi orvosig. A főváros kerületei kimaradnak, mert ott más a közlekedés és az ellátás szerkezete.",
     "source": "Forrás: NEAK havi adatai, OpenStreetMap úthálózat, Volánbusz GTFS, NNGYK halandósági adatbázis, KSH TIMEA, NFSZ."
+  },
+  "static": {
+    "months": [
+      "január",
+      "február",
+      "március",
+      "április",
+      "május",
+      "június",
+      "július",
+      "augusztus",
+      "szeptember",
+      "október",
+      "november",
+      "december"
+    ],
+    "unit": {
+      "min": "perc",
+      "people": "fő",
+      "mFt": "M Ft"
+    },
+    "here": "helyben",
+    "eeszt": {
+      "reason": {
+        "noFin": "nincs az EESZT-ben",
+        "noUnitLicence": "nincs működési engedély",
+        "ambiguous": "kétértelmű telephely",
+        "otherProfession": "más szakmájú engedély",
+        "otherTip": "más szolgálattípus"
+      },
+      "verdict": {
+        "otherUnitSameProfession": "ugyanaz a cím, másik szervezeti egység",
+        "ownUnitSameProfession": "ugyanaz a cím, saját szervezeti egység",
+        "otherProfessionAtAddress": "a címen más szakma engedélye van",
+        "streetSameProfession": "ugyanaz az utca, eltérő házszám",
+        "providerName": "a szolgáltató neve egyezik",
+        "providerTaxNumber": "a szolgáltató adószáma egyezik"
+      },
+      "has": "van",
+      "hasElsewhere": "van (más telephely)",
+      "siteTitle": "Engedélyezett telephely: {where}",
+      "matched": "illesztett",
+      "matchedTitle": "Az automatikus párosítás nem talált engedélyt a körzet saját szervezeti egysége alatt, a keresztellenőrzés viszont igen ({basis}).{where}",
+      "suggested": " Javasolt engedély: {where}.",
+      "unmatchedTitle": "Sem az automatikus párosítás, sem a keresztellenőrzés nem talált ehhez a körzethez működési engedélyt ({reason}).",
+      "noData": "Az EESZT törzsében nincs adat erről a kódról."
+    },
+    "street": {
+      "label": {
+        "gp": "Háziorvosi rendelő",
+        "dental": "Fogorvosi rendelő",
+        "pharmacy": "Gyógyszertár",
+        "oncall": "Központi ügyelet",
+        "ambulance": "Mentőállomás",
+        "inpatient": "Kórház",
+        "outpatient": "Járóbeteg-szakrendelés",
+        "gyse": "Gyógyászati segédeszköz",
+        "transport": "Betegszállítás",
+        "dialysis": "Művese"
+      },
+      "heading": "Utcaszinten",
+      "explain": "Hol állnak pontosan: a betöltött rendelők az orvos nevével, a gyógyszertárak, és ami még a településen van. A térkép csak kattintásra töltődik be, hogy a lap addig is azonnal olvasható maradjon.",
+      "loading": "Térkép betöltése…",
+      "failed": "A térkép nem töltődött be",
+      "open": "Térkép megnyitása",
+      "full": "Utcaszintű térkép",
+      "points": "{n} pont",
+      "note": "A pontok geokódolt címek (Nominatim/OpenStreetMap), nem helyszíni felmérés: ahol a cím pontatlan, a jelölő a település közepére esik, és ezt a buborék ki is írja. Térkép: {maptiler}, adat: {osm}.",
+      "osm": "© OpenStreetMap közreműködők"
+    },
+    "state": {
+      "filled": "Van betöltött körzete.",
+      "vacant": "Van betöltetlen körzete.",
+      "vacantOnly": "Csak betöltetlen körzet tartozik hozzá.",
+      "absent": "Egyik körzet listáján sem szerepel."
+    },
+    "band": {
+      "kiemelt": "kiemelt kockázat",
+      "magas": "magas kockázat",
+      "kozepes": "közepes kockázat",
+      "alacsony": "alacsony kockázat"
+    },
+    "bandShort": {
+      "alacsony": "alacsony",
+      "kozepes": "közepes",
+      "magas": "magas",
+      "kiemelt": "kiemelt"
+    },
+    "layer": {
+      "gp": "Háziorvosi rendelő",
+      "dental": "Fogorvosi rendelő",
+      "oncall": "Központi ügyelet",
+      "ambulance": "Mentőállomás",
+      "inpatient": "Kórház",
+      "outpatient": "Járóbeteg-szakrendelés",
+      "gyse": "Gyógyászati segédeszköz",
+      "pharmacy": "Gyógyszertár"
+    },
+    "branch": {
+      "noData": "Erről az ágról nincs adatunk erre a településre.",
+      "absentDetail": "A nyilvántartás egyetlen körzetnél sem sorolja fel ezt a települést.",
+      "detail": "{filled} betöltött, {vacant} betöltetlen vagy megszűnt körzet szolgálja.",
+      "seat": "Itt van egy körzet székhelye.",
+      "gpTitle": "Háziorvosi ellátás",
+      "dentalTitle": "Fogorvosi ellátás",
+      "gpAdj": "háziorvosi",
+      "dentalAdj": "fogorvosi"
+    },
+    "age": {
+      "young": "0–14 éves",
+      "working": "15–64 éves",
+      "old": "65 év felett",
+      "aria": "Korösszetétel",
+      "hover": "vidd rá",
+      "hundredAria": "Száz lakosból hány esik az egyes korcsoportokba",
+      "hundredNote": "Száz lakosból ennyi esik az egyes korcsoportokba. Vidd rá az egeret vagy kattints rá: a kördiagram közepén kiírja a pontos számot.",
+      "nationalTitle": "országos: {v}",
+      "compareNote": "A sötét vonal az országos arány — ahol a sáv túlnyúlik rajta, ott a településen több.",
+      "maleTitle": "{group} · férfi: {n} ({share} a korcsoporton belül)",
+      "femaleTitle": "{group} · nő: {n} ({share} a korcsoporton belül)",
+      "pyramidAria": "Korfa nemek szerint",
+      "suppressed": "A népszámlálás erre a településre nem közöl korcsoportos bontást (kis lélekszámnál elhagyja).",
+      "perWorking": "/ 100 munkaképes korú",
+      "oldLabel": "idős (65 év felett)",
+      "nationally": "országosan {n}",
+      "youngLabel": "gyermek (0–14 éves)",
+      "perChild": "/ 100 gyermek",
+      "ageingLabel": "idős — öregedési index",
+      "moreOld": "több az idős, mint a gyermek",
+      "moreYoung": "több a gyermek, mint az idős",
+      "femaleLabel": "a lakosság nő",
+      "sexSplit": "{m} férfi · {f} nő",
+      "groupsCaption": "{name} korcsoportjai",
+      "pyramidCaption": "Korfa: férfiak és nők",
+      "pyramidNote": "A sávok hossza az adott település legnépesebb csoportjához van mérve.",
+      "hundredCaption": "Száz lakosból",
+      "compareCaption": "Az országos arányhoz képest",
+      "source": "Forrás: KSH, 2022. évi népszámlálás (CC BY 4.0). A fenti arányok a népszámlálás {census} fős népességére vonatkoznak; a lap tetején szereplő {pop} fő a KSH friss helységnévtárából való, ezért a kettő nem azonos."
+    },
+    "type": {
+      "adult": "felnőtt",
+      "child": "gyermek",
+      "mixed": "vegyes",
+      "school": "iskolai"
+    },
+    "vacancy": {
+      "title": "Betöltetlen és megszűnt körzetek, amelyek ide tartoznak",
+      "th": {
+        "fin": "NEAK kód",
+        "branch": "Ág",
+        "type": "Körzet",
+        "status": "Állapot",
+        "since": "Mióta",
+        "seat": "Székhely"
+      },
+      "dissolved": "megszűnt",
+      "longTerm": "tartósan betöltetlen",
+      "vacant": "betöltetlen",
+      "note": "A „mióta\" a NEAK betöltetlenségi listájának kezdő hónapja. Betöltetlen körzetet nem nevesítünk orvossal, és a helyettesítés a nyilvános adatokban nem látszik."
+    },
+    "since": {
+      "lessThanYear": "{label} (< 1 éve)",
+      "years": "{label} ({n} éve)"
+    },
+    "vedono": {
+      "title": "Védőnői szolgálat",
+      "preview": "{t} területi · {s} iskolai",
+      "th": {
+        "address": "Cím",
+        "provider": "Fenntartó",
+        "services": "Szolgálat"
+      },
+      "note": "A védőnő nevét egyetlen nyilvános nyilvántartás sem közli — a szolgálat és a fenntartó igen, a személy nem. (Orvosnevet is csak betöltött körzetnél, a NEAK saját közzétételéből mutatunk.)"
+    },
+    "catchment": {
+      "heading": "Melyik fogászati körzethez tartozik?",
+      "explain": "Ezt a települést egyetlen fogászati körzet listája sem nevezi meg. Nem azért, mert nincs ellátása, hanem mert a <strong>NEAK a fogászatnál csak a körzet székhelyét közli</strong>, a hozzá tartozó településeket nem — a háziorvosi nyilvántartásban ez szerepel, a fogászatiban nem. A tényleges körzethatárt önkormányzati rendelet mondja ki, ami nincs központi, gépi feldolgozásra alkalmas formában közzétéve.",
+      "nearest": "A legközelebbi fogorvosi rendelő <strong>{where}</strong> településen van, {min} autóval. Ez a legközelebbi, nem feltétlenül az, amelyikhez a település hivatalosan tartozik."
+    },
+    "change": {
+      "same": "A {branch} ellátásban {n} betöltetlen vagy megszűnt körzet tartozik ide — egy éve ugyanennyi.",
+      "moved": "A {branch} ellátásban {then} helyett {now} betöltetlen vagy megszűnt körzet tartozik ide.",
+      "district": "{type} körzet",
+      "seatAt": "{seat} székhellyel",
+      "dissolved": "megszűnt",
+      "becameVacant": "betöltetlenné vált",
+      "filled": "betöltődött",
+      "newDoctor": "új orvost kapott",
+      "newDoctors": "{n} körzetben új orvos kezdett az elmúlt egy évben.",
+      "none": "Az elmúlt egy évben nem változott, amit a nyilvános adatokból látunk.",
+      "heading": "Mi változott egy év alatt?",
+      "explain": "Az összevetés alapja a {month} havi pillanatkép a saját archívumunkból.",
+      "detailsTitle": "Melyik körzettel mi történt",
+      "th": {
+        "fin": "NEAK kód",
+        "branch": "Ág",
+        "type": "Körzet",
+        "what": "Mi történt",
+        "who": "Ki / hol",
+        "when": "Mikortól"
+      },
+      "note": "Csak azok a változások szerepelnek, amiket a mai pillanatkép meg is erősít: egy körzet akkor „betöltetlenné vált”, ha a betöltetlensége az elmúlt egy évben kezdődött, és akkor „betöltődött”, ha ma orvos rendel benne. Az archívum egyenetlensége így nem jelenik meg változásnak.",
+      "scope": "Csak azt vetjük össze, amire minden hónapra van adatunk: a betöltetlen és megszűnt körzeteket, illetve az orvosváltásokat. A menetidő, a buszelérés és a gyógyszertári hálózat visszamenőleg nem áll rendelkezésre, ezekre nem mondunk változást. Megyei szinten a {link} mutatja, mennyire cserélődnek az orvosok.",
+      "fluct": "fluktuáció"
+    },
+    "transit": {
+      "capital": "Budapest külön menetrendi adatforrásból működik, ez a rész a fővárosra nem terjed ki.",
+      "to": {
+        "gp": "háziorvoshoz",
+        "oncall": "ügyelethez",
+        "inpatient": "kórházhoz"
+      },
+      "direct": "van közvetlen járat{m}",
+      "indirect": "nincs közvetlen járat, csak átszállással",
+      "lead": "Egy átlagos szerdán <strong>{dep}</strong> menetrend szerinti indulás van a településről, és közvetlenül <strong>{reach}</strong> másik település érhető el.",
+      "train": "Vonat nincs az adatban: a MÁV menetrendje csak regisztrációhoz kötötten érhető el. A „nincs közvetlen járat” nem azt jelenti, hogy nem lehet odajutni.",
+      "short": {
+        "gp": "háziorvos",
+        "oncall": "ügyelet",
+        "inpatient": "kórház"
+      },
+      "departures": "indulás a referencianapon",
+      "reachable": "átszállás nélkül elérhető település"
+    },
+    "bench": {
+      "population": "Lakosság",
+      "avgSettlement": "a {district} járás átlagos települése",
+      "gpMinutes": "Menetidő háziorvoshoz",
+      "districtMedian": "a járás mediánja",
+      "index": "Összetett kockázati index",
+      "nationalMedian": "országos járási medián",
+      "title": "Hol áll ez a település?"
+    },
+    "index": {
+      "rank": "Az ország {of} települése közül {article} <strong>{rank}.</strong> legmagasabb összetett ellátási kockázati indexszel.",
+      "bandTitle": "{label} sáv",
+      "best": "0 — a legjobb helyzetű település",
+      "worst": "100 — a legrosszabb",
+      "place": "{name} a {of} településből a <strong>{rank}.</strong> helyen áll{better}.",
+      "better": " — az ország {share}-ánál kedvezőbb a helyzete",
+      "heading": "Összetett ellátási kockázati index",
+      "help": "Nyolc nyilvános mutató súlyozott átlaga, mindegyik országos rangsorszázalékra váltva: betöltetlenség, menetidő háziorvoshoz, fogorvoshoz, ügyelethez, járóbeteg- és fekvőbeteg-ellátáshoz, buszelérés, korösszetétel, kockázati előrejelzés és a kedvezményezett települési besorolás. A 100 a legrosszabb helyzetű települést jelenti, nem azt, hogy ott nincs ellátás.",
+      "cluster": "Ez a település egy <strong>összefüggő ellátási hiányterület</strong> része ({name} környéke: {n} település, {pop} lakos).",
+      "note": "Az index nyolc nyilvános mutató súlyozott átlaga, országos rangsorszázalékokból. Összehasonlítás, nem ítélet: a magas érték azt jelenti, hogy több mutató mutat ugyanabba az irányba — nem azt, hogy ott nincs ellátás. {link}.",
+      "method": "A módszer részletesen"
+    },
+    "tenure": {
+      "fromStart": "{n}. éve vagy régebben",
+      "lessThanYear": "< 1 éve",
+      "years": "{n} éve"
+    },
+    "doctors": {
+      "multiFlag": "Több körzetben vagy telephelyen rendel",
+      "sharedFlag": "Több orvos rendel ezen a címen",
+      "raw": "A nyilvántartásban: {raw}",
+      "groupDoctor": "orvos",
+      "groupDistrict": "körzet",
+      "sort": {
+        "fin": "NEAK kód",
+        "doctor": "Orvos",
+        "type": "Körzet",
+        "site": "Rendelő címe",
+        "tenure": "Mióta",
+        "eeszt": "EESZT engedély"
+      },
+      "grouping": "Csoportosítás:",
+      "group": {
+        "list": "Lista",
+        "site": "Telephely szerint",
+        "doctor": "Orvos szerint"
+      },
+      "sharedSites": "{n} címen több orvos is rendel",
+      "busyDoctors": "{n} orvos több körzetben vagy telephelyen dolgozik",
+      "hintTail": "— a ⧉ jelöli őket, a csoportosítás megmutatja.",
+      "gpHeading": "Háziorvosok a településen",
+      "dentalHeading": "Fogorvosok a településen",
+      "note": "Az orvos neve a NEAK szerződött szolgáltatói nyilvántartásából való, és csak betöltött körzetnél szerepel. A „mióta” a saját archívumunkból jön ({from} óta őrzött havi NEAK-pillanatképek), nem NEAK által közölt kezdődátum; rendelési időt egyik nyilvános forrás sem közöl.",
+      "none": "A településen egyetlen betöltött körzetnek sincs rendelője — alább az látszik, mely körzetek tartoznak ide, és hol a legközelebbi ellátás."
+    },
+    "pharmacy": {
+      "th": {
+        "name": "Gyógyszertár",
+        "address": "Cím"
+      },
+      "nearest": "A településen nincs szerződött gyógyszertár. A legközelebbi {where} településen van, {min} autóval.",
+      "none": "A településen nincs szerződött gyógyszertár.",
+      "heading": "Gyógyszertár",
+      "mapLead": "A gyógyszertárak a térképen, utcaszinten."
+    },
+    "rail": {
+      "aria": "Szakaszok",
+      "elhelyezkedes": "Elhelyezkedés",
+      "lakossag": "Lakosság",
+      "eletkorulmenyek": "Életkörülmények",
+      "elerhetoseg": "Elérhetőség",
+      "orvosok": "Orvosok",
+      "tavolsag": "Távolság",
+      "gyogyszertar": "Gyógyszertár",
+      "kozlekedes": "Közlekedés",
+      "kockazat": "Kockázati index",
+      "valtozas": "Változás"
+    },
+    "footerLinks": {
+      "map": "Vissza a térképhez",
+      "all": "Minden település",
+      "analysis": "Elemző",
+      "data": "Adat export"
+    },
+    "page": {
+      "title": "{name} — alapellátás egy helyen",
+      "desc": "{name} ({where}), {pop} lakos.",
+      "descDistrict": "{county}, {district} járás",
+      "descGp": "Háziorvos: {state}",
+      "descDrive": "A legközelebbi háziorvosi rendelő {min}.",
+      "descSite": "Praxistérkép, {month}.",
+      "kickerDistrict": "{district} járás",
+      "kickerPop": "{n} lakos",
+      "kickerBenefit": "kedvezményezett település",
+      "lead": "Minden, amit a nyilvános adatokból tudunk erről a településről: van-e orvosa, milyen messze az ellátás, eljut-e oda busz, és hol áll az ország rangsorában.",
+      "where": "Hol van ez?",
+      "who": "Kik laknak itt?",
+      "doctors": "Van-e orvos?",
+      "vacantDivider": "Ami betöltetlen",
+      "vacantNote": "A betöltetlenség nem azonos az ellátatlansággal: a helyettesítés a nyilvános adatokban nem látszik.",
+      "vedonoDivider": "Védőnői ellátás",
+      "distance": "Milyen messze?",
+      "distanceExplain": "Autóval, szabad forgalom mellett, az OpenStreetMap úthálózatán számolva — a légvonalbeli távolság mellette áll, mert a kettő nem ugyanaz.",
+      "th": {
+        "care": "Ellátás",
+        "drive": "Menetidő",
+        "air": "Légvonal",
+        "where": "Hol"
+      },
+      "gyse": "A településen {n} gyógyászati segédeszköz-kiadóhely működik.",
+      "bus": "Busszal is elérhető?",
+      "lang": "EN",
+      "langLabel": "Switch to English"
+    },
+    "list": {
+      "title": "Települések — Praxistérkép",
+      "desc": "Mind a {n} magyar település alapellátási adatlapja: van-e orvos, milyen messze az ellátás, eljut-e oda busz.",
+      "heading": "Települések",
+      "lead": "Mind a {n} település adatlapja, megyénként.",
+      "countyData": "a megye adatai",
+      "settlements": "{n} település",
+      "seatCounty": "Megyeszékhely",
+      "seatJaras": "járásszékhely",
+      "rest": "a többi település"
+    },
+    "map": {
+      "links": {
+        "gp": "Háziorvos",
+        "dental": "Fogorvos",
+        "oncall": "Központi ügyelet",
+        "inpatient": "Kórház",
+        "pharmacy": "Gyógyszertár"
+      },
+      "jarasSeats": "Járásszékhelyek",
+      "aria": "{name} elhelyezkedése {county} megyében",
+      "caption": "{county} megye{district}. A vékony vonalak járáshatárok, a kis pontok járásszékhelyek. A szaggatott vonal nem útvonal, hanem kapcsolat: a felirat a közúton számított menetidőt mondja.{inPlace}",
+      "captionDistrict": ", {district} járás (kiemelve)",
+      "inPlace": " Helyben van: {list}.",
+      "thumbAria": "{county} megye"
+    }
   }
 }

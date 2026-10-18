@@ -34,7 +34,14 @@ dissolved (megszűnt) list for GP; the GP registry is the source of district
 
 - Code, comments, commit messages, identifiers: **English**.
 - UI copy, docs for stakeholders, PLAN.md: **Hungarian**. UI strings live in
-  `web/src/i18n/hu.json` only — never hardcode Hungarian text in components.
+  `web/src/i18n/hu.json` (and its English twin `en.json`) only — never
+  hardcode Hungarian text in components. The site is bilingual everywhere:
+  the app switches with ?lang=, and the static settlement pages are written
+  twice, /telepules/<slug>/ and /en/telepules/<slug>/, from the `static.*`
+  block (settlement-pages.mjs reads S()/label() through the current LANG;
+  county-map.mjs takes a translator). Never glue a Hungarian case ending to a
+  placeholder ("{year}-ban", "a {total}-ből"): the ending depends on how the
+  number is pronounced — reword instead.
 - Hungarian quotes in JS/JSON string literals: use Unicode escapes
   (`\u201E` „ and `\u201D` ”) to avoid encoding issues (known past pain point).
 
