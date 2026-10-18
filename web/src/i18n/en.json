@@ -207,26 +207,67 @@
     "p9": "The EESZT supplement (source H) is built from three public registers of the EESZT master-data publication: NEAK_FINSZOLG (financed services), EUSZOLG_PUBLIKUS (healthcare providers) and EUSZOLG_ENGEDELY_PUBLIKUS (operating licences). Matching uses official codes only: from the NEAK FIN code through the organisational-unit code to the licence of the district's own profession (GP 6301–6303, dental 1300/1304/1305). We check whether the licensed premises lie in the district's settlement and whether the licensee's tax number matches the financed provider; differences are flagged, and where a FIN points to several licences at different premises no premises are shown. The district number is extracted from the official service name with a strict pattern. The provider name is shown only for filled districts; for vacant districts no free-text name field is taken over, as organisational-unit names often carry the former physician's name. On the EESZT map each district is drawn at its licensed premises; addresses are geocoded with OpenStreetMap Nominatim (at most 1 request per second, cached). Where an address cannot be resolved at street level, the settlement centre is used — shown as a fainter point on the map and in the \"approximate location\" column; districts without coordinates are not drawn."
   },
   "footer": {
-    "publicOnly": "This site uses only publicly released official and statistical data, which it analyses in aggregate. It collects no data of its own and contains no patient or other personal health data.",
+    "publicOnly": "This site works only with publicly released official and statistical data: it downloads them every month, archives them unchanged — the archive is public so the figures can be checked — and analyses them in aggregate. We carry out no data collection of our own: nothing is gathered about visitors or patients, and the site holds no patient or other personal health data.",
     "sources": "Sources",
-    "sourceNeak": "NEAK — vacant dental services; vacant (dissolved) dental services; vacant GP services; contracted providers (neak.gov.hu)",
-    "sourceOkfo": "Long-term vacant districts: OKFŐ Primary Care Directorate (alapellatas.okfo.gov.hu)",
-    "sourceEeszt": "Supplementary data: EESZT master publication — NEAK_FINSZOLG, EUSZOLG_PUBLIKUS, EUSZOLG_ENGEDELY_PUBLIKUS (www.eeszt.gov.hu)",
-    "sourceKsh": "KSH — gazetteer (population, district, area) and the 2022 census age composition (CC BY 4.0, www.ksh.hu)",
-    "sourceDecree": "Statutory classifications: government decrees 290/2014 (XI. 26.) and 105/2015 (IV. 23.), from the National Legislation Database (njt.hu)",
-    "sourceOsm": "Map data: © OpenStreetMap contributors (ODbL), geocoding: Nominatim; timetables: Volánbusz GTFS (CC0)",
     "legal": "Legal notes",
     "disclaimer": "NEAK states its own data to be informational, published from the monthly financing contract records. The figures here are not a basis for administrative, legal or care-planning decisions.",
     "vacantNotUnserved": "A vacant district does not mean there is no care: residents are usually seen by a substitute physician, which the public data does not show. Check opening hours and the place of care with the provider.",
     "names": "A physician's name appears only where NEAK itself publishes it: on filled districts in the contracted provider list. Never for vacant or dissolved districts, nor for substitutes.",
-    "noPersonal": "The site asks for no registration, uses no tracking cookies and runs no visitor analytics; we collect and store no visitor data. Your language choice and map-layer settings are kept in your own browser's storage and never reach us. Two third parties are embedded: Google Fonts serves the typefaces, and the street-level map — only if you open it — comes from MapTiler and OpenStreetMap; your browser contacts them when those load.",
+    "noPersonal": "The site asks for no registration and stores no visitor data in its own systems. Visitor statistics (Google Analytics) start only if you separately consent — without consent no measurement code is loaded and no cookie is set. Your language choice and map layers are kept in your own browser and never reach us. Google Fonts serves the typefaces; MapTiler and OpenStreetMap serve the street map, only if you open it. Details in the privacy notice.",
     "notOfficial": "A private initiative: not an official publication of NEAK, OKFŐ, NNGYK or any other authority, and not an official position. The author's professional role is given for identification, not as institutional endorsement.",
     "correction": "Found something wrong or out of date? Corrections are best raised with the publisher of the source; errors on this site can be reported on GitHub (@ZoliQua) and are fixed with the next monthly update.",
     "authorBy": "Made by",
     "authorName": "Dr. Zoltán Dul",
     "authorTitle": ", national collegial professional lead dentist",
     "license": "Code: MIT licence · Processed data: CC BY 4.0 · Source data under the terms of its original publisher",
-    "updated": "Data as of"
+    "updated": "Data as of",
+    "src": {
+      "neak": {
+        "title": "NEAK — National Health Insurance Fund:",
+        "dentalVacant": "Vacant dental services",
+        "dentalDissolved": "Vacant, dissolved dental services",
+        "gpVacant": "Vacant GP services",
+        "dentalRegistry": "Contracted dental surgeries",
+        "gpRegistry": "Contracted GP services",
+        "referral": "Nine-digit referral master list",
+        "inpatient": "Inpatient specialist institutions",
+        "outpatient": "Outpatient specialist institutions",
+        "listing": "all in one place: NEAK downloads"
+      },
+      "okfo": {
+        "title": "OKFŐ Primary Care Directorate — long-term vacant districts:",
+        "dental": "dental",
+        "gp": "GP"
+      },
+      "eeszt": {
+        "title": "EESZT master publication:",
+        "portal": "public master data",
+        "compare": "our comparison with the NEAK list"
+      },
+      "ksh": {
+        "title": "KSH — Hungarian Central Statistical Office:",
+        "hntr": "Gazetteer (population, district, area)",
+        "census": "2022 census (CC BY 4.0)"
+      },
+      "law": {
+        "title": "National Legislation Database:",
+        "d290": "Decree 290/2014 (XI. 26.) — district development ranking",
+        "d105": "Decree 105/2015 (IV. 23.) — beneficiary settlements"
+      },
+      "geo": {
+        "title": "Maps and timetables:",
+        "osm": "OpenStreetMap (ODbL)",
+        "geofabrik": "Hungary extract (Geofabrik)",
+        "gtfs": "Volánbusz timetable (GTFS, CC0)"
+      },
+      "own": {
+        "title": "What we made of it — free to download:",
+        "repo": "the full source code",
+        "data": "the processed data (JSON)",
+        "raw": "the original source files, archived monthly"
+      }
+    },
+    "sourcesNote": "Every figure is linked to its source: all of these are public files and pages anyone can download. The NEAK files always serve the current month; earlier months are archived here and downloadable too."
   },
   "praxisTypes": {
     "adult": "adult",
@@ -2112,5 +2153,53 @@
     "richButShort": "Well off, yet short of doctors",
     "richButShortExplain": "Of the better-off third, those with the most vacant districts.",
     "devRank": "development: {rank}"
+  },
+  "privacy": {
+    "heading": "Privacy notice",
+    "lead": "This site measures almost nothing, which is why this notice is short and concrete: what is stored, by whom, for how long, and how to say no.",
+    "updated": "In effect from 18 October 2026.",
+    "controller": {
+      "title": "Who the controller is",
+      "text": "Dr. Zoltán Dul, as a private individual running praxisterkep.hu. A private initiative, not a publication of NEAK, OKFŐ or any authority. Contact: GitHub @ZoliQua, or as given on dulzoltan.hu."
+    },
+    "what": {
+      "title": "What data is processed",
+      "text": "By default none about visitors. No registration, no sign-in, no newsletter, and no visitor data stored in our own systems. What the site does download and archive is public-interest data the authorities have already published — it is not about visitors. The health data shown comes from those public lists; the site holds no patient or other personal health data."
+    },
+    "analytics": {
+      "title": "Visitor statistics (only with consent)",
+      "text": "The site uses Google Analytics 4 — but only if you explicitly accept it on the bar. Without consent the measurement code is not even loaded and no cookie is set. With consent, Google Analytics stores a random identifier in a cookie and records pages viewed, referrer, approximate location and device type. IP addresses are anonymised, and advertising signals and personalisation are switched off."
+    },
+    "legalBasis": {
+      "title": "Legal basis",
+      "text": "Your consent (GDPR Art. 6(1)(a)), which you may withdraw at any time without consequence; withdrawal does not affect prior lawfulness."
+    },
+    "retention": {
+      "title": "For how long",
+      "text": "Google Analytics event data is deleted after 14 months. Your choice is kept in your own browser until you clear it."
+    },
+    "processors": {
+      "title": "Who else is involved",
+      "text": "Google Ireland Limited (Analytics, only with consent; Google is certified under the EU–US Data Privacy Framework), Vercel Inc. (hosting), Google Fonts (typefaces), and MapTiler with OpenStreetMap only if you open the street map. Your browser contacts these for technical reasons, which makes your IP address visible to them."
+    },
+    "storage": {
+      "title": "What your browser keeps",
+      "text": "Your language choice, map-layer settings and your cookie decision. These stay on your device and never reach us."
+    },
+    "rights": {
+      "title": "Your rights",
+      "text": "Access, rectification, erasure, restriction, objection, and withdrawal of consent at any time. You may complain to the Hungarian data protection authority (naih.hu) or go to court."
+    },
+    "sources": {
+      "title": "About the data shown",
+      "text": "Every figure comes from publicly released official and statistical sources, analysed in aggregate. A physician's name appears only where NEAK publishes it, on filled districts. The full source list is at the bottom of every page."
+    },
+    "change": {
+      "title": "Changes",
+      "text": "If the measurement or the services used change, this notice changes with them and the date at the top is updated."
+    },
+    "changeMind": "Changed your mind?",
+    "reopen": "Cookie settings",
+    "navLabel": "Privacy"
   }
 }

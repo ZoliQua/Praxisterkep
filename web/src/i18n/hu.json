@@ -207,26 +207,67 @@
     "p9": "Az EESZT-kiegészítés (H forrás) az EESZT törzspublikáció három nyilvános törzséből épül: NEAK_FINSZOLG (finanszírozott szolgálatok), EUSZOLG_PUBLIKUS (egészségügyi szolgáltatók) és EUSZOLG_ENGEDELY_PUBLIKUS (működési engedélyek). Az illesztés kizárólag hivatalos kódokkal történik: a NEAK FIN-kódból a szervezeti egység kódján át a körzet saját szakmájú (háziorvosi 6301–6303, fogorvosi 1300/1304/1305) engedélyéhez. Ellenőrizzük, hogy az engedély telephelye a körzet településén van-e, és hogy az engedélyes adószáma egyezik-e a finanszírozott szolgáltatóéval; az eltéréseket jelöljük, az ellentmondó (több telephelyre mutató) eseteknél nem mutatunk telephelyet. A körzet sorszámát szigorú mintával nyerjük ki a hivatalos szolgálatnévből. A szolgáltató nevét csak betöltött körzetnél közöljük; betöltetlen körzetnél semmilyen szabad szöveges névmezőt nem veszünk át, mert a szervezeti egységek neve gyakran a korábbi orvos nevét hordozza. Az EESZT-térképen minden körzet az engedélyezett telephelyén jelenik meg; a címeket az OpenStreetMap Nominatim szolgáltatásával geokódoljuk (legfeljebb 1 kérés/másodperc, gyorsítótárral). Ahol a cím utcaszinten nem azonosítható, a település középpontját használjuk, és ezt a térképen halványabb ponttal, a táblázatban „hozzávetőleges hely” oszloppal jelöljük; koordináta nélküli körzet nem kerül a térképre."
   },
   "footer": {
-    "publicOnly": "Ez az oldal kizárólag nyilvánosan közzétett hatósági és statisztikai adatokat használ, és azokat összesítve elemzi. Saját adatgyűjtést nem végez, beteg- vagy más személyes egészségügyi adatot nem tartalmaz.",
+    "publicOnly": "Ez az oldal kizárólag nyilvánosan közzétett hatósági és statisztikai adatokkal dolgozik: havonta letölti őket, változatlan formában archiválja — az archívum az ellenőrizhetőség kedvéért nyilvános —, és összesítve elemzi. Saját adatfelvételt nem végzünk: sem a látogatókról, sem betegekről nem gyűjtünk adatot, és beteg- vagy más személyes egészségügyi adat az oldalon nem szerepel.",
     "sources": "Felhasznált források",
-    "sourceNeak": "NEAK — Betöltetlen fogorvosi szolgálatok; Betöltetlen (megszűnt) fogorvosi szolgálatok; Betöltetlen háziorvosi szolgálatok; Szerződött szolgáltatók (neak.gov.hu)",
-    "sourceOkfo": "Tartósan betöltetlen körzetek: OKFŐ Alapellátási Igazgatóság (alapellatas.okfo.gov.hu)",
-    "sourceEeszt": "Kiegészítő adatok: EESZT törzspublikáció — NEAK_FINSZOLG, EUSZOLG_PUBLIKUS, EUSZOLG_ENGEDELY_PUBLIKUS (www.eeszt.gov.hu)",
-    "sourceKsh": "KSH — Helységnévtár (lakónépesség, járás, terület) és a 2022. évi népszámlálás korösszetétele (CC BY 4.0, www.ksh.hu)",
-    "sourceDecree": "Jogszabályi besorolások: 290/2014. (XI. 26.) és 105/2015. (IV. 23.) Korm. rendelet (Nemzeti Jogszabálytár, njt.hu)",
-    "sourceOsm": "Térképi alapadatok: © OpenStreetMap közreműködők (ODbL), geokódolás: Nominatim; menetrend: Vólánbusz GTFS (CC0)",
     "legal": "Jogi tudnivalók",
     "disclaimer": "A NEAK adatai saját közlése szerint tájékoztató jellegűek, a havi finanszírozási szerződésadatok alapján kerülnek közzétételre. Az itt közölt számok ellátásszervezési, hatósági vagy jogi döntés megalapozására nem alkalmasak.",
     "vacantNotUnserved": "A betöltetlen körzet nem jelenti azt, hogy ott nincs ellátás: a lakosokat jellemzően helyettesítő orvos látja el, ami a nyilvános adatokból nem látszik. Konkrét rendelési időt és ellátási helyet mindig a szolgáltatónál vagy az önkormányzatnál érdemes ellenőrizni.",
     "names": "Orvosnév kizárólag ott szerepel, ahol azt a NEAK maga is közzéteszi: a szerződött szolgáltatói listán szereplő, betöltött körzeteknél. Betöltetlen és megszűnt körzetnél, valamint helyettesítő orvosnál soha.",
-    "noPersonal": "Az oldal nem kér regisztrációt, nem használ nyomkövető sütit és nem működtet látogatói statisztikát; látogatói adatot nem gyűjtünk és nem tárolunk. A nyelvválasztást és a térképrétegek beállítását a böngésződ saját tárolójában őrzi, ez hozzánk nem jut el. Két külső szolgáltató van beágyazva: a betűtípusokat a Google Fonts adja, az utcaszintű térképet pedig — csak ha rákattintasz — a MapTiler és az OpenStreetMap; ezek megnyitásakor a böngésződ kapcsolatba lép velük.",
+    "noPersonal": "Az oldal nem kér regisztrációt és nem tárol látogatói adatot a saját rendszereiben. Látogatói statisztika (Google Analytics) kizárólag akkor indul, ha ehhez külön hozzájárulsz — hozzájárulás nélkül mérőkód sem töltődik be, és süti sem kerül a gépedre. A nyelvválasztást és a térképrétegeket a böngésződ saját tárolója őrzi, ez hozzánk nem jut el. A betűtípusokat a Google Fonts adja, az utcaszintű térképet — csak ha rákattintasz — a MapTiler és az OpenStreetMap. Részletek az adatkezelési tájékoztatóban.",
     "notOfficial": "Magánkezdeményezés: nem a NEAK, az OKFŐ, az NNGYK vagy bármely más hatóság hivatalos kiadványa, és nem minősül hivatalos állásfoglalásnak. A szerző szakmai beosztása azonosítási célú, nem jelent intézményi jóváhagyást.",
     "correction": "Hibás vagy elavult adatot találtál? A forrás javítását a kibocsátónál érdemes kezdeményezni; az oldal hibáját a GitHubon (@ZoliQua) lehet jelezni, és a következő havi frissítéssel javítjuk.",
     "authorBy": "Készítette:",
     "authorName": "Dr. Dul Zoltán",
     "authorTitle": ", országos kollegiális szakmai vezető fogorvos",
     "license": "Kód: MIT licenc · Feldolgozott adatok: CC BY 4.0 · A forrásadatok az eredeti kibocsátó feltételei szerint használhatók",
-    "updated": "Adatállapot"
+    "updated": "Adatállapot",
+    "src": {
+      "neak": {
+        "title": "NEAK — Nemzeti Egészségbiztosítási Alapkezelő:",
+        "dentalVacant": "Betöltetlen fogorvosi szolgálatok",
+        "dentalDissolved": "Betöltetlen, megszűnt fogorvosi szolgálatok",
+        "gpVacant": "Betöltetlen háziorvosi szolgálatok",
+        "dentalRegistry": "Szerződött fogorvosi rendelők",
+        "gpRegistry": "Szerződött háziorvosi szolgálatok",
+        "referral": "9 jegyű beutalási törzslista",
+        "inpatient": "Fekvőbeteg-szakellátó intézmények",
+        "outpatient": "Járóbeteg-szakellátó intézmények",
+        "listing": "mind egy helyen: NEAK letöltőoldal"
+      },
+      "okfo": {
+        "title": "OKFŐ Alapellátási Igazgatóság — tartósan betöltetlen körzetek:",
+        "dental": "fogorvosi",
+        "gp": "háziorvosi"
+      },
+      "eeszt": {
+        "title": "EESZT törzspublikáció:",
+        "portal": "nyilvános törzsadatok",
+        "compare": "a mi összevetésünk a NEAK-listával"
+      },
+      "ksh": {
+        "title": "KSH — Központi Statisztikai Hivatal:",
+        "hntr": "Helységnévtár (lakónépesség, járás, terület)",
+        "census": "2022. évi népszámlálás (CC BY 4.0)"
+      },
+      "law": {
+        "title": "Nemzeti Jogszabálytár:",
+        "d290": "290/2014. (XI. 26.) Korm. rendelet — járások fejlettségi besorolása",
+        "d105": "105/2015. (IV. 23.) Korm. rendelet — kedvezményezett települések"
+      },
+      "geo": {
+        "title": "Térkép és menetrend:",
+        "osm": "OpenStreetMap (ODbL)",
+        "geofabrik": "magyarországi kivonat (Geofabrik)",
+        "gtfs": "Volánbusz menetrend (GTFS, CC0)"
+      },
+      "own": {
+        "title": "Amit mi készítettünk belőle — szabadon letölthető:",
+        "repo": "a teljes forráskód",
+        "data": "a feldolgozott adatok (JSON)",
+        "raw": "az eredeti, havonta archivált forrásfájlok"
+      }
+    },
+    "sourcesNote": "Minden szám alá linkeltük a forrását: ezek mind nyilvános, bárki által letölthető fájlok és oldalak. A NEAK-állományok mindig az aktuális hónapot adják vissza; a korábbi hónapokat mi archiváljuk, azok is letölthetők."
   },
   "praxisTypes": {
     "adult": "felnőtt",
@@ -2112,5 +2153,53 @@
     "richButShort": "Jómódú, mégis orvoshiányos",
     "richButShortExplain": "A fejlettebb harmadból azok, ahol a legtöbb körzetben nincs orvos.",
     "devRank": "fejlettség: {rank}."
+  },
+  "privacy": {
+    "heading": "Adatkezelési tájékoztató",
+    "lead": "Ez az oldal majdnem semmit nem mér. Éppen ezért ez a tájékoztató rövid és konkrét: egy képernyőn látszik, mi tárolódik, kinél, meddig, és hogyan lehet nemet mondani.",
+    "updated": "Hatályos: 2026. október 18-tól.",
+    "controller": {
+      "title": "Ki az adatkezelő",
+      "text": "Dr. Dul Zoltán, magánszemélyként, a praxisterkep.hu üzemeltetőjeként. Az oldal magánkezdeményezés, nem a NEAK, az OKFŐ vagy bármely hatóság kiadványa. Elérhetőség: GitHubon @ZoliQua, illetve a dulzoltan.hu oldalon megadott módon."
+    },
+    "what": {
+      "title": "Milyen adatot kezelünk",
+      "text": "Alaphelyzetben semmilyen látogatói adatot. Az oldal nem kér regisztrációt, nem használ bejelentkezést, nem küld hírlevelet, és nem tárol látogatói adatot a saját rendszereiben. Amit az oldal letölt és archivál, az a hatóságok által már közzétett, közérdekű adat — nem a látogatókról szól. A megjelenített egészségügyi adatok ezekből a nyilvános listákból származnak: beteg- vagy más személyes egészségügyi adatot az oldal nem tartalmaz."
+    },
+    "analytics": {
+      "title": "Látogatói statisztika (csak hozzájárulással)",
+      "text": "Szeretnénk tudni, hányan és milyen oldalakat olvasnak, ezért az oldal Google Analytics 4 mérést használ — de kizárólag akkor, ha ehhez a felül megjelenő sávon kifejezetten hozzájárulsz. Hozzájárulás nélkül a mérőkód be sem töltődik, és süti sem kerül a gépedre. Elfogadás esetén a Google Analytics sütiben egy véletlenszerű azonosítót tárol, és rögzíti a megtekintett oldalakat, a hivatkozó forrást, a hozzávetőleges földrajzi helyet és az eszköz/böngésző típusát. Az IP-cím anonimizálva kerül feldolgozásra, hirdetési célú összekapcsolást és személyre szabott hirdetést kifejezetten kikapcsoltunk."
+    },
+    "legalBasis": {
+      "title": "Mi a jogalap",
+      "text": "A mérés jogalapja a hozzájárulásod (GDPR 6. cikk (1) a) pont), amit bármikor, következmény nélkül visszavonhatsz — a visszavonás a korábbi kezelés jogszerűségét nem érinti. A nyilvános hatósági adatok megjelenítése nem a látogató adatkezelése: azok már közzétett közérdekű adatok."
+    },
+    "retention": {
+      "title": "Meddig",
+      "text": "A Google Analytics eseményadatait 14 hónap után töröljük (ez a GA4-ben beállított megőrzési idő). A döntésed tényét a böngésződ saját tárolójában őrizzük, amíg nem törlöd."
+    },
+    "processors": {
+      "title": "Kinek adjuk tovább",
+      "text": "Google Ireland Limited (Google Analytics) — csak hozzájárulás esetén; a Google az EU–USA adatvédelmi keret szerint tanúsított. Vercel Inc. — az oldal tárhelyszolgáltatója, amely technikai naplót vezet a kiszolgálásról. Google Fonts — a betűtípusok kiszolgálása. MapTiler és OpenStreetMap — csak akkor, ha megnyitod az utcaszintű térképet. Ezek megnyitásakor a böngésződ technikai okból kapcsolatba lép velük, így IP-címed számukra láthatóvá válik."
+    },
+    "storage": {
+      "title": "Mit őriz a böngésződ",
+      "text": "A nyelvválasztást, a térképrétegek beállítását és a sütikről hozott döntésedet. Ezek a saját gépeden maradnak, hozzánk nem jutnak el, és a böngésző adatainak törlésével eltűnnek."
+    },
+    "rights": {
+      "title": "Milyen jogaid vannak",
+      "text": "Kérheted a tájékoztatást, a helyesbítést, a törlést, a kezelés korlátozását és tiltakozhatsz, illetve bármikor visszavonhatod a hozzájárulást. Panasszal a Nemzeti Adatvédelmi és Információszabadság Hatósághoz (naih.hu) fordulhatsz, vagy bírósághoz."
+    },
+    "sources": {
+      "title": "Az oldalon megjelenő adatokról",
+      "text": "Minden szám nyilvánosan közzétett hatósági és statisztikai forrásból származik (NEAK, OKFŐ, EESZT, KSH, jogszabályok, OpenStreetMap), összesített elemzésben. Orvosnév csak ott szerepel, ahol azt a NEAK maga is közzéteszi, betöltött körzetnél. A pontos forráslista minden oldal alján megtalálható."
+    },
+    "change": {
+      "title": "Változások",
+      "text": "Ha a mérésen vagy a felhasznált szolgáltatókon változtatunk, ez a tájékoztató vele együtt változik, és a hatályba lépés dátuma a lap tetején látszik."
+    },
+    "changeMind": "Meggondoltad magad?",
+    "reopen": "Sütibeállítás",
+    "navLabel": "Adatkezelés"
   }
 }
