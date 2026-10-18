@@ -22,7 +22,7 @@ import { DataTableModal } from './DataTableModal';
 import { makeCellRenderer, renderExtraCell } from './EesztCells';
 import { NeakDetailModal } from './NeakDetailModal';
 
-const REPO = 'https://github.com/ZoliQua/OEP-Alapellatas/blob/main';
+const REPO = 'https://github.com/ZoliQua/Praxisterkep/blob/main';
 const EXAMPLE_FIN = '020066099'; // Sásd, dental — also a vacant district
 
 type Tab = 'districts' | 'primary' | 'specialist' | 'crosscheck';

@@ -35,7 +35,7 @@ OUT = ROOT / "data" / "kedvezmenyezett.json"
 RAW = ROOT / "data" / "raw" / "kedvezmenyezett"
 SOURCE_URL = "https://njt.hu/jogszabaly/2015-105-20-22"
 SCHEMA_VERSION = 1
-HEADERS = {"User-Agent": "OEP-Alapellatas/1.0 (+https://github.com/ZoliQua/OEP-Alapellatas)"}
+HEADERS = {"User-Agent": "Praxisterkep/1.0 (+https://github.com/ZoliQua/Praxisterkep)"}
 # the decree is a fixed list; a wild swing means the page changed, not reality
 MIN_ROWS = {"benefit": 1000, "temporary": 300}
 

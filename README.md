@@ -1,6 +1,6 @@
-# Praxistérkép · OEP-Alapellatas
+# Praxistérkép
 
-[![Havi ETL](https://github.com/ZoliQua/OEP-Alapellatas/actions/workflows/monthly-etl.yml/badge.svg)](https://github.com/ZoliQua/OEP-Alapellatas/actions/workflows/monthly-etl.yml)
+[![Havi ETL](https://github.com/ZoliQua/Praxisterkep/actions/workflows/monthly-etl.yml/badge.svg)](https://github.com/ZoliQua/Praxisterkep/actions/workflows/monthly-etl.yml)
 [![Verzió](https://img.shields.io/badge/verzi%C3%B3-1.26.0-blue)](CHANGELOG.md)
 [![Licenc: MIT](https://img.shields.io/badge/licenc-MIT-green.svg)](LICENSE)
 [![Python 3.13](https://img.shields.io/badge/Python-3.13-3776ab?logo=python&logoColor=white)](etl/)

@@ -69,7 +69,7 @@ SCHEMA_VERSION = 1
 
 FEED_URL = "https://gtfs.kti.hu/public-gtfs/volanbusz_gtfs.zip"
 FEED_NAME = "volanbusz_gtfs.zip"
-HEADERS = {"User-Agent": "Praxisterkep/1.0 (+https://github.com/ZoliQua/OEP-Alapellatas)"}
+HEADERS = {"User-Agent": "Praxisterkep/1.0 (+https://github.com/ZoliQua/Praxisterkep)"}
 # a stop without a settlement prefix is attached to the nearest centre, but
 # only if it is genuinely close to one
 MAX_STOP_KM = 6.0

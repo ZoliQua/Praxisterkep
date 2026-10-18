@@ -54,9 +54,9 @@
     {
       "key": "own",
       "items": [
-        { "key": "repo", "href": "https://github.com/ZoliQua/OEP-Alapellatas" },
-        { "key": "data", "href": "https://github.com/ZoliQua/OEP-Alapellatas/tree/main/data" },
-        { "key": "raw", "href": "https://github.com/ZoliQua/OEP-Alapellatas/tree/main/data/raw" }
+        { "key": "repo", "href": "https://github.com/ZoliQua/Praxisterkep" },
+        { "key": "data", "href": "https://github.com/ZoliQua/Praxisterkep/tree/main/data" },
+        { "key": "raw", "href": "https://github.com/ZoliQua/Praxisterkep/tree/main/data/raw" }
       ]
     }
   ]
