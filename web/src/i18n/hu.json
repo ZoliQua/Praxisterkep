@@ -249,7 +249,8 @@
       "ksh": {
         "title": "KSH — Központi Statisztikai Hivatal:",
         "hntr": "Helységnévtár (lakónépesség, járás, terület)",
-        "census": "2022. évi népszámlálás (CC BY 4.0)"
+        "census": "2022. évi népszámlálás (CC BY 4.0)",
+        "timea": "TIMEA — jövedelem, népmozgalom, vándorlás településenként"
       },
       "law": {
         "title": "Nemzeti Jogszabálytár:",
@@ -267,6 +268,15 @@
         "repo": "a teljes forráskód",
         "data": "a feldolgozott adatok (JSON)",
         "raw": "az eredeti, havonta archivált forrásfájlok"
+      },
+      "nngyk": {
+        "title": "NNGYK — Nemzeti Népegészségügyi és Gyógyszerészeti Központ:",
+        "database": "halandósági adatbázis",
+        "avoidable": "elkerülhető halálozás járásonként (SHA)"
+      },
+      "nfsz": {
+        "title": "NFSZ — Nemzeti Foglalkoztatási Szolgálat:",
+        "settlements": "nyilvántartott álláskeresők településenként, havonta"
       }
     },
     "sourcesNote": "Minden szám alá linkeltük a forrását: ezek mind nyilvános, bárki által letölthető fájlok és oldalak. A NEAK-állományok mindig az aktuális hónapot adják vissza; a korábbi hónapokat mi archiváljuk, azok is letölthetők."
@@ -2451,6 +2461,51 @@
       "avoidableLink": "A járás egészségi adatai →",
       "noise": "Egy kis településen néhány születés vagy költözés is nagyot mozdít az arányon, ezért a népmozgalmi számok négy év átlagai; a nagyon kis falvaknál így is óvatosan kell olvasni őket.",
       "source": "Források: KSH TIMEA (a jövedelem a NAV adataiból), NFSZ településsoros adatai, NNGYK Halandósági adatbázis."
+    },
+    "methodLink": "Módszertan →"
+  },
+  "outcomeMethod": {
+    "heading": "Kimenetek és körülmények — hogyan készülnek",
+    "lead": "Az elemző oldal halálozási, jövedelmi, munkaerőpiaci és népességi számai három külső, nyilvános forrásból jönnek, és mindegyiket ugyanaz a szabály köti, mint az oldal többi adatát: minden szám archivált forrásfájlra vezethető vissza, és egy félig beolvasott forrás inkább hibát dob, mint hogy megjelenjen.",
+    "mortality": {
+      "title": "Elkerülhető halálozás — NNGYK",
+      "text": "A Nemzeti Népegészségügyi és Gyógyszerészeti Központ halandósági adatbázisa járásonként és megyénként közli a standardizált halálozási arányszámot (SHA, 100 ezer lakosra, a 2013-as európai standard népességgel) és a standardizált halálozási hányadost (SHH, ahol 100 az országos arányokból várt érték). Az elkerülhető halálozás az Eurostat két listáját követi, a 75 év alatti halálozásra: az NNGYK a halálokokat három, egymást nem fedő csoportba sorolja — csak ellátással elkerülhető, csak megelőzéssel elkerülhető, és mindkettő. A három összege az összes elkerülhető halálozás, a csak ellátással és a mindkettő összege az ellátással befolyásolható rész; azonos standard népességre számolt arányok ezért összeadhatók. Az NNGYK minden halálokot egy-egy, kb. 22 MB-os interaktív térképként közöl; ebből az adatot hordozó, kb. 270 KB-os rész bájtpontosan archiválva van, a teljes eredeti fájl SHA-256 lenyomatával együtt."
+    },
+    "whyNotKsh": {
+      "title": "Miért nem a KSH járási halálozási táblája?",
+      "text": "A KSH is közöl járási halálozást halálok, életkor és év szerint (Statinfo NH3A07), és abból is ki lehetne számolni az elkerülhető halálozást. Csakhogy a KSH adatvédelmi okból minden 3 alatti cellát elrejt, és pontosan úgy jeleníti meg, mint a nullát. Járás × halálok × korcsoport × év bontásban a cellák többsége ilyen kicsi, így az elrejtett esetek eltűnnének — és épp a kis, falusi járások tűnnének a legegészségesebbnek. Az NNGYK a teljes, el nem rejtett mikroadatból számol."
+    },
+    "income": {
+      "title": "Jövedelem — KSH TIMEA, NAV-adatok",
+      "text": "A személyi jövedelemadó alapját képező éves belföldi jövedelem egy állandó lakosra vetítve, településenként, járásonként és megyénként, a KSH TIMEA nyilvános térképszolgáltatásából. A forintösszegek évek között nem hasonlíthatók össze — 2022–23-ban 15–25% volt az infláció —, ezért az időbeli összevetés mindig az adott évi medián járás százalékában történik."
+    },
+    "jobs": {
+      "title": "Álláskeresők — NFSZ",
+      "text": "A Nemzeti Foglalkoztatási Szolgálat havonta közöl településsoros adatot: a nyilvántartott álláskeresőket a tartózkodási helyük szerint, a hónap 20-i állapotában, és mellette a 15–64 éves népességet (a KSH előző január 1-i adatával). Az arány a kettő hányadosa. 2024 előtt az adat negyedéves, 2019-ig visszamenőleg; a grafikon ezért valódi időtengelyen fut. Minden munkalapnak pontosan ki kell adnia a saját, nyomtatott megyei összesítőjét, különben a feldolgozás elutasítja."
+    },
+    "population": {
+      "title": "Születés, halálozás, vándorlás — KSH TIMEA",
+      "text": "A természetes szaporodás vagy fogyás (élveszületések mínusz halálozások) és a belföldi vándorlási egyenleg (állandó és ideiglenes vándorlás együtt), mindkettő ezer lakosra. Járásnál és településnél a 2022–2025 közötti évek átlaga szerepel: a 2020–21-es járványos többlethalálozást nem akarjuk helyi jellemzőnek olvasni, és egy kis faluban egyetlen esemény is több ezreléket mozdít."
+    },
+    "stats": {
+      "title": "Összefüggések — mit számolunk",
+      "text": "A korreláció a 174 vidéki járás közötti Pearson-féle r, mellette a Spearman-féle rangkorreláció; a p-érték a t-eloszlásból jön. A parciális korreláció azt mutatja, mennyi marad egy összefüggésből, ha a járások jövedelmi különbségét kivesszük: r_xy·z = (r_xy − r_xz·r_yz) / √((1 − r_xz²)(1 − r_yz²)). A szórásdiagramok egyenese a látható pontokra illesztett legkisebb négyzetes egyenes, amit a felület számol, nem a tárolt adatból vesz."
+    },
+    "grid": {
+      "title": "A 3 × 3-as rács",
+      "text": "A vidéki járásokat jövedelem szerint és a háziorvosi betöltetlenség szerint is harmadokra osztjuk, és mind a kilenc cellában az elkerülhető halálozás mediánját közöljük. Egy soron belül a jövedelem közel azonos: ha balról jobbra nő a szám, akkor egyformán szegény vagy gazdag járások között is ott magasabb a halálozás, ahol több az üres körzet."
+    },
+    "capital": {
+      "title": "Miért marad ki a főváros az összefüggésekből?",
+      "text": "A KSH TIMEA a fővárost egyetlen településként és egyetlen járásként közli, így egy kerületnek nincs saját jövedelme vagy vándorlási egyenlege. A kerületek saját halálozási, álláskeresői és betöltetlenségi adattal szerepelnek; ahol egy szám Budapest egészére vonatkozik, az oldal ezt kiírja."
+    },
+    "cross": {
+      "title": "A négy keresztmetszet",
+      "text": "Új forrás nélkül, a település-profilokból: a betöltetlen körzet kezdete a NEAK havi listáiból, a menetidő a legközelebbi betöltött rendelőig az OpenStreetMap úthálózatán, a közvetlen buszjárat a Volánbusz menetrendjéből, a korösszetétel a 2022-es népszámlálásból, az ellátási sivatag a meglévő klaszterelemzésből. Az érintett lakosságot itt nem összegezzük, mert egy városban egyetlen üres körzet miatt az egész város beleszámítana."
+    },
+    "limits": {
+      "title": "Amit ezek a számok nem mondanak",
+      "text": "Járások közötti összefüggést mérnek, nem okot, és nem egyéneket: abból, hogy a betöltetlenebb járásokban több az elkerülhető halál, nem következik, hogy egy adott üres körzet okoz egy adott halált. A betöltetlen körzet nem ellátatlan — a helyettesítést a nyilvános adatok nem mutatják. Egy várt összefüggés hiánya is eredmény: a háziorvosoknál nyilvántartott krónikus betegek aránya nem függ össze a betöltetlenséggel."
     }
   }
 }

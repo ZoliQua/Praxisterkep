@@ -3158,3 +3158,5 @@ body:has(.tp-rail) .tp-map svg { margin-top: 0; }
 .tp-living__avoid p { margin: 0 0 6px; color: var(--ink); }
 .tp-living__avoid .tp-note { margin: 0; color: var(--ink-dim); }
 .tp-source { color: var(--ink-faint); font-size: 12px; margin: 10px 0 0; }
+.method__item { max-width: 86ch; }
+.method__item p { color: var(--ink-dim); line-height: 1.65; }

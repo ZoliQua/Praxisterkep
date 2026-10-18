@@ -99,6 +99,20 @@ dissolved (megszűnt) list for GP; the GP registry is the source of district
     from the gazetteer itself — never by reading settlements.json, which is
     built from these files. Every NFSZ sheet must add up to its own printed
     county total or it is rejected.
+  `outcomes.json` (etl/outcomes.py) puts the three against vacancy for the
+  197 járás: Pearson and Spearman across the 174 rural járás (the capital
+  is out — TIMEA has no kerület income), the partial correlation with
+  income held constant, an income-third × vacancy-third grid of median
+  avoidable mortality, county and per-járás series, and four cross-readings
+  of the settlement profiles (vacancy duration × driving time, age bands,
+  no direct bus, care deserts). It feeds elemzo.html (#halalozas,
+  #jovedelem, #allaskeresok, #nepesseg, #osszefuggesek, #keresztmetszet),
+  the járás page (#egeszseg), the county page (#egeszseg) and — through the
+  optional `living` block of settlements.json — every static settlement
+  page (#eletkorulmenyek). The method is written out on modszertan.html
+  (#kimenetek); any change to how a number is made changes that text too.
+  A finding that did not hold is reported, not dropped: GP-registered
+  chronic patients do not fall where GPs are missing.
 - Not in git, reproducible from their URL and date: the OSM extract under
   `data/raw/osm/`, the GTFS zip under `data/raw/gtfs/` and the derived
   `data/geo/road_graph.npz`.

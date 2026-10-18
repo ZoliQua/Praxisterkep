@@ -4,59 +4,166 @@
     {
       "key": "neak",
       "items": [
-        { "key": "dentalVacant", "href": "https://www.neak.gov.hu/pfile/file?path=/letoltheto/altfin_dok/szerzodott_szolgaltatok/Betoltetlen_fogorvosi_szolgalatok&inline=true", "format": "PDF" },
-        { "key": "dentalDissolved", "href": "https://www.neak.gov.hu/pfile/file?path=/letoltheto/altfin_dok/szerzodott_szolgaltatok/Betoltetlen_megszunt_fogorvosi_szolgalatok&inline=true", "format": "PDF" },
-        { "key": "gpVacant", "href": "https://www.neak.gov.hu/pfile/file?path=/letoltheto/altfin_dok/szerzodott_szolgaltatok/Betoltetlen_haziorvosi_szolgalatok&inline=true", "format": "PDF" },
-        { "key": "dentalRegistry", "href": "https://www.neak.gov.hu/pfile/file?path=/letoltheto/altfin_dok/szerzodott_szolgaltatok/Fogorvosi_rendelok_xls&inline=true", "format": "XLS" },
-        { "key": "gpRegistry", "href": "https://www.neak.gov.hu/pfile/file?path=/letoltheto/altfin_dok/szerzodott_szolgaltatok/Haziorvosi_szolgalatok_xls&inline=true", "format": "XLS" },
-        { "key": "referral", "href": "https://www.neak.gov.hu/pfile/file?path=/letoltheto/altfin_dok/torzs/9_jegyu_beutalasi_torzslista&inline=true", "format": "XLSX" },
-        { "key": "inpatient", "href": "https://www.neak.gov.hu/pfile/file?path=/letoltheto/altfin_dok/szerzodott_szolgaltatok/Fekvobeteg-szakellato_intezmenyek_xlsx&inline=true", "format": "XLSX" },
-        { "key": "outpatient", "href": "https://www.neak.gov.hu/pfile/file?path=/letoltheto/altfin_dok/szerzodott_szolgaltatok/Jarobeteg-szakellato_intezmenyek_xlsx&inline=true", "format": "XLSX" },
-        { "key": "listing", "href": "https://www.neak.gov.hu/letoltheto/altfin_dok/szerzodott_szolgaltatok" }
+        {
+          "key": "dentalVacant",
+          "href": "https://www.neak.gov.hu/pfile/file?path=/letoltheto/altfin_dok/szerzodott_szolgaltatok/Betoltetlen_fogorvosi_szolgalatok&inline=true",
+          "format": "PDF"
+        },
+        {
+          "key": "dentalDissolved",
+          "href": "https://www.neak.gov.hu/pfile/file?path=/letoltheto/altfin_dok/szerzodott_szolgaltatok/Betoltetlen_megszunt_fogorvosi_szolgalatok&inline=true",
+          "format": "PDF"
+        },
+        {
+          "key": "gpVacant",
+          "href": "https://www.neak.gov.hu/pfile/file?path=/letoltheto/altfin_dok/szerzodott_szolgaltatok/Betoltetlen_haziorvosi_szolgalatok&inline=true",
+          "format": "PDF"
+        },
+        {
+          "key": "dentalRegistry",
+          "href": "https://www.neak.gov.hu/pfile/file?path=/letoltheto/altfin_dok/szerzodott_szolgaltatok/Fogorvosi_rendelok_xls&inline=true",
+          "format": "XLS"
+        },
+        {
+          "key": "gpRegistry",
+          "href": "https://www.neak.gov.hu/pfile/file?path=/letoltheto/altfin_dok/szerzodott_szolgaltatok/Haziorvosi_szolgalatok_xls&inline=true",
+          "format": "XLS"
+        },
+        {
+          "key": "referral",
+          "href": "https://www.neak.gov.hu/pfile/file?path=/letoltheto/altfin_dok/torzs/9_jegyu_beutalasi_torzslista&inline=true",
+          "format": "XLSX"
+        },
+        {
+          "key": "inpatient",
+          "href": "https://www.neak.gov.hu/pfile/file?path=/letoltheto/altfin_dok/szerzodott_szolgaltatok/Fekvobeteg-szakellato_intezmenyek_xlsx&inline=true",
+          "format": "XLSX"
+        },
+        {
+          "key": "outpatient",
+          "href": "https://www.neak.gov.hu/pfile/file?path=/letoltheto/altfin_dok/szerzodott_szolgaltatok/Jarobeteg-szakellato_intezmenyek_xlsx&inline=true",
+          "format": "XLSX"
+        },
+        {
+          "key": "listing",
+          "href": "https://www.neak.gov.hu/letoltheto/altfin_dok/szerzodott_szolgaltatok"
+        }
       ]
     },
     {
       "key": "okfo",
       "items": [
-        { "key": "dental", "href": "https://alapellatas.okfo.gov.hu/tajekoztato-a-tartosan-betoltetlen-fogorvosi-korzetekrol/" },
-        { "key": "gp", "href": "https://alapellatas.okfo.gov.hu/tajekoztato-a-tartosan-betoltetlen-haziorvosi-korzetekrol/" }
+        {
+          "key": "dental",
+          "href": "https://alapellatas.okfo.gov.hu/tajekoztato-a-tartosan-betoltetlen-fogorvosi-korzetekrol/"
+        },
+        {
+          "key": "gp",
+          "href": "https://alapellatas.okfo.gov.hu/tajekoztato-a-tartosan-betoltetlen-haziorvosi-korzetekrol/"
+        }
       ]
     },
     {
       "key": "eeszt",
       "items": [
-        { "key": "portal", "href": "https://www.eeszt.gov.hu/hu/torzspublikacio" },
-        { "key": "compare", "href": "/eeszt.html" }
+        {
+          "key": "portal",
+          "href": "https://www.eeszt.gov.hu/hu/torzspublikacio"
+        },
+        {
+          "key": "compare",
+          "href": "/eeszt.html"
+        }
       ]
     },
     {
       "key": "ksh",
       "items": [
-        { "key": "hntr", "href": "https://www.ksh.hu/apps/hntr.egyeb", "format": "XLSX" },
-        { "key": "census", "href": "https://nepszamlalas2022.ksh.hu/" }
+        {
+          "key": "hntr",
+          "href": "https://www.ksh.hu/apps/hntr.egyeb",
+          "format": "XLSX"
+        },
+        {
+          "key": "census",
+          "href": "https://nepszamlalas2022.ksh.hu/"
+        },
+        {
+          "key": "timea",
+          "href": "https://map.ksh.hu/timea/"
+        }
+      ]
+    },
+    {
+      "key": "nngyk",
+      "items": [
+        {
+          "key": "database",
+          "href": "https://nngyk.gov.hu/hu/halandosagi-adatbazis.html"
+        },
+        {
+          "key": "avoidable",
+          "href": "https://nngyk.gov.hu/hu/halandosagi-adatbazis-terkepek/2024/standatrdizalt-halalozasi-aranyszam.html"
+        }
+      ]
+    },
+    {
+      "key": "nfsz",
+      "items": [
+        {
+          "key": "settlements",
+          "href": "https://nfsz.munka.hu/tart/stat_telepulessoros_adatok",
+          "format": "XLSX"
+        }
       ]
     },
     {
       "key": "law",
       "items": [
-        { "key": "d290", "href": "https://njt.hu/jogszabaly/2014-290-20-22" },
-        { "key": "d105", "href": "https://njt.hu/jogszabaly/2015-105-20-22" }
+        {
+          "key": "d290",
+          "href": "https://njt.hu/jogszabaly/2014-290-20-22"
+        },
+        {
+          "key": "d105",
+          "href": "https://njt.hu/jogszabaly/2015-105-20-22"
+        }
       ]
     },
     {
       "key": "geo",
       "items": [
-        { "key": "osm", "href": "https://www.openstreetmap.org/copyright" },
-        { "key": "geofabrik", "href": "https://download.geofabrik.de/europe/hungary.html", "format": "PBF" },
-        { "key": "gtfs", "href": "https://gtfs.kti.hu/", "format": "ZIP" }
+        {
+          "key": "osm",
+          "href": "https://www.openstreetmap.org/copyright"
+        },
+        {
+          "key": "geofabrik",
+          "href": "https://download.geofabrik.de/europe/hungary.html",
+          "format": "PBF"
+        },
+        {
+          "key": "gtfs",
+          "href": "https://gtfs.kti.hu/",
+          "format": "ZIP"
+        }
       ]
     },
     {
       "key": "own",
       "items": [
-        { "key": "repo", "href": "https://github.com/ZoliQua/Praxisterkep" },
-        { "key": "data", "href": "https://github.com/ZoliQua/Praxisterkep/tree/main/data" },
-        { "key": "raw", "href": "https://github.com/ZoliQua/Praxisterkep/tree/main/data/raw" }
+        {
+          "key": "repo",
+          "href": "https://github.com/ZoliQua/Praxisterkep"
+        },
+        {
+          "key": "data",
+          "href": "https://github.com/ZoliQua/Praxisterkep/tree/main/data"
+        },
+        {
+          "key": "raw",
+          "href": "https://github.com/ZoliQua/Praxisterkep/tree/main/data/raw"
+        }
       ]
     }
   ]
