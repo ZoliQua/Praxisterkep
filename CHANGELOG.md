@@ -5,6 +5,64 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.48.0] — 2026-10-18
+
+Kik élnek ott, ahol nincs orvos; milyen messze a sürgősségi osztály; megérte-e
+a letelepedési támogatás; és mi várható egy év múlva.
+
+### Hozzáadva
+- **Népszámlálás (KSH 2022, CC BY 4.0)** települési, járási és megyei szinten:
+  felsőfokú végzettség (a 20 év felettiek arányában), foglalkoztatottság,
+  digitális inaktivitás, rossz minőségű lakások, csak idősekből álló
+  háztartások. Az elrejtett kis cellákat nem becsüljük; a rossz lakásokat
+  pontos azonossággal állítjuk vissza (1635 hiányból 12 maradt).
+- **Sürgősségi osztály** mint kilencedik menetidő-réteg (NEAK 4602 és 4605
+  szakmakód, 67 helyszín): térkép, sávok, és a „se saját háziorvos, se közeli
+  sürgősségi” települések listája.
+- **A letelepedési és praxisjog-támogatások sorsa** (NEAK nyertes-listák,
+  2019, 2021–2025, név nélkül): minden nyertes körzetét a havi archívumban
+  követjük, és összevetjük a támogatás nélkül, legalább egy éve üres
+  körzetekkel. A közös rendelőcímű, el nem dönthető eseteket kihagyjuk.
+- **Előrejelzés egy évre**: a kockázati modell és a túlélési görbék
+  összerakva, 90%-os sávval és visszaméréssel; országos görbe, megyei
+  súlyzódiagram, járási térkép.
+- **Kettős kontroll**: az összefüggés-mátrix és a halálozási szakasz a
+  jövedelem és a végzettség együttes kiszűrése után is mutatja a
+  kapcsolatot (másodrendű parciális korreláció).
+- A járási lapon hét új kártya és a járás támogatott körzetei; a megyei lapon
+  kilenc rangsor, előrejelzési görbe és a támogatások évenként; minden
+  településlapon népszámlálási pontdiagram, a település támogatásai, a járás
+  előrejelzése és a sürgősségi osztály a menetidő-táblázatban.
+- A módszertan oldalon az új források és módszerek; a benne idézett számok
+  az adatfájlból töltődnek, így nem avulnak el.
+- `LICENSE.md` (a `LICENSE` helyett, a teljes forrás- és licenclistával),
+  frissített `CODE_OF_CONDUCT.md`, új `CONTRIBUTORS.md`, átírt README.
+
+### Módosítva
+- **A fő eredmény pontosabb lett.** A betöltetlenség és az elkerülhető
+  halálozás kapcsolata a jövedelmet kiszűrve 0,36, a jövedelmet és a
+  végzettséget együtt kiszűrve 0,17 (p ≈ 0,02): gyengébb, de megmarad. A
+  sürgősségi osztály távolsága a két kontroll után nem jár együtt a
+  halálozással; ezt null-eredményként közöljük.
+
+### Javítva
+- **Ékezet nélküli településnevek a NEAK fogorvosi listáján.** 2026 óta a
+  lista „Gyor”, „Hejokeresztúr”, „Csengod” alakban írja a településeket;
+  ezek a körzetek nem jelentek meg a saját településük lapján. Minden
+  telephelynév a KSH Helységnévtár írásmódjára kerül, ha az ékezet nélküli
+  név egyetlen települést jelöl.
+- **Kömlő és Komló, Kömörő és Komoró.** Az ékezetfüggetlen keresés az egyik
+  település népességét a másikhoz rendelhette; a kereső előbb pontos nevet
+  keres.
+- A módszertan letöltési táblájában három fájl leírás nélkül szerepelt, a
+  járáshatár kétszer; az új `census.json`, `grants.json` és `forecast.json`
+  is letölthető lett.
+
+### Nem készült el
+- **Szűrési részvétel és átoltottság.** Járási vagy települési bontásban
+  egyik intézmény sem közli nyilvánosan, géppel olvashatóan; becslést nem
+  teszünk közzé.
+
 ## [1.47.0] — 2026-10-18
 
 Mivel jár együtt a betöltetlenség? Elkerülhető halálozás, jövedelem,
