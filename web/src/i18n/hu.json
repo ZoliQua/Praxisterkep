@@ -1179,7 +1179,13 @@
       "statisztika": "Országos trendek",
       "osszevetes": "Háziorvos vs Fogorvos",
       "tavolsag": "Távolság légvonalban",
-      "jarasok": "Járási kép"
+      "jarasok": "Járási kép",
+      "halalozas": "Elkerülhető halálozás",
+      "jovedelem": "Jövedelem",
+      "allaskeresok": "Álláskeresők",
+      "nepesseg": "Fogyó népesség",
+      "osszefuggesek": "Összefüggések",
+      "keresztmetszet": "Keresztmetszetek"
     }
   },
   "vedono": {
@@ -2134,7 +2140,8 @@
     "distBin": "{n} járás, {from} és {to} között",
     "distBinLabel": "{n} járás ebben a sávban ({from}–{to}):",
     "distMore": "és még {n}",
-    "distNoValue": "{name} járásra ez a mérték nem értelmezhető."
+    "distNoValue": "{name} járásra ez a mérték nem értelmezhető.",
+    "legendBottom": "és alatta"
   },
   "districtAnalysis": {
     "heading": "Járási kép: együtt jár a szegénység az orvoshiánnyal?",
@@ -2205,5 +2212,180 @@
     "changeMind": "Meggondoltad magad?",
     "reopen": "Sütibeállítás",
     "navLabel": "Adatkezelés"
+  },
+  "outcomes": {
+    "scatter": {
+      "size": "A pont mérete a járás népessége."
+    },
+    "measure": {
+      "gpRate": "Betöltetlen háziorvosi körzetek aránya",
+      "gpLongTerm": "Tartósan betöltetlen háziorvosi körzetek aránya",
+      "dentalRate": "Betöltetlen fogorvosi körzetek aránya",
+      "gpMinutes": "Menetidő a legközelebbi háziorvosig",
+      "avoidable": "Elkerülhető halálozás",
+      "amenable": "Ellátással befolyásolható halálozás",
+      "treatable": "Csak ellátással elkerülhető",
+      "preventable": "Csak megelőzéssel elkerülhető",
+      "both": "Ellátással és megelőzéssel is",
+      "allCause": "Összhalálozás",
+      "income": "Jövedelem egy lakosra",
+      "incomeIndex": "Jövedelem a járási medián %-ában",
+      "taxpayers": "Adózók ezer lakosra",
+      "jobseekers": "Álláskeresők aránya",
+      "naturalChange": "Természetes szaporodás/fogyás",
+      "migration": "Belföldi vándorlási egyenleg",
+      "diabetes": "Nyilvántartott cukorbetegek",
+      "hypertension": "Nyilvántartott magas vérnyomásos betegek",
+      "ischaemic": "Nyilvántartott ischaemiás szívbetegek",
+      "gpLoad": "Egy háziorvosra jutó betegforgalom",
+      "ageing": "Öregedési index",
+      "development": "Fejlettség (komplex mutató, 2014)"
+    },
+    "measureText": {
+      "avoidable": "75 év alatti halálozás olyan okból, amelyet időben kapott ellátás vagy hatékony megelőzés megakadályozhatott volna — a három NNGYK-csoport összege, 100 ezer lakosra, az európai standard népességre korrigálva.",
+      "amenable": "Minden, ami az Eurostat kezelhető (ellátással elkerülhető) listáján szerepel: a csak ellátással elkerülhető és a mindkét listán szereplő okok együtt. Ez az a rész, ahol az, hogy van-e kihez fordulni, a legtöbbet számít.",
+      "treatable": "Csak a kezelhető listán szereplő okok — pl. magas vérnyomás, agyérbetegség, tüdőgyulladás, vakbélgyulladás, sérv, epekő.",
+      "preventable": "Csak a megelőzhető listán szereplő okok — pl. tüdőrák, alkoholos májbetegség, COPD, közlekedési baleset, öngyilkosság.",
+      "allCause": "Minden halálozás, minden életkorban, 100 ezer lakosra, az európai standard népességre korrigálva. Összevetésnek: ebből mennyi az elkerülhető."
+    },
+    "part": {
+      "treatable": "csak ellátással",
+      "both": "ellátással és megelőzéssel is",
+      "preventable": "csak megelőzéssel"
+    },
+    "partText": {
+      "treatable": "időben kapott orvosi ellátással elkerülhető halálokok",
+      "both": "mindkét Eurostat-listán szereplő okok: ischaemiás szívbetegség, vastagbél-, emlő- és méhnyakrák, cukorbetegség, tüdőgyulladás",
+      "preventable": "népegészségügyi megelőzéssel (dohányzás, alkohol, balesetek) elkerülhető okok"
+    },
+    "mortality": {
+      "heading": "Mibe kerül egy üres körzet? — elkerülhető halálozás",
+      "lead": "Az elkerülhető halálozás azt méri, hányan halnak meg 75 éves koruk előtt olyan okból, amelyet időben kapott ellátás vagy megelőzés megakadályozhatott volna. A {year}. évi adatok szerint járásonként {bestValue} ({best}) és {worstValue} ({worst}) között szóródott 100 ezer lakosra — {times}-szoros különbség egy országon belül.",
+      "whatHeading": "Mit jelent az, hogy elkerülhető?",
+      "what": "Az NNGYK az Eurostat két listáját követi, és a halálokokat három, egymást nem fedő csoportba sorolja. A három összege az elkerülhető halálozás; a sáv azt mutatja, miből áll egy átlagos járásé.",
+      "medianDistrict": "A középső járás ({name})",
+      "switch": "Melyik mutató",
+      "mapHeading": "Hol a legmagasabb?",
+      "scatterHeading": "Együtt jár a betöltetlen körzetekkel?",
+      "pickedLine": "{value} / 100 ezer lakos; a vidéki járások mediánja {median}.",
+      "findingRaw": "A 174 vidéki járásban a betöltetlen háziorvosi körzetek aránya és {what} közötti összefüggés {strength}: r = {r} (p {p}, n = {n}).",
+      "findingPartial": "A jövedelmi különbségeket kiszűrve is megmarad: parciális r = {r} (p {p}) — tehát nem csak arról van szó, hogy a szegényebb járásokban egyszerre több az üres körzet és a halál.",
+      "findingIncome": "A jövedelem maga erősebben jár együtt vele (r = {r}).",
+      "caveat": "Ez járások közötti összefüggés, nem bizonyíték arra, hogy egy adott betöltetlen körzet okozza a halálozást. A betöltetlenség, a szegénység, az elöregedés és a halálozás egymást erősítik; a jövedelem kiszűrése ezt csökkenti, de nem szünteti meg. A betöltetlen körzet nem ellátatlan: a lakosokat helyettesítő orvos látja el.",
+      "source": "Forrás: NNGYK Halandósági adatbázis, {year}; standardizált halálozási arányszám (SHA) 100 ezer lakosra, az európai standard népességgel (2013). A háziorvosi betöltetlenség a NEAK havi listáiból."
+    },
+    "grid": {
+      "aria": "Elkerülhető halálozás jövedelmi és betöltetlenségi harmadok szerint",
+      "rows": "Jövedelem",
+      "cols": "Betöltetlen háziorvosi körzetek",
+      "vac0": "kevés üres körzet",
+      "vac1": "közepes",
+      "vac2": "sok üres körzet",
+      "inc0": "legszegényebb harmad",
+      "inc1": "középső harmad",
+      "inc2": "leggazdagabb harmad",
+      "n": "{n} járás",
+      "heading": "Csak a szegénység?",
+      "explain": "Soronként a jövedelem azonos szinten van tartva: ha balról jobbra haladva nő a szám, akkor egyformán szegény vagy egyformán gazdag járások között is ott magasabb {what}, ahol több a betöltetlen háziorvosi körzet. Egy cellára kattintva látszik, mely járások tartoznak bele.",
+      "finding": "A leggazdagabb harmadban a legkevesebb és a legtöbb üres körzetű járások között {richLow} → {richHigh} a különbség (+{richUp}%); a legszegényebb harmadban {poorLow} → {poorHigh}.",
+      "cellHeading": "{inc}, {vac}",
+      "pickHint": "Kattints egy cellára: itt jelennek meg a járásai, és a fenti szórásdiagramon is kiemelődnek."
+    },
+    "third": {
+      "0": "legszegényebb harmad",
+      "1": "középső harmad",
+      "2": "leggazdagabb harmad"
+    },
+    "vacThird": {
+      "0": "sok üres háziorvosi körzet",
+      "1": "közepes",
+      "2": "kevés üres körzet"
+    },
+    "strength": {
+      "none": "elhanyagolható",
+      "weak": "gyenge",
+      "moderate": "közepesen erős",
+      "strong": "erős"
+    },
+    "matrix": {
+      "cellTitle": "{x} és {y}: r = {r} (p {p})"
+    },
+    "trend": {
+      "hint": "Válassz megyét a lista alatt, vagy vidd az egeret egy vonalra."
+    },
+    "medianDistrict": "medián vidéki járás",
+    "national": "országos",
+    "living": {
+      "worstHeading": "A legrosszabb helyzetű járások",
+      "median": "A vidéki járások mediánja: {value}.",
+      "capitalWide": "A KSH a fővárost egyben közli, ezért a kerületek itt üresen maradnak."
+    },
+    "income": {
+      "heading": "Mennyi pénz van egy helyen? — jövedelem",
+      "lead": "A személyi jövedelemadó alapját képező éves jövedelem egy állandó lakosra vetítve — a legközvetlenebb mérőszáma annak, mennyi pénz van egy helyen. A vidéki járások mediánja {median} évente ({year}).",
+      "trendHeading": "Felzárkózik vagy lemarad? — a megyék a járási medián százalékában",
+      "trendExplain": "A forintösszegek évek között nem vethetők össze: 2022–23-ban 15–25% volt az infláció. Ezért a görbe azt mutatja, hány százaléka egy megye jövedelme az adott évi járási mediánnak; a szaggatott 100%-os vonal maga a medián.",
+      "finding": "Az összes vizsgált tényező közül a jövedelem jár a legerősebben együtt az elkerülhető halálozással: r = {r}. Ezért van minden más összefüggés mellett a jövedelmet kiszűrő változat is.",
+      "source": "Forrás: KSH TIMEA (NAV-adatok alapján), a személyi jövedelemadó-alapot képező jövedelem egy állandó lakosra, ezer Ft."
+    },
+    "jobs": {
+      "heading": "Van-e munka? — nyilvántartott álláskeresők",
+      "lead": "Legutóbb ({month}) {count} nyilvántartott álláskereső volt, a munkaképes korúak {rate}%-a; közülük {long} több mint egy éve keres munkát. A sorozat kezdetén ({first}) az arány {firstRate}% volt.",
+      "trendHeading": "Az álláskeresők aránya megyénként",
+      "quarterly": "2024 előtt az NFSZ negyedévente közölt településsoros adatot, ezért a görbe 2019 és 2023 között negyedéves, azóta havi.",
+      "finding": "Ahol több a betöltetlen háziorvosi körzet, ott több az álláskereső is (r = {r}): az orvos családjának is munka kell, és a munkanélküli, fogyó vidék a legnehezebben betölthető.",
+      "source": "Forrás: NFSZ településsoros adatai; nyilvántartott álláskeresők a tartózkodási helyük szerint a hónap 20-i állapotában, a 15–64 éves népesség arányában."
+    },
+    "pop": {
+      "heading": "Ki marad itt? — fogyó és elköltöző népesség",
+      "lead": "{years} átlagában a 174 vidéki járásból {emptying} járásban egyszerre fogy a népesség természetes úton és elvándorlással is — ezekben {people} ember él. Ahol többen halnak meg, mint születnek, és többen költöznek el, mint ide, ott egy praxis egyre kevesebb betegből és egyre kevesebb jövőből áll.",
+      "quadrantHeading": "Két fogyás egy ábrán",
+      "quadrantExplain": "Minden pont egy járás: vízszintesen a természetes szaporodás vagy fogyás (születések mínusz halálozások), függőlegesen a belföldi vándorlási egyenleg, mindkettő ezer lakosra. A bal alsó negyed az, ahol a népesség mindkét úton fogy. A szín a háziorvosi betöltetlenség harmada; egy pontra kattintva a járás oldala nyílik meg.",
+      "trendHeading": "{what} megyénként",
+      "source": "Forrás: KSH TIMEA; ezer lakosra, a járásoknál {years} átlaga. A vándorlás az állandó és ideiglenes belföldi vándorlás együtt."
+    },
+    "links": {
+      "heading": "Mi függ össze mivel?",
+      "lead": "A teljes kép egy táblázatban: a sorokban az ellátás négy jellemzője, az oszlopokban a következmények és a körülmények. Minden cella egy korrelációs együttható a 174 vidéki járás között; egy cellára kattintva alatta megjelenik a pontfelhő, így egyetlen szám sem kell, hogy hitből elfogadd.",
+      "controlled": "Jövedelem kiszűrve",
+      "controlledExplain": "Parciális korreláció: mennyi marad az összefüggésből, ha a járások jövedelmi különbségét kivesszük. A betöltetlenségi sorokra számolva.",
+      "rawExplain": "Nyers korreláció (Pearson-féle r). Piros: együtt nőnek; türkiz: az egyik nő, ahogy a másik csökken; halvány: a véletlentől nem különböztethető meg (p ≥ 0,05).",
+      "keyPos": "együtt nőnek",
+      "keyNeg": "ellentétesen mozognak",
+      "keyWeak": "nem szignifikáns",
+      "pairHeading": "{x} és {y}",
+      "pairFinding": "Az összefüggés {strength}: r = {r} (rangkorreláció: {rho}), {n} járás.",
+      "pairPartial": "A jövedelmet kiszűrve: {r}.",
+      "caveat": "Egy korreláció a járások közötti együttmozgást méri, nem okot. Ami több változóval egyszerre összefügg — a szegénység, az elöregedés —, az összefüggést mutathat ott is, ahol nincs közvetlen kapcsolat. Egy eredmény, ami nem jött ki, ugyanúgy eredmény: a nyilvántartott krónikus betegek aránya például nem függ össze a betöltetlenséggel."
+    },
+    "cross": {
+      "heading": "Négy keresztmetszet — a meglévő adatok egymás tükrében",
+      "lead": "Új forrás nélkül, csak a településprofilokból: meddig üres egy körzet, és ehhez képest milyen messze a legközelebbi orvos; hogyan függ ez a település korösszetételétől; jár-e busz; és hol alkotnak összefüggő foltot az ellátatlan települések.",
+      "durationHeading": "Minél régebben üres, annál messzebb a következő orvos?",
+      "durationText": "{n} település, amelyet legalább egy betöltetlen háziorvosi körzet lát el. A sáv a legközelebbi betöltött rendelőig tartó autós menetidő mediánját mutatja aszerint, hogy a körzet mióta üres.",
+      "band0": "2 évnél rövidebb",
+      "band1": "2–5 éve",
+      "band2": "5–10 éve",
+      "band3": "10 évnél régebben",
+      "bandN": "{n} település",
+      "xYears": "Mióta üres (év)",
+      "yMinutes": "Menetidő a legközelebbi orvosig",
+      "gNoBus": "csak üres körzet, nincs közvetlen busz",
+      "gOnly": "csak üres körzet",
+      "gPartial": "van betöltött körzete is",
+      "ageHeading": "Az öregedő falvak maradnak orvos nélkül?",
+      "ageText": "A települések a 65 év felettiek aránya szerint sávokba rendezve; az oszlop azt mutatja, hányadukat látja el kizárólag betöltetlen háziorvosi körzet.",
+      "ageTitle": "{from}–{to}% idős: {n} település, {share}% csak üres körzettel",
+      "ageNote": "U alakú: a legfiatalabb és a legidősebb falvak a legkiszolgáltatottabbak. A két szélső sávban kevés a település, ezért ott egy-két község is sokat mozdít az arányon.",
+      "busHeading": "Ahová busz sem visz",
+      "busBig": "település ({people} fő) a {of} közül, amelyet csak betöltetlen körzet lát el, közvetlen busszal sem éri el a legközelebbi orvost.",
+      "desertHeading": "Ellátási sivatagok",
+      "desertBig": "összefüggő folt {settlements} településsel, ahol {people} ember él",
+      "desertText": "Emellett {isolated} elszigetelt település ({isolatedPeople} fő) van, ahol nincs betöltött háziorvosi körzet, és a szomszédja sem segít.",
+      "desertMore": "A térkép és a módszer →"
+    },
+    "min": "perc",
+    "yr": "év",
+    "people": "fő"
   }
 }

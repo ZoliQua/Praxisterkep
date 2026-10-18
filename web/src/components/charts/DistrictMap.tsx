@@ -32,23 +32,82 @@ function fillOf(v: number | undefined, max: number, color: string, empty: string
   return `color-mix(in srgb, ${color} ${share}%, var(--bg-raised))`;
 }
 
+/**
+ * How a value becomes a colour, for the measures that are not a rate from
+ * zero: a mortality rate never comes near 0, an income is better high, and a
+ * migration balance has its middle at zero. `ramp` returns the shade, `ends`
+ * the two values the legend names.
+ */
+export interface MapScale {
+  /** 'zero' is the rate ramp (0 → the 90th percentile); 'spread' runs from
+   *  the 10th to the 90th percentile so a narrow range still shows */
+  domain?: 'zero' | 'spread';
+  /** higher is better: the low values get the dark end */
+  invert?: boolean;
+  /** a diverging measure: the middle value, and the colour of its good side */
+  mid?: number;
+  goodColor?: string;
+}
+
+function quantile(sorted: number[], q: number): number {
+  if (!sorted.length) return 0;
+  return sorted[Math.min(sorted.length - 1, Math.max(0, Math.floor(sorted.length * q)))];
+}
+
+function makeRamp(sorted: number[], color: string, empty: string, scale?: MapScale) {
+  if (!scale || (!scale.mid && scale.mid !== 0 && (scale.domain ?? 'zero') === 'zero'
+    && !scale.invert)) {
+    const max = Math.max(0.0001, quantile(sorted, 0.9));
+    return { fill: (v: number | undefined) => fillOf(v, max, color, empty), ends: [0, max] as const,
+      shadeAt: (f: number) => fillOf(f * max, max, color, empty) };
+  }
+  const mix = (c: string, f: number) =>
+    `color-mix(in srgb, ${c} ${Math.round((0.1 + Math.min(1, Math.max(0, f)) * 0.9) * 100)}%, var(--bg-raised))`;
+  if (scale.mid !== undefined) {
+    const mid = scale.mid;
+    // the ramp reaches full colour at the 90th percentile of the distance
+    // from the middle, on either side
+    const dev = sorted.map((v) => Math.abs(v - mid)).sort((a, b) => a - b);
+    const span = Math.max(0.0001, quantile(dev, 0.9));
+    const good = scale.goodColor ?? 'var(--accent)';
+    const fill = (v: number | undefined) => {
+      if (v === undefined) return empty;
+      const above = v >= mid;
+      const bad = scale.invert ? !above : above;
+      return mix(bad ? color : good, Math.abs(v - mid) / span);
+    };
+    return { fill, ends: [mid - span, mid + span] as const,
+      shadeAt: (f: number) => fill(mid - span + f * 2 * span) };
+  }
+  const lo = scale.domain === 'spread' ? quantile(sorted, 0.1) : 0;
+  const hi = Math.max(lo + 0.0001, quantile(sorted, 0.9));
+  const fill = (v: number | undefined) => {
+    if (v === undefined) return empty;
+    const f = (v - lo) / (hi - lo);
+    return mix(color, scale.invert ? 1 - f : f);
+  };
+  return { fill, ends: [lo, hi] as const, shadeAt: (f: number) => fill(lo + f * (hi - lo)) };
+}
+
 /** The ramp as a strip, with what its ends mean. */
-function Legend({ max, color, empty, format, hasEmpty }: {
-  max: number; color: string; empty: string;
-  format: (v: number) => string; hasEmpty: boolean;
+function Legend({ ends, shadeAt, empty, format, hasEmpty, scaled }: {
+  ends: readonly [number, number]; shadeAt: (f: number) => string; empty: string;
+  format: (v: number) => string; hasEmpty: boolean; scaled: boolean;
 }) {
   const steps = 24;
   return (
     <div className="district-map__legend">
-      <span className="district-map__legend-end">{format(0)}</span>
+      <span className="district-map__legend-end">
+        {format(ends[0])}
+        {scaled && <small>{t('district.legendBottom')}</small>}
+      </span>
       <span className="district-map__ramp" aria-hidden="true">
         {Array.from({ length: steps }, (_, i) => (
-          <i key={i} style={{ background: fillOf(
-            (i / (steps - 1)) * max, max, color, empty) }} />
+          <i key={i} style={{ background: shadeAt(i / (steps - 1)) }} />
         ))}
       </span>
       <span className="district-map__legend-end">
-        {format(max)}
+        {format(ends[1])}
         <small>{t('district.legendTop')}</small>
       </span>
       {hasEmpty && (
@@ -63,7 +122,7 @@ function Legend({ max, color, empty, format, hasEmpty }: {
 
 export function DistrictMap({
   values, format, color = '#ef6461', empty = 'var(--bg-panel)', onPick, selected,
-  legendFormat, total, seatOf,
+  legendFormat, total, seatOf, scale,
 }: {
   /** járás name -> value in 0..1; a missing one is drawn as empty */
   values: Map<string, number>;
@@ -78,6 +137,8 @@ export function DistrictMap({
   total?: number;
   /** the seat of a járás, for the readout */
   seatOf?: (name: string) => string | undefined;
+  /** for a measure that is not a rate from zero (see MapScale) */
+  scale?: MapScale;
 }) {
   const inset = useMemo(() => INSET, []);
   const { shapes, capital } = useDistrictShapes(W, H, inset);
@@ -88,7 +149,7 @@ export function DistrictMap({
   // a lone 75% would squash every other shape into the background, and the
   // question the map answers is where the bad patches are, not who holds the
   // record. Anything above it is simply the darkest shade.
-  const max = Math.max(0.0001, sorted[Math.floor(sorted.length * 0.9)] ?? 0);
+  const ramp = makeRamp(sorted, color, empty, scale);
   const shownName = hover ?? selected ?? null;
   const value = shownName ? values.get(shownName) : undefined;
   const seat = shownName && seatOf ? seatOf(shownName) : undefined;
@@ -100,7 +161,7 @@ export function DistrictMap({
       <path key={key} d={s.d}
         className={`district-map__shape${on ? ' is-on' : ''}${
           onPick ? ' is-clickable' : ''}`}
-        fill={fillOf(v, max, color, empty)}
+        fill={ramp.fill(v)}
         onPointerEnter={() => setHover(s.name)}
         onClick={onPick ? () => onPick(s.name) : undefined}>
         <title>{format ? format(s.name, v) : `${s.name}: ${v ?? '–'}`}</title>
@@ -168,8 +229,8 @@ export function DistrictMap({
         </g>
       </svg>
       {legendFormat && (
-        <Legend max={max} color={color} empty={empty} format={legendFormat}
-          hasEmpty={(total ?? shapes.length) > values.size} />
+        <Legend ends={ramp.ends} shadeAt={ramp.shadeAt} empty={empty} format={legendFormat}
+          hasEmpty={(total ?? shapes.length) > values.size} scaled={!!scale} />
       )}
     </div>
   );

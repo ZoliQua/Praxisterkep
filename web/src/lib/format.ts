@@ -48,7 +48,8 @@ export function formatDuration(months: number): string {
 
 /** locale-aware decimal separator for plain numbers like 2.91 */
 export function formatDecimal(n: number | string): string {
-  const text = String(n);
+  // a leading hyphen is a hyphen; a negative number takes the minus sign
+  const text = String(n).replace(/^-/, '\u2212');
   return locale === 'en' ? text : text.replace('.', ',');
 }
 
@@ -69,4 +70,21 @@ export function huArticle(n: number): string {
   if (abs >= 100) return Math.floor(abs / 100) === 5 ? 'az' : 'a'; // ötszáz
   if (abs >= 10) return Math.floor(abs / 10) === 5 ? 'az' : 'a';   // ötven
   return abs === 1 || abs === 5 ? 'az' : 'a';
+}
+
+/**
+ * A measure's name as it sits inside a Hungarian sentence: lower-case first
+ * letter and the right article ("az elkerülhető halálozás", "a jövedelem").
+ * Writing "a(z)" is what a form letter does. English gets the bare noun.
+ */
+export function inSentence(label: string): string {
+  const lower = label.charAt(0).toLocaleLowerCase(locale === 'en' ? 'en' : 'hu') + label.slice(1);
+  if (locale === 'en') return lower;
+  return `${/^[aáeéiíoóöőuúüű]/i.test(lower) ? 'az' : 'a'} ${lower}`;
+}
+
+/** The same label as the second half of a heading: lower-case first letter,
+ *  no article ("Betöltetlen … és egy háziorvosra jutó …"). */
+export function lowerFirst(label: string): string {
+  return label.charAt(0).toLocaleLowerCase(locale === 'en' ? 'en' : 'hu') + label.slice(1);
 }
