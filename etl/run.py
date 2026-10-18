@@ -372,6 +372,15 @@ def main() -> None:
                     describe=lambda r: f", {len(r['districts'])} districts"),
              needs=("settlements", "emergency", "district_development"),
              output=ROOT / "data" / "districts.json"),
+        # what a vacancy goes with: deaths, money, work, people leaving —
+        # and the four cross-readings of the existing data
+        Step("outcomes", "outcomes against vacancy",
+             simple("outcomes",
+                    describe=lambda r: f", {len(r['districts'])} járás, "
+                                       f"{len(r['correlations']['pairs'])} pairs"),
+             needs=("mortality", "territorial", "jobseekers", "district_profiles",
+                    "county_profiles", "settlements", "clusters"),
+             output=ROOT / "data" / "outcomes.json"),
     ]
     run_steps(steps, month)
     print("done")

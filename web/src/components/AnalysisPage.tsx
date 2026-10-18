@@ -22,6 +22,10 @@ import { WorkforceSection } from './WorkforceSection';
 import { ClusterSection } from './ClusterSection';
 import { TravelTimeSection } from './TravelTimeSection';
 import { TransitSection } from './TransitSection';
+import { MortalitySection } from './MortalitySection';
+import { LivingSection } from './LivingSection';
+import { LinksSection } from './LinksSection';
+import { CrossSection } from './CrossSection';
 
 /** One hand-off between two analyses, in the page's own rhythm. */
 function Next({ items }: { items: Parameters<typeof NextSteps>[0]['items'] }) {
@@ -43,8 +47,9 @@ export function AnalysisPage() {
       </header>
       <nav className="page-toc">
         {(['statisztika', 'osszevetes', 'kockazat', 'tulel', 'orvosok',
-           'lefedettseg', 'ugyelet', 'tavolsag', 'menetido', 'busz', 'index',
-           'jarasok', 'hianyteruletek'] as const).map((id) => (
+           'lefedettseg', 'jarasok', 'halalozas', 'jovedelem', 'allaskeresok',
+           'nepesseg', 'osszefuggesek', 'ugyelet', 'tavolsag', 'menetido', 'busz',
+           'index', 'keresztmetszet', 'hianyteruletek'] as const).map((id) => (
           <a key={id} href={`#${id}`}>{t(`analysis.toc.${id}`)}</a>
         ))}
       </nav>
@@ -55,6 +60,11 @@ export function AnalysisPage() {
       <WorkforceSection kind={kind} />
       <CoverageSection kind={kind} />
       <DistrictAnalysis />
+      {/* what a vacancy goes with: the deaths it may cost, and the
+          circumstances that make a district hard to fill */}
+      <MortalitySection />
+      <LivingSection />
+      <LinksSection />
       <EmergencySection kind={kind} />
       <AccessSection />
       <TravelTimeSection />
@@ -72,6 +82,7 @@ export function AnalysisPage() {
         { href: '/modszertan.html', titleKey: 'next.method.title',
           textKey: 'next.method.text' },
       ]} />
+      <CrossSection />
       <ClusterSection />
       <Next items={[
         { href: '/megye.html', titleKey: 'next.county.title', textKey: 'next.county.text' },

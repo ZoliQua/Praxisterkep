@@ -1179,7 +1179,13 @@
       "statisztika": "National trends",
       "osszevetes": "GP vs dental",
       "tavolsag": "Distance as the crow flies",
-      "jarasok": "Districts"
+      "jarasok": "Districts",
+      "halalozas": "Avoidable mortality",
+      "jovedelem": "Income",
+      "allaskeresok": "Jobseekers",
+      "nepesseg": "Shrinking population",
+      "osszefuggesek": "Associations",
+      "keresztmetszet": "Cross-sections"
     }
   },
   "vedono": {
@@ -2134,7 +2140,8 @@
     "distBin": "{n} districts, between {from} and {to}",
     "distBinLabel": "{n} districts in this band ({from}–{to}):",
     "distMore": "and {n} more",
-    "distNoValue": "This measure does not apply to {name}."
+    "distNoValue": "This measure does not apply to {name}.",
+    "legendBottom": "and below"
   },
   "districtAnalysis": {
     "heading": "Districts: does the shortage follow the poverty?",
@@ -2205,5 +2212,180 @@
     "changeMind": "Changed your mind?",
     "reopen": "Cookie settings",
     "navLabel": "Privacy"
+  },
+  "outcomes": {
+    "scatter": {
+      "size": "Dot size is the járás population."
+    },
+    "measure": {
+      "gpRate": "Share of GP districts vacant",
+      "gpLongTerm": "Share of GP districts vacant long-term",
+      "dentalRate": "Share of dental districts vacant",
+      "gpMinutes": "Driving time to the nearest GP",
+      "avoidable": "Avoidable mortality",
+      "amenable": "Care-sensitive mortality",
+      "treatable": "Treatable only",
+      "preventable": "Preventable only",
+      "both": "Treatable and preventable",
+      "allCause": "All-cause mortality",
+      "income": "Income per resident",
+      "incomeIndex": "Income, % of the median járás",
+      "taxpayers": "Taxpayers per 1,000",
+      "jobseekers": "Registered jobseekers",
+      "naturalChange": "Natural change",
+      "migration": "Domestic migration balance",
+      "diabetes": "Registered diabetes",
+      "hypertension": "Registered hypertension",
+      "ischaemic": "Registered ischaemic heart disease",
+      "gpLoad": "Patient visits per GP",
+      "ageing": "Ageing index",
+      "development": "Development (2014 index)"
+    },
+    "measureText": {
+      "avoidable": "Deaths under 75 from causes that timely care or effective prevention should have averted — the three NNGYK groups together, per 100,000, age-standardised to the European Standard Population.",
+      "amenable": "Everything on Eurostat's treatable list: the treatable-only causes and those on both lists. This is the part where having a doctor to go to matters most.",
+      "treatable": "Causes on the treatable list only — hypertension, stroke, pneumonia, appendicitis, hernia, gallstones.",
+      "preventable": "Causes on the preventable list only — lung cancer, alcoholic liver disease, COPD, road deaths, suicide.",
+      "allCause": "All deaths at every age, per 100,000, age-standardised. For comparison: how much of it is avoidable."
+    },
+    "part": {
+      "treatable": "treatable only",
+      "both": "treatable and preventable",
+      "preventable": "preventable only"
+    },
+    "partText": {
+      "treatable": "causes that timely medical care can avert",
+      "both": "causes on both Eurostat lists: ischaemic heart disease, colorectal, breast and cervical cancer, diabetes, pneumonia",
+      "preventable": "causes public-health prevention can avert (smoking, alcohol, accidents)"
+    },
+    "mortality": {
+      "heading": "What does an empty district cost? — avoidable mortality",
+      "lead": "Avoidable mortality counts the people who die before 75 of something timely care or prevention should have stopped. In {year} it ranged from {bestValue} ({best}) to {worstValue} ({worst}) per 100,000 — a {times}-fold gap inside one country.",
+      "whatHeading": "What makes a death avoidable?",
+      "what": "NNGYK follows Eurostat's two lists and sorts causes into three groups that do not overlap. Their sum is avoidable mortality; the bar shows what a typical járás's is made of.",
+      "medianDistrict": "The middle járás ({name})",
+      "switch": "Which measure",
+      "mapHeading": "Where is it highest?",
+      "scatterHeading": "Does it go with vacant districts?",
+      "pickedLine": "{value} per 100,000; the rural median is {median}.",
+      "findingRaw": "Across the 174 rural járás, the association between the share of vacant GP districts and {what} is {strength}: r = {r} (p {p}, n = {n}).",
+      "findingPartial": "It survives holding income constant: partial r = {r} (p {p}) — so it is not only that poorer places have both more empty districts and more deaths.",
+      "findingIncome": "Income itself is more strongly associated (r = {r}).",
+      "caveat": "This is an association between places, not proof that a given vacancy causes deaths. Vacancy, poverty, ageing and mortality reinforce one another; holding income constant reduces that, it does not remove it. A vacant district is not unserved: a substitute doctor covers it.",
+      "source": "Source: NNGYK mortality database, {year}; standardised death rate (SHA) per 100,000, 2013 European Standard Population. GP vacancy from NEAK's monthly lists."
+    },
+    "grid": {
+      "aria": "Avoidable mortality by income and vacancy thirds",
+      "rows": "Income",
+      "cols": "Vacant GP districts",
+      "vac0": "few vacant",
+      "vac1": "middle",
+      "vac2": "many vacant",
+      "inc0": "poorest third",
+      "inc1": "middle third",
+      "inc2": "richest third",
+      "n": "{n} járás",
+      "heading": "Is it only poverty?",
+      "explain": "Each row holds income still: if the numbers rise left to right, {what} is higher where more GP districts are vacant even among equally poor, or equally rich, places. Click a cell to see its járás.",
+      "finding": "In the richest third, the járás with the fewest and the most vacancies differ by {richLow} → {richHigh} (+{richUp}%); in the poorest third, {poorLow} → {poorHigh}.",
+      "cellHeading": "{inc}, {vac}",
+      "pickHint": "Click a cell: its járás appear here and light up on the scatter above."
+    },
+    "third": {
+      "0": "poorest third",
+      "1": "middle third",
+      "2": "richest third"
+    },
+    "vacThird": {
+      "0": "many vacant GP districts",
+      "1": "middle",
+      "2": "few vacant"
+    },
+    "strength": {
+      "none": "negligible",
+      "weak": "weak",
+      "moderate": "moderate",
+      "strong": "strong"
+    },
+    "matrix": {
+      "cellTitle": "{x} and {y}: r = {r} (p {p})"
+    },
+    "trend": {
+      "hint": "Pick a county below, or hover a line."
+    },
+    "medianDistrict": "median rural járás",
+    "national": "national",
+    "living": {
+      "worstHeading": "The járás worst off",
+      "median": "Rural median: {value}.",
+      "capitalWide": "KSH publishes the capital as one place, so the kerület are left blank here."
+    },
+    "income": {
+      "heading": "How much money is there? — income",
+      "lead": "Yearly income forming the personal income tax base, per permanent resident — the most direct measure of how much money a place has. The rural median is {median} a year ({year}).",
+      "trendHeading": "Catching up or falling behind? — counties as % of the median járás",
+      "trendExplain": "Forints are not comparable across years: inflation ran at 15–25% in 2022–23. So the line is each county's income as a share of that year's median járás; the dashed 100% line is the median itself.",
+      "finding": "Of everything examined, income is most strongly associated with avoidable mortality: r = {r}. That is why every other association also comes in an income-adjusted version.",
+      "source": "Source: KSH TIMEA (from NAV data), income forming the personal income tax base per permanent resident, thousand Ft."
+    },
+    "jobs": {
+      "heading": "Is there work? — registered jobseekers",
+      "lead": "Most recently ({month}) there were {count} registered jobseekers, {rate}% of the working-age population; {long} of them for over a year. At the start of the series ({first}) the share was {firstRate}%.",
+      "trendHeading": "Share of jobseekers by county",
+      "quarterly": "Before 2024 NFSZ published settlement figures quarterly, so the line is quarterly for 2019–2023 and monthly since.",
+      "finding": "Where more GP districts are vacant, there are more jobseekers too (r = {r}): a doctor's family needs work as well, and a jobless, shrinking area is the hardest to fill.",
+      "source": "Source: NFSZ settlement data; registered jobseekers by place of residence on the 20th of the month, as a share of the 15–64 population."
+    },
+    "pop": {
+      "heading": "Who stays? — shrinking and leaving",
+      "lead": "Averaged over {years}, {emptying} of the 174 rural járás lose people both ways at once — more deaths than births and more leaving than arriving — and {people} people live in them.",
+      "quadrantHeading": "Two kinds of shrinking in one chart",
+      "quadrantExplain": "Each dot is a járás: across, natural change (births minus deaths); up, the domestic migration balance; both per 1,000. Bottom left is where the population shrinks both ways. Colour is the GP-vacancy third; click a dot to open the járás.",
+      "trendHeading": "{what} by county",
+      "source": "Source: KSH TIMEA; per 1,000 residents, for the járás the {years} average. Migration counts permanent and temporary domestic moves together."
+    },
+    "links": {
+      "heading": "What goes with what?",
+      "lead": "The whole picture in one table: four features of care in the rows, outcomes and circumstances in the columns. Each cell is a correlation across the 174 rural járás; click one and its cloud of dots appears below, so no number has to be taken on trust.",
+      "controlled": "Income held constant",
+      "controlledExplain": "Partial correlation: what remains of the association once the income difference between járás is taken out. Computed for the vacancy rows.",
+      "rawExplain": "Raw correlation (Pearson's r). Red: they rise together; teal: one rises as the other falls; faded: not distinguishable from chance (p ≥ 0.05).",
+      "keyPos": "rise together",
+      "keyNeg": "move opposite",
+      "keyWeak": "not significant",
+      "pairHeading": "{x} and {y}",
+      "pairFinding": "The association is {strength}: r = {r} (rank correlation: {rho}), {n} járás.",
+      "pairPartial": "Holding income constant: {r}.",
+      "caveat": "A correlation measures how places move together, not a cause. Anything tied to many variables at once — poverty, ageing — can produce an association where there is no direct link. A result that did not come out is a result too: the share of registered chronic patients, for one, is unrelated to vacancy."
+    },
+    "cross": {
+      "heading": "Four cross-sections — the existing data read against itself",
+      "lead": "No new source, only the settlement profiles: how long a district has been empty against how far the next doctor is; how that depends on how old the village is; whether a bus goes there; and where the unserved settlements form a contiguous patch.",
+      "durationHeading": "The longer it is empty, the further the next doctor?",
+      "durationText": "{n} settlements served by at least one vacant GP district. Each bar is the median driving time to the nearest staffed surgery, by how long the district has been empty.",
+      "band0": "under 2 years",
+      "band1": "2–5 years",
+      "band2": "5–10 years",
+      "band3": "over 10 years",
+      "bandN": "{n} settlements",
+      "xYears": "Empty for (years)",
+      "yMinutes": "Driving time to the nearest doctor",
+      "gNoBus": "vacant only, no direct bus",
+      "gOnly": "vacant only",
+      "gPartial": "also has a staffed district",
+      "ageHeading": "Do ageing villages lose their doctor?",
+      "ageText": "Settlements banded by the share aged 65+; each column is how many of them are served only by a vacant GP district.",
+      "ageTitle": "{from}–{to}% aged: {n} settlements, {share}% vacant only",
+      "ageNote": "U-shaped: the youngest and the oldest villages are the most exposed. The two end bands hold few settlements, so one or two villages move the share a lot.",
+      "busHeading": "Where no bus goes either",
+      "busBig": "settlements ({people} people) of the {of} served only by a vacant district cannot reach the nearest doctor by direct bus either.",
+      "desertHeading": "Care deserts",
+      "desertBig": "contiguous patches holding {settlements} settlements and {people} people",
+      "desertText": "On top of that, {isolated} isolated settlements ({isolatedPeople} people) have no staffed GP district and no neighbour that helps.",
+      "desertMore": "The map and the method →"
+    },
+    "min": "min",
+    "yr": "yrs",
+    "people": "people"
   }
 }

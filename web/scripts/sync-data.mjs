@@ -52,6 +52,10 @@ const optional = [
     join(out, 'district_development.json')],
   [join(repo, 'data', 'tenure.json'), join(out, 'tenure.json')],
   [join(repo, 'data', 'fluctuation.json'), join(out, 'fluctuation.json')],
+  // the outcome analyses (elemzo.html, jaras.html, megye.html); the three
+  // source files behind it (mortality, territorial, jobseekers) stay on the
+  // ETL side — the pages read the slice they need, not 10 MB of inputs
+  [join(repo, 'data', 'outcomes.json'), join(out, 'outcomes.json')],
   [join(repo, 'data', 'geo', 'settlements.geojson'), join(out, 'settlements.geojson')],
   [join(repo, 'data', 'geo', 'jaras.geojson'), join(out, 'jaras.geojson')],
 ];
