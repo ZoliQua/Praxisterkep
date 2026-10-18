@@ -435,7 +435,9 @@
       "A szűrések kimaradnak — az apró szuvasodást senki nem veszi észre.",
       "A szuvasodás csendben terjed, és fájdalommal, duzzanattal jelentkezik.",
       "A menthetetlen fogat húzni kell — a pótlás hosszabb, fájdalmasabb és sokkal drágább."
-    ]
+    ],
+    "storyTieBroken": "Ma {count} {kind} körzetben szakad meg ez a lánc — {people} embert érint.",
+    "storyTieOk": "Ez a lánc ma {count} {kind} körzetben működik az ország {total} körzetéből."
   },
   "showcase": {
     "sparkNote": "az archivált hónapok alapján ({first} – {last})",
