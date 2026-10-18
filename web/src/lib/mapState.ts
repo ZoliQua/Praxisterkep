@@ -50,7 +50,9 @@ export function writeMapState(search: string, s: MapUrlState): string {
     if (value) p.set(key, value);
     else p.delete(key);
   };
-  setOr(KEYS.kind, s.kind === 'gp' ? 'gp' : undefined);
+  // GP is the site-wide default (see lib/context.ts), so only dental is
+  // spelled out; writing the default would put ?k=gp on every bare landing
+  setOr(KEYS.kind, s.kind === 'dental' ? 'dental' : undefined);
   setOr(KEYS.county, s.county);
   setOr(KEYS.type, s.type && s.type !== 'all' ? s.type : undefined);
   setOr(KEYS.view, s.view === 'columns' ? 'columns' : undefined);

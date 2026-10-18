@@ -45,8 +45,12 @@ export const CONTEXT_KEYS = {
   kind: 'k', county: 'm', settlement: 'tel', dissolved: 'msz', district: 'jar',
 } as const;
 
+// GP is what a visitor arriving cold is most likely to be looking for: nearly
+// everyone has a háziorvos, far fewer think about which dental district they
+// belong to. The dental branch is the one this project started from, but it is
+// the narrower question, so it is no longer what the site opens on.
 export const EMPTY: SiteContext = {
-  kind: 'dental', county: null, settlement: null, dissolved: 'without',
+  kind: 'gp', county: null, settlement: null, dissolved: 'without',
   district: null,
 };
 
@@ -57,7 +61,7 @@ export function readContext(search: string = window.location.search): SiteContex
   const kind = p.get(CONTEXT_KEYS.kind);
   const settlement = p.get(CONTEXT_KEYS.settlement);
   return {
-    kind: kind === 'gp' ? 'gp' : 'dental',
+    kind: kind === 'dental' ? 'dental' : 'gp',
     county: p.get(CONTEXT_KEYS.county) || null,
     settlement: settlement && SLUG_RE.test(settlement) ? settlement : null,
     dissolved: p.get(CONTEXT_KEYS.dissolved) === '1' ? 'with' : 'without',
@@ -72,8 +76,8 @@ export function writeContext(search: string, ctx: SiteContext): string {
     if (value) p.set(key, value);
     else p.delete(key);
   };
-  // dental is the default everywhere, so it is left out of the address
-  setOr(CONTEXT_KEYS.kind, ctx.kind === 'gp' ? 'gp' : null);
+  // GP is the default everywhere, so it is left out of the address
+  setOr(CONTEXT_KEYS.kind, ctx.kind === 'dental' ? 'dental' : null);
   setOr(CONTEXT_KEYS.county, ctx.county);
   setOr(CONTEXT_KEYS.settlement, ctx.settlement);
   // the narrow reading is the default, so only the other choice is written
