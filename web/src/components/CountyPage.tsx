@@ -6,6 +6,7 @@
 // settlements it is made of.
 import { useMemo, useState } from 'react';
 import { t } from '../lib/i18n';
+import { CountyOutcomes } from './CountyOutcomes';
 import { formatDecimal, formatNumber, formatPercent } from '../lib/format';
 import { useContextStore } from '../lib/context';
 import { useHashScroll } from '../lib/useHashScroll';
@@ -365,6 +366,8 @@ export function CountyPage() {
                 </tr>
               </tbody>
             </table>
+
+            <CountyOutcomes county={agg.name} />
 
             <h2 className="section__subheading" id="telepulesek">
               {t('county.tableHeading', { county: agg.name })}

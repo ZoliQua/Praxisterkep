@@ -120,7 +120,7 @@ export function LivingSection() {
         <h3 className="outcome__sub">{t('outcomes.income.trendHeading')}</h3>
         <p className="section__explain">{t('outcomes.income.trendExplain')}</p>
         <TrendLines labels={income.labels} series={income.series} reference={income.reference}
-          focus={focus} onFocus={setFocus} format={(v) => `${Math.round(v)}%`} />
+          focus={focus} onFocus={setFocus} format={(v) => `${Math.round(v)}%`} minSpan={40} />
         <CountyChips focus={focus} onFocus={setFocus} names={income.series.map((s) => s.key)} />
         {incomeAvoid && (
           <p className="outcome__finding">{t('outcomes.income.finding', {

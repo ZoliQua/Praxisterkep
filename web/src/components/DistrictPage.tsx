@@ -20,6 +20,7 @@ import { Donut, DonutLegend } from './charts/Donut';
 import { DistrictMap } from './charts/DistrictMap';
 import { DistrictRanking } from './charts/DistrictRanking';
 import { DistrictScatter, type ScatterX } from './charts/DistrictScatter';
+import { DistrictOutcomes } from './DistrictOutcomes';
 import { DistrictDistribution } from './charts/DistrictDistribution';
 import { CompareBars, ScaleMark, ShareDots } from './charts/DistrictFigures';
 import { PageNav } from './PageNav';
@@ -495,6 +496,9 @@ export function DistrictPage() {
               source: data?.development?.source ?? '',
               benefit: data?.development?.benefitSource ?? '',
             })}</p>
+
+            {/* the outcome analyses, turned to this járás */}
+            <DistrictOutcomes name={d.name} />
 
             <h2 className="section__subheading" id="rangsor">
               {t('district.rankingHeading')}

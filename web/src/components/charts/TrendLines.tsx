@@ -32,7 +32,7 @@ function monthNumber(m: string): number {
   return y * 12 + (mo - 1);
 }
 
-export function TrendLines({ labels, series, reference, focus, onFocus, format, tickLabel }: {
+export function TrendLines({ labels, series, reference, focus, onFocus, format, tickLabel, minSpan }: {
   /** the x positions, in order: years ("2012") or months ("2019-03"). Months
    *  are placed on a true time axis — a quarterly stretch followed by a
    *  monthly one must not look like the same span of time. */
@@ -45,6 +45,9 @@ export function TrendLines({ labels, series, reference, focus, onFocus, format, 
   format: (v: number) => string;
   /** how a label is written under the axis; return '' to skip one */
   tickLabel?: (label: string, i: number) => string;
+  /** the least the vertical axis may span. A line moving between 97% and
+   *  103% must not be blown up to fill the frame and read as a swing. */
+  minSpan?: number;
 }) {
   const [hoverI, setHoverI] = useState<number | null>(null);
   const geom = useMemo(() => {
@@ -52,6 +55,10 @@ export function TrendLines({ labels, series, reference, focus, onFocus, format, 
       .flatMap((s) => s.values).filter((v): v is number => v !== null);
     if (!all.length) return null;
     let lo = Math.min(...all); let hi = Math.max(...all);
+    if (minSpan && hi - lo < minSpan) {
+      const mid = (hi + lo) / 2;
+      lo = mid - minSpan / 2; hi = mid + minSpan / 2;
+    }
     const pad = (hi - lo) * 0.06 || 1;
     lo -= pad; hi += pad;
     const n = labels.length;
@@ -77,7 +84,7 @@ export function TrendLines({ labels, series, reference, focus, onFocus, format, 
       return d;
     };
     return { lo, hi, px, py, path, ty: ticks(lo, hi), yearTicks, pos, p0, p1, monthly };
-  }, [labels, series, reference]);
+  }, [labels, series, reference, minSpan]);
   if (!geom) return null;
   const { lo, hi, px, py, path, ty, yearTicks, pos, p0, p1, monthly } = geom;
   const focused = series.find((s) => s.key === focus) ?? null;

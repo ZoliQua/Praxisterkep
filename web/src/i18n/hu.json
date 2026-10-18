@@ -2386,6 +2386,43 @@
     },
     "min": "perc",
     "yr": "év",
-    "people": "fő"
+    "people": "fő",
+    "district": {
+      "heading": "Egészség és életkörülmények",
+      "explain": "Az elkerülhető halálozás és a járás körülményei, a 174 vidéki járás mediánja és a megye mellett. A csík minden vidéki járást egy vonással mutat, a mediánt magasabb vonallal; a pont ez a járás. A rossz vég mindig jobbra esik. A halálozás az NNGYK {year}. évi adata.",
+      "median": "vidéki medián",
+      "rank": "{article} {rank}. legrosszabb a {of} vidéki járás közül",
+      "capitalWide": "a főváros egészére",
+      "capital": "Budapest egésze",
+      "stripNote": "A kártya színe akkor piros, ha a járás a legrosszabb negyedben van, és akkor türkiz, ha a legjobb negyedben.",
+      "avoidHeading": "Miből áll az elkerülhető halálozás?",
+      "avoidExplain": "A három NNGYK-csoport 100 ezer lakosra; az összegük az elkerülhető halálozás. Ha a piros rész a nagy, a hiányzó ellátás számít többet; ha a lila, a megelőzés.",
+      "causeHeading": "Halálozás halálokok szerint",
+      "shhNote": "Standardizált halálozási hányados (SHH): 100 az, amennyi halált az országos arányok a járás kor- és nemszerkezete alapján előre jeleznének. 140 = 40%-kal több a vártnál.",
+      "jobsHeading": "Álláskeresők aránya — a járás és az ország",
+      "incomeHeading": "Jövedelem a medián járás százalékában",
+      "source": "Források: NNGYK Halandósági adatbázis; KSH TIMEA (NAV-adatok); NFSZ településsoros adatai."
+    },
+    "cause": {
+      "all": "Összes halálozás",
+      "circulatory": "Keringési betegségek",
+      "ischaemicHeart": "Ischaemiás szívbetegség",
+      "cerebrovascular": "Agyérbetegség",
+      "cancer": "Rosszindulatú daganatok",
+      "respiratory": "Légzőrendszeri",
+      "chronicRespiratory": "Idült alsó légúti",
+      "digestive": "Emésztőrendszeri",
+      "external": "Külső okok",
+      "mental": "Mentális zavarok"
+    },
+    "county": {
+      "heading": "Egészség és életkörülmények — {county}",
+      "explain": "A megye a másik tizenkilenc mellett, öt mutatóban; mindegyik rangsor a legrosszabbtól a legjobbig tart. A halálozás az NNGYK {year}. évi adata, a többi a KSH TIMEA és az NFSZ legfrissebb közlése.",
+      "place": "{rank}. a {of} megyéből (a legrosszabbtól számolva)",
+      "jobsHeading": "Álláskeresők aránya — a megye és az ország",
+      "incomeHeading": "Jövedelem a medián járás százalékában",
+      "districtsHeading": "{county} járásai egymás mellett",
+      "colDistrict": "Járás"
+    }
   }
 }

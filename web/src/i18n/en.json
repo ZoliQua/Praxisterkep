@@ -2386,6 +2386,43 @@
     },
     "min": "min",
     "yr": "yrs",
-    "people": "people"
+    "people": "people",
+    "district": {
+      "heading": "Health and living conditions",
+      "explain": "Avoidable mortality and the járás's circumstances, beside the median of the 174 rural járás and its county. The strip shows every rural járás as a tick, the median as a taller one; the dot is this járás. The bad end is always on the right. Mortality is NNGYK's {year} data.",
+      "median": "rural median",
+      "rank": "{rank}th worst of the {of} rural járás",
+      "capitalWide": "for the whole capital",
+      "capital": "Budapest as a whole",
+      "stripNote": "A card turns red when the járás is in the worst quarter, teal in the best.",
+      "avoidHeading": "What is its avoidable mortality made of?",
+      "avoidExplain": "The three NNGYK groups per 100,000; their sum is avoidable mortality. A large red part means missing care weighs more; a large violet one, prevention.",
+      "causeHeading": "Mortality by cause",
+      "shhNote": "Standardised mortality ratio (SHH): 100 is the deaths national rates would predict for the járás's age and sex structure. 140 = 40% more than expected.",
+      "jobsHeading": "Jobseekers — the járás and the country",
+      "incomeHeading": "Income as % of the median járás",
+      "source": "Sources: NNGYK mortality database; KSH TIMEA (NAV data); NFSZ settlement data."
+    },
+    "cause": {
+      "all": "All causes",
+      "circulatory": "Circulatory",
+      "ischaemicHeart": "Ischaemic heart",
+      "cerebrovascular": "Stroke",
+      "cancer": "Cancer",
+      "respiratory": "Respiratory",
+      "chronicRespiratory": "Chronic lower respiratory",
+      "digestive": "Digestive",
+      "external": "External causes",
+      "mental": "Mental disorders"
+    },
+    "county": {
+      "heading": "Health and living conditions — {county}",
+      "explain": "The county beside the other nineteen in five measures, each ranking running from worst to best. Mortality is NNGYK's {year} data; the rest is the latest from KSH TIMEA and NFSZ.",
+      "place": "{rank} of {of} counties (counting from the worst)",
+      "jobsHeading": "Jobseekers — the county and the country",
+      "incomeHeading": "Income as % of the median járás",
+      "districtsHeading": "The járás of {county} side by side",
+      "colDistrict": "Járás"
+    }
   }
 }
