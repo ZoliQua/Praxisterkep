@@ -5,6 +5,43 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.47.0] — 2026-10-18
+
+Mivel jár együtt a betöltetlenség? Elkerülhető halálozás, jövedelem,
+munkanélküliség és elvándorlás — országos, megyei, járási és települési
+szinten.
+
+### Hozzáadva
+- **Három új nyilvános forrás.** Az NNGYK halandósági adatbázisa
+  (standardizált halálozás járásonként és megyénként, tíz halálok és az
+  elkerülhető halálozás három csoportja), a KSH TIMEA (jövedelem a NAV
+  adataiból, természetes fogyás, vándorlás, egy háziorvosra jutó
+  betegforgalom, településenként) és az NFSZ településsoros
+  álláskeresői adatai 2019-től. Mindhárom archiválva van, és minden
+  beolvasás ellenőrzi magát (197 járás és 20 megye; az NFSZ minden
+  munkalapja a saját megyei összesítőjét adja ki).
+- **Az elemző oldalon hat új szakasz:** elkerülhető halálozás (térkép,
+  szórásdiagram, jövedelem × betöltetlenség rács), jövedelem,
+  álláskeresők, népesség, összefüggés-mátrix parciális korrelációval,
+  és négy keresztmetszet új adat nélkül (betöltetlenség hossza ×
+  menetidő, korösszetétel, buszelérés, ellátási sivatagok).
+- **A járás- és a megyelapon** új „Egészség és életkörülmények” rész:
+  a járás helye a 174 vidéki járás között mértékenként, halálokok az
+  országos arányhoz mérve, idősorok; a megye a többi tizenkilenc
+  között, és a járásai egymás mellett.
+- **Mind a 3177 településlapon** új „Hogyan élnek itt?” szakasz
+  szkript nélkül: jövedelem, álláskeresők idősorral, születés és
+  halálozás, vándorlás, betegforgalom, a járás, a megye és a középső
+  település mellett, plusz a járás elkerülhető halálozása.
+- A módszertan oldalon a források és a statisztika leírása (`#kimenetek`),
+  a láblécben a három új forrás közvetlen linkje.
+
+### Fő eredmény
+- A 174 vidéki járásban a betöltetlen háziorvosi körzetek aránya és az
+  elkerülhető halálozás között r = 0,44; a jövedelmet kiszűrve is
+  0,36 marad. Ami nem igazolódott, az is szerepel: a nyilvántartott
+  krónikus betegek aránya nem függ össze a betöltetlenséggel.
+
 ## [1.46.1] — 2026-10-18
 
 ### Módosítva
