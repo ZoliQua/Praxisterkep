@@ -1,4 +1,4 @@
-# CLAUDE.md — Magyar-Alapellatas (Praxistérkép)
+# CLAUDE.md — Praxistérkép
 
 Interactive public map of Hungarian primary care districts (dental first, GP later),
 showing vacancies, duration, affected population and trends, built from monthly
