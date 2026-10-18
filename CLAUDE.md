@@ -81,6 +81,24 @@ dissolved (megszűnt) list for GP; the GP registry is the source of district
   (174 + the capital's 23 kerület) — so a browser never downloads 3177 towns
   to look at one of them. `district_development.json` carries the state's own
   development ranking of the járás (source L).
+- Outcomes and circumstances, from outside the health registers:
+  `mortality.json` (source M — what a vacancy costs, in deaths),
+  `territorial.json` (source N — income, births and deaths, people leaving)
+  and `jobseekers.json` (source O). Three rules hold for all three:
+  * Avoidable mortality comes from NNGYK, never from KSH's district death
+    tables (Statinfo NH3A07): KSH masks every cell under three deaths and
+    draws it exactly like a zero, which would make the small rural járás
+    look healthiest. The three NNGYK groups are disjoint, so 11+12+13 is
+    total avoidable and 11+13 everything on the treatable list.
+  * Every TIMEA value is a rate, and rates are never averaged up a level:
+    járás and county values come from KSH's own higher layers. There is no
+    national layer; comparisons use the county and the median of the 174
+    járás. TIMEA has no kerület level — the capital is one settlement there.
+  * Settlements are keyed by the KSH code (TIMEA's ELEM_KOD is the first four
+    digits of our kshId) or, for NFSZ, by county + casefolded name, always
+    from the gazetteer itself — never by reading settlements.json, which is
+    built from these files. Every NFSZ sheet must add up to its own printed
+    county total or it is rejected.
 - Not in git, reproducible from their URL and date: the OSM extract under
   `data/raw/osm/`, the GTFS zip under `data/raw/gtfs/` and the derived
   `data/geo/road_graph.npz`.
@@ -148,8 +166,15 @@ dissolved (megszűnt) list for GP; the GP registry is the source of district
 | J | OpenStreetMap Hungary extract (Geofabrik, ODbL) — the drivable road graph | PBF | on demand |
 | K | Volánbusz national GTFS (MÁV Sz. Zrt. via gtfs.kti.hu, CC0) — scheduled buses; MÁV rail is registration-only and therefore absent | ZIP | monthly |
 | L | 290/2014. (XI. 26.) Korm. rendelet — the járás development ranking (komplex mutató, 2014) and 105/2015. (IV. 23.) Korm. rendelet — the lagging settlements, both from njt.hu | HTML | on demand |
+| M | NNGYK Halandósági adatbázis (nngyk.gov.hu) — SHA (direct, 2013 European Standard Population) and SHH (indirect, 100 = national) per járás and county, by sex: 10 cause groups and Eurostat's avoidable mortality split into treatable-only / preventable-only / both | HTML (htmlwidgets; the JSON payload is archived, the base64 map geometry is not) | yearly |
+| N | KSH TIMEA (map.ksh.hu ArcGIS service, NAV/KSH data) — SZJA-alapot képező jövedelem per resident and per taxpayer, taxpayers, natural change, births, deaths, domestic migration balance, a GP's yearly patient count, GP-registered diabetes / hypertension / ischaemic heart disease (járás), ageing index; settlement, járás and county layers, the capital as one | REST JSON | yearly |
+| O | NFSZ településsoros adatai — registered jobseekers per settlement and kerület (total, > 1 year, benefit, assistance, supported, working-age population) | XLSX | monthly (quarterly before 2024, back to 2019) |
 
-Source URLs are configured in `etl/sources.py` — update there only.
+NEAK source URLs are configured in `etl/sources.py` — update there only. The
+other sources keep their URL as a constant in the one module that reads them
+(`district_development.py`, `nngyk_mortality.py`, `ksh_timea.py`,
+`nfsz_jobseekers.py`, …), with the source described in that module's
+docstring.
 NEAK data is "tájékoztató jellegű"; this disclaimer must appear in the UI footer.
 
 ## Key data model

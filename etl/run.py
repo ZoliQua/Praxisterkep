@@ -330,6 +330,23 @@ def main() -> None:
                                        f"{r['kinds']['dental']['recentChanges']} dental "
                                        "changes in the last year"),
              needs=("tenure",), output=ROOT / "data" / "fluctuation.json"),
+        # outcomes and circumstances, from outside the health registers:
+        # what a vacancy costs (deaths), and where it is hardest to fill
+        # (income, work, people leaving)
+        Step("mortality", "avoidable mortality by járás (NNGYK)",
+             simple("nngyk_mortality",
+                    describe=lambda r: f", {r['year']}, {r['counts']['districts']} járás"),
+             output=ROOT / "data" / "mortality.json"),
+        Step("territorial", "income, births, migration (KSH TIMEA)",
+             simple("ksh_timea",
+                    describe=lambda r: f", {r['counts']['settlements']} settlements, "
+                                       f"{r['years'][0]}–{r['years'][-1]}"),
+             output=ROOT / "data" / "territorial.json"),
+        Step("jobseekers", "registered jobseekers (NFSZ)",
+             simple("nfsz_jobseekers",
+                    describe=lambda r: f", {r['counts']['settlements']} settlements, "
+                                       f"latest {r['latest']}"),
+             output=ROOT / "data" / "jobseekers.json"),
         # the analyses turned inside out: one record per settlement, which
         # the build then bakes into a static page for each of them
         Step("settlements", "settlement profiles", simple("settlements"),
