@@ -23,8 +23,18 @@ describe('site navigation', () => {
   it('names every page the site has, in the order of the zooms', () => {
     expect(allEntries.map((e) => e.href)).toEqual([
       '/', '/megye.html', '/jaras.html', '/telepules/', '/elemzo.html',
-      '/eeszt.html', '/szakellato.html', '/modszertan.html',
+      '/szakellato.html', '/modszertan.html',
     ]);
+  });
+
+  it('keeps the register comparison out of the menu', () => {
+    // eeszt.html is a working note about where two public registers disagree.
+    // It is still built and still linked — from the sources list in the
+    // footer — but it is not one of the site's seven pages.
+    expect(allHrefs.some((h) => h.startsWith('/eeszt.html'))).toBe(false);
+    const footer = readFileSync(
+      join(root, 'src', 'components', 'Footer.tsx'), 'utf8');
+    expect(footer).toContain('"/eeszt.html"');
   });
 
   it('has a label in both locales for every entry', () => {

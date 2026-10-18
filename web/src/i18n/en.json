@@ -207,16 +207,26 @@
     "p9": "The EESZT supplement (source H) is built from three public registers of the EESZT master-data publication: NEAK_FINSZOLG (financed services), EUSZOLG_PUBLIKUS (healthcare providers) and EUSZOLG_ENGEDELY_PUBLIKUS (operating licences). Matching uses official codes only: from the NEAK FIN code through the organisational-unit code to the licence of the district's own profession (GP 6301–6303, dental 1300/1304/1305). We check whether the licensed premises lie in the district's settlement and whether the licensee's tax number matches the financed provider; differences are flagged, and where a FIN points to several licences at different premises no premises are shown. The district number is extracted from the official service name with a strict pattern. The provider name is shown only for filled districts; for vacant districts no free-text name field is taken over, as organisational-unit names often carry the former physician's name. On the EESZT map each district is drawn at its licensed premises; addresses are geocoded with OpenStreetMap Nominatim (at most 1 request per second, cached). Where an address cannot be resolved at street level, the settlement centre is used — shown as a fainter point on the map and in the \"approximate location\" column; districts without coordinates are not drawn."
   },
   "footer": {
+    "publicOnly": "This site uses only publicly released official and statistical data, which it analyses in aggregate. It collects no data of its own and contains no patient or other personal health data.",
     "sources": "Sources",
-    "sourceNeak": "NEAK — Vacant dental services; Vacant (terminated) dental services; Vacant GP services; Contracted providers (dental practices, GP services)",
-    "sourceOsm": "Base map data: © OpenStreetMap contributors (ODbL) — boundaries and geocoding (Nominatim)",
-    "disclaimer": "NEAK's data are informative in nature, published on the basis of monthly financing-contract records.",
-    "license": "Code: MIT licence · Processed data: CC BY 4.0 · Source data under the original publishers' terms",
-    "author": "Created by Dr. Zoltan Dul",
-    "updated": "Data as of",
-    "sourceKsh": "Resident population: HCSO Gazetteer, 1 January 2025 (www.ksh.hu/apps/hntr.egyeb)",
+    "sourceNeak": "NEAK — vacant dental services; vacant (dissolved) dental services; vacant GP services; contracted providers (neak.gov.hu)",
     "sourceOkfo": "Long-term vacant districts: OKFŐ Primary Care Directorate (alapellatas.okfo.gov.hu)",
-    "sourceEeszt": "Supplementary data: EESZT master-data publication — NEAK_FINSZOLG, EUSZOLG_PUBLIKUS, EUSZOLG_ENGEDELY_PUBLIKUS (www.eeszt.gov.hu)"
+    "sourceEeszt": "Supplementary data: EESZT master publication — NEAK_FINSZOLG, EUSZOLG_PUBLIKUS, EUSZOLG_ENGEDELY_PUBLIKUS (www.eeszt.gov.hu)",
+    "sourceKsh": "KSH — gazetteer (population, district, area) and the 2022 census age composition (CC BY 4.0, www.ksh.hu)",
+    "sourceDecree": "Statutory classifications: government decrees 290/2014 (XI. 26.) and 105/2015 (IV. 23.), from the National Legislation Database (njt.hu)",
+    "sourceOsm": "Map data: © OpenStreetMap contributors (ODbL), geocoding: Nominatim; timetables: Volánbusz GTFS (CC0)",
+    "legal": "Legal notes",
+    "disclaimer": "NEAK states its own data to be informational, published from the monthly financing contract records. The figures here are not a basis for administrative, legal or care-planning decisions.",
+    "vacantNotUnserved": "A vacant district does not mean there is no care: residents are usually seen by a substitute physician, which the public data does not show. Check opening hours and the place of care with the provider.",
+    "names": "A physician's name appears only where NEAK itself publishes it: on filled districts in the contracted provider list. Never for vacant or dissolved districts, nor for substitutes.",
+    "noPersonal": "The site asks for no registration, uses no tracking cookies and runs no visitor analytics; we collect and store no visitor data. Your language choice and map-layer settings are kept in your own browser's storage and never reach us. Two third parties are embedded: Google Fonts serves the typefaces, and the street-level map — only if you open it — comes from MapTiler and OpenStreetMap; your browser contacts them when those load.",
+    "notOfficial": "A private initiative: not an official publication of NEAK, OKFŐ, NNGYK or any other authority, and not an official position. The author's professional role is given for identification, not as institutional endorsement.",
+    "correction": "Found something wrong or out of date? Corrections are best raised with the publisher of the source; errors on this site can be reported on GitHub (@ZoliQua) and are fixed with the next monthly update.",
+    "authorBy": "Made by",
+    "authorName": "Dr. Zoltán Dul",
+    "authorTitle": ", national collegial professional lead dentist",
+    "license": "Code: MIT licence · Processed data: CC BY 4.0 · Source data under the terms of its original publisher",
+    "updated": "Data as of"
   },
   "praxisTypes": {
     "adult": "adult",
@@ -513,7 +523,8 @@
     "colNeakCode": "NEAK code",
     "mapDistrictNames": "District names",
     "mapSavePng": "Save map (PNG)",
-    "colAddress": "Address"
+    "colAddress": "Address",
+    "internalNote": "This page is a working note for internal analysis and is not in the main menu. It holds two public registers against each other — NEAK's contracted provider list and the EESZT master publication — and shows where they disagree. The differences are inconsistencies between the registers: administrative discrepancies, not findings about any physician, provider or the care given. Nothing here asserts fault on anyone's part; the point is to make the limits of using the two sources together visible."
   },
   "dataTable": {
     "searchAll": "Search all columns…",
@@ -1174,7 +1185,8 @@
     "note": "Source: EESZT master publication, {asOf}. An operating licence was found for {licence} services and not for {missing}. Geocoded premises: {geocoded}. No health visitor's name appears anywhere.",
     "colYoung": "Residents aged 0–14",
     "colYoungPerService": "Aged 0–14 / territorial service",
-    "statYoungPerService": "residents aged 0–14 per territorial service"
+    "statYoungPerService": "residents aged 0–14 per territorial service",
+    "navLabel": "Health visitors"
   },
   "specialist": {
     "heading": "Specialist institutions",

@@ -5,6 +5,66 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.45.0] — 2026-10-18
+
+Nyilvánosságra készülés: mit mond magáról az oldal, és mit nem.
+
+### Hozzáadva
+- **Minden lap alján ugyanaz a forrás- és jogi blokk** — a
+  főoldalon, a megye-, járás- és elemzőlapon, a „Ki lát el
+  még?"-en, a módszertanon és mind a 3177 statikus
+  településlapon. Egy szöveg, két rendereő (a React komponens és
+  a statikus generátor ugyanabból az `i18n/hu.json`-ból olvas).
+- **Az első sor, kiemelve:** az oldal kizárólag nyilvánosan
+  közzétett hatósági és statisztikai adatokat használ, és
+  azokat összesítve elemzi; saját adatgyűjtést nem végez,
+  beteg- vagy más személyes egészségügyi adatot nem tartalmaz.
+- **Jogi tudnivalók hat pontban**: a NEAK adatai tájékoztató
+  jellegűek és nem alapoznak meg hatósági vagy jogi
+  döntést; a betöltetlen körzet nem ellátatlan; orvosnév csak
+  ott, ahol a NEAK maga is közli (betöltött körzet) —
+  betöltetlennél, megszűntnél és helyettesítőnél soha;
+  mit tárol és mit nem az oldal; hogy ez
+  **magánkezdeményezés, nem a NEAK, az OKFŐ vagy bármely
+  hatóság hivatalos kiadványa**, és a szerző beosztása
+  azonosítási célú, nem intézményi jóváhagyás; és hol
+  lehet hibát jelezni.
+- A szerző névjegye: **Dr. Dul Zoltán, országos kollegiális
+  szakmai vezető fogorvos**, a név a dulzoltan.hu-ra mutat.
+- A forráslista kiegészült a **jogszabályi besorolásokkal**
+  (290/2014. és 105/2015. Korm. rendelet) és a **menetrendi
+  adattal**, a KSH-sor pedig a helységnévtárat és a
+  népszámlálást is megnevezi, licenccel együtt.
+
+### Módosítva
+- **A védőnői ellátás átkerült a „Ki lát el még?" lapra**,
+  annak első szekciójaként és első menüpontjaként, a meglévő
+  statisztikáival együtt (4017 területi és 1006 iskolai
+  szolgálat, 2375 lakos egy területi szolgálatra, 290
+  fenntartó). A főoldal felső sávjából az ikon eltűnt: ott
+  egy olyan nézőpont rejtőzött, amit „ki lát el engem?" kérdéssel
+  érkező olvasó sosem talált meg.
+- **A „Nyilvántartás" menüpont megszűnt.** Az EESZT-összevetés
+  csak a lábléc „Kiegészítő adatok: EESZT
+  törzspublikáció" soráról érhető el, és a lap tetején
+  kiemelt szöveg mondja ki, hogy ez **belső elemzési célú
+  munkalap**: két nyilvános nyilvántartás közötti
+  inkonzisztenciákat mutat, adminisztrációs eltéréseket —
+  nem orvosra, szolgáltatóra vagy ellátásra vonatkozó
+  megállapításokat, és senkiről nem állít hibát vagy
+  mulasztást.
+- A beágyazható minitérkép is a szűkebb olvasatot mutatja
+  (betöltetlen, megszűnt nélkül), ahogy a főoldal.
+
+### Ellenőrizve
+A lábléc állításai nem ígéretek, hanem mért tények: a
+betöltetlen és megszűnt körzeteken **0 orvosnév** szerepel
+(mindkét ágon), a buildben **nincs analítika vagy nyomkövető
+script**. Amit a böngésző tárol (nyelv, térképrétegek) és
+amit külső szolgáltató szolgál ki (Google Fonts; kattintásra a
+MapTiler és az OpenStreetMap), az ki van írva — ígérni
+olyat, ami nem igaz, rosszabb, mint közzétenni.
+
 ## [1.44.0] — 2026-10-17
 
 ### Javítva

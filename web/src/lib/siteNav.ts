@@ -19,11 +19,6 @@ import { entries } from './siteNav.json';
  */
 export const SITE_NAV = (entries as NavEntry[]);
 
-/** The landing when the health-visitor view is on: its sections are different. */
-export const VEDONO_NAV: readonly NavEntry[] = [
-  { href: '/#vedono', labelKey: 'nav.vedono' },
-  ...SITE_NAV.slice(1),
-];
 
 /** Resolves a site-absolute href against the deployment's base path. */
 export function resolve(href: string): string {
