@@ -223,6 +223,13 @@ def main() -> None:
             return f"{name}{describe(result) if describe else ''}"
         return run
 
+    def europe_step() -> str:
+        import eu_compare
+        out, geometry = eu_compare.build()
+        eu_compare.write(out, geometry)
+        return (f"europe.json + geo/europe.json, {len(out['indicators'])} indicators, "
+                f"{len(out['regional']['values'])} regions")
+
     def history_step() -> str:
         import eeszt_history
         # fetch=True downloads only the snapshots that are not archived yet,
@@ -360,6 +367,10 @@ def main() -> None:
              simple("eurostat_avoidable",
                     describe=lambda r: f", {r['years'][0]}–{r['years'][-1]}"),
              output=ROOT / "data" / "eurostat.json"),
+        # the same questions asked of the EU and the UK (Eurostat, OECD),
+        # and of the NUTS 2 regions on either side of Hungary's borders
+        Step("europe", "primary care across Europe (Eurostat, OECD)", europe_step,
+             output=ROOT / "data" / "europe.json"),
         Step("territorial", "income, births, migration (KSH TIMEA)",
              simple("ksh_timea",
                     describe=lambda r: f", {r['counts']['settlements']} settlements, "

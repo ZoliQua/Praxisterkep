@@ -5,5 +5,19 @@
     { "key": "districts", "items": ["jarasok", "halalozas", "jovedelem", "allaskeresok", "nepesseg", "nepszamlalas", "osszefuggesek"] },
     { "key": "access", "items": ["ugyelet", "tavolsag", "menetido", "surgosseg", "busz"] },
     { "key": "settlements", "items": ["index", "keresztmetszet", "hianyteruletek"] }
+  ],
+  "europe": [
+    { "key": "countries", "items": ["attekintes", "igeny", "munkaero", "vandorlas", "hozzaferes", "eredmeny", "kiadas", "berek", "ketmutato"] },
+    { "key": "regions", "items": ["regiok", "hatar"] }
+  ],
+  "county": [
+    { "key": "county", "items": ["varmegye", "attekintes", "ellatas", "egeszseg", "elorejelzes", "jarasai", "keresztmetszet", "telepulesek"] }
+  ],
+  "district": [
+    { "key": "district", "items": ["jaras", "allapot", "fejlettseg", "egeszseg", "keresztmetszet", "rangsor", "osszefugges", "telepulesek"] },
+    { "key": "country", "items": ["veszelyeztetett"] }
+  ],
+  "specialist": [
+    { "key": "specialist", "items": ["vedono", "szakellatas", "gyogyszertar", "segedeszkoz"] }
   ]
 }

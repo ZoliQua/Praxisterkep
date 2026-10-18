@@ -5,3 +5,6 @@ export const METHOD_PARAGRAPHS = ['p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8'
 export const OUTCOME_ITEMS = ['mortality', 'whyNotKsh', 'income', 'jobs', 'population', 'census', 'stats',
   'education', 'grid', 'capital', 'sbo', 'grants', 'forecast', 'cross', 'notAvailable',
   'limits'] as const;
+
+export const EUROPE_METHOD_ITEMS = ['sources', 'oneSource', 'concepts', 'years', 'selfReport', 'migration',
+  'regions', 'limits'] as const;

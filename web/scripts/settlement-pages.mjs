@@ -275,6 +275,8 @@ let DICT = hu;
 const pick = (root, key) => key.split('.').reduce((o, k) => (o ?? {})[k], root);
 const fill = (text, vars) => Object.entries(vars).reduce(
   (t, [k, v]) => t.replaceAll(`{${k}}`, String(v)), text);
+// the release the footer names, from the one place it is kept
+const VERSION = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')).version;
 const label = (key) => pick(DICT, key) ?? pick(hu, key) ?? key;
 /** A static.* string, with {placeholders} filled. Escape it where it lands. */
 const S = (key, vars = {}, fallback) => fill(
@@ -1221,6 +1223,7 @@ function siteFooter(homeHref, analysisHref) {
       <li>${esc(f.names)}</li>
       <li>${esc(f.noPersonal)}</li>
       <li>${esc(f.notOfficial)}</li>
+      <li>${esc(f.thirdParty)}</li>
       <li>${esc(f.correction)}</li>
     </ul></details>
     <p class="footer__privacy"><a href="${esc(appHref('/adatkezeles.html'))}">${esc(DICT.privacy.navLabel)}</a>
@@ -1228,7 +1231,9 @@ function siteFooter(homeHref, analysisHref) {
     <p class="footer__author">${esc(f.authorBy)}
       <a href="https://dulzoltan.hu" rel="noopener">${esc(f.authorName)}</a>${
   esc(f.authorTitle)}</p>
-    <p>${esc(f.updated)}: ${esc(monthLabelNow())} · ${esc(f.license)}</p>
+    <p>${esc(f.updated)}: ${esc(monthLabelNow())} ·
+      <a href="https://github.com/ZoliQua/Praxisterkep/releases" rel="noopener" class="footer__version">${
+  esc(S('footerVersion', { version: VERSION }))}</a> · ${esc(f.license)}</p>
     <p class="tp-footer__links"><a href="${esc(homeHref)}">${esc(S('footerLinks.map'))}</a> ·
       <a href="${esc(pagePath(''))}">${esc(S('footerLinks.all'))}</a> ·
       <a href="${esc(analysisHref)}">${esc(S('footerLinks.analysis'))}</a> ·
@@ -1768,10 +1773,56 @@ for (const p of profiles.settlements) {
   if (!byCounty.has(p.county)) byCounty.set(p.county, []);
   byCounty.get(p.county).push(p);
 }
+/** "Győr-Moson-Sopron" -> "m-gyor-moson-sopron": an anchor per county */
+const countyAnchor = (county) => `m-${county.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+  .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`;
+
+/**
+ * The same side menu the app's long pages carry (components/SideNav.tsx),
+ * written out for a page without React: the twenty counties, the one being
+ * read lit, and on a phone a column of dots that opens into the list.
+ */
+function countyRail(counties) {
+  return `<nav class="side-nav" aria-label="${esc(label('sideNav.settlements.label'))}">
+  <button type="button" class="side-nav__toggle" aria-expanded="false">
+    <span class="side-nav__toggle-label">${esc(label('sideNav.settlements.label'))}</span>
+    <span class="side-nav__dots" aria-hidden="true">${counties.map(() => '<i></i>').join('')}</span>
+  </button>
+  <div class="side-nav__panel"><div class="side-nav__group">
+    <p class="side-nav__title">${esc(label('sideNav.settlements.group'))}</p>
+    <ul>${counties.map((c) => `<li><a href="#${countyAnchor(c)}">${esc(c)}</a></li>`).join('')}</ul>
+  </div></div>
+</nav>
+<script>document.addEventListener('DOMContentLoaded', function () {
+  document.body.classList.add('has-side-nav');
+  var nav = document.querySelector('.side-nav'); if (!nav) return;
+  var btn = nav.querySelector('.side-nav__toggle');
+  btn.addEventListener('click', function () {
+    var open = nav.classList.toggle('is-open'); btn.setAttribute('aria-expanded', String(open));
+  });
+  var links = [].slice.call(nav.querySelectorAll('a'));
+  var dots = [].slice.call(nav.querySelectorAll('.side-nav__dots i'));
+  links.forEach(function (a) { a.addEventListener('click', function () { nav.classList.remove('is-open'); }); });
+  if (!('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      links.forEach(function (a, i) {
+        var on = a.hash.slice(1) === e.target.id;
+        if (on) a.setAttribute('aria-current', 'location'); else a.removeAttribute('aria-current');
+        if (dots[i]) dots[i].className = on ? 'is-on' : '';
+      });
+    });
+  }, { rootMargin: '-20% 0px -60% 0px' });
+  links.forEach(function (a) { var el = document.getElementById(a.hash.slice(1)); if (el) io.observe(el); });
+});</script>`;
+}
+
 function writeIndex(root) {
+  const counties = [...byCounty.keys()].sort((a, b) => a.localeCompare(b, 'hu'));
   const countyBlocks = [...byCounty.entries()]
     .sort((a, b) => a[0].localeCompare(b[0], 'hu'))
-    .map(([county, list]) => `<section class="section container tp-index-county">
+    .map(([county, list]) => `<section class="section container tp-index-county" id="${countyAnchor(county)}">
     <div class="tp-index-head">
       ${countyThumb(county, geo, undefined, undefined, (k, v) => S(`map.${k}`, v))}
       <div>
@@ -1807,6 +1858,7 @@ ${alternates('')}
     ${navBar(null)}
   </div>
 </div></nav>
+${countyRail(counties)}
 <header class="section container">
   <h1 class="section__heading">${esc(S('list.heading'))}</h1>
   <p class="section__lead">${esc(S('list.lead', { n: profiles.settlements.length }))}</p>
@@ -1838,7 +1890,8 @@ LANG = 'hu';
 DICT = hu;
 
 // a sitemap, so the pages are findable at all
-const urls = ['/', '/elemzo.html', '/eeszt.html', '/szakellato.html', '/telepules/', '/en/telepules/']
+const urls = ['/', '/megye.html', '/jaras.html', '/elemzo.html', '/europa.html', '/szakellato.html',
+  '/modszertan.html', '/eeszt.html', '/telepules/', '/en/telepules/']
   .concat(profiles.settlements.map((p) => `/telepules/${p.slug}/`))
   .concat(profiles.settlements.map((p) => `/en/telepules/${p.slug}/`));
 writeFileSync(join(dist, 'sitemap.xml'),

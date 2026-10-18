@@ -16,4 +16,8 @@ numpy>=2.0
 scipy>=1.14
 osmium>=4.0
 
+# OECD's migration table names countries by ISO alpha-3; the page names
+# them through the browser, which wants alpha-2
+pycountry>=24.6
+
 pytest>=8.0

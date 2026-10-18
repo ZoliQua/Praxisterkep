@@ -25,8 +25,12 @@ import { PointGrid } from './charts/PointGrid';
 import { IconTooth } from './icons';
 import { vacancyOf } from '../lib/vacancy';
 import { PageNav } from './PageNav';
+import { SideNav } from './SideNav';
+import { sideGroups } from '../lib/sideGroups';
 import { NextSteps } from './NextSteps';
 import { Footer } from './Footer';
+
+const COUNTY_GROUPS = sideGroups('county');
 
 const NEXT = [
   { href: 'elemzo.html', titleKey: 'next.analysis.title', textKey: 'next.analysis.text' },
@@ -140,6 +144,7 @@ export function CountyPage() {
   return (
     <>
       <PageNav kind={kind} onKind={setKind} />
+      <SideNav groups={COUNTY_GROUPS} labelKey="sideNav.county.label" />
       <section className="section container" id="varmegye">
         <h1 className="section__heading">{t('county.heading')}</h1>
         <p className="section__lead">{t('county.lead')}</p>
@@ -161,7 +166,7 @@ export function CountyPage() {
 
         {agg && (
           <>
-            <div className="county-cards">
+            <div className="county-cards" id="attekintes">
               {/* who lives here */}
               <article className="county-card">
                 <div className="county-card__figure">
@@ -320,7 +325,7 @@ export function CountyPage() {
               </article>
             </div>
 
-            <table className="info-table">
+            <table className="info-table" id="ellatas">
               <tbody>
                 <tr>
                   <th>{t('county.gpLine')}</th>

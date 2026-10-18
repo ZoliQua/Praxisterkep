@@ -12,12 +12,14 @@ abstract: >-
   mortality, income, education, unemployment and out-migration, with partial
   correlations that hold income and education constant. It follows each
   state settlement grant through the monthly archive to what became of the
-  district, forecasts vacancies a year ahead with a back-test, and publishes
+  district, forecasts vacancies a year ahead with a back-test, sets Hungary
+  beside the 27 member states and the United Kingdom (Eurostat, OECD) and
+  its border regions beside their neighbours, and publishes
   a static, bilingual page for each of the 3,177 settlements. Every figure
   traces to an archived source file; the pipeline fails rather than publish
   a partial or estimated number. Informational, not an official publication.
-version: 1.50.0
-date-released: 2026-10-18
+version: 1.51.0
+date-released: 2026-10-19
 url: "https://praxisterkep.hu"
 repository-code: "https://github.com/ZoliQua/Praxisterkep"
 license: MIT
@@ -78,6 +80,18 @@ references:
     authors:
       - name: "Eurostat"
     url: "https://ec.europa.eu/eurostat/databrowser/view/hlth_cd_apr/default/table"
+  - type: data
+    title: "OECD Health Statistics"
+    authors:
+      - name: "OECD"
+    url: "https://data-explorer.oecd.org/"
+    license: CC-BY-4.0
+  - type: data
+    title: "Health database; regional database (NUTS 2); GISCO NUTS 2024 boundaries"
+    authors:
+      - name: "Eurostat"
+    url: "https://ec.europa.eu/eurostat/web/health/database"
+    notes: "Boundaries: © EuroGeographics for the administrative boundaries."
   - type: data
     title: "Településsoros adatok — nyilvántartott álláskeresők"
     authors:

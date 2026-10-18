@@ -1,7 +1,7 @@
 # Praxistérkép
 
 [![Monthly ETL](https://github.com/ZoliQua/Praxisterkep/actions/workflows/monthly-etl.yml/badge.svg)](https://github.com/ZoliQua/Praxisterkep/actions/workflows/monthly-etl.yml)
-[![Version](https://img.shields.io/badge/version-1.50.0-blue)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.51.0-blue)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE.md)
 [![Python 3.12](https://img.shields.io/badge/Python-3.12-3776ab?logo=python&logoColor=white)](etl/)
 [![React 19](https://img.shields.io/badge/React-19-61dafb?logo=react&logoColor=black)](web/)
@@ -35,7 +35,9 @@ every page.
 ### What the site shows
 
 Four levels — **country → county → district (járás) → settlement** — with the
-chosen branch (GP or dental) and place kept across the whole site.
+chosen branch (GP or dental) and place kept across the whole site. Every long
+page carries a left-hand menu of its sections (on a phone, a column of dots
+that opens into the list), and every footer names the release being served.
 
 | Page | What it does |
 |---|---|
@@ -44,7 +46,8 @@ chosen branch (GP or dental) and place kept across the whole site.
 | [District](https://praxisterkep.hu/jaras.html) | Each of the 197 units (174 járás + the capital's 23 kerület): districts, on-call care, yardstick cards among the 174 rural járás, mortality by cause, census, emergency access, forecast, grants, the four cross-sections — and a ranking of **the most vulnerable districts** by access |
 | [Settlement](https://praxisterkep.hu/en/telepules/) | 3,177 static pages in Hungarian and English, readable without JavaScript: is there a doctor (named only for staffed districts, from NEAK), how long a district has been vacant, how far care is by car and bus, pharmacies, health visitors, age structure, how people live (income, jobseekers, births and deaths, migration, census), grants, a one-year chance that a serving district falls vacant, a year of change |
 | [Analysis](https://praxisterkep.hu/elemzo.html?lang=en) | 22 sections in five groups — the national picture, what comes next (risk, survival, forecast, grants), districts and counties (mortality, income, jobs, population, census, associations), access (on-call, distance, drive time, emergency department, bus), settlements (composite index, cross-sections, care deserts) |
-| [Who else provides care?](https://praxisterkep.hu/szakellato.html?lang=en) | Health visitors, outpatient and inpatient specialist care, pharmacies, medical-aid retailers |
+| [Europe](https://praxisterkep.hu/europa.html?lang=en) | Hungary among the 27 member states and the UK — narrowed to Central and Eastern Europe (with Germany and the UK as yardsticks) or the V4: who needs care (age, healthy life years, long-standing illness), doctors and their age, foreign-trained doctors and where a country's doctors go, GP and dentist visits by city and countryside, unmet need by income, avoidable mortality, screening, flu vaccination, avoidable hospital admissions, spending, doctors' pay; a map of the NUTS 2 regions and nine border regions face to face |
+| [More — who else provides care?](https://praxisterkep.hu/szakellato.html?lang=en) | Health visitors, outpatient and inpatient specialist care, pharmacies, medical-aid retailers |
 | [Methodology](https://praxisterkep.hu/modszertan.html?lang=en) | Where every number comes from and what it cannot say; the downloadable files; the embed code |
 
 ### Data sources
@@ -63,7 +66,8 @@ chosen branch (GP or dental) and place kept across the whole site.
 | N | [KSH TIMEA](https://map.ksh.hu/timea/) | income (NAV data), natural change, migration, GP workload | `ksh_timea.py` |
 | O | [NFSZ settlement data](https://nfsz.munka.hu/tart/stat_telepulessoros_adatok) | registered jobseekers | `nfsz_jobseekers.py` |
 | P | [NEAK settlement grants](https://neak.gov.hu/felso_menu/szakmai_oldalak/gyogyito_megeleozo_ellatas/alapellatas/haziorvosi_ellatas/archivum) | where and when grants were won (no names) | `neak_grants.py` |
-| Q | [Eurostat hlth_cd_apr](https://ec.europa.eu/eurostat/databrowser/view/hlth_cd_apr/default/table) | Hungary's avoidable mortality against the EU-27 | `eurostat_avoidable.py` |
+| Q | [Eurostat](https://ec.europa.eu/eurostat/web/health/database) health and regional databases, [GISCO](https://ec.europa.eu/eurostat/web/gisco/geodata/statistical-units/territorial-units-statistics) outlines | Hungary's avoidable mortality against the EU-27; the European comparison and its maps | `eurostat_avoidable.py`, `eu_compare.py` |
+| R | [OECD Health Statistics](https://data-explorer.oecd.org/) (CC BY 4.0) | avoidable hospital admissions, doctors' pay, the UK after 2019 | `eu_compare.py` |
 
 Every downloaded file is archived under [`data/raw/`](data/raw/) — **the git
 history is the audit trail**. Screening participation and vaccination coverage
@@ -94,6 +98,11 @@ settlement in public, machine-readable form; no estimate is shown instead.
   still differ: a doctor chose the granted district.
 - Hungary's avoidable mortality is twice the EU average (Eurostat, 2023:
   472.7 against 237.7 per 100,000).
+- Hungary has 45.6 practising GPs per 100,000 (2024), seventh of the eight
+  regional countries that report it; 46.2% saw a dentist in a year (EHIS 2019),
+  37.4% in rural areas, against an EU figure of 60.5%.
+- Across the border, Észak-Magyarország has 238 doctors per 100,000 and a life
+  expectancy of 75.1 years; Východné Slovensko 389 and 78.2 (2024).
 - Distance to an emergency department does not go with mortality once income
   and education are held constant — reported as a null result.
 
@@ -137,7 +146,9 @@ consent-gated; without it nothing loads), `VITE_MAP_STYLE` (street-map tiles),
 The monthly workflow ([`.github/workflows/monthly-etl.yml`](.github/workflows/monthly-etl.yml))
 runs twice a month and opens an issue instead of publishing when validation
 fails. Vercel deploys every push to `main` to
-[praxisterkep.hu](https://praxisterkep.hu). The site collects no personal
+[praxisterkep.hu](https://praxisterkep.hu). Releases are tagged `vX.Y.Z` with
+[GitHub release notes](https://github.com/ZoliQua/Praxisterkep/releases); the
+version lives in `web/package.json` only, and every footer shows it. The site collects no personal
 data; analytics load only after consent (`web/public/consent.js`); see the
 [privacy notice](https://praxisterkep.hu/adatkezeles.html).
 
@@ -153,8 +164,11 @@ Issues with data errors or new public sources are welcome — see
 [CONTRIBUTORS.md](CONTRIBUTORS.md) and the [code of conduct](CODE_OF_CONDUCT.md).
 Code: [MIT](LICENSE.md). Processed data (`data/*.json`): CC BY 4.0, with the
 original source credited; raw source files (`data/raw/`) remain under their
-publishers' terms (KSH census CC BY 4.0, OpenStreetMap ODbL, Volánbusz GTFS
-CC0) — details in [LICENSE.md](LICENSE.md).
+publishers' terms (KSH census CC BY 4.0, OECD CC BY 4.0, OpenStreetMap ODbL,
+Volánbusz GTFS CC0). One exception to CC BY: the European outlines
+(`data/geo/europe.json`, from GISCO) are for non-commercial use only, with
+"© EuroGeographics for the administrative boundaries" — details in
+[LICENSE.md](LICENSE.md).
 
 ---
 
@@ -207,13 +221,17 @@ megmarad.
 | [Járás](https://praxisterkep.hu/jaras.html) (`jaras.html`) | A 197 egység (174 járás + 23 kerület) mindegyike: körzetek, ügyelet, rangsor, és mérőszalag-kártyák a 174 vidéki járás között (halálozás halálokonként, jövedelem, álláskeresők, népszámlálás, sürgősségi elérés, előrejelzés), a járásban elnyert támogatások |
 | [Település](https://praxisterkep.hu/telepules/) (`/telepules/<slug>/`, angolul `/en/telepules/<slug>/`) | 3177 statikus oldal két nyelven, JavaScript nélkül is olvasható: van-e orvos és ki az (betöltött körzetnél), mióta üres, milyen messze az ellátás autóval és busszal, gyógyszertár, védőnő, korösszetétel, **Hogyan élnek itt?** (jövedelem, álláskeresők idősorral, születés és halálozás, vándorlás, betegforgalom, népszámlálási pontdiagram, támogatással betöltött körzet, a járás előrejelzése és elkerülhető halálozása), egy év változása |
 | [Elemző](https://praxisterkep.hu/elemzo.html) (`elemzo.html`) | Országos trendek, háziorvos és fogorvos összevetése, kockázati modell, túlélés-elemzés, **előrejelzés egy évre**, **a letelepedési támogatások sorsa**, települési lefedettség, járási kép, **elkerülhető halálozás**, jövedelem, álláskeresők, népesség, **népszámlálás**, összefüggés-mátrix (nyers / jövedelem / jövedelem + végzettség kiszűrve), ügyelet és mentő, távolság, menetidő, **sürgősségi osztály**, busz, összetett index, keresztmetszetek, hiányterületek |
-| [Ki lát el még?](https://praxisterkep.hu/szakellato.html) (`szakellato.html`) | Védőnői ellátás, járóbeteg- és fekvőbeteg-szakellátás, gyógyszertárak, gyógyászati segédeszköz-forgalmazók |
+| [Európa](https://praxisterkep.hu/europa.html) (`europa.html`) | Magyarország az EU 27 tagállama és az Egyesült Királyság között — szűkíthető Közép-Kelet-Európára (Németország és az Egyesült Királyság mércéjével) vagy a V4-re: kinek kell az ellátás (kor, egészségben eltöltött évek, tartós betegség), orvosok és koruk, külföldön végzett orvosok és orvosvándorlás, háziorvos- és fogorvos-látogatás városban és vidéken, kimaradt ellátás jövedelem szerint, elkerülhető halálozás, szűrés, influenzaoltás, elkerülhető kórházi felvételek, kiadások, orvosi jövedelmek; a NUTS 2 régiók térképe és kilenc határ menti régiópár |
+| [Továbbiak — Ki lát el még?](https://praxisterkep.hu/szakellato.html) (`szakellato.html`) | Védőnői ellátás, járóbeteg- és fekvőbeteg-szakellátás, gyógyszertárak, gyógyászati segédeszköz-forgalmazók |
 | [Módszertan](https://praxisterkep.hu/modszertan.html) (`modszertan.html`) | Minden szám eredete és korlátai, a letölthető adatfájlok, beágyazási kód |
 | [Adatkezelés](https://praxisterkep.hu/adatkezeles.html) (`adatkezeles.html`) | Adatkezelési tájékoztató |
 | `eeszt.html` | Munkajegyzet két nyilvános nyilvántartás összevetéséről (nincs a menüben, a láblécből érhető el) |
 | `embed.html` | Beágyazható térkép más oldalakra |
 
-Az oldal két nyelvű: a HU/EN váltó minden oldal fejlécében ott van.
+Az oldal két nyelvű: a HU/EN váltó minden oldal fejlécében ott van. Minden
+hosszabb oldalnak bal oldali, csúszó menüje van a szakaszaival (telefonon
+pöttysor, amely koppintásra kinyílik), a településlistán a húsz megyével; a
+lábléc mindenhol megnevezi a futó verziót.
 
 Minden diagram interaktív: mértékválasztó chipek, ágváltó, szórásdiagram
 kiemeléssel, kattintható mátrix, megyére váltó előrejelzési görbe, térképek
@@ -248,7 +266,8 @@ audit-nyomvonal**.
 | N | [KSH TIMEA](https://map.ksh.hu/timea/) | jövedelem (NAV), adózók, népmozgalom, vándorlás, háziorvosi betegforgalom, nyilvántartott krónikus betegek | REST JSON | évi | `ksh_timea.py` |
 | O | [NFSZ — településsoros adatok](https://nfsz.munka.hu/tart/stat_telepulessoros_adatok) | nyilvántartott álláskeresők településenként | XLSX | havi (2024 előtt negyedéves) | `nfsz_jobseekers.py` |
 | P | [NEAK — letelepedési és praxisjog-pályázatok](https://neak.gov.hu/felso_menu/szakmai_oldalak/gyogyito_megeleozo_ellatas/alapellatas/haziorvosi_ellatas/archivum) | a nyertesek helye és éve (név nélkül) | PDF | évi | `neak_grants.py` |
-| Q | [Eurostat — hlth_cd_apr](https://ec.europa.eu/eurostat/databrowser/view/hlth_cd_apr/default/table) | kezelhető és megelőzhető halálozás, Magyarország és az EU-27 | JSON-stat | évi | `eurostat_avoidable.py` |
+| Q | [Eurostat](https://ec.europa.eu/eurostat/web/health/database) egészségügyi és regionális adatbázis, [GISCO](https://ec.europa.eu/eurostat/web/gisco/geodata/statistical-units/territorial-units-statistics) határok | kezelhető és megelőzhető halálozás; az európai összevetés mutatói és térképei | JSON-stat, GeoJSON | évi | `eurostat_avoidable.py`, `eu_compare.py` |
+| R | [OECD Health Statistics](https://data-explorer.oecd.org/) (CC BY 4.0) | elkerülhető kórházi felvételek, orvosi jövedelmek, az Egyesült Királyság 2019 után | SDMX CSV | évi | `eu_compare.py` |
 
 További nyilvános források, amelyeket egy-egy kiegészítő épít: a NEAK
 [gyógyszertári partnerlistája](https://www.neak.gov.hu/felso_menu/lakossagnak/)
@@ -336,6 +355,13 @@ körzeteknek csak 17%-ában (a két csoport így sem teljesen összevethető —
 lásd a módszertant). A sürgősségi osztály távolsága a két kontroll után nem jár
 együtt a halálozással.
 
+Európai összevetésben (Eurostat): Magyarországon 100 ezer lakosra 45,6
+praktizáló háziorvos jut (2024) — a régió nyolc, adatot közlő országa közül a
+hetedik hely; az elmúlt évben fogorvosnál a lakosok 46,2%-a járt, vidéken
+37,4% (EHIS 2019), az EU-ban 60,5%. A határ két oldalán: Észak-Magyarországon
+100 ezer lakosra 238 orvos jut és a várható élettartam 75,1 év, Kelet-Szlovákiában
+389 orvos és 78,2 év (2024).
+
 ---
 
 ### Architektúra
@@ -381,7 +407,7 @@ megbuktatja a munkafolyamatot, ha bármi hibázott vagy kimaradt.
 | `access`, `centroids`, `emergency`, `roads`, `traveltime`, `transit` | légvonal, település-középpontok, ügyelet/mentő, úthálózat, menetidő, busz | G, H, I, J, K |
 | `risk`, `survival`, **`forecast`**, `tenure`, `fluctuation` | kockázat, túlélés, előrejelzés, fluktuáció | a havi archívum |
 | `ksh_age`, **`census`**, `coverage`, `composite`, `clusters` | kor, népszámlálás, lefedettség, index, sivatagok | F, F2 |
-| `mortality`, `eurostat`, `territorial`, `jobseekers`, **`grants`** | halálozás, európai összevetés, TIMEA, álláskeresők, támogatások | M, N, O, P, Q |
+| `mortality`, `eurostat`, **`europe`**, `territorial`, `jobseekers`, **`grants`** | halálozás, Magyarország és az EU, európai összevetés, TIMEA, álláskeresők, támogatások | M, N, O, P, Q, R |
 | `settlements`, `county_profiles`, `district_development`, `district_profiles`, `outcomes` | település-, megye-, járásprofilok, kimenetek | minden fenti |
 
 Kötelező ellenőrzések (`validate.py` és a modulok saját `guard()`-jai):
@@ -407,6 +433,7 @@ Mind a [`data/`](data/) alatt, a webes build a `web/public/data/`-ba másolja
 | `counties.json`, `districts.json` | a profilok megyei és járási (197) szelete |
 | `outcomes.json` | halálozás, körülmények, népszámlálás, sürgősségi elérés, támogatások, előrejelzés — járásonként, megyénként, korrelációkkal |
 | `mortality.json`, `eurostat.json`, `territorial.json`, `jobseekers.json`, `census.json` | az M, Q, N, O és F2 forrás feldolgozva |
+| `europe.json`, `geo/europe.json`, `europe_summary.json` | az európai összevetés: 49 mutató és az orvosvándorlás a 27 tagállamra és az Egyesült Királyságra, a NUTS 2 régiók, a határ menti párok; országhatárok és régióhatárok |
 | `grants.json`, `forecast.json`, `highlights.json` | a támogatások sorsa; az egyéves előrejelzés; a főoldal két kiemelt eredménye |
 | `risk.json`, `survival.json`, `tenure.json`, `fluctuation.json` | archívumra épülő elemzések |
 | `coverage.json`, `composite.json`, `clusters.json`, `age.json` | lefedettség, összetett index, sivatagok, korösszetétel |
@@ -465,7 +492,8 @@ utcaszintű térképe nem készül el), `VITE_SITE_URL` (a sitemap címe).
   változás egy-két perc alatt élesbe kerül, a
   [praxisterkep.hu](https://praxisterkep.hu) domainen.
 - **Verziók** — [`CHANGELOG.md`](CHANGELOG.md) (Keep a Changelog, SemVer),
-  minden verzióhoz `vX.Y.Z` git-címke.
+  minden verzióhoz `vX.Y.Z` git-címke és [GitHub-kiadás](https://github.com/ZoliQua/Praxisterkep/releases);
+  a verziószám egyetlen helye a `web/package.json`, ebből olvassa minden lábléc.
 
 ---
 
@@ -500,7 +528,10 @@ A kód [MIT licencű](LICENSE.md). A feldolgozott adatok (`data/*.json`) CC BY
 4.0 licencűek, az eredeti forrás megjelölésével; a `data/raw/` alatti
 forrásfájlok a kibocsátóik feltételei szerint használhatók (NEAK, OKFŐ,
 EESZT, KSH — a népszámlálás CC BY 4.0 —, NNGYK, NFSZ, OpenStreetMap — ODbL —,
-Volánbusz GTFS — CC0). Részletek a [LICENSE.md](LICENSE.md)-ben.
+Volánbusz GTFS — CC0, OECD — CC BY 4.0). Kivétel a CC BY alól: az európai
+határok (`data/geo/europe.json`, GISCO) csak nem kereskedelmi célra
+használhatók, „© EuroGeographics for the administrative boundaries”
+felirattal. Részletek a [LICENSE.md](LICENSE.md)-ben.
 
 ---
 

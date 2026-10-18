@@ -40,11 +40,12 @@
     "countyPage": "County",
     "settlements": "Settlements",
     "registry": "Registry",
-    "whoElse": "Who else provides care?",
+    "whoElse": "More",
     "stock": "District stock",
     "districtPage": "District",
     "districtChoose": "Choose a district",
-    "districtVulnerable": "The most vulnerable districts"
+    "districtVulnerable": "The most vulnerable districts",
+    "europe": "Europe"
   },
   "hero": {
     "vacant": "vacant {kind} districts",
@@ -294,9 +295,18 @@
       "nfsz": {
         "title": "NFSZ — National Employment Service:",
         "settlements": "registered jobseekers by settlement, monthly"
+      },
+      "europe": {
+        "title": "European sources:",
+        "eurostatHealth": "Eurostat — health database (workforce, surveys, screening, spending, mortality)",
+        "eurostatRegional": "Eurostat — regional database (NUTS 2: doctors, mortality, life expectancy, GDP)",
+        "oecd": "OECD Health Statistics — avoidable hospital admissions, doctors' pay, the United Kingdom (CC BY 4.0)",
+        "gisco": "GISCO — NUTS 2024 region outlines (© EuroGeographics for the administrative boundaries)"
       }
     },
-    "sourcesNote": "Every figure is linked to its source: all of these are public files and pages anyone can download. The NEAK files always serve the current month; earlier months are archived here and downloadable too."
+    "sourcesNote": "Every figure is linked to its source: all of these are public files and pages anyone can download. The NEAK files always serve the current month; earlier months are archived here and downloadable too.",
+    "version": "v{version}",
+    "thirdParty": "Eurostat and OECD figures are shown as processed here, without the publishers' endorsement: the processing and the comparisons are the author's work, not the view of Eurostat or the OECD. Region outlines: © EuroGeographics for the administrative boundaries."
   },
   "praxisTypes": {
     "adult": "adult",
@@ -1019,7 +1029,11 @@
       "outcomes_json": "Mortality, income, jobseekers, population change, census, emergency access, grants and the forecast by járás and county, with correlations",
       "census_json": "Census shares (KSH 2022, CC BY 4.0) by settlement, járás and county: education, work, digital skills, housing, households",
       "grants_json": "Winners of NEAK's settlement and practice-right grants (no names) and where their district stands today",
-      "forecast_json": "Vacant districts in 12 months: national, county and járás forecast with a band and a back-test"
+      "forecast_json": "Vacant districts in 12 months: national, county and járás forecast with a band and a back-test",
+      "europe_json": "The European comparison (Eurostat, OECD): 49 measures for the 27 member states and the United Kingdom by year, doctor migration, four NUTS 2 regional measures and the border pairs. CC BY 4.0, with the sources credited.",
+      "europe_geo_json": "Country and NUTS 2 region outlines of Europe for the maps (GISCO). Non-commercial use only, with the notice “© EuroGeographics for the administrative boundaries”.",
+      "europe_summary_json": "The landing page's two European facts (GP density, dentist visits), computed from europe.json.",
+      "highlights_json": "The landing page's two headline findings (settlement grants, dental districts vacant for ten years), computed from the analyses."
     },
     "useHeading": "How to use them",
     "use1": "The files are static and versioned: a finished month stays in months/, while latest.json always points at the current one.",
@@ -2755,7 +2769,8 @@
     "group": {
       "base": "The base data",
       "outcomes": "Outcomes and circumstances",
-      "data": "Data and embedding"
+      "data": "Data and embedding",
+      "europe": "The European comparison"
     },
     "referral": "Dissolved GP districts",
     "data": "Downloadable data",
@@ -2766,7 +2781,15 @@
     "vs": "vs.",
     "more": "How we counted →",
     "gp": "Of GP districts filled with a settlement grant, this share has a doctor today — against this share of matched districts without a grant, vacant as long, in settlements of the same size ({pairs} pairs).",
-    "dental": "Of today's vacant dental districts, this many have been empty for ten years or more ({share}). A decade without a dentist of their own."
+    "dental": "Of today's vacant dental districts, this many have been empty for ten years or more ({share}). A decade without a dentist of their own.",
+    "europe": {
+      "heading": "Against the rest of Europe",
+      "kicker": "Europe",
+      "gp": "practising GPs per 100,000 people in Hungary ({year}), against the regional median: rank {rank} of the {of} countries in the region that report it; the most: {best}, {bestValue}.",
+      "dental": "of adults saw a dentist within a year ({year}), only {rural} in rural areas — against this EU figure. Rank {rank} of {of} countries in the region.",
+      "dentalMedian": "of adults saw a dentist within a year ({year}), only {rural} in rural areas, against the regional median. Rank {rank} of {of} countries in the region.",
+      "more": "The European comparison →"
+    }
   },
   "vulnerable": {
     "heading": "The most vulnerable districts",
@@ -3154,6 +3177,555 @@
       "captionDistrict": ", {district} district (highlighted)",
       "inPlace": " Here in the settlement: {list}.",
       "thumbAria": "{county} county"
+    },
+    "footerVersion": "v{version}"
+  },
+  "europe": {
+    "heading": "Europe: where does Hungarian primary care stand?",
+    "lead": "The questions the site asks of a district — is there a doctor, does the patient get to one, what does care achieve, what does it cost — asked of the 27 member states of the European Union and the United Kingdom, from the joint data collection of Eurostat and the OECD, and finally of the regions on either side of the border. Choose above which countries to compare and which one to put in focus; the bar at the top switches between the GP and the dental measures.",
+    "loading": "Loading the European data…",
+    "sideNav": "Europe",
+    "side": {
+      "countries": "Countries",
+      "regions": "Regions"
+    },
+    "toc": {
+      "attekintes": "Overview",
+      "munkaero": "Who is in the surgery?",
+      "hozzaferes": "Do patients get there?",
+      "eredmeny": "What does care achieve?",
+      "kiadas": "What do we spend?",
+      "berek": "What do doctors earn?",
+      "ketmutato": "Two measures side by side",
+      "regiok": "Map of the regions",
+      "hatar": "Across the border",
+      "igeny": "Who needs care?",
+      "vandorlas": "Where do doctors come from and go?"
+    },
+    "groupLabel": "Compare:",
+    "group": {
+      "all": "EU-27 + United Kingdom",
+      "cee": "Central and Eastern Europe",
+      "v4": "Visegrád Four"
+    },
+    "groupHint": {
+      "all": "All 27 member states and the United Kingdom",
+      "cee": "Hungary, Austria, Slovakia, Czechia, Poland, Romania and Bulgaria, with Germany and the United Kingdom as yardsticks",
+      "v4": "Hungary, Czechia, Poland and Slovakia"
+    },
+    "focusLabel": "In focus:",
+    "reset": "Back to Hungary",
+    "pickMeasure": "Choose a measure",
+    "noData": "no data",
+    "stale": "old figure",
+    "staleYear": "old figure: {year}",
+    "oecdMark": "OECD",
+    "oecdMarkTitle": "This country's whole series comes from the OECD (from the same joint data collection Eurostat draws on), because Eurostat does not publish it after 2019.",
+    "missing": "No data: {list}",
+    "refEu": "EU-27: {value} ({year})",
+    "refMedian": "median of the countries chosen: {value}",
+    "refMedianRegions": "median of the regions chosen: {value}",
+    "noBranch": "There is no comparable European figure for this part in this branch.",
+    "trendHeading": "Over the years — highlighted: {name}",
+    "pairHeading": "Behind the average: two groups in the same country",
+    "pairTitle": "{name}, {year}: {a} {av}, {b} {bv}",
+    "pair": {
+      "city": "living in cities",
+      "rural": "living in rural areas",
+      "poor": "poorest fifth",
+      "rich": "richest fifth"
+    },
+    "map": {
+      "aria": "Map of Europe by the measure chosen",
+      "worse": "worse",
+      "better": "better",
+      "low": "lower",
+      "high": "higher"
+    },
+    "unit": {
+      "per100k": "per 100,000 inhabitants",
+      "pct": "per cent",
+      "perCapita": "per inhabitant per year",
+      "pps": "per inhabitant, in purchasing power standards (PPS)",
+      "ratio": "times the average wage",
+      "years": "years",
+      "pctEu": "as a percentage of the EU average (EU = 100)"
+    },
+    "source": {
+      "eurostat": "Source: Eurostat, {dataset} — downloaded {fetched}.",
+      "oecd": "Source: OECD Health Statistics, {dataset} (CC BY 4.0) — downloaded {fetched}.",
+      "open": "Open at the publisher →",
+      "ukOecd": "The United Kingdom's series comes from the OECD."
+    },
+    "overview": {
+      "heading": "{country} among the countries chosen",
+      "lead": "Eight headline measures, each at its latest year. A card's colour shows which third of the ranking of the countries chosen the country in focus falls into; the dots are the other countries, the tick is the EU-27. A card takes you to its section.",
+      "rank": "rank {rank} of {of} countries",
+      "hint": "Click a dot to put that country in focus across the page. The ranking uses comparable years only: a figure more than five years older than the newest one is shown but not ranked.",
+      "unranked": "no better direction, not ranked"
+    },
+    "section": {
+      "workforce": {
+        "heading": "Who is in the surgery?",
+        "short": "Workforce",
+        "lead": "How many doctors there are for the population, how many of them are GPs, how many are close to retiring, and how many are coming after them. The figures count practising doctors — those actually seeing patients — not everyone on the register."
+      },
+      "access": {
+        "heading": "Do patients get to a doctor?",
+        "short": "Access",
+        "lead": "Two kinds of question from two sources: how many people saw a doctor in the past year (the European Health Interview Survey, EHIS), and how many say they needed to but did not get there (the EU-SILC household survey). Both are people's own answers, not registers."
+      },
+      "outcomes": {
+        "heading": "What does care achieve?",
+        "short": "Outcomes",
+        "lead": "What depends on primary care: deaths that timely treatment or prevention would have avoided, the reach of organised screening, flu vaccination of the old, and hospital admissions that good GP care would make unnecessary (OECD)."
+      },
+      "spending": {
+        "heading": "What do we spend on it?",
+        "short": "Spending",
+        "lead": "Health spending per inhabitant in purchasing power, how much of it goes to medical and dental practices and to prevention — and how much patients pay out of their own pocket."
+      },
+      "pay": {
+        "heading": "What do doctors earn?",
+        "short": "Pay",
+        "lead": "The OECD gives earnings as a multiple of each country's average wage, so countries with different price levels can be compared. Salaried and self-employed doctors are shown separately, because the two are not the same income."
+      },
+      "needs": {
+        "heading": "Who needs care?",
+        "short": "Needs",
+        "lead": "Before counting doctors: how old and how ill is the population to be cared for. Where life is shorter, fewer years are lived in health and long-standing illness is more common, more primary care is needed, not less."
+      }
+    },
+    "ind": {
+      "gpDensity": {
+        "name": "General practitioners",
+        "short": "GPs",
+        "explain": "Practising general practitioners per 100,000 inhabitants.",
+        "note": "Countries do not count GPs alike: in Poland many family doctors are filed among other generalists, in Portugal every generalist is included. All generalist doctors are therefore shown as well."
+      },
+      "generalistDensity": {
+        "name": "All generalist doctors",
+        "short": "Generalists",
+        "explain": "GPs and other non-specialist doctors together, per 100,000 inhabitants. This wider circle evens out the countries' different filing."
+      },
+      "dentistDensity": {
+        "name": "Dentists",
+        "short": "Dentists",
+        "explain": "Practising dentists per 100,000 inhabitants.",
+        "note": "Only practising dentists are shown. Where a country reports only professionally active or licensed dentists (Slovakia since 2004), the cell is empty: the concepts do not mix."
+      },
+      "physicianDensity": {
+        "name": "All doctors",
+        "short": "All doctors",
+        "explain": "All practising doctors, specialists included, per 100,000 inhabitants."
+      },
+      "nurseDensity": {
+        "name": "Nurses",
+        "short": "Nurses",
+        "explain": "Practising nurses per 100,000 inhabitants. Where primary care is short of doctors, much of the work falls to them."
+      },
+      "physicians55": {
+        "name": "Doctors aged 55 or over",
+        "short": "Doctors 55+",
+        "explain": "The share of doctors aged 55 or over: those who may retire within ten years.",
+        "note": "The share is computed from the published age bands by an exact identity: the three older bands, or where an older band is missing, the total less the three younger ones. If neither is complete, there is no value. It covers all doctors, not GPs only."
+      },
+      "medGraduates": {
+        "name": "Medical graduates",
+        "short": "New doctors",
+        "explain": "Doctors graduating in the year, per 100,000 inhabitants.",
+        "note": "Graduates include foreign students. Romania, Bulgaria and Hungary have many, and most return home."
+      },
+      "dentGraduates": {
+        "name": "Dental graduates",
+        "short": "New dentists",
+        "explain": "Dentists graduating in the year, per 100,000 inhabitants.",
+        "note": "Graduates include foreign students, most of whom return home."
+      },
+      "gpVisit": {
+        "name": "Saw a GP in the past year",
+        "short": "Saw a GP",
+        "explain": "The share of people aged 15 or over who saw a general practitioner in the past 12 months (EHIS, 2019).",
+        "pairName": "Saw a GP: city and countryside",
+        "pairExplain": "The same question among those living in cities (densely populated areas) and in rural, thinly populated areas. Rows are sorted by the gap between the two."
+      },
+      "dentVisit": {
+        "name": "Saw a dentist in the past year",
+        "short": "Saw a dentist",
+        "explain": "The share of people aged 15 or over who saw a dentist in the past 12 months (EHIS, 2019; the United Kingdom 2014).",
+        "pairName": "Saw a dentist: city and countryside",
+        "pairExplain": "The same question among those living in cities and in rural, thinly populated areas. Rows are sorted by the gap between the two."
+      },
+      "consultations": {
+        "name": "Doctor consultations",
+        "short": "Consultations",
+        "explain": "Doctor consultations (GPs and specialists together) per inhabitant per year, from the practices' own records.",
+        "note": "This has no good direction: many consultations can mean good access, or patients returning for a prescription or a referral."
+      },
+      "dentConsultations": {
+        "name": "Dental consultations",
+        "short": "Dental visits",
+        "explain": "Dental consultations per inhabitant per year."
+      },
+      "unmetMed": {
+        "name": "Needed a doctor but did not get there",
+        "short": "Unmet medical need",
+        "explain": "The share of people aged 16 or over who needed a medical examination in the past year but did not get one because it was too expensive, too far, or the waiting list too long (EU-SILC).",
+        "note": "Self-reported: people used to having no doctor less often feel they missed one. Hungary's figure is therefore lower than the visits would suggest, and is no proof of good access on its own.",
+        "pairName": "Unmet medical need: poor and rich",
+        "pairExplain": "The same question in the poorest and the richest income fifth. Rows are sorted by the gap between the two."
+      },
+      "unmetDent": {
+        "name": "Needed a dentist but did not get there",
+        "short": "Unmet dental need",
+        "explain": "The share of people aged 16 or over who needed a dental examination but did not get one for cost, distance or a waiting list (EU-SILC).",
+        "note": "Self-reported, with the same weakness as the medical question: people who do not go to a dentist often do not feel the lack.",
+        "pairName": "Unmet dental need: poor and rich",
+        "pairExplain": "The same question in the poorest and the richest income fifth. Rows are sorted by the gap between the two."
+      },
+      "avoidable": {
+        "name": "Avoidable mortality",
+        "short": "Avoidable deaths",
+        "explain": "Deaths under 75 from causes that timely care or prevention would have avoided, standardised to the 2013 European Standard Population, per 100,000 inhabitants (Eurostat).",
+        "note": "Inside Hungary, by district, the site uses NNGYK's figures, whose level is lower; the two are never mixed (see the methodology)."
+      },
+      "treatable": {
+        "name": "Treatable mortality",
+        "short": "Treatable deaths",
+        "explain": "The part of avoidable mortality that depends on health care: deaths timely, effective treatment could have prevented."
+      },
+      "preventable": {
+        "name": "Preventable mortality",
+        "short": "Preventable deaths",
+        "explain": "The part of avoidable mortality that depends on prevention: tobacco, alcohol, accidents, vaccine-preventable disease."
+      },
+      "screenBreast": {
+        "name": "Breast screening",
+        "short": "Breast screening",
+        "explain": "The share of women in the target age group screened in the organised breast-screening programme (programme data, not a survey).",
+        "note": "Programme data: it shows who reached the organised screening. Women screened privately are not in it, and how many there are differs by country."
+      },
+      "screenCervical": {
+        "name": "Cervical screening",
+        "short": "Cervical screening",
+        "explain": "The share of women in the target age group screened in the organised cervical-screening programme (programme data).",
+        "note": "Programme data: smears taken privately or as part of a gynaecological visit are not in it, so in some countries the true share may be higher."
+      },
+      "screenColorectal": {
+        "name": "Colorectal screening",
+        "short": "Colorectal screening",
+        "explain": "The share of the target age group taking part in the organised colorectal-screening programme (programme data)."
+      },
+      "flu65": {
+        "name": "Flu vaccination, 65 and over",
+        "short": "Flu shot 65+",
+        "explain": "The share of people aged 65 or over vaccinated against influenza. The shot is usually given by the GP."
+      },
+      "admAsthmaCopd": {
+        "name": "Avoidable admissions: asthma and COPD",
+        "short": "Admissions: asthma, COPD",
+        "explain": "Hospital admissions for asthma or chronic obstructive pulmonary disease, per 100,000 inhabitants aged 15 or over, age- and sex-standardised (OECD). With good GP care most are avoidable.",
+        "note": "An OECD quality indicator; Bulgaria is not an OECD member and is missing. Hospital coding differs between countries."
+      },
+      "admHeartFailure": {
+        "name": "Avoidable admissions: heart failure",
+        "short": "Admissions: heart failure",
+        "explain": "Hospital admissions for congestive heart failure, per 100,000 inhabitants aged 15 or over, standardised (OECD).",
+        "note": "For Hungary only an old figure is available; the page shows it but does not rank it."
+      },
+      "admDiabetes": {
+        "name": "Avoidable admissions: diabetes",
+        "short": "Admissions: diabetes",
+        "explain": "Hospital admissions for diabetes, per 100,000 inhabitants aged 15 or over, standardised (OECD)."
+      },
+      "spendingPps": {
+        "name": "Health spending per inhabitant",
+        "short": "Spending per head",
+        "explain": "Current health expenditure per inhabitant in purchasing power standards (PPS), so that countries with different price levels can be compared."
+      },
+      "outOfPocket": {
+        "name": "Paid out of patients' own pockets",
+        "short": "Out of pocket",
+        "explain": "The part of current health spending households pay directly — for medicines, co-payments or private consultations, for instance."
+      },
+      "medicalPractices": {
+        "name": "Spending on medical practices",
+        "short": "Medical practices",
+        "explain": "The share of current health spending that goes to medical practices (GP and outpatient specialist practices).",
+        "note": "Whether a consultation happens in a practice or a hospital outpatient department differs by country, so this has no good direction."
+      },
+      "dentalPractices": {
+        "name": "Spending on dental practices",
+        "short": "Dental practices",
+        "explain": "The share of current health spending that goes to dental practices, public and private together."
+      },
+      "prevention": {
+        "name": "Spending on prevention",
+        "short": "Prevention",
+        "explain": "The share of current health spending that goes to prevention (vaccination, screening, health promotion)."
+      },
+      "payGpSalaried": {
+        "name": "Pay of salaried GPs",
+        "short": "GP, salaried",
+        "explain": "Average yearly earnings of salaried GPs as a multiple of the country's average wage (OECD).",
+        "note": "Most Hungarian GPs are self-employed, but the OECD reports the salaried figure for Hungary; this is therefore not what a typical Hungarian GP earns."
+      },
+      "payGpSelf": {
+        "name": "Pay of self-employed GPs",
+        "short": "GP, self-employed",
+        "explain": "Average yearly earnings of self-employed GPs as a multiple of the average wage (OECD). There is no figure for Hungary."
+      },
+      "paySpecSalaried": {
+        "name": "Pay of salaried specialists",
+        "short": "Specialist, salaried",
+        "explain": "Average yearly earnings of salaried specialists as a multiple of the average wage (OECD) — the yardstick for the GP figure: what a doctor gives up by becoming a GP."
+      },
+      "payNurse": {
+        "name": "Pay of hospital nurses",
+        "short": "Nurses",
+        "explain": "Average yearly earnings of hospital nurses as a multiple of the average wage (OECD)."
+      },
+      "share65": {
+        "name": "People aged 65 and over",
+        "short": "Share 65+",
+        "explain": "The share of the population aged 65 or over, on 1 January. The old account for much of a GP's work.",
+        "note": "This has no good direction: a higher share means more need, not worse care."
+      },
+      "lifeExpectancy": {
+        "name": "Life expectancy at birth",
+        "short": "Life expectancy",
+        "explain": "How many years a child born now would live on average if the country's present mortality held throughout its life."
+      },
+      "healthyYears65": {
+        "name": "Healthy life years at 65",
+        "short": "Healthy years 65+",
+        "explain": "How many more years a 65-year-old can expect to live without a health problem that limits activity (from the EU-SILC question and mortality)."
+      },
+      "goodHealth": {
+        "name": "Rate their health as good",
+        "short": "Good health",
+        "explain": "The share of people aged 16 or over who rate their health as good or very good (EU-SILC)."
+      },
+      "longIllness": {
+        "name": "Live with a long-standing illness",
+        "short": "Long-standing illness",
+        "explain": "The share of people aged 16 or over with a long-standing (at least six months) illness or health problem (EU-SILC).",
+        "note": "Self-reported: where more patients are under care, more people know of their illness, so a higher share may partly mean better diagnosis."
+      },
+      "vaccDtp": {
+        "name": "Childhood vaccination: diphtheria, tetanus, pertussis",
+        "short": "Vaccination: DTP",
+        "explain": "The share of one-year-olds who received the full primary series (OECD). In Hungary vaccination is organised by the paediatric GP and the health visitor.",
+        "note": "Countries measure it differently (registers or surveys, different ages), so small differences are not meaningful."
+      },
+      "vaccMeasles": {
+        "name": "Childhood vaccination: measles",
+        "short": "Vaccination: measles",
+        "explain": "The share of children vaccinated against measles by the required age (OECD).",
+        "note": "Countries measure it differently, so small differences are not meaningful."
+      },
+      "foreignTrained": {
+        "name": "Foreign-trained doctors",
+        "short": "Foreign-trained",
+        "explain": "The share of doctors who trained abroad (OECD). It counts the place of the degree, not nationality.",
+        "note": "This has no good direction: foreign-trained doctors can fill a gap, or show that a country does not train enough."
+      }
+    },
+    "scatter": {
+      "heading": "Two measures side by side",
+      "lead": "Pick any two measures; each dot is a country at its latest figure. The two dashed lines are the medians of the countries chosen, splitting the field into four quarters.",
+      "x": "Horizontal axis",
+      "y": "Vertical axis",
+      "note": "{n} countries are shown. With so few, no correlation is computed: leaving one or two countries in or out could turn it round. The chart shows where a country stands, not what goes with what.",
+      "tooFew": "Too few countries have figures for these two measures."
+    },
+    "regions": {
+      "heading": "Map of the regions",
+      "lead": "Eurostat publishes a few measures for regions (NUTS 2) too: the number of doctors, standardised mortality, life expectancy at birth and GDP per head. Hungary's eight regions can thus be seen among the regions of the countries chosen. Click a region to highlight it.",
+      "aria": "Map of Europe's regions by the measure chosen",
+      "unmapped": "{n} regions are in the list but not on the map: overseas territories, or regions whose code was retired in the 2024 classification."
+    },
+    "region": {
+      "physicians": {
+        "name": "Doctors in the region",
+        "short": "Doctors",
+        "explain": "Doctors working in the region per 100,000 inhabitants, all specialties together (there is no GP breakdown at regional level).",
+        "note": "Doctors are counted where they work: regions with university and county hospitals stand out, which does not mean the villages there have more doctors."
+      },
+      "deathRate": {
+        "name": "Standardised mortality",
+        "short": "Mortality",
+        "explain": "All deaths in the region with differences in age structure removed, per 100,000 inhabitants.",
+        "note": "The latest regional year is 2021, the year of the COVID-19 pandemic, which also shapes the differences between regions."
+      },
+      "lifeExpectancy": {
+        "name": "Life expectancy at birth",
+        "short": "Life expectancy",
+        "explain": "How many years a child born now would live on average if the region's present mortality held throughout its life."
+      },
+      "gdpPps": {
+        "name": "GDP per head",
+        "short": "GDP per head",
+        "explain": "The region's GDP per head in purchasing power, as a percentage of the EU average (EU = 100). A yardstick: richer regions can be expected to have more doctors and better health; the question is whether Hungary's regions do better or worse than that."
+      }
+    },
+    "border": {
+      "heading": "Across the border",
+      "lead": "Hungary's border regions beside the region facing them in the neighbouring country. Most things are shared here — landscape, climate, often history and language — so more of the difference comes down to care and prosperity. The better value is marked in green.",
+      "note": "The year is given beside each row; where the two regions report different years, both are there. The pairs follow the border from the north, clockwise."
+    },
+    "next": {
+      "method": {
+        "title": "How is it made?",
+        "text": "The sources, the concepts, and why Eurostat and OECD figures are never mixed."
+      }
+    },
+    "method": {
+      "heading": "The European comparison",
+      "lead": "How the Europe page is made, and what it cannot say.",
+      "sources": {
+        "title": "Sources",
+        "text": "Eurostat's health and regional databases (source Q) and OECD Health Statistics (source R, CC BY 4.0). Both draw on the same joint OECD–Eurostat–WHO data collection; the OECD is used for three things Eurostat does not publish: avoidable hospital admissions, doctors' pay, and the United Kingdom after 2019. Region outlines are GISCO's NUTS 2024 classification (© EuroGeographics for the administrative boundaries). Every downloaded answer is archived with its date."
+      },
+      "oneSource": {
+        "title": "One country, one source",
+        "text": "A country's whole series for a measure comes from one publisher. The United Kingdom's workforce figures are taken from the OECD, but only after the two publishers have been checked to agree on the years they share; if they differ, the build stops. Such a country carries an OECD mark in the ranking."
+      },
+      "concepts": {
+        "title": "Measuring the same thing",
+        "text": "Practising, professionally active and licensed doctors are three different numbers; practising is shown everywhere, and where a country reports only the other two, the cell is left empty. The share of doctors aged 55 or over is computed from the published age bands by an exact identity, without estimation."
+      },
+      "years": {
+        "title": "Every value with its own year",
+        "text": "Each country is shown at its latest published year, with the year beside it. A figure more than five years older than the newest one for the measure is shown but not ranked. The latest published wave of the surveys (EHIS) is 2019."
+      },
+      "selfReport": {
+        "title": "Survey and register",
+        "text": "Doctor visits and unmet need are people's own answers. Unmet need has a known weakness: people used to going without say so less often, so it is to be read beside the visits, not instead of them. Screening rates are programme data: tests outside the organised programme are not in them."
+      },
+      "regions": {
+        "title": "Regions",
+        "text": "Only a few measures exist at regional (NUTS 2) level; there is no GP breakdown and no avoidable mortality. Doctors are counted at their workplace, so regions with hospital centres stand out. The border pairs are set by geography, not by the data."
+      },
+      "limits": {
+        "title": "What it does not say",
+        "text": "No correlation is computed from nine or twenty-eight countries, and no measure is claimed to cause another: the page compares, it does not model. Health systems are organised differently (who is the gatekeeper, what counts as a practice), so part of a difference in a measure is a difference in filing."
+      },
+      "migration": {
+        "title": "Doctors on the move",
+        "text": "The OECD health workforce migration table (source R) counts, from the receiving countries' reports, how many doctors work there with a foreign degree and where they got it. Outflow is therefore visible only in reporting countries; their years differ, and place of training is not nationality — graduates who studied abroad as foreign students and went home look like emigrants in the table. No net loss is computed."
+      }
+    },
+    "country": {
+      "EU": "EU-27",
+      "AT": "Austria",
+      "BE": "Belgium",
+      "BG": "Bulgaria",
+      "CY": "Cyprus",
+      "CZ": "Czechia",
+      "DE": "Germany",
+      "DK": "Denmark",
+      "EE": "Estonia",
+      "EL": "Greece",
+      "ES": "Spain",
+      "FI": "Finland",
+      "FR": "France",
+      "HR": "Croatia",
+      "HU": "Hungary",
+      "IE": "Ireland",
+      "IT": "Italy",
+      "LT": "Lithuania",
+      "LU": "Luxembourg",
+      "LV": "Latvia",
+      "MT": "Malta",
+      "NL": "Netherlands",
+      "PL": "Poland",
+      "PT": "Portugal",
+      "RO": "Romania",
+      "SE": "Sweden",
+      "SI": "Slovenia",
+      "SK": "Slovakia",
+      "UK": "United Kingdom"
+    },
+    "change": {
+      "modeLabel": "View",
+      "rank": "Now",
+      "change": "Over ten years",
+      "from": "ten years earlier",
+      "to": "now",
+      "good": "the good way",
+      "bad": "the bad way",
+      "none": "There is no figure from ten years earlier for this measure.",
+      "title": "{name}: {fromYear}: {from} → {toYear}: {to}",
+      "missing": "No figure from ten years earlier (±2 years): {list}"
+    },
+    "profile": {
+      "heading": "Strengths and weaknesses — {country}",
+      "explain": "Every rankable measure on one row: right of the centre line where it stands in the better half of the countries chosen, left where it stands in the worse. The length shows how far.",
+      "worst": "worst",
+      "middle": "middle",
+      "best": "best"
+    },
+    "migration": {
+      "heading": "Where do doctors come from and go? — {country}",
+      "lead": "The OECD counts doctors by where they trained: who works in a country with a foreign degree, and how many doctors trained in a country work in the countries that report it.",
+      "inHeading": "Trained abroad, working here",
+      "outHeading": "Trained here, working abroad",
+      "home": "trained at home: {n}",
+      "splitTitle": "Doctors trained at home and abroad",
+      "inSummary": "{year}: {n} doctors work with a foreign degree, {share} of all doctors. Where they trained:",
+      "outSummary": "{places} countries report {n} doctors trained here in all (each at its own latest year). At home, {home} home-trained doctors work.",
+      "other": "other countries",
+      "noIn": "There are no figures for this country.",
+      "noOut": "No reporting country lists doctors trained here.",
+      "mapAria": "Map of Europe: how many doctors trained here work in each country",
+      "note": "Place of training is not nationality. A country that teaches many foreign students sends many doctors home on paper: most of those trained in Hungary who work in Israel, Norway, Sweden, Greece or Cyprus were probably born there and went home. This table cannot separate emigration, so no net loss is computed from it. Only reporting countries appear, each at its own year."
+    }
+  },
+  "sideNav": {
+    "county": {
+      "label": "County",
+      "group": {
+        "county": "The county"
+      },
+      "varmegye": "Choose a county",
+      "attekintes": "Overview",
+      "ellatas": "Care in numbers",
+      "egeszseg": "Health and living conditions",
+      "elorejelzes": "Forecast and grants",
+      "jarasai": "Its districts",
+      "keresztmetszet": "Cross-sections",
+      "telepulesek": "Its settlements"
+    },
+    "district": {
+      "label": "District",
+      "group": {
+        "district": "The district",
+        "country": "Nationally"
+      },
+      "jaras": "Choose a district",
+      "allapot": "State of care",
+      "fejlettseg": "Development",
+      "egeszseg": "Health and living conditions",
+      "keresztmetszet": "Cross-sections",
+      "rangsor": "Ranking",
+      "osszefugges": "Association",
+      "telepulesek": "Its settlements",
+      "veszelyeztetett": "The most vulnerable districts"
+    },
+    "specialist": {
+      "label": "More",
+      "group": {
+        "specialist": "Who else provides care?"
+      },
+      "vedono": "Health visitors",
+      "szakellatas": "Specialist care",
+      "gyogyszertar": "Pharmacies",
+      "segedeszkoz": "Medical aids"
+    },
+    "settlements": {
+      "label": "Counties",
+      "group": "Counties"
     }
   }
 }

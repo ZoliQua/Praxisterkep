@@ -106,7 +106,7 @@ export function CountyOutcomes({ county }: { county: string }) {
       </div>
 
       {fc && (
-        <div className="outcome__pair">
+        <div className="outcome__pair" id="elorejelzes">
           <div>
             <h3 className="outcome__sub">{t('outcomes.county.forecastHeading')}</h3>
             <ForecastPath start={o.forecast.kinds.gp.month} path={fc.path} band={fc.vacantIn12Band} />
@@ -132,7 +132,7 @@ export function CountyOutcomes({ county }: { county: string }) {
         </div>
       )}
 
-      <h3 className="outcome__sub">{t('outcomes.county.districtsHeading', { county })}</h3>
+      <h3 className="outcome__sub" id="jarasai">{t('outcomes.county.districtsHeading', { county })}</h3>
       <div className="table-wrap">
         <table className="county-table outcome-table">
           <thead>

@@ -23,7 +23,7 @@ const allHrefs = allEntries.flatMap((e) => [e.href, ...(e.children ?? []).map(([
 describe('site navigation', () => {
   it('names every page the site has, in the order of the zooms', () => {
     expect(allEntries.map((e) => e.href)).toEqual([
-      '/', '/megye.html', '/jaras.html', '/telepules/', '/elemzo.html',
+      '/', '/megye.html', '/jaras.html', '/telepules/', '/elemzo.html', '/europa.html',
       '/szakellato.html', '/modszertan.html',
     ]);
   });

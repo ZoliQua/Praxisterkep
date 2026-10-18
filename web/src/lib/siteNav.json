@@ -160,6 +160,56 @@
       ]
     },
     {
+      "href": "/europa.html",
+      "labelKey": "nav.europe",
+      "children": [
+        [
+          "/europa.html#attekintes",
+          "europe.toc.attekintes"
+        ],
+        [
+          "/europa.html#igeny",
+          "europe.toc.igeny"
+        ],
+        [
+          "/europa.html#munkaero",
+          "europe.toc.munkaero"
+        ],
+        [
+          "/europa.html#vandorlas",
+          "europe.toc.vandorlas"
+        ],
+        [
+          "/europa.html#hozzaferes",
+          "europe.toc.hozzaferes"
+        ],
+        [
+          "/europa.html#eredmeny",
+          "europe.toc.eredmeny"
+        ],
+        [
+          "/europa.html#kiadas",
+          "europe.toc.kiadas"
+        ],
+        [
+          "/europa.html#berek",
+          "europe.toc.berek"
+        ],
+        [
+          "/europa.html#ketmutato",
+          "europe.toc.ketmutato"
+        ],
+        [
+          "/europa.html#regiok",
+          "europe.toc.regiok"
+        ],
+        [
+          "/europa.html#hatar",
+          "europe.toc.hatar"
+        ]
+      ]
+    },
+    {
       "href": "/szakellato.html",
       "labelKey": "nav.whoElse",
       "children": [

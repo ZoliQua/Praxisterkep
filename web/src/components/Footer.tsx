@@ -15,6 +15,9 @@ import { useSnapshot } from '../store/useAppStore';
 
 const AUTHOR_URL = 'https://dulzoltan.hu';
 
+// every release has its notes; the footer links the one being served
+const RELEASES_URL = 'https://github.com/ZoliQua/Praxisterkep/releases';
+
 export function Footer({ month }: { month?: string }) {
   const snapshot = useSnapshot();
   const asOf = month ?? snapshot?.month;
@@ -59,6 +62,7 @@ export function Footer({ month }: { month?: string }) {
           <li>{t('footer.names')}</li>
           <li>{t('footer.noPersonal')}</li>
           <li>{t('footer.notOfficial')}</li>
+          <li>{t('footer.thirdParty')}</li>
           <li>{t('footer.correction')}</li>
         </ul>
         </details>
@@ -76,6 +80,9 @@ export function Footer({ month }: { month?: string }) {
         </p>
         <p>
           {asOf && <>{t('footer.updated')}: {formatMonth(asOf)} · </>}
+          <a href={RELEASES_URL} rel="noopener" className="footer__version">
+            {t('footer.version', { version: __APP_VERSION__ })}</a>
+          {' · '}
           {t('footer.license')}
         </p>
       </div>

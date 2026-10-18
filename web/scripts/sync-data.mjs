@@ -58,6 +58,11 @@ const optional = [
   // small enough to offer for download on their own: the census shares, the
   // grant follow-up and the forecast that outcomes.json is cut from
   [join(repo, 'data', 'census.json'), join(out, 'census.json')],
+  // the European comparison (europa.html) and its outlines
+  [join(repo, 'data', 'europe.json'), join(out, 'europe.json')],
+  [join(repo, 'data', 'geo', 'europe.json'), join(out, 'europe_geo.json')],
+  // the landing's two European facts, so it does not fetch the whole comparison
+  [join(repo, 'data', 'europe_summary.json'), join(out, 'europe_summary.json')],
   // the landing's two headline findings, a few hundred bytes
   [join(repo, 'data', 'highlights.json'), join(out, 'highlights.json')],
   [join(repo, 'data', 'grants.json'), join(out, 'grants.json')],

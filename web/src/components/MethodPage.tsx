@@ -5,7 +5,8 @@ import { useHashScroll } from '../lib/useHashScroll';
 import { PageNav } from './PageNav';
 import { Methodology } from './Methodology';
 import { OutcomeMethod } from './OutcomeMethod';
-import { METHOD_PARAGRAPHS, OUTCOME_ITEMS } from '../lib/methodSections';
+import { EUROPE_METHOD_ITEMS, METHOD_PARAGRAPHS, OUTCOME_ITEMS } from '../lib/methodSections';
+import { EuropeMethod } from './EuropeMethod';
 import { SideNav, type SideGroup } from './SideNav';
 import { DataSection } from './DataSection';
 import { NextSteps } from './NextSteps';
@@ -26,6 +27,8 @@ const GROUPS: SideGroup[] = [
   ] },
   { titleKey: 'method.group.outcomes', items:
     OUTCOME_ITEMS.map((k) => ({ id: `k-${k}`, labelKey: `outcomeMethod.${k}.title` })) },
+  { titleKey: 'method.group.europe', items:
+    EUROPE_METHOD_ITEMS.map((k) => ({ id: `e-${k}`, labelKey: `europe.method.${k}.title` })) },
   { titleKey: 'method.group.data', items: [
     { id: 'adatok', labelKey: 'method.data' },
     { id: 'm-embed', labelKey: 'method.embed' },
@@ -40,6 +43,7 @@ export function MethodPage() {
       <SideNav groups={GROUPS} labelKey="method.sideNav" />
       <Methodology />
       <OutcomeMethod />
+      <EuropeMethod />
       <DataSection />
       <div className="section container"><NextSteps items={NEXT} /></div>
       <Footer />

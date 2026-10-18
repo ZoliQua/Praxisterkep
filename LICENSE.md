@@ -45,6 +45,9 @@ is kötelező, és az OpenStreetMapből származó részekre az ODbL feltételei
 | [KSH TIMEA](https://map.ksh.hu/timea/) | jövedelem (NAV-adatokból), népmozgalom, vándorlás, háziorvosi betegforgalom | nyilvános közadat, forrásmegjelöléssel |
 | [NNGYK Halandósági adatbázis](https://nngyk.gov.hu/hu/halandosagi-adatbazis.html) | standardizált és elkerülhető halálozás járásonként | nyilvános közadat, forrásmegjelöléssel |
 | [Eurostat](https://ec.europa.eu/eurostat/databrowser/view/hlth_cd_apr/default/table) | Magyarország és az EU-27 elkerülhető halálozása | [Eurostat szerzői jogi közlemény](https://ec.europa.eu/eurostat/help/copyright-notice): az adatok újrafelhasználása a forrás megjelölésével engedélyezett |
+| [Eurostat egészségügyi és regionális adatbázis](https://ec.europa.eu/eurostat/web/health/database) | az európai összevetés (`europa.html`): munkaerő, felmérések, szűrés, kiadások, régiók | ugyanaz a [szerzői jogi közlemény](https://ec.europa.eu/eurostat/help/copyright-notice): újrafelhasználás a forrás megjelölésével |
+| [OECD Health Statistics](https://data-explorer.oecd.org/) | elkerülhető kórházi felvételek, orvosi jövedelmek, az Egyesült Királyság 2019 után | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.hu) (az OECD 2024. júliusi nyílt hozzáférési szabálya szerint), forrásmegjelöléssel |
+| [GISCO NUTS 2024 és országhatárok](https://ec.europa.eu/eurostat/web/gisco/geodata/statistical-units/territorial-units-statistics) | az európai térképek határai | nem kereskedelmi célú felhasználás; a térképen kötelező felirat: „© EuroGeographics for the administrative boundaries” |
 | [NFSZ településsoros adatok](https://nfsz.munka.hu/tart/stat_telepulessoros_adatok) | nyilvántartott álláskeresők | nyilvános közadat, forrásmegjelöléssel |
 | [Nemzeti Jogszabálytár](https://njt.hu/) | 290/2014. és 105/2015. Korm. rendelet: járásfejlettség, kedvezményezett települések | jogszabályszöveg, szabadon felhasználható |
 | [OpenStreetMap](https://www.openstreetmap.org/copyright) (a [Geofabrik](https://download.geofabrik.de/europe/hungary.html) kivonatán át) | határok, úthálózat, geokódolás (Nominatim) | © OpenStreetMap közreműködők, [ODbL 1.0](https://opendatacommons.org/licenses/odbl/1-0/) |
@@ -53,6 +56,13 @@ is kötelező, és az OpenStreetMapből származó részekre az ODbL feltételei
 Az OpenStreetMapből származó adatbázis-részek (`data/geo/`, a geokódolási
 gyorsítótár) az ODbL hatálya alá tartoznak: továbbadásuk ugyanilyen
 feltétellel lehetséges.
+
+Kivétel a CC BY 4.0 alól: a **`data/geo/europe.json`** (az európai ország- és
+régióhatárok) a GISCO adataiból készült, és a GISCO feltételei szerint
+**csak nem kereskedelmi célra** használható, a „© EuroGeographics for the
+administrative boundaries” felirattal. Az OECD-ből származó számok (R forrás)
+CC BY 4.0 alatt, az OECD megjelölésével használhatók; az itteni feldolgozás és
+összevetés a szerző munkája, nem az OECD hivatalos álláspontja.
 
 Az oldal orvosnevet kizárólag a betöltött praxisoknál, a NEAK nyilvános
 szolgáltatói törzséből jelenít meg. A pályázati nyertesek nevét az adatok
@@ -67,4 +77,8 @@ them — derive from third-party public data. The original source files under
 `data/raw/` remain subject to each source's own terms (listed above). The
 processed data (the JSON under `data/`) is published under CC BY 4.0, with the
 original source credited as well; OpenStreetMap-derived parts remain under
-the ODbL 1.0.
+the ODbL 1.0. Exception: `data/geo/europe.json` (European country and region
+outlines) is derived from GISCO and may be used **for non-commercial purposes
+only**, with the notice "© EuroGeographics for the administrative
+boundaries". OECD figures (source R) are CC BY 4.0, credited to the OECD; the
+processing and comparisons here are the author's, not an official OECD view.

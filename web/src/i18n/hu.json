@@ -40,11 +40,12 @@
     "countyPage": "Megye",
     "settlements": "Település",
     "registry": "Nyilvántartás",
-    "whoElse": "Ki lát el még?",
+    "whoElse": "Továbbiak",
     "stock": "Körzetállomány",
     "districtPage": "Járás",
     "districtChoose": "Járás kiválasztása",
-    "districtVulnerable": "A legveszélyeztetettebb járások"
+    "districtVulnerable": "A legveszélyeztetettebb járások",
+    "europe": "Európa"
   },
   "hero": {
     "vacant": "betöltetlen {kind} körzet",
@@ -294,9 +295,18 @@
       "nfsz": {
         "title": "NFSZ — Nemzeti Foglalkoztatási Szolgálat:",
         "settlements": "nyilvántartott álláskeresők településenként, havonta"
+      },
+      "europe": {
+        "title": "Európai források:",
+        "eurostatHealth": "Eurostat — egészségügyi adatbázis (munkaerő, felmérések, szűrés, kiadások, halálozás)",
+        "eurostatRegional": "Eurostat — regionális adatbázis (NUTS 2: orvosok, halálozás, várható élettartam, GDP)",
+        "oecd": "OECD Health Statistics — elkerülhető kórházi felvételek, orvosi jövedelmek, Egyesült Királyság (CC BY 4.0)",
+        "gisco": "GISCO — NUTS 2024 régióhatárok (© EuroGeographics a közigazgatási határokért)"
       }
     },
-    "sourcesNote": "Minden szám alá linkeltük a forrását: ezek mind nyilvános, bárki által letölthető fájlok és oldalak. A NEAK-állományok mindig az aktuális hónapot adják vissza; a korábbi hónapokat mi archiváljuk, azok is letölthetők."
+    "sourcesNote": "Minden szám alá linkeltük a forrását: ezek mind nyilvános, bárki által letölthető fájlok és oldalak. A NEAK-állományok mindig az aktuális hónapot adják vissza; a korábbi hónapokat mi archiváljuk, azok is letölthetők.",
+    "version": "v{version}",
+    "thirdParty": "Az Eurostat és az OECD adatait feldolgozva, a kiadók jóváhagyása nélkül közöljük: a feldolgozás és az összevetés a szerző munkája, nem az Eurostat vagy az OECD álláspontja. A régióhatárok forrása: © EuroGeographics a közigazgatási határokért."
   },
   "praxisTypes": {
     "adult": "felnőtt",
@@ -1019,7 +1029,11 @@
       "outcomes_json": "Halálozás, jövedelem, álláskeresők, népmozgalom, népszámlálás, sürgősségi elérés, támogatások és előrejelzés járásonként és megyénként, korrelációkkal",
       "census_json": "Népszámlálási arányok (KSH 2022, CC BY 4.0) településenként, járásonként, megyénként: végzettség, foglalkoztatás, digitális jártasság, lakás, háztartás",
       "grants_json": "A NEAK letelepedési és praxisjog-pályázatainak nyertesei (név nélkül) és a körzetük mai állapota",
-      "forecast_json": "Betöltetlen körzetek 12 hónap múlva: országos, megyei és járási előrejelzés sávval és visszaméréssel"
+      "forecast_json": "Betöltetlen körzetek 12 hónap múlva: országos, megyei és járási előrejelzés sávval és visszaméréssel",
+      "europe_json": "Az európai összevetés (Eurostat, OECD): 49 mutató a 27 tagállamra és az Egyesült Királyságra évenként, az orvosvándorlás, a NUTS 2 régiók négy mutatója és a határ menti párok. CC BY 4.0, a források megjelölésével.",
+      "europe_geo_json": "Európa ország- és NUTS 2 régióhatárai a térképekhez (GISCO). Csak nem kereskedelmi célra, „© EuroGeographics for the administrative boundaries” felirattal.",
+      "europe_summary_json": "A főoldal két európai kiemelése (háziorvos-sűrűség, fogorvoshoz járás), az europe.json-ból számolva.",
+      "highlights_json": "A főoldal két kiemelt eredménye (letelepedési támogatások, tíz éve üres fogorvosi körzetek), az elemzésekből számolva."
     },
     "useHeading": "Hogyan használd",
     "use1": "A fájlok statikusak és verziózottak: a hónap végleges állapota a months/ könyvtárban marad, a latest.json mindig az aktuális hónapra mutat.",
@@ -2755,7 +2769,8 @@
     "group": {
       "base": "Az alapadatok",
       "outcomes": "Kimenetek és körülmények",
-      "data": "Adatok és beágyazás"
+      "data": "Adatok és beágyazás",
+      "europe": "Európai összevetés"
     },
     "referral": "Megszűnt háziorvosi körzetek",
     "data": "Letölthető adatok",
@@ -2766,7 +2781,15 @@
     "vs": "vs.",
     "more": "Hogyan számoltuk? →",
     "gp": "A letelepedési támogatással betöltött háziorvosi körzetek ennyiében van ma is orvos — a hozzájuk illesztett, ugyanannyi ideje üres, hasonló méretű településen lévő, támogatás nélküli körzetekben csak ennyiben ({pairs} pár).",
-    "dental": "A ma betöltetlen fogorvosi körzetek közül ennyi már legalább tíz éve üres ({share}). Egy évtizede nincs saját fogorvosuk."
+    "dental": "A ma betöltetlen fogorvosi körzetek közül ennyi már legalább tíz éve üres ({share}). Egy évtizede nincs saját fogorvosuk.",
+    "europe": {
+      "heading": "Európai összevetésben",
+      "kicker": "Európa",
+      "gp": "praktizáló háziorvos jut 100 ezer lakosra Magyarországon ({year}), szemben a régió mediánjával. A régió {of} adatot közlő országa közül ez a {rank}. hely; a legtöbb: {best}, {bestValue}.",
+      "dental": "a felnőttek ennyi része volt fogorvosnál egy év alatt ({year}), vidéken csak {rural} — az EU-ban ennyi. A régió {of} országa közül ez a {rank}. hely.",
+      "dentalMedian": "a felnőttek ennyi része volt fogorvosnál egy év alatt ({year}), vidéken csak {rural}, szemben a régió mediánjával. A régió {of} országa közül ez a {rank}. hely.",
+      "more": "Az európai összevetés →"
+    }
   },
   "vulnerable": {
     "heading": "A legveszélyeztetettebb járások",
@@ -3154,6 +3177,555 @@
       "captionDistrict": ", {district} járás (kiemelve)",
       "inPlace": " Helyben van: {list}.",
       "thumbAria": "{county} megye"
+    },
+    "footerVersion": "v{version}"
+  },
+  "europe": {
+    "heading": "Európa: hol áll a magyar alapellátás?",
+    "lead": "Ugyanazok a kérdések, amelyeket az oldal egy járásnál feltesz — van-e orvos, eljut-e hozzá a beteg, mit ér el az ellátás, mennyibe kerül —, ezúttal az Európai Unió 27 tagállamára és az Egyesült Királyságra, az Eurostat és az OECD közös adatgyűjtéséből, végül a határ két oldalán fekvő régiókra. Fent kiválaszthatod, mely országokat hasonlítsuk össze, és melyik ország álljon a középpontban; a felső sávban a háziorvosi és a fogorvosi mutatók között váltasz.",
+    "loading": "Az európai adatok betöltése…",
+    "sideNav": "Európa",
+    "side": {
+      "countries": "Országok",
+      "regions": "Régiók"
+    },
+    "toc": {
+      "attekintes": "Áttekintés",
+      "munkaero": "Ki van a rendelőben?",
+      "hozzaferes": "Eljut-e a beteg?",
+      "eredmeny": "Mit ér el az ellátás?",
+      "kiadas": "Mennyit költünk rá?",
+      "berek": "Mennyit keres az orvos?",
+      "ketmutato": "Két mutató egymás mellett",
+      "regiok": "Régiók térképe",
+      "hatar": "A határ két oldalán",
+      "igeny": "Kinek kell az ellátás?",
+      "vandorlas": "Honnan jönnek, hová mennek az orvosok?"
+    },
+    "groupLabel": "Összevetés:",
+    "group": {
+      "all": "EU-27 + Egyesült Királyság",
+      "cee": "Közép-Kelet-Európa",
+      "v4": "Visegrádi négyek"
+    },
+    "groupHint": {
+      "all": "Mind a 27 tagállam és az Egyesült Királyság",
+      "cee": "Magyarország, Ausztria, Szlovákia, Csehország, Lengyelország, Románia és Bulgária, mércének Németország és az Egyesült Királyság",
+      "v4": "Magyarország, Csehország, Lengyelország és Szlovákia"
+    },
+    "focusLabel": "Középpontban:",
+    "reset": "Vissza Magyarországhoz",
+    "pickMeasure": "Mutató választása",
+    "noData": "nincs adat",
+    "stale": "régi adat",
+    "staleYear": "régi adat: {year}",
+    "oecdMark": "OECD",
+    "oecdMarkTitle": "Ennek az országnak a teljes idősora az OECD-től származik (ugyanabból a közös adatgyűjtésből, amelyből az Eurostat dolgozik), mert az Eurostat 2019 után nem közli.",
+    "missing": "Nincs adat: {list}",
+    "refEu": "EU-27: {value} ({year})",
+    "refMedian": "a kiválasztott országok mediánja: {value}",
+    "refMedianRegions": "a kiválasztott régiók mediánja: {value}",
+    "noBranch": "Ehhez a részhez ebben az ágban nincs összevethető európai adat.",
+    "trendHeading": "Az évek során — kiemelve: {name}",
+    "pairHeading": "Átlag mögött: két csoport ugyanabban az országban",
+    "pairTitle": "{name}, {year}: {a} {av}, {b} {bv}",
+    "pair": {
+      "city": "városban élők",
+      "rural": "vidéken élők",
+      "poor": "legszegényebb ötöd",
+      "rich": "leggazdagabb ötöd"
+    },
+    "map": {
+      "aria": "Európa térképe a kiválasztott mutató szerint",
+      "worse": "rosszabb",
+      "better": "jobb",
+      "low": "alacsonyabb",
+      "high": "magasabb"
+    },
+    "unit": {
+      "per100k": "100 ezer lakosra",
+      "pct": "százalék",
+      "perCapita": "egy lakosra évente",
+      "pps": "vásárlóerő-paritáson (PPS) egy lakosra",
+      "ratio": "az átlagbér hányszorosa",
+      "years": "év",
+      "pctEu": "az EU-átlag százalékában (EU = 100)"
+    },
+    "source": {
+      "eurostat": "Forrás: Eurostat, {dataset} — letöltve: {fetched}.",
+      "oecd": "Forrás: OECD Health Statistics, {dataset} (CC BY 4.0) — letöltve: {fetched}.",
+      "open": "Megnyitás a kiadónál →",
+      "ukOecd": "Az Egyesült Királyság idősora az OECD-től származik."
+    },
+    "overview": {
+      "heading": "{country} a kiválasztott országok között",
+      "lead": "Nyolc fő mutató, mindegyik a legfrissebb évével. A kártya színe azt mutatja, a kiválasztott országok rangsorának melyik harmadába esik a középpontban álló ország; a pöttyök a többi ország, a vonás az EU-27 értéke. Egy kártyára kattintva a hozzá tartozó részre ugrasz.",
+      "rank": "{rank}. hely, {of} ország közül",
+      "hint": "Egy pöttyre kattintva az az ország kerül a középpontba az egész oldalon. A rangsor csak az összehasonlítható évekből készül: ami öt évnél régebbi a legfrissebbnél, az szerepel, de nem kap helyezést.",
+      "unranked": "nincs jobb irány, nem rangsoroljuk"
+    },
+    "section": {
+      "workforce": {
+        "heading": "Ki van a rendelőben?",
+        "short": "Munkaerő",
+        "lead": "Hány orvos jut a lakosságra, mennyien közülük háziorvosok, mennyien vannak a nyugdíj közelében, és hányan jönnek utánuk. A számok a praktizáló — betegeket ténylegesen ellátó — orvosokat mutatják, nem a nyilvántartásban szereplőket."
+      },
+      "access": {
+        "heading": "Eljut-e a beteg az orvoshoz?",
+        "short": "Hozzáférés",
+        "lead": "Kétféle kérdés, kétféle forrásból: hányan voltak orvosnál az elmúlt egy évben (az európai lakossági egészségfelmérés, EHIS), és hányan mondják, hogy kellett volna, de nem jutottak el (az EU-SILC háztartásfelvétel). Mindkettő a megkérdezettek saját válasza, nem nyilvántartás."
+      },
+      "outcomes": {
+        "heading": "Mit ér el az ellátás?",
+        "short": "Eredmények",
+        "lead": "Ami az alapellátáson múlik: az időben kezelhető és a megelőzhető halálozás, a szervezett szűrések elérése, az idősek influenza elleni oltása, és az olyan kórházi felvételek, amelyek jó háziorvosi gondozás mellett elkerülhetők lennének (OECD)."
+      },
+      "spending": {
+        "heading": "Mennyit költünk rá?",
+        "short": "Kiadások",
+        "lead": "Az egészségügyi kiadás egy lakosra, vásárlóerőben mérve, és hogy ebből mennyi jut az orvosi és a fogorvosi rendelőkre, mennyi a megelőzésre — és mennyit fizetnek a betegek a saját zsebükből."
+      },
+      "pay": {
+        "heading": "Mennyit keres az orvos?",
+        "short": "Jövedelmek",
+        "lead": "Az OECD a jövedelmeket az adott ország átlagbérének többszörösében közli, így a különböző árszínvonalú országok összevethetők. Az alkalmazott és a vállalkozó orvosok külön sorban szerepelnek, mert a kettő nem ugyanaz a jövedelem."
+      },
+      "needs": {
+        "heading": "Kinek kell az ellátás?",
+        "short": "Igények",
+        "lead": "Mielőtt az orvosokat számolnánk: mennyire öreg és mennyire beteg a népesség, amelyet el kell látni. Ahol rövidebb az élet, kevesebb év telik egészségben, és több a tartós betegség, ott több alapellátás kellene, nem kevesebb."
+      }
+    },
+    "ind": {
+      "gpDensity": {
+        "name": "Háziorvosok",
+        "short": "Háziorvos",
+        "explain": "Praktizáló általános orvosok (háziorvosok) száma 100 ezer lakosra.",
+        "note": "Az országok nem egyformán számolják a háziorvost: Lengyelországban a családorvosok jó része az egyéb generalisták között szerepel, Portugáliában minden általános orvos beletartozik. Ezért mellette ott az összes generalista orvos is."
+      },
+      "generalistDensity": {
+        "name": "Generalista orvosok összesen",
+        "short": "Generalisták",
+        "explain": "A háziorvosok és a nem szakorvos általános orvosok együtt, 100 ezer lakosra. Az országok eltérő besorolását ez a tágabb kör jobban kiegyenlíti."
+      },
+      "dentistDensity": {
+        "name": "Fogorvosok",
+        "short": "Fogorvos",
+        "explain": "Praktizáló fogorvosok száma 100 ezer lakosra.",
+        "note": "Csak a praktizáló fogorvosokat mutatjuk. Ahol egy ország csak a szakmailag aktív vagy a működési engedéllyel rendelkező fogorvosokat jelenti (Szlovákia 2004 óta), ott üres a cella: a két fogalom nem keverhető."
+      },
+      "physicianDensity": {
+        "name": "Orvosok összesen",
+        "short": "Összes orvos",
+        "explain": "Az összes praktizáló orvos 100 ezer lakosra, szakorvosokkal együtt."
+      },
+      "nurseDensity": {
+        "name": "Ápolók",
+        "short": "Ápoló",
+        "explain": "Praktizáló ápolók 100 ezer lakosra. Ahol az alapellátásban kevés az orvos, sok feladat rájuk hárul."
+      },
+      "physicians55": {
+        "name": "Az orvosok legalább 55 évesek",
+        "short": "Orvos 55+",
+        "explain": "Az 55 éves és idősebb orvosok aránya az összes orvos között: akik a következő tíz évben nyugdíjba mehetnek.",
+        "note": "Az arányt a közölt korcsoportokból számoljuk, pontos azonossággal: a három idősebb korcsoport összege, vagy ahol egy idősebb korcsoport hiányzik, az összes orvos és a három fiatalabb korcsoport különbsége. Ha egyik sem teljes, nincs érték. Ez minden orvosra vonatkozik, nem csak a háziorvosokra."
+      },
+      "medGraduates": {
+        "name": "Végzett orvosok",
+        "short": "Új orvosok",
+        "explain": "Az adott évben végzett orvosok 100 ezer lakosra.",
+        "note": "A végzettek között a külföldi hallgatók is szerepelnek. Romániában, Bulgáriában és Magyarországon sok ilyen hallgató van, és ők többnyire hazamennek."
+      },
+      "dentGraduates": {
+        "name": "Végzett fogorvosok",
+        "short": "Új fogorvosok",
+        "explain": "Az adott évben végzett fogorvosok 100 ezer lakosra.",
+        "note": "A végzettek között a külföldi hallgatók is szerepelnek, akik többnyire hazamennek."
+      },
+      "gpVisit": {
+        "name": "Háziorvosnál volt az elmúlt évben",
+        "short": "Háziorvosnál járt",
+        "explain": "A 15 éves és idősebb lakosok aránya, akik az elmúlt 12 hónapban háziorvosnál jártak (EHIS, 2019).",
+        "pairName": "Háziorvosnál járt: város és vidék",
+        "pairExplain": "Ugyanaz a kérdés a városokban (sűrűn lakott területek) és a vidéki, ritkán lakott területeken élőknél. A sorok a két érték közötti különbség szerint rendezettek."
+      },
+      "dentVisit": {
+        "name": "Fogorvosnál volt az elmúlt évben",
+        "short": "Fogorvosnál járt",
+        "explain": "A 15 éves és idősebb lakosok aránya, akik az elmúlt 12 hónapban fogorvosnál jártak (EHIS, 2019; az Egyesült Királyságban 2014).",
+        "pairName": "Fogorvosnál járt: város és vidék",
+        "pairExplain": "Ugyanaz a kérdés a városokban és a vidéki, ritkán lakott területeken élőknél. A sorok a két érték közötti különbség szerint rendezettek."
+      },
+      "consultations": {
+        "name": "Orvos–beteg találkozások",
+        "short": "Orvoslátogatás",
+        "explain": "Az orvosi konzultációk (háziorvos és szakorvos együtt) száma egy lakosra egy évben, a rendelők adataiból.",
+        "note": "Ennek nincs jó iránya: sok találkozás jelenthet jó hozzáférést, de azt is, hogy a beteg receptért vagy beutalóért jár vissza."
+      },
+      "dentConsultations": {
+        "name": "Fogorvosi látogatások",
+        "short": "Fogorvosi vizit",
+        "explain": "A fogorvosi konzultációk száma egy lakosra egy évben."
+      },
+      "unmetMed": {
+        "name": "Nem jutott el orvoshoz, pedig kellett volna",
+        "short": "Kimaradt orvosi ellátás",
+        "explain": "A 16 éves és idősebbek aránya, akiknek az elmúlt évben orvosi vizsgálatra lett volna szükségük, de nem jutottak el hozzá, mert túl drága volt, túl messze volt, vagy hosszú volt a várólista (EU-SILC).",
+        "note": "Saját bevallás: aki megszokta, hogy nincs orvos, ritkábban érzi kimaradásnak. A magyar érték ezért alacsonyabb, mint a látogatási adatok alapján várnánk. Önmagában nem bizonyítja a jó hozzáférést.",
+        "pairName": "Kimaradt orvosi ellátás: szegények és gazdagok",
+        "pairExplain": "Ugyanaz a kérdés a jövedelem szerinti legszegényebb és leggazdagabb ötödben. A sorok a két érték közötti különbség szerint rendezettek."
+      },
+      "unmetDent": {
+        "name": "Nem jutott el fogorvoshoz, pedig kellett volna",
+        "short": "Kimaradt fogászat",
+        "explain": "A 16 éves és idősebbek aránya, akiknek fogorvosi vizsgálatra lett volna szükségük, de költség, távolság vagy várólista miatt nem jutottak el (EU-SILC).",
+        "note": "Saját bevallás, ugyanazzal a gyengeséggel, mint az orvosi kérdés: a fogorvoshoz nem járók gyakran nem is érzik a hiányt.",
+        "pairName": "Kimaradt fogászat: szegények és gazdagok",
+        "pairExplain": "Ugyanaz a kérdés a jövedelem szerinti legszegényebb és leggazdagabb ötödben. A sorok a két érték közötti különbség szerint rendezettek."
+      },
+      "avoidable": {
+        "name": "Elkerülhető halálozás",
+        "short": "Elkerülhető halálozás",
+        "explain": "75 év alatti halálozás olyan okokból, amelyek időben adott ellátással vagy megelőzéssel elkerülhetők lennének, standardizálva a 2013-as európai standard népességre, 100 ezer lakosra (Eurostat).",
+        "note": "Magyarországon belül, járásonként az oldal az NNGYK adatát használja, amelynek a szintje alacsonyabb; a kettőt nem keverjük (lásd a módszertant)."
+      },
+      "treatable": {
+        "name": "Kezelhető halálozás",
+        "short": "Kezelhető halálozás",
+        "explain": "Az elkerülhető halálozás az egészségügyi ellátáson múló része: halálesetek, amelyeket időben adott, jó ellátás megelőzhetett volna."
+      },
+      "preventable": {
+        "name": "Megelőzhető halálozás",
+        "short": "Megelőzhető halálozás",
+        "explain": "Az elkerülhető halálozás a megelőzésen múló része: dohányzás, alkohol, balesetek, oltással elkerülhető betegségek."
+      },
+      "screenBreast": {
+        "name": "Emlőszűrés",
+        "short": "Emlőszűrés",
+        "explain": "A szervezett emlőszűrő programban megvizsgált nők aránya a célkorosztályban (programadat, nem kérdőív).",
+        "note": "Programadat: azt mutatja, hányan jutottak el a szervezett szűrésre. Akit magánrendelésen szűrtek, nincs benne; országonként eltér, mennyire."
+      },
+      "screenCervical": {
+        "name": "Méhnyakszűrés",
+        "short": "Méhnyakszűrés",
+        "explain": "A szervezett méhnyakszűrő programban megvizsgált nők aránya a célkorosztályban (programadat).",
+        "note": "Programadat: a magánrendelésen vagy nőgyógyászati vizsgálat részeként végzett kenet nincs benne. Ezért egyes országokban a valós arány magasabb lehet."
+      },
+      "screenColorectal": {
+        "name": "Vastagbélszűrés",
+        "short": "Vastagbélszűrés",
+        "explain": "A szervezett vastagbélszűrő programban részt vevők aránya a célkorosztályban (programadat)."
+      },
+      "flu65": {
+        "name": "Influenza elleni oltás 65 év felett",
+        "short": "Influenzaoltás 65+",
+        "explain": "A 65 éves és idősebbek közül influenza ellen oltottak aránya. Az oltás jellemzően a háziorvosnál történik."
+      },
+      "admAsthmaCopd": {
+        "name": "Elkerülhető kórházi felvétel: asztma és COPD",
+        "short": "Felvétel: asztma, COPD",
+        "explain": "Kórházi felvételek asztma vagy krónikus obstruktív tüdőbetegség miatt, 100 ezer 15 év feletti lakosra, kor és nem szerint standardizálva (OECD). Jó háziorvosi gondozás mellett ezek többsége elkerülhető.",
+        "note": "Az OECD minőségi mutatója; Bulgária nem OECD-tag, ezért hiányzik. A kórházi kódolás országonként eltér."
+      },
+      "admHeartFailure": {
+        "name": "Elkerülhető kórházi felvétel: szívelégtelenség",
+        "short": "Felvétel: szívelégtelenség",
+        "explain": "Kórházi felvételek pangásos szívelégtelenség miatt, 100 ezer 15 év feletti lakosra, standardizálva (OECD).",
+        "note": "Magyarországra csak régi adat érhető el; az oldal megmutatja, de nem rangsorolja."
+      },
+      "admDiabetes": {
+        "name": "Elkerülhető kórházi felvétel: cukorbetegség",
+        "short": "Felvétel: cukorbetegség",
+        "explain": "Kórházi felvételek cukorbetegség miatt, 100 ezer 15 év feletti lakosra, standardizálva (OECD)."
+      },
+      "spendingPps": {
+        "name": "Egészségügyi kiadás egy lakosra",
+        "short": "Kiadás / fő",
+        "explain": "A teljes folyó egészségügyi kiadás egy lakosra, vásárlóerő-paritáson (PPS), hogy az eltérő árszínvonalú országok összevethetők legyenek."
+      },
+      "outOfPocket": {
+        "name": "A betegek saját zsebből fizetett része",
+        "short": "Saját zsebből",
+        "explain": "A folyó egészségügyi kiadásnak az a része, amelyet a háztartások közvetlenül fizetnek — például gyógyszerért, önrészért vagy magánrendelésért."
+      },
+      "medicalPractices": {
+        "name": "Orvosi rendelőkre jutó kiadás",
+        "short": "Orvosi rendelők",
+        "explain": "A folyó egészségügyi kiadásból az orvosi rendelőkre (háziorvosi és járóbeteg-szakorvosi praxisokra) jutó rész.",
+        "note": "Az, hogy egy rendelés praxisban vagy kórházi ambulancián történik, országonként eltér; ezért ennek nincs jó iránya."
+      },
+      "dentalPractices": {
+        "name": "Fogorvosi rendelőkre jutó kiadás",
+        "short": "Fogorvosi rendelők",
+        "explain": "A folyó egészségügyi kiadásból a fogorvosi rendelőkre jutó rész, köz- és magánkiadás együtt."
+      },
+      "prevention": {
+        "name": "Megelőzésre jutó kiadás",
+        "short": "Megelőzés",
+        "explain": "A folyó egészségügyi kiadásból a megelőzésre (oltás, szűrés, egészségfejlesztés) jutó rész."
+      },
+      "payGpSalaried": {
+        "name": "Alkalmazott háziorvos jövedelme",
+        "short": "Háziorvos, alkalmazott",
+        "explain": "Az alkalmazottként dolgozó háziorvosok átlagos éves jövedelme az ország átlagbérének többszörösében (OECD).",
+        "note": "A magyar háziorvosok többsége vállalkozó, az OECD viszont Magyarországra az alkalmazotti adatot közli; ez a szám ezért nem a tipikus magyar háziorvos jövedelme."
+      },
+      "payGpSelf": {
+        "name": "Vállalkozó háziorvos jövedelme",
+        "short": "Háziorvos, vállalkozó",
+        "explain": "A vállalkozóként dolgozó háziorvosok átlagos éves jövedelme az átlagbér többszörösében (OECD). Magyarországra nincs adat."
+      },
+      "paySpecSalaried": {
+        "name": "Alkalmazott szakorvos jövedelme",
+        "short": "Szakorvos, alkalmazott",
+        "explain": "Az alkalmazott szakorvosok átlagos éves jövedelme az átlagbér többszörösében (OECD) — a háziorvosi szám mércéje: mennyit ad fel, aki háziorvosnak megy."
+      },
+      "payNurse": {
+        "name": "Kórházi ápoló jövedelme",
+        "short": "Ápoló",
+        "explain": "A kórházi ápolók átlagos éves jövedelme az átlagbér többszörösében (OECD)."
+      },
+      "share65": {
+        "name": "A 65 évesek és idősebbek aránya",
+        "short": "65+ arány",
+        "explain": "A 65 éves és idősebb lakosok aránya a teljes népességben, január 1-jén. Az idősek viszik a háziorvosi forgalom nagy részét.",
+        "note": "Ennek nincs jó iránya: a magasabb arány nagyobb igényt jelent, nem rosszabb ellátást."
+      },
+      "lifeExpectancy": {
+        "name": "Születéskor várható élettartam",
+        "short": "Várható élettartam",
+        "explain": "Hány évet élne átlagosan egy most születő, ha az ország mostani halandósága egész életében fennmaradna."
+      },
+      "healthyYears65": {
+        "name": "Egészségben eltöltött évek 65 évesen",
+        "short": "Egészséges évek 65+",
+        "explain": "Hány évet élhet még egy 65 éves tevékenységet korlátozó egészségi probléma nélkül (az EU-SILC kérdése és a halandóság alapján)."
+      },
+      "goodHealth": {
+        "name": "Jónak érzi az egészségét",
+        "short": "Jó egészség",
+        "explain": "A 16 éves és idősebbek aránya, akik jónak vagy nagyon jónak mondják az egészségüket (EU-SILC)."
+      },
+      "longIllness": {
+        "name": "Tartós betegséggel él",
+        "short": "Tartós betegség",
+        "explain": "A 16 éves és idősebbek aránya, akiknek tartós (legalább hat hónapja fennálló) betegségük vagy egészségi problémájuk van (EU-SILC).",
+        "note": "Saját bevallás: ahol több a gondozott beteg, ott többen tudnak a betegségükről, ezért a magasabb arány részben jobb diagnosztikát is jelenthet."
+      },
+      "vaccDtp": {
+        "name": "Gyermekkori oltás: diftéria, tetanusz, szamárköhögés",
+        "short": "Oltás: DTP",
+        "explain": "Az egyévesek közül a teljes alapoltási sorozatot megkapók aránya (OECD). Magyarországon az oltást a házi gyermekorvos és a védőnő szervezi.",
+        "note": "Az országok eltérően mérik (nyilvántartás vagy felmérés, más életkor), ezért a kis különbségek nem jelentősek."
+      },
+      "vaccMeasles": {
+        "name": "Gyermekkori oltás: kanyaró",
+        "short": "Oltás: kanyaró",
+        "explain": "A kanyaró elleni oltást az előírt életkorig megkapó gyermekek aránya (OECD).",
+        "note": "Az országok eltérően mérik, ezért a kis különbségek nem jelentősek."
+      },
+      "foreignTrained": {
+        "name": "Külföldön végzett orvosok",
+        "short": "Külföldi diploma",
+        "explain": "Az orvosok közül a külföldön végzettek aránya (OECD). A szám a diploma helyét mutatja, nem az állampolgárságot.",
+        "note": "Ennek nincs jó iránya: a külföldön végzett orvos pótolhat hiányt, de jelentheti azt is, hogy az ország nem képez eleget."
+      }
+    },
+    "scatter": {
+      "heading": "Két mutató egymás mellett",
+      "lead": "Bármelyik két mutató választható; minden pötty egy ország a legfrissebb értékével. A két szaggatott vonal a kiválasztott országok mediánja, így négy negyedre osztja a mezőt.",
+      "x": "Vízszintes tengely",
+      "y": "Függőleges tengely",
+      "note": "Most {n} ország szerepel. Ilyen kevés országból nem számolunk korrelációt: egy-két ország ki- vagy beválasztása megfordíthatná. A diagram azt mutatja meg, hol áll egy ország, nem azt, hogy mi mivel függ össze.",
+      "tooFew": "Ehhez a két mutatóhoz túl kevés országnak van adata."
+    },
+    "regions": {
+      "heading": "Régiók térképe",
+      "lead": "Az Eurostat a régiók (NUTS 2) szintjén is közöl néhány mutatót: az orvosok számát, a standardizált halálozást, a születéskor várható élettartamot és az egy főre jutó GDP-t. Magyarország nyolc régiója így a kiválasztott országok régiói között látható. Egy régióra kattintva kiemeled.",
+      "aria": "Európa régióinak térképe a kiválasztott mutató szerint",
+      "unmapped": "{n} régió adatai a listában szerepelnek, de a térképen nem: tengerentúli területek, vagy olyan régiók, amelyeknek a kódja a 2024-es beosztásban megszűnt."
+    },
+    "region": {
+      "physicians": {
+        "name": "Orvosok a régióban",
+        "short": "Orvosok",
+        "explain": "A régióban dolgozó orvosok száma 100 ezer lakosra, minden szakterülettel együtt (háziorvosi bontás régiós szinten nincs).",
+        "note": "Az orvosokat ott számolják, ahol dolgoznak: az egyetemi és megyei kórházak régiói ezért kiemelkednek, és ez nem jelenti, hogy a régió falvaiban is több az orvos."
+      },
+      "deathRate": {
+        "name": "Standardizált halálozás",
+        "short": "Halálozás",
+        "explain": "Az összes halálozás a régióban, a korösszetétel különbségeit kiszűrve, 100 ezer lakosra.",
+        "note": "A legfrissebb régiós év a 2021-es, a covid-járvány éve; a régiók közötti különbséget ez is alakítja."
+      },
+      "lifeExpectancy": {
+        "name": "Születéskor várható élettartam",
+        "short": "Várható élettartam",
+        "explain": "Hány évet élne átlagosan egy most születő, ha a régió mostani halandósága egész életében fennmaradna."
+      },
+      "gdpPps": {
+        "name": "Egy főre jutó GDP",
+        "short": "GDP / fő",
+        "explain": "A régió egy főre jutó GDP-je vásárlóerő-paritáson, az EU-átlag százalékában (EU = 100). Mérce: a gazdagabb régióban több orvos és jobb egészség várható; a kérdés, hogy a magyar régiók ennél jobban vagy rosszabbul állnak-e."
+      }
+    },
+    "border": {
+      "heading": "A határ két oldalán",
+      "lead": "Magyarország határ menti régiói a szomszéd ország szemközti régiójával. Itt a legtöbb dolog közös: a táj, az éghajlat, gyakran a történelem és a nyelv is, ezért a különbség nagyobb része az ellátáson és a jóléten múlik. A jobb érték zölddel jelölve.",
+      "note": "Az évszám a sor mellett szerepel; ahol a két régió más évet közöl, mindkettő ott van. A párok a határ mentén, északról az óramutató járása szerint következnek."
+    },
+    "next": {
+      "method": {
+        "title": "Hogyan készül?",
+        "text": "A források, a fogalmak és hogy miért nem keverjük az Eurostat és az OECD adatait."
+      }
+    },
+    "method": {
+      "heading": "Az európai összevetés",
+      "lead": "Hogyan készül az Európa oldal, és mit nem tud megmondani.",
+      "sources": {
+        "title": "Források",
+        "text": "Az Eurostat egészségügyi és regionális adatbázisa (Q forrás) és az OECD Health Statistics (R forrás, CC BY 4.0). A kettő ugyanabból a közös OECD–Eurostat–WHO adatgyűjtésből dolgozik; az OECD-t azért használjuk, mert három dolgot az Eurostat nem közöl: az elkerülhető kórházi felvételeket, az orvosok jövedelmét és az Egyesült Királyságot 2019 után. A régiók határa a GISCO NUTS 2024-es beosztása (© EuroGeographics a közigazgatási határokért). Minden letöltött válasz dátummal archiválódik."
+      },
+      "oneSource": {
+        "title": "Egy ország, egy forrás",
+        "text": "Egy ország egy mutatójának teljes idősora egyetlen kiadótól származik. Az Egyesült Királyság munkaerő-adatait az OECD-től vesszük, de csak azután, hogy a két kiadó a közös években ellenőrzötten egyezik; ha eltérnek, a feldolgozás megáll. A rangsorban az ilyen ország OECD jelölést kap."
+      },
+      "concepts": {
+        "title": "Ugyanazt mérjük",
+        "text": "Praktizáló, szakmailag aktív és működési engedéllyel rendelkező orvos három különböző szám; mindenhol a praktizálót mutatjuk, és ahol egy ország csak a másik kettőt közli, üresen hagyjuk. Az 55 év feletti orvosok arányát a közölt korcsoportokból pontos azonossággal számoljuk, becslés nélkül."
+      },
+      "years": {
+        "title": "Minden érték a saját évével",
+        "text": "Minden ország a legfrissebb közölt évével szerepel, az évszám mellette. Ami több mint öt évvel régebbi, mint a mutató legfrissebb adata, az látszik, de nem kap helyezést. A felmérésekből (EHIS) a legutóbbi közölt hullám a 2019-es."
+      },
+      "selfReport": {
+        "title": "Kérdőív és nyilvántartás",
+        "text": "Az orvoslátogatás és a kimaradt ellátás a megkérdezettek saját válasza. A kimaradt ellátás ismert gyengesége, hogy aki hozzászokott a hiányhoz, ritkábban mondja kimaradásnak; ezért a látogatási arányok mellett, nem helyettük olvasandó. A szűrési arányok programadatok: a szervezett programon kívül végzett vizsgálat nincs bennük."
+      },
+      "regions": {
+        "title": "Régiók",
+        "text": "Régiós (NUTS 2) szinten csak néhány mutató érhető el; háziorvosi bontás és elkerülhető halálozás nincs. Az orvosokat a munkahelyük szerint számolják, ezért a kórházi központok régiói kiemelkednek. A határ menti párokat a földrajz adja, nem az adatok."
+      },
+      "limits": {
+        "title": "Amit nem mond meg",
+        "text": "Kilenc vagy huszonnyolc országból nem számolunk korrelációt, és nem állítjuk, hogy egy mutató okozza a másikat: az oldal összevet, nem modellez. Az országok egészségügyi rendszerei eltérően szerveződnek (ki a kapuőr, mi számít rendelőnek), ezért egy mutató különbsége részben a besorolás különbsége."
+      },
+      "migration": {
+        "title": "Orvosvándorlás",
+        "text": "Az OECD egészségügyi munkaerő-migrációs táblája (R forrás) a fogadó országok jelentéséből számolja, hány orvos dolgozik ott külföldi diplomával, és melyik országban szerezte. A kiáramlás tehát csak azokban az országokban látszik, amelyek jelentenek; az országok évei eltérnek, és a képzés helye nem azonos az állampolgársággal — a külföldi hallgatóként végzettek hazatérése a táblában kivándorlásnak látszik. Ezért nettó veszteséget nem számolunk."
+      }
+    },
+    "country": {
+      "EU": "EU-27",
+      "AT": "Ausztria",
+      "BE": "Belgium",
+      "BG": "Bulgária",
+      "CY": "Ciprus",
+      "CZ": "Csehország",
+      "DE": "Németország",
+      "DK": "Dánia",
+      "EE": "Észtország",
+      "EL": "Görögország",
+      "ES": "Spanyolország",
+      "FI": "Finnország",
+      "FR": "Franciaország",
+      "HR": "Horvátország",
+      "HU": "Magyarország",
+      "IE": "Írország",
+      "IT": "Olaszország",
+      "LT": "Litvánia",
+      "LU": "Luxemburg",
+      "LV": "Lettország",
+      "MT": "Málta",
+      "NL": "Hollandia",
+      "PL": "Lengyelország",
+      "PT": "Portugália",
+      "RO": "Románia",
+      "SE": "Svédország",
+      "SI": "Szlovénia",
+      "SK": "Szlovákia",
+      "UK": "Egyesült Királyság"
+    },
+    "change": {
+      "modeLabel": "Nézet",
+      "rank": "Most",
+      "change": "Tíz év alatt",
+      "from": "tíz évvel korábban",
+      "to": "most",
+      "good": "jó irányba",
+      "bad": "rossz irányba",
+      "none": "Ehhez a mutatóhoz nincs tíz évvel korábbi adat.",
+      "title": "{name}: {fromYear}: {from} → {toYear}: {to}",
+      "missing": "Nincs tíz évvel korábbi (±2 év) adat: {list}"
+    },
+    "profile": {
+      "heading": "Erősségek és gyengeségek — {country}",
+      "explain": "Minden rangsorolható mutató egy sorban: a középvonaltól jobbra az, amiben a kiválasztott országok mezőnyének jobbik felében áll, balra az, amiben a rosszabbikban. A sor hossza azt mutatja, mennyire.",
+      "worst": "a legrosszabb",
+      "middle": "középen",
+      "best": "a legjobb"
+    },
+    "migration": {
+      "heading": "Honnan jönnek, hová mennek az orvosok? — {country}",
+      "lead": "Az OECD a képzés helye szerint számolja az orvosokat: ki dolgozik egy országban külföldi diplomával, és hány, az adott országban végzett orvos dolgozik azokban az országokban, amelyek ezt jelentik.",
+      "inHeading": "Akik külföldön végeztek, és itt dolgoznak",
+      "outHeading": "Akik itt végeztek, és külföldön dolgoznak",
+      "home": "itthon végzett: {n}",
+      "splitTitle": "Az itthon és a külföldön végzett orvosok aránya",
+      "inSummary": "{year}: {n} orvos dolgozik külföldi diplomával, az összes orvos {share} része. Ahol végeztek:",
+      "outSummary": "{places} ország jelent összesen {n} itt végzett orvost (mindegyik a saját legutóbbi évével). Itthon ugyanekkor {home} itthon végzett orvos dolgozik.",
+      "other": "egyéb országok",
+      "noIn": "Erről az országról nincs adat.",
+      "noOut": "Egyetlen jelentő ország sem közöl itt végzett orvost.",
+      "mapAria": "Európa térképe: hány itt végzett orvos dolgozik az egyes országokban",
+      "note": "A képzés helye nem az állampolgárság. Egy ország, ahol sok külföldi hallgató tanul, papíron sok orvost küld haza: a Magyarországon végzettek nagy része Izraelben, Norvégiában, Svédországban, Görögországban vagy Cipruson ezért valószínűleg ott született, és hazatért. A kivándorlást ez a tábla nem tudja elkülöníteni, ezért nem is számolunk belőle nettó veszteséget. Csak azok az országok szerepelnek, amelyek jelentik, mindegyik a saját évével."
+    }
+  },
+  "sideNav": {
+    "county": {
+      "label": "Megye",
+      "group": {
+        "county": "A megye"
+      },
+      "varmegye": "Megye választása",
+      "attekintes": "Áttekintés",
+      "ellatas": "Ellátás számokban",
+      "egeszseg": "Egészség és életkörülmények",
+      "elorejelzes": "Előrejelzés és támogatások",
+      "jarasai": "A megye járásai",
+      "keresztmetszet": "Keresztmetszetek",
+      "telepulesek": "A megye települései"
+    },
+    "district": {
+      "label": "Járás",
+      "group": {
+        "district": "A járás",
+        "country": "Országosan"
+      },
+      "jaras": "Járás választása",
+      "allapot": "Az ellátás állapota",
+      "fejlettseg": "Fejlettség",
+      "egeszseg": "Egészség és életkörülmények",
+      "keresztmetszet": "Keresztmetszetek",
+      "rangsor": "Rangsor",
+      "osszefugges": "Összefüggés",
+      "telepulesek": "A járás települései",
+      "veszelyeztetett": "A legveszélyeztetettebb járások"
+    },
+    "specialist": {
+      "label": "Továbbiak",
+      "group": {
+        "specialist": "Ki lát el még?"
+      },
+      "vedono": "Védőnői ellátás",
+      "szakellatas": "Szakellátás",
+      "gyogyszertar": "Gyógyszertárak",
+      "segedeszkoz": "Gyógyászati segédeszköz"
+    },
+    "settlements": {
+      "label": "Megyék",
+      "group": "Megyék"
     }
   }
 }

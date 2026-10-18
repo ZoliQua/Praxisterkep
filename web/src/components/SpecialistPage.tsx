@@ -19,10 +19,14 @@ import { CountyChoropleth } from './charts/CountyChoropleth';
 import { GyseSection } from './GyseSection';
 import { PharmacySection } from './PharmacySection';
 import { PageNav } from './PageNav';
+import { SideNav } from './SideNav';
+import { sideGroups } from '../lib/sideGroups';
 import { Footer } from './Footer';
 import { VedonoSection } from './VedonoSection';
 import { useHashScroll } from '../lib/useHashScroll';
 import { renderExtraCell } from './EesztCells';
+
+const SPECIALIST_GROUPS = sideGroups('specialist');
 
 function detailRows(row: MapRow): [string, string][] {
   return [
@@ -93,6 +97,7 @@ export function SpecialistPage() {
   return (
     <>
       <PageNav />
+      <SideNav groups={SPECIALIST_GROUPS} labelKey="sideNav.specialist.label" />
       {/* the third branch of primary care: it was behind an icon on the
           landing page, where a reader looking for "who else cares for me"
           never found it */}

@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { t } from '../lib/i18n';
 import { formatNumber, formatPercent } from '../lib/format';
 import { contextHref } from '../lib/context';
+import { EuropeHighlights } from './EuropeHighlights';
 
 interface HighlightsData {
   month: string;
@@ -49,6 +50,7 @@ export function Highlights() {
           <span className="highlight__more">{t('highlights.more')}</span>
         </a>
       </div>
+      <EuropeHighlights />
     </section>
   );
 }

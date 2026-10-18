@@ -124,6 +124,27 @@
       ]
     },
     {
+      "key": "europe",
+      "items": [
+        {
+          "key": "eurostatHealth",
+          "href": "https://ec.europa.eu/eurostat/web/health/database"
+        },
+        {
+          "key": "eurostatRegional",
+          "href": "https://ec.europa.eu/eurostat/web/regions/database"
+        },
+        {
+          "key": "oecd",
+          "href": "https://data-explorer.oecd.org/"
+        },
+        {
+          "key": "gisco",
+          "href": "https://ec.europa.eu/eurostat/web/gisco/geodata/statistical-units/territorial-units-statistics"
+        }
+      ]
+    },
+    {
       "key": "nfsz",
       "items": [
         {

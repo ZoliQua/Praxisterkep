@@ -24,9 +24,13 @@ import { DistrictOutcomes } from './DistrictOutcomes';
 import { DistrictDistribution } from './charts/DistrictDistribution';
 import { CompareBars, ScaleMark, ShareDots } from './charts/DistrictFigures';
 import { PageNav } from './PageNav';
+import { SideNav } from './SideNav';
+import { sideGroups } from '../lib/sideGroups';
 import { NextSteps } from './NextSteps';
 import { Footer } from './Footer';
 import { VulnerableDistricts } from './VulnerableDistricts';
+
+const DISTRICT_GROUPS = sideGroups('district');
 
 const NEXT = [
   { href: 'megye.html', titleKey: 'next.county.title', textKey: 'next.county.text' },
@@ -226,6 +230,7 @@ export function DistrictPage() {
   return (
     <>
       <PageNav kind={kind} onKind={setKind} />
+      <SideNav groups={DISTRICT_GROUPS} labelKey="sideNav.district.label" />
       <section className="section container" id="jaras">
         <h1 className="section__heading">{t('district.heading')}</h1>
         <p className="section__lead">{t('district.lead')}</p>

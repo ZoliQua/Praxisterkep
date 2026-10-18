@@ -5,9 +5,54 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
-## [Unreleased]
+## [1.51.0] - 2026-10-19
 
 ### Hozzáadva
+- **Európa oldal (`europa.html`, új menüpont az Elemző után).** Magyarország
+  az EU 27 tagállama és az Egyesült Királyság között, szűkíthetően
+  Közép-Kelet-Európára (HU, AT, SK, CZ, PL, RO, BG, mércének DE és UK) vagy a
+  V4-re, bármelyik ország középpontba állítható. Öt témakör háziorvosi és
+  fogorvosi ágon: ki van a rendelőben (orvos-, háziorvos-, fogorvos-, ápolósűrűség,
+  az 55 év feletti orvosok aránya, végzettek), eljut-e a beteg (látogatás
+  városban és vidéken, kimaradt ellátás a legszegényebb és a leggazdagabb
+  ötödben), mit ér el (elkerülhető halálozás, szűrőprogramok, influenzaoltás,
+  elkerülhető kórházi felvételek), mennyit költünk rá, mennyit keres az orvos.
+  Mindegyikhez rangsor, térkép, idősor. Mellettük két tetszőleges mutató
+  pontdiagramja, a NUTS 2 régiók térképe és kilenc határ menti régiópár
+  (orvosok, halálozás, várható élettartam, GDP).
+- **Új forrás (R): OECD Health Statistics** (CC BY 4.0) — elkerülhető kórházi
+  felvételek, orvosi jövedelmek, az Egyesült Királyság 2019 után. A Q forrás
+  (Eurostat) kibővült az egészségügyi és a regionális adatbázissal és a GISCO
+  határaival (`etl/eu_compare.py`, `data/europe.json`, `data/geo/europe.json`).
+  Egy ország idősora mindig egy kiadótól származik; a brit OECD-sor csak akkor
+  kerül be, ha a közös években 5%-on belül egyezik az Eurostattal.
+- Az Európa oldal bővítése: **Kinek kell az ellátás?** (65 év felettiek aránya,
+  várható élettartam, egészségben eltöltött évek 65 évesen, saját egészség,
+  tartós betegség), **gyermekkori oltások** (DTP, kanyaró — OECD), **külföldön
+  végzett orvosok**, és **orvosvándorlás**: honnan jöttek az itt dolgozók, és
+  hány itt végzett orvos dolgozik a jelentő országokban (térképpel; a képzés
+  helye nem állampolgárság, nettó veszteséget nem számolunk). Minden
+  mutatónál **Most / Tíz év alatt** nézet, az áttekintésben **erősségek és
+  gyengeségek** diagram a középpontban álló országra.
+- A főoldalon két európai kiemelés: a háziorvos-sűrűség és a fogorvoshoz
+  járás, mindkettő a régió országai között (`data/europe_summary.json`).
+- Az Európa oldal tetején a tartalomjegyzék a ragadós országválasztó sáv alá
+  csúszott; az oldalsó menü és a felső lenyíló menü ugyanezt adja, ezért
+  kikerült.
+- Módszertan: „Az európai összevetés” fejezet; lábléc: európai források.
+- **Oldalsó menü** a megyei, a járási és a „Továbbiak” (eddig „Ki lát el
+  még?”) oldalon, és a településlistán a húsz megyével — ugyanaz a csúszó
+  menü, mint az Elemzőn: széles képernyőn a bal margón, telefonon pöttysor.
+- **Verziószám a láblécben** minden oldalon, a 6354 statikus lapon is; a
+  `web/package.json` az egyetlen helye, a kiadási jegyzetekre mutat.
+- A menüpont neve „Ki lát el még?” helyett **„Továbbiak”**.
+- Jogi: a lábléc kimondja, hogy az Eurostat- és OECD-adatok feldolgozása nem a
+  kiadók álláspontja; a `LICENSE.md` szerint a `data/geo/europe.json` (GISCO)
+  csak nem kereskedelmi célra használható, nem CC BY 4.0.
+- A felső menü magassága minden oldalon mérve van, így a ragadós sávok és a
+  szakaszcímek telefonon sem csúsznak a többsoros menü alá.
+- A sitemap minden alkalmazásoldalt felsorol (eddig a megye-, járás- és
+  módszertani oldal hiányzott).
 - **`CITATION.cff`** a Zenodo-kiadáshoz (a szerző ORCID-jával és a fő
   adatforrásokkal; a DOI az archiválás után kerül bele).
 - **Kétnyelvű README:** elöl angolul, utána magyarul.
