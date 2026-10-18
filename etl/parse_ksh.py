@@ -50,6 +50,13 @@ def normalize_settlement(name: str) -> str:
     return "".join(ch for ch in s if not unicodedata.combining(ch))
 
 
+# NEAK misspellings no rule can mend, put right by hand; every entry is a
+# typo in a NEAK file that names a real settlement unambiguously
+SPELLING_FIXES = {
+    "Bakonszentlászló": "Bakonyszentlászló",
+}
+
+
 class KshRef:
     def __init__(self, entries: list[dict]):
         self.entries = entries
@@ -88,7 +95,9 @@ class KshRef:
     def canonical(self, name: str) -> str:
         """The gazetteer's spelling of a settlement NEAK wrote without its
         accents ("Gyor", "Hejokeresztúr", "Csengod"), else the name unchanged."""
-        hit = self.lookup(name)
+        # a stray comma after the name, and NEAK's own misspellings
+        clean = SPELLING_FIXES.get(name.strip().rstrip(",;"), name.strip().rstrip(",;"))
+        hit = self.lookup(clean)
         return hit["name"] if hit else name
 
 
