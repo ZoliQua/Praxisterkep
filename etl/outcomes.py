@@ -604,13 +604,38 @@ def grants_summary() -> dict:
                            "status": w["status"], "matchedBy": w["matchedBy"],
                            "vacantSince": w["vacantSince"], "lat": lat, "lon": lon})
         out["kinds"][kind] = {key: k[key] for key in ("latestMonth", "years", "byProgrammeYear",
-                                                      "byCounty", "total", "comparison")}
+                                                      "byCounty", "total", "comparison",
+                                                      "matched")}
         out["kinds"][kind]["winners"] = points
     return out
 
 
+AT_RISK_MAX_DISTRICTS = 2
+
+
+def _at_risk(settlements: dict, profiles: dict) -> list[dict]:
+    """Where every serving district has a doctor today, but the chance that
+    one will not in a year is highest — the next vacancies, by place.
+
+    Only settlements served by at most AT_RISK_MAX_DISTRICTS districts: in a
+    city of a hundred districts one is nearly always about to fall vacant,
+    which says nothing; in a village of one, that one is its doctor."""
+    rows = []
+    for ksh, h in settlements.items():
+        p = profiles.get(ksh)
+        if (p is None or h["vacantNow"] or not h["districts"]
+                or h["districts"] > AT_RISK_MAX_DISTRICTS):
+            continue
+        rows.append({"slug": p["slug"], "name": p["settlement"], "county": p["county"],
+                     "district": p["district"], "population": p["population"],
+                     "districts": h["districts"], "chance": h["pAnyVacant"],
+                     "topDecile": h["topDecile"]})
+    return sorted(rows, key=lambda r: (-r["chance"], -r["population"]))[:30]
+
+
 def forecast_summary() -> dict:
     f = read("forecast.json")
+    profiles = {r["kshId"]: r for r in read("settlements.json")["settlements"]}
     keep = ("districts", "vacantNow", "expectedNew", "expectedRefills", "vacantIn12",
             "vacantIn12Band", "rateNow", "rateIn12")
     return {"horizonMonths": f["horizonMonths"], "kinds": {
@@ -620,6 +645,7 @@ def forecast_summary() -> dict:
                          for n, c in k["counties"].items()},
             "districts": {n: {x: d[x] for x in keep} for n, d in k["districts"].items()},
             "backtest": k["backtest"], "riskValidation": k["riskValidation"],
+            "atRisk": _at_risk(k.get("settlements", {}), profiles),
         } for kind, k in f["kinds"].items()}}
 
 

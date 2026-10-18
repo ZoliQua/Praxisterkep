@@ -215,3 +215,50 @@ def test_gazetteer_lookup_never_lets_a_folded_pair_collide():
     assert ref.lookup("Komlo") is None                  # nothing decides: no guess
     assert ref.canonical("Gyor") == "Győr"
     assert ref.canonical("Nincsilyen") == "Nincsilyen"
+
+
+# ------------------------------------------------------- archive respelling
+
+def test_respelling_merges_one_place_spelt_three_ways():
+    import respell_archive
+    from parse_ksh import load_reference
+    ref = load_reference()
+    if ref is None:
+        pytest.skip("the KSH gazetteer is not built")
+    snap = {"month": "2020-01", "kind": "gp", "praxes": [], "filledPraxes": [
+        {"id": "F1", "settlement": "Budapest XI. kerület", "postalCode": "1111",
+         "servedSettlements": ["Budapest XI. kerület"]}],
+        "settlements": [
+            {"name": "Budapest XI. kerület", "county": "Budapest", "filled": 2,
+             "vacantPraxisIds": ["A"], "dissolvedPraxisIds": [], "affectedByDissolved": False},
+            {"name": "Budapest 11", "county": "Budapest", "filled": 1,
+             "vacantPraxisIds": ["A", "B"], "dissolvedPraxisIds": [], "affectedByDissolved": True},
+        ]}
+    respell_archive.respell(snap, ref)
+    assert snap["filledPraxes"][0]["settlement"] == "Budapest 11. ker."
+    [entry] = snap["settlements"]
+    assert entry["name"] == "Budapest 11. ker." and entry["filled"] == 3
+    assert entry["vacantPraxisIds"] == ["A", "B"] and entry["affectedByDissolved"]
+    assert entry["kshId"]
+
+
+# ------------------------------------------------- settlement-level forecast
+
+def test_settlement_chance_combines_filled_risk_and_refill():
+    from parse_ksh import load_reference
+    ref = load_reference()
+    if ref is None:
+        pytest.skip("the KSH gazetteer is not built")
+    snapshot = {"filledPraxes": [{"id": "F1", "settlement": "Igar", "servedSettlements": ["Igar"]}],
+                "praxes": [{"id": "V1", "sites": [{"settlement": "Igar"}],
+                            "servedSettlements": ["Igar"]}]}
+    risk_kind = {"rows": [{"fin": "F1", "risk": 0.2}]}
+    spells = [{"fin": "V1", "start": "2026-09"}]
+    out = forecast.settlement_forecast("gp", snapshot, risk_kind, spells,
+                                       {"V1": ("Fejér", "Igar")}, {}, CURVE, "2026-10", ref)
+    [row] = out.values()
+    q = forecast.refill_chance(CURVE, 1)          # the vacancy is one month old
+    assert row["districts"] == 2 and row["vacantNow"] == 1
+    # no district vacant in a year: F1 keeps its doctor and V1 is refilled
+    assert row["pAnyVacant"] == pytest.approx(1 - 0.8 * q, abs=1e-3)
+    assert row["topDecile"] == 1                   # the only filled one is the top tenth

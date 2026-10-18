@@ -19,6 +19,19 @@ every járás:
                      than the curve reaches is given no further chance of
                      refilling: a guess either way would be invented.
 
+Per settlement the forecast is turned into one probability a reader can
+hold: that in twelve months at least one district serving the settlement
+has no contracted doctor,
+
+  P = 1 − Π (1 − pᵢ) · Π qⱼ
+
+over the filled districts i that serve it and the vacant ones j, with qⱼ
+the chance the vacancy has filled by then. A GP district counts for every
+settlement on its served list (a village's risk is its district's, wherever
+the surgery sits); a dental one for its seat, the only place NEAK names. It
+is said of the settlement, never of a named doctor's district, and the
+count of serving districts in the country's riskiest tenth goes with it.
+
 The band around each number treats the districts as independent coin flips
 (variance Σ p(1 − p)); districts are not independent — a doctor who retires
 from two districts empties both — so the band is narrower than the truth and
@@ -186,6 +199,73 @@ def backtest(kind: str, kind_survival: dict, risk_kind: dict, latest: str) -> di
     }
 
 
+TOP_DECILE = 0.9
+
+
+def settlement_forecast(kind: str, snapshot: dict, risk_kind: dict, open_spells: list[dict],
+                        where: dict, by_county: dict, overall: list[dict], month: str,
+                        ksh) -> dict[str, dict]:
+    """{kshId: districts serving it, vacant now, P(≥1 vacant in 12 months), …}."""
+    def ids(names) -> list[str]:
+        out = []
+        for n in names:
+            hit = ksh.lookup(n) if n else None
+            if hit and hit["kshId"] not in out:
+                out.append(hit["kshId"])
+        return out
+
+    served: dict[str, list[str]] = {}
+    for f in snapshot.get("filledPraxes") or []:
+        names = (f.get("servedSettlements") or []) if kind == "gp" else []
+        served[f["id"]] = ids(names or [f.get("settlement", "")])
+    for p in snapshot.get("praxes", []):
+        names = (p.get("servedSettlements") or []) if kind == "gp" else []
+        served[p["id"]] = ids(names or [s.get("settlement", "") for s in p.get("sites", [])][:1])
+
+    risks = sorted(r["risk"] for r in risk_kind["rows"])
+    cut = risks[int(TOP_DECILE * (len(risks) - 1))] if risks else 1.0
+    acc: dict[str, dict] = {}
+
+    def slot(k: str) -> dict:
+        return acc.setdefault(k, {"districts": 0, "vacantNow": 0, "expectedNew": 0.0,
+                                  "expectedRefills": 0.0, "pNone": 1.0, "topDecile": 0})
+
+    missing = 0
+    for r in risk_kind["rows"]:
+        places = served.get(r["fin"])
+        if not places:
+            missing += 1
+            continue
+        for k in places:
+            a = slot(k)
+            a["districts"] += 1
+            a["expectedNew"] += r["risk"]
+            a["pNone"] *= 1 - r["risk"]
+            a["topDecile"] += r["risk"] >= cut
+    for sp in open_spells:
+        places = served.get(sp["fin"])
+        if not places:
+            missing += 1
+            continue
+        county, _settlement = where[sp["fin"]]
+        q = refill_chance(by_county.get(county, overall),
+                          month_index(month) - month_index(sp["start"]))
+        for k in places:
+            a = slot(k)
+            a["districts"] += 1
+            a["vacantNow"] += 1
+            a["expectedRefills"] += q
+            a["pNone"] *= q
+    if missing > (len(risk_kind["rows"]) + len(open_spells)) * 0.01:
+        raise ParseError(f"{kind}: {missing} districts serve no settlement we can place")
+    return {k: {"districts": a["districts"], "vacantNow": a["vacantNow"],
+                "vacantIn12": round(a["vacantNow"] - a["expectedRefills"] + a["expectedNew"], 2),
+                "expectedNew": round(a["expectedNew"], 2),
+                "expectedRefills": round(a["expectedRefills"], 2),
+                "pAnyVacant": round(1 - a["pNone"], 3), "topDecile": a["topDecile"]}
+            for k, a in sorted(acc.items())}
+
+
 def build() -> dict:
     risk = read("risk.json")
     survival = read("survival.json")
@@ -258,11 +338,15 @@ def build() -> dict:
         if unplaced > (len(risk_kind["rows"]) + len(open_spells)) * 0.01:
             raise ParseError(f"{kind}: {unplaced} districts could not be placed in a járás")
 
+        settlements = settlement_forecast(kind, snapshot, risk_kind, open_spells, where,
+                                          by_county, overall, month, ksh)
+
         out_kinds[kind] = {
             "month": month,
             "national": national.out(),
             "counties": {c: t.out() for c, t in sorted(counties.items())},
             "districts": {d: t.out() for d, t in sorted(districts.items())},
+            "settlements": settlements,
             "countyCurves": sorted(by_county),
             "backtest": backtest(kind, surv_kind, risk_kind, month),
             "riskValidation": risk_kind.get("validation"),

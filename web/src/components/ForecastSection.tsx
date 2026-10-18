@@ -12,6 +12,7 @@ import { formatDecimal, formatMonth, formatNumber, formatPercent } from '../lib/
 import { districtHref, useOutcomes } from '../lib/outcomes';
 import { contextHref, currentContext } from '../lib/context';
 import { DistrictMap } from './charts/DistrictMap';
+import { settlementHref } from '../lib/settlementLink';
 import { Dumbbell } from './charts/Dumbbell';
 import { ForecastPath } from './charts/ForecastPath';
 
@@ -99,6 +100,22 @@ export function ForecastSection({ kind: initial }: { kind: Kind }) {
             toLabel={t('outcomes.forecast.later')} selected={county} onPick={setCounty} />
         </div>
       </div>
+
+      {f.atRisk.length > 0 && (
+        <div className="outcome__callout">
+          <h3 className="outcome__sub">{t('outcomes.forecast.atRiskHeading')}</h3>
+          <p>{t('outcomes.forecast.atRiskText')}</p>
+          <ol className="outcome__ranking-list">
+            {f.atRisk.slice(0, 16).map((r) => (
+              <li key={r.slug}>
+                <a href={settlementHref(r.slug)}>{r.name}</a>
+                <span>{r.county} · {formatNumber(r.population)} {t('outcomes.sbo.people')} ·{' '}
+                  {t('outcomes.forecast.atRiskChance', { pct: formatPercent(r.chance, 0) })}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
 
       <h3 className="outcome__sub">{t('outcomes.forecast.mapHeading')}</h3>
       <DistrictMap values={mapValues} selected={picked} onPick={(name) => {

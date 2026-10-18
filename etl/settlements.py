@@ -203,6 +203,13 @@ def living_block(ksh: str, district: str, county: str, ctx: dict) -> dict | None
         out["grants"] = sorted(ctx["grants"][ksh], key=lambda g: (g["year"], g["kind"]))
     fc = ctx.get("forecast")
     if fc:
+        # the settlement itself, per branch: the chance that a district
+        # serving it is vacant in a year, and how many are in the riskiest
+        # tenth — said of the place, never of a named doctor's district
+        here = {k: fc["kinds"][k].get("settlements", {}).get(ksh) for k in ("gp", "dental")}
+        here = {k: v for k, v in here.items() if v}
+        if here:
+            out["forecastHere"] = here
         row = fc["kinds"]["gp"]["districts"].get(district)
         if row and row["districts"]:
             out["forecast"] = {k: row[k] for k in ("districts", "vacantNow", "vacantIn12",

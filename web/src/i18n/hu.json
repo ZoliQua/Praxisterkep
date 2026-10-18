@@ -2534,7 +2534,19 @@
       "forecastUnit": "várhatóan betöltetlen háziorvosi körzet 12 hónap múlva (ma {now} / {of})",
       "forecastNow": "most",
       "forecastLater": "12 hónap múlva",
-      "forecastNote": "Várhatóan {add} körzet üresedik meg és {fill} töltődik be; a 90%-os sáv {lo}–{hi}. Előrejelzés, nem ígéret: a betöltött körzetek eddigi kockázatából és az üres körzetek eddigi betöltődési üteméből számolva."
+      "forecastNote": "Várhatóan {add} körzet üresedik meg és {fill} töltődik be; a 90%-os sáv {lo}–{hi}. Előrejelzés, nem ígéret: a betöltött körzetek eddigi kockázatából és az üres körzetek eddigi betöltődési üteméből számolva.",
+      "here": {
+        "heading": "Mi várható itt egy év múlva?",
+        "gp": "Háziorvosi ellátás",
+        "dental": "Fogorvosi ellátás",
+        "chance": "{pct}% az esélye, hogy 12 hónap múlva a települést ellátó {n} körzet közül legalább egy betöltetlen lesz.",
+        "sure": "Ma {n} / {of} ellátó körzet betöltetlen; szinte biztos, hogy egy év múlva is lesz közöttük betöltetlen.",
+        "topDecile": "Az ellátó körzetek közül {n} az ország legkockázatosabb tizedébe tartozik.",
+        "note": "Előrejelzés, nem jóslat: a betöltött körzetek eddigi kockázatából és az üres körzetek eddigi betöltődési üteméből. A település egészére vonatkozik, nem egy-egy orvosra.",
+        "chanceOne": "{pct}% az esélye, hogy 12 hónap múlva a települést ellátó körzet betöltetlen lesz.",
+        "chanceNow": "{pct}% az esélye, hogy 12 hónap múlva a települést ellátó {n} körzet közül legalább egy betöltetlen lesz; ma {now} betöltetlen.",
+        "chanceOneNow": "A települést ellátó körzet ma betöltetlen; {pct}% az esélye, hogy 12 hónap múlva is az lesz."
+      }
     },
     "methodLink": "Módszertan →",
     "steps": {
@@ -2616,7 +2628,13 @@
       "mapHeading": "Hány nyertes körzet jutott egy-egy járásba",
       "countyHeading": "Megyénként",
       "caveat": "A két csoport nem véletlenül különbözik: a támogatott körzetet egy orvos választotta, mert ott akart dolgozni, így a különbség nem csak a támogatás hatása. A párosítás a rendelő címén alapul; ahol egy címen több körzet működik (egészségház), és a havi adatokból nem dönthető el, melyiket töltötte be a nyertes, ott nem számolunk. A nyertesek nevét nem közöljük.",
-      "source": "Forrás: NEAK, háziorvosi és fogorvosi letelepedési, illetve praxisjog-vásárlási pályázatok nyertesei (2019, 2021–2025; a 2020-as lista nem elérhető), a körzetek sorsa a havi NEAK-adatokból."
+      "source": "Forrás: NEAK, háziorvosi és fogorvosi letelepedési, illetve praxisjog-vásárlási pályázatok nyertesei (2019, 2021–2025; a 2020-as lista nem elérhető), a körzetek sorsa a havi NEAK-adatokból.",
+      "matchedHeading": "Hasonló körzetekhez illesztve",
+      "matched": {
+        "with": "támogatással betöltött körzet",
+        "without": "hasonló körzet, támogatás nélkül"
+      },
+      "matchedText": "{pairs} támogatott körzet mindegyike mellé legfeljebb {per} olyan, támogatást nem kapott körzetet választottunk ugyanabból a hónapból, amely ugyanannyi ideje üres (12–24 hónap, 2–5 év, 5 év fölött) és ugyanakkora településen van; ahol volt elég, ugyanabban a megyében (a párok {same}-a). Ez a legtisztességesebb összevetés, ami a nyilvános adatokból kihozható — a különbség mégsem csak a támogatás hatása, mert a támogatott körzetet egy orvos választotta. {excluded} támogatott körzetet nem tudtunk illeszteni."
     },
     "forecast": {
       "heading": "Mi várható egy év múlva?",
@@ -2640,7 +2658,10 @@
       "pathAria": "Betöltetlen körzetek: ma {now}, egy év múlva várhatóan {later}",
       "mapHeading": "Várható betöltetlenség járásonként, 12 hónap múlva",
       "caveat": "Előrejelzés, nem jóslat: azt mutatja, mi lesz, ha a következő év olyan lesz, mint az eddigiek. A sáv a körzeteket egymástól független eseményként kezeli; a valóságban nem azok (egy orvos nyugdíjba vonulása két körzetet is kiüríthet), ezért a valódi bizonytalanság nagyobb. A kockázati modell rangsoroló ereje mérsékelt (AUC = {auc}).",
-      "source": "Forrás: a betöltetlenségi kockázati modell és a Kaplan–Meier-túlélési görbék ezen az oldalon, mindkettő a havi NEAK-archívumból."
+      "source": "Forrás: a betöltetlenségi kockázati modell és a Kaplan–Meier-túlélési görbék ezen az oldalon, mindkettő a havi NEAK-archívumból.",
+      "atRiskHeading": "Ahol ma még van orvos — de egy éven belül a legnagyobb az esélye, hogy nem lesz",
+      "atRiskText": "Olyan települések, amelyeket egy vagy két körzet lát el, és ma mindegyikben van szerződött orvos. Itt egyetlen üresedés a település orvosát viszi el.",
+      "atRiskChance": "{pct} esély egy éven belül"
     }
   },
   "outcomeMethod": {
@@ -2700,11 +2721,11 @@
     },
     "grants": {
       "title": "Letelepedési és praxisjog-támogatások — NEAK",
-      "text": "A NEAK évente közzéteszi a háziorvosi és fogorvosi letelepedési, valamint a háziorvosi praxisjog-vásárlási pályázat nyerteseit: megye, település, a rendelő címe (2019, 2021–2025; a 2020-as lista a NEAK oldalán nem érhető el). A nyertesek nevét nem tároljuk és nem közöljük. Minden nyertes címét a havi NEAK-adatokban egy körzethez (FIN-kódhoz) kötjük: elsőként a nyertes évében és az azt megelőző két évben betöltetlenként listázott, azonos című körzethez; ha egy címen több ilyen körzet van, azt választjuk, amelyik a támogatás évében vagy az azt követőben lekerült az üres listáról; ha ez sem dönt, a nyertest nem egyértelműként jelöljük és kihagyjuk minden arányból. A NEAK listáinak nyilvánvaló elírásait (rossz megye, elgépelt településnév) szabállyal vagy jelölt kézi javítással igazítjuk. Összehasonlító csoport: az adott év végén legalább 12 hónapja betöltetlen, támogatást nem kapott körzetek. A két csoport nem véletlenszerűen különbözik — a támogatott körzetet egy orvos választotta —, ezért a különbség nem a támogatás tiszta hatása."
+      "text": "A NEAK évente közzéteszi a háziorvosi és fogorvosi letelepedési, valamint a háziorvosi praxisjog-vásárlási pályázat nyerteseit: megye, település, a rendelő címe (2019, 2021–2025; a 2020-as lista a NEAK oldalán nem érhető el). A nyertesek nevét nem tároljuk és nem közöljük. Minden nyertes címét a havi NEAK-adatokban egy körzethez (FIN-kódhoz) kötjük: elsőként a nyertes évében és az azt megelőző két évben betöltetlenként listázott, azonos című körzethez; ha egy címen több ilyen körzet van, azt választjuk, amelyik a támogatás évében vagy az azt követőben lekerült az üres listáról; ha ez sem dönt, a nyertest nem egyértelműként jelöljük és kihagyjuk minden arányból. A NEAK listáinak nyilvánvaló elírásait (rossz megye, elgépelt településnév) szabállyal vagy jelölt kézi javítással igazítjuk. Összehasonlító csoport: az adott év végén legalább 12 hónapja betöltetlen, támogatást nem kapott körzetek. A két csoport nem véletlenszerűen különbözik — a támogatott körzetet egy orvos választotta —, ezért a különbség nem a támogatás tiszta hatása. Ezen felül illesztett összevetés: minden támogatott körzet mellé legfeljebb öt, támogatást nem kapott körzetet választunk abból a hónapból, amikor a támogatott még üres volt, azonos ágban, azonos üresedési sávban (12–24 hónap, 2–5 év, 5 év fölött) és azonos településméret-sávban (1000, 3000, 10 000 lakos határokkal), lehetőség szerint ugyanabban a megyében; a választás determinisztikus (a legközelebbi üresedési hossz, majd a FIN-kód)."
     },
     "forecast": {
       "title": "Előrejelzés: egy év múlva",
-      "text": "Áramlási modell: a 12 hónap múlva betöltetlen körzetek száma = a most betöltetlenek − a várható betöltődések + a várható új üresedések. A várható új üresedés a betöltött körzetek 12 havi kockázatának összege (a kockázati modellből), a várható betöltődés minden üres körzetre 1 − S(e + 12) / S(e), ahol e az eddigi üresedés hossza, S a megye Kaplan–Meier-görbéje (60 időszaknál kevesebbel az országos). A görbe végén túl nem tételezünk fel további betöltődést. A 90%-os sáv a körzeteket független eseményként kezeli, ezért a valódi bizonytalanságnál szűkebb. Visszamérés két archivált hónap között — a betöltődésnél ugyanezzel a módszerrel, az új üresedésnél a modell alapkockázatával, mert a múltbeli körzetenkénti kockázatot nem őrizzük (háziorvos: {from} → {to}) — új üresedések {newPred} várt / {newAct} tényleges, betöltődések {fillPred} várt / {fillAct} tényleges; az előrejelzés tehát kissé borúlátó. Nem tiszta teszt, mert a túlélési görbe ezt az időszakot is látta."
+      "text": "Áramlási modell: a 12 hónap múlva betöltetlen körzetek száma = a most betöltetlenek − a várható betöltődések + a várható új üresedések. A várható új üresedés a betöltött körzetek 12 havi kockázatának összege (a kockázati modellből), a várható betöltődés minden üres körzetre 1 − S(e + 12) / S(e), ahol e az eddigi üresedés hossza, S a megye Kaplan–Meier-görbéje (60 időszaknál kevesebbel az országos). A görbe végén túl nem tételezünk fel további betöltődést. A 90%-os sáv a körzeteket független eseményként kezeli, ezért a valódi bizonytalanságnál szűkebb. Visszamérés két archivált hónap között — a betöltődésnél ugyanezzel a módszerrel, az új üresedésnél a modell alapkockázatával, mert a múltbeli körzetenkénti kockázatot nem őrizzük (háziorvos: {from} → {to}) — új üresedések {newPred} várt / {newAct} tényleges, betöltődések {fillPred} várt / {fillAct} tényleges; az előrejelzés tehát kissé borúlátó. Nem tiszta teszt, mert a túlélési görbe ezt az időszakot is látta. Települési szinten egyetlen valószínűséget közlünk: annak esélyét, hogy 12 hónap múlva a települést ellátó körzetek közül legalább egy betöltetlen, P = 1 − Π(1 − pᵢ) · Π qⱼ, ahol pᵢ a betöltött, qⱼ az üres körzetek betöltődési esélye. Háziorvosnál a körzet az ellátott települések listáján minden településnél számít, fogorvosnál a székhelyén. Az esélyt a településre közöljük, soha nem egy megnevezett orvos körzetére."
     },
     "notAvailable": {
       "title": "Ami nincs benne, mert nincs nyilvános adat",
