@@ -9,7 +9,21 @@ export interface NavEntry {
   /** href of the group itself: an anchor on this page or another page */
   href: string;
   labelKey: string;
-  children?: readonly (readonly [string, string])[];
+  /** [href, labelKey] links; a third element "group" makes the row a
+   *  heading of the links under it (the analysis page's 22 sections) */
+  children?: readonly (readonly [string, string] | readonly [string, string, string])[];
+}
+
+type Child = NonNullable<NavEntry['children']>[number];
+
+/** Split a submenu at its group headings; an ungrouped one is one column. */
+function columns(children: readonly Child[]): Child[][] {
+  const out: Child[][] = [];
+  for (const c of children) {
+    if (c[2] === 'group' || !out.length) out.push([]);
+    out[out.length - 1].push(c);
+  }
+  return out;
 }
 
 export function NavMenu({ entries }: { entries: readonly NavEntry[] }) {
@@ -61,9 +75,16 @@ export function NavMenu({ entries }: { entries: readonly NavEntry[] }) {
               <button className="topnav__toggle" aria-expanded={open === entry.href}
                 aria-label={t(entry.labelKey)}
                 onClick={() => show(entry.href)} />
-              <div className="topnav__submenu" hidden={open !== entry.href}>
-                {entry.children.map(([href, key]) => (
-                  <a key={href} href={href} onClick={() => setOpen(null)}>{t(key)}</a>
+              <div className={`topnav__submenu${entry.children.some((c) => c[2] === 'group')
+                ? ' is-grouped' : ''}`} hidden={open !== entry.href}>
+                {/* a heading and its links stay together in one column */}
+                {columns(entry.children).map((col) => (
+                  <div key={col[0][0]} className="topnav__subcol">
+                    {col.map((c) => (
+                      <a key={c[0]} href={c[0]} className={c[2] === 'group' ? 'topnav__subhead' : undefined}
+                        onClick={() => setOpen(null)}>{t(c[1])}</a>
+                    ))}
+                  </div>
                 ))}
               </div>
             </>

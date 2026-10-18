@@ -5,6 +5,7 @@ import { t } from '../lib/i18n';
 import { contextHref } from '../lib/context';
 import { ContextBar } from './ContextBar';
 import { NavMenu } from './NavMenu';
+import { LangToggle } from './LangToggle';
 import { SITE_NAV, withContext } from '../lib/siteNav';
 import { IconStethoscope, IconTooth } from './icons';
 import type { PraxisKind } from '../types';
@@ -36,6 +37,7 @@ export function PageNav({ kind = null, onKind }: Props) {
             </button>
           </div>
         )}
+        <LangToggle />
         <NavMenu entries={withContext(SITE_NAV)} />
       </div>
     </nav>

@@ -23,7 +23,12 @@ export function Footer({ month }: { month?: string }) {
       <div className="container">
         <p className="footer__lead">{t('footer.publicOnly')}</p>
 
-        <h3>{t('footer.sources')}</h3>
+        {/* folded by default: the sources and the legal notes are a click
+            away on every page, without taking the bottom of each one */}
+        <details className="footer__fold"
+          // a link to #forrasok is a request to see them: arrive with them open
+          open={typeof window !== 'undefined' && window.location.hash === '#forrasok'}>
+        <summary><h3>{t('footer.sources')}</h3></summary>
         <p className="footer__note">{t('footer.sourcesNote')}</p>
         {/* every figure on the site, with the place anyone can fetch it from */}
         <ul className="footer__sources">
@@ -44,8 +49,10 @@ export function Footer({ month }: { month?: string }) {
             </li>
           ))}
         </ul>
+        </details>
 
-        <h3>{t('footer.legal')}</h3>
+        <details className="footer__fold">
+        <summary><h3>{t('footer.legal')}</h3></summary>
         <ul className="footer__legal">
           <li>{t('footer.disclaimer')}</li>
           <li>{t('footer.vacantNotUnserved')}</li>
@@ -54,6 +61,7 @@ export function Footer({ month }: { month?: string }) {
           <li>{t('footer.notOfficial')}</li>
           <li>{t('footer.correction')}</li>
         </ul>
+        </details>
 
         <p className="footer__privacy">
           <a href="/adatkezeles.html">{t('privacy.navLabel')}</a>

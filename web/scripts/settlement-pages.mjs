@@ -293,20 +293,34 @@ const sources = JSON.parse(
 const label = (key) => key.split('.').reduce((o, k) => (o ?? {})[k], hu) ?? key;
 
 const navBar = (profile) => nav.entries.map((e) => {
-  const children = (e.children ?? []).map(([href, key]) =>
-    `<a href="${esc(ctx(href, profile))}">${esc(label(key))}</a>`).join('');
+  const grouped = (e.children ?? []).some((c) => c[2] === 'group');
+  // a heading and its links stay together in one column, as in the app
+  const cols = [];
+  for (const c of e.children ?? []) {
+    if (c[2] === 'group' || !cols.length) cols.push([]);
+    cols[cols.length - 1].push(c);
+  }
+  const children = cols.map((col) => `<div class="topnav__subcol">${col.map(([href, key, kind]) =>
+    `<a href="${esc(ctx(href, profile))}"${kind === 'group' ? ' class="topnav__subhead"' : ''}>${
+      esc(label(key))}</a>`).join('')}</div>`).join('');
   return `<div class="topnav__group"><a href="${esc(ctx(e.href, profile))}">${
     esc(label(e.labelKey))}${children ? '<i class="topnav__caret" aria-hidden="true"></i>' : ''
-  }</a>${children ? `<div class="topnav__submenu" hidden>${children}</div>` : ''}</div>`;
+  }</a>${children ? `<div class="topnav__submenu${grouped ? ' is-grouped' : ''}" hidden>${
+    children}</div>` : ''}</div>`;
 }).join('\n    ');
 
 const ctx = (href, profile) => {
   // the index page has no settlement of its own: its links carry no context
   // rather than someone else's
   if (!profile) return href;
-  const [path, hash] = href.includes('#') ? [href.slice(0, href.indexOf('#')),
+  const [base, hash] = href.includes('#') ? [href.slice(0, href.indexOf('#')),
     href.slice(href.indexOf('#'))] : [href, ''];
-  const q = new URLSearchParams({ m: profile.county, tel: profile.slug });
+  // a link that already has a query keeps it: "/jaras.html?jar=X" once came
+  // out as "?jar=X?m=…", and the járás page read "X?m=…" as the járás
+  const [path, query = ''] = base.split('?');
+  const q = new URLSearchParams(query);
+  q.set('m', profile.county);
+  q.set('tel', profile.slug);
   return `${path}?${q}${hash}`;
 };
 
@@ -1221,7 +1235,7 @@ function siteFooter(homeHref, analysisHref) {
   return `<footer class="footer" id="forrasok">
   <div class="container">
     <p class="footer__lead">${esc(f.publicOnly)}</p>
-    <h3>${esc(f.sources)}</h3>
+    <details class="footer__fold" id="forrasok-lista"><summary><h3>${esc(f.sources)}</h3></summary>
     <p class="footer__note">${esc(f.sourcesNote)}</p>
     <ul class="footer__sources">${sources.groups.map((g) => {
     const labels = hu.footer.src[g.key];
@@ -1230,8 +1244,8 @@ function siteFooter(homeHref, analysisHref) {
         item.href.startsWith('/') ? '' : ' rel="noopener"'}>${esc(labels[item.key])}</a>${
         item.format ? `<span class="footer__format"> ${esc(item.format)}</span>` : ''}`)
       .join('')}</li>`;
-  }).join('')}</ul>
-    <h3>${esc(f.legal)}</h3>
+  }).join('')}</ul></details>
+    <details class="footer__fold"><summary><h3>${esc(f.legal)}</h3></summary>
     <ul class="footer__legal">
       <li>${esc(f.disclaimer)}</li>
       <li>${esc(f.vacantNotUnserved)}</li>
@@ -1239,7 +1253,7 @@ function siteFooter(homeHref, analysisHref) {
       <li>${esc(f.noPersonal)}</li>
       <li>${esc(f.notOfficial)}</li>
       <li>${esc(f.correction)}</li>
-    </ul>
+    </ul></details>
     <p class="footer__privacy"><a href="/adatkezeles.html">${esc(hu.privacy.navLabel)}</a>
       · <a href="#" data-consent-reopen>${esc(hu.privacy.reopen)}</a></p>
     <p class="footer__author">${esc(f.authorBy)}
@@ -1251,6 +1265,7 @@ function siteFooter(homeHref, analysisHref) {
       <a href="${esc(analysisHref)}">Elemző</a> ·
       <a href="/#adatok">Adat export</a></p>
   </div>
+  <script>if (location.hash === '#forrasok') document.getElementById('forrasok-lista').open = true;</script>
 </footer>`;
 }
 
@@ -1258,11 +1273,33 @@ function sectionRail(present) {
   // a rail that points at a section the page does not have is worse than no
   // rail: the blocks decide, not the list
   const items = SECTIONS.filter(([id]) => present.has(id));
+  // the section being read is lit (and, on a phone, scrolled into the bar):
+  // a few lines of script that only add to a rail which works without them
   return `<nav class="tp-rail" aria-label="Szakaszok">
     <ul>${items.map(([id, label, icon]) => `<li>
       <a href="#${id}">${railIcon(icon)}<span>${esc(label)}</span></a>
     </li>`).join('')}</ul>
-  </nav>`;
+  </nav>
+  <script>document.addEventListener('DOMContentLoaded', function () {
+    var nav = document.querySelector('.topnav');
+    function navHeight() {
+      if (nav) document.documentElement.style.setProperty('--topnav-h', nav.offsetHeight + 'px');
+    }
+    navHeight(); window.addEventListener('resize', navHeight);
+    var links = [].slice.call(document.querySelectorAll('.tp-rail a'));
+    if (!('IntersectionObserver' in window) || !links.length) return;
+    var byId = {}; links.forEach(function (a) { byId[a.hash.slice(1)] = a; });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        links.forEach(function (a) { a.removeAttribute('aria-current'); });
+        var a = byId[e.target.id]; if (!a) return;
+        a.setAttribute('aria-current', 'location');
+        if (window.innerWidth <= 1100) a.scrollIntoView({ block: 'nearest', inline: 'center' });
+      });
+    }, { rootMargin: '-35% 0px -55% 0px' });
+    Object.keys(byId).forEach(function (id) { var el = document.getElementById(id); if (el) io.observe(el); });
+  });</script>`;
 }
 
 /** A rule with a word on it, so a long section reads as its parts. */
@@ -1379,7 +1416,7 @@ function compareRows(rows, fmt, diverging = false) {
       ? (r.v >= 0 ? `left:50%;width:${w.toFixed(1)}%` : `left:${(50 - w).toFixed(1)}%;width:${w.toFixed(1)}%`)
       : `width:${w.toFixed(1)}%`;
     return `<div class="tp-compare__row${r.self ? ' is-self' : ''}">
-      <span class="tp-compare__label">${esc(r.label)}</span>
+      <span class="tp-compare__label">${r.href ? `<a href="${esc(r.href)}">${esc(r.label)}</a>` : esc(r.label)}</span>
       <span class="tp-compare__track"><i class="${diverging && r.v < 0 ? 'is-neg' : ''}" style="${style}"></i></span>
       <b>${esc(fmt(r.v))}</b></div>`;
   }).join('')}</div>`;
@@ -1512,6 +1549,9 @@ function livingBlock(profile, nationalJobs) {
   const cap = !!l.capitalWide;
   const parts = [];
   const median = L('medianSettlement');
+  // the járás and the county a row names are pages of their own
+  const dHref = ctx(`/jaras.html?jar=${encodeURIComponent(district)}`, profile);
+  const cHref = ctx('/megye.html', profile);
   if (l.income) {
     const i = l.income;
     parts.push(`<article class="tp-living__item">
@@ -1519,8 +1559,8 @@ function livingBlock(profile, nationalJobs) {
       <p class="tp-living__value">${esc(mFt(i.value))}<small>${esc(L('perYear', { year: i.year }))}</small></p>
       ${cap ? `<p class="tp-note">${esc(L('capitalWide'))}</p>` : compareRows([
         { label: name, v: i.value, self: true },
-        { label: `${district} ${L('districtSuffix')}`, v: i.district },
-        { label: county, v: i.county },
+        { label: `${district} ${L('districtSuffix')}`, v: i.district, href: dHref },
+        { label: county, v: i.county, href: cHref },
         { label: median, v: i.median },
       ], mFt)}
       ${i.taxpayers ? `<p class="tp-note">${esc(L('taxpayers', { n: dec(i.taxpayers, 0) }))}</p>` : ''}
@@ -1534,8 +1574,8 @@ function livingBlock(profile, nationalJobs) {
         n: num(j.registered), of: num(j.workingAge), month: formatMonth(j.month) }))}</small></p>
       ${compareRows([
         { label: name, v: j.value, self: true },
-        ...(profile.county === 'Budapest' ? [] : [{ label: `${district} ${L('districtSuffix')}`, v: j.district }]),
-        { label: county, v: j.county },
+        ...(profile.county === 'Budapest' ? [] : [{ label: `${district} ${L('districtSuffix')}`, v: j.district, href: dHref }]),
+        { label: county, v: j.county, href: cHref },
         { label: L('national'), v: j.national },
       ], (v) => `${dec(v)}%`)}
       ${j.longShare !== null ? `<p class="tp-note">${esc(L('jobsLong', { share: dec(j.longShare, 0) }))}</p>` : ''}
@@ -1551,8 +1591,8 @@ function livingBlock(profile, nationalJobs) {
         from: v.years[0], to: v.years[1] }))}</small></p>
       ${cap ? `<p class="tp-note">${esc(L('capitalWide'))}</p>` : compareRows([
         { label: name, v: v.value, self: true },
-        { label: `${district} ${L('districtSuffix')}`, v: v.district },
-        { label: county, v: v.county },
+        { label: `${district} ${L('districtSuffix')}`, v: v.district, href: dHref },
+        { label: county, v: v.county, href: cHref },
         { label: median, v: v.median },
       ], signedPm, true)}
       <p class="tp-note">${esc(L(`${key}Text`))}</p>
@@ -1564,7 +1604,7 @@ function livingBlock(profile, nationalJobs) {
       <p class="tp-living__value">${esc(num(Math.round(l.gpLoad.value)))}<small>${esc(L('loadUnit', { year: l.gpLoad.year }))}</small></p>
       ${compareRows([
         { label: name, v: l.gpLoad.value, self: true },
-        { label: `${district} ${L('districtSuffix')}`, v: l.gpLoad.district },
+        { label: `${district} ${L('districtSuffix')}`, v: l.gpLoad.district, href: dHref },
       ], (v) => num(Math.round(v)))}
       <p class="tp-note">${esc(L('loadText'))}</p>
     </article>`);

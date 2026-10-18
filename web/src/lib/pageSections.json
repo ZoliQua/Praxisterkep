@@ -1,0 +1,9 @@
+{
+  "analysis": [
+    { "key": "national", "items": ["statisztika", "osszevetes", "lefedettseg"] },
+    { "key": "future", "items": ["kockazat", "tulel", "elorejelzes", "tamogatasok"] },
+    { "key": "districts", "items": ["jarasok", "halalozas", "jovedelem", "allaskeresok", "nepesseg", "nepszamlalas", "osszefuggesek"] },
+    { "key": "access", "items": ["ugyelet", "tavolsag", "menetido", "surgosseg", "busz"] },
+    { "key": "settlements", "items": ["index", "keresztmetszet", "hianyteruletek"] }
+  ]
+}

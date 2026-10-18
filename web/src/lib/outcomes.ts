@@ -160,7 +160,7 @@ export interface YearSeries {
 }
 
 export interface CrossPoint {
-  slug: string; name: string; county: string; population: number;
+  slug: string; name: string; county: string; district: string; population: number;
   state: string; months: number; minutes: number | null;
   bus: boolean | null; busMinutes: number | null; old: number | null;
 }
@@ -216,6 +216,12 @@ export interface OutcomesRaw {
         months: number; minutes: number | null }[];
     };
     deserts: { stats?: Record<string, number> };
+    areas: Record<string, {
+      settlements: number;
+      ageBands: AgeBand[];
+      bus: OutcomesRaw['cross']['bus'];
+      deserts: { settlements: number; population: number; clusters: number };
+    }>;
   };
   emergency: {
     points: number; medianMin: number; maxMin: number;

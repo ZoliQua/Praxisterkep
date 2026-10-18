@@ -42,7 +42,9 @@
     "registry": "Nyilvántartás",
     "whoElse": "Ki lát el még?",
     "stock": "Körzetállomány",
-    "districtPage": "Járás"
+    "districtPage": "Járás",
+    "districtChoose": "Járás kiválasztása",
+    "districtVulnerable": "A legveszélyeztetettebb járások"
   },
   "hero": {
     "vacant": "betöltetlen {kind} körzet",
@@ -197,16 +199,27 @@
   "methodology": {
     "heading": "Módszertan",
     "p1": "Az adatok forrása a Nemzeti Egészségbiztosítási Alapkezelő (NEAK) havonta közzétett listái: a betöltetlen fogorvosi és háziorvosi szolgálatok, a betöltetlen (megszűnt szerződésű) fogorvosi szolgálatok, valamint a szerződött szolgáltatók törzslistái. A NEAK adatai tájékoztató jellegűek, a havi finanszírozási szerződésállapotot tükrözik — nem valós idejű működési adatok.",
-    "p2": "„Betöltetlen” az a körzet, amelynek nincs szerződött orvosa. Ez nem azonos az „ellátatlan” fogalmával: a betöltetlen körzetek lakóit helyettesítő orvos látja el. A „megszűnt szerződésű” kategória azokat a fogorvosi körzeteket jelöli, amelyeknél a finanszírozási szerződés is megszűnt — háziorvosi ágon a NEAK ilyen listát nem publikál. A tartósan betöltetlen körzet jogi kategória: a 313/2011. (XII. 23.) Korm. rendelet szerint az a körzet, ahol a szerződés megszűnése óta legalább 6 hónap eltelt.",
+    "p2": "„Betöltetlen” az a körzet, amelynek nincs szerződött orvosa. Ez nem azonos az „ellátatlan” fogalmával: a betöltetlen körzetek lakóit rendszerint helyettesítő orvos látja el, ezt azonban a nyilvános adatok nem mutatják. A „megszűnt szerződésű” kategória azokat a fogorvosi körzeteket jelöli, amelyeknél a finanszírozási szerződés is megszűnt — háziorvosi ágon a NEAK ilyen listát nem publikál. A tartósan betöltetlen körzet jogi kategória: a 313/2011. (XII. 23.) Korm. rendelet 2. § (1) b) pontja szerint az a területi ellátási kötelezettségű körzet, ahol a kötelezettségnek hat hónapot meghaladóan csak helyettesítéssel tudnak eleget tenni, vagy ahol az önkormányzat legalább hat hónapig nem tud helyettesítésen kívül más módon gondoskodni az ellátásról.",
     "p3": "A betöltetlenségi arány nevezője a NEAK törzslistáiban szereplő alapellátási körzetek egyedi kódjainak (FIN, illetve HSZ) száma. Fogorvosi ágon a felnőtt, gyermek, vegyes és iskolai-ifjúsági szolgálatok számítanak (az ügyeleti és egyetemi szolgálatok, valamint a szakellátás nem); háziorvosi ágon a területi ellátási kötelezettségű (T) körzetek — a területi kötelezettség nélküli (TN) praxisok nem, mivel a betöltetlen listán sem szerepelhetnek.",
-    "p4": "A rendelők koordinátáit az OpenStreetMap Nominatim szolgáltatásával határozzuk meg. Ahol a cím nem volt pontosan azonosítható, a település középpontját jelöljük, és ezt a térképen külön jelezzük. Körzethatárok hivatalosan nem publikáltak, ezért a térkép megyei szinten színez, a körzeteket pontként mutatja.",
+    "p4": "A rendelők koordinátáit az OpenStreetMap Nominatim szolgáltatásával határozzuk meg. Ahol a cím nem volt pontosan azonosítható, a település középpontját jelöljük, és ezt a térképen külön jelezzük. Körzethatárokat hivatalosan senki nem közöl, ezért a térképek megyei és járási szinten színeznek, a körzeteket pedig pontként, a rendelő helyén mutatják.",
     "p5": "A településkereső a háziorvosi ágon a körzethez tartozó (ellátott) települések hivatalos listáján alapul, így a kistelepülések is megtalálhatók; a fogorvosi ágon a nyilvántartás csak a rendelő székhelyét közli, ezért ott a keresés a rendelők településeire és a megszűnt körzetek ellátott településeire terjed ki.",
     "p6": "A teljes feldolgozó kód és minden havi nyers forrásfájl nyilvános a projekt tárhelyén — minden szám az eredeti forrásig visszakövethető. A betöltött praxisok szerződött orvosának nevét a NEAK nyilvános szerződött-szolgáltatói adatbázisa alapján jelenítjük meg; betöltetlen vagy megszűnt körzetnél, illetve helyettesítő orvosról személynevet soha nem közlünk.",
     "p7": "A lakossági fajlagos mutatók (a lakosság hány százaléka él betöltetlen körzetben; 10 000 főre jutó körzetszám; a települések lakónépessége) nevezője a KSH Helységnévtár 2025. január 1-jei lakónépesség-adata. Ezt az egy kiadást alkalmazzuk minden archivált hónapra — a történeti hónapoknál ez közelítés, amit itt jelzünk. A települések azonosítása a KSH-törzsszám és a településnév alapján történik; Budapest kerületei külön egységként szerepelnek.",
     "p8": "A tartósan betöltetlen körzetek jogi kategóriáját az OKFŐ Alapellátási Igazgatóság folyamatosan frissített listáiból vesszük át (alapellatas.okfo.gov.hu). A lista nem tartalmaz NEAK-kódot, ezért a párosítás a település, a szolgálattípus és a betöltetlenség kezdő hónapja alapján történik; a lista állapotdátumát a felületen jelezzük. A jelölés a mindenkori aktuális hónapra vonatkozik, a történeti hónapokra visszamenőleg nem alkalmazzuk.",
     "embedTitle": "Beágyazás",
     "embedText": "A térkép beágyazható bármely oldalba az alábbi kóddal (a k paraméter: dental vagy gp; opcionális m paraméter: megyenév):",
-    "p9": "Az EESZT-kiegészítés (H forrás) az EESZT törzspublikáció három nyilvános törzséből épül: NEAK_FINSZOLG (finanszírozott szolgálatok), EUSZOLG_PUBLIKUS (egészségügyi szolgáltatók) és EUSZOLG_ENGEDELY_PUBLIKUS (működési engedélyek). Az illesztés kizárólag hivatalos kódokkal történik: a NEAK FIN-kódból a szervezeti egység kódján át a körzet saját szakmájú (háziorvosi 6301–6303, fogorvosi 1300/1304/1305) engedélyéhez. Ellenőrizzük, hogy az engedély telephelye a körzet településén van-e, és hogy az engedélyes adószáma egyezik-e a finanszírozott szolgáltatóéval; az eltéréseket jelöljük, az ellentmondó (több telephelyre mutató) eseteknél nem mutatunk telephelyet. A körzet sorszámát szigorú mintával nyerjük ki a hivatalos szolgálatnévből. A szolgáltató nevét csak betöltött körzetnél közöljük; betöltetlen körzetnél semmilyen szabad szöveges névmezőt nem veszünk át, mert a szervezeti egységek neve gyakran a korábbi orvos nevét hordozza. Az EESZT-térképen minden körzet az engedélyezett telephelyén jelenik meg; a címeket az OpenStreetMap Nominatim szolgáltatásával geokódoljuk (legfeljebb 1 kérés/másodperc, gyorsítótárral). Ahol a cím utcaszinten nem azonosítható, a település középpontját használjuk, és ezt a térképen halványabb ponttal, a táblázatban „hozzávetőleges hely” oszloppal jelöljük; koordináta nélküli körzet nem kerül a térképre."
+    "p9": "Az EESZT-kiegészítés (H forrás) az EESZT törzspublikáció három nyilvános törzséből épül: NEAK_FINSZOLG (finanszírozott szolgálatok), EUSZOLG_PUBLIKUS (egészségügyi szolgáltatók) és EUSZOLG_ENGEDELY_PUBLIKUS (működési engedélyek). Az illesztés kizárólag hivatalos kódokkal történik: a NEAK FIN-kódból a szervezeti egység kódján át a körzet saját szakmájú (háziorvosi 6301–6303, fogorvosi 1300/1304/1305) engedélyéhez. Ellenőrizzük, hogy az engedély telephelye a körzet településén van-e, és hogy az engedélyes adószáma egyezik-e a finanszírozott szolgáltatóéval; az eltéréseket jelöljük, az ellentmondó (több telephelyre mutató) eseteknél nem mutatunk telephelyet. A körzet sorszámát szigorú mintával nyerjük ki a hivatalos szolgálatnévből. A szolgáltató nevét csak betöltött körzetnél közöljük; betöltetlen körzetnél semmilyen szabad szöveges névmezőt nem veszünk át, mert a szervezeti egységek neve gyakran a korábbi orvos nevét hordozza. Az EESZT-térképen minden körzet az engedélyezett telephelyén jelenik meg; a címeket az OpenStreetMap Nominatim szolgáltatásával geokódoljuk (legfeljebb 1 kérés/másodperc, gyorsítótárral). Ahol a cím utcaszinten nem azonosítható, a település középpontját használjuk, és ezt a térképen halványabb ponttal, a táblázatban „hozzávetőleges hely” oszloppal jelöljük; koordináta nélküli körzet nem kerül a térképre.",
+    "titles": {
+      "p1": "Honnan jönnek az adatok?",
+      "p2": "Betöltetlen, megszűnt, tartósan betöltetlen",
+      "p3": "Mi a nevező?",
+      "p4": "Hol vannak a rendelők?",
+      "p5": "A településkereső",
+      "p6": "Nyilvánosság és nevek",
+      "p7": "Lakossági mutatók",
+      "p8": "Tartósan betöltetlen körzetek (OKFŐ)",
+      "p9": "EESZT-kiegészítés"
+    }
   },
   "footer": {
     "publicOnly": "Ez az oldal kizárólag nyilvánosan közzétett hatósági és statisztikai adatokkal dolgozik: havonta letölti őket, változatlan formában archiválja — az archívum az ellenőrizhetőség kedvéért nyilvános —, és összesítve elemzi. Saját adatfelvételt nem végzünk: sem a látogatókról, sem betegekről nem gyűjtünk adatot, és beteg- vagy más személyes egészségügyi adat az oldalon nem szerepel.",
@@ -986,7 +999,6 @@
       "age_json": "Korösszetétel településenként (KSH, 2022. évi népszámlálás, CC BY 4.0)",
       "settlements_geojson": "Települések középpontja (OpenStreetMap) KSH-kóddal és lakossággal",
       "emergency_json": "Ügyeleti és sürgősségi pontok (EESZT) és a tőlük mért távolságok településenként",
-      "workforce_json": "Orvosváltások az archívumból és a több körzetet tartó orvosok (név nélkül, álnevesített kulccsal)",
       "clusters_json": "Összefüggő ellátási hiányterületek és településeik",
       "traveltime_json": "Menetidő percben minden településről a legközelebbi ellátási pontig (OpenStreetMap úthálózat)",
       "transit_json": "Tömegközlekedési elérés: indulások és közvetlen járatok az ellátás helyszínére (Volánbusz GTFS)",
@@ -1190,7 +1202,6 @@
       "tulel": "Túlélés-elemzés",
       "lefedettseg": "Települési lefedettség",
       "index": "Összetett index",
-      "orvosok": "Ki tartja a körzeteket",
       "ugyelet": "Ügyelet és mentő",
       "hianyteruletek": "Hiányterületek",
       "menetido": "Menetidő",
@@ -1209,6 +1220,22 @@
       "surgosseg": "Sürgősségi",
       "tamogatasok": "Támogatások",
       "elorejelzes": "Egy év múlva"
+    },
+    "sideNav": "Tartalom",
+    "groupKicker": "Elemző",
+    "group": {
+      "national": "Országos kép",
+      "future": "Mi várható?",
+      "districts": "Járások és megyék",
+      "access": "Elérhetőség",
+      "settlements": "Települések"
+    },
+    "groupLead": {
+      "national": "Hogyan alakult a betöltetlenség, és hogyan áll ma a háziorvosi és a fogorvosi ellátás egymáshoz képest, települési szinten olvasva.",
+      "future": "Mely körzetek üresedhetnek meg, mennyi ideig maradnak üresek, mi várható egy év múlva — és segített-e az állami letelepedési támogatás.",
+      "districts": "A 197 járás egyenként: hol halnak meg többen elkerülhető okból, hol szegényebbek, hol nincs munka, honnan költöznek el — és mi függ össze mivel.",
+      "access": "Milyen messze van az ügyelet, a mentő, a háziorvos, a kórház és a sürgősségi osztály — légvonalban, autóval és busszal.",
+      "settlements": "A településeket egyszerre több szempontból: összetett kockázati index, keresztmetszetek és az összefüggő ellátási sivatagok."
     }
   },
   "vedono": {
@@ -1544,46 +1571,6 @@
     "colAmbulanceMedian": "Mentő medián (km)",
     "colAmbulanceMax": "Mentő max (km)",
     "note": "Forrás: EESZT törzspublikáció, {asOf}. Központi ügyelet: {oncallLocated} / {oncallTotal} szolgálat telephelye geokódolva, mentő: {ambulanceLocated} / {ambulanceTotal}. A helyettesítés és a hétköznapi rendelési idő nem látszik a nyilvános adatokban."
-  },
-  "workforce": {
-    "heading": "Ki tartja a körzeteket?",
-    "explain": "Az archívum {from} óta minden hónapban megnevezi a betöltött {kind} körzetek szerződött orvosát. {months} hónap egymás mellé téve olyasmit mutat, amit egyetlen pillanatkép sem: ma {physicians} orvos tartja a {districts} betöltött körzetet, és látszik, melyik körzet cserélt gazdát, hányszor.",
-    "privacy": "Név itt nem szerepel: a feldolgozó minden orvost álnevesített kulccsá alakít, mielőtt bármit megszámolna, így ez a rész csak azt tudja megmondani, hányan — azt nem, hogy kik. A név gyenge azonosító: két orvost hívhatnak ugyanúgy, ezt a számok olvasásakor érdemes fejben tartani.",
-    "statMulti": "orvos tart egynél több körzetet",
-    "statMultiDistricts": "körzet van több körzetet tartó orvosnál ({share})",
-    "statLargest": "körzet a legnagyobb egy orvoshoz tartozó állományban",
-    "statChanged": "a körzeteknek cserélt orvost legalább egyszer",
-    "bandsTitle": "Hány körzetet tart egy orvos?",
-    "bandsExplain": "A sáv az orvosok számát mutatja, zárójelben a hozzájuk tartozó körzetek számával.",
-    "band": {
-      "1": "Egy körzet",
-      "2": "Két körzet",
-      "3": "Három körzet",
-      "four": "Négy vagy több"
-    },
-    "districtsShort": "körzet",
-    "openPortfolios": "Több körzetet tartó orvosok ({n})",
-    "openDistricts": "Körzetek orvosváltással ({n})",
-    "openCounties": "Megyék összevetése",
-    "portfolioTitle": "Több {kind} körzetet tartó orvosok",
-    "portfolioSubtitle": "Egy sor egy orvos álnevesített kulcsa és a hozzá tartozó körzetek",
-    "districtTitle": "Orvosváltások — {kind} körzetek",
-    "districtSubtitle": "Hányszor cserélt orvost egy körzet az archívumban",
-    "countyTitle": "Orvosváltás megyénként — {kind}",
-    "countySubtitle": "Hol cserélődnek gyakran az orvosok, és hol tart egy orvos több körzetet",
-    "colDistricts": "Körzetek",
-    "colIds": "NEAK-kódok",
-    "colKey": "Álnevesített kulcs",
-    "colChanges": "Orvosváltás",
-    "colMonths": "Megfigyelt hónap",
-    "colPortfolio": "A mai orvos körzetei",
-    "colHeld": "Ma betöltött",
-    "colFirstSeen": "Először látva",
-    "colChanged": "Váltással érintett körzet",
-    "colChangeShare": "Váltással érintett arány (%)",
-    "colMulti": "Több körzetes orvosnál",
-    "colMultiShare": "Több körzetes arány (%)",
-    "note": "Összesen {changes} orvosváltás {months} hónap alatt. {crossCounty} orvos tart körzetet egynél több megyében. Az archívum hónapjai nem egyenletesek, így két pillanatkép közötti rövid váltás láthatatlan maradhat."
   },
   "clusters": {
     "heading": "Összefüggő ellátási hiányterületek",
@@ -1989,6 +1976,14 @@
     "deserts": {
       "title": "Hiányterületek",
       "text": "Hol ér össze több magas kockázatú település egy összefüggő folttá?"
+    },
+    "district": {
+      "title": "A legveszélyeztetettebb járások →",
+      "text": "Ahol egyszerre a legtöbb a hiány, a legmesszebb az ellátás és a legrosszabb a halálozás."
+    },
+    "myDistrict": {
+      "title": "A járásod",
+      "text": "A járás egészségi, jövedelmi és elérhetőségi képe, a megye és az ország mellett."
     }
   },
   "churn": {
@@ -2294,7 +2289,7 @@
       "lead": "Az elkerülhető halálozás azt méri, hányan halnak meg 75 éves koruk előtt olyan okból, amelyet időben kapott ellátás vagy megelőzés megakadályozhatott volna. A {year}. évi adatok szerint járásonként {bestValue} ({best}) és {worstValue} ({worst}) között szóródott 100 ezer lakosra — {times}-szoros különbség egy országon belül.",
       "whatHeading": "Mit jelent az, hogy elkerülhető?",
       "what": "Az NNGYK az Eurostat két listáját követi, és a halálokokat három, egymást nem fedő csoportba sorolja. A három összege az elkerülhető halálozás; a sáv azt mutatja, miből áll egy átlagos járásé.",
-      "medianDistrict": "A középső járás ({name})",
+      "medianDistrict": "A medián járás ({name})",
       "switch": "Melyik mutató",
       "mapHeading": "Hol a legmagasabb?",
       "scatterHeading": "Együtt jár a betöltetlen körzetekkel?",
@@ -2424,7 +2419,11 @@
       "desertHeading": "Ellátási sivatagok",
       "desertBig": "összefüggő folt {settlements} településsel, ahol {people} ember él",
       "desertText": "Emellett {isolated} elszigetelt település ({isolatedPeople} fő) van, ahol nincs betöltött háziorvosi körzet, és a szomszédja sem segít.",
-      "desertMore": "A térkép és a módszer →"
+      "desertMore": "A térkép és a módszer →",
+      "localHeading": "Négy keresztmetszet — {name}",
+      "localLead": "Ugyanaz a négy kérdés, mint az elemzőben, csak ennek a területnek a településeire: mennyi ideje üres a körzet és milyen messze a következő orvos, mennyire idős a falu, eljut-e oda busz, és tartozik-e összefüggő ellátási sivatagba.",
+      "desertLocal": "település tartozik összefüggő ellátási sivatagba ({clusters} klaszterben, {people} lakossal) a terület {of} településéből.",
+      "desertNone": "A terület egyetlen települése sem tartozik összefüggő ellátási sivatagba."
     },
     "min": "perc",
     "yr": "év",
@@ -2476,7 +2475,7 @@
     "settlement": {
       "heading": "Hogyan élnek itt?",
       "lead": "Jövedelem, munka, születés és halálozás, elköltözés — a település a járása, a megyéje és a magyar települések középértéke mellett. Ezek okai annak is, miért nehéz egy körzetet betölteni, és annak is, miért halnak meg itt korábban az emberek.",
-      "medianSettlement": "középső település",
+      "medianSettlement": "medián település",
       "districtSuffix": "járás",
       "national": "ország",
       "incomeHeading": "Jövedelem egy lakosra",
@@ -2580,7 +2579,7 @@
         "20-30": "20–30 perc",
         "30+": "30 perc vagy több"
       },
-      "mapHeading": "A járás középső települése, percben",
+      "mapHeading": "A járás medián települése, percben",
       "doublyHeading": "Se saját háziorvos, se közeli sürgősségi",
       "doubly": "{n} településen — {people} lakossal — egyszerre igaz, hogy a település egyetlen háziorvosi körzete betöltetlen, és a legközelebbi sürgősségi osztály legalább 30 percre van.",
       "people": "lakos",
@@ -2731,5 +2730,47 @@
       "title": "Ami nincs benne, mert nincs nyilvános adat",
       "text": "A szűrővizsgálatokon (emlő-, méhnyak-, vastagbélszűrés) való részvételt és az átoltottságot szerettük volna a betöltetlenség mellé tenni — ez lenne a megelőzés mérhető része. Járási vagy települési bontásban azonban egyik intézmény sem közli géppel olvasható, nyilvános formában: az NNGYK teljes nyilvános fájllistáját és a NEAK, KSH oldalait átnéztük. Becsült számot nem teszünk közzé; ha az adat egyszer nyilvános lesz, bekerül."
     }
+  },
+  "method": {
+    "sideNav": "Módszertan",
+    "group": {
+      "base": "Az alapadatok",
+      "outcomes": "Kimenetek és körülmények",
+      "data": "Adatok és beágyazás"
+    },
+    "referral": "Megszűnt háziorvosi körzetek",
+    "data": "Letölthető adatok",
+    "embed": "Beágyazás"
+  },
+  "highlights": {
+    "heading": "Amit eddig senki nem számolt ki",
+    "vs": "vs.",
+    "more": "Hogyan számoltuk? →",
+    "gp": "A letelepedési támogatással betöltött háziorvosi körzetek ennyiében van ma is orvos — a hozzájuk illesztett, ugyanannyi ideje üres, hasonló méretű településen lévő, támogatás nélküli körzetekben csak ennyiben ({pairs} pár).",
+    "dental": "A ma betöltetlen fogorvosi körzetek közül ennyi már legalább tíz éve üres ({share}). Egy évtizede nincs saját fogorvosuk."
+  },
+  "vulnerable": {
+    "heading": "A legveszélyeztetettebb járások",
+    "lead": "Ahol a legnehezebb orvoshoz jutni: a 174 vidéki járás rangsora négy elérhetőségi mutató szerint. Minden sorban látszik, miért került oda — a sávok a járás helyét mutatják a 174 között (minél hosszabb, annál rosszabb), a szám a mért érték.",
+    "shown": "Hány járás látszódjon",
+    "top": "Első {n}",
+    "kpi": {
+      "people": "ember él az első {n} járásban",
+      "avoidable": "elkerülhető halálozás 100 ezer lakosra ezekben a járásokban — a többi vidéki járásban {rest}",
+      "income": "egy lakosra jutó éves jövedelem — a többi vidéki járásban {rest}",
+      "jobs": "az álláskeresők aránya — a többi vidéki járásban {rest}"
+    },
+    "col": {
+      "district": "Járás",
+      "score": "Rangszám"
+    },
+    "factor": {
+      "gpRate": "Üres háziorvosi körzet",
+      "gpMinutes": "Háziorvos autóval",
+      "sboMinutes": "Sürgősségi autóval",
+      "noBusShare": "Nincs közvetlen busz"
+    },
+    "how": "A rangszám a négy mutató percentilis-rangjának átlaga a 174 vidéki járás között (0 = a legjobb, 100 = a legrosszabb minden mutatóban); súlyozás és illesztés nincs. A menetidő a járás medián településéről mért szabad forgalmú autós idő az OpenStreetMap úthálózatán; a buszmutató a járás azon településeinek aránya, ahonnan nincs közvetlen menetrendi járat a legközelebbi orvosig. A főváros kerületei kimaradnak, mert ott más a közlekedés és az ellátás szerkezete.",
+    "source": "Forrás: NEAK havi adatai, OpenStreetMap úthálózat, Volánbusz GTFS, NNGYK halandósági adatbázis, KSH TIMEA, NFSZ."
   }
 }

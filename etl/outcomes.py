@@ -491,6 +491,58 @@ def series() -> dict:
 
 # ------------------------------------------------------- the four cross-cuts
 
+def _age_bands(rows: list[dict]) -> list[dict]:
+    banded: dict[int, list] = {}
+    for r in rows:
+        share = (r.get("age") or {}).get("oldShare")
+        if share is None:
+            continue
+        banded.setdefault(min(int(share * 100) // 5 * 5, 40), []).append(r)
+    return [{
+        "from": b, "to": b + 5, "settlements": len(v),
+        "population": sum(x["population"] for x in v),
+        "vacantOnly": sum(1 for x in v if x["gp"]["state"] == "vacantOnly"),
+        "partial": sum(1 for x in v if x["gp"]["state"] == "partial"),
+    } for b, v in sorted(banded.items())]
+
+
+def _bus(points: list[dict]) -> dict:
+    only = [p for p in points if p["state"] == "vacantOnly"]
+    stranded = [p for p in only if p["bus"] is False]
+    return {
+        "vacantOnly": len(only),
+        "vacantOnlyPopulation": sum(p["population"] for p in only),
+        "noDirectBus": len(stranded),
+        "noDirectBusPopulation": sum(p["population"] for p in stranded),
+        "stranded": sorted(({k: p[k] for k in ("slug", "name", "county", "population",
+                                               "months", "minutes")} for p in stranded),
+                           key=lambda p: -p["population"])[:40],
+    }
+
+
+def _cross_areas(rows: list[dict], points: list[dict], clusters: dict) -> dict:
+    """ageBands, bus and deserts per county and per járás."""
+    in_desert = {k for c in clusters.get("clusters", []) for k in c.get("kshIds", [])}
+    cluster_of = {k: c["id"] for c in clusters.get("clusters", []) for k in c.get("kshIds", [])}
+    out: dict[str, dict] = {}
+    for level, key in (("county", "county"), ("district", "district")):
+        groups: dict[str, list[dict]] = {}
+        for r in rows:
+            if r.get(key):
+                groups.setdefault(r[key], []).append(r)
+        for name, members in groups.items():
+            pts = [p for p in points if p[key] == name]
+            desert = [r for r in members if r["kshId"] in in_desert]
+            out[f"{level}:{name}"] = {
+                "settlements": len(members),
+                "ageBands": _age_bands(members),
+                "bus": _bus(pts),
+                "deserts": {"settlements": len(desert),
+                            "population": sum(r["population"] for r in desert),
+                            "clusters": len({cluster_of[r["kshId"]] for r in desert})},
+            }
+    return out
+
 def cross_readings(data_month: str) -> dict:
     """How long, how far, how old, how reachable — from the settlement
     profiles alone."""
@@ -514,6 +566,7 @@ def cross_readings(data_month: str) -> dict:
         age = r.get("age") or {}
         points.append({
             "slug": r["slug"], "name": r["settlement"], "county": r["county"],
+            "district": r["district"],
             "population": r["population"], "state": r["gp"]["state"],
             "months": longest,
             "minutes": travel.get("minutes"),
@@ -545,6 +598,9 @@ def cross_readings(data_month: str) -> dict:
     clusters = read("clusters.json")
     return {
         "dataMonth": data_month,
+        # the same readings for every county and járás, so their pages can
+        # show them for their own settlements
+        "areas": _cross_areas(rows, points, clusters),
         "durationTravel": points,
         "ageBands": age_bands,
         "bus": {
@@ -681,9 +737,36 @@ def build() -> dict:
     }
 
 
+HIGHLIGHTS = DATA / "highlights.json"
+
+
+def highlights(out: dict) -> dict:
+    """The two findings the landing page leads with — one per branch, small
+    enough that the landing does not fetch the whole analysis for them."""
+    latest = read("latest.json")
+    month = latest["kinds"]["dental"]["month"]
+    y, m = map(int, month.split("-"))
+
+    def years(since: str) -> float:
+        sy, sm = map(int, since[:7].split("-"))
+        return ((y - sy) * 12 + (m - sm)) / 12
+
+    dental = [p for p in latest["kinds"]["dental"]["praxes"] if p.get("vacantSince")]
+    gp = out["grants"]["kinds"]["gp"]["matched"]
+    return {
+        "month": month,
+        "gp": {"grantsFilled": gp["treatedFilled"], "matchedFilled": gp["controlFilled"],
+               "pairs": gp["pairs"]},
+        "dental": {"vacant": len(latest["kinds"]["dental"]["praxes"]),
+                   "tenYears": sum(1 for p in dental if years(p["vacantSince"]) >= 10)},
+    }
+
+
 if __name__ == "__main__":
     out = build()
     OUT.write_text(json.dumps(out, ensure_ascii=False, separators=(",", ":")) + "\n",
                    encoding="utf-8")
+    HIGHLIGHTS.write_text(json.dumps(highlights(out), ensure_ascii=False) + "\n",
+                          encoding="utf-8")
     print(f"wrote {OUT}: {len(out['districts'])} járás, "
           f"{len(out['correlations']['pairs'])} pairs")

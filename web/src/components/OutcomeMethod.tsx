@@ -5,12 +5,11 @@
 // The few numbers the text quotes come from outcomes.json itself, so the
 // method page cannot fall a month behind the analysis it describes.
 import { t } from '../lib/i18n';
+import { OUTCOME_ITEMS } from '../lib/methodSections';
 import { formatDecimal, formatNumber } from '../lib/format';
 import { pairOf, partialOf, pValue, useOutcomes } from '../lib/outcomes';
 
-const ITEMS = ['mortality', 'whyNotKsh', 'income', 'jobs', 'population', 'census', 'stats',
-  'education', 'grid', 'capital', 'sbo', 'grants', 'forecast', 'cross', 'notAvailable',
-  'limits'] as const;
+
 
 export function OutcomeMethod() {
   const o = useOutcomes();
@@ -34,8 +33,8 @@ export function OutcomeMethod() {
     <section className="section container method" id="kimenetek">
       <h2 className="section__heading">{t('outcomeMethod.heading')}</h2>
       <p className="section__lead">{t('outcomeMethod.lead')}</p>
-      {ITEMS.map((k) => (
-        <div key={k} className="method__item">
+      {OUTCOME_ITEMS.map((k) => (
+        <div key={k} className="method__item" id={`k-${k}`}>
           <h3 className="why__chain-title">{t(`outcomeMethod.${k}.title`)}</h3>
           <p>{t(`outcomeMethod.${k}.text`, vars[k] ?? {})}</p>
         </div>

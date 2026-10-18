@@ -24,7 +24,17 @@
     },
     {
       "href": "/jaras.html",
-      "labelKey": "nav.districtPage"
+      "labelKey": "nav.districtPage",
+      "children": [
+        [
+          "/jaras.html",
+          "nav.districtChoose"
+        ],
+        [
+          "/jaras.html#veszelyeztetett",
+          "nav.districtVulnerable"
+        ]
+      ]
     },
     {
       "href": "/telepules/",
@@ -35,20 +45,113 @@
       "labelKey": "nav.analysis",
       "children": [
         [
+          "/elemzo.html#csoport-national",
+          "analysis.group.national",
+          "group"
+        ],
+        [
+          "/elemzo.html#statisztika",
+          "analysis.toc.statisztika"
+        ],
+        [
+          "/elemzo.html#osszevetes",
+          "analysis.toc.osszevetes"
+        ],
+        [
+          "/elemzo.html#lefedettseg",
+          "analysis.toc.lefedettseg"
+        ],
+        [
+          "/elemzo.html#csoport-future",
+          "analysis.group.future",
+          "group"
+        ],
+        [
           "/elemzo.html#kockazat",
           "analysis.toc.kockazat"
         ],
         [
-          "/elemzo.html#menetido",
-          "analysis.toc.menetido"
+          "/elemzo.html#tulel",
+          "analysis.toc.tulel"
+        ],
+        [
+          "/elemzo.html#elorejelzes",
+          "analysis.toc.elorejelzes"
+        ],
+        [
+          "/elemzo.html#tamogatasok",
+          "analysis.toc.tamogatasok"
+        ],
+        [
+          "/elemzo.html#csoport-districts",
+          "analysis.group.districts",
+          "group"
         ],
         [
           "/elemzo.html#jarasok",
           "analysis.toc.jarasok"
         ],
         [
+          "/elemzo.html#halalozas",
+          "analysis.toc.halalozas"
+        ],
+        [
+          "/elemzo.html#jovedelem",
+          "analysis.toc.jovedelem"
+        ],
+        [
+          "/elemzo.html#allaskeresok",
+          "analysis.toc.allaskeresok"
+        ],
+        [
+          "/elemzo.html#nepesseg",
+          "analysis.toc.nepesseg"
+        ],
+        [
+          "/elemzo.html#nepszamlalas",
+          "analysis.toc.nepszamlalas"
+        ],
+        [
+          "/elemzo.html#osszefuggesek",
+          "analysis.toc.osszefuggesek"
+        ],
+        [
+          "/elemzo.html#csoport-access",
+          "analysis.group.access",
+          "group"
+        ],
+        [
+          "/elemzo.html#ugyelet",
+          "analysis.toc.ugyelet"
+        ],
+        [
+          "/elemzo.html#tavolsag",
+          "analysis.toc.tavolsag"
+        ],
+        [
+          "/elemzo.html#menetido",
+          "analysis.toc.menetido"
+        ],
+        [
+          "/elemzo.html#surgosseg",
+          "analysis.toc.surgosseg"
+        ],
+        [
+          "/elemzo.html#busz",
+          "analysis.toc.busz"
+        ],
+        [
+          "/elemzo.html#csoport-settlements",
+          "analysis.group.settlements",
+          "group"
+        ],
+        [
           "/elemzo.html#index",
           "analysis.toc.index"
+        ],
+        [
+          "/elemzo.html#keresztmetszet",
+          "analysis.toc.keresztmetszet"
         ],
         [
           "/elemzo.html#hianyteruletek",

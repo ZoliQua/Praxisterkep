@@ -42,7 +42,9 @@
     "registry": "Registry",
     "whoElse": "Who else provides care?",
     "stock": "District stock",
-    "districtPage": "District"
+    "districtPage": "District",
+    "districtChoose": "Choose a district",
+    "districtVulnerable": "The most vulnerable districts"
   },
   "hero": {
     "vacant": "vacant {kind} districts",
@@ -197,16 +199,27 @@
   "methodology": {
     "heading": "Methodology",
     "p1": "The data come from the monthly lists published by the National Health Insurance Fund of Hungary (NEAK): vacant dental and GP services, vacant dental services with terminated contracts, and the registries of contracted providers. NEAK's data are informative in nature and reflect the monthly financing-contract status — they are not real-time operational data.",
-    "p2": "A district is “vacant” when it has no contracted physician. This is not the same as “unserved”: residents of vacant districts are covered by a substitute physician. The “terminated contract” category marks dental districts whose financing contract has also ended — NEAK publishes no such list for the GP branch. Long-term vacancy is a legal category: under Government Decree 313/2011 (XII. 23.) it applies to districts where at least 6 months have passed since the contract ended.",
+    "p2": "A district is “vacant” when it has no contracted physician. This is not the same as “unserved”: residents of vacant districts are usually covered by a substitute physician, which public data does not show. The “terminated contract” category marks dental districts whose financing contract has also ended — NEAK publishes no such list for the GP branch. Persistent vacancy is a legal category: under section 2 (1) b) of Government Decree 313/2011 (XII. 23.) it applies to a district with a territorial obligation that for more than six months can be met only by substitution, or where the municipality cannot arrange care other than substitution for at least six months.",
     "p3": "The denominator of the vacancy rate is the number of unique primary-care district codes (FIN or HSZ) in NEAK's registries. On the dental branch adult, paediatric, mixed and school-youth services count (on-call and university services and specialist care do not); on the GP branch, districts with a territorial care obligation (T) — practices without one (TN) are excluded, as they cannot appear on the vacancy list either.",
-    "p4": "Practice coordinates are determined with OpenStreetMap's Nominatim service. Where an address could not be identified precisely, the settlement centre is marked and flagged on the map. District boundaries are not officially published, so the map colours at county level and shows districts as points.",
+    "p4": "Practice coordinates are determined with OpenStreetMap's Nominatim service. Where an address could not be identified precisely, the settlement centre is marked and flagged on the map. District boundaries are not officially published by anyone, so the maps colour counties and járás, and show districts as points at the surgery.",
     "p5": "On the GP branch the settlement search is based on the official list of settlements served by each district, so small villages can also be found; the dental registry only records the practice seat, so there the search covers the practices' settlements and the settlements served by terminated districts.",
     "p6": "The full processing code and every month's raw source file are public in the project repository — every number can be traced back to its original source. The contracted physician's name of a filled practice is shown from NEAK's public contracted-provider database; we never publish a personal name for a vacant or terminated district or for a substitute physician.",
     "p7": "The per-capita indicators (share of population living in a vacant district; districts per 10,000 residents; settlement populations) use the resident population of the HCSO Gazetteer as of 1 January 2025. This single edition is applied to every archived month — for historical months this is an approximation, noted here. Settlements are identified by HCSO code and settlement name; Budapest's districts are counted separately.",
     "p8": "The legal category of long-term vacant districts is taken from the continuously updated lists of the OKFŐ Primary Care Directorate (alapellatas.okfo.gov.hu). The list carries no NEAK code, so matching uses the settlement, the service type and the starting month of the vacancy; the list's as-of date is shown in the interface. The flag applies to the current month and is not applied retroactively to historical months.",
     "embedTitle": "Embedding",
     "embedText": "The map can be embedded in any page with the code below (parameter k: dental or gp; optional parameter m: county name):",
-    "p9": "The EESZT supplement (source H) is built from three public registers of the EESZT master-data publication: NEAK_FINSZOLG (financed services), EUSZOLG_PUBLIKUS (healthcare providers) and EUSZOLG_ENGEDELY_PUBLIKUS (operating licences). Matching uses official codes only: from the NEAK FIN code through the organisational-unit code to the licence of the district's own profession (GP 6301–6303, dental 1300/1304/1305). We check whether the licensed premises lie in the district's settlement and whether the licensee's tax number matches the financed provider; differences are flagged, and where a FIN points to several licences at different premises no premises are shown. The district number is extracted from the official service name with a strict pattern. The provider name is shown only for filled districts; for vacant districts no free-text name field is taken over, as organisational-unit names often carry the former physician's name. On the EESZT map each district is drawn at its licensed premises; addresses are geocoded with OpenStreetMap Nominatim (at most 1 request per second, cached). Where an address cannot be resolved at street level, the settlement centre is used — shown as a fainter point on the map and in the \"approximate location\" column; districts without coordinates are not drawn."
+    "p9": "The EESZT supplement (source H) is built from three public registers of the EESZT master-data publication: NEAK_FINSZOLG (financed services), EUSZOLG_PUBLIKUS (healthcare providers) and EUSZOLG_ENGEDELY_PUBLIKUS (operating licences). Matching uses official codes only: from the NEAK FIN code through the organisational-unit code to the licence of the district's own profession (GP 6301–6303, dental 1300/1304/1305). We check whether the licensed premises lie in the district's settlement and whether the licensee's tax number matches the financed provider; differences are flagged, and where a FIN points to several licences at different premises no premises are shown. The district number is extracted from the official service name with a strict pattern. The provider name is shown only for filled districts; for vacant districts no free-text name field is taken over, as organisational-unit names often carry the former physician's name. On the EESZT map each district is drawn at its licensed premises; addresses are geocoded with OpenStreetMap Nominatim (at most 1 request per second, cached). Where an address cannot be resolved at street level, the settlement centre is used — shown as a fainter point on the map and in the \"approximate location\" column; districts without coordinates are not drawn.",
+    "titles": {
+      "p1": "Where the data comes from",
+      "p2": "Vacant, dissolved, persistently vacant",
+      "p3": "The denominator",
+      "p4": "Where the surgeries are",
+      "p5": "The settlement search",
+      "p6": "Openness and names",
+      "p7": "Population measures",
+      "p8": "Persistently vacant districts (OKFŐ)",
+      "p9": "The EESZT supplement"
+    }
   },
   "footer": {
     "publicOnly": "This site works only with publicly released official and statistical data: it downloads them every month, archives them unchanged — the archive is public so the figures can be checked — and analyses them in aggregate. We carry out no data collection of our own: nothing is gathered about visitors or patients, and the site holds no patient or other personal health data.",
@@ -986,7 +999,6 @@
       "age_json": "Age composition per settlement (KSH, 2022 census, CC BY 4.0)",
       "settlements_geojson": "Settlement centres (OpenStreetMap) with KSH code and population",
       "emergency_json": "On-call and emergency points (EESZT) with the distances measured from them per settlement",
-      "workforce_json": "Physician changes from the archive and the physicians holding several districts (no names, pseudonymous keys)",
       "clusters_json": "Contiguous care deserts and their settlements",
       "traveltime_json": "Driving minutes from every settlement to the nearest care point (OpenStreetMap roads)",
       "transit_json": "Public-transport reach: departures and direct services to where care is (Volánbusz GTFS)",
@@ -1190,7 +1202,6 @@
       "tulel": "Survival analysis",
       "lefedettseg": "Settlement coverage",
       "index": "Composite index",
-      "orvosok": "Who holds the districts",
       "ugyelet": "On-call and ambulance",
       "hianyteruletek": "Care deserts",
       "menetido": "Driving time",
@@ -1209,6 +1220,22 @@
       "surgosseg": "Emergency",
       "tamogatasok": "Grants",
       "elorejelzes": "A year from now"
+    },
+    "sideNav": "Contents",
+    "groupKicker": "Analysis",
+    "group": {
+      "national": "The national picture",
+      "future": "What comes next?",
+      "districts": "Districts and counties",
+      "access": "Access",
+      "settlements": "Settlements"
+    },
+    "groupLead": {
+      "national": "How vacancy has developed, and how GP and dental care compare today, read at settlement level.",
+      "future": "Which districts may fall vacant, how long vacancies last, what a year from now looks like — and whether the state's settlement grants helped.",
+      "districts": "The 197 járás one by one: where more people die of avoidable causes, where they are poorer, where there is no work, where people leave — and what goes with what.",
+      "access": "How far the on-call service, the ambulance, the GP, the hospital and the emergency department are — as the crow flies, by car and by bus.",
+      "settlements": "Settlements from several angles at once: the composite risk index, cross-sections and the contiguous care deserts."
     }
   },
   "vedono": {
@@ -1544,46 +1571,6 @@
     "colAmbulanceMedian": "Ambulance median (km)",
     "colAmbulanceMax": "Ambulance max (km)",
     "note": "Source: EESZT master publication, {asOf}. Central on-call: {oncallLocated} of {oncallTotal} services geocoded, ambulance: {ambulanceLocated} of {ambulanceTotal}. Substitution and weekday surgery hours are invisible in the public data."
-  },
-  "workforce": {
-    "heading": "Who holds the districts?",
-    "explain": "Since {from} every archived month names the contracted physician of each filled {kind} district. Put side by side, {months} months show what no snapshot can: today {physicians} physicians hold the {districts} filled districts, and it is visible which district changed hands, and how often.",
-    "privacy": "No name appears here: the pipeline turns every physician into a pseudonymous key before counting anything, so this block can only say how many — never who. A name is a weak identity: two physicians can share one, which is worth remembering when reading the numbers.",
-    "statMulti": "physicians hold more than one district",
-    "statMultiDistricts": "districts are held by a physician with several ({share})",
-    "statLargest": "districts in the largest single holding",
-    "statChanged": "of districts changed physician at least once",
-    "bandsTitle": "How many districts does one physician hold?",
-    "bandsExplain": "The bar shows the number of physicians, with the districts they hold in brackets.",
-    "band": {
-      "1": "One district",
-      "2": "Two districts",
-      "3": "Three districts",
-      "four": "Four or more"
-    },
-    "districtsShort": "districts",
-    "openPortfolios": "Physicians with several districts ({n})",
-    "openDistricts": "Districts by physician change ({n})",
-    "openCounties": "Counties compared",
-    "portfolioTitle": "Physicians holding several {kind} districts",
-    "portfolioSubtitle": "One row per physician's pseudonymous key and the districts they hold",
-    "districtTitle": "Physician changes — {kind} districts",
-    "districtSubtitle": "How often a district changed physician in the archive",
-    "countyTitle": "Physician turnover by county — {kind}",
-    "countySubtitle": "Where physicians change often, and where one holds several districts",
-    "colDistricts": "Districts",
-    "colIds": "NEAK codes",
-    "colKey": "Pseudonymous key",
-    "colChanges": "Changes",
-    "colMonths": "Months observed",
-    "colPortfolio": "Districts of today's physician",
-    "colHeld": "Filled today",
-    "colFirstSeen": "First seen",
-    "colChanged": "Districts with a change",
-    "colChangeShare": "Share with a change (%)",
-    "colMulti": "Held by a multi-district physician",
-    "colMultiShare": "Multi-district share (%)",
-    "note": "{changes} physician changes over {months} months. {crossCounty} physicians hold districts in more than one county. The archived months are unevenly spaced, so a short change between two snapshots can stay invisible."
   },
   "clusters": {
     "heading": "Contiguous care deserts",
@@ -1989,6 +1976,14 @@
     "deserts": {
       "title": "Care deserts",
       "text": "Where several high-risk settlements form one contiguous patch."
+    },
+    "district": {
+      "title": "The most vulnerable districts →",
+      "text": "Where the shortage is greatest, care is farthest and mortality is worst, all at once."
+    },
+    "myDistrict": {
+      "title": "Your district",
+      "text": "The district's health, income and access, beside its county and the country."
     }
   },
   "churn": {
@@ -2424,7 +2419,11 @@
       "desertHeading": "Care deserts",
       "desertBig": "contiguous patches holding {settlements} settlements and {people} people",
       "desertText": "On top of that, {isolated} isolated settlements ({isolatedPeople} people) have no staffed GP district and no neighbour that helps.",
-      "desertMore": "The map and the method →"
+      "desertMore": "The map and the method →",
+      "localHeading": "Four cross-sections — {name}",
+      "localLead": "The same four questions as on the analysis page, for this area's settlements only: how long the district has been vacant and how far the next doctor is, how old the village is, whether a bus gets there, and whether it lies in a contiguous care desert.",
+      "desertLocal": "settlements lie in a contiguous care desert ({clusters} clusters, {people} residents) of the area's {of}.",
+      "desertNone": "None of the area's settlements lies in a contiguous care desert."
     },
     "min": "min",
     "yr": "yrs",
@@ -2731,5 +2730,47 @@
       "title": "What is missing, because no public data exists",
       "text": "We wanted to set screening participation (breast, cervical, colorectal) and vaccination coverage beside vacancy — the measurable part of prevention. No institution publishes them by járás or settlement in a public, machine-readable form: we went through NNGYK's whole public file list and the NEAK and KSH sites. No estimate is published; when the data becomes public, it goes in."
     }
+  },
+  "method": {
+    "sideNav": "Methodology",
+    "group": {
+      "base": "The base data",
+      "outcomes": "Outcomes and circumstances",
+      "data": "Data and embedding"
+    },
+    "referral": "Dissolved GP districts",
+    "data": "Downloadable data",
+    "embed": "Embedding"
+  },
+  "highlights": {
+    "heading": "What nobody had counted before",
+    "vs": "vs.",
+    "more": "How we counted →",
+    "gp": "Of GP districts filled with a settlement grant, this share has a doctor today — against this share of matched districts without a grant, vacant as long, in settlements of the same size ({pairs} pairs).",
+    "dental": "Of today's vacant dental districts, this many have been empty for ten years or more ({share}). A decade without a dentist of their own."
+  },
+  "vulnerable": {
+    "heading": "The most vulnerable districts",
+    "lead": "Where a doctor is hardest to reach: the 174 rural járás ranked by four access measures. Every row shows why it is there — each bar is the járás's place among the 174 (longer is worse), the number the measured value.",
+    "shown": "How many districts to show",
+    "top": "Top {n}",
+    "kpi": {
+      "people": "people live in the top {n} districts",
+      "avoidable": "avoidable deaths per 100,000 in these districts — {rest} in the other rural districts",
+      "income": "yearly income per resident — {rest} in the other rural districts",
+      "jobs": "share of jobseekers — {rest} in the other rural districts"
+    },
+    "col": {
+      "district": "District",
+      "score": "Rank score"
+    },
+    "factor": {
+      "gpRate": "Vacant GP districts",
+      "gpMinutes": "GP by car",
+      "sboMinutes": "Emergency by car",
+      "noBusShare": "No direct bus"
+    },
+    "how": "The rank score is the mean of the four measures' percentile ranks among the 174 rural járás (0 = best, 100 = worst on all four); nothing is weighted or fitted. Driving time is free-flow from the járás's median settlement on the OpenStreetMap road network; the bus measure is the share of its settlements with no direct scheduled bus to the nearest doctor. The capital's kerület are left out, as transport and care work differently there.",
+    "source": "Sources: NEAK monthly data, OpenStreetMap road network, Volánbusz GTFS, NNGYK mortality database, KSH TIMEA, NFSZ."
   }
 }

@@ -62,8 +62,7 @@ dissolved (megszűnt) list for GP; the GP registry is the source of district
   publish for GP).
 - Analyses built on top of the above, each with its own guard:
   `risk.json` (vacancy risk), `survival.json` (Kaplan–Meier of vacancy
-  spells), `workforce.json` (physician turnover and multi-district
-  holdings, pseudonymous), `coverage.json` (settlement-level coverage
+  spells), `coverage.json` (settlement-level coverage
   instead of district seats), `composite.json` (the composite care-risk
   index), `clusters.json` (contiguous care deserts), `age.json` (KSH census
   age composition), `traveltime.json` (driving minutes on the OSM road
@@ -139,6 +138,10 @@ dissolved (megszűnt) list for GP; the GP registry is the source of district
   site name onto the gazetteer's spelling, but only where the accent-folded
   name is unique — Kömlő/Komló and Kömörő/Komoró fold together, and
   `KshRef.lookup` matches exact names first for the same reason.
+- No analysis may match physicians across districts by name. The old
+  "Ki tartja a körzeteket?" section (workforce.py) did, and two doctors who
+  share a common surname and given name cannot be told apart: no public
+  register carries a seal number or any other key. It was removed.
 - Screening participation and vaccination coverage are wanted and absent:
   no institution publishes them by járás or settlement in a public,
   machine-readable form. Do not estimate them.
