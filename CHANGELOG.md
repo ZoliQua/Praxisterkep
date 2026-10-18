@@ -5,6 +5,58 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.50.0] — 2026-10-18
+
+Két nyelven mindenhol, áttekinthetőbb elemző, és Magyarország Európában.
+
+### Hozzáadva
+- **Angol változat mindenhol.** A HU/EN váltó minden oldal fejlécében ott
+  van, és mind a 3177 településlap angolul is elkészül
+  (`/en/telepules/<slug>/`, `hreflang`-párral, a sitemapben is). A
+  generátor minden szövege az i18n-fájlokba került; a magyar lapok szövege
+  karakterre azonos a korábbival.
+- **Az elemző csoportosítva:** Országos kép · Mi várható? · Járások és
+  megyék · Elérhetőség · Települések — csoportfejlécekkel, csoportosított
+  tartalomjegyzékkel, a felső menüben mind a 22 szakasz csoportonként, és
+  oldalsó, az aktuális részt kiemelő menüvel (mobilon pöttysor a bal
+  szélen). A módszertan oldal ugyanilyen oldalmenüt és bekezdésenként
+  horgonyt kapott.
+- **A legveszélyeztetettebb járások** a járási oldalon: négy elérhetőségi
+  mutató rangsorszázalékainak átlaga a 174 vidéki járás között, soronként a
+  négy összetevővel, és hogy mi jár velük (elkerülhető halálozás, jövedelem,
+  álláskeresők).
+- **A négy keresztmetszet** minden megyei és járási lapon, a terület saját
+  településeire.
+- **Hol áll Magyarország Európában?** Az Eurostat magyar és EU-27 idősora
+  (Q forrás): 2023-ban 472,7 kontra 237,7 elkerülhető halálozás 100 ezer
+  lakosra. Az NNGYK-adatok az Eurostat felosztása szerint is (a mindkét
+  listán szereplő okok fele-fele).
+- **A főoldalon két új eredmény** az elemzőből (támogatott háziorvosi
+  körzetek kontra illesztett párok; a legalább tíz éve üres fogorvosi
+  körzetek), és a „Mit nézz meg ezután?” új sorrendje: megye, járás, elemző,
+  miért fontos.
+- A településlap oldalsávja hangsúlyosabb, kiemeli az aktuális részt, és
+  mobilon a fejléc alatt jelenik meg.
+- A lábléc forrás- és jogi része összecsukható, alapból összecsukva.
+
+### Javítva
+- A településlapok „A járás egészségi adatai →” linkje hibás járásnevet
+  adott át („Kalocsai?m=…”).
+- A járási térképen a budapesti kiemelés belelógott az Alföldbe, a kiírás
+  az ország északnyugati részébe; most három, egymást nem fedő sáv.
+- „középső település / járás” helyett medián.
+- A régi `oep-ellatas.vercel.app` cím a praxisterkep.hu-ra irányít; a
+  beágyazási kód és a letöltési példa mindig a valódi címet mutatja.
+- A módszertan: a tartós betöltetlenség jogi meghatározása a 313/2011.
+  Korm. rendelet 2. § (1) b) pontja szerint; a térképleírás a járási
+  térképekhez igazítva.
+- Hat régebbi szöveg, amely számhoz ragasztott ragot („a {total}-ből”).
+
+### Eltávolítva
+- **„Ki tartja a körzeteket?”** — név szerint párosított orvosokat
+  körzetek között; két azonos nevű orvost nyilvános azonosító híján nem
+  lehet megkülönböztetni.
+
 ## [1.49.0] — 2026-10-18
 
 Tisztább archívum, igazságosabb összevetés, előrejelzés településre.

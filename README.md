@@ -1,7 +1,7 @@
 # Praxistérkép
 
 [![Havi ETL](https://github.com/ZoliQua/Praxisterkep/actions/workflows/monthly-etl.yml/badge.svg)](https://github.com/ZoliQua/Praxisterkep/actions/workflows/monthly-etl.yml)
-[![Verzió](https://img.shields.io/badge/verzi%C3%B3-1.49.0-blue)](CHANGELOG.md)
+[![Verzió](https://img.shields.io/badge/verzi%C3%B3-1.50.0-blue)](CHANGELOG.md)
 [![Licenc: MIT](https://img.shields.io/badge/licenc-MIT-green.svg)](LICENSE.md)
 [![Python 3.12](https://img.shields.io/badge/Python-3.12-3776ab?logo=python&logoColor=white)](etl/)
 [![React 19](https://img.shields.io/badge/React-19-61dafb?logo=react&logoColor=black)](web/)
@@ -51,13 +51,15 @@ megmarad.
 | [Térkép](https://praxisterkep.hu/) (`index.html`) | Betöltetlen és megszűnt körzetek pont- és oszlopnézetben, megyei és járási kartogram több mutatóval, idősor-csúszka, megosztható URL; „Hol a háziorvos?” települési kereső; a prevenciós lánc magyarázata |
 | [Megye](https://praxisterkep.hu/megye.html) (`megye.html`) | Egy megye a többi tizenkilenc között: betöltetlenség, járásai, települései, és az **Egészség és életkörülmények** rész — kilenc rangsor (elkerülhető halálozás, jövedelem, álláskeresők, népmozgalom, vándorlás, végzettség, digitális inaktivitás, sürgősségi menetidő, várható betöltetlenség), 12 hónapos előrejelzési görbe, letelepedési támogatások évenként |
 | [Járás](https://praxisterkep.hu/jaras.html) (`jaras.html`) | A 197 egység (174 járás + 23 kerület) mindegyike: körzetek, ügyelet, rangsor, és mérőszalag-kártyák a 174 vidéki járás között (halálozás halálokonként, jövedelem, álláskeresők, népszámlálás, sürgősségi elérés, előrejelzés), a járásban elnyert támogatások |
-| [Település](https://praxisterkep.hu/telepules/) (`/telepules/<slug>/`) | 3177 statikus oldal, JavaScript nélkül olvasható: van-e orvos és ki az (betöltött körzetnél), mióta üres, milyen messze az ellátás autóval és busszal, gyógyszertár, védőnő, korösszetétel, **Hogyan élnek itt?** (jövedelem, álláskeresők idősorral, születés és halálozás, vándorlás, betegforgalom, népszámlálási pontdiagram, támogatással betöltött körzet, a járás előrejelzése és elkerülhető halálozása), egy év változása |
+| [Település](https://praxisterkep.hu/telepules/) (`/telepules/<slug>/`, angolul `/en/telepules/<slug>/`) | 3177 statikus oldal két nyelven, JavaScript nélkül is olvasható: van-e orvos és ki az (betöltött körzetnél), mióta üres, milyen messze az ellátás autóval és busszal, gyógyszertár, védőnő, korösszetétel, **Hogyan élnek itt?** (jövedelem, álláskeresők idősorral, születés és halálozás, vándorlás, betegforgalom, népszámlálási pontdiagram, támogatással betöltött körzet, a járás előrejelzése és elkerülhető halálozása), egy év változása |
 | [Elemző](https://praxisterkep.hu/elemzo.html) (`elemzo.html`) | Országos trendek, háziorvos és fogorvos összevetése, kockázati modell, túlélés-elemzés, **előrejelzés egy évre**, **a letelepedési támogatások sorsa**, települési lefedettség, járási kép, **elkerülhető halálozás**, jövedelem, álláskeresők, népesség, **népszámlálás**, összefüggés-mátrix (nyers / jövedelem / jövedelem + végzettség kiszűrve), ügyelet és mentő, távolság, menetidő, **sürgősségi osztály**, busz, összetett index, keresztmetszetek, hiányterületek |
 | [Ki lát el még?](https://praxisterkep.hu/szakellato.html) (`szakellato.html`) | Védőnői ellátás, járóbeteg- és fekvőbeteg-szakellátás, gyógyszertárak, gyógyászati segédeszköz-forgalmazók |
 | [Módszertan](https://praxisterkep.hu/modszertan.html) (`modszertan.html`) | Minden szám eredete és korlátai, a letölthető adatfájlok, beágyazási kód |
 | [Adatkezelés](https://praxisterkep.hu/adatkezeles.html) (`adatkezeles.html`) | Adatkezelési tájékoztató |
 | `eeszt.html` | Munkajegyzet két nyilvános nyilvántartás összevetéséről (nincs a menüben, a láblécből érhető el) |
 | `embed.html` | Beágyazható térkép más oldalakra |
+
+Az oldal két nyelvű: a HU/EN váltó minden oldal fejlécében ott van.
 
 Minden diagram interaktív: mértékválasztó chipek, ágváltó, szórásdiagram
 kiemeléssel, kattintható mátrix, megyére váltó előrejelzési görbe, térképek

@@ -26,7 +26,15 @@ export const LINKS = [
 
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
   { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-const minutes = (n) => `${n.toFixed(n < 10 ? 1 : 0).replace('.', ',')} perc`;
+// the caller passes a translator, tr(key, vars), over static.map.* — the map
+// is drawn on a Hungarian and an English page alike; without one it falls back
+// to the Hungarian it was written in
+let TR = null;
+let EN = false;
+const tr = (key, vars, fallback) => (TR ? TR(key, vars) : fallback);
+const minutes = (n) => (EN ? `${n.toFixed(n < 10 ? 1 : 0)} min`
+  : `${n.toFixed(n < 10 ? 1 : 0).replace('.', ',')} perc`);
+const linkLabel = (l) => tr(`links.${l.key}`, {}, l.label);
 
 /** Equirectangular projection; at this scale nothing better is warranted. */
 function projector(bbox) {
@@ -105,7 +113,9 @@ function pad(box, share = 0.06) {
  * geo: { counties, cities, settlements } — the GeoJSON files the build
  * already copies into public/data.
  */
-export function countyMap(profile, geo) {
+export function countyMap(profile, geo, translate = null, lang = 'hu') {
+  TR = translate;
+  EN = lang === 'en';
   const county = geo.counties.features.find((f) => f.properties.name === profile.county);
   if (!county) return '';
   // in the capital the county outline is one blob: the districts are what a
@@ -190,8 +200,8 @@ export function countyMap(profile, geo) {
   const lines = [...byTown.entries()].map(([at, group]) => {
     const [tx, ty] = xy(group[0].coords);
     const text = group.length === 1
-      ? `${at} · ${group[0].label.toLowerCase()} ${minutes(group[0].minutes)}`
-      : `${at} · ${group.map((g) => `${g.label.toLowerCase()} ${minutes(g.minutes)}`)
+      ? `${at} · ${linkLabel(group[0]).toLowerCase()} ${minutes(group[0].minutes)}`
+      : `${at} · ${group.map((g) => `${linkLabel(g).toLowerCase()} ${minutes(g.minutes)}`)
         .join(' · ')}`;
     const spot = labels.place(tx + 7, ty + 4, text.length * 5.6);
     const strokes = group.map((t, i) => `
@@ -230,8 +240,8 @@ export function countyMap(profile, geo) {
   // the switches: a checkbox per layer, so the map can be read one question
   // at a time. No script — the stylesheet hides what is unchecked.
   const toggles = [
-    ...targets.map((t) => ({ key: t.key, label: t.label, color: t.color })),
-    { key: 'jarasseat', label: 'Járásszékhelyek', color: '#51637a' },
+    ...targets.map((t) => ({ key: t.key, label: linkLabel(t), color: t.color })),
+    { key: 'jarasseat', label: tr('jarasSeats', {}, 'Járásszékhelyek'), color: '#51637a' },
   ];
   const legend = toggles.length
     ? `<p class="tp-maplegend tp-maplegend--toggles">${toggles.map((t) => `
@@ -245,12 +255,13 @@ export function countyMap(profile, geo) {
       const t = (profile.travel ?? {})[l.key];
       return t && t.at === profile.settlement;
     })
-    .map((l) => l.label);
+    .map((l) => linkLabel(l));
 
   return `<figure class="tp-map">
   ${legend}
   <svg viewBox="0 0 ${W} ${height}" width="100%" height="auto" role="img"
-    aria-label="${esc(profile.settlement)} elhelyezkedése ${esc(profile.county)} megyében">
+    aria-label="${esc(tr('aria', { name: profile.settlement, county: profile.county },
+    `${profile.settlement} elhelyezkedése ${profile.county} megyében`))}">
     <path d="${path}" fill="#131d2b" stroke="#2a3b52" stroke-width="1.2"/>${innerPath ? `
     <path d="${innerPath}" fill="none" stroke="#2a3b52" stroke-width="0.7"
       opacity="0.9"/>` : ''}${minePath ? `
@@ -264,11 +275,11 @@ export function countyMap(profile, geo) {
       y="${(mine?.y ?? hy + 4.5).toFixed(1)}"${mine?.anchorEnd ? ' text-anchor="end"' : ''}
       font-size="13.5" font-weight="700" fill="#f8fafc">${esc(profile.settlement)}</text>
   </svg>
-  <figcaption>${esc(profile.county)} megye${profile.district
-    ? `, ${esc(profile.district)} járás (kiemelve)` : ''}. A vékony vonalak
-    járáshatárok, a kis pontok járásszékhelyek. A szaggatott vonal nem útvonal,
-    hanem kapcsolat: a felirat a közúton számított menetidőt mondja.${
-  inPlace.length ? ` Helyben van: ${esc(inPlace.join(', '))}.` : ''}</figcaption>
+  <figcaption>${esc(tr('caption', {
+    county: profile.county,
+    district: profile.district ? tr('captionDistrict', { district: profile.district }) : '',
+    inPlace: inPlace.length ? tr('inPlace', { list: inPlace.join(', ') }) : '',
+  }, `${profile.county} megye${profile.district ? `, ${profile.district} járás (kiemelve)` : ''}. A vékony vonalak járáshatárok, a kis pontok járásszékhelyek. A szaggatott vonal nem útvonal, hanem kapcsolat: a felirat a közúton számított menetidőt mondja.${inPlace.length ? ` Helyben van: ${inPlace.join(', ')}.` : ''}`))}</figcaption>
 </figure>`;
 }
 
@@ -278,7 +289,8 @@ export function countyMap(profile, geo) {
  * settlement is picked out — this one is a sign above a list, so the reader
  * knows which part of the country the next hundred names belong to.
  */
-export function countyThumb(countyName, geo, width = 190, height = 120) {
+export function countyThumb(countyName, geo, width = 190, height = 120, translate = null) {
+  TR = translate;
   const county = geo.counties.features.find((f) => f.properties.name === countyName);
   if (!county) return '';
   const box = pad(bboxOf(county.geometry.coordinates), 0.04);
@@ -311,6 +323,6 @@ export function countyThumb(countyName, geo, width = 190, height = 120) {
       fill="${seat ? '#cbd5e1' : '#94a3b8'}">${esc(f.properties.name)}</text>` : ''}`;
   }).join('');
   return `<svg class="tp-thumb" viewBox="0 0 ${width} ${height}" width="${width}"
-    height="${height}" role="img" aria-label="${esc(countyName)} megye">
+    height="${height}" role="img" aria-label="${esc(tr('thumbAria', { county: countyName }, `${countyName} megye`))}">
     <path d="${path}" fill="#131d2b" stroke="#2a3b52" stroke-width="1"/>${dots}</svg>`;
 }

@@ -262,3 +262,29 @@ def test_settlement_chance_combines_filled_risk_and_refill():
     # no district vacant in a year: F1 keeps its doctor and V1 is refilled
     assert row["pAnyVacant"] == pytest.approx(1 - 0.8 * q, abs=1e-3)
     assert row["topDecile"] == 1                   # the only filled one is the top tenth
+
+
+# --------------------------------------------------------------- Eurostat
+
+def test_eurostat_series_parse_and_add_up():
+    import eurostat_avoidable as eu
+    archived = sorted(eu.RAW.glob("hlth_cd_apr_*.json.gz"))
+    if not archived:
+        pytest.skip("Eurostat response not archived")
+    import gzip, json
+    series = eu.parse(json.loads(gzip.decompress(archived[-1].read_bytes())))
+    hu, euro = series["hu"], series["eu"]
+    assert hu["avoidable"] and euro["avoidable"]
+    year = max(hu["avoidable"])
+    # treatable + preventable is Eurostat's total, and Hungary sits above the EU
+    assert abs(hu["treatable"][year] + hu["preventable"][year] - hu["avoidable"][year]) <= 1.0
+    assert hu["avoidable"][year] > euro["avoidable"][year]
+
+
+def test_eurostat_guard_refuses_halves_that_do_not_add_up():
+    import eurostat_avoidable as eu
+    bad = {"series": {"hu": {"avoidable": {"2023": 470.0}, "treatable": {"2023": 100.0},
+                             "preventable": {"2023": 100.0}},
+                      "eu": {"avoidable": {"2023": 240.0}, "treatable": {}, "preventable": {}}}}
+    with pytest.raises(ParseError):
+        eu.guard(bad)
