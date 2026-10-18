@@ -197,3 +197,21 @@ def test_second_order_partial_matches_first_order_when_w_is_unrelated():
     # with w uncorrelated with everything, r_xy·zw = r_xy·z
     first = outcomes.partial(0.5, 0.3, 0.4)
     assert outcomes.partial2(0.5, 0.3, 0.4, 0.0, 0.0, 0.0) == pytest.approx(first)
+
+
+# --------------------------------------------------------- settlement names
+
+def test_gazetteer_lookup_never_lets_a_folded_pair_collide():
+    from parse_ksh import KshRef
+    ref = KshRef([
+        {"name": "Komló", "county": "Baranya", "population": 22000, "isDistrictOfCapital": False},
+        {"name": "Kömlő", "county": "Heves", "population": 900, "isDistrictOfCapital": False},
+        {"name": "Győr", "county": "Győr-Moson-Sopron", "population": 130000,
+         "isDistrictOfCapital": False},
+    ])
+    assert ref.lookup("Kömlő")["population"] == 900
+    assert ref.lookup("Komló")["population"] == 22000
+    assert ref.lookup("Kömlo")["name"] == "Kömlő"      # the ö it kept decides
+    assert ref.lookup("Komlo") is None                  # nothing decides: no guess
+    assert ref.canonical("Gyor") == "Győr"
+    assert ref.canonical("Nincsilyen") == "Nincsilyen"

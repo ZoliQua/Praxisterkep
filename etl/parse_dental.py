@@ -94,7 +94,13 @@ def resolve_capital(settlement: str, postal: str = "") -> str:
     The KSH gazetteer is the authority for settlement names and calls it
     "Budapest 08. ker."; everything is folded onto that. A bare "Budapest"
     has its kerület read off the postal code, and only when that names one of
-    the 23. Every other settlement is returned untouched.
+    the 23.
+
+    Every other settlement gets the gazetteer's spelling too. Since 2026 the
+    dental vacancy list drops ő and ű — "Gyor", "Hejokeresztúr", "Csengod" —
+    and a settlement page keyed by the gazetteer's name never met those
+    districts. The accent-folded match is used only where it names a single
+    place; without an archived gazetteer the name passes through unchanged.
     """
     # parse_ksh takes ParseError from here, so the import cannot be at the
     # top of the module; after the first call it is a dict lookup
@@ -109,7 +115,21 @@ def resolve_capital(settlement: str, postal: str = "") -> str:
         number = int(match.group(1))
         return f"Budapest {number:02d}. ker." if 1 <= number <= 23 else name
     match = CAPITAL_KEY_RE.match(key)
-    return f"Budapest {match.group(1)}. ker." if match else name
+    if match:
+        return f"Budapest {match.group(1)}. ker."
+    ref = _gazetteer()
+    return ref.canonical(name) if ref else name
+
+
+_GAZETTEER: list = []
+
+
+def _gazetteer():
+    """The archived KSH gazetteer, loaded once per run (None if absent)."""
+    if not _GAZETTEER:
+        from parse_ksh import load_reference
+        _GAZETTEER.append(load_reference())
+    return _GAZETTEER[0]
 
 
 HU_MONTHS = {
