@@ -1,0 +1,90 @@
+{
+  "files": {
+    "settle_gp_2019.pdf": {
+      "url": "https://neak.gov.hu/pfile/file?path=/letoltheto/altfin_dok/altfin_virt_dok2/Alapellatas/hsz-fog-palyazatok/Hsz_fog_letelepedes_palyazat_2019/nyert_letel_hsz_2019&inline=true",
+      "retrieved": "2026-10-18",
+      "sha256": "a7aa4cc283ee387517989a71a714db31a0aa33e903281e2e28413cdb67bc12de"
+    },
+    "settle_dental_2019.pdf": {
+      "url": "https://neak.gov.hu/pfile/file?path=/letoltheto/altfin_dok/altfin_virt_dok2/Alapellatas/hsz-fog-palyazatok/Hsz_fog_letelepedes_palyazat_2019/nyert_letel_fog_2019&inline=true",
+      "retrieved": "2026-10-18",
+      "sha256": "5c4f0fd5517ea751d32982434e0dbfa27b1205dc3cd4c99954d2de3fecf4d7af"
+    },
+    "settle_gp_2021.pdf": {
+      "url": "https://neak.gov.hu/pfile/file?path=/letoltheto/altfin_dok/altfin_virt_dok2/Alapellatas/hsz-fog-palyazatok/hsz_fog_letel_2021/palyzat_nyertes_letel_hsz_2021&inline=true",
+      "retrieved": "2026-10-18",
+      "sha256": "0f9976501187a8259b55af72b3e289dbebb8dfbd3d44f95313dadfc2d84b841b"
+    },
+    "settle_dental_2021.pdf": {
+      "url": "https://neak.gov.hu/pfile/file?path=/letoltheto/altfin_dok/altfin_virt_dok2/Alapellatas/hsz-fog-palyazatok/hsz_fog_letel_2021/palyzat_nyertes_letel_fog_2021&inline=true",
+      "retrieved": "2026-10-18",
+      "sha256": "207fcabbe1182262d241947f84bc066ba72b14c40e1f0b4f75cf93bd83147a46"
+    },
+    "settle_gp_2022.pdf": {
+      "url": "https://neak.gov.hu/pfile/file?path=/letoltheto/altfin_dok/altfin_virt_dok2/Alapellatas/hsz-fog-palyazatok/hsz_fog_letel_2022/palyzat_nyertes_letel_hsz_2022&inline=true",
+      "retrieved": "2026-10-18",
+      "sha256": "f443764ef8db81c8626c3d047997ac87069052d1908487d02fc8c33f4474da7b"
+    },
+    "settle_dental_2022.pdf": {
+      "url": "https://neak.gov.hu/pfile/file?path=/letoltheto/altfin_dok/altfin_virt_dok2/Alapellatas/hsz-fog-palyazatok/hsz_fog_letel_2022/palyzat_nyertes_letel_fog_2022&inline=true",
+      "retrieved": "2026-10-18",
+      "sha256": "4f0faa4c0e79579793341544d842038bb5b84c81ed0fb5883d9ac17adba6dd65"
+    },
+    "settle_gp_2023.pdf": {
+      "url": "https://neak.gov.hu/pfile/file?path=/letoltheto/altfin_dok/altfin_virt_dok2/Alapellatas/hsz-fog-palyazatok/hsz_fog_letel_2023_2/palyazat_nyertes_letel_hsz_2022&inline=true",
+      "retrieved": "2026-10-18",
+      "sha256": "bbb32a6468e339b118fbc0dd5aea1f49f3f639abc58f76a1ee10b9687765b8da"
+    },
+    "settle_dental_2023.pdf": {
+      "url": "https://neak.gov.hu/pfile/file?path=/letoltheto/altfin_dok/altfin_virt_dok2/Alapellatas/hsz-fog-palyazatok/hsz_fog_letel_2023_2/palyazat_nyertes_letel_fog_2023&inline=true",
+      "retrieved": "2026-10-18",
+      "sha256": "965e563cb5844ed38de8844816c6db397cd41aa003c0a21c0efcfae9b20ad1ae"
+    },
+    "settle_gp_2024.pdf": {
+      "url": "https://neak.gov.hu/pfile/file?path=/letoltheto/altfin_dok/altfin_virt_dok2/Alapellatas/hsz-fog-palyazatok/hsz_fog_letel_2024/palyazat_nyertes_letel_hsz_2024&inline=true",
+      "retrieved": "2026-10-18",
+      "sha256": "7390df64dab636f7cbe0585df61e726b162933f9f766f5de1e2c1526d5767335"
+    },
+    "settle_dental_2024.pdf": {
+      "url": "https://neak.gov.hu/pfile/file?path=/letoltheto/altfin_dok/altfin_virt_dok2/Alapellatas/hsz-fog-palyazatok/hsz_fog_letel_2024/palyazat_nyertes_letel_fog_2024&inline=true",
+      "retrieved": "2026-10-18",
+      "sha256": "f082ba84fec200f37483789a8b791c81a9c6b7a3fd6d9835dd244878e5a126bd"
+    },
+    "settle_gp_2025.pdf": {
+      "url": "https://neak.gov.hu/pfile/file?path=/letoltheto/altfin_dok/altfin_virt_dok2/Alapellatas/hsz-fog-palyazatok/hsz_fog_letel_2025/kozlemeny-nyertesekrol_letelepedes_haziorvos_2025&inline=true",
+      "retrieved": "2026-10-18",
+      "sha256": "bb1bea6a7d77e3ddeeb47dd75026ae509f87b3b9758a17ed624d60757f9a7c15"
+    },
+    "settle_dental_2025.pdf": {
+      "url": "https://neak.gov.hu/pfile/file?path=/letoltheto/altfin_dok/altfin_virt_dok2/Alapellatas/hsz-fog-palyazatok/hsz_fog_letel_2025/kozlemeny-nyertesekrol_letelepedes_fogaszat-2025&inline=true",
+      "retrieved": "2026-10-18",
+      "sha256": "c36955206b54d757191b00df7a9f7ffa192447c83ddfdc1f4ce7b6da34e02b57"
+    },
+    "practice_gp_2021.pdf": {
+      "url": "https://neak.gov.hu/pfile/file?path=/letoltheto/altfin_dok/altfin_virt_dok2/Alapellatas/hsz-fog-palyazatok/hsz_prjog_2021/palyzat_nyertes_prjog_hsz_2021&inline=true",
+      "retrieved": "2026-10-18",
+      "sha256": "67f14b853e13e712e6d3f99f34f14886862ab4ed6a6e8724f3c7a83e9ba7561b"
+    },
+    "practice_gp_2022.pdf": {
+      "url": "https://neak.gov.hu/pfile/file?path=/letoltheto/altfin_dok/altfin_virt_dok2/Alapellatas/hsz-fog-palyazatok/hsz_prjog_2022/palyzat_nyertes_prjog_hsz_2022&inline=true",
+      "retrieved": "2026-10-18",
+      "sha256": "c99feb26ee4e5b15ac36816a3c28d9495459a530ccd006d29bcf681cf076ccb5"
+    },
+    "practice_gp_2023.pdf": {
+      "url": "https://neak.gov.hu/pfile/file?path=/letoltheto/altfin_dok/altfin_virt_dok2/Alapellatas/hsz-fog-palyazatok/hsz_fog_letel_2023_2/palyazat_nyertes_prjog_hsz_2023&inline=true",
+      "retrieved": "2026-10-18",
+      "sha256": "5387f18b5111c9074a01db3f7b38abfb41bd41583a76fa79de7cf5a900e6b977"
+    },
+    "practice_gp_2024.pdf": {
+      "url": "https://neak.gov.hu/pfile/file?path=/letoltheto/altfin_dok/altfin_virt_dok2/Alapellatas/hsz-fog-palyazatok/hsz_fog_prjog_2024/palyazat_nyertes_prjog_hsz_2024&inline=true",
+      "retrieved": "2026-10-18",
+      "sha256": "abc356df835637ea4f628921868368fa66987c749774a5569b2259185316d5af"
+    },
+    "practice_gp_2025.pdf": {
+      "url": "https://neak.gov.hu/pfile/file?path=/letoltheto/altfin_dok/altfin_virt_dok2/Alapellatas/hsz-fog-palyazatok/hsz_fog_prjog_2025/kozlemeny-nyertesekrol_praxisjog_haziorvos_2025&inline=true",
+      "retrieved": "2026-10-18",
+      "sha256": "98c5da4496e4f9f233986472d739d840f3fa2d1977003f8032ca85a707ba8ebb"
+    }
+  },
+  "page": "https://neak.gov.hu/felso_menu/szakmai_oldalak/gyogyito_megeleozo_ellatas/alapellatas/haziorvosi_ellatas/archivum"
+}
