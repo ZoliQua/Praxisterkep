@@ -29,6 +29,7 @@ import { SideNav } from './SideNav';
 import { sideGroups } from '../lib/sideGroups';
 import { NextSteps } from './NextSteps';
 import { Footer } from './Footer';
+import { PdfButton } from './PdfButton';
 
 const COUNTY_GROUPS = sideGroups('county');
 
@@ -146,7 +147,10 @@ export function CountyPage() {
       <PageNav kind={kind} onKind={setKind} />
       <SideNav groups={COUNTY_GROUPS} labelKey="sideNav.county.label" />
       <section className="section container" id="varmegye">
-        <h1 className="section__heading">{t('county.heading')}</h1>
+        <div className="heading-row">
+          <h1 className="section__heading">{t('county.heading')}</h1>
+          {agg && <PdfButton level="county" name={agg.name} />}
+        </div>
         <p className="section__lead">{t('county.lead')}</p>
 
         <CountyPicker />

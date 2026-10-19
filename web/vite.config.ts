@@ -23,6 +23,8 @@ export default defineConfig({
         privacy: resolve(__dirname, 'adatkezeles.html'),
         // not a page: the lazy street map the static settlement pages load
         streetmap: resolve(__dirname, 'src/streetmap.ts'),
+        // not a page either: the PDF export button of the static settlement pages
+        pdfexport: resolve(__dirname, 'src/pdfexport.ts'),
       },
     },
   },

@@ -191,6 +191,27 @@ const streetFile = env.VITE_MAP_STYLE
   ? readdirSync(join(dist, 'assets')).find((f) => /^streetmap-.*\.js$/.test(f))
   : null;
 
+// the PDF export the settlement pages offer (src/pdfexport.ts): the button is
+// written hidden, and only the script shows it, so without JavaScript there
+// is no button that does nothing
+const pdfFile = readdirSync(join(dist, 'assets')).find((f) => /^pdfexport-.*\.js$/.test(f)) ?? null;
+
+/** The settlement's own numbers, inline, for the PDF export to read. */
+function pdfData(profile) {
+  if (!pdfFile) return '';
+  const payload = { profile, dataMonth: profiles.dataMonth, national: {
+    age: profiles.national?.age, jobseekers: profiles.national?.jobseekers } };
+  // "<" escaped, so no value can close the script element early
+  return `\n<script type="application/json" id="pdf-data">${
+    JSON.stringify(payload).replace(/</g, '\\u003c')}</script>`;
+}
+
+const pdfButton = () => (pdfFile ? `<button type="button" class="pdf-btn" data-pdf-export hidden
+    title="${esc(label('pdf.buttonTitleStatic'))}"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none"
+    stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path
+    d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5M12 11v6M9.5 14.5 12 17l2.5-2.5"/></svg><span>${
+  esc(label('pdf.button'))}</span></button>` : '');
+
 const streetLabel = (kind) => S(`street.label.${kind}`, {}, kind);
 const STREET_COLORS = {
   gp: '#4fd6c2', dental: '#8ab4ff', pharmacy: '#c88ff0', oncall: '#f0b429',
@@ -1678,7 +1699,8 @@ function page(profile) {
 <link rel="canonical" href="${site}${esc(pagePath(profile.slug))}">
 ${alternates(profile.slug)}
 <link rel="stylesheet" href="/assets/${esc(cssFile)}">${streetFile ? `
-<script type="module" src="/assets/${esc(streetFile)}" defer></script>` : ''}
+<script type="module" src="/assets/${esc(streetFile)}" defer></script>` : ''}${pdfFile ? `
+<script type="module" src="/assets/${esc(pdfFile)}" defer></script>` : ''}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900;1,62..125,400..900&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap&subset=latin-ext" rel="stylesheet">
@@ -1696,9 +1718,12 @@ ${menuScript()}
 
 <header class="section container">
   <p class="tp-kicker">${esc(county)}${district ? ` · ${esc(S('page.kickerDistrict', { district }))}` : ''} · ${esc(S('page.kickerPop', { n: num(profile.population) }))}${profile.benefit ? ` · ${esc(S('page.kickerBenefit'))}` : ''}</p>
-  <h1 class="section__heading">${esc(settlement)}</h1>
+  <div class="heading-row">
+    <h1 class="section__heading">${esc(settlement)}</h1>
+    ${pdfButton()}
+  </div>
   <p class="section__lead">${esc(S('page.lead'))}</p>
-</header>
+</header>${pdfData(profile)}
 
 ${sectionRail(present)}
 

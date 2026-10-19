@@ -64,6 +64,12 @@ administrative boundaries” felirattal. Az OECD-ből származó számok (R forr
 CC BY 4.0 alatt, az OECD megjelölésével használhatók; az itteni feldolgozás és
 összevetés a szerző munkája, nem az OECD hivatalos álláspontja.
 
+A PDF-export betűtípusai — **IBM Plex Sans**, **Source Serif 4** és
+**Roboto** — a [SIL Open Font License 1.1](https://openfontlicense.org/)
+alatt állnak (szerzőik: IBM Corp., a Source Serif 4 és a Roboto projekt szerzői); az oldal
+változatlanul szolgálja ki őket, és a PDF-be beágyazhatók. A PDF-et a
+[pdfmake](https://github.com/bpampuch/pdfmake) (MIT) készíti.
+
 Az oldal orvosnevet kizárólag a betöltött praxisoknál, a NEAK nyilvános
 szolgáltatói törzséből jelenít meg. A pályázati nyertesek nevét az adatok
 nem tartalmazzák; a `data/raw/neak_grants/` alatti eredeti NEAK-dokumentumok
@@ -82,3 +88,9 @@ outlines) is derived from GISCO and may be used **for non-commercial purposes
 only**, with the notice "© EuroGeographics for the administrative
 boundaries". OECD figures (source R) are CC BY 4.0, credited to the OECD; the
 processing and comparisons here are the author's, not an official OECD view.
+
+The PDF export's fonts — **IBM Plex Sans**, **Source Serif 4** and **Roboto** —
+are under the [SIL Open Font License 1.1](https://openfontlicense.org/) (by
+IBM Corp. and the Source Serif 4 and Roboto project authors); the site serves them
+unchanged, and they may be embedded in the PDFs. The PDFs are made with
+[pdfmake](https://github.com/bpampuch/pdfmake) (MIT).

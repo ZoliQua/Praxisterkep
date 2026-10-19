@@ -2230,7 +2230,7 @@
     },
     "storage": {
       "title": "What your browser keeps",
-      "text": "Your language choice, map-layer settings and your cookie decision. These stay on your device and never reach us."
+      "text": "Your language choice, map-layer settings, your last PDF export settings and your cookie decision. These stay on your device and never reach us."
     },
     "rights": {
       "title": "Your rights",
@@ -3727,6 +3727,450 @@
     "settlements": {
       "label": "Counties",
       "group": "Counties"
+    }
+  },
+  "pdf": {
+    "button": "PDF",
+    "buttonTitle": "Make a PDF report: {name}",
+    "buttonTitleStatic": "Make a PDF report on this settlement",
+    "yes": "yes",
+    "kind": {
+      "county": "County report",
+      "district": "District (járás) report",
+      "settlement": "Settlement report"
+    },
+    "title": {
+      "jaras": "{name} district",
+      "kerulet": "{name}"
+    },
+    "file": {
+      "county": "county",
+      "district": "district",
+      "settlement": "settlement"
+    },
+    "branchLine": {
+      "both": "GP and dental primary care",
+      "gp": "GP primary care",
+      "dental": "dental primary care"
+    },
+    "footer": {
+      "line": "Praxis Map (Praxistérkép) · {version} · {url} · An analysis built from public data",
+      "made": "Made on {date}",
+      "page": "page {page} of {pages}"
+    },
+    "section": {
+      "summary": "Summary",
+      "age": "Age structure",
+      "care": "Care: districts and settlements",
+      "churn": "Doctor turnover",
+      "access": "Access",
+      "ranking": "Ranking",
+      "outcomes": "Health and living conditions",
+      "forecast": "Forecast",
+      "districts": "Districts of the county",
+      "settlements": "Settlements",
+      "development": "Development",
+      "transit": "Public transport",
+      "index": "Composite care-risk index",
+      "living": "Living conditions",
+      "jobseekers": "Jobseekers",
+      "change": "Change over a year",
+      "pharmacies": "Pharmacies",
+      "notes": "Sources and notes on method",
+      "dataMonth": "Data as of"
+    },
+    "fact": {
+      "population": "Population",
+      "settlements": "Settlements",
+      "county": "County",
+      "district": "District (járás)",
+      "seat": "District seat",
+      "area": "Area",
+      "pharmacies": "Pharmacies",
+      "benefit": "Beneficiary settlement",
+      "longTerm": "of which vacant long-term",
+      "dissolved": "Dental districts with a dissolved contract",
+      "districts": {
+        "gp": "GP districts",
+        "dental": "Dental districts"
+      },
+      "vacant": {
+        "gp": "Vacant GP districts",
+        "dental": "Vacant or dissolved dental districts"
+      },
+      "vacantOnly": {
+        "gp": "Vacant GP districts",
+        "dental": "Vacant dental districts"
+      },
+      "rate": {
+        "gp": "Share of vacant GP districts",
+        "dental": "Share of vacant or dissolved dental districts"
+      },
+      "state": {
+        "gp": "GP care",
+        "dental": "Dental care"
+      },
+      "counts": {
+        "gp": "GP districts serving it",
+        "dental": "Dental districts serving it"
+      },
+      "countsValue": "{filled} filled, {vacant} vacant or dissolved",
+      "index": "Composite care-risk index"
+    },
+    "summary": {
+      "county": "{name}: {population} residents in {settlements} settlements.",
+      "district": "{name} ({county}), seat {seat}: {population} residents in {settlements} settlements.",
+      "settlement": "{name} ({district}, {county}): {population} residents.",
+      "vacancy": {
+        "gp": "GP districts: {total}, of which {vacant} vacant ({rate}). Rank by vacancy rate among {scope}: {rank}.",
+        "dental": "Dental districts: {total}, of which {vacant} vacant or with a dissolved contract ({rate}). Rank by vacancy rate among {scope}: {rank}."
+      }
+    },
+    "scope": {
+      "counties": "the 20 counties (Budapest included)",
+      "jaras": "the rural districts",
+      "kerulet": "the Budapest kerület"
+    },
+    "rank": {
+      "of": "{rank} of {of} (1 = the most favourable)",
+      "short": "{rank} / {of}"
+    },
+    "age": {
+      "young": "Aged 0–14",
+      "working": "Aged 15–64",
+      "old": "Aged 65+",
+      "text": "In {name}, {old} of residents are over 65 and {young} under 15. Nationally, the share over 65 is {national}.",
+      "chartTitle": "Age structure: {name}",
+      "chartNational": "Age structure: Hungary",
+      "caption": "Source: KSH, 2022 census. The bands show each age group's share of the resident population.",
+      "captionNational": "Source: KSH, 2022 census, national figure — for comparison."
+    },
+    "state": {
+      "filled": "has a filled district",
+      "partial": "has both filled and vacant districts",
+      "vacantOnly": "served by vacant districts only",
+      "absent": "named by no district"
+    },
+    "stateShort": {
+      "filled": "filled",
+      "partial": "mixed",
+      "vacantOnly": "vacant only",
+      "absent": "no district"
+    },
+    "settlementState": {
+      "filled": "has a filled district",
+      "partial": "has both filled and vacant districts",
+      "vacantOnly": "served by vacant districts only",
+      "absent": "named on no district's list"
+    },
+    "care": {
+      "caveat": "A vacant district is not an unserved one: its residents are mostly seen by a substitute doctor, usually from another settlement, for limited hours. Substitution does not show in the public data.",
+      "districts": {
+        "gp": "GP districts: {total}. Vacant: {vacant} ({rate}), of which legally long-term vacant: {longTerm}.",
+        "dental": "Dental districts: {total}. Vacant: {vacant}, with a dissolved contract: {dissolved}; together {rate}. Long-term vacant: {longTerm}."
+      },
+      "settlements": {
+        "gp": "Settlements by GP care: {filled} have filled districts only, {partial} have both filled and vacant ones, {vacantOnly} are served by vacant districts only, {absent} are named by no district.",
+        "dental": "Settlements by dental care: {filled} have filled districts only, {partial} have both filled and vacant ones, {vacantOnly} are served by vacant districts only, {absent} are named by no district."
+      },
+      "chartTitle": {
+        "gp": "Settlements by GP care",
+        "dental": "Settlements by dental care"
+      },
+      "caption": "How the settlements divide by the districts that serve them, from NEAK's registry and its monthly vacancy lists.",
+      "surgeriesText": "Surgeries of the filled districts in the settlement ({n}). A doctor's name appears only where NEAK itself publishes it.",
+      "noSurgery": "No filled district has a surgery here in the chosen branch.",
+      "vacantText": "Vacant or dissolved districts serving the settlement ({n}). These carry no doctor's name.",
+      "fromStart": "{month} or earlier"
+    },
+    "churn": {
+      "caveat": "A change of name is not necessarily a departure: a marriage, a typo or a registry correction can cause one. The figures come from our own monthly archive.",
+      "text": {
+        "gp": "GP care: in the last 12 months there were {changes} changes of doctor in {districts} filled districts, {rate} per 100 districts. In half the districts the same doctor has practised for at least {years} years; in {unchanged} districts the doctor has not changed since the archive began.",
+        "dental": "Dental care: in the last 12 months there were {changes} changes of doctor in {districts} filled districts, {rate} per 100 districts. In half the districts the same doctor has practised for at least {years} years; in {unchanged} districts the doctor has not changed since the archive began."
+      },
+      "chartTitle": {
+        "gp": "GP changes per 100 districts, 12 months, by county",
+        "dental": "Dentist changes per 100 districts, 12 months, by county"
+      },
+      "caption": "The subject of the report is highlighted. Source: archived snapshots of NEAK's monthly registry."
+    },
+    "access": {
+      "text": "Driving time in free-flowing traffic on the OpenStreetMap road network, the median of the settlements: half the area's settlements are closer, half farther.",
+      "gp": "GP surgery",
+      "dental": "Dental surgery",
+      "oncall": "Out-of-hours service",
+      "inpatient": "Hospital (inpatient care)",
+      "noBus": "Settlements without a direct bus (to a GP)",
+      "oncallPoints": "Out-of-hours points",
+      "ambulance": "Ambulance stations",
+      "chartTitle": "Median driving time to the nearest care",
+      "caption": "Minutes, the median of the area's settlements. Source: OpenStreetMap (ODbL), NEAK, own calculation.",
+      "settlementText": "Driving time from the settlement to the nearest place of care, in free-flowing traffic on the OpenStreetMap road network. 0 minutes: the care is in the settlement.",
+      "settlementChart": "Driving time to the nearest care",
+      "settlementCaption": "Minutes. GP and dental surgeries highlighted. Source: OpenStreetMap (ODbL), NEAK, own calculation."
+    },
+    "travel": {
+      "gp": "GP",
+      "dental": "Dentist",
+      "pharmacy": "Pharmacy",
+      "outpatient": "Outpatient specialist care",
+      "gyse": "Medical aids",
+      "oncall": "Out-of-hours service",
+      "ambulance": "Ambulance station",
+      "inpatient": "Hospital",
+      "sbo": "Emergency department"
+    },
+    "ranking": {
+      "countyText": "The counties by the share of vacant districts, from the highest to the lowest.",
+      "districtText": "The districts of the same county ({county}) by the share of vacant districts, from the highest to the lowest.",
+      "chartTitle": {
+        "gp": "Share of vacant GP districts by county",
+        "dental": "Share of vacant or dissolved dental districts by county"
+      },
+      "districtChart": {
+        "gp": "Share of vacant GP districts — {county}, by district",
+        "dental": "Share of vacant or dissolved dental districts — {county}, by district"
+      },
+      "caption": "The subject of the report is highlighted. Source: NEAK monthly vacancy lists and provider registry."
+    },
+    "outcomes": {
+      "countyText": "The county's measures beside the median of the 20 counties. Mortality: NNGYK, {year}; income: KSH TIMEA (tax data), {incomeYear}; jobseekers: NFSZ; education, employment, digital activity, households: KSH 2022 census.",
+      "districtText": "The district's measures beside the median of the 174 rural districts. Mortality: NNGYK, {year}; income: KSH TIMEA (tax data), {incomeYear}; jobseekers: NFSZ; education, employment, digital activity, households: KSH 2022 census.",
+      "rankNote": "Rank: 1 is the most favourable value among the 20 counties (the lowest for mortality, jobseekers and driving time, the highest for income and education). Avoidable mortality per 100,000 residents, age-standardised.",
+      "rankNoteDistrict": "Rank: 1 is the most favourable value among the rural districts (the lowest for mortality, jobseekers and driving time, the highest for income and education). Avoidable mortality per 100,000 residents, age-standardised.",
+      "capitalWide": "A Budapest kerület: income, births, deaths and registered patients are the capital's as a whole, not the kerület's.",
+      "avoidableTitle": "Avoidable mortality per 100,000 residents, by county ({year})",
+      "avoidableDistrictTitle": "Avoidable mortality per 100,000 residents — {county}, by district ({year})",
+      "avoidableCaption": "Deaths under 75 from causes that timely care or effective prevention would have avoided; age-standardised rate. Source: NNGYK mortality database.",
+      "jobseekersTitle": "Jobseekers as a share of the working-age population",
+      "jobseekersCaption": "Per cent. Source: NFSZ settlement data; quarterly before 2024, monthly after.",
+      "countyRef": "For the county as a whole ({county}), avoidable mortality is {avoidable} per 100,000 and the jobseeker share {jobseekers}.",
+      "association": "These measures describe the background; they are not causal explanations. They show the circumstances in which the gaps occur, not that the gaps cause them."
+    },
+    "forecast": {
+      "county": {
+        "gp": "The share of vacant GP districts is {now} now; the model expects {later} in 12 months.",
+        "dental": "The share of vacant or dissolved dental districts is {now} now; the model expects {later} in 12 months."
+      },
+      "district": "The share of vacant GP districts is {now} now; the model expects {later} in 12 months, about {vacant} vacant districts, {fresh} of them newly vacant.",
+      "method": "The estimate: the districts vacant today, less their chance of being filled (Kaplan–Meier, from past vacancy spells), plus the 12-month risk that a filled district falls vacant. An estimate, not a forecast fact; the method is on the methodology page."
+    },
+    "districts": {
+      "text": "The county's {n} districts, ordered by the share of vacant GP districts."
+    },
+    "development": {
+      "text": "The district's complex development indicator is {complex} (Government Decree 290/2014, from 2014 data); its rank is {rank} of {of} ranked districts (1 = the least developed). Classification: {beneficiary}.",
+      "beneficiary": "beneficiary district",
+      "notBeneficiary": "not a beneficiary district",
+      "lagging": "Of the district's {of} settlements, {n} are on the beneficiary list of Government Decree 105/2015; {population} people live in them, a share of {share} of the district's residents.",
+      "chartTitle": "Complex development indicator — {county}, by district",
+      "caption": "A higher value means a more developed district. The subject of the report is highlighted. Source: Government Decree 290/2014 (XI. 26.)."
+    },
+    "settlements": {
+      "textTop": "{scope} has {of} settlements; the list shows the {n} in the highest risk bands, by population within a band.",
+      "textAll": "{scope} has {of} settlements; the list shows them all, by risk band and then population.",
+      "note": "Risk band: the national band of the composite care-risk index (highlighted = the worst 5%). Driving time in minutes. “No district”: no district's list names the settlement."
+    },
+    "band": {
+      "kiemelt": "highest",
+      "magas": "high",
+      "kozepes": "medium",
+      "alacsony": "low"
+    },
+    "branch": {
+      "gp": "GP",
+      "dental": "dentist"
+    },
+    "type": {
+      "adult": "adult",
+      "child": "children's",
+      "mixed": "mixed",
+      "school": "school"
+    },
+    "status": {
+      "vacant": "vacant",
+      "longTerm": "long-term vacant",
+      "dissolved": "contract dissolved"
+    },
+    "transit": {
+      "text": "On an ordinary Wednesday there are {departures} scheduled bus departures from the settlement, and {reachable} other settlements can be reached without changing.",
+      "gp": "To a GP",
+      "oncall": "To out-of-hours care",
+      "inpatient": "To a hospital",
+      "here": "in the settlement ({target})",
+      "direct": "direct bus towards {target}, about {minutes} min",
+      "change": "only with a change, towards {target}, about {minutes} min",
+      "none": "no data",
+      "note": "Source: Volánbusz national timetable (GTFS). Trains are not in the data, because MÁV's timetable is available only after registration; “only with a change” does not mean one cannot get there. Budapest runs on a separate data source, so this part does not apply there."
+    },
+    "index": {
+      "text": "The index is {value} on a 0–100 scale ({band} band); its national rank counting from the highest is {rank} of {of} settlements. 100 marks the worst-placed settlement, not one without care.",
+      "chartTitle": "Parts of the index: national rank percentile",
+      "caption": "Each part is the settlement's place in the national ranking, in per cent: 100 = the worst. Parts in the worst quarter are highlighted.",
+      "note": "The index is a weighted average of public measures; the weights and the calculation are on the methodology page."
+    },
+    "indexPart": {
+      "vacancy": "Vacancy",
+      "gpMin": "Driving time to a GP",
+      "dentalMin": "Driving time to a dentist",
+      "oncallMin": "Driving time to out-of-hours care",
+      "outpatientMin": "Driving time to outpatient care",
+      "inpatientMin": "Driving time to a hospital",
+      "transit": "Bus access",
+      "ageing": "Age structure",
+      "risk": "Risk forecast",
+      "deprivation": "Beneficiary classification"
+    },
+    "living": {
+      "text": "The settlement beside its district, its county and a reference value. Income: KSH TIMEA (tax data), {incomeYear}; births, deaths and migration are four-year averages; census shares are from 2022.",
+      "note": "Reference: the median Hungarian settlement for income and population change, the national value for jobseekers and the census shares. In a small settlement a few births or moves shift the rates a great deal.",
+      "incomeChart": "Income per resident ({year})",
+      "incomeCaption": "Million forints a year, income on which personal income tax is assessed. Source: KSH TIMEA from tax data."
+    },
+    "jobseekers": {
+      "text": "Registered jobseekers as a share of the working-age population: {value} ({month}); {registered} people.",
+      "chartTitle": "Jobseekers as a share of the working-age population",
+      "caption": "Per cent. Source: NFSZ settlement data; quarterly before 2024, monthly after."
+    },
+    "change": {
+      "gp": "GP care: since {month} the vacant or dissolved districts serving the settlement went from {before} to {now}; filled: {resolved}, newly vacant: {fresh}.",
+      "dental": "Dental care: since {month} the vacant or dissolved districts serving the settlement went from {before} to {now}; filled: {resolved}, newly vacant: {fresh}.",
+      "noArrivals": "No new doctor has started in the settlement's districts since {month}."
+    },
+    "pharmacies": {
+      "text": "Pharmacies in the settlement under contract with NEAK ({n}).",
+      "none": "No contracted pharmacy in the settlement; the nearest is in {at}, {minutes}."
+    },
+    "col": {
+      "settlement": "Settlement",
+      "population": "Residents",
+      "band": "Risk band",
+      "gpState": "GP",
+      "dentalState": "Dentist",
+      "gpMin": "GP, min",
+      "oncallMin": "Out-of-hours, min",
+      "measure": "Measure",
+      "value": "Value",
+      "countyMedian": "Median of counties",
+      "ruralMedian": "Median of rural districts",
+      "rank": "Rank",
+      "district": "District",
+      "county": "County",
+      "countryOrMedian": "Reference",
+      "gpVacant": "Vacant GP",
+      "gpRate": "GP share",
+      "dentalRate": "Dental share",
+      "branch": "Branch",
+      "type": "District",
+      "doctor": "Doctor (NEAK)",
+      "address": "Address",
+      "since": "Since",
+      "status": "Status",
+      "vacantSince": "Vacant since",
+      "seat": "Seat",
+      "served": "Residents served",
+      "service": "Care",
+      "nearestAt": "Nearest at",
+      "minutes": "Driving time",
+      "km": "Km",
+      "name": "Name"
+    },
+    "ref": {
+      "national": "National",
+      "district": "District",
+      "county": "County",
+      "median": "Median settlement"
+    },
+    "unit": {
+      "min": "min",
+      "mFt": "m Ft"
+    },
+    "notes": {
+      "data": "The figures come from NEAK’s monthly published lists and the public sources below, as processed each month by Praxis Map. NEAK’s data are for information.",
+      "vacant": "Vacant ≠ unserved: the residents of a vacant district are usually seen by a substitute doctor. Substitution does not show in the public data, so this report does not claim that any place is without care.",
+      "names": "A doctor's name appears only for a filled district, where NEAK itself publishes it; never for a vacant or dissolved one.",
+      "settlement": "The settlement's districts are, in NEAK's registry, those whose catchment lists the settlement; one district may serve several settlements.",
+      "sources": "Sources: NEAK (vacant services, contracted providers), OKFŐ, EESZT, KSH (gazetteer, 2022 census, TIMEA), NNGYK, NFSZ, Volánbusz timetable (GTFS), OpenStreetMap (ODbL), Government Decrees 290/2014 and 105/2015. The full source list and the method: praxisterkep.hu/modszertan.html.",
+      "disclaimer": "Praxis Map is a private initiative, not a publication of NEAK, OKFŐ or any authority. Errors can be reported in the site's GitHub repository: github.com/ZoliQua/Praxisterkep.",
+      "dataMonth": "Data as of {month} — from NEAK’s monthly lists and the related public sources."
+    },
+    "dialog": {
+      "title": "PDF report",
+      "subtitle": {
+        "county": "{name}",
+        "district": "{name}",
+        "settlement": "{name}"
+      },
+      "contents": "What goes in?",
+      "all": "All",
+      "none": "None",
+      "settlementLimit": "Length of the settlement list",
+      "top": "{n} at highest risk",
+      "allSettlements": "All",
+      "notes": "Sources and notes on method at the end",
+      "languageBranch": "Language and branch",
+      "language": "Language of the report",
+      "branch": "Branch of care",
+      "branchBoth": "GP and dentist",
+      "branchGp": "GP only",
+      "branchDental": "Dentist only",
+      "typography": "Font and size",
+      "font": {
+        "label": "Font",
+        "plex": "IBM Plex Sans",
+        "serif": "Source Serif 4",
+        "roboto": "Roboto"
+      },
+      "fontSample": "Árvíztűrő tükörfúrógép — ŐŰ őű",
+      "fontNote": "All three fonts go into the PDF with the full Hungarian accent set (ő and ű included), embedded, so it looks the same on any computer.",
+      "size": "Font size",
+      "sizeSmall": "Small",
+      "sizeNormal": "Normal",
+      "sizeLarge": "Large",
+      "charts": "Charts",
+      "palette": {
+        "label": "Colour palette",
+        "site": "Praxis Map",
+        "colorblind": "Colour-blind safe",
+        "gray": "Greyscale (for printing)",
+        "blue": "Single blue"
+      },
+      "chartSize": "Chart size",
+      "chartCompact": "Compact",
+      "chartNormal": "Normal",
+      "chartLarge": "Large",
+      "grid": "Gridlines",
+      "labels": "Value labels at the end of the bars",
+      "chartNote": "Charts go into the PDF as vectors on a white background, each with a descriptive caption and its source.",
+      "page": "Page",
+      "portrait": "A4 portrait",
+      "landscape": "A4 landscape",
+      "pageNumbers": "Page numbers",
+      "go": "Download PDF",
+      "cancel": "Cancel",
+      "working": "Making the PDF…",
+      "failed": "The PDF could not be made. Try again, or reload the page.",
+      "nothing": "Choose at least one part."
+    },
+    "cards": {
+      "gp": "settlements with no contracted GP",
+      "dental": {
+        "county": "vacant dental districts of those in the county",
+        "district": "vacant dental districts of those in the district",
+        "kerulet": "vacant dental districts of those in the kerület"
+      },
+      "dentalSub": "{n} of them long-term vacant · {dissolved} dissolved",
+      "filledSettlements": "has a filled district",
+      "filledDistricts": "filled",
+      "rank": "Rank: {rank}",
+      "gpKerulet": "vacant GP districts of those in the kerület",
+      "gpSub": "{n} of them long-term vacant"
+    },
+    "map": {
+      "county": "Where {name} lies in Hungary",
+      "district": "Where {name} lies in Hungary; the other districts of the county ({county}) in darker grey",
+      "kerulet": "Where {name} lies in Budapest"
     }
   }
 }

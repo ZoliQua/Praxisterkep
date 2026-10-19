@@ -1,7 +1,8 @@
 # Praxistérkép
 
 [![Monthly ETL](https://github.com/ZoliQua/Praxisterkep/actions/workflows/monthly-etl.yml/badge.svg)](https://github.com/ZoliQua/Praxisterkep/actions/workflows/monthly-etl.yml)
-[![Version](https://img.shields.io/badge/version-1.52.0-blue)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.53.0-blue)](CHANGELOG.md)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23460426.svg)](https://doi.org/10.5281/zenodo.23460426)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE.md)
 [![Python 3.12](https://img.shields.io/badge/Python-3.12-3776ab?logo=python&logoColor=white)](etl/)
 [![React 19](https://img.shields.io/badge/React-19-61dafb?logo=react&logoColor=black)](web/)
@@ -38,6 +39,14 @@ Four levels — **country → county → district (járás) → settlement** —
 chosen branch (GP or dental) and place kept across the whole site. Every long
 page carries a left-hand menu of its sections (on a phone, a column of dots
 that opens into the list), and every footer names the release being served.
+The county, district and settlement pages each have a **PDF** button by their
+heading: a dialog picks the sections, the language (Hungarian or English),
+the branch, the font (three, all with the full Hungarian accent set,
+embedded), the size, the chart palette (including colour-blind safe and
+greyscale), gridlines, value labels and the page orientation. The report has
+the Praxistérkép mark on every page, the area on the map of the country, the
+headline figures as on the page, charts on white with a caption and source
+each, and the program, its address and version in the footer.
 
 | Page | What it does |
 |---|---|
@@ -156,8 +165,9 @@ Insights, cookieless) load only after consent (`web/public/consent.js`); see the
 ### Citation
 
 If you use the code or the processed data, please cite it as given in
-[`CITATION.cff`](CITATION.cff) (GitHub's “Cite this repository” reads it). The
-Zenodo DOI is added once the first release is archived.
+[`CITATION.cff`](CITATION.cff) (GitHub's “Cite this repository” reads it).
+Every release is archived on Zenodo. To cite all versions, use the concept DOI
+[10.5281/zenodo.23460426](https://doi.org/10.5281/zenodo.23460426).
 
 ### Contributing and licence
 
@@ -213,7 +223,16 @@ az EESZT, a KSH, az NNGYK és az NFSZ közléseiből, valamint az OpenStreetMap
 
 A nézőpont négy szinten fut: **ország → megye → járás → település**. A
 kiválasztott ág (háziorvos vagy fogorvos) és a hely az egész oldalon
-megmarad.
+megmarad. A megye, a járás és a település oldalán a címsor mellett **PDF**
+gomb van: a felugró ablakban kiválasztható, mely részek kerüljenek bele, a
+nyelv (magyar vagy angol), az ellátási ág, a betűtípus (három, mindegyik
+teljes magyar ékezetkészlettel, beágyazva), a betűméret, a grafikonok
+színpalettája (színtévesztő-barát és szürkeárnyalatos is), a rácsvonalak, az
+értékcímkék és az oldal tájolása. A jelentés minden oldalán ott a
+Praxistérkép logója, a cím alatt a terület az ország térképén, az
+összefoglalóban az oldal két fő mutatója, a grafikonok fehér háttéren,
+mindegyik alatt leírással és forrással, a láblécben a program neve, címe és
+verziója, a végén kiemelve az adatállapot.
 
 | Oldal | Mit tud |
 |---|---|
@@ -515,8 +534,8 @@ beágyazható nézet (`embed.html`) semmilyen sütit nem használ.
 
 Ha a kódot vagy a feldolgozott adatokat felhasználod, kérlek, hivatkozz rá a
 [`CITATION.cff`](CITATION.cff) szerint (a GitHub „Cite this repository”
-gombja ebből dolgozik). A Zenodón archivált kiadás DOI-ja a megjelenés után
-kerül a fájlba.
+gombja ebből dolgozik). Minden kiadás archiválva van a Zenodón; az összes
+verzióra együtt a [10.5281/zenodo.23460426](https://doi.org/10.5281/zenodo.23460426) DOI-val lehet hivatkozni.
 
 ### Közreműködés
 

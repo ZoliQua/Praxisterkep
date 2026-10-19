@@ -5,6 +5,42 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.53.0] - 2026-10-19
+
+### Hozzáadva
+- **PDF-export a megye, a járás és a település oldalán.** A címsor melletti
+  „PDF” gomb ablakot nyit: választható részek (összefoglaló, korösszetétel,
+  ellátás, orvosváltások, elérhetőség, rangsor, egészség és életkörülmények,
+  előrejelzés, járások, településlista 25/50/mind; településnél rendelők,
+  busz, kockázati index, álláskeresők, változás, gyógyszertárak), nyelv
+  (magyar/angol, az oldal nyelvétől függetlenül, a számformátummal együtt),
+  ellátási ág, betűtípus (IBM Plex Sans, Source Serif 4, Roboto — mind teljes
+  magyar ékezetkészlettel, beágyazva), betűméret, négy színpaletta
+  (Praxistérkép, színtévesztő-barát, szürkeárnyalatos, egyszínű kék),
+  grafikonméret, rácsvonalak, értékcímkék, A4 álló/fekvő, oldalszámozás. A
+  beállításokat a böngésző megjegyzi.
+- A jelentés: minden oldalon fejléc a Praxistérkép logójával; a cím alatt a
+  terület az ország térképén (megyénél a 20 megye, járásnál a 197 járás,
+  kerületnél a főváros); az összefoglalóban az oldal két kártyája egymás
+  mellett („településen nincs szerződött háziorvos”, „betöltetlen fogorvosi
+  körzet a megyében lévőkből”); vektoros grafikonok fehér háttéren, leíró
+  felirattal és forrással; a végén kiemelve az adatállapot; a láblécben
+  „Praxistérkép · verzió · www.praxisterkep.hu · Nyilvános adatokból készült
+  elemzés”, a készítés dátuma és az oldalszám. Betöltetlen ≠ ellátatlan és a
+  névszabály a PDF-ben is érvényes.
+- A pdfmake és a betűtípusok csak az első gombnyomásra töltődnek le; a
+  település-oldalak egy 625 bájtos szkriptet kapnak, a saját adatukat
+  beágyazva viszik.
+- Zenodo: minden kiadás archiválva, az összes verzió DOI-ja
+  10.5281/zenodo.23460426 (README, `CITATION.cff`).
+
+### Módosítva
+- Az adatkezelési tájékoztató szerint a böngésző a PDF-export legutóbbi
+  beállításait is őrzi; a `LICENSE.md` felsorolja a betűtípusok OFL 1.1 és a
+  pdfmake MIT licencét.
+- A vetítés (`web/src/lib/projection.ts`) React nélküli modulba került, hogy
+  a PDF ugyanazokat az alakzatokat rajzolhassa, mint az oldal.
+
 ## [1.52.0] - 2026-10-19
 
 ### Hozzáadva

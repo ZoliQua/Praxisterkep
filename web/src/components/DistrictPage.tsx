@@ -28,6 +28,7 @@ import { SideNav } from './SideNav';
 import { sideGroups } from '../lib/sideGroups';
 import { NextSteps } from './NextSteps';
 import { Footer } from './Footer';
+import { PdfButton } from './PdfButton';
 import { VulnerableDistricts } from './VulnerableDistricts';
 
 const DISTRICT_GROUPS = sideGroups('district');
@@ -232,7 +233,10 @@ export function DistrictPage() {
       <PageNav kind={kind} onKind={setKind} />
       <SideNav groups={DISTRICT_GROUPS} labelKey="sideNav.district.label" />
       <section className="section container" id="jaras">
-        <h1 className="section__heading">{t('district.heading')}</h1>
+        <div className="heading-row">
+          <h1 className="section__heading">{t('district.heading')}</h1>
+          {d && <PdfButton level="district" name={d.name} />}
+        </div>
         <p className="section__lead">{t('district.lead')}</p>
 
         <DistrictMap values={values} selected={district} onPick={pick}

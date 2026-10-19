@@ -18,15 +18,16 @@ abstract: >-
   a static, bilingual page for each of the 3,177 settlements. Every figure
   traces to an archived source file; the pipeline fails rather than publish
   a partial or estimated number. Informational, not an official publication.
-version: 1.52.0
+version: 1.53.0
 date-released: 2026-10-19
+doi: 10.5281/zenodo.23460426
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.23460426
+    description: "Concept DOI: all versions on Zenodo"
 url: "https://praxisterkep.hu"
 repository-code: "https://github.com/ZoliQua/Praxisterkep"
 license: MIT
-# Zenodo: once the first release is archived, add the concept (all-versions)
-# DOI here as `doi:` and under `identifiers:`, with the version-specific DOI
-# beside it, as in the other projects of this author. No DOI has been minted
-# yet, so none is given.
 authors:
   - family-names: Dul
     given-names: Zoltán
