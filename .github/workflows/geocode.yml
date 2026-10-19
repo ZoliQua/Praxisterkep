@@ -33,8 +33,14 @@ jobs:
       - name: Install what the geocoder needs
         run: pip install -r etl/requirements.txt
 
+      # the input reaches the shell as a variable, never spliced into the
+      # command line, and anything but a whole number stops the run
       - name: Look up the missing addresses
-        run: python etl/geocode_filled.py --limit ${{ inputs.limit || 0 }}
+        env:
+          LIMIT: ${{ inputs.limit || '0' }}
+        run: |
+          case "$LIMIT" in ''|*[!0-9]*) echo "limit must be a whole number: $LIMIT"; exit 1;; esac
+          python etl/geocode_filled.py --limit "$LIMIT"
 
       # the profiles carry the coordinates, so they are rebuilt here too
       - name: Rebuild the settlement and county profiles

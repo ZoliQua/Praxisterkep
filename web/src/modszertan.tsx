@@ -3,6 +3,7 @@
 import { StrictMode, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
+import './lib/measure';
 import { locale } from './lib/i18n';
 import { useAppStore, useSnapshot } from './store/useAppStore';
 import { MethodPage } from './components/MethodPage';

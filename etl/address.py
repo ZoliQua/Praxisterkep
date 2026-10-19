@@ -54,7 +54,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from parse_ksh import normalize_settlement  # noqa: E402
+from parse_ksh import normalize_settlement
 
 ROOT = Path(__file__).resolve().parent.parent
 CACHE = Path(__file__).resolve().parent / "address_cache.json"

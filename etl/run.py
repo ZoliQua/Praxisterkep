@@ -59,7 +59,15 @@ def _tidy_addresses(parsed: dict[str, tuple[list, list, list]],
 
 
 def _parse_kind(kind: str, raw: Path, month: str) -> tuple[list, list, list]:
-    """Returns (vacant, dissolved, registry) for one kind."""
+    """Returns (vacant, dissolved, registry) for one kind.
+
+    Only the PDFs carry a statement month, and only they are checked against
+    the requested one. The registry XLS files have no date anywhere in them
+    (the first row is the list's title, then the header), so there is nothing
+    to assert; what stands in for it is the ±15 % row-count guard in
+    validate.py and the fact that both are fetched in the same run as the
+    PDFs.
+    """
     if kind == "dental":
         for pdf in ("dental_vacant.pdf", "dental_vacant_dissolved.pdf"):
             validate_statement_month(
@@ -190,7 +198,7 @@ def main() -> None:
         for name, entity in fetch_eeszt.ENTITIES.items():
             try:
                 fetch_eeszt.download(name, entity, size=500, sleep=1.0)
-            except Exception as exc:  # noqa: BLE001 — the portal has bad days
+            except Exception as exc:  # the portal has bad days
                 # October 2026 is what this is for: the portal answered 404 for
                 # one register and took every analysis built on EESZT down with
                 # it. An archived register is still a published fact, so the

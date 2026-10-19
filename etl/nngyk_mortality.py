@@ -103,7 +103,7 @@ CAUSES = {
 AVOIDABLE = ("treatable", "preventable", "both")
 SEXES = {"ffi": "m", "nő": "f", "összesen": "t"}
 LAYER = re.compile(r"^(Vármegye|Járás) - (ffi|nő|összesen)$")
-WIDGET = re.compile(r'<script type="application/json" data-for="[^"]+">(.*?)</script>', re.S)
+WIDGET = re.compile(r'<script type="application/json" data-for="[^"]+">(.*?)</script>', re.DOTALL)
 # the járás layer must carry exactly the 197 járás (174 + the capital's 23)
 DISTRICTS = 197
 COUNTIES = 20
@@ -192,7 +192,7 @@ def _cells(popup: str) -> dict[str, str]:
     """One popup table -> {header: value}. The tables are machine-written:
     <th>Label&emsp;</th><td>value&emsp;</td>, one row per field."""
     out = {}
-    for th, td in re.findall(r"<th>(?:<b>)?(.*?)(?:</b>)?</th><td>(.*?)</td>", popup, re.S):
+    for th, td in re.findall(r"<th>(?:<b>)?(.*?)(?:</b>)?</th><td>(.*?)</td>", popup, re.DOTALL):
         key = htmllib.unescape(re.sub("<[^>]+>", "", th)).replace(" ", "").strip().rstrip(":")
         val = htmllib.unescape(re.sub("<[^>]+>", "", td)).replace(" ", "").strip()
         out[key.translate(_LATIN1)] = val.translate(_LATIN1)

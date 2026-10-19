@@ -9,7 +9,6 @@ from __future__ import annotations
 import json
 
 import pytest
-
 from address import load_cache, normalize_entries, resolve, strip_place, tidy
 
 

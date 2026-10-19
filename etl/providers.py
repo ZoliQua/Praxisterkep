@@ -29,7 +29,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from build_eeszt import EesztError, load, latest_date
+from build_eeszt import EesztError, latest_date, load
 from crosscheck import name_match
 
 ROOT = Path(__file__).resolve().parent.parent

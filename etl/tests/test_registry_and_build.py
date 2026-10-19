@@ -1,7 +1,6 @@
 from pathlib import Path
 
 import pytest
-
 from build import build_snapshot
 from parse_registry import parse as parse_registry
 from validate import ValidationError, validate_records, validate_snapshot
@@ -80,4 +79,14 @@ def test_validate_snapshot_catches_name_leak():
     snap = build_snapshot("2026-08", "dental", vacant, dissolved, registry)
     snap["praxes"][0]["doctor"] = "Dr. X"
     with pytest.raises(ValidationError):
+        validate_snapshot(snap)
+
+
+@pytest.mark.parametrize("field", ["doctorName", "orvosNeve", "providerName", "Physician"])
+def test_validate_snapshot_catches_a_renamed_name_field(field):
+    # a column renamed upstream must not carry a name past the guard
+    vacant, dissolved, registry = _sample_data()
+    snap = build_snapshot("2026-08", "dental", vacant, dissolved, registry)
+    snap["praxes"][0][field] = "Dr. X"
+    with pytest.raises(ValidationError, match="personal-name field"):
         validate_snapshot(snap)

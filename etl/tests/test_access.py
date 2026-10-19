@@ -1,6 +1,5 @@
 """Distance to the nearest operating surgery: geometry, bands and the guard."""
 import pytest
-
 from access import band_of, guard, haversine
 
 

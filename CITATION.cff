@@ -18,7 +18,7 @@ abstract: >-
   a static, bilingual page for each of the 3,177 settlements. Every figure
   traces to an archived source file; the pipeline fails rather than publish
   a partial or estimated number. Informational, not an official publication.
-version: 1.51.1
+version: 1.52.0
 date-released: 2026-10-19
 url: "https://praxisterkep.hu"
 repository-code: "https://github.com/ZoliQua/Praxisterkep"

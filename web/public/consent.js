@@ -18,6 +18,9 @@
  *  - A decision can be changed: the footer's link reopens the banner.
  *  - With no measurement id configured, nothing loads and no banner appears.
  *    The site keeps working exactly as it did.
+ *  - The same yes starts Vercel Speed Insights (cookieless page-load timing)
+ *    in the app pages: a granted decision is marked on window and announced
+ *    with a "praxisterkep:consent" event, which src/lib/measure.ts waits for.
  *
  * The id comes from <meta name="ga-id">, which Vite fills from VITE_GA_ID in
  * the built pages and the generator writes into the static ones.
@@ -38,7 +41,8 @@
   var T = {
     hu: {
       text: 'Szeretnénk mérni, hányan és milyen oldalakat néznek — ehhez a '
-        + 'Google Analytics sütit használ. Csak akkor indul el, ha elfogadod. '
+        + 'Google Analytics sütit használ, a Vercel Speed Insights pedig süti '
+        + 'nélkül a betöltési sebességet méri. Csak akkor indulnak el, ha elfogadod. '
         + 'Az oldal enélkül is teljesen működik.',
       accept: 'Elfogadom',
       deny: 'Nem kérem',
@@ -47,7 +51,8 @@
     },
     en: {
       text: 'We would like to measure how many people read which pages, which '
-        + 'Google Analytics does with a cookie. It only starts if you accept. '
+        + 'Google Analytics does with a cookie, and how fast pages load, which '
+        + 'Vercel Speed Insights measures without one. Neither starts unless you accept. '
         + 'The site works fully without it.',
       accept: 'Accept',
       deny: 'No thanks',
@@ -92,6 +97,8 @@
     if (loaded) return;
     loaded = true;
     gtag('consent', 'update', { analytics_storage: 'granted' });
+    window.praxisterkepConsent = GRANTED;
+    try { window.dispatchEvent(new Event('praxisterkep:consent')); } catch (e) { /* old browser */ }
     var s = document.createElement('script');
     s.async = true;
     s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(id);

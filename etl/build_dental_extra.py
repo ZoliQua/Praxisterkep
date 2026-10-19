@@ -36,7 +36,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from build_eeszt import EesztError, load, latest_date, same_place
+from build_eeszt import EesztError, latest_date, load, same_place
 from parse_dental import _clean
 from parse_registry import UNIT_CODE_RE, parse_extra
 
@@ -155,9 +155,10 @@ def build(month: str, date: str) -> dict:
             hit = geocache.get(_site_key(postal, settlement, address))
             if not hit:
                 return False
-            entry["geo"] = {"lat": hit["lat"], "lon": hit["lon"],
+            # called only within this iteration, so the loop's entry is the right one
+            entry["geo"] = {"lat": hit["lat"], "lon": hit["lon"],  # noqa: B023
                             "approx": bool(hit.get("geoApprox")), "from": source}
-            st["geo"] += 1
+            st["geo"] += 1  # noqa: B023 — same iteration, see above
             return True
 
         cands = [r for r in fin_rows.get(code, []) if r[fx["TIP"]] == TIP]

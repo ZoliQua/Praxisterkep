@@ -22,7 +22,6 @@ from functools import lru_cache
 from pathlib import Path
 
 import pandas as pd
-
 from parse_dental import ParseError
 
 KSH_DIR = Path(__file__).resolve().parent.parent / "data" / "raw" / "ksh"
@@ -117,9 +116,7 @@ def parse(xlsx_path: Path) -> KshRef:
         name = str(r.name).strip()
         county = "" if pd.isna(r.county) else str(r.county).strip()
         is_ker = county == "főváros"
-        if name == "Budapest" and not county:
-            county = "Budapest"
-        elif is_ker:
+        if name == "Budapest" and not county or is_ker:
             county = "Budapest"
         if not county:
             continue

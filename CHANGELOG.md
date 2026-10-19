@@ -5,6 +5,30 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.52.0] - 2026-10-19
+
+### Hozzáadva
+- **Vercel Speed Insights** (a Vercel javaslata, átvéve): süti és azonosító
+  nélküli betöltési sebességmérés az alkalmazás oldalain. Ugyanarra az
+  „Elfogadom”-ra indul, mint a Google Analytics, nélküle semmi nem töltődik
+  be; a cím lekérdezési részét (megye, település) elküldés előtt levágja
+  (`web/src/lib/measure.ts`, `consent.js`). Az adatkezelési tájékoztató, a
+  lábléc és a sütisáv szövege ehhez igazodott; hatályos 2026. október 19-től.
+
+### Javítva (a 2026-10-19-i code review alapján)
+- A névmező-őr részszót is figyel: `doctorName`, `orvosNeve`, `providerName`
+  ugyanúgy megállítja a publikálást, mint a `doctor` (`validate.py`, új teszt).
+- `build_eeszt.py`: a tömörített EESZT-archívum `with` blokkban nyílik meg.
+- `geocode.yml`: a `limit` bemenet környezeti változóként, egész számra
+  ellenőrizve jut a parancssorba.
+- A havi munkafolyamat hiba esetén nem nyit második azonos issue-t: ha már
+  van nyitott „ETL failed” issue, ahhoz fűz megjegyzést.
+- A NEAK nyilvántartási XLS-ekben nincs tárgyhónap; ez most a kódban
+  dokumentálva van, a sorszám-őr és az azonos futásban letöltött PDF-ek
+  hónapja áll helyette.
+- Ruff: importrendezés és a többi biztonságos automatikus javítás; a hat
+  B023-találat (téves riasztás) indoklással ellátott `noqa`-t kapott.
+
 ## [1.51.1] - 2026-10-19
 
 ### Hozzáadva

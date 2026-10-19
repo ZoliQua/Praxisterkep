@@ -20,7 +20,6 @@ from pathlib import Path
 from typing import TypedDict
 
 import pandas as pd
-
 from parse_dental import (
     TYPE_MAP,
     ParseError,

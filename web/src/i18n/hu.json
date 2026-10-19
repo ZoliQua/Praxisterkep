@@ -230,7 +230,7 @@
     "disclaimer": "A NEAK adatai saját közlése szerint tájékoztató jellegűek, a havi finanszírozási szerződésadatok alapján kerülnek közzétételre. Az itt közölt számok ellátásszervezési, hatósági vagy jogi döntés megalapozására nem alkalmasak.",
     "vacantNotUnserved": "A betöltetlen körzet nem jelenti azt, hogy ott nincs ellátás: a lakosokat jellemzően helyettesítő orvos látja el, ami a nyilvános adatokból nem látszik. Konkrét rendelési időt és ellátási helyet mindig a szolgáltatónál vagy az önkormányzatnál érdemes ellenőrizni.",
     "names": "Orvosnév kizárólag ott szerepel, ahol azt a NEAK maga is közzéteszi: a szerződött szolgáltatói listán szereplő, betöltött körzeteknél. Betöltetlen és megszűnt körzetnél, valamint helyettesítő orvosnál soha.",
-    "noPersonal": "Az oldal nem kér regisztrációt és nem tárol látogatói adatot a saját rendszereiben. Látogatói statisztika (Google Analytics) kizárólag akkor indul, ha ehhez külön hozzájárulsz — hozzájárulás nélkül mérőkód sem töltődik be, és süti sem kerül a gépedre. A nyelvválasztást és a térképrétegeket a böngésződ saját tárolója őrzi, ez hozzánk nem jut el. A betűtípusokat a Google Fonts adja, az utcaszintű térképet — csak ha rákattintasz — a MapTiler és az OpenStreetMap. Részletek az adatkezelési tájékoztatóban.",
+    "noPersonal": "Az oldal nem kér regisztrációt és nem tárol látogatói adatot a saját rendszereiben. Látogatói statisztika (Google Analytics) és sebességmérés (Vercel Speed Insights) kizárólag akkor indul, ha ehhez külön hozzájárulsz — hozzájárulás nélkül mérőkód sem töltődik be, és süti sem kerül a gépedre. A nyelvválasztást és a térképrétegeket a böngésződ saját tárolója őrzi, ez hozzánk nem jut el. A betűtípusokat a Google Fonts adja, az utcaszintű térképet — csak ha rákattintasz — a MapTiler és az OpenStreetMap. Részletek az adatkezelési tájékoztatóban.",
     "notOfficial": "Magánkezdeményezés: nem a NEAK, az OKFŐ, az NNGYK vagy bármely más hatóság hivatalos kiadványa, és nem minősül hivatalos állásfoglalásnak. A szerző szakmai beosztása azonosítási célú, nem jelent intézményi jóváhagyást.",
     "correction": "Hibás vagy elavult adatot találtál? A forrás javítását a kibocsátónál érdemes kezdeményezni; az oldal hibáját a GitHubon (@ZoliQua) lehet jelezni, és a következő havi frissítéssel javítjuk.",
     "authorBy": "Készítette:",
@@ -2203,7 +2203,7 @@
   "privacy": {
     "heading": "Adatkezelési tájékoztató",
     "lead": "Ez az oldal majdnem semmit nem mér. Éppen ezért ez a tájékoztató rövid és konkrét: egy képernyőn látszik, mi tárolódik, kinél, meddig, és hogyan lehet nemet mondani.",
-    "updated": "Hatályos: 2026. október 18-tól.",
+    "updated": "Hatályos: 2026. október 19-től.",
     "controller": {
       "title": "Ki az adatkezelő",
       "text": "Az oldal adatkezelője Dr. Dul Zoltán magánszemélyként: az oldalt ő készítette és ő üzemelteti, és minden döntés az övé arról, hogy az oldal mit, miért és meddig kezel. A praxisterkep.hu domain a Mackó Dental Kft. nevén van bejegyezve: a társaság a domaint és a technikai hátteret biztosítja, az oldal tartalmát és adatkezelését azonban nem ő határozza meg, és a látogatók adatait nem használja saját célra. Az oldal magánkezdeményezés, nem a NEAK, az OKFŐ, a Mackó Dental Kft. vagy bármely hatóság kiadványa, és nem szolgál üzleti célt: nincs rajta hirdetés, nem értékesít semmit, és nem gyűjt ügyfeleket. Elérhetőség: GitHubon @ZoliQua, illetve a dulzoltan.hu oldalon megadott módon."
@@ -2214,7 +2214,7 @@
     },
     "analytics": {
       "title": "Látogatói statisztika (csak hozzájárulással)",
-      "text": "Szeretnénk tudni, hányan és milyen oldalakat olvasnak, ezért az oldal Google Analytics 4 mérést használ — de kizárólag akkor, ha ehhez a felül megjelenő sávon kifejezetten hozzájárulsz. Hozzájárulás nélkül a mérőkód be sem töltődik, és süti sem kerül a gépedre. Elfogadás esetén a Google Analytics sütiben egy véletlenszerű azonosítót tárol, és rögzíti a megtekintett oldalakat, a hivatkozó forrást, a hozzávetőleges földrajzi helyet és az eszköz/böngésző típusát. Az IP-cím anonimizálva kerül feldolgozásra, hirdetési célú összekapcsolást és személyre szabott hirdetést kifejezetten kikapcsoltunk."
+      "text": "Szeretnénk tudni, hányan és milyen oldalakat olvasnak, ezért az oldal Google Analytics 4 mérést használ — de kizárólag akkor, ha ehhez a felül megjelenő sávon kifejezetten hozzájárulsz. Hozzájárulás nélkül a mérőkód be sem töltődik, és süti sem kerül a gépedre. Elfogadás esetén a Google Analytics sütiben egy véletlenszerű azonosítót tárol, és rögzíti a megtekintett oldalakat, a hivatkozó forrást, a hozzávetőleges földrajzi helyet és az eszköz/böngésző típusát. Az IP-cím anonimizálva kerül feldolgozásra, hirdetési célú összekapcsolást és személyre szabott hirdetést kifejezetten kikapcsoltunk. Ugyanez a hozzájárulás indítja a Vercel Speed Insights mérést is: süti és azonosító nélkül azt rögzíti, milyen gyorsan töltődik be és reagál az oldal, az eszköz típusával és az oldal címével együtt. A címből a lekérdezési részt (például a kiválasztott megyét vagy települést) elküldés előtt levágjuk."
     },
     "legalBasis": {
       "title": "Mi a jogalap",
@@ -2222,11 +2222,11 @@
     },
     "retention": {
       "title": "Meddig",
-      "text": "A Google Analytics eseményadatait 14 hónap után töröljük (ez a GA4-ben beállított megőrzési idő). A döntésed tényét a böngésződ saját tárolójában őrizzük, amíg nem törlöd."
+      "text": "A Google Analytics eseményadatait 14 hónap után töröljük (ez a GA4-ben beállított megőrzési idő). A Speed Insights méréseit a Vercel a saját megőrzési szabályai szerint tárolja; ezek nem tartalmaznak azonosítót. A döntésed tényét a böngésződ saját tárolójában őrizzük, amíg nem törlöd."
     },
     "processors": {
       "title": "Kinek adjuk tovább",
-      "text": "Google Ireland Limited (Google Analytics) — csak hozzájárulás esetén; a Google az EU–USA adatvédelmi keret szerint tanúsított. Vercel Inc. — az oldal tárhelyszolgáltatója, amely technikai naplót vezet a kiszolgálásról. Google Fonts — a betűtípusok kiszolgálása. MapTiler és OpenStreetMap — csak akkor, ha megnyitod az utcaszintű térképet. Ezek megnyitásakor a böngésződ technikai okból kapcsolatba lép velük, így IP-címed számukra láthatóvá válik."
+      "text": "Google Ireland Limited (Google Analytics) — csak hozzájárulás esetén; a Google az EU–USA adatvédelmi keret szerint tanúsított. Vercel Inc. — az oldal tárhelyszolgáltatója, amely technikai naplót vezet a kiszolgálásról, és hozzájárulás esetén a Speed Insights betöltési méréseit is fogadja. Google Fonts — a betűtípusok kiszolgálása. MapTiler és OpenStreetMap — csak akkor, ha megnyitod az utcaszintű térképet. Ezek megnyitásakor a böngésződ technikai okból kapcsolatba lép velük, így IP-címed számukra láthatóvá válik."
     },
     "storage": {
       "title": "Mit őriz a böngésződ",

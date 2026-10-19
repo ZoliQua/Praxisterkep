@@ -69,7 +69,7 @@ class RoadCollector(osmium.SimpleHandler):
         self.wanted: set[int] = set()
         self.snappable: set[int] = set()
 
-    def way(self, w) -> None:  # noqa: N802 — osmium's callback name
+    def way(self, w) -> None:  # osmium's callback name
         tags = w.tags
         highway = tags.get("highway")
         if highway not in DRIVABLE:
@@ -101,7 +101,7 @@ class NodeCollector(osmium.SimpleHandler):
         self.lat: dict[int, float] = {}
         self.lon: dict[int, float] = {}
 
-    def node(self, n) -> None:  # noqa: N802 — osmium's callback name
+    def node(self, n) -> None:  # osmium's callback name
         if n.id in self.wanted:
             self.lat[n.id] = n.location.lat
             self.lon[n.id] = n.location.lon

@@ -8,9 +8,8 @@ from __future__ import annotations
 
 import math
 
-import pytest
-
 import outcomes as oc
+import pytest
 
 
 def test_pearson_matches_a_hand_computed_value():

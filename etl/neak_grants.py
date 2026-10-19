@@ -96,8 +96,8 @@ FILES = {
     ("practice", "gp", 2025): "hsz_fog_prjog_2025/kozlemeny-nyertesekrol_praxisjog_haziorvos_2025",
 }
 TITLE = {
-    "settle": re.compile(r"letelepedésének\s+támogatása.*?(\d{4})\.\s*évi\s+nyertes", re.S),
-    "practice": re.compile(r"praxisjog\s+vásárlásának\s+támogatása.*?(\d{4})\.\s*évi\s+nyertes", re.S),
+    "settle": re.compile(r"letelepedésének\s+támogatása.*?(\d{4})\.\s*évi\s+nyertes", re.DOTALL),
+    "practice": re.compile(r"praxisjog\s+vásárlásának\s+támogatása.*?(\d{4})\.\s*évi\s+nyertes", re.DOTALL),
 }
 KIND_WORD = {"gp": "háziorvos", "dental": "fogorvos"}
 ROMAN = {"I": 1, "V": 5, "X": 10}
@@ -189,7 +189,7 @@ class Places:
         if text in SETTLEMENT_FIXES:
             text = SETTLEMENT_FIXES[text]
             fixes.append("settlement")
-        m = re.fullmatch(r"Budapest,?\s+([IVX]+)\.?\s*(?:kerület|ker\.)?", text, re.I)
+        m = re.fullmatch(r"Budapest,?\s+([IVX]+)\.?\s*(?:kerület|ker\.)?", text, re.IGNORECASE)
         if m:
             text = f"Budapest {_roman(m.group(1).upper()):02d}. ker."
             if county != "Budapest":
@@ -383,7 +383,7 @@ def _band(value: int | None, bands) -> int | None:
 
 
 def matched_comparison(rows: list[dict], snaps: list[dict], latest: dict,
-                       granted: set[str], places: "Places") -> dict:
+                       granted: set[str], places: Places) -> dict:
     pop = {e["name"]: e["population"] for e in places.entries.values()}
     by_bare = {_bare(e["name"]): e["population"] for e in places.entries.values()}
 

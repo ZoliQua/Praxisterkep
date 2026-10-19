@@ -34,7 +34,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import centroids
-from build_eeszt import EesztError, load, latest_date
+from build_eeszt import EesztError, latest_date, load
 from geocode import load_cache
 from parse_ksh import load_reference
 

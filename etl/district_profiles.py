@@ -233,7 +233,8 @@ def build() -> dict:
     # how the járás as a whole stands; this says how much of it is in that
     # position, which is not the same question in a járás with one town and
     # thirty villages.
-    from kedvezmenyezett import county_key, normalize as benefit_key
+    from kedvezmenyezett import county_key
+    from kedvezmenyezett import normalize as benefit_key
     flags = {}
     for entry in (benefit.get("settlements") or {}).values():
         flags[f'{county_key(entry["c"])}|{benefit_key(entry["n"])}'] = entry

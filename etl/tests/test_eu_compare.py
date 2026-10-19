@@ -1,6 +1,5 @@
-import pytest
-
 import eu_compare as e
+import pytest
 from parse_dental import ParseError
 
 

@@ -1,7 +1,6 @@
 from pathlib import Path
 
 import pytest
-
 from parse_dental import ParseError, extract_statement_month
 from parse_gp import canonical_county, parse_registry, parse_vacant
 

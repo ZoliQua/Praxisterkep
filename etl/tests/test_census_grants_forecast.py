@@ -14,7 +14,6 @@ import neak_grants
 import outcomes
 from parse_dental import ParseError
 
-
 # ------------------------------------------------------------------ census
 
 def full_cells(**over):
@@ -271,7 +270,8 @@ def test_eurostat_series_parse_and_add_up():
     archived = sorted(eu.RAW.glob("hlth_cd_apr_*.json.gz"))
     if not archived:
         pytest.skip("Eurostat response not archived")
-    import gzip, json
+    import gzip
+    import json
     series = eu.parse(json.loads(gzip.decompress(archived[-1].read_bytes())))
     hu, euro = series["hu"], series["eu"]
     assert hu["avoidable"] and euro["avoidable"]

@@ -85,9 +85,9 @@ def fetch(url: str, cache: Path) -> str:
 
 def _rows(table: str) -> list[list[str]]:
     out = []
-    for row in re.findall(r"<tr.*?</tr>", table, re.S):
+    for row in re.findall(r"<tr.*?</tr>", table, re.DOTALL):
         cells = [html.unescape(re.sub("<[^>]+>", "", c)).strip()
-                 for c in re.findall(r"<t[dh][^>]*>(.*?)</t[dh]>", row, re.S)]
+                 for c in re.findall(r"<t[dh][^>]*>(.*?)</t[dh]>", row, re.DOTALL)]
         out.append([re.sub(r"\s+", " ", c) for c in cells])
     return out
 
@@ -114,7 +114,7 @@ def district_key(name: str) -> str:
 
 
 def parse(page: str) -> dict:
-    tables = re.findall(r"<table.*?</table>", page, re.S)
+    tables = re.findall(r"<table.*?</table>", page, re.DOTALL)
     if len(tables) < 2:
         raise ParseError(f"expected the annex tables, found {len(tables)}")
 

@@ -1,5 +1,4 @@
 import pytest
-
 from build_eeszt import EesztError, district_no, guard, same_place
 
 

@@ -1,9 +1,13 @@
 """Address/name normalisation and the guard of the cross-check."""
 import pytest
-
 from build_eeszt import EesztError
 from crosscheck import (
-    address_key, guard, name_match, name_tokens, settlement_key, street_core,
+    address_key,
+    guard,
+    name_match,
+    name_tokens,
+    settlement_key,
+    street_core,
 )
 
 

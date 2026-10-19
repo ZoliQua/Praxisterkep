@@ -87,7 +87,8 @@ def parse(path: Path, care: str) -> list[dict]:
 
     rows: list[dict] = []
     for record in df.to_dict("records"):
-        get = lambda col: ("" if pd.isna(record.get(col)) else str(record[col]))  # noqa: E731
+        # called right away, on this record only
+        get = lambda col: ("" if pd.isna(record.get(col)) else str(record[col]))  # noqa: B023
         fin = get(id_col)
         if not fin:
             continue

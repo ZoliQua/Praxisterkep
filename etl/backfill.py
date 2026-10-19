@@ -45,7 +45,12 @@ from build import (
     rebuild_timeseries,
 )
 from geocode import load_cache
-from validate import ValidationError, validate_records, validate_snapshot, validate_statement_month
+from validate import (
+    ValidationError,
+    validate_records,
+    validate_snapshot,
+    validate_statement_month,
+)
 
 # category -> (filename regex, canonical raw name stem)
 PATTERNS = [

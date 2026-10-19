@@ -230,7 +230,7 @@
     "disclaimer": "NEAK states its own data to be informational, published from the monthly financing contract records. The figures here are not a basis for administrative, legal or care-planning decisions.",
     "vacantNotUnserved": "A vacant district does not mean there is no care: residents are usually seen by a substitute physician, which the public data does not show. Check opening hours and the place of care with the provider.",
     "names": "A physician's name appears only where NEAK itself publishes it: on filled districts in the contracted provider list. Never for vacant or dissolved districts, nor for substitutes.",
-    "noPersonal": "The site asks for no registration and stores no visitor data in its own systems. Visitor statistics (Google Analytics) start only if you separately consent — without consent no measurement code is loaded and no cookie is set. Your language choice and map layers are kept in your own browser and never reach us. Google Fonts serves the typefaces; MapTiler and OpenStreetMap serve the street map, only if you open it. Details in the privacy notice.",
+    "noPersonal": "The site asks for no registration and stores no visitor data in its own systems. Visitor statistics (Google Analytics) and speed measurement (Vercel Speed Insights) start only if you separately consent — without consent no measurement code is loaded and no cookie is set. Your language choice and map layers are kept in your own browser and never reach us. Google Fonts serves the typefaces; MapTiler and OpenStreetMap serve the street map, only if you open it. Details in the privacy notice.",
     "notOfficial": "A private initiative: not an official publication of NEAK, OKFŐ, NNGYK or any other authority, and not an official position. The author's professional role is given for identification, not as institutional endorsement.",
     "correction": "Found something wrong or out of date? Corrections are best raised with the publisher of the source; errors on this site can be reported on GitHub (@ZoliQua) and are fixed with the next monthly update.",
     "authorBy": "Made by",
@@ -2203,7 +2203,7 @@
   "privacy": {
     "heading": "Privacy notice",
     "lead": "This site measures almost nothing, which is why this notice is short and concrete: what is stored, by whom, for how long, and how to say no.",
-    "updated": "In effect from 18 October 2026.",
+    "updated": "In effect from 19 October 2026.",
     "controller": {
       "title": "Who the controller is",
       "text": "The data controller is Dr. Zoltán Dul as a private individual: he built the site and runs it, and every decision about what is processed, why and for how long is his. The praxisterkep.hu domain is registered to Mackó Dental Kft., which provides the domain and the technical background; it does not decide the site's content or its data processing and does not use visitors' data for its own purposes. The site is a private initiative, not a publication of NEAK, OKFŐ, Mackó Dental Kft. or any authority, and serves no commercial purpose: no advertising, nothing sold, no customers gathered. Contact: GitHub @ZoliQua, or as given on dulzoltan.hu."
@@ -2214,7 +2214,7 @@
     },
     "analytics": {
       "title": "Visitor statistics (only with consent)",
-      "text": "The site uses Google Analytics 4 — but only if you explicitly accept it on the bar. Without consent the measurement code is not even loaded and no cookie is set. With consent, Google Analytics stores a random identifier in a cookie and records pages viewed, referrer, approximate location and device type. IP addresses are anonymised, and advertising signals and personalisation are switched off."
+      "text": "The site uses Google Analytics 4 — but only if you explicitly accept it on the bar. Without consent the measurement code is not even loaded and no cookie is set. With consent, Google Analytics stores a random identifier in a cookie and records pages viewed, referrer, approximate location and device type. IP addresses are anonymised, and advertising signals and personalisation are switched off. The same consent starts Vercel Speed Insights: with no cookie and no identifier, it records how fast the page loads and responds, with the device type and the page address. The query part of the address (the county or settlement chosen, for instance) is cut off before sending."
     },
     "legalBasis": {
       "title": "Legal basis",
@@ -2222,11 +2222,11 @@
     },
     "retention": {
       "title": "For how long",
-      "text": "Google Analytics event data is deleted after 14 months. Your choice is kept in your own browser until you clear it."
+      "text": "Google Analytics event data is deleted after 14 months. Speed Insights measurements are kept by Vercel under its own retention rules; they carry no identifier. Your choice is kept in your own browser until you clear it."
     },
     "processors": {
       "title": "Who else is involved",
-      "text": "Google Ireland Limited (Analytics, only with consent; Google is certified under the EU–US Data Privacy Framework), Vercel Inc. (hosting), Google Fonts (typefaces), and MapTiler with OpenStreetMap only if you open the street map. Your browser contacts these for technical reasons, which makes your IP address visible to them."
+      "text": "Google Ireland Limited (Analytics, only with consent; Google is certified under the EU–US Data Privacy Framework), Vercel Inc. (hosting, and with consent the Speed Insights measurements), Google Fonts (typefaces), and MapTiler with OpenStreetMap only if you open the street map. Your browser contacts these for technical reasons, which makes your IP address visible to them."
     },
     "storage": {
       "title": "What your browser keeps",

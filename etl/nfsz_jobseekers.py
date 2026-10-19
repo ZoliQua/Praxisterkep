@@ -66,7 +66,7 @@ MONTHS = {"január": 1, "február": 2, "március": 3, "április": 4, "május": 5
 # NFSZ has titled the same document "adatai" and "adatok", with stray spaces
 # and suffixes ("2024. június2", "2023. december (excel)"); only the year and
 # the month name are read. Before 2024 the series is quarterly.
-TITLE = re.compile(r"településsoros adat(?:ai|ok)\s+(\d{4})\.\s*([a-záéíóöőúüű]+)", re.I)
+TITLE = re.compile(r"településsoros adat(?:ai|ok)\s+(\d{4})\.\s*([a-záéíóöőúüű]+)", re.IGNORECASE)
 # column -> key; positions are NFSZ's and are checked against the header text
 COLUMNS = {3: ("registered", "Nyilvántar"), 4: ("longTerm", "365"),
            5: ("benefit", "Járadék"), 6: ("assistance", "Segély"),

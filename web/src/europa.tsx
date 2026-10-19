@@ -2,6 +2,7 @@
 import { StrictMode, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
+import './lib/measure';
 import { locale } from './lib/i18n';
 import { useContextStore } from './lib/context';
 import { EuropePage } from './components/europe/EuropePage';

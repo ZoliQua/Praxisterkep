@@ -20,7 +20,6 @@ from pathlib import Path
 
 import pandas as pd
 import requests
-
 from parse_dental import (
     HU_MONTHS,
     TYPE_MAP,

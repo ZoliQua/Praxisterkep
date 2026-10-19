@@ -45,7 +45,8 @@ def test_the_pharmacy_step_fetches_the_workbook_it_needs(monkeypatch, tmp_path):
 
 def test_an_eeszt_outage_falls_back_to_the_archive_but_not_for_ever():
     """The age rule the run applies when a register will not download."""
-    from run import EESZT_MAX_AGE_DAYS  # noqa: PLC0415 — module-level import pulls in the whole ETL
+    # imported here: a module-level import pulls in the whole ETL
+    from run import EESZT_MAX_AGE_DAYS
 
     today = dt.date(2026, 10, 7)
     nine_days = (today - dt.date(2026, 9, 28)).days

@@ -9,14 +9,12 @@ from __future__ import annotations
 
 import json
 
-import openpyxl
-import pytest
-
 import ksh_timea as kt
 import nfsz_jobseekers as nf
 import nngyk_mortality as nm
+import openpyxl
+import pytest
 from parse_dental import ParseError
-
 
 # --------------------------------------------------------------- NNGYK maps
 

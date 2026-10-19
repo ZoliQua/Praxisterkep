@@ -1,6 +1,5 @@
 """The operating-level table: the guard that keeps a praxis row coherent."""
 import pytest
-
 from build_eeszt import EesztError
 from operating import guard
 

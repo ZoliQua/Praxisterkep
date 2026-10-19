@@ -1,7 +1,6 @@
 from pathlib import Path
 
 import pytest
-
 from parse_dental import (
     ParseError,
     _parse_date,

@@ -656,7 +656,7 @@ def main() -> None:
         "settlements": [[r["settlement"], r["county"], r["slug"],
                          r.get("population", 0)] for r in rows],
     }, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
-    withs = lambda k: sum(1 for r in rows if k in r)  # noqa: E731
+    withs = lambda k: sum(1 for r in rows if k in r)
     print(f"wrote {OUT}: {len(rows)} settlement profiles")
     print(f"  with driving times: {withs('travel')}, with bus data: {withs('transit')}, "
           f"with age: {withs('age')}, in a care desert: {withs('cluster')}")

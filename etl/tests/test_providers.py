@@ -1,6 +1,5 @@
 """The unified provider list: the guard that keeps a row honest."""
 import pytest
-
 from build_eeszt import EesztError
 from providers import GROUPS, guard
 

@@ -26,7 +26,6 @@ import re
 from pathlib import Path
 
 import pandas as pd
-
 from parse_dental import (
     FIN_RE,
     ParseError,
@@ -94,7 +93,6 @@ def parse_registry(xls_path: Path) -> list[dict]:
     """
 
     from parse_dental import _cell
-
     from parse_registry import attach_provider, clean_doctor, locate_columns
 
     header_map = {

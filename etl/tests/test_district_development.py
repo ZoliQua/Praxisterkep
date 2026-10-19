@@ -8,9 +8,8 @@ from __future__ import annotations
 
 import json
 
-import pytest
-
 import district_development as dd
+import pytest
 from parse_dental import ParseError
 
 ANNEX_1 = """

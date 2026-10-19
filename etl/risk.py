@@ -250,7 +250,7 @@ def build() -> dict:
         snap = latest["kinds"][kind]
 
         population = {s["name"]: s.get("population") for s in snap["settlements"]}
-        portfolio_of = lambda code: portfolio.get(code or "", 1) <= 1  # noqa: E731
+        portfolio_of = lambda code: portfolio.get(code or "", 1) <= 1
 
         # every district we ever saw, with the attributes of its settlement
         static: dict[str, dict] = {}
@@ -295,12 +295,13 @@ def build() -> dict:
         coords = {fid: (entry["g"][0], entry["g"][1])
                   for fid, entry in eeszt["praxes"].items() if entry.get("g")}
 
+        # used only inside this iteration: the closure never outlives it
         def neighbour_at(fid: str, month: str) -> bool:
-            point = coords.get(fid)
+            point = coords.get(fid)  # noqa: B023
             if not point:
                 return False
             return any(haversine(point[0], point[1], la, lo) <= NEIGHBOUR_KM
-                       for la, lo in vacant_by_month.get(month, ()))
+                       for la, lo in vacant_by_month.get(month, ()))  # noqa: B023
 
         # replay the archive: the state of month `a` knows nothing after it
         info: dict[str, dict] = {}

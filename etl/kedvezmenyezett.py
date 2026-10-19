@@ -51,7 +51,7 @@ def normalize(name: str) -> str:
 
 
 def county_key(county: str) -> str:
-    return normalize(re.sub(r"\s*(megye|vármegye)\s*$", "", county or "", flags=re.I))
+    return normalize(re.sub(r"\s*(megye|vármegye)\s*$", "", county or "", flags=re.IGNORECASE))
 
 
 def fetch(url: str, cache: Path) -> str:
@@ -68,15 +68,15 @@ def fetch(url: str, cache: Path) -> str:
 
 def _rows(table: str) -> list[list[str]]:
     out = []
-    for row in re.findall(r"<tr.*?</tr>", table, re.S):
+    for row in re.findall(r"<tr.*?</tr>", table, re.DOTALL):
         cells = [html.unescape(re.sub("<[^>]+>", "", c)).strip()
-                 for c in re.findall(r"<t[dh][^>]*>(.*?)</t[dh]>", row, re.S)]
+                 for c in re.findall(r"<t[dh][^>]*>(.*?)</t[dh]>", row, re.DOTALL)]
         out.append([re.sub(r"\s+", " ", c) for c in cells])
     return out
 
 
 def parse(page: str) -> dict:
-    tables = re.findall(r"<table.*?</table>", page, re.S)
+    tables = re.findall(r"<table.*?</table>", page, re.DOTALL)
     if len(tables) < 2:
         raise ParseError(f"expected the two annex tables, found {len(tables)}")
     benefit, temporary = _rows(tables[0]), _rows(tables[1])

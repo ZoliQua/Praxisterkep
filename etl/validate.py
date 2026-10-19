@@ -147,11 +147,16 @@ def validate_snapshot(snapshot: dict) -> None:
             raise ValidationError(f"filled praxis {f['id']}: bad doctor value {doc!r}")
 
 
+# Any key containing one of these is a name field: "doctorName" or
+# "orvosNeve" must fail as surely as "doctor" does, or a renamed column would
+# slip a name past the guard without a word.
+NAME_FIELD_PARTS = ("doctor", "physician", "orvos", "provider")
+
+
 def _assert_no_name_fields(obj, path="$") -> None:
-    banned = {"doctor", "physician", "orvos", "name_of_doctor", "provider"}
     if isinstance(obj, dict):
         for k, v in obj.items():
-            if k.lower() in banned:
+            if any(part in k.lower() for part in NAME_FIELD_PARTS):
                 raise ValidationError(f"personal-name field {k!r} at {path}")
             _assert_no_name_fields(v, f"{path}.{k}")
     elif isinstance(obj, list):

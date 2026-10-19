@@ -95,8 +95,8 @@ def resolve(name: str, date: str) -> str:
 def load(name: str, date: str) -> tuple[dict[str, int], list[list]]:
     date = resolve(name, date)
     meta = json.loads((RAW / f"{name}_{date}.meta.json").read_text(encoding="utf-8"))
-    rows = [json.loads(line) for line in
-            gzip.open(RAW / f"{name}_{date}.jsonl.gz", "rt", encoding="utf-8")]
+    with gzip.open(RAW / f"{name}_{date}.jsonl.gz", "rt", encoding="utf-8") as fh:
+        rows = [json.loads(line) for line in fh]
     if len(rows) != meta["totalRowCount"]:
         raise EesztError(f"{name}: {len(rows)} rows != declared {meta['totalRowCount']}")
     return {f: i for i, f in enumerate(meta["fields"])}, rows

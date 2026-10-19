@@ -1,6 +1,5 @@
 """Parsing the beneficiary-settlement annexes of 105/2015. Korm. rendelet."""
 import pytest
-
 from kedvezmenyezett import ParseError, county_key, normalize, parse
 
 HEAD = "<html><body>"

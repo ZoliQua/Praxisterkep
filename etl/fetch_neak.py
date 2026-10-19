@@ -9,7 +9,6 @@ from datetime import date
 from pathlib import Path
 
 import requests
-
 from sources import SOURCES
 
 RAW_DIR = Path(__file__).resolve().parent.parent / "data" / "raw"

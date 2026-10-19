@@ -1,7 +1,7 @@
 # Praxistérkép
 
 [![Monthly ETL](https://github.com/ZoliQua/Praxisterkep/actions/workflows/monthly-etl.yml/badge.svg)](https://github.com/ZoliQua/Praxisterkep/actions/workflows/monthly-etl.yml)
-[![Version](https://img.shields.io/badge/version-1.51.1-blue)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.52.0-blue)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE.md)
 [![Python 3.12](https://img.shields.io/badge/Python-3.12-3776ab?logo=python&logoColor=white)](etl/)
 [![React 19](https://img.shields.io/badge/React-19-61dafb?logo=react&logoColor=black)](web/)
@@ -149,7 +149,8 @@ fails. Vercel deploys every push to `main` to
 [praxisterkep.hu](https://praxisterkep.hu). Releases are tagged `vX.Y.Z` with
 [GitHub release notes](https://github.com/ZoliQua/Praxisterkep/releases); the
 version lives in `web/package.json` only, and every footer shows it. The site collects no personal
-data; analytics load only after consent (`web/public/consent.js`); see the
+data; analytics (Google Analytics 4) and page-speed timing (Vercel Speed
+Insights, cookieless) load only after consent (`web/public/consent.js`); see the
 [privacy notice](https://praxisterkep.hu/adatkezeles.html).
 
 ### Citation
@@ -502,7 +503,9 @@ utcaszintű térképe nem készül el), `VITE_SITE_URL` (a sitemap címe).
 Az oldal személyes adatot nem gyűjt. Látogatói statisztika (Google
 Analytics 4) **csak hozzájárulás után** töltődik be: a
 `web/public/consent.js` alapértelmezésben `analytics_storage: denied`
-állapotot állít be, és csak igen után tölti be a gtag-et. Részletek: az
+állapotot állít be, és csak igen után tölti be a gtag-et. Ugyanez az igen
+indítja a süti nélküli Vercel Speed Insights sebességmérést az alkalmazás
+oldalain (`web/src/lib/measure.ts`), a cím lekérdezési része nélkül. Részletek: az
 [adatkezelési tájékoztató](https://praxisterkep.hu/adatkezeles.html). A
 beágyazható nézet (`embed.html`) semmilyen sütit nem használ.
 

@@ -2,7 +2,6 @@
 from pathlib import Path
 
 import pytest
-
 from build_dental_extra import guard
 from build_eeszt import EesztError
 from parse_registry import parse as parse_registry
