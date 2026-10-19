@@ -1,7 +1,7 @@
 {
   "site": {
     "title": "Praxistérkép",
-    "lead": "Interaktív térkép arról, hol nincs szerződött {doctor} Magyarországon — havonta frissülő, nyilvános NEAK-adatokból, körzetről körzetre.",
+    "lead": "Interaktív térkép és statisztikai elemző oldal arról, hol nincs szerződött {doctor} Magyarországon: havonta frissülő, nyilvános NEAK-adatokból, megyei, járási és települési bontásban, európai kitekintéssel. Azt is megmutatja, mi jár együtt a hiánnyal: ahol több a betöltetlen háziorvosi körzet, ott jellemzően messzebb van a rendelő, alacsonyabb a jövedelem és az iskolázottság, több az álláskereső és magasabb az elkerülhető halálozás. Ez együttjárás, nem bizonyított ok-okozat.",
     "lastUpdate": "Utolsó adatfrissítés",
     "firstMonthNote": "Az adatgyűjtés első hónapja — a havi változás a következő frissítéstől jelenik meg.",
     "monthDelta": "az előző hónaphoz képest",
@@ -41,6 +41,7 @@
     "settlements": "Település",
     "registry": "Nyilvántartás",
     "whoElse": "Továbbiak",
+    "menu": "Menü",
     "stock": "Körzetállomány",
     "districtPage": "Járás",
     "districtChoose": "Járás kiválasztása",
@@ -3300,13 +3301,13 @@
       "gpDensity": {
         "name": "Háziorvosok",
         "short": "Háziorvos",
-        "explain": "Praktizáló általános orvosok (háziorvosok) száma 100 ezer lakosra.",
-        "note": "Az országok nem egyformán számolják a háziorvost: Lengyelországban a családorvosok jó része az egyéb generalisták között szerepel, Portugáliában minden általános orvos beletartozik. Ezért mellette ott az összes generalista orvos is."
+        "explain": "Praktizáló háziorvosok száma 100 ezer lakosra.",
+        "note": "Az országok nem egyformán számolják a háziorvost: Lengyelországban a családorvosok jó része az egyéb általános orvosok között szerepel, Portugáliában viszont minden általános orvost háziorvosnak számolnak. Ezért mellette ott az általános orvosok teljes köre is."
       },
       "generalistDensity": {
-        "name": "Generalista orvosok összesen",
-        "short": "Generalisták",
-        "explain": "A háziorvosok és a nem szakorvos általános orvosok együtt, 100 ezer lakosra. Az országok eltérő besorolását ez a tágabb kör jobban kiegyenlíti."
+        "name": "Általános orvosok összesen",
+        "short": "Általános orvosok",
+        "explain": "A háziorvosok és a szakorvosi képesítés nélküli általános orvosok együtt (a nemzetközi foglalkozási osztályozás 2211-es csoportja), 100 ezer lakosra. Az országok eltérő besorolását ez a tágabb kör jobban kiegyenlíti."
       },
       "dentistDensity": {
         "name": "Fogorvosok",

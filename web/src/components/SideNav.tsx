@@ -21,33 +21,51 @@ export function SideNav({ groups, labelKey }: { groups: SideGroup[]; labelKey: s
   useEffect(() => {
     const watched = groups.flatMap((g) => g.items.map((i) => i.id));
     document.body.classList.add('has-side-nav');
-    const seen = new Map<string, number>();
-    const io = new IntersectionObserver((entries) => {
-      for (const e of entries) seen.set(e.target.id, e.isIntersecting ? e.boundingClientRect.top : Infinity);
-      // the topmost section still on screen is the one being read
+    // The section being read is the last one whose top has passed a line a
+    // third of the way down the screen. An observer that lit "the topmost
+    // section on screen" failed on the county page, where the first target
+    // wraps all the others and the rest are short headings inside it: the
+    // wrapper was always on screen and always on top.
+    let frame = 0;
+    const pick = () => {
+      frame = 0;
+      const line = window.innerHeight * 0.33;
       let best: string | null = null;
-      let top = Infinity;
+      let top = -Infinity;
       for (const id of watched) {
-        const v = seen.get(id);
-        if (v !== undefined && v !== Infinity && v < top) { top = v; best = id; }
-      }
-      if (best) setActive(best);
-    }, { rootMargin: '-20% 0px -60% 0px' });
-    // sections render after their data arrives: look again until all are there
-    const attach = () => {
-      const here = new Set<string>();
-      watched.forEach((id) => {
         const el = document.getElementById(id);
-        if (!el) return;
-        here.add(id);
-        if (!el.dataset.sideObserved) { el.dataset.sideObserved = '1'; io.observe(el); }
-      });
-      setPresent((old) => (old.size === here.size && [...here].every((x) => old.has(x)) ? old : here));
+        if (!el) continue;
+        const y = el.getBoundingClientRect().top;
+        if (y <= line && y > top) { top = y; best = id; }
+      }
+      // at the very top nothing has passed the line yet: the first one is next
+      setActive(best ?? watched.find((id) => document.getElementById(id)) ?? null);
+    };
+    const onScroll = () => { if (!frame) frame = window.requestAnimationFrame(pick); };
+    // sections render after their data arrives: look again until all are there.
+    // Re-pick only when the cast of present sections changes — scroll and
+    // resize already schedule their own picks, and reading every section's
+    // box once a second on an idle page forces a layout nothing needs. The
+    // trade: content growing above without a scroll event (a slow image)
+    // shifts the line until the next scroll nudge.
+    let last = new Set<string>();
+    const attach = () => {
+      const here = new Set(watched.filter((id) => document.getElementById(id)));
+      const changed = here.size !== last.size || ![...here].every((x) => last.has(x));
+      if (!changed) return;
+      last = here;
+      setPresent(here);
+      pick();
     };
     attach();
     const timer = window.setInterval(attach, 1000);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
     return () => {
-      io.disconnect(); window.clearInterval(timer);
+      window.clearInterval(timer);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
       document.body.classList.remove('has-side-nav');
     };
   }, [groups]);

@@ -17,3 +17,8 @@ etl/geocode_cache.json.tmp
 data/raw/osm/
 data/geo/road_graph.npz
 data/raw/gtfs/
+
+# working notes, kept out of the repository and its history
+docs/
+CLAUDE.md
+ime-kezirat/

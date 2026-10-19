@@ -28,7 +28,24 @@ function columns(children: readonly Child[]): Child[][] {
 
 export function NavMenu({ entries }: { entries: readonly NavEntry[] }) {
   const [open, setOpen] = useState<string | null>(null);
+  // on a phone the whole bar folds behind one button (the CSS shows it there)
+  const [folded, setFolded] = useState(true);
   const navRef = useRef<HTMLDivElement>(null);
+  // The bar wraps to two rows on a phone and grows further with the folded
+  // menu open; whatever sticks below it reads its real height. The measure
+  // lives here so every render path — the landing, the standalone pages —
+  // gets it. The generated settlement pages run no React; their inline
+  // script in web/scripts/settlement-pages.mjs does the same, keep them in
+  // step.
+  useEffect(() => {
+    const el = navRef.current?.closest('nav');
+    if (!el || typeof ResizeObserver === 'undefined') return undefined;
+    const set = () => document.documentElement.style.setProperty('--topnav-h', `${el.offsetHeight}px`);
+    set();
+    const ro = new ResizeObserver(set);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
   // The caret only ever opens. A toggle reads well on paper and fails in the
   // hand: the pointer enters the caret and clicks in one motion, so the hover
   // opens the panel and the click closes it again — the menu looks dead. It
@@ -52,8 +69,17 @@ export function NavMenu({ entries }: { entries: readonly NavEntry[] }) {
     };
   }, [open]);
 
+  const done = () => { setOpen(null); setFolded(true); };
+
   return (
-    <div className="topnav__links" ref={navRef}>
+    <>
+    <button type="button" className="topnav__menu" aria-expanded={!folded}
+      aria-controls="topnav-links" onClick={() => setFolded((f) => !f)}>
+      <i aria-hidden="true" /><span className="topnav__menu-label">{t('nav.menu')}</span>
+    </button>
+    {/* one nav per page: the button's aria-controls and the CSS sibling
+        selector both assume this id is unique on the page */}
+    <div className={`topnav__links${folded ? '' : ' is-open'}`} id="topnav-links" ref={navRef}>
       {entries.map((entry) => (
         <div key={entry.href} className="topnav__group"
           // hover opens it for a mouse only: on a touch screen the tap would
@@ -66,7 +92,7 @@ export function NavMenu({ entries }: { entries: readonly NavEntry[] }) {
               setOpen((cur) => (cur === entry.href ? null : cur));
             }
           }}>
-          <a href={entry.href} onClick={() => setOpen(null)}>
+          <a href={entry.href} onClick={done}>
             {t(entry.labelKey)}
             {entry.children && <i className="topnav__caret" aria-hidden="true" />}
           </a>
@@ -82,7 +108,7 @@ export function NavMenu({ entries }: { entries: readonly NavEntry[] }) {
                   <div key={col[0][0]} className="topnav__subcol">
                     {col.map((c) => (
                       <a key={c[0]} href={c[0]} className={c[2] === 'group' ? 'topnav__subhead' : undefined}
-                        onClick={() => setOpen(null)}>{t(c[1])}</a>
+                        onClick={done}>{t(c[1])}</a>
                     ))}
                   </div>
                 ))}
@@ -92,5 +118,6 @@ export function NavMenu({ entries }: { entries: readonly NavEntry[] }) {
         </div>
       ))}
     </div>
+    </>
   );
 }

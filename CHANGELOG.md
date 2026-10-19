@@ -5,6 +5,34 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.51.1] - 2026-10-19
+
+### Hozzáadva
+- **Saját favicon-csomag** minden oldalon, a 6354 statikus település-oldalon is:
+  `favicon.ico`, SVG, PNG-méretek, Apple-ikon, `site.webmanifest` és
+  `theme-color`. A régi `favicon.svg` helyére lépett.
+
+### Javítva
+- **Telefonon a felső menü egy gomb mögé csukódik**: a hét menüpont addig
+  három sort foglalt, a település-oldalakon a szakaszsávval együtt a képernyő
+  ötödét. Asztali nézetben nem változott.
+- A település-oldalakon telefonon a szöveg a képernyő széléig ért: egy
+  CSS-szabály lenullázta a konténer oldalsó margóját.
+- **A bal oldali menü a megyeoldalon nem lépett tovább** az első pontról: az
+  első célpont az egész oldalt magában foglalja, így mindig az látszott
+  „legfelül”. Most az a pont világít, amelynek a teteje legutoljára haladt át
+  a képernyő felső harmadán (megye, járás, Továbbiak, Európa, Elemző).
+- Az Európa oldalon a „generalista orvos” helyett **„általános orvos”** (FEOR
+  2211, az Eurostat „generalist medical practitioners” kategóriája).
+
+### Módosítva
+- **A főoldal bevezetője** az egész oldalt írja le: térkép és statisztikai
+  elemző, megyei, járási, települési bontás, európai kitekintés, és hogy mi
+  jár együtt a háziorvos-hiánnyal (menetidő, jövedelem, iskolázottság,
+  álláskeresők, elkerülhető halálozás — együttjárás, nem ok-okozat).
+- `docs/` és `CLAUDE.md` kikerült a git-történetből, és a `.gitignore`-ba
+  került (az `ime-kezirat/` mappával együtt).
+
 ## [1.51.0] - 2026-10-19
 
 ### Hozzáadva

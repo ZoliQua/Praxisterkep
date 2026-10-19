@@ -322,6 +322,31 @@ const ctx = (href, profile) => {
   return `${path}?${q}${hash}`;
 };
 
+/**
+ * On a phone the top bar folds behind one button, or its seven entries take
+ * three rows and, with the section strip under them, a fifth of the screen.
+ * The button is hidden until the script shows it: without JavaScript the
+ * links simply stay open.
+ * The React twin of this button + script lives in web/src/components/
+ * NavMenu.tsx — change one, change the other. Both assume one nav per page:
+ * the button's aria-controls and the CSS sibling selector target the single
+ * #topnav-links.
+ */
+const menuButton = () => `<button type="button" class="topnav__menu" aria-expanded="false"
+    aria-controls="topnav-links" hidden><i aria-hidden="true"></i><span class="topnav__menu-label">${esc(label('nav.menu'))}</span></button>`;
+
+const menuScript = () => `<script>(function () {
+  var nav = document.querySelector('.topnav'); if (!nav) return;
+  var btn = nav.querySelector('.topnav__menu'), links = nav.querySelector('.topnav__links');
+  btn.hidden = false;
+  btn.addEventListener('click', function () {
+    var open = links.classList.toggle('is-open'); btn.setAttribute('aria-expanded', String(open));
+  });
+  // whatever sticks under the bar reads its real height, folded or open
+  function h() { document.documentElement.style.setProperty('--topnav-h', nav.offsetHeight + 'px'); }
+  h(); if ('ResizeObserver' in window) new ResizeObserver(h).observe(nav); else window.addEventListener('resize', h);
+})();</script>`;
+
 /** A link into the app with no settlement context, in the page's language. */
 function appHref(href) {
   if (LANG !== 'en' || !href.startsWith('/') || href.startsWith('/telepules')) return href;
@@ -1643,7 +1668,13 @@ function page(profile) {
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:image" content="/og.png">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">${gaMeta}
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/praxisterkep-favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#0D1117">${gaMeta}
 <link rel="canonical" href="${site}${esc(pagePath(profile.slug))}">
 ${alternates(profile.slug)}
 <link rel="stylesheet" href="/assets/${esc(cssFile)}">${streetFile ? `
@@ -1656,10 +1687,12 @@ ${alternates(profile.slug)}
 <nav class="topnav"><div class="topnav__inner">
   <a class="topnav__brand" href="${esc(appHref('/'))}">${esc(label('site.title').toUpperCase())}</a>
   ${langSwitch(profile.slug)}
-  <div class="topnav__links">
+  ${menuButton()}
+  <div class="topnav__links" id="topnav-links">
     ${navBar(profile)}
   </div>
 </div></nav>
+${menuScript()}
 
 <header class="section container">
   <p class="tp-kicker">${esc(county)}${district ? ` · ${esc(S('page.kickerDistrict', { district }))}` : ''} · ${esc(S('page.kickerPop', { n: num(profile.population) }))}${profile.benefit ? ` · ${esc(S('page.kickerBenefit'))}` : ''}</p>
@@ -1845,7 +1878,13 @@ function writeIndex(root) {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${esc(S('list.title'))}</title>
 <meta name="description" content="${esc(S('list.desc', { n: profiles.settlements.length }))}">
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">${gaMeta}
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/praxisterkep-favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#0D1117">${gaMeta}
 <link rel="canonical" href="${site}${pagePath('')}">
 ${alternates('')}
 <link rel="stylesheet" href="/assets/${esc(cssFile)}">
@@ -1854,10 +1893,12 @@ ${alternates('')}
 <nav class="topnav"><div class="topnav__inner">
   <a class="topnav__brand" href="${esc(appHref('/'))}">${esc(label('site.title').toUpperCase())}</a>
   ${langSwitch('')}
-  <div class="topnav__links">
+  ${menuButton()}
+  <div class="topnav__links" id="topnav-links">
     ${navBar(null)}
   </div>
 </div></nav>
+${menuScript()}
 ${countyRail(counties)}
 <header class="section container">
   <h1 class="section__heading">${esc(S('list.heading'))}</h1>

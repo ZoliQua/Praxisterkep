@@ -1,7 +1,6 @@
 // The top bar of every standalone page. It shows the same six-plus-one
 // entries as the landing (lib/siteNav.ts) in the order of the zooms they
 // offer, and every link carries the branch and the area on.
-import { useEffect, useRef } from 'react';
 import { t } from '../lib/i18n';
 import { contextHref } from '../lib/context';
 import { ContextBar } from './ContextBar';
@@ -19,21 +18,9 @@ interface Props {
 
 export function PageNav({ kind = null, onKind }: Props) {
   const home = import.meta.env.BASE_URL;
-  const bar = useRef<HTMLElement>(null);
-  // the bar wraps to two or three rows on a phone; whatever sticks below it
-  // (a page's toolbar, a section heading jumped to) reads its real height
-  useEffect(() => {
-    const el = bar.current;
-    if (!el || typeof ResizeObserver === 'undefined') return;
-    const set = () => document.documentElement.style.setProperty('--topnav-h', `${el.offsetHeight}px`);
-    set();
-    const ro = new ResizeObserver(set);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
   return (
     <>
-    <nav className="topnav" ref={bar}>
+    <nav className="topnav">
       <div className="topnav__inner">
         <a className="topnav__brand" href={contextHref(home)}>{t('site.title')}</a>
         {kind && onKind && (

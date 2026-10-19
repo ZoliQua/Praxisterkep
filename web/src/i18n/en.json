@@ -1,7 +1,7 @@
 {
   "site": {
     "title": "Praxis Map",
-    "lead": "An interactive map of where there is no contracted {doctor} in Hungary — from public NEAK data, refreshed monthly, district by district.",
+    "lead": "An interactive map and statistical analysis of where there is no contracted {doctor} in Hungary — from public NEAK data, refreshed monthly, by county, járás and settlement, with a European comparison. It also shows what goes with the gaps: where more GP districts are vacant, the surgery tends to be farther away, income and education lower, jobseekers more numerous and avoidable mortality higher. That is association, not proven cause.",
     "lastUpdate": "Last data update",
     "firstMonthNote": "First month of data collection — monthly change appears from the next update.",
     "monthDelta": "compared to the previous month",
@@ -41,6 +41,7 @@
     "settlements": "Settlements",
     "registry": "Registry",
     "whoElse": "More",
+    "menu": "Menu",
     "stock": "District stock",
     "districtPage": "District",
     "districtChoose": "Choose a district",

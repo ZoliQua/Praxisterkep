@@ -1,7 +1,7 @@
 # Praxistérkép
 
 [![Monthly ETL](https://github.com/ZoliQua/Praxisterkep/actions/workflows/monthly-etl.yml/badge.svg)](https://github.com/ZoliQua/Praxisterkep/actions/workflows/monthly-etl.yml)
-[![Version](https://img.shields.io/badge/version-1.51.0-blue)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.51.1-blue)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE.md)
 [![Python 3.12](https://img.shields.io/badge/Python-3.12-3776ab?logo=python&logoColor=white)](etl/)
 [![React 19](https://img.shields.io/badge/React-19-61dafb?logo=react&logoColor=black)](web/)
@@ -241,7 +241,7 @@ kiemeléssel, kattintható mátrix, megyére váltó előrejelzési görbe, tér
 
 ### Adatforrások
 
-A kanonikus lista a [`CLAUDE.md`](CLAUDE.md)-ben él; másik forrás nem kerül be.
+Az alábbi táblázat a teljes lista; ezen kívül más forrás nem kerül be.
 A NEAK-URL-ek az [`etl/sources.py`](etl/sources.py)-ban vannak, a többi forrásé
 az azt olvasó modulban, a modul fejkommentjében leírva. Minden letöltött
 fájl a [`data/raw/`](data/raw/) alatt archiválódik — **a git-történet maga az
@@ -519,8 +519,7 @@ kerül a fájlba.
 
 Hibajelentést, adatészrevételt, új nyilvános forrást issue-ban szívesen
 fogadok; részletek a [CONTRIBUTORS.md](CONTRIBUTORS.md)-ben. Kérlek, tartsd be a
-[magatartási kódexet](CODE_OF_CONDUCT.md). Fejlesztési terv:
-[`docs/PLAN.md`](docs/PLAN.md).
+[magatartási kódexet](CODE_OF_CONDUCT.md).
 
 ### Licenc
 
