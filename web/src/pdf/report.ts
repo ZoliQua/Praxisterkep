@@ -11,6 +11,7 @@ import type { CountiesRaw, CountyAggregateRow, SettlementRow, State } from '../l
 import type { DistrictRow, DistrictsRaw } from '../lib/districts';
 import type { OutcomeCounty, OutcomeDistrict, OutcomesRaw } from '../lib/outcomes';
 import { aspect, project, type ShapeFeature } from '../lib/projection';
+import { COUNTY_LABELS } from '../lib/countyLabels';
 import {
   areaMap, barChart, donut, lineChart, PALETTES, stackedBar, type BarRow, type ChartStyle,
 } from './charts';
@@ -338,7 +339,7 @@ function areaOnMap(c: Ctx, features: ShapeFeature[], focus: string, caption: str
   const ratio = aspect(features);
   const width = Math.min(c.width * 0.62, 340, 165 * ratio);
   const height = width / ratio;
-  const shapes = project(features, { x: 2, y: 2, width: width - 4, height: height - 4 });
+  const shapes = project(features, { x: 2, y: 2, width: width - 4, height: height - 4 }, COUNTY_LABELS);
   return { svg: areaMap(shapes, width, height, focus, PALETTES[c.o.palette], c.font, group),
     width, height, caption };
 }

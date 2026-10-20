@@ -9,6 +9,7 @@ import { useHashScroll } from '../lib/useHashScroll';
 import { NextSteps } from './NextSteps';
 import { PageNav } from './PageNav';
 import { Footer } from './Footer';
+import { PdfButton } from './PdfButton';
 import { StatsSection } from './StatsSection';
 import { VersusSection } from './VersusSection';
 import { AccessSection } from './AccessSection';
@@ -65,7 +66,10 @@ export function AnalysisPage() {
     <>
       <PageNav kind={kind} onKind={setKind} />
       <header className="section container">
-        <h1 className="section__heading">{t('analysis.heading')}</h1>
+        <div className="heading-row">
+          <h1 className="section__heading">{t('analysis.heading')}</h1>
+          <PdfButton level="analysis" />
+        </div>
         <p className="section__lead">{t('analysis.lead')}</p>
       </header>
       <nav className="page-toc page-toc--grouped">

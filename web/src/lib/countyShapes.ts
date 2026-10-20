@@ -3,6 +3,7 @@
 // any choropleth that has one number per county.
 import { useMemo } from 'react';
 import { useGeo } from './geo';
+import { COUNTY_LABELS } from './countyLabels';
 
 export interface CountyShape {
   name: string;
@@ -35,12 +36,15 @@ export function useCountyShapes(width: number, height: number): CountyShape[] {
     return geo.features.map((f) => {
       const rings = f.geometry.coordinates as number[][][];
       const points = rings.flat().map(xy);
+      const name = String(f.properties.name);
+      // a hand-placed label where the average of the outline lands badly
+      const at = COUNTY_LABELS[name] ? xy(COUNTY_LABELS[name]) : null;
       return {
-        name: String(f.properties.name),
+        name,
         d: rings.map((ring) => `M${ring.map((p) => xy(p).map((v) => v.toFixed(1))
           .join(' ')).join('L')}Z`).join(''),
-        cx: points.reduce((a, p) => a + p[0], 0) / points.length,
-        cy: points.reduce((a, p) => a + p[1], 0) / points.length,
+        cx: at ? at[0] : points.reduce((a, p) => a + p[0], 0) / points.length,
+        cy: at ? at[1] : points.reduce((a, p) => a + p[1], 0) / points.length,
       };
     });
   }, [geo, width, height]);

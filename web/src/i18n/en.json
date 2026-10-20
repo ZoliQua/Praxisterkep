@@ -2490,7 +2490,9 @@
       "forecastLink": "How the forecast is made →",
       "grantsHeading": "GP settlement grants by year",
       "grantsRow": "{n} winners, {filled} districts have a doctor today",
-      "grantsNone": "No winner with a contract in this county."
+      "grantsNone": "No winner with a contract in this county.",
+      "colKerulet": "Kerület",
+      "districtsHeadingCapital": "The capital’s kerület side by side"
     },
     "settlement": {
       "heading": "How do people live here?",
@@ -3737,7 +3739,9 @@
     "kind": {
       "county": "County report",
       "district": "District (járás) report",
-      "settlement": "Settlement report"
+      "settlement": "Settlement report",
+      "analysis": "National analysis",
+      "europe": "European comparison"
     },
     "title": {
       "jaras": "{name} district",
@@ -3746,7 +3750,9 @@
     "file": {
       "county": "county",
       "district": "district",
-      "settlement": "settlement"
+      "settlement": "settlement",
+      "analysis": "analysis",
+      "europe": "europe"
     },
     "branchLine": {
       "both": "GP and dental primary care",
@@ -4074,7 +4080,19 @@
       "nearestAt": "Nearest at",
       "minutes": "Driving time",
       "km": "Km",
-      "name": "Name"
+      "name": "Name",
+      "total": "Total",
+      "vacantN": "Vacant",
+      "share": "Share",
+      "partialIncome": "Partial r (income held)",
+      "programme": "Programme",
+      "year": "Year",
+      "winners": "Winners",
+      "matched": "Matched to a district",
+      "nowFilled": "Filled now",
+      "nowVacant": "Vacant now",
+      "gone": "Dissolved",
+      "reference": "Reference"
     },
     "ref": {
       "national": "National",
@@ -4100,7 +4118,9 @@
       "subtitle": {
         "county": "{name}",
         "district": "{name}",
-        "settlement": "{name}"
+        "settlement": "{name}",
+        "analysis": "National analysis",
+        "europe": "European comparison"
       },
       "contents": "What goes in?",
       "all": "All",
@@ -4151,7 +4171,13 @@
       "cancel": "Cancel",
       "working": "Making the PDF…",
       "failed": "The PDF could not be made. Try again, or reload the page.",
-      "nothing": "Choose at least one part."
+      "nothing": "Choose at least one part.",
+      "countries": "Countries",
+      "countryGroup": "Country group",
+      "focus": "In focus",
+      "rankLimit": "Length of the rankings",
+      "first": "first {n}",
+      "allRows": "all"
     },
     "cards": {
       "gp": "settlements with no contracted GP",
@@ -4171,6 +4197,145 @@
       "county": "Where {name} lies in Hungary",
       "district": "Where {name} lies in Hungary; the other districts of the county ({county}) in darker grey",
       "kerulet": "Where {name} lies in Budapest"
+    },
+    "buttonTitleLevel": {
+      "analysis": "Make a PDF report from the national analysis",
+      "europe": "Make a PDF report from the European comparison"
+    },
+    "analysis": {
+      "title": "Hungary",
+      "section": {
+        "national": "The national picture",
+        "trend": "Over time",
+        "counties": "Counties ranked",
+        "districts": "Districts ranked",
+        "survival": "How long does a district stay vacant?",
+        "forecast": "Forecast for 12 months",
+        "correlations": "What goes with vacancy?",
+        "grid": "Income, vacancy and mortality",
+        "grants": "Settlement and practice-purchase grants",
+        "emergency": "Reaching an emergency department"
+      },
+      "national": {
+        "gp": "GP districts: {total}. Vacant: {vacant} ({rate}), of which long-term vacant {longTerm}. {people} people live in vacant districts, a share of {share} of the population.",
+        "dental": "Dental districts: {total}. Vacant: {vacant}, with a dissolved contract: {dissolved}; together {rate}. Long-term vacant: {longTerm}. {people} people live in these districts.",
+        "chart": {
+          "gp": "GP districts in the country",
+          "dental": "Dental districts in the country"
+        },
+        "caption": "How the districts divide, from NEAK's monthly vacancy lists and provider registry."
+      },
+      "trend": {
+        "gp": "GP care, from {from} to {to} ({n} archived months): vacant districts went from {then} to {now}; {people} people live in them today.",
+        "dental": "Dental care, from {from} to {to} ({n} archived months): vacant or dissolved districts went from {then} to {now}.",
+        "chart": {
+          "gp": "Vacant GP districts",
+          "dental": "Vacant or dissolved dental districts"
+        },
+        "line": {
+          "gp": "vacant GP districts",
+          "dental": "vacant or dissolved dental districts"
+        },
+        "caption": "From our own monthly archive; the line breaks where a month is missing."
+      },
+      "rankingCaption": "From the highest share to the lowest. Source: NEAK monthly vacancy lists and provider registry.",
+      "districts": {
+        "text": "The {n} rural districts by the share of vacant districts (the Budapest kerület are on the district page).",
+        "chart": {
+          "gp": "The highest GP vacancy — {n} districts",
+          "dental": "The highest dental vacancy — {n} districts"
+        }
+      },
+      "survival": {
+        "lead": "Kaplan–Meier estimate from the vacancy spells in our own archive: what share of districts is still vacant after a given time. Spells still open count as censored, not as filled.",
+        "gp": "GP care: {spells} vacancy spells, {refilled} ended in a filling, {open} are still open. The median length is {median} months. After one year {s12} of districts are still vacant, after two {s24}, after five {s60}.",
+        "dental": "Dental care: {spells} vacancy spells, {refilled} ended in a filling, {open} are still open. The median length is {median} months. After one year {s12} of districts are still vacant, after two {s24}, after five {s60}.",
+        "chart": {
+          "gp": "Share of GP districts still vacant, by time elapsed",
+          "dental": "Share of dental districts still vacant, by time elapsed"
+        },
+        "line": "still vacant",
+        "month": "month {n}",
+        "caption": "Per cent, by months since the district fell vacant. Source: archived snapshots of NEAK's monthly lists, own calculation."
+      },
+      "forecast": {
+        "gp": "{now} GP districts are vacant now ({rateNow}). The model expects {later} in 12 months ({rateLater}), with a 90% band from {lo} to {hi}: about {fresh} districts falling vacant and {refill} being filled.",
+        "dental": "{now} dental districts are vacant or dissolved now ({rateNow}). The model expects {later} in 12 months ({rateLater}), with a 90% band from {lo} to {hi}.",
+        "chart": {
+          "gp": "Vacant GP districts: the expected path over 12 months",
+          "dental": "Vacant dental districts: the expected path over 12 months"
+        },
+        "line": "expected value",
+        "caption": "Count, monthly. The 90% band assumes districts are independent; the back-test is on the methodology page."
+      },
+      "correlations": {
+        "text": "The {n} rural districts: how the share of vacant GP districts goes with the other measures. r: Pearson, ρ: Spearman correlation; the partial value holds income constant.",
+        "note": "Association, not cause: the table shows where the gaps and the measure occur together, not that one causes the other. The Budapest kerület are left out, because their income is the capital's."
+      },
+      "grid": {
+        "text": "The rural districts in three income and three vacancy thirds; each cell gives the median avoidable mortality (per 100,000, age-standardised) and the number of districts.",
+        "corner": "Income \\ vacancy",
+        "vacLow": "low (< {a})",
+        "vacMid": "medium ({a}–{b})",
+        "vacHigh": "high (> {b})",
+        "incLow": "low (< {a} m Ft)",
+        "incMid": "medium ({a}–{b} m Ft)",
+        "incHigh": "high (> {b} m Ft)",
+        "cell": "{v} ({n} districts)",
+        "note": "Where mortality rises with vacancy within one income row, the association is partly independent of income — which still does not prove a cause."
+      },
+      "grants": {
+        "text": "The winners of NEAK's settlement and practice-purchase grants, matched to their district, and what became of the district as of {month}. The winners' names are not in the data.",
+        "programme": {
+          "settle": "settlement grant",
+          "practice": "practice purchase"
+        },
+        "note": "“Matched to a district”: the winner's surgery address points to one district in the monthly archive; uncertain addresses of shared health centres are left out. NEAK published no winners' list for 2020."
+      },
+      "emergency": {
+        "text": "Reaching an emergency department ({points} sites) by car: the median settlement is {median} minutes away, the farthest {max} minutes. {beyond} people live more than 30 minutes away, a share of {share} of the population.",
+        "chart": "Population by driving time to the nearest emergency department",
+        "band": "{band} min",
+        "caption": "People. Driving time on the OpenStreetMap road network; emergency department: NEAK inpatient professions 4602 and 4605."
+      },
+      "notesMethod": "The method of the analyses — survival, forecast and correlations — is set out at praxisterkep.hu/modszertan.html."
+    },
+    "europe": {
+      "title": "{country} and Europe",
+      "more": "Summary and migration",
+      "section": {
+        "overview": "Summary table",
+        "migration": "Doctors on the move"
+      },
+      "overview": {
+        "text": "In focus: {country}; compared with: {group} ({n} countries). Each measure at the country's own latest year, ranked among the countries that can be ranked.",
+        "note": "Rank: 1 = the most favourable value among the countries compared; measures without a better direction are not ranked, nor is a value more than five years old. Reference: the EU-27 figure as Eurostat publishes it, else the median of the countries."
+      },
+      "unranked": "not ranked",
+      "refEu": "(EU-27)",
+      "refMedian": "(median)",
+      "value": "{country}: {value} ({year}; {unit}).",
+      "noValue": "No value is published for {country}.",
+      "rankLower": "Rank: {rank} of {of} ranked countries, where lower is better.",
+      "rankHigher": "Rank: {rank} of {of} ranked countries, where higher is better.",
+      "refEuText": "The EU-27 figure is {value} ({year}).",
+      "refMedianText": "The median of the countries compared is {value} ({year}).",
+      "chartTitle": "{name} — {group}",
+      "caption": "{unit}; {order}. The year in brackets where it differs from the newest. Source: {source} ({dataset}).",
+      "orderBest": "from the most favourable to the least",
+      "orderNeutral": "from the highest to the lowest (the measure has no better direction)",
+      "staleNote": "A value more than five years older than the newest is shown but not ranked.",
+      "oecdNote": "The United Kingdom's figure comes from the OECD, as it left the Eurostat collection after 2019; it is used only where both agree within 5% on the years they share.",
+      "migration": {
+        "in": "{country}: in {year}, {n} foreign-trained doctors worked in the country (trained at home: {domestic}).",
+        "inChart": "Where were the foreign-trained doctors working in {country} trained?",
+        "out": "Doctors trained in the country who work abroad, as the destinations report them: {n} in total, in {places} countries.",
+        "outChart": "Where do doctors trained in {country} work abroad?",
+        "caption": "People; the year in brackets as each destination reported it. Source: OECD ({dataset}), CC BY 4.0."
+      },
+      "dataMonth": "Data as of {month} — from the Eurostat and OECD databases, each measure at its own latest year.",
+      "notesRules": "Each country's series comes from one publisher; practising, professionally active and licensed doctors are never mixed; no correlation is computed across countries. Migration is counted by place of training, not nationality, so no net loss is computed.",
+      "notesLicence": "Eurostat: re-use with the source credited. OECD: CC BY 4.0; the processing and comparison are the author's, not an official OECD view."
     }
   }
 }

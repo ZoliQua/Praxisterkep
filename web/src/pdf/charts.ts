@@ -136,6 +136,8 @@ export function stackedBar(parts: Part[], style: ChartStyle,
   let lx = 0;
   let ly = barH + 10;
   parts.forEach((p, i) => {
+    // an empty part keeps its colour slot but takes no room in the legend
+    if (p.value <= 0) return;
     const label = `${p.label} (${format(p.value / total)})`;
     const w = textWidth(label, fs) + 22;
     if (lx + w > style.width) { lx = 0; ly += fs + 6; }

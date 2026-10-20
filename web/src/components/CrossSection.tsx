@@ -35,6 +35,11 @@ export function CrossSection({ area }: { area?: { level: 'county' | 'district'; 
   if (!o) return null;
   const local = area ? o.cross.areas[`${area.level}:${area.name}`] : null;
   if (area && !local) return null;
+  // all four readings count settlements served by vacant districts only;
+  // where an area has none (a kerület, a well-served járás) every card would
+  // read zero, which says nothing — the section is left out
+  if (local && !pts.length && !local.bus.vacantOnly && !local.deserts.settlements
+    && local.ageBands.every((b) => !b.vacantOnly)) return null;
   const c = { ...o.cross, ...(local ? { ageBands: local.ageBands, bus: local.bus } : {}) };
   const scatter: ScatterPoint[] = pts.filter((p) => p.minutes !== null).map((p) => ({
     id: p.slug, label: p.name, sub: `${p.county} · ${formatDuration(p.months)}`,

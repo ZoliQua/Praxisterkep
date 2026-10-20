@@ -16,6 +16,7 @@ import {
 import sections from '../../lib/pageSections.json';
 import { PageNav } from '../PageNav';
 import { Footer } from '../Footer';
+import { PdfButton } from '../PdfButton';
 import { NextSteps } from '../NextSteps';
 import { SideNav, type SideGroup } from '../SideNav';
 import { EuOverview } from './EuOverview';
@@ -69,7 +70,10 @@ export function EuropePage() {
     <>
       <PageNav kind={kind} onKind={setKind} />
       <header className="section container">
-        <h1 className="section__heading">{t('europe.heading')}</h1>
+        <div className="heading-row">
+          <h1 className="section__heading">{t('europe.heading')}</h1>
+          <PdfButton level="europe" group={group} focus={live} />
+        </div>
         <p className="section__lead">{t('europe.lead')}</p>
       </header>
       <div className="eu-toolbar">

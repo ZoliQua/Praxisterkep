@@ -10,6 +10,8 @@ import {
 } from './report';
 import { rings } from '../lib/projection';
 import { defaultOptions, SECTIONS, type Lang, type Level, type Report } from './types';
+import { analysisReport } from './analysisReport';
+import { europeDefaults, europeReport } from './europeReport';
 
 const style: ChartStyle = { width: 400, palette: PALETTES.site, font: 'PlexSans', grid: true,
   labels: true, size: 'normal' };
@@ -24,7 +26,7 @@ function ctx(level: Level, lang: Lang, over: Partial<Ctx['o']> = {}): Ctx {
 /** Every string a report would print, flattened. */
 function texts(r: Report): string[] {
   return [r.title, r.subtitle, ...r.sections.flatMap((s) => [s.title, ...s.blocks.flatMap((b) => {
-    if (b.kind === 'p' || b.kind === 'note' || b.kind === 'highlight') return [b.text];
+    if (b.kind === 'p' || b.kind === 'note' || b.kind === 'highlight' || b.kind === 'h3') return [b.text];
     if (b.kind === 'facts') return b.rows.flat();
     if (b.kind === 'table') return [...b.head, ...b.rows.flat()];
     if (b.kind === 'cards') return b.cards.flatMap((x) => [x.title, x.value, x.label, x.sub ?? '', ...x.legend.map((l) => l.text)]);
@@ -186,5 +188,47 @@ describe('the reports, from the real data', () => {
         expect(vacantTable.head).not.toContain('Orvos (NEAK)');
       }
     }
+  });
+});
+
+describe('the national reports, from the real data', () => {
+  const latest = data('latest.json');
+  const input = {
+    dataMonth: latest.month,
+    national: { gp: latest.kinds.gp.national, dental: latest.kinds.dental.national },
+    timeseries: data('timeseries.json').kinds, survival: data('survival.json').kinds,
+    outcomes: data('outcomes.json'), counties: data('counties.json'), districts: data('districts.json'),
+  };
+  const europe = data('europe.json');
+
+  for (const lang of ['hu', 'en'] as Lang[]) {
+    it(`analysis (${lang}): every section, nothing left unfilled`, () => {
+      const r = analysisReport(ctx('analysis', lang), input);
+      expect(r.sections.map((s) => s.id)).toEqual(SECTIONS.analysis);
+      expect(texts(r).join('\n')).not.toMatch(/\{\w+\}|undefined|NaN|pdf\.|vármegy/i);
+    });
+
+    it(`europe (${lang}): every indicator, the summary and migration`, () => {
+      const c = ctx('europe', lang, { sections: europeDefaults(europe), group: 'cee', focus: 'HU' });
+      const r = europeReport(c, europe);
+      const bad = texts(r).filter((x) => /\{\w+\}|undefined|NaN|pdf\.|europe\.ind/i.test(x));
+      expect(bad).toEqual([]);
+      expect(r.sections.map((s) => s.id)).toEqual(['overview', 'needs', 'workforce', 'access', 'outcomes',
+        'spending', 'pay', 'migration', 'notes']);
+      expect(texts(r).join('\n')).not.toMatch(/\{\w+\}|undefined|NaN|pdf\.|europe\.ind/i);
+    });
+  }
+
+  it('keeps the rankings to the chosen length', () => {
+    const r = analysisReport(ctx('analysis', 'hu', { sections: ['counties'], settlementLimit: 10, branch: 'gp' }), input);
+    const chart = r.sections[0].blocks.find((b) => b.kind === 'chart');
+    expect(chart && chart.kind === 'chart' && chart.svg.match(/<text [^>]*text-anchor="end"/g)?.length).toBe(10);
+  });
+
+  it('puts only the picked indicators in, and the focus country in the title', () => {
+    const r = europeReport(ctx('europe', 'en', { sections: ['gpDensity'], group: 'v4', focus: 'PL', branch: 'gp' }), europe);
+    expect(r.title).toBe('Poland and Europe');
+    expect(r.sections.map((s) => s.id)).toEqual(['workforce', 'notes']);
+    expect(r.sections[0].blocks.filter((b) => b.kind === 'h3')).toHaveLength(1);
   });
 });

@@ -5,6 +5,8 @@ import type { CountiesRaw } from '../lib/counties';
 import type { DistrictsRaw } from '../lib/districts';
 import type { OutcomesRaw } from '../lib/outcomes';
 import { rings, type ShapeFeature } from '../lib/projection';
+import type { EuropeRaw } from '../lib/europe';
+import type { AnalysisInput } from './analysisReport';
 import type { CountyInput, DistrictInput, SettlementInput } from './report';
 
 interface GeoFile { features: { properties: Record<string, unknown>;
@@ -60,4 +62,23 @@ export function settlementInput(): SettlementInput {
   const el = document.getElementById('pdf-data');
   if (!el?.textContent) throw new Error('no settlement data on this page');
   return JSON.parse(el.textContent) as SettlementInput;
+}
+
+interface LatestKind { national: AnalysisInput['national']['gp'] }
+
+/** The country as a whole: the snapshot, the series, and the analyses. */
+export async function analysisInput(): Promise<AnalysisInput> {
+  const [latest, ts, survival, outcomes, counties, districts] = await Promise.all([
+    json<{ month: string; kinds: Record<'gp' | 'dental', LatestKind> }>('latest.json'),
+    json<{ kinds: AnalysisInput['timeseries'] }>('timeseries.json'),
+    json<{ kinds: NonNullable<AnalysisInput['survival']> }>('survival.json', true),
+    json<OutcomesRaw>('outcomes.json', true), json<CountiesRaw>('counties.json'),
+    json<DistrictsRaw>('districts.json', true)]);
+  return { dataMonth: latest!.month,
+    national: { gp: latest!.kinds.gp.national, dental: latest!.kinds.dental.national },
+    timeseries: ts!.kinds, survival: survival?.kinds ?? null, outcomes, counties: counties!, districts };
+}
+
+export async function europeInput(): Promise<EuropeRaw> {
+  return (await json<EuropeRaw>('europe.json'))!;
 }

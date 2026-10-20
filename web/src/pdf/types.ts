@@ -2,7 +2,7 @@
 // produce before any PDF library sees it. The report is plain data, so the
 // builders can be tested without rendering a page.
 
-export type Level = 'county' | 'district' | 'settlement';
+export type Level = 'county' | 'district' | 'settlement' | 'analysis' | 'europe';
 export type Lang = 'hu' | 'en';
 export type FontKey = 'plex' | 'serif' | 'roboto';
 export type SizeKey = 'small' | 'normal' | 'large';
@@ -29,11 +29,16 @@ export interface PdfOptions {
   /** sources, data month and the method notes at the end */
   notes: boolean;
   pageNumbers: boolean;
+  /** the European report: which countries are compared, and which one leads */
+  group?: 'all' | 'cee' | 'v4';
+  focus?: string;
 }
 
 export type Block =
   | { kind: 'p'; text: string }
   | { kind: 'note'; text: string }
+  /** a heading inside a section: one indicator of the European report */
+  | { kind: 'h3'; text: string }
   /** a line that must not be missed: the data month at the end */
   | { kind: 'highlight'; text: string }
   | { kind: 'facts'; rows: [string, string][] }
@@ -77,7 +82,15 @@ export const SECTIONS: Record<Level, string[]> = {
     'forecast', 'settlements', 'notes'],
   settlement: ['summary', 'care', 'access', 'transit', 'age', 'index', 'living',
     'jobseekers', 'change', 'pharmacies', 'notes'],
+  analysis: ['national', 'trend', 'counties', 'districts', 'survival', 'forecast',
+    'correlations', 'grid', 'grants', 'emergency', 'notes'],
+  // the European report's parts are its indicators, read from europe.json;
+  // these are the ones around them
+  europe: ['overview', 'migration', 'notes'],
 };
+
+/** A choice list the dialog shows when a level's parts come from its data. */
+export interface Catalog { groups: { title: string; items: { id: string; label: string }[] }[] }
 
 export function defaultOptions(level: Level, lang: Lang, branch: BranchChoice = 'both'): PdfOptions {
   return {

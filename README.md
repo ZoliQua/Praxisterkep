@@ -1,7 +1,7 @@
 # Praxistérkép
 
 [![Monthly ETL](https://github.com/ZoliQua/Praxisterkep/actions/workflows/monthly-etl.yml/badge.svg)](https://github.com/ZoliQua/Praxisterkep/actions/workflows/monthly-etl.yml)
-[![Version](https://img.shields.io/badge/version-1.53.0-blue)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.53.1-blue)](CHANGELOG.md)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23460426.svg)](https://doi.org/10.5281/zenodo.23460426)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE.md)
 [![Python 3.12](https://img.shields.io/badge/Python-3.12-3776ab?logo=python&logoColor=white)](etl/)
@@ -39,8 +39,10 @@ Four levels — **country → county → district (járás) → settlement** —
 chosen branch (GP or dental) and place kept across the whole site. Every long
 page carries a left-hand menu of its sections (on a phone, a column of dots
 that opens into the list), and every footer names the release being served.
-The county, district and settlement pages each have a **PDF** button by their
-heading: a dialog picks the sections, the language (Hungarian or English),
+The county, district and settlement pages — and the analysis and Europe
+pages, where every section or each of the 41 European indicators can be
+picked, with the country group and the country in focus — each have a
+**PDF** button by their heading: a dialog picks the sections, the language (Hungarian or English),
 the branch, the font (three, all with the full Hungarian accent set,
 embedded), the size, the chart palette (including colour-blind safe and
 greyscale), gridlines, value labels and the page orientation. The report has
@@ -223,8 +225,10 @@ az EESZT, a KSH, az NNGYK és az NFSZ közléseiből, valamint az OpenStreetMap
 
 A nézőpont négy szinten fut: **ország → megye → járás → település**. A
 kiválasztott ág (háziorvos vagy fogorvos) és a hely az egész oldalon
-megmarad. A megye, a járás és a település oldalán a címsor mellett **PDF**
-gomb van: a felugró ablakban kiválasztható, mely részek kerüljenek bele, a
+megmarad. A megye, a járás és a település oldalán, valamint az Elemzőn és
+az Európa oldalon (ott részenként, illetve mind a 41 európai mutató
+egyenként választható, az országcsoporttal és a középpontba állított
+országgal együtt) a címsor mellett **PDF** gomb van: a felugró ablakban kiválasztható, mely részek kerüljenek bele, a
 nyelv (magyar vagy angol), az ellátási ág, a betűtípus (három, mindegyik
 teljes magyar ékezetkészlettel, beágyazva), a betűméret, a grafikonok
 színpalettája (színtévesztő-barát és szürkeárnyalatos is), a rácsvonalak, az

@@ -2490,7 +2490,9 @@
       "forecastLink": "Az előrejelzés módszere →",
       "grantsHeading": "Háziorvosi letelepedési támogatások évenként",
       "grantsRow": "{n} nyertes, ma {filled} körzetben van orvos",
-      "grantsNone": "A megyében nem volt szerződést kötött nyertes."
+      "grantsNone": "A megyében nem volt szerződést kötött nyertes.",
+      "colKerulet": "Kerület",
+      "districtsHeadingCapital": "A főváros kerületei egymás mellett"
     },
     "settlement": {
       "heading": "Hogyan élnek itt?",
@@ -3737,7 +3739,9 @@
     "kind": {
       "county": "Megyei jelentés",
       "district": "Járási jelentés",
-      "settlement": "Települési jelentés"
+      "settlement": "Települési jelentés",
+      "analysis": "Országos elemzés",
+      "europe": "Európai összevetés"
     },
     "title": {
       "jaras": "{name} járás",
@@ -3746,7 +3750,9 @@
     "file": {
       "county": "megye",
       "district": "jaras",
-      "settlement": "telepules"
+      "settlement": "telepules",
+      "analysis": "elemzes",
+      "europe": "europa"
     },
     "branchLine": {
       "both": "háziorvosi és fogorvosi alapellátás",
@@ -4074,7 +4080,19 @@
       "nearestAt": "Legközelebb",
       "minutes": "Menetidő",
       "km": "Km",
-      "name": "Név"
+      "name": "Név",
+      "total": "Összes",
+      "vacantN": "Betöltetlen",
+      "share": "Arány",
+      "partialIncome": "Parciális r (jövedelem rögzítve)",
+      "programme": "Program",
+      "year": "Év",
+      "winners": "Nyertes",
+      "matched": "Körzethez kötve",
+      "nowFilled": "Ma betöltött",
+      "nowVacant": "Ma betöltetlen",
+      "gone": "Megszűnt",
+      "reference": "Viszonyítás"
     },
     "ref": {
       "national": "Országos",
@@ -4100,7 +4118,9 @@
       "subtitle": {
         "county": "{name}",
         "district": "{name}",
-        "settlement": "{name}"
+        "settlement": "{name}",
+        "analysis": "Országos elemzés",
+        "europe": "Európai összevetés"
       },
       "contents": "Mi kerüljön bele?",
       "all": "Mind",
@@ -4151,7 +4171,13 @@
       "cancel": "Mégse",
       "working": "A PDF készül…",
       "failed": "A PDF-et nem sikerült elkészíteni. Próbáld újra, vagy frissítsd az oldalt.",
-      "nothing": "Válassz legalább egy részt."
+      "nothing": "Válassz legalább egy részt.",
+      "countries": "Országok",
+      "countryGroup": "Országcsoport",
+      "focus": "Középpontban",
+      "rankLimit": "A rangsorok hossza",
+      "first": "első {n}",
+      "allRows": "mind"
     },
     "cards": {
       "gp": "településen nincs szerződött háziorvos",
@@ -4171,6 +4197,145 @@
       "county": "{name} helye az országban",
       "district": "{name} helye az országban; sötétebb szürkével a megye ({county}) többi járása",
       "kerulet": "{name} helye a fővárosban"
+    },
+    "buttonTitleLevel": {
+      "analysis": "PDF-jelentés az országos elemzésből",
+      "europe": "PDF-jelentés az európai összevetésből"
+    },
+    "analysis": {
+      "title": "Magyarország",
+      "section": {
+        "national": "Országos helyzet",
+        "trend": "Időbeli alakulás",
+        "counties": "Megyék rangsora",
+        "districts": "Járások rangsora",
+        "survival": "Mennyi ideig betöltetlen egy körzet?",
+        "forecast": "Előrejelzés 12 hónapra",
+        "correlations": "Mi jár együtt a betöltetlenséggel?",
+        "grid": "Jövedelem, betöltetlenség és halálozás",
+        "grants": "Letelepedési és praxisjog-támogatások",
+        "emergency": "Sürgősségi osztályok elérése"
+      },
+      "national": {
+        "gp": "Háziorvosi körzetek: {total}. Betöltetlen: {vacant} ({rate}), ebből tartósan betöltetlen {longTerm}. Betöltetlen körzetben él {people} ember, a lakosság {share} része.",
+        "dental": "Fogorvosi körzetek: {total}. Betöltetlen: {vacant}, megszűnt szerződésű: {dissolved}; együttes arányuk {rate}. Tartósan betöltetlen: {longTerm}. Ezekben a körzetekben {people} ember él.",
+        "chart": {
+          "gp": "Háziorvosi körzetek az országban",
+          "dental": "Fogorvosi körzetek az országban"
+        },
+        "caption": "A körzetek megoszlása a NEAK havi betöltetlenségi listái és szolgáltatói nyilvántartása szerint."
+      },
+      "trend": {
+        "gp": "Háziorvosi ellátás, {from} és {to} között ({n} archivált hónap): a betöltetlen körzetek száma {then} volt, most {now}; ezekben ma {people} ember él.",
+        "dental": "Fogorvosi ellátás, {from} és {to} között ({n} archivált hónap): a betöltetlen vagy megszűnt körzetek száma {then} volt, most {now}.",
+        "chart": {
+          "gp": "Betöltetlen háziorvosi körzetek száma",
+          "dental": "Betöltetlen vagy megszűnt fogorvosi körzetek száma"
+        },
+        "line": {
+          "gp": "betöltetlen háziorvosi körzet",
+          "dental": "betöltetlen vagy megszűnt fogorvosi körzet"
+        },
+        "caption": "A saját havi archívumunk pillanatképeiből; a hiányzó hónapoknál a vonal megszakad."
+      },
+      "rankingCaption": "A legmagasabb aránytól a legalacsonyabbig. Forrás: NEAK havi betöltetlenségi listái és szolgáltatói nyilvántartása.",
+      "districts": {
+        "text": "A vidéki járások ({n}) a betöltetlen körzetek aránya szerint; a budapesti kerületek a járási oldalon szerepelnek.",
+        "chart": {
+          "gp": "A legmagasabb háziorvosi betöltetlenség — {n} járás",
+          "dental": "A legmagasabb fogorvosi betöltetlenség — {n} járás"
+        }
+      },
+      "survival": {
+        "lead": "Kaplan–Meier-becslés a saját archívumunk betöltetlenségi időszakaiból: mekkora része marad betöltetlen egy körzetnek adott idő után. A még tartó időszakok cenzoráltként számítanak, nem betöltöttként.",
+        "gp": "Háziorvosi ellátás: {spells} betöltetlenségi időszak, ebből {refilled} zárult betöltéssel, {open} még tart. A medián időtartam {median} hónap. Egy év után a körzetek {s12}, két év után {s24}, öt év után {s60} része betöltetlen még.",
+        "dental": "Fogorvosi ellátás: {spells} betöltetlenségi időszak, ebből {refilled} zárult betöltéssel, {open} még tart. A medián időtartam {median} hónap. Egy év után a körzetek {s12}, két év után {s24}, öt év után {s60} része betöltetlen még.",
+        "chart": {
+          "gp": "Még betöltetlen háziorvosi körzetek aránya az eltelt idő szerint",
+          "dental": "Még betöltetlen fogorvosi körzetek aránya az eltelt idő szerint"
+        },
+        "line": "még betöltetlen",
+        "month": "{n}. hó",
+        "caption": "Százalék, a betöltetlenné válás óta eltelt hónapok szerint. Forrás: a NEAK havi listáinak archivált pillanatképei, saját számítás."
+      },
+      "forecast": {
+        "gp": "Ma {now} háziorvosi körzet betöltetlen ({rateNow}). A modell szerint 12 hónap múlva várhatóan {later} ({rateLater}), 90%-os sávval {lo} és {hi} között: nagyjából {fresh} körzet üresedik meg, és {refill} töltődik be.",
+        "dental": "Ma {now} fogorvosi körzet betöltetlen vagy megszűnt ({rateNow}). A modell szerint 12 hónap múlva várhatóan {later} ({rateLater}), 90%-os sávval {lo} és {hi} között.",
+        "chart": {
+          "gp": "Betöltetlen háziorvosi körzetek: a következő 12 hónap várható útja",
+          "dental": "Betöltetlen fogorvosi körzetek: a következő 12 hónap várható útja"
+        },
+        "line": "várható érték",
+        "caption": "Darab, havonta. A 90%-os sáv a körzetek függetlenségét feltételezi; az utólagos tesztet a módszertan oldal közli."
+      },
+      "correlations": {
+        "text": "A vidéki járások ({n}) adatai: hogyan jár együtt a betöltetlen háziorvosi körzetek aránya a többi mutatóval. r: Pearson-, ρ: Spearman-korreláció; a parciális érték a jövedelem hatását rögzíti.",
+        "note": "Együttjárás, nem ok-okozat: a táblázat azt mutatja, hol jelentkezik együtt a hiány és a mutató, nem azt, hogy egyik okozza a másikat. A budapesti kerületek kimaradnak, mert a jövedelem ott fővárosi szintű adat."
+      },
+      "grid": {
+        "text": "A vidéki járások három jövedelmi és három betöltetlenségi harmadba sorolva; a cellákban az elkerülhető halálozás mediánja (100 ezer lakosra, korra standardizálva) és a járások száma.",
+        "corner": "Jövedelem \\ betöltetlenség",
+        "vacLow": "alacsony (< {a})",
+        "vacMid": "közepes ({a}–{b})",
+        "vacHigh": "magas (> {b})",
+        "incLow": "alacsony (< {a} M Ft)",
+        "incMid": "közepes ({a}–{b} M Ft)",
+        "incHigh": "magas (> {b} M Ft)",
+        "cell": "{v} ({n} járás)",
+        "note": "Ha egy jövedelmi soron belül a betöltetlenséggel együtt nő a halálozás, az a jövedelemtől részben független együttjárás — de ez sem bizonyítja az okozati kapcsolatot."
+      },
+      "grants": {
+        "text": "A NEAK letelepedési és praxisjog-vásárlási pályázatainak nyertesei, a körzetükhöz kötve, és hogy mi lett a körzettel {month} állapotában. A nyertesek nevét az adatok nem tartalmazzák.",
+        "programme": {
+          "settle": "letelepedési támogatás",
+          "practice": "praxisjog-vásárlás"
+        },
+        "note": "„Körzethez kötve”: a nyertes rendelőcíme a havi archívum alapján egyértelműen egy körzethez köthető; a közös rendelőházak bizonytalan címei kimaradnak. 2020-ra a NEAK nem közölt nyertesi listát."
+      },
+      "emergency": {
+        "text": "A sürgősségi betegellátó osztályok ({points} pont) autós elérése: a települések medián menetideje {median} perc, a leghosszabb {max} perc. 30 percnél messzebb {beyond} ember él, a lakosság {share} része.",
+        "chart": "Lakosság a legközelebbi sürgősségi osztálytól mért menetidő szerint",
+        "band": "{band} perc",
+        "caption": "Fő. Autós menetidő az OpenStreetMap úthálózatán; sürgősségi osztály: NEAK fekvőbeteg-szakmák 4602 és 4605."
+      },
+      "notesMethod": "Az elemzések módszertana, a túlélés-, az előrejelzési és a korrelációs számítás részletei a praxisterkep.hu/modszertan.html oldalon olvashatók."
+    },
+    "europe": {
+      "title": "{country} és Európa",
+      "more": "Összesítés és vándorlás",
+      "section": {
+        "overview": "Összesítő táblázat",
+        "migration": "Orvosok vándorlása"
+      },
+      "overview": {
+        "text": "Középpontban: {country}; összevetve: {group} ({n} ország). Minden mutató az ország saját legutóbbi évével, helyezés a rangsorolható országok között.",
+        "note": "Helyezés: 1 = a legkedvezőbb érték az összevetett országok között; az irány nélküli mutatók nincsenek rangsorolva, és az öt évnél régebbi érték sem. Viszonyítás: az EU-27 Eurostat által közölt értéke, ennek hiányában az országok mediánja."
+      },
+      "unranked": "nem rangsorolt",
+      "refEu": "(EU-27)",
+      "refMedian": "(medián)",
+      "value": "{country}: {value} ({year}; {unit}).",
+      "noValue": "{country} értéke nincs közölve.",
+      "rankLower": "Helyezés: {rank}. hely ({of} rangsorolt ország közül; az alacsonyabb érték a kedvezőbb).",
+      "rankHigher": "Helyezés: {rank}. hely ({of} rangsorolt ország közül; a magasabb érték a kedvezőbb).",
+      "refEuText": "Az EU-27 értéke {value} ({year}).",
+      "refMedianText": "Az összevetett országok mediánja {value} ({year}).",
+      "chartTitle": "{name} — {group}",
+      "caption": "{unit}; {order}. Zárójelben az évszám, ahol eltér a legfrissebbtől. Forrás: {source} ({dataset}).",
+      "orderBest": "a legkedvezőbbtől a legkedvezőtlenebbig",
+      "orderNeutral": "a legmagasabbtól a legalacsonyabbig (a mutatónak nincs jobb iránya)",
+      "staleNote": "A legfrissebbnél öt évvel régebbi érték látszik, de nem rangsorolt.",
+      "oecdNote": "Az Egyesült Királyság értéke az OECD-től származik, mert 2019 után kilépett az Eurostat adatgyűjtéséből; csak akkor szerepel, ha a közös években 5%-on belül egyezik az Eurostattal.",
+      "migration": {
+        "in": "{country}: {year} évben {n} külföldön végzett orvos dolgozott az országban (belföldön végzett: {domestic}).",
+        "inChart": "{country}: hol végeztek az ott dolgozó, külföldön végzett orvosok?",
+        "out": "Az ország orvosképzésében végzett, külföldön dolgozó orvosok, ahogy a célországok jelentik: összesen {n}, {places} országban.",
+        "outChart": "{country}: hol dolgoznak külföldön az ott végzett orvosok?",
+        "caption": "Fő; zárójelben az év, ahogy az adott célország jelentette. Forrás: OECD ({dataset}), CC BY 4.0."
+      },
+      "dataMonth": "Adatállapot: {month} — az Eurostat és az OECD adatbázisai szerint, mutatónként a saját legutóbbi évével.",
+      "notesRules": "Egy ország idősora mindig egyetlen kiadótól származik; a praktizáló, a szakmailag aktív és az engedéllyel rendelkező orvos fogalmát nem keverjük; országok között korrelációt nem számolunk. A vándorlást a végzés helye szerint számoljuk, nem nemzetiség szerint, ezért nettó veszteséget nem számolunk.",
+      "notesLicence": "Eurostat: újrafelhasználás a forrás megjelölésével. OECD: CC BY 4.0; a feldolgozás és az összevetés a szerző munkája, nem az OECD hivatalos álláspontja."
     }
   }
 }

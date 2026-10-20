@@ -3175,6 +3175,8 @@ body:has(.tp-rail) .tp-map svg { margin-top: 0; }
 .county-rank li.is-on .county-rank__track i { background: var(--alert); }
 .county-rank li b { text-align: right; font-weight: 500; font-variant-numeric: tabular-nums; }
 .outcome-table td, .outcome-table th { font-variant-numeric: tabular-nums; }
+.outcome-table__name { white-space: nowrap; }
+.outcome-table tbody tr:nth-child(even) td { background: color-mix(in srgb, var(--ink) 3%, transparent); }
 
 /* settlement pages: how people live here (no script) */
 .tp-living { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; margin-top: 12px; }
@@ -3737,3 +3739,8 @@ body:has(.tp-rail) section[id] { scroll-margin-top: calc(var(--topnav-h, 56px) +
   .pdfx__actions { margin: 0 -16px; padding: 10px 16px 14px; flex-wrap: wrap; }
   .pdfx__status { flex-basis: 100%; }
 }
+/* the European report's indicators, under their section names */
+.pdfx__catalog { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 4px 18px; margin-bottom: 8px; }
+.pdfx__catgroup .pdfx__grid { grid-template-columns: 1fr; margin-bottom: 4px; }
+.pdfx__catgroup .pdfx__label { margin: 8px 0 2px; font-weight: 700; color: var(--ink); }
+.pdfx__select { padding: 6px 10px; border-radius: 8px; border: 1px solid var(--line-strong); background: var(--bg-raised); color: var(--ink); font: 13.5px var(--font-body); min-width: 220px; }

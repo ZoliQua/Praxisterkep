@@ -112,6 +112,10 @@ export async function renderPdf(report: Report, o: PdfOptions, T: Translate, ver
           vLineColor: () => accent, fillColor: () => '#f5f7fa',
           paddingLeft: () => 8, paddingRight: () => 6, paddingTop: () => 4, paddingBottom: () => 4 },
         margin: [0, 0, 0, fs * 0.8] };
+      case 'h3':
+        // an indicator's own heading inside a section, kept with what follows
+        return { text: b.text, bold: true, fontSize: fs * 1.15, color: ink, margin: [0, fs * 0.6, 0, fs * 0.3],
+          headlineLevel: 2 };
       case 'highlight':
         return { unbreakable: true, table: { widths: ['*'], body: [[{ text: b.text, bold: true,
           fontSize: fs * 1.08, color: ink, lineHeight: 1.25 }]] },
@@ -226,8 +230,10 @@ export async function renderPdf(report: Report, o: PdfOptions, T: Translate, ver
         ], margin: [0, 2, 0, 0] },
       ],
     }),
+    // a heading never ends a page alone; a sub-heading needs room for its chart
     pageBreakBefore: (node: { headlineLevel?: number; startPosition: { verticalRatio: number } }) =>
-      node.headlineLevel === 1 && node.startPosition.verticalRatio > 0.86,
+      (node.headlineLevel === 1 && node.startPosition.verticalRatio > 0.86)
+      || (node.headlineLevel === 2 && node.startPosition.verticalRatio > 0.8),
     content,
   };
   return pdfMake.createPdf(doc).getBlob();

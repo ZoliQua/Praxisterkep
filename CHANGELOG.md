@@ -5,6 +5,34 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.53.1] - 2026-10-20
+
+### Hozzáadva
+- **PDF-export az Elemző és az Európa oldalon is.** Az Elemzőnél egyenként
+  választható: országos helyzet, időbeli alakulás, megyék és járások
+  rangsora (első 10, 20 vagy mind), betöltetlenségi túlélés
+  (Kaplan–Meier), 12 hónapos előrejelzés, mi jár együtt a
+  betöltetlenséggel (r, ρ, parciális r), jövedelem × betöltetlenség ×
+  halálozás rács, letelepedési támogatások, sürgősségi elérés. Az Európa
+  oldalnál **mutatónként** választható mind a 41, mellettük összesítő
+  táblázat és orvosvándorlás; országcsoport (EU-27 + UK, Közép-Kelet-Európa,
+  V4) és a középpontba állított ország is választható, alapból az, amit az
+  oldal épp mutat. Minden mutatónál rangsor, érték és év, EU-27-érték vagy
+  medián, forrás és adatkészlet.
+
+### Javítva
+- A megyetérképen 14 megye neve kézzel igazított helyre került (Pest nem
+  takarja Budapestet, Veszprém, Somogy, Vas, Nógrád stb. a saját területén
+  belül); a helyek földrajzi koordinátaként vannak tárolva
+  (`web/src/lib/countyLabels.ts`), így a PDF térképe is ugyanígy írja őket.
+- Budapest megyei oldalán a kerületek táblázata rendes táblázatstílust
+  kapott; a csak fővárosi szinten létező jövedelem- és vándorlásoszlop
+  helyett a felsőfokú végzettségűek aránya szerepel, „Kerület” fejléccel.
+- A „Négy keresztmetszet” rész kimarad egy megye vagy járás oldaláról, ha
+  nincs mit mutatnia (nincs csak betöltetlen körzetű település, ellátási
+  sivatag vagy érintett busz nélküli település — pl. Budapest 02. kerület).
+- A `code-review-2026-10-19.md` a `.gitignore`-ba került.
+
 ## [1.53.0] - 2026-10-19
 
 ### Hozzáadva

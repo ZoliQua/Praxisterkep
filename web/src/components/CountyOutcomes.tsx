@@ -60,6 +60,8 @@ export function CountyOutcomes({ county }: { county: string }) {
   const incCounty = inc.counties[county];
   const incomeIndex = incCounty?.map((v, i) => (v !== null && inc.medianDistrict[i]
     ? (100 * v) / (inc.medianDistrict[i] as number) : null));
+  // the capital's 23 kerület stand where a county's járás would
+  const capital = county === 'Budapest';
   const districts = o.districts.filter((d) => d.county === county)
     .sort((a, b) => (b.avoidable ?? 0) - (a.avoidable ?? 0));
   const fmtA = metaOf('avoidable').format;
@@ -132,28 +134,33 @@ export function CountyOutcomes({ county }: { county: string }) {
         </div>
       )}
 
-      <h3 className="outcome__sub" id="jarasai">{t('outcomes.county.districtsHeading', { county })}</h3>
+      <h3 className="outcome__sub" id="jarasai">{t(capital ? 'outcomes.county.districtsHeadingCapital'
+        : 'outcomes.county.districtsHeading', { county })}</h3>
       <div className="table-wrap">
-        <table className="county-table outcome-table">
+        <table className="info-table county-table outcome-table">
           <thead>
             <tr>
-              <th>{t('outcomes.county.colDistrict')}</th>
-              <th>{t('outcomes.measure.gpRate')}</th>
-              <th>{t('outcomes.measure.avoidable')}</th>
-              <th>{t('outcomes.measure.income')}</th>
-              <th>{t('outcomes.measure.jobseekers')}</th>
-              <th>{t('outcomes.measure.migration')}</th>
+              <th>{t(capital ? 'outcomes.county.colKerulet' : 'outcomes.county.colDistrict')}</th>
+              <th className="is-num">{t('outcomes.measure.gpRate')}</th>
+              <th className="is-num">{t('outcomes.measure.avoidable')}</th>
+              {/* a kerület has no income or migration of its own: the
+                  capital's would fill both columns with one number */}
+              {!capital && <th className="is-num">{t('outcomes.measure.income')}</th>}
+              <th className="is-num">{t('outcomes.measure.jobseekers')}</th>
+              {capital ? <th className="is-num">{t('outcomes.measure.degree')}</th>
+                : <th className="is-num">{t('outcomes.measure.migration')}</th>}
             </tr>
           </thead>
           <tbody>
             {districts.map((d) => (
               <tr key={d.slug}>
-                <td><a href={districtHref(d.name)}>{d.name}</a></td>
-                <td>{d.gpRate === null ? '–' : metaOf('gpRate').format(d.gpRate)}</td>
-                <td>{d.avoidable === null ? '–' : fmtA(d.avoidable)}</td>
-                <td>{d.capital || valueOf(d, 'income') === null ? '–' : metaOf('income').format(d.income as number)}</td>
-                <td>{d.jobseekers === null ? '–' : metaOf('jobseekers').format(d.jobseekers)}</td>
-                <td>{d.capital || d.migration === null ? '–' : metaOf('migration').format(d.migration)}</td>
+                <td className="outcome-table__name"><a href={districtHref(d.name)}>{d.name}</a></td>
+                <td className="is-num">{d.gpRate === null ? '–' : metaOf('gpRate').format(d.gpRate)}</td>
+                <td className="is-num">{d.avoidable === null ? '–' : fmtA(d.avoidable)}</td>
+                {!capital && <td className="is-num">{valueOf(d, 'income') === null ? '–' : metaOf('income').format(d.income as number)}</td>}
+                <td className="is-num">{d.jobseekers === null ? '–' : metaOf('jobseekers').format(d.jobseekers)}</td>
+                {capital ? <td className="is-num">{d.degree === null ? '–' : metaOf('degree').format(d.degree)}</td>
+                  : <td className="is-num">{d.migration === null ? '–' : metaOf('migration').format(d.migration)}</td>}
               </tr>
             ))}
           </tbody>

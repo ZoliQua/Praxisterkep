@@ -26,8 +26,10 @@ export function rings(geometry: { type: string; coordinates: unknown }): Ring[] 
   return geometry.coordinates as Ring[];
 }
 
-/** Projects features into a box, keeping their aspect ratio. */
-export function project(features: ShapeFeature[], box: Box): ProjectedShape[] {
+/** Projects features into a box, keeping their aspect ratio; `labels` puts
+ *  a name at a given longitude/latitude instead of the outline's average. */
+export function project(features: ShapeFeature[], box: Box,
+  labels: Record<string, [number, number]> = {}): ProjectedShape[] {
   let bbox = [Infinity, Infinity, -Infinity, -Infinity];
   for (const f of features) {
     for (const ring of f.rings) {
@@ -47,13 +49,14 @@ export function project(features: ShapeFeature[], box: Box): ProjectedShape[] {
   ];
   return features.map((f) => {
     const points = f.rings.flat().map(xy);
+    const at = labels[f.name] ? xy(labels[f.name]) : null;
     return {
       name: f.name,
       isCapital: f.isCapital,
       d: f.rings.map((ring) => `M${ring.map((p) => xy(p).map((v) => v.toFixed(1))
         .join(' ')).join('L')}Z`).join(''),
-      cx: points.reduce((a, p) => a + p[0], 0) / points.length,
-      cy: points.reduce((a, p) => a + p[1], 0) / points.length,
+      cx: at ? at[0] : points.reduce((a, p) => a + p[0], 0) / points.length,
+      cy: at ? at[1] : points.reduce((a, p) => a + p[1], 0) / points.length,
     };
   });
 }
