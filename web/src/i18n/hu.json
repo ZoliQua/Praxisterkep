@@ -2413,7 +2413,8 @@
         "income": "Parciális korreláció: mennyi marad az összefüggésből, ha a járások jövedelmi különbségét kivesszük.",
         "incomeDegree": "Másodrendű parciális korreláció: mennyi marad, ha a jövedelmet és a diplomások arányát egyszerre kivesszük. Ez a legszigorúbb olvasat — ami itt is megmarad, az nem csak a szegénység és az iskolázottság tükre."
       },
-      "pairPartial2": "A jövedelmet és a végzettséget is kiszűrve: {r}."
+      "pairPartial2": "A jövedelmet és a végzettséget is kiszűrve: {r}.",
+      "ischaemicWithheld": "A nyilvántartott ischaemiás szívbetegek aránya most kimarad: a KSH TIMEA szolgáltatása erre a mutatóra (TYWJ013) minden járásban, megyében és évben a magas vérnyomásos betegek (TYWJ012) számait adja vissza. Amíg ez így van, nem közöljük; ha a KSH javítja, az oszlop magától visszakerül."
     },
     "cross": {
       "heading": "Négy keresztmetszet — a meglévő adatok egymás tükrében",

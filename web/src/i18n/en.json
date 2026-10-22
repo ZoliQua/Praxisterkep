@@ -2413,7 +2413,8 @@
         "income": "Partial correlation: what remains once the income difference between járás is taken out.",
         "incomeDegree": "Second-order partial correlation: what remains once income and the share of graduates are taken out together. The strictest reading — what survives here is not just poverty and schooling."
       },
-      "pairPartial2": "Income and education held constant: {r}."
+      "pairPartial2": "Income and education held constant: {r}.",
+      "ischaemicWithheld": "Registered ischaemic heart disease is left out for now: for this measure (TYWJ013) KSH’s TIMEA service returns the figures of hypertension (TYWJ012) in every district, county and year. Until that changes it is not published; once KSH corrects it, the column comes back by itself."
     },
     "cross": {
       "heading": "Four cross-sections — the existing data read against itself",

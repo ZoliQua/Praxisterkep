@@ -5,6 +5,19 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.53.2] - 2026-10-22
+
+### Javítva
+- **Az ischaemiás szívbetegség sora a magas vérnyomás másolata volt.** A KSH
+  TIMEA szolgáltatása a TYWJ013 (ischaemiás szívbetegség) mutatóra járási és
+  megyei szinten minden évben a TYWJ012 (magas vérnyomás) számait adja
+  vissza – mind az 1365 érték egyezik, élőben és az archivált letöltésben is.
+  Az ETL mostantól visszatart minden mutatót, amely egy másiknak cellánként
+  pontos másolata (`withhold_copies`, `etl/ksh_timea.py`), és figyelmeztetést
+  ír. Az ischaemiás oszlop így kikerült az összefüggések mátrixából és a
+  PDF-ből; helyette egy megjegyzés mondja el, miért. Ha a KSH javítja a
+  forrást, a sor magától visszatér.
+
 ## [1.53.1] - 2026-10-20
 
 ### Hozzáadva

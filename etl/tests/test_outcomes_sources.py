@@ -103,6 +103,35 @@ def test_timea_keys_settlements_by_the_ksh_stem(monkeypatch):
     assert set(out["districts"]) == {"Esztergomi", "Budapest"}
 
 
+def _two(copy: bool) -> tuple[dict, dict]:
+    ind = {"hypertensionRegistered": {"code": "TYWJ012", "levels": ["district", "county"]},
+           "ischaemicRegistered": {"code": "TYWJ013", "levels": ["district", "county"]}}
+    districts = {f"J{i}": {"hypertensionRegistered": {"2025": 3000.0 + i},
+                           "ischaemicRegistered": {"2025": (3000.0 + i) if copy else 900.0 + i}}
+                 for i in range(30)}
+    counties = {"M": {"hypertensionRegistered": {"2025": 3100.0},
+                      "ischaemicRegistered": {"2025": 3100.0 if copy else 950.0}}}
+    return ind, {"settlement": {}, "district": districts, "county": counties}
+
+
+def test_timea_withholds_an_indicator_that_is_another_ones_copy():
+    # KSH has answered TYWJ013 with TYWJ012's figures everywhere: the copy is
+    # not published under the other name, and the indicator says why
+    ind, levels = _two(copy=True)
+    assert kt.withhold_copies(ind, levels) == ["ischaemicRegistered"]
+    assert ind["ischaemicRegistered"]["withheld"]["sameAs"] == "TYWJ012"
+    assert all("ischaemicRegistered" not in d for d in levels["district"].values())
+    assert "ischaemicRegistered" not in levels["county"]["M"]
+    assert all("hypertensionRegistered" in d for d in levels["district"].values())
+
+
+def test_timea_keeps_two_indicators_that_differ():
+    ind, levels = _two(copy=False)
+    assert kt.withhold_copies(ind, levels) == []
+    assert "withheld" not in ind["ischaemicRegistered"]
+    assert levels["district"]["J0"]["ischaemicRegistered"] == {"2025": 900.0}
+
+
 def test_timea_refuses_a_truncated_answer(monkeypatch):
     class Resp:
         def raise_for_status(self): pass

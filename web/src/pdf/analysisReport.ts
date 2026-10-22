@@ -162,11 +162,8 @@ export function analysisReport(c: Ctx, input: AnalysisInput): Report {
   }
 
   if (want(c, 'correlations') && out) {
-    // gpLongTerm is the vacancy itself, and the ischaemic series in
-    // outcomes.json is a copy of the hypertension one (an ETL fault, reported):
-    // neither belongs in a table of what goes with vacancy
-    const pairs = out.correlations.pairs.filter((p) => p.x === 'gpRate' && p.y !== 'gpLongTerm'
-      && p.y !== 'ischaemic');
+    // gpLongTerm is the vacancy itself, not something that goes with it
+    const pairs = out.correlations.pairs.filter((p) => p.x === 'gpRate' && p.y !== 'gpLongTerm');
     const partial = (y: string) => out.correlations.partials.find((p) => p.x === 'gpRate' && p.y === y
       && p.control === 'income');
     sections.push({ id: 'correlations', title: T('pdf.analysis.section.correlations'), blocks: [

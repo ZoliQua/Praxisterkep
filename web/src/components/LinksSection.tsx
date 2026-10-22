@@ -26,6 +26,9 @@ export function LinksSection() {
   const [control, setControl] = useState<Control>('none');
   const [active, setActive] = useState<{ x: string; y: string }>({ x: 'gpRate', y: 'gpLoad' });
   if (!o) return null;
+  // a measure with no pair in the data is not offered: the ETL withholds a
+  // series KSH answers with another one's figures (TYWJ013 = TYWJ012)
+  const cols = COLS.filter((k) => ROWS.some((r) => pairOf(o, r, k)));
   const third = incomeThird(o.districts);
   const { x, y } = active;
   const points: ScatterPoint[] = o.districts
@@ -48,8 +51,9 @@ export function LinksSection() {
         ))}
       </div>
       <p className="section__explain">{t(`outcomes.links.controlExplain.${control}`)}</p>
-      <CorrMatrix data={o} rows={ROWS} cols={COLS} control={control} active={active}
+      <CorrMatrix data={o} rows={ROWS} cols={cols} control={control} active={active}
         onPick={(a, b) => setActive({ x: a, y: b })} />
+      {!cols.includes('ischaemic') && <p className="outcome__hint">{t('outcomes.links.ischaemicWithheld')}</p>}
       <div className="corr-matrix__key">
         <span><i className="is-pos" />{t('outcomes.links.keyPos')}</span>
         <span><i className="is-neg" />{t('outcomes.links.keyNeg')}</span>

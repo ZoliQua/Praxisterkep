@@ -1,7 +1,7 @@
 # Praxistérkép
 
 [![Monthly ETL](https://github.com/ZoliQua/Praxisterkep/actions/workflows/monthly-etl.yml/badge.svg)](https://github.com/ZoliQua/Praxisterkep/actions/workflows/monthly-etl.yml)
-[![Version](https://img.shields.io/badge/version-1.53.1-blue)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.53.2-blue)](CHANGELOG.md)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23460426.svg)](https://doi.org/10.5281/zenodo.23460426)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE.md)
 [![Python 3.12](https://img.shields.io/badge/Python-3.12-3776ab?logo=python&logoColor=white)](etl/)

@@ -238,9 +238,57 @@ def parse(files: dict[str, bytes], ksh_ids: dict[str, str]) -> dict:
     if len(districts) != DISTRICTS or len(counties) != COUNTIES:
         raise ParseError(f"{len(districts)} járás / {len(counties)} counties, "
                          f"expected {DISTRICTS} / {COUNTIES}")
+    withhold_copies(indicators, {"settlement": settlements, "district": districts,
+                                 "county": counties})
     return {"indicators": indicators, "settlements": settlements,
             "districts": districts, "counties": counties, "capital": capital,
             "unmatched": sorted(unmatched)}
+
+
+def _series(rows: dict[str, dict], key: str) -> dict[tuple[str, str], float]:
+    return {(area, year): v for area, by_key in rows.items()
+            for year, v in by_key.get(key, {}).items()}
+
+
+def withhold_copies(indicators: dict, levels: dict[str, dict[str, dict]],
+                    min_values: int = 20) -> list[str]:
+    """Keep out an indicator whose every value is another one's.
+
+    KSH's service has answered for TYWJ013 (GP-registered ischaemic heart
+    disease, I20–I25) with the figures of TYWJ012 (hypertension, I10–I15) at
+    every járás, county and year (checked 2026-10-20, live and in the
+    archive). Two different diagnoses cannot agree to the hundredth in 1225
+    cells, and a third of adults registered with ischaemic heart disease is
+    not a number any register holds. Publishing it would print a copy under
+    another name, so the later code of an identical pair is withheld: its
+    values are dropped at every level and the indicator says why. Nothing is
+    estimated in its place, and the next run brings it back by itself once
+    KSH's answer differs.
+    """
+    withheld = []
+    keys = sorted(indicators, key=lambda k: indicators[k]["code"])
+    for i, a in enumerate(keys):
+        for b in keys[i + 1:]:
+            if b in withheld or "withheld" in indicators[b]:
+                continue
+            shared = [lvl for lvl in indicators[a]["levels"] if lvl in indicators[b]["levels"]]
+            pairs = [(_series(levels[lvl], a), _series(levels[lvl], b)) for lvl in shared]
+            cells = sum(len(sb) for _, sb in pairs)
+            if not shared or cells < min_values:
+                continue
+            if all(sa.keys() == sb.keys() and all(sa[k] == sb[k] for k in sb) for sa, sb in pairs):
+                indicators[b]["withheld"] = {
+                    "sameAs": indicators[a]["code"],
+                    "reason": f"KSH answers {indicators[b]['code']} with the figures of "
+                              f"{indicators[a]['code']} in every cell ({cells}); a source fault, "
+                              "not published until the answer differs"}
+                for lvl in indicators[b]["levels"]:
+                    for by_key in levels[lvl].values():
+                        by_key.pop(b, None)
+                withheld.append(b)
+                print(f"  WARNING {indicators[b]['code']} withheld: identical to "
+                      f"{indicators[a]['code']} in all {cells} values")
+    return withheld
 
 
 def _ksh_stems() -> dict[str, str]:
