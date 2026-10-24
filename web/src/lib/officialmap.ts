@@ -46,11 +46,11 @@ export interface OfficialRaw {
 }
 
 export const VERDICT_COLORS: Record<Verdict, string> = {
-  agree: '#4fd6c2',
-  differ: '#ff7a59',
-  onlyOfficial: '#ffb454',
-  onlyOurs: '#b8b0f5',
-  neither: '#8899ad',
+  agree: 'var(--good)',
+  differ: 'var(--alert)',
+  onlyOfficial: 'var(--alert-soft)',
+  onlyOurs: 'var(--violet-soft)',
+  neither: 'var(--approx)',
 };
 
 let cache: OfficialRaw | null = null;

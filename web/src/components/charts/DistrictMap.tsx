@@ -128,7 +128,7 @@ function Legend({ ends, shadeAt, empty, format, hasEmpty, scaled }: {
 }
 
 export function DistrictMap({
-  values, format, color = '#ef6461', empty = 'var(--bg-panel)', onPick, selected,
+  values, format, color = 'var(--bad)', empty = 'var(--bg-panel)', onPick, selected,
   legendFormat, total, seatOf, scale,
 }: {
   /** járás name -> value in 0..1; a missing one is drawn as empty */

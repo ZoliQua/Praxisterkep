@@ -1,0 +1,35 @@
+{
+  "_comment": "The colour schemes of the palette picker (lib/theme.ts). Each sets the dental and GP accents, the two warm vacancy colours and the series colours 2-8; the derived tokens (bad, warn, good, calm, violet, blue, the four praxis types) follow from them unless a scheme names its own. web/scripts/theme-css.mjs writes src/theme.css from this file, with a darker twin of every colour for the light theme.",
+  "alap": {
+    "dental": "#4fd6c2", "gp": "#6ea8ff", "alert": "#ff7a59", "alertSoft": "#ffb454",
+    "series": ["#6ea8ff", "#ffb454", "#ff7a59", "#b48cff", "#f27fb2", "#9bd46a", "#8b98ab"],
+    "bad": "#ef6461", "warn": "#f0b429", "calm": "#5fb3a1", "violet": "#a78bfa", "violetSoft": "#b8b0f5",
+    "blue": "#8ab4ff", "mint": "#9bd4a5", "mid": "#c98500", "pink": "#e05b8a", "amber": "#f2a541",
+    "typeAdult": "#3d87e0", "typeChild": "#c98500", "typeMixed": "#17a08c", "typeSchool": "#9085e9"
+  },
+  "okabe": {
+    "dental": "#2fc79a", "gp": "#56b4e9", "alert": "#e8743b", "alertSoft": "#f0e442",
+    "series": ["#56b4e9", "#e69f00", "#cc79a7", "#f0e442", "#e8743b", "#7fc8f0", "#999999"],
+    "typeAdult": "#56b4e9", "typeChild": "#e69f00", "typeMixed": "#2fc79a", "typeSchool": "#cc79a7"
+  },
+  "viridis": {
+    "dental": "#5ec962", "gp": "#3fa6c9", "alert": "#fde725", "alertSoft": "#b5de2b",
+    "series": ["#3fa6c9", "#fde725", "#4b6fc0", "#b5de2b", "#8a5cc4", "#21a39a", "#8b98ab"]
+  },
+  "magma": {
+    "dental": "#fb8f5a", "gp": "#fdc366", "alert": "#ef4f7a", "alertSoft": "#fcd57a",
+    "series": ["#fdc366", "#c83f8a", "#ef4f7a", "#9a54cf", "#feeaa8", "#6a5ad0", "#8b98ab"]
+  },
+  "tableau": {
+    "dental": "#76b7b2", "gp": "#6f9bd1", "alert": "#e15759", "alertSoft": "#f28e2b",
+    "series": ["#6f9bd1", "#f28e2b", "#e15759", "#59a14f", "#edc948", "#b07aa1", "#ff9da7"]
+  },
+  "kek": {
+    "dental": "#7fb2ff", "gp": "#7fb2ff", "alert": "#f4a261", "alertSoft": "#f6c88f",
+    "series": ["#b9d3ff", "#4f7fd6", "#dbe8ff", "#3561b0", "#93bdf5", "#2a4f8f", "#8b98ab"]
+  },
+  "kontraszt": {
+    "dental": "#00e5ff", "gp": "#ffea00", "alert": "#ff3d71", "alertSoft": "#ff9f1c",
+    "series": ["#ffea00", "#ff9f1c", "#ff3d71", "#c77dff", "#7cff6b", "#ffffff", "#9aa8bb"]
+  }
+}

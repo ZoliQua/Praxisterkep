@@ -62,10 +62,10 @@ export interface RiskRaw {
 }
 
 export const BAND_COLORS: Record<string, string> = {
-  kiemelt: '#e05b8a',
-  magas: '#ff7a59',
-  kozepes: '#c98500',
-  alacsony: '#4fd6c2',
+  kiemelt: 'var(--pink)',
+  magas: 'var(--alert)',
+  kozepes: 'var(--mid)',
+  alacsony: 'var(--good)',
 };
 
 let cache: RiskRaw | null = null;

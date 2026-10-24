@@ -170,7 +170,7 @@ export function LivingSection() {
           ))}
         </div>
         <MapAndList o={o} measure={popKey} picked={picked} onPick={setPicked}
-          scale={{ mid: 0, invert: true, goodColor: '#5fb3a1' }} />
+          scale={{ mid: 0, invert: true, goodColor: 'var(--calm)' }} />
         <h3 className="outcome__sub">{t('outcomes.pop.quadrantHeading')}</h3>
         <p className="section__explain">{t('outcomes.pop.quadrantExplain')}</p>
         <OutcomeScatter points={quadrant}

@@ -93,17 +93,17 @@ export interface EmergencyRaw {
 }
 
 export const BAND_COLORS: Record<string, string> = {
-  '0-10': '#4fd6c2',
-  '10-20': '#ffb454',
-  '20-30': '#ff7a59',
-  '30+': '#e05b8a',
+  '0-10': 'var(--good)',
+  '10-20': 'var(--alert-soft)',
+  '20-30': 'var(--alert)',
+  '30+': 'var(--pink)',
 };
 
 export const GROUP_COLORS: Record<EmergencyGroup, string> = {
-  oncall: '#4fd6c2',
-  ambulance: '#e05b8a',
-  transport: '#ffb454',
-  dialysis: '#b8b0f5',
+  oncall: 'var(--good)',
+  ambulance: 'var(--pink)',
+  transport: 'var(--alert-soft)',
+  dialysis: 'var(--violet-soft)',
 };
 
 let cache: EmergencyRaw | null = null;

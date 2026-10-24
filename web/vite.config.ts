@@ -25,6 +25,8 @@ export default defineConfig({
         streetmap: resolve(__dirname, 'src/streetmap.ts'),
         // not a page either: the PDF export button of the static settlement pages
         pdfexport: resolve(__dirname, 'src/pdfexport.ts'),
+        // nor this: the light/dark and colour-scheme buttons of the static pages
+        statictools: resolve(__dirname, 'src/navtoolsStatic.ts'),
       },
     },
   },

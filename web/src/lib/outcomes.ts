@@ -288,9 +288,9 @@ const signed = (digits: number, unit: string) => {
   const f = num(digits);
   return (v: number) => `${v > 0 ? '+' : v < 0 ? '−' : ''}${f(Math.abs(v))}${unit}`;
 };
-const RED = '#ef6461';
-const AMBER = '#f2a541';
-const VIOLET = '#a78bfa';
+const RED = 'var(--bad)';
+const AMBER = 'var(--amber)';
+const VIOLET = 'var(--violet)';
 
 export const MEASURES: Record<string, MeasureMeta> = {
   gpRate: { key: 'gpRate', direction: 'higherWorse', color: RED,
@@ -412,7 +412,7 @@ export function partialOf(o: OutcomesRaw, x: string, y: string, control = 'incom
 /* ---------------------------------------------------------- shared helpers */
 
 /** red, amber, teal: worst third to best third, on every outcome chart */
-export const GROUP_COLORS = ['#ef6461', '#f2a541', '#5fb3a1'];
+export const GROUP_COLORS = ['var(--bad)', 'var(--amber)', 'var(--calm)'];
 
 export function districtHref(name: string): string {
   return contextHref('jaras.html', { ...currentContext(), district: name });

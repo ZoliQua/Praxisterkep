@@ -106,8 +106,8 @@ export interface SpecialistRaw {
 }
 
 export const CARE_COLORS: Record<Care, string> = {
-  inpatient: '#b8b0f5',
-  outpatient: '#4fd6c2',
+  inpatient: 'var(--violet-soft)',
+  outpatient: 'var(--good)',
 };
 
 let cache: SpecialistRaw | null = null;

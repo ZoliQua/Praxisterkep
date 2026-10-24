@@ -35,7 +35,7 @@ export function PharmacySection() {
   );
   const without = useMemo(() => withoutPharmacy(data), [data]);
   const categories = useMemo(() => [{
-    key: 'pharmacy', label: t('pharmacy.mapLegend'), color: '#4fd6c2',
+    key: 'pharmacy', label: t('pharmacy.mapLegend'), color: 'var(--good)',
   }], []);
 
   if (!data) return null;

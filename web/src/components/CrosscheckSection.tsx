@@ -15,13 +15,13 @@ import { renderExtraCell } from './EesztCells';
 import type { PraxisKind } from '../types';
 
 const VERDICT_COLOR: Record<string, string> = {
-  otherUnitSameProfession: '#4fd6c2',
-  ownUnitSameProfession: '#6ea8ff',
-  providerTaxNumber: '#17a08c',
-  otherProfessionAtAddress: '#c98500',
-  streetSameProfession: '#9085e9',
-  providerName: '#17a08c',
-  none: '#64748b',
+  otherUnitSameProfession: 'var(--good)',
+  ownUnitSameProfession: 'var(--gp)',
+  providerTaxNumber: 'var(--type-mixed)',
+  otherProfessionAtAddress: 'var(--mid)',
+  streetSameProfession: 'var(--violet)',
+  providerName: 'var(--type-mixed)',
+  none: 'var(--ink-faint)',
 };
 
 export function CrosscheckSection({ kind, part }: { kind: PraxisKind; part: number }) {

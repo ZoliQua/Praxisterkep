@@ -68,6 +68,11 @@ export function Footer({ month }: { month?: string }) {
         </details>
 
         <p className="footer__privacy">
+          {/* in the top bar's place, for a reader who came from the internal
+              site and has "Belső" there instead (see NavMenu) */}
+          <span className="only-internal">
+            <a href="/modszertan.html">{t('nav.methodology')}</a>{' · '}
+          </span>
           <a href="/adatkezeles.html">{t('privacy.navLabel')}</a>
           {' · '}
           {/* consent.js finds this and reopens the bar */}

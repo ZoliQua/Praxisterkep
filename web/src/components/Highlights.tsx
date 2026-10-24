@@ -6,6 +6,7 @@ import { t } from '../lib/i18n';
 import { formatNumber, formatPercent } from '../lib/format';
 import { contextHref } from '../lib/context';
 import { EuropeHighlights } from './EuropeHighlights';
+import { HighlightsStory } from './story/PageStories';
 
 interface HighlightsData {
   month: string;
@@ -51,6 +52,7 @@ export function Highlights() {
         </a>
       </div>
       <EuropeHighlights />
+      <HighlightsStory data={data} />
     </section>
   );
 }

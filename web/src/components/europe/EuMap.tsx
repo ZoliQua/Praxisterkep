@@ -11,11 +11,21 @@ import { geoArea, geoAzimuthalEqualArea, geoPath, interpolateRgbBasis } from 'd3
 import type { Feature, FeatureCollection, MultiPolygon } from 'geojson';
 import { t } from '../../lib/i18n';
 import { goodness, type Better, type EuShape } from '../../lib/europe';
+import { cssColor, currentTheme, useThemeTick } from '../../lib/theme';
 
 const W = 760;
 const H = 560;
-const GOOD = interpolateRgbBasis(['#ff7a59', '#ffb454', '#e9e3a6', '#4fd6c2']);
-const PLAIN = interpolateRgbBasis(['#1f3550', '#3f6fa8', '#8fc3ff']);
+/** worst → best in the colour scheme's own warm and good colours; low → high
+ *  for a measure with no direction. Read off the page (theme, scheme). */
+function scales(tick = 0) {
+  void tick;
+  const light = currentTheme() === 'light';
+  return {
+    GOOD: interpolateRgbBasis([cssColor('--alert', '#ff7a59'), cssColor('--alert-soft', '#ffb454'),
+      light ? '#d9d08a' : '#e9e3a6', cssColor('--good', '#4fd6c2')]),
+    PLAIN: interpolateRgbBasis(light ? ['#d6e4f3', '#6f9bd1', '#1f4f8f'] : ['#1f3550', '#3f6fa8', '#8fc3ff']),
+  };
+}
 
 /** d3-geo wants each exterior ring clockwise; GeoJSON files differ. A ring
  *  the wrong way round fills the whole globe but itself — so measure, and
@@ -75,6 +85,8 @@ export function EuMap({ shapes, base, frame, valueOf, better, focus, onPick, nam
     const all = vs.length ? vs : [...values.values()].map((v) => v.value);
     return [Math.min(...all), Math.max(...all)];
   }, [values, frame]);
+  const themeTick = useThemeTick();
+  const { GOOD, PLAIN } = useMemo(() => scales(themeTick), [themeTick]);
   const colour = (v: MapValue) => {
     const g = goodness(better, v.value, lo, hi);
     return better === 'neutral' ? PLAIN(Math.max(0, Math.min(1, g))) : GOOD(Math.max(0, Math.min(1, g)));

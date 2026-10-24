@@ -107,16 +107,16 @@ export const useTravel = loader<TravelRaw>('traveltime.json');
 export const useTransit = loader<TransitRaw>('transit.json');
 
 export const BAND_COLORS: Record<string, string> = {
-  '0-10': '#4fd6c2',
-  '10-20': '#ffb454',
-  '20-30': '#ff7a59',
-  '30+': '#e05b8a',
+  '0-10': 'var(--good)',
+  '10-20': 'var(--alert-soft)',
+  '20-30': 'var(--alert)',
+  '30+': 'var(--pink)',
 };
 
 export const SERVICE_COLORS: Record<string, string> = {
-  direct: '#4fd6c2',
-  indirect: '#ff7a59',
-  none: '#e05b8a',
+  direct: 'var(--good)',
+  indirect: 'var(--alert)',
+  none: 'var(--pink)',
 };
 
 export function layerStats(data: TravelRaw | null, layer: Layer): LayerStats | null {

@@ -12,7 +12,7 @@ const W = 460;
 const H = 150;
 const PAD = { top: 12, right: 10, bottom: 22, left: 34 };
 const COLOR_A = 'var(--accent)';
-const COLOR_B = '#b58cff';
+const COLOR_B = 'var(--s5)';
 
 function CountyCard({ county, color }: { county: CountyAggregate; color: string }) {
   // both readings, side by side and labelled: a comparison of two counties is

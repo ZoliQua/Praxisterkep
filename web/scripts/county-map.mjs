@@ -17,11 +17,11 @@ const PAD = 14;
 
 /** Layers drawn as a connection, in the order they are stacked. */
 export const LINKS = [
-  { key: 'gp', label: 'Háziorvos', color: '#4fd6c2' },
-  { key: 'dental', label: 'Fogorvos', color: '#8ab4ff' },
-  { key: 'oncall', label: 'Központi ügyelet', color: '#f0b429' },
-  { key: 'inpatient', label: 'Kórház', color: '#ef6461' },
-  { key: 'pharmacy', label: 'Gyógyszertár', color: '#c88ff0' },
+  { key: 'gp', label: 'Háziorvos', color: 'var(--good)' },
+  { key: 'dental', label: 'Fogorvos', color: 'var(--blue)' },
+  { key: 'oncall', label: 'Központi ügyelet', color: 'var(--warn)' },
+  { key: 'inpatient', label: 'Kórház', color: 'var(--bad)' },
+  { key: 'pharmacy', label: 'Gyógyszertár', color: 'var(--violet)' },
 ];
 
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
@@ -214,7 +214,7 @@ export function countyMap(profile, geo, translate = null, lang = 'hu') {
     return `<g class="cm-link ${group.map((t) => `cm-layer--${t.key}`).join(' ')}">${strokes}${dots}${spot ? `
     <a href="${esc(geo.linkOf?.(at, profile.county) ?? '')}" class="cm-townlink">
       <text x="${(spot.anchorEnd ? tx - 9 : tx + 9).toFixed(1)}" y="${spot.y.toFixed(1)}"
-        ${spot.anchorEnd ? 'text-anchor="end" ' : ''}fill="#cbd5e1"
+        ${spot.anchorEnd ? 'text-anchor="end" ' : ''}fill="var(--ink)"
         font-size="11">${esc(text)}</text></a>` : ''}
   </g>`;
   }).join('\n  ');
@@ -227,12 +227,12 @@ export function countyMap(profile, geo, translate = null, lang = 'hu') {
     const spot = labels.place(x + 6, y + 3.5, c.name.length * size, { push: 2 });
     return `<g class="cm-town${jaras ? ' cm-layer--jarasseat' : ''}">
     <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${seat ? 3.4 : jaras ? 1.8 : 2.2}"
-      fill="${seat ? '#94a3b8' : jaras ? '#51637a' : '#64748b'}"/>${spot ? `
+      fill="${seat ? 'var(--ink-dim)' : jaras ? 'var(--ink-faint)' : 'var(--ink-faint)'}"/>${spot ? `
     <a href="${esc(geo.linkOf?.(c.name, profile.county) ?? '')}" class="cm-townlink">
       <text x="${(spot.anchorEnd ? x - 6 : x + 6).toFixed(1)}" y="${spot.y.toFixed(1)}"
         ${spot.anchorEnd ? 'text-anchor="end" ' : ''}font-size="${
   seat ? 11.5 : jaras ? 9 : 10}"
-        fill="${seat ? '#cbd5e1' : jaras ? '#8595aa' : '#94a3b8'}"${
+        fill="${seat ? 'var(--ink)' : jaras ? 'var(--ink-dim)' : 'var(--ink-dim)'}"${
   seat ? ' font-weight="600"' : ''}>${esc(c.name)}</text></a>` : ''}
   </g>`;
   }).join('\n  ');
@@ -241,7 +241,7 @@ export function countyMap(profile, geo, translate = null, lang = 'hu') {
   // at a time. No script — the stylesheet hides what is unchecked.
   const toggles = [
     ...targets.map((t) => ({ key: t.key, label: linkLabel(t), color: t.color })),
-    { key: 'jarasseat', label: tr('jarasSeats', {}, 'Járásszékhelyek'), color: '#51637a' },
+    { key: 'jarasseat', label: tr('jarasSeats', {}, 'Járásszékhelyek'), color: 'var(--ink-faint)' },
   ];
   const legend = toggles.length
     ? `<p class="tp-maplegend tp-maplegend--toggles">${toggles.map((t) => `
@@ -262,18 +262,18 @@ export function countyMap(profile, geo, translate = null, lang = 'hu') {
   <svg viewBox="0 0 ${W} ${height}" width="100%" height="auto" role="img"
     aria-label="${esc(tr('aria', { name: profile.settlement, county: profile.county },
     `${profile.settlement} elhelyezkedése ${profile.county} megyében`))}">
-    <path d="${path}" fill="#131d2b" stroke="#2a3b52" stroke-width="1.2"/>${innerPath ? `
-    <path d="${innerPath}" fill="none" stroke="#2a3b52" stroke-width="0.7"
+    <path d="${path}" fill="var(--bg-panel)" stroke="var(--line-strong)" stroke-width="1.2"/>${innerPath ? `
+    <path d="${innerPath}" fill="none" stroke="var(--line-strong)" stroke-width="0.7"
       opacity="0.9"/>` : ''}${minePath ? `
-    <path d="${minePath}" fill="#18273a" stroke="#3d5a80" stroke-width="0.9"/>` : ''}
+    <path d="${minePath}" fill="var(--map-base)" stroke="var(--ink-faint)" stroke-width="0.9"/>` : ''}
     ${townDots}
     ${lines}
     <circle cx="${hx.toFixed(1)}" cy="${hy.toFixed(1)}" r="10" fill="none"
-      stroke="#f8fafc" stroke-width="1" opacity="0.5"/>
-    <circle cx="${hx.toFixed(1)}" cy="${hy.toFixed(1)}" r="5.5" fill="#f8fafc"/>
+      stroke="var(--label-fill)" stroke-width="1" opacity="0.5"/>
+    <circle cx="${hx.toFixed(1)}" cy="${hy.toFixed(1)}" r="5.5" fill="var(--label-fill)"/>
     <text x="${(mine?.anchorEnd ? hx - 13 : hx + 13).toFixed(1)}"
       y="${(mine?.y ?? hy + 4.5).toFixed(1)}"${mine?.anchorEnd ? ' text-anchor="end"' : ''}
-      font-size="13.5" font-weight="700" fill="#f8fafc">${esc(profile.settlement)}</text>
+      font-size="13.5" font-weight="700" fill="var(--label-fill)">${esc(profile.settlement)}</text>
   </svg>
   <figcaption>${esc(tr('caption', {
     county: profile.county,
@@ -317,12 +317,12 @@ export function countyThumb(countyName, geo, width = 190, height = 120, translat
     labels.block(x, y, 3);
     const spot = labels.place(x + 5, y + 3, f.properties.name.length * 4.6, { push: 2 });
     return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${seat ? 2.6 : 1.8}"
-      fill="${seat ? '#cbd5e1' : '#64748b'}"/>${spot ? `
+      fill="${seat ? 'var(--ink)' : 'var(--ink-faint)'}"/>${spot ? `
     <text x="${(spot.anchorEnd ? x - 5 : x + 5).toFixed(1)}" y="${spot.y.toFixed(1)}"
       ${spot.anchorEnd ? 'text-anchor="end" ' : ''}font-size="${seat ? 8.5 : 7.5}"
-      fill="${seat ? '#cbd5e1' : '#94a3b8'}">${esc(f.properties.name)}</text>` : ''}`;
+      fill="${seat ? 'var(--ink)' : 'var(--ink-dim)'}">${esc(f.properties.name)}</text>` : ''}`;
   }).join('');
   return `<svg class="tp-thumb" viewBox="0 0 ${width} ${height}" width="${width}"
     height="${height}" role="img" aria-label="${esc(tr('thumbAria', { county: countyName }, `${countyName} megye`))}">
-    <path d="${path}" fill="#131d2b" stroke="#2a3b52" stroke-width="1"/>${dots}</svg>`;
+    <path d="${path}" fill="var(--bg-panel)" stroke="var(--line-strong)" stroke-width="1"/>${dots}</svg>`;
 }

@@ -36,9 +36,9 @@ export function TravelTimeSection() {
   // outside the dial", and the bands are still in the breakdown above
   const categories = useMemo(() => [
     { key: 'over', label: t('threshold.over', { minutes: String(threshold) }),
-      color: '#ef6461' },
+      color: 'var(--bad)' },
     { key: 'under', label: t('threshold.under', { minutes: String(threshold) }),
-      color: '#4fd6c2' },
+      color: 'var(--good)' },
   ], [threshold]);
   const mapRows = useMemo(() => rows.map((r) => ({
     ...r,

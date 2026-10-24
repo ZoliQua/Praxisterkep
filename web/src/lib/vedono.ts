@@ -110,8 +110,8 @@ export function useVedono(): VedonoRaw | null {
 }
 
 export const BRANCH_COLORS: Record<string, string> = {
-  territorial: '#4fd6c2',
-  school: '#ffb454',
+  territorial: 'var(--good)',
+  school: 'var(--alert-soft)',
 };
 
 export const SERVICE_COLUMNS: ColDef[] = [
@@ -210,9 +210,9 @@ export function loadBands(data: VedonoRaw | null): LoadBand[] {
   const ref = data?.referenceResidents ?? 2500;
   const counties = data?.counties ?? [];
   const bands: LoadBand[] = [
-    { key: 'under', label: t('vedono.bandUnder'), n: 0, color: '#4fd6c2' },
-    { key: 'near', label: t('vedono.bandNear'), n: 0, color: '#c98500' },
-    { key: 'over', label: t('vedono.bandOver'), n: 0, color: '#ff7a59' },
+    { key: 'under', label: t('vedono.bandUnder'), n: 0, color: 'var(--good)' },
+    { key: 'near', label: t('vedono.bandNear'), n: 0, color: 'var(--mid)' },
+    { key: 'over', label: t('vedono.bandOver'), n: 0, color: 'var(--alert)' },
   ];
   for (const c of counties) {
     const r = c.residentsPerTerritorial;

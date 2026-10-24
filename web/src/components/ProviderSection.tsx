@@ -16,12 +16,12 @@ import { DataTableModal } from './DataTableModal';
 import { renderExtraCell } from './EesztCells';
 
 const CARE_COLOR: Record<string, string> = {
-  gp: '#6ea8ff', dental: '#4fd6c2', specialist: '#c98500',
-  oncall: '#ff7a59', university: '#9085e9',
+  gp: 'var(--gp)', dental: 'var(--good)', specialist: 'var(--mid)',
+  oncall: 'var(--alert)', university: 'var(--violet)',
 };
 
 const SPREAD_COLOR: Record<string, string> = {
-  '1': '#4fd6c2', '2': '#6ea8ff', '3-5': '#c98500', '6+': '#e05b8a',
+  '1': 'var(--good)', '2': 'var(--gp)', '3-5': 'var(--mid)', '6+': 'var(--pink)',
 };
 
 export function ProviderSection({ part }: { part: number }) {

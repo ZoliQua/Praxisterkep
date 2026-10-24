@@ -16,8 +16,8 @@ import { StackedBars } from './charts/StackedBars';
 
 const ORDER = ['filled', 'vacant', 'gone', 'ambiguous', 'unmatched', 'noContract'];
 const COLORS: Record<string, string> = {
-  filled: '#5fb3a1', vacant: '#ef6461', gone: '#8b8fa3', ambiguous: '#f2a541',
-  unmatched: '#4a5068', noContract: '#2c3044',
+  filled: 'var(--calm)', vacant: 'var(--bad)', gone: 'var(--approx)', ambiguous: 'var(--amber)',
+  unmatched: 'var(--ink-faint)', noContract: 'var(--line-strong)',
 };
 
 type Kind = 'gp' | 'dental';
@@ -159,7 +159,7 @@ export function GrantsSection() {
         <div>
           <h3 className="outcome__sub">{t('outcomes.grants.mapHeading')}</h3>
           <DistrictMap values={byDistrict} selected={picked} onPick={(n) => { window.location.href = districtHref(n); }}
-            legendFormat={(v) => formatNumber(v)} total={o.districts.length} color="#5fb3a1"
+            legendFormat={(v) => formatNumber(v)} total={o.districts.length} color="var(--calm)"
             seatOf={(n) => o.districts.find((d) => d.name === n)?.county} />
         </div>
         <div>

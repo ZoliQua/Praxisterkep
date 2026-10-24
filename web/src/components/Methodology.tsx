@@ -2,6 +2,7 @@ import { t } from '../lib/i18n';
 import { SITE_URL } from '../lib/site';
 import { ReferralBlock } from './ReferralBlock';
 import { METHOD_PARAGRAPHS } from '../lib/methodSections';
+import { MethodStory } from './story/PageStories';
 
 export function Methodology() {
   // the published address, whatever host the page was opened on: a snippet
@@ -10,6 +11,7 @@ export function Methodology() {
   return (
     <section className="section container method" id="modszertan">
       <h2 className="section__heading">{t('methodology.heading')}</h2>
+      <MethodStory />
       {METHOD_PARAGRAPHS.map((k) => (
         <div key={k} className="method__item" id={`m-${k}`}>
           <h3 className="why__chain-title">{t(`methodology.titles.${k}`)}</h3>

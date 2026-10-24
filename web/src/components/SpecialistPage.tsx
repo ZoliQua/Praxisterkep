@@ -23,6 +23,7 @@ import { SideNav } from './SideNav';
 import { sideGroups } from '../lib/sideGroups';
 import { Footer } from './Footer';
 import { VedonoSection } from './VedonoSection';
+import { SpecialistStory } from './story/PageStories';
 import { useHashScroll } from '../lib/useHashScroll';
 import { renderExtraCell } from './EesztCells';
 
@@ -101,6 +102,7 @@ export function SpecialistPage() {
       {/* the third branch of primary care: it was behind an icon on the
           landing page, where a reader looking for "who else cares for me"
           never found it */}
+      <div className="container"><SpecialistStory /></div>
       <VedonoSection />
       <header className="section container" id="szakellatas">
         <h1 className="section__heading">{t('specialist.heading')}</h1>

@@ -46,7 +46,24 @@
     "districtPage": "District",
     "districtChoose": "Choose a district",
     "districtVulnerable": "The most vulnerable districts",
-    "europe": "Europe"
+    "europe": "Europe",
+    "internal": "Internal",
+    "internalTitle": "Back to the internal analysis site (belso.praxisterkep.hu)"
+  },
+  "theme": {
+    "toLight": "Light mode",
+    "toDark": "Dark mode",
+    "palette": "Colour scheme of the charts and maps",
+    "paletteTitle": "Colour scheme",
+    "palettes": {
+      "alap": { "name": "Praxistérkép", "note": "the site's own colours" },
+      "okabe": { "name": "Okabe–Ito", "note": "distinguishable with colour-vision deficiency" },
+      "viridis": { "name": "Viridis", "note": "even lightness" },
+      "magma": { "name": "Magma", "note": "warm, sunset tones" },
+      "tableau": { "name": "Tableau 10", "note": "the classic analyst set" },
+      "kek": { "name": "Shades of blue", "note": "restrained, one hue" },
+      "kontraszt": { "name": "High contrast", "note": "vivid, for a projector" }
+    }
   },
   "hero": {
     "vacant": "vacant {kind} districts",
@@ -2230,7 +2247,7 @@
     },
     "storage": {
       "title": "What your browser keeps",
-      "text": "Your language choice, map-layer settings, your last PDF export settings and your cookie decision. These stay on your device and never reach us."
+      "text": "Your language choice, light or dark appearance and colour scheme, map-layer settings, your last PDF export settings and your cookie decision; until the browser tab is closed, also whether you arrived from the internal analysis site (the menu then shows a link back to it). These stay on your device and never reach us."
     },
     "rights": {
       "title": "Your rights",
@@ -4337,6 +4354,178 @@
       "dataMonth": "Data as of {month} — from the Eurostat and OECD databases, each measure at its own latest year.",
       "notesRules": "Each country's series comes from one publisher; practising, professionally active and licensed doctors are never mixed; no correlation is computed across countries. Migration is counted by place of training, not nationality, so no net loss is computed.",
       "notesLicence": "Eurostat: re-use with the source credited. OECD: CC BY 4.0; the processing and comparison are the author's, not an official OECD view."
+    }
+  },
+  "story": {
+    "ui": {
+      "region": "Animation: {title}",
+      "aria": "{title} — animated summary, {n} scenes. The text of the scenes is listed below the picture.",
+      "play": "Play",
+      "pause": "Pause",
+      "next": "Next scene",
+      "replay": "From the start",
+      "scene": "Scene {i}: {say}",
+      "script": "The text of the animation",
+      "time": "{now} / {total} s",
+      "counter": "{i} / {n}"
+    },
+    "common": {
+      "filled": "filled",
+      "vacant": "vacant",
+      "dissolved": "dissolved",
+      "national": "national",
+      "settlFilled": "has a filled one",
+      "settlPartial": "mixed",
+      "settlVacant": "only vacant",
+      "gp": "GP",
+      "dentist": "dentist",
+      "hospital": "hospital"
+    },
+    "landing": {
+      "title": "{label} districts in half a minute",
+      "total": "{month}: NEAK lists {total} {kind} districts.",
+      "totalLabel": "{kind} districts",
+      "vacant": "Of these, {vacant} are vacant: {rate}.",
+      "vacantWith": "Counting dissolved contracts too, {vacant} districts have no contracted doctor: {rate}.",
+      "dissolvedOut": "Another {n} districts had their contract dissolved; they are not in that figure.",
+      "dissolvedIn": "That figure includes {n} districts whose contract was dissolved.",
+      "people": "{people} residents belong to these districts.",
+      "peopleLabel": "residents",
+      "caveat": "Vacant ≠ unserved: most residents are seen by a substitute {doctor}, in limited surgery hours.",
+      "longTerm": "Legally long-term vacant: {n} districts (OKFŐ, {month}).",
+      "longTermShare": "of the vacant districts",
+      "duration": "Half of today's vacant districts have been empty for at least {dur}.",
+      "durationLabel": "since falling vacant (median)",
+      "trend": "{from}: {a} vacant districts. {to}: {b}.",
+      "trendWith": "{from}: {a} vacant or dissolved districts. {to}: {b}.",
+      "counties": "Highest shares: {c1} ({r1}), {c2} ({r2}), {c3} ({r3})."
+    },
+    "highlights": {
+      "title": "{heading}, in half a minute",
+      "grant": "GP districts filled with a settlement grant that still have a doctor: {a}.",
+      "grantLabel": "still have a doctor",
+      "matched": "Among similar districts without a grant, only {b} ({pairs} pairs).",
+      "withGrant": "with a grant",
+      "withoutGrant": "without a grant",
+      "ten": "{vacant} dental districts are vacant today; {ten} of them have been empty for ten years or more.",
+      "tenShare": "That is {share}: a decade without a dentist of their own.",
+      "tenLabel": "empty for ten years or more",
+      "euGp": "GPs per 100,000 residents: {value} in Hungary ({year}), against a regional median of {median}.",
+      "euGpRank": "Hungary ranks {rank} of the {of} countries in the region that report it; the most: {best}, {bestValue}.",
+      "euDental": "Adults who saw a dentist in a year: {value} ({year}), only {rural} in rural areas.",
+      "euDentalNoRural": "Adults who saw a dentist in a year: {value} ({year}).",
+      "euDentalEu": "The EU figure is {eu}; Hungary ranks {rank} of {of} countries in the region.",
+      "euDentalMedian": "The regional median is {median}; Hungary ranks {rank} of {of} countries in the region.",
+      "median": "median",
+      "rural": "rural"
+    },
+    "area": {
+      "title": "{name} in half a minute",
+      "size": "{name}: {settlements} settlements, {population} residents.",
+      "residents": "residents",
+      "age": "Residents over 65: {old}, a share of {share}.",
+      "districts": "Of {total} {kind} districts, {vacant} are vacant ({rate}).",
+      "districtsDissolved": "Of {total} {kind} districts, {vacant} are vacant ({rate}) and {dissolved} dissolved.",
+      "settlements": "In {vacant} settlements every {kind} district is vacant; in {partial}, some are.",
+      "compare": "Share of vacant {kind} districts: {here} here, {national} nationally.",
+      "development": "In the development ranking of the districts: {rank} of {of} (1 = least developed).",
+      "developmentLabel": "development rank (1 = least developed)",
+      "travel": "Median drive: GP {gp}, dentist {dental}, hospital {inpatient}.",
+      "bus": "{n} settlements have no direct bus to the nearest GP surgery.",
+      "busLabel": "of the settlements have no direct bus"
+    },
+    "countyOverview": {
+      "title": "The counties in half a minute",
+      "intro": "{n} counties and Budapest: {total} {kind} districts, {vacant} of them vacant.",
+      "introWith": "{n} counties and Budapest: {total} {kind} districts, {vacant} of them vacant or dissolved.",
+      "highest": "Highest shares: {c1} ({r1}), {c2} ({r2}), {c3} ({r3}).",
+      "lowest": "Lowest shares: {c1} ({r1}), {c2} ({r2}), {c3} ({r3}).",
+      "most": "Most vacant districts: {c1} ({r1}), {c2} ({r2}), {c3} ({r3}).",
+      "pick": "Pick a county and this story tells its own numbers."
+    },
+    "districtOverview": {
+      "title": "The districts in half a minute",
+      "intro": "{n} districts and the {capital} boroughs of Budapest, each with its own numbers.",
+      "highest": "Highest {kind} shares: {c1} ({r1}), {c2} ({r2}), {c3} ({r3}).",
+      "zero": "In {zero} districts no {kind} district is vacant (of {of}).",
+      "zeroLabel": "no vacant district",
+      "pick": "Pick a district on the map or from the list and this story tells its own numbers."
+    },
+    "analysis": {
+      "title": "The analyses in half a minute",
+      "spells": "Since {from} we have followed {spells} {kind} vacancies through the monthly lists.",
+      "refilled": "filled again",
+      "stillOpen": "still vacant",
+      "median": "Half of the {kind} vacancies last longer than {m} months (Kaplan–Meier median).",
+      "noMedian": "More than half of the vacancies followed are still open.",
+      "monthTick": "month {m}",
+      "s60": "Still vacant after five years (Kaplan–Meier estimate): {s60}.",
+      "s60Label": "still vacant after five years",
+      "forecast": "{now} {kind} districts are vacant now; in a year, an expected {in12} (90%: {lo}–{hi}).",
+      "now": "now",
+      "plusMonths": "+{m} mo",
+      "grants": "Grant-filled {kind} districts that still have a doctor: {a}; their matched peers: {b}.",
+      "corr": "Across {n} rural districts, {kind} vacancy goes with avoidable mortality: r = {r}.",
+      "corrLabel": "correlation (Pearson)",
+      "partial": "It holds with income held constant: partial r = {p}. A correlation, not a cause.",
+      "raw": "raw r",
+      "incomeHeld": "income held constant",
+      "sbo": "{people} people live more than 30 minutes' drive from the nearest emergency department.",
+      "band": "{b} min"
+    },
+    "europe": {
+      "title": "The European comparison in half a minute",
+      "intro": "Compared: {group}, {n} countries. Every value keeps its year; rank 1 is the best.",
+      "fact": "{name}: Hungary {value} ({year}), {ref}.",
+      "factRank": "{name}: Hungary {value} ({year}), {ref}; rank {rank} of {of}.",
+      "factOnly": "{name}: Hungary {value} ({year}).",
+      "refEu": "the EU-27 at {value}",
+      "refMedian": "the group median at {value}",
+      "unit": {
+        "per100k": "per 100,000",
+        "pct": "",
+        "perCapita": "per person a year",
+        "pps": "PPS per person",
+        "ratio": "",
+        "years": "years",
+        "pctEu": "(EU = 100)"
+      }
+    },
+    "specialist": {
+      "title": "Who else cares for you? In half a minute",
+      "vedono": "{territorial} territorial and {school} school health-visitor services.",
+      "territorial": "territorial",
+      "school": "school",
+      "vedonoLoad": "One territorial service covers {res} residents, {young} of them aged 0–14.",
+      "vedonoPremises": "{with} of {total} settlements have health-visitor premises.",
+      "premisesLabel": "of the settlements have health-visitor premises",
+      "inpatient": "{inst} inpatient institutions with {units} wards are contracted with NEAK.",
+      "wards": "inpatient wards",
+      "outpatient": "Outpatient specialist care: {inst} institutions, {rooms} consulting rooms.",
+      "inpatientShort": "inpatient institutions",
+      "outpatientShort": "outpatient institutions",
+      "pharmacy": "{n} contracted pharmacies; {per} residents per pharmacy.",
+      "pharmacies": "contracted pharmacies",
+      "pharmacyPlaces": "{with} of {total} settlements have a pharmacy.",
+      "gyse": "Medical aids can be collected at {premises} premises in {settl} settlements.",
+      "gyseLabel": "of the settlements have a dispensing place"
+    },
+    "method": {
+      "title": "Where the numbers come from, in half a minute",
+      "sources": "Every number comes from public sources: {files} files or registers in {groups} groups.",
+      "archive": "The monthly archive: {d} dental and {g} GP months.",
+      "span": "The oldest archived month: {first}; the newest: {last}.",
+      "districts": "{month}: {dental} dental and {gp} GP districts in NEAK's registry.",
+      "fin": "Every district is keyed by NEAK's FIN code; if a code disappears, the district counts as dissolved.",
+      "pages": "{n} settlements each have a page of their own, rebuilt from the monthly data.",
+      "pagesLabel": "settlement pages",
+      "pipeline": "The monthly run has {steps} steps; last time ({date}) {ok} finished cleanly.",
+      "stepOk": "steps finished cleanly",
+      "stepOther": "steps failed or skipped",
+      "loud": "If a source is missing or a check fails, nothing is published: a gap rather than a guess.",
+      "pinSource": "source",
+      "pinCheck": "check",
+      "pinStop": "stop"
     }
   }
 }

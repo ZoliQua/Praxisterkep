@@ -13,7 +13,7 @@ export interface AgeSplit { young: number; working: number; old: number }
 export type AgeKey = keyof AgeSplit;
 
 export const AGE_COLORS: Record<AgeKey, string> = {
-  young: '#4fd6c2', working: '#6ea8ff', old: '#f0b429',
+  young: 'var(--good)', working: 'var(--gp)', old: 'var(--warn)',
 };
 const ORDER: AgeKey[] = ['young', 'working', 'old'];
 

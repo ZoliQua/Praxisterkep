@@ -3,6 +3,7 @@
 // orientation the visitor sees on screen.
 import type { Map as MLMap } from 'maplibre-gl';
 import { downloadBlob } from './exportChart';
+import { cssColor } from './theme';
 
 const CREDIT = '© OpenStreetMap contributors · Praxistérkép';
 
@@ -56,7 +57,7 @@ export function exportMapPng(map: MLMap, filename: string): void {
     out.height = canvas.height + Math.round(22 * ratio);
     const ctx = out.getContext('2d');
     if (!ctx) return;
-    ctx.fillStyle = '#0b1016';
+    ctx.fillStyle = cssColor('--bg', '#0b1016');
     ctx.fillRect(0, 0, out.width, out.height);
     ctx.drawImage(canvas, 0, 0);
 
@@ -72,14 +73,14 @@ export function exportMapPng(map: MLMap, filename: string): void {
       ctx.font = `${label.weight} ${label.size * ratio}px "IBM Plex Sans", sans-serif`;
       ctx.textBaseline = 'middle';
       ctx.lineWidth = 3 * ratio;
-      ctx.strokeStyle = 'rgba(11,16,22,0.85)';
+      ctx.strokeStyle = cssColor('--label-halo', '#0b1016');
       ctx.strokeText(label.text, x, y);
       ctx.fillStyle = label.color;
       ctx.fillText(label.text, x, y);
     }
 
     ctx.font = `${12 * ratio}px "IBM Plex Sans", sans-serif`;
-    ctx.fillStyle = '#64748b';
+    ctx.fillStyle = cssColor('--ink-faint', '#64748b');
     ctx.textBaseline = 'middle';
     ctx.fillText(CREDIT, 10 * ratio, canvas.height + 11 * ratio);
 

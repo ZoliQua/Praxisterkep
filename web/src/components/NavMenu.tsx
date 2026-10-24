@@ -4,6 +4,8 @@
 // "Térkép" goes to the map whether or not you open its submenu.
 import { useEffect, useRef, useState } from 'react';
 import { t } from '../lib/i18n';
+import { INTERNAL_URL } from '../lib/theme';
+import { NavTools } from './NavTools';
 
 export interface NavEntry {
   /** href of the group itself: an anchor on this page or another page */
@@ -80,8 +82,15 @@ export function NavMenu({ entries }: { entries: readonly NavEntry[] }) {
     {/* one nav per page: the button's aria-controls and the CSS sibling
         selector both assume this id is unique on the page */}
     <div className={`topnav__links${folded ? '' : ' is-open'}`} id="topnav-links" ref={navRef}>
+      {/* only for a reader who came from the private analysis site (?belso=true,
+          see THEME_BOOT in lib/theme.ts): the way back, first; Módszertan then
+          moves to the footer to make room */}
+      <div className="topnav__group only-internal">
+        <a href={INTERNAL_URL} title={t('nav.internalTitle')}>{t('nav.internal')}</a>
+      </div>
       {entries.map((entry) => (
-        <div key={entry.href} className="topnav__group"
+        <div key={entry.href}
+          className={`topnav__group${/modszertan\.html/.test(entry.href) ? ' no-internal' : ''}`}
           // hover opens it for a mouse only: on a touch screen the tap would
           // open the panel and the click that follows would close it again
           onPointerEnter={(event) => {
@@ -117,6 +126,7 @@ export function NavMenu({ entries }: { entries: readonly NavEntry[] }) {
           )}
         </div>
       ))}
+      <NavTools />
     </div>
     </>
   );

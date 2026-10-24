@@ -16,6 +16,7 @@ import { SearchSection } from './components/SearchSection';
 import { Footer } from './components/Footer';
 import { LangToggle } from './components/LangToggle';
 import { Highlights } from './components/Highlights';
+import { LandingStory } from './components/story/PageStories';
 import { NavMenu } from './components/NavMenu';
 import { IconStethoscope, IconTooth } from './components/icons';
 import type { PraxisKind } from './types';
@@ -92,6 +93,7 @@ export default function App() {
       </nav>
       <ContextBar />
       <Hero />
+      <div className="container"><LandingStory /></div>
           <ScrollyIntro />
           <HeroShowcase />
           <PraxisBalance />

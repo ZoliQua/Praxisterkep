@@ -38,11 +38,11 @@ export function CountyChangeChart({ rows, color, firstMonth, lastMonth }: {
                 {r.county}
               </text>
               <line x1={x(r.firstValue)} x2={x(r.lastValue)} y1={y} y2={y}
-                stroke={grew ? '#d95926' : color} strokeWidth={2} strokeLinecap="round" />
+                stroke={grew ? 'var(--alert)' : color} strokeWidth={2} strokeLinecap="round" />
               <circle cx={x(r.firstValue)} cy={y} r={4} fill="var(--bg-raised)"
                 stroke="var(--ink-faint)" strokeWidth={2} />
               <circle cx={x(r.lastValue)} cy={y} r={4.5}
-                fill={grew ? '#d95926' : color} stroke="var(--bg-raised)" strokeWidth={2} />
+                fill={grew ? 'var(--alert)' : color} stroke="var(--bg-raised)" strokeWidth={2} />
               <text x={x(Math.max(r.firstValue, r.lastValue)) + 10} y={y}
                 dominantBaseline="middle" fill="var(--ink)" fontSize={12} fontWeight={600}>
                 {formatNumber(r.lastValue)}

@@ -49,10 +49,10 @@ export interface AccessRaw {
 }
 
 export const BAND_COLORS: Record<string, string> = {
-  '0-5': '#4fd6c2',
-  '5-10': '#c98500',
-  '10-20': '#ff7a59',
-  '20+': '#e05b8a',
+  '0-5': 'var(--good)',
+  '5-10': 'var(--mid)',
+  '10-20': 'var(--alert)',
+  '20+': 'var(--pink)',
 };
 
 let cache: AccessRaw | null = null;

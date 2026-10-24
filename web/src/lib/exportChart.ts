@@ -2,6 +2,8 @@
 // standalone rasterized copy cannot resolve — so computed styles are inlined
 // onto a clone before rendering to canvas.
 
+import { cssColor } from './theme';
+
 const STYLE_PROPS = [
   'fill', 'stroke', 'stroke-width', 'stroke-dasharray', 'opacity',
   'font-size', 'font-family', 'font-weight',
@@ -42,7 +44,7 @@ export function exportSvgToPng(svg: SVGSVGElement, filename: string): void {
   const url = URL.createObjectURL(blob);
   const img = new Image();
   img.onload = () => {
-    ctx.fillStyle = bg && bg !== 'rgba(0, 0, 0, 0)' ? bg : '#101823';
+    ctx.fillStyle = bg && bg !== 'rgba(0, 0, 0, 0)' ? bg : cssColor('--bg-raised', '#101823');
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
     URL.revokeObjectURL(url);

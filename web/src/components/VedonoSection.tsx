@@ -114,7 +114,7 @@ export function VedonoSection() {
         <div className="eeszt-coverage__row">
           <span className="eeszt-coverage__label">{t('vedono.withoutPremises')}</span>
           <span className="eeszt-coverage__bar">
-            <span style={{ width: `${(1 - coveredShare) * 100}%`, background: '#ff7a59' }} />
+            <span style={{ width: `${(1 - coveredShare) * 100}%`, background: 'var(--alert)' }} />
           </span>
           <span className="eeszt-coverage__val">
             <button className="info-drill" onClick={() => setOpen('uncovered')}>

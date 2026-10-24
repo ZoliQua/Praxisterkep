@@ -10,6 +10,7 @@ import { NextSteps } from './NextSteps';
 import { PageNav } from './PageNav';
 import { Footer } from './Footer';
 import { PdfButton } from './PdfButton';
+import { AnalysisStory } from './story/PageStories';
 import { StatsSection } from './StatsSection';
 import { VersusSection } from './VersusSection';
 import { AccessSection } from './AccessSection';
@@ -71,6 +72,7 @@ export function AnalysisPage() {
           <PdfButton level="analysis" />
         </div>
         <p className="section__lead">{t('analysis.lead')}</p>
+        <AnalysisStory kind={kind} />
       </header>
       <nav className="page-toc page-toc--grouped">
         {GROUPS.map((g) => (

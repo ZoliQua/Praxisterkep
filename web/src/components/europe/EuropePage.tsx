@@ -24,6 +24,7 @@ import { IndicatorSection, type EuView } from './IndicatorSection';
 import { EuTwoMeasures } from './EuTwoMeasures';
 import { EuRegions } from './EuRegions';
 import { EuMigration } from './EuMigration';
+import { EuropeStory } from '../story/PageStories';
 
 const GROUPS: SideGroup[] = (sections.europe as { key: string; items: string[] }[]).map((g) => ({
   titleKey: `europe.side.${g.key}`,
@@ -75,6 +76,7 @@ export function EuropePage() {
           <PdfButton level="europe" group={group} focus={live} />
         </div>
         <p className="section__lead">{t('europe.lead')}</p>
+        <EuropeStory kind={kind} group={group} />
       </header>
       <div className="eu-toolbar">
         <div className="container eu-toolbar__inner">

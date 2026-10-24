@@ -13,7 +13,7 @@ import { vacancyOf, vacancyRateOf } from '../lib/vacancy';
 import { TimeSeriesChart, type ChartSeries } from './charts/TimeSeriesChart';
 import type { PraxisKind, Snapshot } from '../types';
 
-const COLORS: Record<PraxisKind, string> = { dental: '#17a08c', gp: '#3d87e0' };
+const COLORS: Record<PraxisKind, string> = { dental: 'var(--type-mixed)', gp: 'var(--type-adult)' };
 
 const ROW_H = 24;
 const LABEL_W = 190;

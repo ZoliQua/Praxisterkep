@@ -13,6 +13,8 @@ import { countyRanking, filterPraxes, type TypeFilter } from '../lib/selectors';
 import { readMapState, writeMapState } from '../lib/mapState';
 import { useContextStore } from '../lib/context';
 import { vacancyOf } from '../lib/vacancy';
+import { mapColors, type MapColors } from '../lib/mapColors';
+import { useThemeTick } from '../lib/theme';
 import { eesztNow, eesztPraxis, loadEeszt, takesOnCall } from '../lib/eeszt';
 import {
   useAppStore, useHistoryEntries, useMapSnapshot, type MapMetric,
@@ -20,10 +22,6 @@ import {
 import type { Praxis, PraxisType, Snapshot } from '../types';
 
 const HUNGARY_BOUNDS: [number, number, number, number] = [16.0, 45.6, 23.0, 48.7];
-// dark-friendly sequential ramp (low -> high vacancy)
-const RAMP = ['#152438', '#1f3a52', '#3d5a6c', '#8a7a55', '#d99a3d', '#ff7a59'];
-// vacancy-age steps: <1y, 1-5y, 5-10y, 10+y
-const AGE_COLORS = ['#f5c96b', '#ffb454', '#ff7a59', '#e34948'];
 const LABEL_OFFSET: Record<string, [number, number]> = {
   Pest: [0.28, -0.42], // its centroid falls on Budapest
 };
@@ -63,7 +61,7 @@ const METRIC_LABEL_KEYS: Record<MapMetric, string> = {
   popshare: 'map.metricPopShare',
 };
 
-function fillColorExpression(snapshot: Snapshot, metric: MapMetric): ExpressionSpecification {
+function fillColorExpression(snapshot: Snapshot, metric: MapMetric, RAMP: string[]): ExpressionSpecification {
   const values = snapshot.counties.map((c) => countyMetric(snapshot, c.name, metric));
   const max = Math.max(...values, 1e-9);
   const match: unknown[] = ['match', ['get', 'name']];
@@ -77,7 +75,7 @@ function fillColorExpression(snapshot: Snapshot, metric: MapMetric): ExpressionS
 }
 
 function jarasFillExpression(
-  values: Map<string, { count: number; population: number }>,
+  values: Map<string, { count: number; population: number }>, RAMP: string[],
 ): ExpressionSpecification {
   // sqrt scale: one outlier (Budapest) must not flatten everything else
   // into the darkest ramp step; any district with data gets >= RAMP[1]
@@ -99,13 +97,14 @@ function fillOpacityExpression(focus: string | null): ExpressionSpecification | 
   return ['case', ['==', ['get', 'name'], focus], 0.92, 0.25] as ExpressionSpecification;
 }
 
-function pointColorExpression(mode: ColorMode): ExpressionSpecification {
+function pointColorExpression(mode: ColorMode, c: MapColors): ExpressionSpecification {
+  const AGE_COLORS = c.age;
   if (mode === 'age') {
     return ['step', ['get', 'months'],
       AGE_COLORS[0], 12, AGE_COLORS[1], 60, AGE_COLORS[2], 120, AGE_COLORS[3],
     ] as ExpressionSpecification;
   }
-  return ['match', ['get', 'status'], 'dissolved', '#ffb454', '#ff7a59'] as ExpressionSpecification;
+  return ['match', ['get', 'status'], 'dissolved', c.dissolved, c.vacant] as ExpressionSpecification;
 }
 
 function pointOpacityExpression(focus: string | null): ExpressionSpecification {
@@ -301,6 +300,13 @@ export function MapSection() {
   const markersRef = useRef<Marker[]>([]);
   const snapshotRef = useRef(snapshot);
   snapshotRef.current = snapshot;
+  // MapLibre paints with plain colours: read them off the theme, again on a change
+  const themeTick = useThemeTick();
+  const colors = useMemo(() => mapColors(themeTick), [themeTick]);
+  const colorsRef = useRef(colors);
+  colorsRef.current = colors;
+  const RAMP = colors.ramp;
+  const AGE_COLORS = colors.age;
   const urlMonthApplied = useRef(false);
 
   const months = useMemo(() => entries.map((e) => e.month), [entries]);
@@ -434,7 +440,7 @@ export function MapSection() {
       style: {
         version: 8,
         sources: {},
-        layers: [{ id: 'bg', type: 'background', paint: { 'background-color': '#0b1016' } }],
+        layers: [{ id: 'bg', type: 'background', paint: { 'background-color': colorsRef.current.bg } }],
       },
       bounds: HUNGARY_BOUNDS,
       fitBoundsOptions: { padding: 24 },
@@ -460,7 +466,7 @@ export function MapSection() {
         type: 'fill',
         source: 'counties',
         paint: {
-          'fill-color': fillColorExpression(snapshotRef.current, useAppStore.getState().mapMetric),
+          'fill-color': fillColorExpression(snapshotRef.current, useAppStore.getState().mapMetric, colorsRef.current.ramp),
           'fill-opacity': 0.85,
         },
       });
@@ -468,7 +474,7 @@ export function MapSection() {
         id: 'county-line',
         type: 'line',
         source: 'counties',
-        paint: { 'line-color': '#2a3b52', 'line-width': 1 },
+        paint: { 'line-color': colorsRef.current.line, 'line-width': 1 },
       });
       // járás layer starts empty; the geojson is only fetched on first use
       map.addSource('jaras', {
@@ -481,14 +487,14 @@ export function MapSection() {
         type: 'fill',
         source: 'jaras',
         layout: { visibility: 'none' },
-        paint: { 'fill-color': RAMP[0], 'fill-opacity': 0.85 },
+        paint: { 'fill-color': colorsRef.current.ramp[0], 'fill-opacity': 0.85 },
       });
       map.addLayer({
         id: 'jaras-line',
         type: 'line',
         source: 'jaras',
         layout: { visibility: 'none' },
-        paint: { 'line-color': '#2a3b52', 'line-width': 0.8 },
+        paint: { 'line-color': colorsRef.current.line, 'line-width': 0.8 },
       });
       map.addSource('praxes', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
       map.addLayer({
@@ -497,10 +503,10 @@ export function MapSection() {
         source: 'praxes',
         paint: {
           'circle-radius': ['case', ['get', 'geoApprox'], 3.5, 5],
-          'circle-color': pointColorExpression('status'),
+          'circle-color': pointColorExpression('status', colorsRef.current),
           'circle-opacity': pointOpacityExpression(null),
           'circle-stroke-width': 1,
-          'circle-stroke-color': '#0b1016',
+          'circle-stroke-color': colorsRef.current.halo,
         },
       });
 
@@ -578,14 +584,18 @@ export function MapSection() {
     const map = mapRef.current;
     if (!map) return;
     const apply = () => {
-      map.setPaintProperty('county-fill', 'fill-color', fillColorExpression(snapshot, mapMetric));
+      map.setPaintProperty('county-fill', 'fill-color', fillColorExpression(snapshot, mapMetric, colors.ramp));
       map.setPaintProperty('county-fill', 'fill-opacity', fillOpacityExpression(selectedCounty));
       map.setPaintProperty('praxis-points', 'circle-opacity', pointOpacityExpression(selectedCounty));
-      map.setPaintProperty('praxis-points', 'circle-color', pointColorExpression(colorMode));
+      map.setPaintProperty('praxis-points', 'circle-color', pointColorExpression(colorMode, colors));
+      map.setPaintProperty('praxis-points', 'circle-stroke-color', colors.halo);
+      map.setPaintProperty('bg', 'background-color', colors.bg);
+      map.setPaintProperty('county-line', 'line-color', colors.line);
+      map.setPaintProperty('jaras-line', 'line-color', colors.line);
     };
     if (readyRef.current) apply();
     else map.once('praxisterkep:ready', apply);
-  }, [snapshot, mapMetric, selectedCounty, colorMode]);
+  }, [snapshot, mapMetric, selectedCounty, colorMode, colors]);
 
   /* point data */
   useEffect(() => {
@@ -626,12 +636,12 @@ export function MapSection() {
       map.setLayoutProperty('county-fill', 'visibility', showC);
       map.setLayoutProperty('county-line', 'visibility', showC);
       if (level === 'jaras') {
-        map.setPaintProperty('jaras-fill', 'fill-color', jarasFillExpression(districtValues));
+        map.setPaintProperty('jaras-fill', 'fill-color', jarasFillExpression(districtValues, colors.ramp));
       }
     };
     if (readyRef.current) apply();
     else map.once('praxisterkep:ready', apply);
-  }, [level, districtValues]);
+  }, [level, districtValues, colors]);
 
   /* county focus zoom */
   useEffect(() => {
@@ -835,11 +845,11 @@ export function MapSection() {
           </div>
           {view === 'points' && colorMode === 'status' && (
             <div style={{ marginTop: 8 }}>
-              <div><span className="map-legend__dot" style={{ background: '#ff7a59' }} />{t('map.pointVacant')}</div>
+              <div><span className="map-legend__dot" style={{ background: colors.vacant }} />{t('map.pointVacant')}</div>
               {showDissolved && snapshot.national.dissolved > 0 && (
-                <div><span className="map-legend__dot" style={{ background: '#ffb454' }} />{t('map.pointDissolved')}</div>
+                <div><span className="map-legend__dot" style={{ background: colors.dissolved }} />{t('map.pointDissolved')}</div>
               )}
-              <div><span className="map-legend__dot" style={{ background: '#8b98ab', opacity: 0.55 }} />{t('map.pointApprox')}</div>
+              <div><span className="map-legend__dot" style={{ background: colors.approx, opacity: 0.55 }} />{t('map.pointApprox')}</div>
             </div>
           )}
           {view === 'points' && colorMode === 'age' && (

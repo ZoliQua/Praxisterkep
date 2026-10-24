@@ -10,7 +10,7 @@ const W = 720;
 const H = 250;
 
 export function CountyChoropleth({
-  values, format, color = '#4fd6c2', empty = 'var(--bg-panel)', onPick, selected,
+  values, format, color = 'var(--good)', empty = 'var(--bg-panel)', onPick, selected,
 }: {
   /** county name -> value in 0..1; a missing county is drawn as empty */
   values: Map<string, number>;

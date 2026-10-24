@@ -198,20 +198,20 @@ export const useComposite = loader<CompositeRaw>('composite.json');
 /* ------------------------------ selectors ----------------------------- */
 
 export const CLASS_COLORS: Record<CoverageClass, string> = {
-  filled: '#4fd6c2',
-  partial: '#ffb454',
-  vacantOnly: '#ff7a59',
-  absent: '#8899ad',
+  filled: 'var(--good)',
+  partial: 'var(--alert-soft)',
+  vacantOnly: 'var(--alert)',
+  absent: 'var(--approx)',
 };
 
 export const BAND_COLORS: Record<string, string> = {
-  kiemelt: '#e05b8a',
-  magas: '#ff7a59',
-  kozepes: '#c98500',
-  alacsony: '#4fd6c2',
+  kiemelt: 'var(--pink)',
+  magas: 'var(--alert)',
+  kozepes: 'var(--mid)',
+  alacsony: 'var(--good)',
 };
 
-export const CURVE_COLORS = ['#4fd6c2', '#ff7a59', '#ffb454', '#b8b0f5', '#e05b8a'];
+export const CURVE_COLORS = ['var(--good)', 'var(--alert)', 'var(--alert-soft)', 'var(--violet-soft)', 'var(--pink)'];
 
 export const SPELL_COLUMNS: ColDef[] = [
   { key: 'fin', labelKey: 'eeszt.colFin', type: 'text', visible: true },

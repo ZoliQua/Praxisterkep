@@ -120,7 +120,7 @@ export function ForecastSection({ kind: initial }: { kind: Kind }) {
       <h3 className="outcome__sub">{t('outcomes.forecast.mapHeading')}</h3>
       <DistrictMap values={mapValues} selected={picked} onPick={(name) => {
         setPicked(name); window.location.href = districtHref(name);
-      }} legendFormat={(v) => formatPercent(v)} total={o.districts.length} color="#ef6461"
+      }} legendFormat={(v) => formatPercent(v)} total={o.districts.length} color="var(--bad)"
         scale={{ domain: 'spread' }}
         seatOf={(name) => o.districts.find((d) => d.name === name)?.county} />
       <p className="notice">{t('outcomes.forecast.caveat', {

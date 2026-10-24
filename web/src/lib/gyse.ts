@@ -48,13 +48,13 @@ export interface GyseRaw {
 }
 
 export const KIND_COLORS: Record<string, string> = {
-  shop: '#4fd6c2',
-  branch: '#7fd8c8',
-  workshop: '#b8b0f5',
-  orthopaedic: '#ffb454',
-  dentaltech: '#c98500',
-  rental: '#8899ad',
-  repair: '#ff7a59',
+  shop: 'var(--good)',
+  branch: 'var(--mint)',
+  workshop: 'var(--violet-soft)',
+  orthopaedic: 'var(--alert-soft)',
+  dentaltech: 'var(--mid)',
+  rental: 'var(--approx)',
+  repair: 'var(--alert)',
 };
 
 let cache: GyseRaw | null = null;

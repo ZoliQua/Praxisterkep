@@ -18,12 +18,10 @@ import { useContextStore } from '../lib/context';
 import { exportMapPng } from '../lib/mapExport';
 import { LAYER_KEYS, setLayer, type LayerChoice } from '../lib/mapLayers';
 import { useOrientationLayers } from './useOrientationLayers';
+import { mapColors } from '../lib/mapColors';
+import { resolveColor, useThemeTick } from '../lib/theme';
 
 const HUNGARY: [[number, number], [number, number]] = [[16.0, 45.7], [23.0, 48.65]];
-const COLOR_FILLED = '#4fd6c2';
-const COLOR_VACANT = '#ff7a59';
-const COLOR_DISSOLVED = '#ffb454';
-const COLOR_MISMATCH = '#b8b0f5';
 
 /** what the map needs from a row; both data browsers' rows satisfy it */
 export type MapRow = Row & {
@@ -186,11 +184,20 @@ export function EesztMap({
   const statusFilled = t('stats.statusFilled');
   const statusDissolved = t('stats.statusDissolved');
 
+  // MapLibre paints with plain colours: read them off the theme, again on a change
+  const themeTick = useThemeTick();
+  const mc = useMemo(() => mapColors(themeTick), [themeTick]);
+  const mcRef = useRef(mc);
+  mcRef.current = mc;
+  const COLOR_FILLED = mc.filled;
+  const COLOR_VACANT = mc.vacant;
+  const COLOR_DISSOLVED = mc.dissolved;
+  const COLOR_MISMATCH = mc.mismatch;
   const color = useMemo(() => (categories?.length
     ? ['match', ['get', 'c'],
-      ...categories.flatMap((c) => [c.key, c.color]), COLOR_VACANT]
+      ...categories.flatMap((c) => [c.key, resolveColor(c.color)]), mc.vacant]
     : ['match', ['get', 's'],
-      'f', COLOR_FILLED, 'd', COLOR_DISSOLVED, COLOR_VACANT]), [categories]);
+      'f', mc.filled, 'd', mc.dissolved, mc.vacant]), [categories, mc]);
   const colorRef = useRef(color);
   colorRef.current = color;
 
@@ -202,7 +209,7 @@ export function EesztMap({
       style: {
         version: 8,
         sources: {},
-        layers: [{ id: 'bg', type: 'background', paint: { 'background-color': '#0b1016' } }],
+        layers: [{ id: 'bg', type: 'background', paint: { 'background-color': mcRef.current.bg } }],
       },
       bounds: HUNGARY,
       fitBoundsOptions: { padding: 16 },
@@ -224,7 +231,7 @@ export function EesztMap({
       });
       map.addLayer({
         id: 'county-line', type: 'line', source: 'counties',
-        paint: { 'line-color': '#2a3b52', 'line-width': 1 },
+        paint: { 'line-color': mcRef.current.line, 'line-width': 1 },
       });
       // the county in focus gets a heavier outline of its own
       map.addLayer({
@@ -243,24 +250,27 @@ export function EesztMap({
         layout: { visibility: 'none' },
         paint: {
           'circle-radius': ['interpolate', ['linear'], ['zoom'], 6, 6, 9, 9, 12, 13],
-          'circle-color': '#ffb454',
+          'circle-color': mcRef.current.dissolved,
           'circle-opacity': 0.22,
           'circle-stroke-width': 1,
-          'circle-stroke-color': '#ffb454',
+          'circle-stroke-color': mcRef.current.dissolved,
           'circle-stroke-opacity': 0.5,
         },
       });
       map.addLayer({
         id: 'pts', type: 'circle', source: 'pts',
         paint: {
-          'circle-radius': ['case', ['get', 'dim'], 2,
-            ['interpolate', ['linear'], ['zoom'], 6, 2.6, 9, 4.5, 12, 7]],
+          // "zoom" may only lead the expression, so the dimming goes inside each stop
+          'circle-radius': ['interpolate', ['linear'], ['zoom'],
+            6, ['case', ['get', 'dim'], 2, 2.6],
+            9, ['case', ['get', 'dim'], 2, 4.5],
+            12, ['case', ['get', 'dim'], 2, 7]],
           'circle-color': colorRef.current as never,
           'circle-opacity': ['case', ['get', 'dim'], 0.16,
             ['get', 'approx'], 0.4, 0.9],
           'circle-stroke-width': ['case', ['get', 'dim'], 0,
             ['get', 'mismatch'], 1.6, 0.6],
-          'circle-stroke-color': ['case', ['get', 'mismatch'], COLOR_MISMATCH, '#0b1016'],
+          'circle-stroke-color': ['case', ['get', 'mismatch'], mcRef.current.mismatch, mcRef.current.halo],
         },
       });
       map.on('click', 'pts', (e: MapLayerMouseEvent) => {
@@ -328,8 +338,13 @@ export function EesztMap({
     const map = mapRef.current;
     if (map?.getLayer('pts')) {
       map.setPaintProperty('pts', 'circle-color', color as never);
+      map.setPaintProperty('pts', 'circle-stroke-color', ['case', ['get', 'mismatch'], mc.mismatch, mc.halo]);
+      map.setPaintProperty('benefit-ring', 'circle-color', mc.dissolved);
+      map.setPaintProperty('benefit-ring', 'circle-stroke-color', mc.dissolved);
+      map.setPaintProperty('bg', 'background-color', mc.bg);
+      map.setPaintProperty('county-line', 'line-color', mc.line);
     }
-  }, [color]);
+  }, [color, mc]);
 
   const layers = useOrientationLayers(mapRef, defaultLayers);
   const [showDistricts, setShowDistricts] = useState(true);
@@ -467,7 +482,7 @@ export function EesztMap({
             </>
           )}
           <i className="is-ring" style={{ borderColor: COLOR_MISMATCH }} />{t('eeszt.legendMismatch')}
-          <i style={{ background: '#9aa8bb', opacity: 0.45 }} />{t('eeszt.legendApprox')}
+          <i style={{ background: mc.approx, opacity: 0.45 }} />{t('eeszt.legendApprox')}
         </span>
       </div>
       <div className="eeszt-map__stage" style={{ height }}>

@@ -24,7 +24,7 @@ function typeBadge(label: string) {
   const key = PRAXIS_TYPES.find((k) => t(`praxisTypes.${k}`) === label);
   const color = key ? TYPE_COLORS[key] : undefined;
   return (
-    <span className="badge" style={color ? { background: `${color}2e`, color } : undefined}>
+    <span className="badge" style={color ? { background: `color-mix(in srgb, ${color} 18%, transparent)`, color } : undefined}>
       {label}
     </span>
   );
@@ -50,7 +50,7 @@ export function renderExtraCell(col: ColDef, row: Row): React.ReactNode | undefi
       if (!row[col.key]) return undefined;
       const label = String(row[col.key]);
       const color = serviceTypeColor(label);
-      return <span className="badge" style={{ background: `${color}2e`, color }}>{label}</span>;
+      return <span className="badge" style={{ background: `color-mix(in srgb, ${color} 18%, transparent)`, color }}>{label}</span>;
     }
     case 'status':
       return undefined; // the care level reads better unstyled

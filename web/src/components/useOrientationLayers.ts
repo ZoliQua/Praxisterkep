@@ -8,6 +8,8 @@ import {
   cityVisible, loadCities, loadGeo, resolveLayers, useLayerChoice,
   type LayerChoice, type LayerState,
 } from '../lib/mapLayers';
+import { mapColors } from '../lib/mapColors';
+import { useThemeTick } from '../lib/theme';
 
 /** layers the borders should stay underneath, in order of preference */
 const BELOW = ['pts', 'praxes', 'county-marker'];
@@ -15,13 +17,14 @@ const BELOW = ['pts', 'praxes', 'county-marker'];
 interface BorderLayer {
   id: string;
   file: string;
-  color: string;
+  /** which of mapColors() it is drawn in */
+  color: 'jaras' | 'budapest';
   width: number;
 }
 
 const BORDERS: Record<'jaras' | 'budapest', BorderLayer> = {
-  jaras: { id: 'jaras-outline', file: 'jaras', color: '#2f4059', width: 0.7 },
-  budapest: { id: 'bp-line', file: 'budapest', color: '#46597a', width: 1 },
+  jaras: { id: 'jaras-outline', file: 'jaras', color: 'jaras', width: 0.7 },
+  budapest: { id: 'bp-line', file: 'budapest', color: 'budapest', width: 1 },
 };
 
 function centroid(feature: GeoJSON.Feature): [number, number] | null {
@@ -55,6 +58,7 @@ export function useOrientationLayers(
     [choice, defaultsKey],
   );
   const markersRef = useRef<Marker[]>([]);
+  const themeTick = useThemeTick();
 
   // city (and optionally county) labels
   useEffect(() => {
@@ -105,6 +109,7 @@ export function useOrientationLayers(
         const on = layers[key];
         if (map.getLayer(border.id)) {
           map.setLayoutProperty(border.id, 'visibility', on ? 'visible' : 'none');
+          map.setPaintProperty(border.id, 'line-color', mapColors()[border.color]);
           continue;
         }
         if (!on) continue;
@@ -117,7 +122,7 @@ export function useOrientationLayers(
             }
             m.addLayer({
               id: border.id, type: 'line', source: border.id,
-              paint: { 'line-color': border.color, 'line-width': border.width },
+              paint: { 'line-color': mapColors()[border.color], 'line-width': border.width },
             }, BELOW.find((id) => m.getLayer(id)));
           } catch {
             // the style is not ready yet — try again shortly
@@ -131,7 +136,7 @@ export function useOrientationLayers(
       cancelled = true;
       window.clearTimeout(timer);
     };
-  }, [layers.jaras, layers.budapest, layers, mapRef]);
+  }, [layers.jaras, layers.budapest, layers, mapRef, themeTick]);
 
   return layers;
 }

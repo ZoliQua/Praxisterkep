@@ -31,7 +31,7 @@ export function CorrMatrix({ data, rows, cols, control, active, onPick }: {
   };
   const color = (r: number, sig: boolean) => {
     const pct = Math.round(10 + Math.min(1, Math.abs(r) / 0.7) * 80);
-    const c = r >= 0 ? '#ef6461' : '#5fb3a1';
+    const c = r >= 0 ? 'var(--bad)' : 'var(--calm)';
     return `color-mix(in srgb, ${c} ${sig ? pct : Math.round(pct * 0.35)}%, var(--bg-raised))`;
   };
   return (

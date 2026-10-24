@@ -30,6 +30,7 @@ import { sideGroups } from '../lib/sideGroups';
 import { NextSteps } from './NextSteps';
 import { Footer } from './Footer';
 import { PdfButton } from './PdfButton';
+import { CountyStory } from './story/PageStories';
 
 const COUNTY_GROUPS = sideGroups('county');
 
@@ -90,12 +91,12 @@ export function CountyPage() {
 
   // the settlements of the county by what their GP care looks like
   const stateSlices = agg ? [
-    { value: agg.gpVacantOnly, color: '#ef6461',
+    { value: agg.gpVacantOnly, color: 'var(--bad)',
       label: t('county.state.vacantOnly'), state: 'vacantOnly' as State },
-    { value: agg.gpPartial, color: '#f0b429',
+    { value: agg.gpPartial, color: 'var(--warn)',
       label: t('county.state.partial'), state: 'partial' as State },
     { value: agg.settlements - agg.gpVacantOnly - agg.gpPartial,
-      color: '#4fd6c2', label: t('county.state.filled'), state: 'filled' as State },
+      color: 'var(--good)', label: t('county.state.filled'), state: 'filled' as State },
   ] : [];
   const active = stateSlices.find((s2) => s2.label === stateOn) ?? null;
 
@@ -107,12 +108,12 @@ export function CountyPage() {
   const dentalParts = vacancyOf(agg?.dentalDistricts, 'with');
   const dentalTotal = agg?.dentalDistricts?.total ?? 0;
   const dentalSlices = agg?.dentalDistricts ? [
-    { value: agg.dentalDistricts.vacant, color: '#ef6461',
+    { value: agg.dentalDistricts.vacant, color: 'var(--bad)',
       label: t('stats.statusVacant'), state: 'vacantOnly' as State },
     { value: agg.dentalDistricts.dissolved, color: 'var(--line-strong)',
       label: t('stats.statusDissolved'), state: '' as State },
     { value: Math.max(agg.dentalDistricts.total - agg.dentalDistricts.vacant
-      - agg.dentalDistricts.dissolved, 0), color: '#4fd6c2',
+      - agg.dentalDistricts.dissolved, 0), color: 'var(--good)',
       label: t('stats.statusFilled'), state: 'filled' as State },
   ] : [];
   const dentalActive = dentalSlices.find((s2) => s2.label === dentalOn) ?? null;
@@ -164,6 +165,8 @@ export function CountyPage() {
             ))}
           </select>
         </label>
+
+        <CountyStory />
 
         {!data && <p className="loading">…</p>}
         {data && !agg && <p className="section__explain">{t('county.nothingPicked')}</p>}

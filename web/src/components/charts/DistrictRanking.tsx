@@ -61,7 +61,7 @@ export function DistrictRanking({ data, branch, selected, onPick }: {
               <text x={LABEL - 10} y={y + ROW / 2 + 4} textAnchor="end"
                 className="district-ranking__label">{r.name}</text>
               <rect x={LABEL} y={y + 2} width={Math.max(2, x(r.v))} height={ROW - 6}
-                rx={2} fill={on ? 'var(--accent)' : '#ef6461'}
+                rx={2} fill={on ? 'var(--accent)' : 'var(--bad)'}
                 fillOpacity={on ? 1 : 0.75} />
               <text x={LABEL + x(r.v) + 8} y={y + ROW / 2 + 4}
                 className="district-ranking__value">{formatPercent(r.v)}</text>

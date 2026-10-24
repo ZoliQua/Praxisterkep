@@ -170,9 +170,13 @@ const monthName = (y, m) => (LANG === 'en' ? `${DICT.static.months[m - 1]} ${y}`
   : `${y}. ${DICT.static.months[m - 1]}`);
 const monthLabelNow = () => monthName(year, month);
 
-// the built stylesheet carries a content hash, so it is looked up, not guessed
+// the built stylesheet carries a content hash, so it is looked up, not
+// guessed: the site's own sheet is the one that styles the top bar (the
+// bundler names it after whichever chunk it lands in, and the map and the
+// story have small sheets of their own)
 const cssFile = readdirSync(join(dist, 'assets')).filter((f) => f.endsWith('.css'))
-  .sort((a, b) => b.length - a.length)[0];
+  .find((f) => readFileSync(join(dist, 'assets', f), 'utf8').includes('.topnav__inner'));
+if (!cssFile) throw new Error('no built stylesheet styles .topnav__inner');
 
 // the street map is written only when a tile provider is configured: without
 // VITE_MAP_STYLE the bundle would have nothing to draw on, so the button is
@@ -196,6 +200,27 @@ const streetFile = env.VITE_MAP_STYLE
 // is no button that does nothing
 const pdfFile = readdirSync(join(dist, 'assets')).find((f) => /^pdfexport-.*\.js$/.test(f)) ?? null;
 
+// the light/dark and colour-scheme buttons (src/navtoolsStatic.ts), and the
+// inline script that applies the stored choice before the first paint — the
+// same text as THEME_BOOT in src/lib/theme.ts, read from there
+const toolsFile = readdirSync(join(dist, 'assets')).find((f) => /^statictools-.*\.js$/.test(f)) ?? null;
+const themeBoot = /export const THEME_BOOT = `([^`]*)`/.exec(
+  readFileSync(join(here, '..', 'src', 'lib', 'theme.ts'), 'utf8'))?.[1];
+if (!themeBoot) throw new Error('THEME_BOOT not found in src/lib/theme.ts');
+const INTERNAL_URL = /export const INTERNAL_URL = '([^']*)'/.exec(
+  readFileSync(join(here, '..', 'src', 'lib', 'theme.ts'), 'utf8'))?.[1];
+const PALETTE_KEYS = Object.keys(JSON.parse(
+  readFileSync(join(here, '..', 'src', 'lib', 'palettes.json'), 'utf8'))).filter((k) => !k.startsWith('_'));
+const bootScript = () => `<script>${themeBoot}</script>`;
+const toolsScript = () => (toolsFile ? `\n<script type="module" src="/assets/${esc(toolsFile)}" defer></script>` : '');
+/** The host of the two buttons, with their labels in the page's language. */
+const navTools = () => `<div class="navtools" data-navtools="${esc(JSON.stringify({
+  toLight: label('theme.toLight'), toDark: label('theme.toDark'),
+  palette: label('theme.palette'), paletteTitle: label('theme.paletteTitle'),
+  palettes: Object.fromEntries(PALETTE_KEYS.map((k) => [k, {
+    name: label(`theme.palettes.${k}.name`), note: label(`theme.palettes.${k}.note`) }])),
+}))}"></div>`;
+
 /** The settlement's own numbers, inline, for the PDF export to read. */
 function pdfData(profile) {
   if (!pdfFile) return '';
@@ -214,9 +239,9 @@ const pdfButton = () => (pdfFile ? `<button type="button" class="pdf-btn" data-p
 
 const streetLabel = (kind) => S(`street.label.${kind}`, {}, kind);
 const STREET_COLORS = {
-  gp: '#4fd6c2', dental: '#8ab4ff', pharmacy: '#c88ff0', oncall: '#f0b429',
-  ambulance: '#ef8354', inpatient: '#ef6461', outpatient: '#9bd4a5',
-  gyse: '#b8a4ff', transport: '#7dd3fc', dialysis: '#f0abfc',
+  gp: 'var(--good)', dental: 'var(--blue)', pharmacy: 'var(--violet)', oncall: 'var(--warn)',
+  ambulance: 'var(--alert)', inpatient: 'var(--bad)', outpatient: 'var(--mint)',
+  gyse: 'var(--violet-soft)', transport: 'var(--s2)', dialysis: 'var(--s6)',
 };
 
 /** Everything in this settlement that has a coordinate, for the street map. */
@@ -266,7 +291,7 @@ function streetBlock(profile, opts = {}) {
     </button>
     <p class="tp-maplegend">${kinds.map((k) =>
     `<span><i class="street-pin" style="background:${
-      STREET_COLORS[k] ?? '#94a3b8'}"></i>${
+      STREET_COLORS[k] ?? 'var(--ink-dim)'}"></i>${
     esc(streetLabel(k))}</span>`).join('')}</p>
     <div class="tp-street__map" hidden></div>
     <script type="application/json">${
@@ -309,7 +334,13 @@ const decSep = () => (LANG === 'en' ? '.' : ',');
 /** Where a page of this language lives: /telepules/x/ or /en/telepules/x/. */
 const pagePath = (slug) => `${LANG === 'en' ? '/en' : ''}/telepules/${slug ? `${slug}/` : ''}`;
 
-const navBar = (profile) => nav.entries.map((e) => {
+// the way back to the private analysis site, shown only to a reader who came
+// from there (THEME_BOOT marks <html data-internal>); Módszertan then makes
+// room and moves to the footer — the React twin is in components/NavMenu.tsx
+const internalEntry = () => `<div class="topnav__group only-internal"><a href="${esc(INTERNAL_URL)}" title="${
+  esc(label('nav.internalTitle'))}">${esc(label('nav.internal'))}</a></div>`;
+
+const navBar = (profile) => [internalEntry()].concat(nav.entries.map((e) => {
   const grouped = (e.children ?? []).some((c) => c[2] === 'group');
   // a heading and its links stay together in one column, as in the app
   const cols = [];
@@ -320,11 +351,11 @@ const navBar = (profile) => nav.entries.map((e) => {
   const children = cols.map((col) => `<div class="topnav__subcol">${col.map(([href, key, kind]) =>
     `<a href="${esc(ctx(href, profile))}"${kind === 'group' ? ' class="topnav__subhead"' : ''}>${
       esc(label(key))}</a>`).join('')}</div>`).join('');
-  return `<div class="topnav__group"><a href="${esc(ctx(e.href, profile))}">${
+  return `<div class="topnav__group${/modszertan\.html/.test(e.href) ? ' no-internal' : ''}"><a href="${esc(ctx(e.href, profile))}">${
     esc(label(e.labelKey))}${children ? '<i class="topnav__caret" aria-hidden="true"></i>' : ''
   }</a>${children ? `<div class="topnav__submenu${grouped ? ' is-grouped' : ''}" hidden>${
     children}</div>` : ''}</div>`;
-}).join('\n    ');
+}), [navTools()]).join('\n    ');
 
 const ctx = (href, profile) => {
   // the index page has no settlement of its own: its links carry no context
@@ -472,7 +503,7 @@ function travelRows(profile) {
   }).join('\n');
 }
 
-const AGE_COLORS = { young: '#4fd6c2', working: '#6ea8ff', old: '#f0b429' };
+const AGE_COLORS = { young: 'var(--good)', working: 'var(--gp)', old: 'var(--warn)' };
 const ageLabel = (key) => S(`age.${key}`);
 
 /**
@@ -501,7 +532,7 @@ function agePie(split, size = 132, prefix = 'kor') {
     const big = to - from > Math.PI ? 1 : 0;
     return `<a href="#${prefix}-${key}" class="agepie__slice agepie__slice--${key}">
       <path d="M${r} ${r}L${x1.toFixed(2)} ${y1.toFixed(2)}A${r} ${r} 0 ${big} 1 ${
-  x2.toFixed(2)} ${y2.toFixed(2)}Z" fill="${AGE_COLORS[key]}" stroke="#0b1016"
+  x2.toFixed(2)} ${y2.toFixed(2)}Z" fill="${AGE_COLORS[key]}" stroke="var(--bg)"
         stroke-width="1"><title>${esc(ageLabel(key))}: ${num(split[key])} (${
   pct(shares[i])})</title></path></a>`;
   };
@@ -510,15 +541,15 @@ function agePie(split, size = 132, prefix = 'kor') {
     <text x="${r}" y="${r - 2}" text-anchor="middle" font-size="15"
       font-weight="700" fill="${AGE_COLORS[key]}">${esc(pct(shares[i]))}</text>
     <text x="${r}" y="${r + 14}" text-anchor="middle" font-size="10"
-      fill="#94a3b8">${num(split[key])} ${esc(S('unit.people'))}</text>
+      fill="var(--ink-dim)">${num(split[key])} ${esc(S('unit.people'))}</text>
   </g>`).join('');
   return `<svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}"
     role="img" aria-label="${esc(S('age.aria'))}" class="agepie">
     <g class="agepie__wedges">${keys.map(wedge).join('')}</g>
-    <circle cx="${r}" cy="${r}" r="${(r * 0.46).toFixed(1)}" fill="#101823"/>
+    <circle cx="${r}" cy="${r}" r="${(r * 0.46).toFixed(1)}" fill="var(--bg-raised)"/>
     ${readouts}
     <text class="agepie__hint" x="${r}" y="${r + 4}" text-anchor="middle"
-      font-size="9.5" fill="#64748b">${esc(S('age.hover'))}</text>
+      font-size="9.5" fill="var(--ink-faint)">${esc(S('age.hover'))}</text>
   </svg>`;
 }
 
@@ -623,17 +654,17 @@ function pyramid(bySex, { width = 300, band = 26, gap = 4 } = {}) {
     const sum = m + f;
     return `<a href="#kor-${key}" class="pyramid__row">
       <rect x="${(half - mw).toFixed(1)}" y="${y}" width="${mw.toFixed(1)}"
-        height="${band}" fill="#6ea8ff" rx="2"><title>${esc(S('age.maleTitle', {
+        height="${band}" fill="var(--gp)" rx="2"><title>${esc(S('age.maleTitle', {
   group: ageLabel(key), n: num(m), share: pct(sum ? m / sum : 0) }))}</title></rect>
       <rect x="${half + 86}" y="${y}" width="${fw.toFixed(1)}" height="${band}"
-        fill="#f0abfc" rx="2"><title>${esc(S('age.femaleTitle', {
+        fill="var(--s6)" rx="2"><title>${esc(S('age.femaleTitle', {
   group: ageLabel(key), n: num(f), share: pct(sum ? f / sum : 0) }))}</title></rect>
       <text x="${half + 43}" y="${y + band / 2 + 4}" text-anchor="middle"
-        font-size="11" fill="#94a3b8">${esc(ageLabel(key))}</text>
+        font-size="11" fill="var(--ink-dim)">${esc(ageLabel(key))}</text>
       <text x="${(half - mw - 6).toFixed(1)}" y="${y + band / 2 + 4}" text-anchor="end"
-        font-size="11" fill="#cbd5e1">${num(m)}</text>
+        font-size="11" fill="var(--ink)">${num(m)}</text>
       <text x="${(half + 86 + fw + 6).toFixed(1)}" y="${y + band / 2 + 4}"
-        font-size="11" fill="#cbd5e1">${num(f)}</text>
+        font-size="11" fill="var(--ink)">${num(f)}</text>
     </a>`;
   }).join('');
   return `<svg class="tp-pyramid" viewBox="0 0 ${width} ${height}" width="100%"
@@ -1272,7 +1303,8 @@ function siteFooter(homeHref, analysisHref) {
       <li>${esc(f.thirdParty)}</li>
       <li>${esc(f.correction)}</li>
     </ul></details>
-    <p class="footer__privacy"><a href="${esc(appHref('/adatkezeles.html'))}">${esc(DICT.privacy.navLabel)}</a>
+    <p class="footer__privacy"><span class="only-internal"><a href="${esc(appHref('/modszertan.html'))}">${
+  esc(label('nav.methodology'))}</a> · </span><a href="${esc(appHref('/adatkezeles.html'))}">${esc(DICT.privacy.navLabel)}</a>
       · <a href="#" data-consent-reopen>${esc(DICT.privacy.reopen)}</a></p>
     <p class="footer__author">${esc(f.authorBy)}
       <a href="https://dulzoltan.hu" rel="noopener">${esc(f.authorName)}</a>${
@@ -1335,9 +1367,9 @@ function helpTip(text) {
 }
 
 const TRAVEL_COLORS = {
-  gp: '#4fd6c2', dental: '#8ab4ff', oncall: '#f0b429', ambulance: '#ef8354',
-  inpatient: '#ef6461', outpatient: '#9bd4a5', gyse: '#b8a4ff', pharmacy: '#c88ff0',
-  sbo: '#ff4d6d',
+  gp: 'var(--good)', dental: 'var(--blue)', oncall: 'var(--warn)', ambulance: 'var(--alert)',
+  inpatient: 'var(--bad)', outpatient: 'var(--mint)', gyse: 'var(--violet-soft)', pharmacy: 'var(--violet)',
+  sbo: 'var(--pink)',
 };
 
 /** The drive to each kind of care, as bars, before the table says it again. */
@@ -1353,7 +1385,7 @@ function travelChart(profile) {
     <span class="tp-bar__label">${esc(r.label)}</span>
     <span class="tp-bar__track">
       <span class="tp-bar__fill" style="width:${Math.max((r.min / max) * 100, 1.5)}%;
-        background:${TRAVEL_COLORS[r.key] ?? '#94a3b8'}"
+        background:${TRAVEL_COLORS[r.key] ?? 'var(--ink-dim)'}"
         title="${esc(r.label)}: ${esc(minutes(r.min))}"></span>
     </span>
     <span class="tp-bar__value">${esc(minutes(r.min))}${
@@ -1681,6 +1713,7 @@ function page(profile) {
 <html lang="${LANG}">
 <head>
 <meta charset="utf-8">
+${bootScript()}
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${esc(title)} | ${esc(label('site.title'))}</title>
 <meta name="description" content="${esc(desc)}">
@@ -1698,7 +1731,7 @@ function page(profile) {
 <meta name="theme-color" content="#0D1117">${gaMeta}
 <link rel="canonical" href="${site}${esc(pagePath(profile.slug))}">
 ${alternates(profile.slug)}
-<link rel="stylesheet" href="/assets/${esc(cssFile)}">${streetFile ? `
+<link rel="stylesheet" href="/assets/${esc(cssFile)}">${toolsScript()}${streetFile ? `
 <script type="module" src="/assets/${esc(streetFile)}" defer></script>` : ''}${pdfFile ? `
 <script type="module" src="/assets/${esc(pdfFile)}" defer></script>` : ''}
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1900,6 +1933,7 @@ function writeIndex(root) {
 <html lang="${LANG}">
 <head>
 <meta charset="utf-8">
+${bootScript()}
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${esc(S('list.title'))}</title>
 <meta name="description" content="${esc(S('list.desc', { n: profiles.settlements.length }))}">
@@ -1912,7 +1946,7 @@ function writeIndex(root) {
 <meta name="theme-color" content="#0D1117">${gaMeta}
 <link rel="canonical" href="${site}${pagePath('')}">
 ${alternates('')}
-<link rel="stylesheet" href="/assets/${esc(cssFile)}">
+<link rel="stylesheet" href="/assets/${esc(cssFile)}">${toolsScript()}
 </head>
 <body>
 <nav class="topnav"><div class="topnav__inner">

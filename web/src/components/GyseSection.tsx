@@ -112,7 +112,7 @@ export function GyseSection() {
           the question is not how many premises there are but how many people
           share one */}
       <h3 className="section__subheading">{t('gyse.countyHeading')}</h3>
-      <CountyChoropleth values={countyLoad} color="#c88ff0" selected={null}
+      <CountyChoropleth values={countyLoad} color="var(--violet)" selected={null}
         format={(name) => {
           const row = counties.find((c) => c.county === name);
           return row

@@ -29,6 +29,7 @@ import { sideGroups } from '../lib/sideGroups';
 import { NextSteps } from './NextSteps';
 import { Footer } from './Footer';
 import { PdfButton } from './PdfButton';
+import { DistrictStory } from './story/PageStories';
 import { VulnerableDistricts } from './VulnerableDistricts';
 
 const DISTRICT_GROUPS = sideGroups('district');
@@ -212,15 +213,15 @@ export function DistrictPage() {
 
   const gpSlices = d?.gpDistricts ? [
     { value: d.gpDistricts.total - d.gpDistricts.vacant - d.gpDistricts.dissolved,
-      color: '#4fd6c2', label: t('stats.statusFilled') },
-    { value: d.gpDistricts.vacant, color: '#ef6461', label: t('stats.statusVacant') },
+      color: 'var(--good)', label: t('stats.statusFilled') },
+    { value: d.gpDistricts.vacant, color: 'var(--bad)', label: t('stats.statusVacant') },
     { value: d.gpDistricts.dissolved, color: 'var(--line-strong)',
       label: t('stats.statusDissolved') },
   ].filter((s) => s.value > 0) : [];
   const dentalSlices = d?.dentalDistricts ? [
     { value: d.dentalDistricts.total - d.dentalDistricts.vacant
-      - d.dentalDistricts.dissolved, color: '#4fd6c2', label: t('stats.statusFilled') },
-    { value: d.dentalDistricts.vacant, color: '#ef6461',
+      - d.dentalDistricts.dissolved, color: 'var(--good)', label: t('stats.statusFilled') },
+    { value: d.dentalDistricts.vacant, color: 'var(--bad)',
       label: t('stats.statusVacant') },
     { value: d.dentalDistricts.dissolved, color: 'var(--line-strong)',
       label: t('stats.statusDissolved') },
@@ -267,6 +268,8 @@ export function DistrictPage() {
             </select>
           </label>
         </div>
+
+        <DistrictStory />
 
         {!data && <p className="loading">…</p>}
         {data && !d && <p className="section__explain">{t('district.nothingPicked')}</p>}

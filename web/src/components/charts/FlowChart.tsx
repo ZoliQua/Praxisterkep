@@ -11,7 +11,7 @@ import { monthToDate, type FlowPoint } from '../../lib/statsSelectors';
 const MARGIN = { top: 12, right: 16, bottom: 26, left: 46 };
 const WIDTH = 640;
 const HEIGHT = 240;
-const FLOW_COLORS = { entered: '#d95926', left: '#17a08c' };
+const FLOW_COLORS = { entered: 'var(--alert)', left: 'var(--type-mixed)' };
 
 export function FlowChart({ points }: { points: FlowPoint[] }) {
   const [hover, setHover] = useState<FlowPoint | null>(null);

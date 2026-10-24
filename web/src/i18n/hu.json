@@ -46,7 +46,24 @@
     "districtPage": "Járás",
     "districtChoose": "Járás kiválasztása",
     "districtVulnerable": "A legveszélyeztetettebb járások",
-    "europe": "Európa"
+    "europe": "Európa",
+    "internal": "Belső",
+    "internalTitle": "Vissza a belső elemző oldalra (belso.praxisterkep.hu)"
+  },
+  "theme": {
+    "toLight": "Világos mód",
+    "toDark": "Sötét mód",
+    "palette": "Színskála: a grafikonok és a térképek színei",
+    "paletteTitle": "Színskála",
+    "palettes": {
+      "alap": { "name": "Praxistérkép", "note": "az oldal saját színei" },
+      "okabe": { "name": "Okabe–Ito", "note": "színtévesztők számára is megkülönböztethető" },
+      "viridis": { "name": "Viridis", "note": "egyenletes világosságú skála" },
+      "magma": { "name": "Magma", "note": "meleg, naplemente-tónusok" },
+      "tableau": { "name": "Tableau 10", "note": "klasszikus elemzői színkészlet" },
+      "kek": { "name": "Kék árnyalatok", "note": "visszafogott, egyszínű" },
+      "kontraszt": { "name": "Nagy kontraszt", "note": "élénk, kivetítőhöz" }
+    }
   },
   "hero": {
     "vacant": "betöltetlen {kind} körzet",
@@ -2230,7 +2247,7 @@
     },
     "storage": {
       "title": "Mit őriz a böngésződ",
-      "text": "A nyelvválasztást, a térképrétegek beállítását, a PDF-export legutóbbi beállításait és a sütikről hozott döntésedet. Ezek a saját gépeden maradnak, hozzánk nem jutnak el, és a böngésző adatainak törlésével eltűnnek."
+      "text": "A nyelvválasztást, a világos vagy sötét megjelenést és a választott színskálát, a térképrétegek beállítását, a PDF-export legutóbbi beállításait és a sütikről hozott döntésedet; a böngészőlap bezárásáig azt is, hogy a belső elemző oldalról érkeztél-e (ekkor a menüben egy oda visszavezető link jelenik meg). Ezek a saját gépeden maradnak, hozzánk nem jutnak el, és a böngésző adatainak törlésével eltűnnek."
     },
     "rights": {
       "title": "Milyen jogaid vannak",
@@ -4337,6 +4354,178 @@
       "dataMonth": "Adatállapot: {month} — az Eurostat és az OECD adatbázisai szerint, mutatónként a saját legutóbbi évével.",
       "notesRules": "Egy ország idősora mindig egyetlen kiadótól származik; a praktizáló, a szakmailag aktív és az engedéllyel rendelkező orvos fogalmát nem keverjük; országok között korrelációt nem számolunk. A vándorlást a végzés helye szerint számoljuk, nem nemzetiség szerint, ezért nettó veszteséget nem számolunk.",
       "notesLicence": "Eurostat: újrafelhasználás a forrás megjelölésével. OECD: CC BY 4.0; a feldolgozás és az összevetés a szerző munkája, nem az OECD hivatalos álláspontja."
+    }
+  },
+  "story": {
+    "ui": {
+      "region": "Animáció: {title}",
+      "aria": "{title} — animált összefoglaló, {n} jelenet. A jelenetek szövege az ábra alatt olvasható.",
+      "play": "Lejátszás",
+      "pause": "Szünet",
+      "next": "Következő jelenet",
+      "replay": "Újra az elejéről",
+      "scene": "{i}. jelenet: {say}",
+      "script": "Az animáció szövege",
+      "time": "{now} / {total} mp",
+      "counter": "{i} / {n}"
+    },
+    "common": {
+      "filled": "betöltött",
+      "vacant": "betöltetlen",
+      "dissolved": "megszűnt",
+      "national": "országos",
+      "settlFilled": "van betöltött",
+      "settlPartial": "vegyes",
+      "settlVacant": "csak betöltetlen",
+      "gp": "háziorvos",
+      "dentist": "fogorvos",
+      "hospital": "kórház"
+    },
+    "landing": {
+      "title": "{label} körzetek fél percben",
+      "total": "{month}: a NEAK {total} {kind} körzetet tart nyilván.",
+      "totalLabel": "{kind} körzet",
+      "vacant": "Ebből {vacant} betöltetlen, arányuk {rate}.",
+      "vacantWith": "Megszűnt szerződésűekkel együtt {vacant} körzetnek nincs szerződött orvosa, arányuk {rate}.",
+      "dissolvedOut": "Mellettük {n} körzet szerződése megszűnt; ezek nincsenek benne a fenti számban.",
+      "dissolvedIn": "A fenti számban {n} megszűnt szerződésű körzet is benne van.",
+      "people": "Ezekhez a körzetekhez {people} lakos tartozik.",
+      "peopleLabel": "lakos",
+      "caveat": "Betöltetlen ≠ ellátatlan: a lakosok többségét helyettesítő {doctor} látja el, korlátozott rendelési időben.",
+      "longTerm": "Jogilag tartósan betöltetlen: {n} körzet (OKFŐ, {month}).",
+      "longTermShare": "a betöltetlen körzetek közül",
+      "duration": "A ma betöltetlen körzetek felében legalább {dur} telt el az üresedés óta.",
+      "durationLabel": "az üresedés óta (medián)",
+      "trend": "{from}: {a} betöltetlen körzet. {to}: {b}.",
+      "trendWith": "{from}: {a} betöltetlen vagy megszűnt körzet. {to}: {b}.",
+      "counties": "A legmagasabb arány: {c1} ({r1}), {c2} ({r2}), {c3} ({r3})."
+    },
+    "highlights": {
+      "title": "{heading}, fél percben",
+      "grant": "Letelepedési támogatással betöltött háziorvosi körzet, ahol ma is van orvos: {a}.",
+      "grantLabel": "ma is van orvos",
+      "matched": "Hasonló, támogatás nélküli párjaiknál ugyanez csak {b} ({pairs} pár).",
+      "withGrant": "támogatással",
+      "withoutGrant": "támogatás nélkül",
+      "ten": "Ma {vacant} fogorvosi körzet betöltetlen; közülük {ten} legalább tíz éve üres.",
+      "tenShare": "Arányuk {share}: egy évtizede nincs saját fogorvosuk.",
+      "tenLabel": "legalább tíz éve üres",
+      "euGp": "Háziorvos 100 ezer lakosra: Magyarországon {value} ({year}), a régió mediánja {median}.",
+      "euGpRank": "A régió {of} adatot közlő országa közül Magyarország {art} {rank}. helyen áll; a legtöbb: {best}, {bestValue}.",
+      "euDental": "Egy év alatt fogorvosnál járt felnőttek: {value} ({year}), vidéken csak {rural}.",
+      "euDentalNoRural": "Egy év alatt fogorvosnál járt felnőttek: {value} ({year}).",
+      "euDentalEu": "Az EU-ban ugyanez {eu}; a régió {of} országa közül Magyarország {art} {rank}. helyen áll.",
+      "euDentalMedian": "A régió mediánja {median}; a régió {of} országa közül Magyarország {art} {rank}. helyen áll.",
+      "median": "medián",
+      "rural": "vidék"
+    },
+    "area": {
+      "title": "{name} fél percben",
+      "size": "{name}: {settlements} település, {population} lakos.",
+      "residents": "lakos",
+      "age": "65 év feletti lakos: {old}, arányuk {share}.",
+      "districts": "{total} {kind} körzetből {vacant} betöltetlen ({rate}).",
+      "districtsDissolved": "{total} {kind} körzetből {vacant} betöltetlen ({rate}), {dissolved} megszűnt.",
+      "settlements": "{vacant} településen csak betöltetlen {kind} körzet van, {partial} helyen betöltött és betöltetlen is.",
+      "compare": "Betöltetlen {kind} körzetek aránya: itt {here}, országosan {national}.",
+      "development": "A járások fejlettségi rangsorában: {rank} / {of} (1 = a legkevésbé fejlett).",
+      "developmentLabel": "fejlettségi helyezés (1 = a legkevésbé fejlett)",
+      "travel": "Medián menetidő autóval: háziorvos {gp}, fogorvos {dental}, kórház {inpatient}.",
+      "bus": "{n} településről nincs közvetlen busz a legközelebbi háziorvosi rendelőhöz.",
+      "busLabel": "a települések közül nincs közvetlen busz"
+    },
+    "countyOverview": {
+      "title": "A megyék fél percben",
+      "intro": "{n} megye és Budapest: {total} {kind} körzet, ebből {vacant} betöltetlen.",
+      "introWith": "{n} megye és Budapest: {total} {kind} körzet, ebből {vacant} betöltetlen vagy megszűnt.",
+      "highest": "A legmagasabb arány: {c1} ({r1}), {c2} ({r2}), {c3} ({r3}).",
+      "lowest": "A legalacsonyabb arány: {c1} ({r1}), {c2} ({r2}), {c3} ({r3}).",
+      "most": "A legtöbb betöltetlen körzet: {c1} ({r1}), {c2} ({r2}), {c3} ({r3}).",
+      "pick": "Válassz megyét, és ez a mese a megye saját számait mondja el."
+    },
+    "districtOverview": {
+      "title": "A járások fél percben",
+      "intro": "{n} járás és Budapest {capital} kerülete, mindegyik a saját számaival.",
+      "highest": "A legmagasabb {kind} arány: {c1} ({r1}), {c2} ({r2}), {c3} ({r3}).",
+      "zero": "{zero} járásban nincs betöltetlen {kind} körzet ({of} közül).",
+      "zeroLabel": "nincs betöltetlen körzet",
+      "pick": "Válassz járást a térképen vagy a listából, és ez a mese a járás saját számait mondja el."
+    },
+    "analysis": {
+      "title": "Az elemzések fél percben",
+      "spells": "{from} óta {spells} {kind} megüresedést követtünk végig a havi listákon.",
+      "refilled": "betöltődött",
+      "stillOpen": "ma is betöltetlen",
+      "median": "Egy megüresedett {kind} körzet medián {m} hónapig marad betöltetlen (Kaplan–Meier).",
+      "noMedian": "A követett megüresedések több mint fele ma is betöltetlen.",
+      "monthTick": "{m}. hó",
+      "s60": "Öt év után is betöltetlen marad (Kaplan–Meier-becslés): {s60}.",
+      "s60Label": "öt év után is betöltetlen",
+      "forecast": "Ma {now} {kind} körzet betöltetlen; egy év múlva várhatóan {in12} (90%: {lo}–{hi}).",
+      "now": "ma",
+      "plusMonths": "+{m} hó",
+      "grants": "Támogatással betöltött {kind} körzet, ahol ma is van orvos: {a}; hasonló párjaiknál {b}.",
+      "corr": "{n} vidéki járásban a {kind} betöltetlenség az elkerülhető halálozással együtt jár: r = {r}.",
+      "corrLabel": "korreláció (Pearson)",
+      "partial": "A jövedelmet kiszűrve is megmarad: parciális r = {p}. Ez együttjárás, nem ok-okozat.",
+      "raw": "nyers r",
+      "incomeHeld": "jövedelmet kiszűrve",
+      "sbo": "{people} lakos él 30 percnél messzebb autóval a legközelebbi sürgősségi osztálytól.",
+      "band": "{b} perc"
+    },
+    "europe": {
+      "title": "Európai összevetés fél percben",
+      "intro": "Összevetés: {group}, {n} ország. Minden érték a saját évével; az 1. hely a legjobb.",
+      "fact": "{name}: Magyarország {value} ({year}), {ref}.",
+      "factRank": "{name}: Magyarország {value} ({year}), {ref}; helyezés: {rank} / {of}.",
+      "factOnly": "{name}: Magyarország {value} ({year}).",
+      "refEu": "az EU-27 értéke {value}",
+      "refMedian": "a csoport mediánja {value}",
+      "unit": {
+        "per100k": "/ 100 ezer lakos",
+        "pct": "",
+        "perCapita": "/ fő / év",
+        "pps": "PPS / fő",
+        "ratio": "",
+        "years": "év",
+        "pctEu": "(EU = 100)"
+      }
+    },
+    "specialist": {
+      "title": "Ki lát el még? Fél percben",
+      "vedono": "{territorial} területi és {school} iskolai védőnői szolgálat működik.",
+      "territorial": "területi",
+      "school": "iskolai",
+      "vedonoLoad": "Egy területi védőnői szolgálatra {res} lakos jut, köztük {young} gyermek (0–14 éves).",
+      "vedonoPremises": "{with} / {total} településen van védőnői telephely.",
+      "premisesLabel": "a települések közül van védőnői telephely",
+      "inpatient": "{inst} fekvőbeteg-intézmény {units} osztállyal szerződött a NEAK-kal.",
+      "wards": "fekvőbeteg-osztály",
+      "outpatient": "Járóbeteg-szakellátás: {inst} intézmény, {rooms} rendelő.",
+      "inpatientShort": "fekvőbeteg-intézmény",
+      "outpatientShort": "járóbeteg-intézmény",
+      "pharmacy": "{n} szerződött gyógyszertár; egy patikára {per} lakos jut.",
+      "pharmacies": "szerződött gyógyszertár",
+      "pharmacyPlaces": "{with} / {total} településen van gyógyszertár.",
+      "gyse": "Gyógyászati segédeszköz {premises} kiadóhelyen, {settl} településen váltható ki.",
+      "gyseLabel": "a települések közül van kiadóhely"
+    },
+    "method": {
+      "title": "Honnan jönnek a számok? Fél percben",
+      "sources": "Minden szám nyilvános forrásból jön: {groups} forráscsoport {files} fájljából vagy nyilvántartásából.",
+      "archive": "A havi listák archívuma: {d} fogorvosi és {g} háziorvosi hónap.",
+      "span": "A legrégebbi archivált hónap: {first}; a legfrissebb: {last}.",
+      "districts": "{month}: {dental} fogorvosi és {gp} háziorvosi körzet a NEAK nyilvántartásában.",
+      "fin": "Minden körzetet a NEAK FIN-kódja azonosít; ha egy kód eltűnik, a körzet megszűntként szerepel.",
+      "pages": "{n} településnek saját lapja van, a havi adatokból újraépítve.",
+      "pagesLabel": "települési lap",
+      "pipeline": "A havi futás {steps} lépésből áll; legutóbb ({date}) {ok} futott le hibátlanul.",
+      "stepOk": "rendben lefutott lépés",
+      "stepOther": "hibás vagy kihagyott lépés",
+      "loud": "Ha egy forrás hiányzik vagy egy ellenőrzés elbukik, nincs közzététel: inkább hiány, mint becsült adat.",
+      "pinSource": "forrás",
+      "pinCheck": "ellenőrzés",
+      "pinStop": "megállás"
     }
   }
 }
