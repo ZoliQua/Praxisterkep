@@ -5,6 +5,38 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.54.0] - 2026-10-24
+
+### Hozzáadva
+- **Világos és sötét mód, hét színskála.** A menü végén két új gomb: a
+  nap/hold a világos és a sötét mód között vált (alapból sötét), a paletta
+  ikon hét színskálát kínál (Praxistérkép, színtévesztő-barát Okabe–Ito,
+  Viridis, Magma, Tableau, kék, nagy kontraszt). A térképek, a grafikonok és
+  a 3177 statikus településoldal is azonnal átszíneződik; világos módban
+  minden skála sötétebb, fehéren is olvasható változatot kap. A választást
+  csak a böngésző tárolja, ezt az adatkezelési tájékoztató is leírja.
+- **Papírkivágás-animáció minden főoldal elején.** A főoldal, a megye, a
+  járás, az Elemző, az Európa, a Továbbiak és a Módszertan oldal tetején
+  30 másodperces animáció mondja el az oldal saját adatait; a megye- és
+  járásoldalon a kiválasztott terület számaiból. A főoldalon az „Amit eddig
+  senki nem számolt ki” rész alatt egy második animáció a négy kiemelést
+  meséli el. Világos módban az éjszakai égből nappal lesz.
+- **„A prevenciós lánc” új rajza.** Mind a négy változat (háziorvos és
+  fogorvos, van és nincs orvos) ugyanebben a stílusban, animálva; a szövegek
+  és a számok nem változtak.
+- **Visszalépés a belső elemzőoldalra.** A belső oldalról `?belso=true`
+  véggel érkező látogatónak a böngészőlap bezárásáig a menü első helyén
+  „Belső” pont áll, a Módszertan pedig a láblécbe kerül, az Adatkezelés
+  elé. Csak navigáció: semmilyen adat nem megy át.
+
+### Javítva
+- Az EESZT-térkép pontméret-kifejezése érvénytelen volt (a nagyítás egy
+  feltételen belül állt), ezért a térkép elutasította; a nagyítás most a
+  kifejezés élén áll.
+- A statikus oldalak generátora fájlnév alapján kereste a stíluslapot, ami
+  több CSS-fájl mellett rosszat választott volna; most tartalom alapján
+  keresi.
+
 ## [1.53.2] - 2026-10-22
 
 ### Javítva
