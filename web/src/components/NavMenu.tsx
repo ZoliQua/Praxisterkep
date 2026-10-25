@@ -1,8 +1,10 @@
 // The top bar, grouped. Ten flat links had stopped fitting on a laptop and
-// were scrolling sideways; now six entries carry their sections in a
-// dropdown. A group whose label is itself a destination stays clickable —
-// "Térkép" goes to the map whether or not you open its submenu.
-import { useEffect, useRef, useState } from 'react';
+// were scrolling sideways; now five entries carry their sections in a
+// dropdown, "Térkép" with the zooms under it (highlights, the twenty counties,
+// the járás, the settlements of each county). A group whose label is itself a
+// destination stays clickable — "Térkép" goes to the map whether or not you
+// open its submenu.
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { t } from '../lib/i18n';
 import { INTERNAL_URL } from '../lib/theme';
 import { NavTools } from './NavTools';
@@ -12,11 +14,15 @@ export interface NavEntry {
   href: string;
   labelKey: string;
   /** [href, labelKey] links; a third element "group" makes the row a
-   *  heading of the links under it (the analysis page's 22 sections) */
+   *  heading of the links under it (the analysis page's 22 sections), and
+   *  "name" marks a label that is a proper name, not a key (the counties) */
   children?: readonly (readonly [string, string] | readonly [string, string, string])[];
 }
 
 type Child = NonNullable<NavEntry['children']>[number];
+
+/** A row's text: a county is its own name in every language. */
+const childLabel = (c: Child) => (c[2] === 'name' ? c[1] : t(c[1]));
 
 /** Split a submenu at its group headings; an ungrouped one is one column. */
 function columns(children: readonly Child[]): Child[][] {
@@ -82,15 +88,21 @@ export function NavMenu({ entries }: { entries: readonly NavEntry[] }) {
     {/* one nav per page: the button's aria-controls and the CSS sibling
         selector both assume this id is unique on the page */}
     <div className={`topnav__links${folded ? '' : ' is-open'}`} id="topnav-links" ref={navRef}>
-      {/* only for a reader who came from the private analysis site (?belso=true,
-          see THEME_BOOT in lib/theme.ts): the way back, first; Módszertan then
-          moves to the footer to make room */}
-      <div className="topnav__group only-internal">
-        <a href={INTERNAL_URL} title={t('nav.internalTitle')}>{t('nav.internal')}</a>
-      </div>
-      {entries.map((entry) => (
-        <div key={entry.href}
-          className={`topnav__group${/modszertan\.html/.test(entry.href) ? ' no-internal' : ''}`}
+      {entries.map((entry, i) => (
+        <Fragment key={entry.href}>
+        {/* only for a reader who came from the private analysis site
+            (?belso=true, see THEME_BOOT in lib/theme.ts): the way back, in
+            the place of Módszertan, which moves to the footer */}
+        {/modszertan\.html/.test(entry.href) && (
+          <div className="topnav__group only-internal">
+            <a href={INTERNAL_URL} title={t('nav.internalTitle')}>
+              {t('nav.internal')}<span className="topnav__out" aria-hidden="true">{'\u2197'}</span>
+            </a>
+          </div>
+        )}
+        <div
+          className={`topnav__group${/modszertan\.html/.test(entry.href) ? ' no-internal' : ''}${
+            i === 0 ? ' topnav__group--first' : ''}`}
           // hover opens it for a mouse only: on a touch screen the tap would
           // open the panel and the click that follows would close it again
           onPointerEnter={(event) => {
@@ -114,10 +126,11 @@ export function NavMenu({ entries }: { entries: readonly NavEntry[] }) {
                 ? ' is-grouped' : ''}`} hidden={open !== entry.href}>
                 {/* a heading and its links stay together in one column */}
                 {columns(entry.children).map((col) => (
-                  <div key={col[0][0]} className="topnav__subcol">
-                    {col.map((c) => (
-                      <a key={c[0]} href={c[0]} className={c[2] === 'group' ? 'topnav__subhead' : undefined}
-                        onClick={done}>{t(c[1])}</a>
+                  <div key={col[0][0]}
+                    className={`topnav__subcol${col.some((c) => c[2] === 'name') ? ' topnav__subcol--names' : ''}`}>
+                    {col.map((c, j) => (
+                      <a key={j} href={c[0]} className={c[2] === 'group' ? 'topnav__subhead' : undefined}
+                        onClick={done}>{childLabel(c)}</a>
                     ))}
                   </div>
                 ))}
@@ -125,6 +138,7 @@ export function NavMenu({ entries }: { entries: readonly NavEntry[] }) {
             </>
           )}
         </div>
+        </Fragment>
       ))}
       <NavTools />
     </div>

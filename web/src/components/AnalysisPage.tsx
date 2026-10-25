@@ -32,6 +32,7 @@ import { SboSection } from './SboSection';
 import { GrantsSection } from './GrantsSection';
 import { ForecastSection } from './ForecastSection';
 import { SideNav, type SideGroup } from './SideNav';
+import { Deferred } from './Deferred';
 import sections from '../lib/pageSections.json';
 
 // the page's groups, in order: the same list builds the top table of
@@ -84,39 +85,41 @@ export function AnalysisPage() {
       </nav>
       <SideNav groups={GROUPS} labelKey="analysis.sideNav" />
 
+      {/* everything below the first section waits until the reader comes
+          near it: twenty sections, each with its own data file */}
       <GroupHead id="national" />
       <StatsSection />
-      <VersusSection />
-      <CoverageSection kind={kind} />
+      <Deferred ids={['osszevetes']}><VersusSection /></Deferred>
+      <Deferred ids={['lefedettseg']}><CoverageSection kind={kind} /></Deferred>
 
       <GroupHead id="future" />
-      <RiskSection kind={kind} />
-      <SurvivalSection kind={kind} />
+      <Deferred ids={['kockazat']}><RiskSection kind={kind} /></Deferred>
+      <Deferred ids={['tulel']}><SurvivalSection kind={kind} /></Deferred>
       {/* the two above, put together: how many will be vacant in a year —
           and whether paying a doctor to settle has filled districts so far */}
-      <ForecastSection key={kind} kind={kind} />
-      <GrantsSection />
+      <Deferred ids={['elorejelzes']}><ForecastSection key={kind} kind={kind} /></Deferred>
+      <Deferred ids={['tamogatasok']}><GrantsSection /></Deferred>
 
       <GroupHead id="districts" />
-      <DistrictAnalysis />
+      <Deferred ids={['jarasok']}><DistrictAnalysis /></Deferred>
       {/* what a vacancy goes with: the deaths it may cost, and the
           circumstances that make a district hard to fill */}
-      <MortalitySection />
-      <LivingSection />
-      <CensusSection />
-      <LinksSection />
+      <Deferred ids={['halalozas']}><MortalitySection /></Deferred>
+      <Deferred ids={['jovedelem', 'allaskeresok', 'nepesseg']}><LivingSection /></Deferred>
+      <Deferred ids={['nepszamlalas']}><CensusSection /></Deferred>
+      <Deferred ids={['osszefuggesek']}><LinksSection /></Deferred>
 
       <GroupHead id="access" />
-      <EmergencySection kind={kind} />
-      <AccessSection />
-      <TravelTimeSection />
-      <SboSection />
-      <TransitSection />
+      <Deferred ids={['ugyelet']}><EmergencySection kind={kind} /></Deferred>
+      <Deferred ids={['tavolsag']}><AccessSection /></Deferred>
+      <Deferred ids={['menetido']}><TravelTimeSection /></Deferred>
+      <Deferred ids={['surgosseg']}><SboSection /></Deferred>
+      <Deferred ids={['busz']}><TransitSection /></Deferred>
 
       <GroupHead id="settlements" />
-      <CompositeSection />
-      <CrossSection />
-      <ClusterSection />
+      <Deferred ids={['index']}><CompositeSection /></Deferred>
+      <Deferred ids={['keresztmetszet']}><CrossSection /></Deferred>
+      <Deferred ids={['hianyteruletek']}><ClusterSection /></Deferred>
       <Next items={[
         { href: '/megye.html', titleKey: 'next.county.title', textKey: 'next.county.text' },
         { href: '/jaras.html#veszelyeztetett', titleKey: 'next.district.title',

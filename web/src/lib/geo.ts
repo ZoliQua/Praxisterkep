@@ -1,6 +1,7 @@
 // The boundary files, fetched once and shared. They are static geometry, so a
 // module-level cache per file is all the state they need.
 import { useEffect, useState } from 'react';
+import { dataUrl } from './dataUrl';
 
 export interface GeoFile {
   type: string;
@@ -16,7 +17,7 @@ export function useGeo(name: string): GeoFile | null {
   useEffect(() => {
     let alive = true;
     if (!pending.has(name)) {
-      pending.set(name, fetch(`${import.meta.env.BASE_URL}data/${name}`)
+      pending.set(name, fetch(dataUrl(name))
         .then((r) => (r.ok ? r.json() : null))
         .then((d: GeoFile | null) => { cache.set(name, d); return d; })
         .catch(() => null));

@@ -4,6 +4,7 @@
 import { useEffect, useState } from 'react';
 import { t } from './i18n';
 import type { ColDef, Row } from './eesztTable';
+import { dataUrl } from './dataUrl';
 
 export type ProviderGroup = 'dental' | 'gp' | 'oncall' | 'university' | 'specialist';
 
@@ -43,7 +44,7 @@ let pending: Promise<ProvidersRaw | null> | null = null;
 
 export function loadProviders(): Promise<ProvidersRaw | null> {
   if (cache) return Promise.resolve(cache);
-  pending ??= fetch(`${import.meta.env.BASE_URL}data/providers.json`)
+  pending ??= fetch(dataUrl('providers.json'))
     .then((r) => (r.ok ? r.json() : null))
     .then((d: ProvidersRaw | null) => { cache = d; return d; })
     .catch(() => null);

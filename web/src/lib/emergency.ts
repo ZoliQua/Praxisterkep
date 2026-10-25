@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { t } from './i18n';
 import { districtStatus } from './eesztTable';
 import type { ColDef, Row } from './eesztTable';
+import { dataUrl } from './dataUrl';
 
 export type EmergencyGroup = 'oncall' | 'ambulance' | 'transport' | 'dialysis';
 export const MEASURED: EmergencyGroup[] = ['oncall', 'ambulance'];
@@ -113,7 +114,7 @@ export function useEmergency(): EmergencyRaw | null {
   const [data, setData] = useState<EmergencyRaw | null>(cache);
   useEffect(() => {
     let alive = true;
-    pending ??= fetch(`${import.meta.env.BASE_URL}data/emergency.json`)
+    pending ??= fetch(dataUrl('emergency.json'))
       .then((r) => (r.ok ? r.json() : null))
       .then((d: EmergencyRaw | null) => { cache = d; return d; })
       .catch(() => null);

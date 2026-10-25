@@ -11,31 +11,12 @@ import { t } from '../../lib/i18n';
 import { formatNumber } from '../../lib/format';
 import type { Painter } from './paint';
 import { useStoryCanvas } from './useStoryCanvas';
+import {
+  drawStoryFrame, jumpTime, prefersReducedMotion, sceneAt, storyHeight, timeline,
+  type Mascot, type Scene,
+} from './player';
 
-export type Mood = 'happy' | 'worried' | 'surprised' | 'proud';
-export type Mascot = 'tooth' | 'house';
-export type Scene = {
-  /** the handwritten line, the scene's one statement */
-  say: string;
-  /** milliseconds; by default the story is spread over about thirty seconds */
-  dur?: number;
-  mood?: Mood;
-  /** the narrator of this scene, when it is not the story's own */
-  mascot?: Mascot;
-  /** draws the scene's picture; t runs 0 → 1 over the scene */
-  draw: (p: Painter, t: number) => void;
-};
-
-const TARGET = 30000;
-const WRITE = 0.42; // the share of a scene spent writing its line out
-/** a picture-book ratio, never too low or too tall */
-function storyHeight(w: number): number {
-  return Math.max(330, Math.min(460, w * (w < 560 ? 1.05 : 0.42)));
-}
-
-function defaultDur(n: number): number {
-  return Math.round(Math.max(3600, Math.min(4300, TARGET / Math.max(1, n))));
-}
+export type { Mood, Mascot, Scene } from './player';
 
 export function Story({ title, mascot, scenes }: { title: string; mascot: Mascot; scenes: Scene[] }) {
   const [playing, setPlaying] = useState(false);
@@ -44,16 +25,12 @@ export function Story({ title, mascot, scenes }: { title: string; mascot: Mascot
   const reduced = useRef(false);
   const [still, setStill] = useState(false);
 
-  const { durs, starts, total } = useMemo(() => {
-    const fallback = defaultDur(scenes.length);
-    const d = scenes.map((s) => s.dur ?? fallback);
-    return { durs: d, starts: d.map((_, i) => d.slice(0, i).reduce((a, b) => a + b, 0)), total: d.reduce((a, b) => a + b, 0) };
-  }, [scenes]);
+  const tl = useMemo(() => timeline(scenes), [scenes]);
+  const { durs, starts, total } = tl;
 
   useEffect(() => {
-    reduced.current = typeof window.matchMedia === 'function'
-      && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduced.current) { setTime(starts[0] + durs[0] - 1); setStill(true); }
+    reduced.current = prefersReducedMotion();
+    if (reduced.current) { setTime(jumpTime(0, tl, true)); setStill(true); }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -78,23 +55,8 @@ export function Story({ title, mascot, scenes }: { title: string; mascot: Mascot
 
   // one frame: the narrator, the scene's picture, its line on the note
   const draw = useCallback((p: Painter) => {
-    if (!scenes.length) return;
-    let i = starts.findIndex((s, k) => time >= s && time < s + durs[k]);
-    if (i < 0) i = scenes.length - 1;
-    const local = Math.min(1, Math.max(0, (time - starts[i]) / durs[i]));
-    const sc = scenes[i];
-    p.mascot(sc.mascot ?? mascot, sc.mood ?? 'happy', local);
-    p.ctx.save();
-    try {
-      sc.draw(p, local);
-    } catch {
-      // a picture that cannot be drawn leaves the line on its own
-    }
-    p.ctx.restore();
-    p.note(sc.say, local / WRITE);
-    // the scene counter, top right
-    p.text(t('story.ui.counter', { i: i + 1, n: scenes.length }), p.W - 14, 22, { size: 12, color: p.c.dim, align: 'right' });
-  }, [scenes, mascot, starts, durs, time]);
+    drawStoryFrame(p, scenes, mascot, time, tl, (i, n) => t('story.ui.counter', { i, n }));
+  }, [scenes, mascot, time, tl]);
 
   // play once on first sight; a story off screen stops
   const { wrap, canvas, size, visible } = useStoryCanvas(draw, {
@@ -106,9 +68,9 @@ export function Story({ title, mascot, scenes }: { title: string; mascot: Mascot
   useEffect(() => { if (!visible) setPlaying(false); }, [visible]);
 
   if (!scenes.length) return null;
-  const scene = Math.max(0, starts.findIndex((s, k) => time >= s && time < s + durs[k]));
+  const scene = sceneAt(time, tl);
   const jump = (i: number) => {
-    setTime(reduced.current ? starts[i] + durs[i] - 1 : starts[i]);
+    setTime(jumpTime(i, tl, reduced.current));
     if (!reduced.current) setPlaying(true);
     started.current = true;
   };

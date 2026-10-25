@@ -18,6 +18,7 @@ import { EesztMap, type MapRow } from './EesztMap';
 import { CountyChoropleth } from './charts/CountyChoropleth';
 import { GyseSection } from './GyseSection';
 import { PharmacySection } from './PharmacySection';
+import { Deferred } from './Deferred';
 import { PageNav } from './PageNav';
 import { SideNav } from './SideNav';
 import { sideGroups } from '../lib/sideGroups';
@@ -239,8 +240,9 @@ export function SpecialistPage() {
         <p className="extra-note">{t('specialist.pdfNote')}</p>
       </section>
 
-      <PharmacySection />
-      <GyseSection />
+      {/* each loads its own register: only once the reader comes near */}
+      <Deferred ids={['gyogyszertar']}><PharmacySection /></Deferred>
+      <Deferred ids={['segedeszkoz']}><GyseSection /></Deferred>
 
       <DataTableModal
         open={open === 'sites'}

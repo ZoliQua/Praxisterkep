@@ -145,10 +145,17 @@ export function contextHref(
   ctx: SiteContext = currentContext(),
   search: string = typeof window === 'undefined' ? '' : window.location.search,
 ): string {
-  const [path, hash] = splitHash(href);
+  const [full, hash] = splitHash(href);
+  // a link that names its own county ("/megye.html?m=Pest" in the menu)
+  // goes there: the reader's settlement and járás belong to another county
+  const [path, own = ''] = full.split('?');
+  const ownCounty = new URLSearchParams(own).get(CONTEXT_KEYS.county);
+  const target = ownCounty && ownCounty !== ctx.county
+    ? { ...ctx, county: ownCounty, settlement: null, district: null }
+    : ctx;
   // a link that stays on this page keeps its query: the map's month, filters
   // and colouring live there, and a menu click must not wipe them
-  const q = writeContext(path === '' || samePage(path) ? search : '', ctx);
+  const q = writeContext(path === '' || samePage(path) ? search : own, target);
   return `${path}${q}${hash}`;
 }
 

@@ -1,6 +1,7 @@
 import { t } from '../lib/i18n';
 import { SITE_URL } from '../lib/site';
 import { ReferralBlock } from './ReferralBlock';
+import { Deferred } from './Deferred';
 import { METHOD_PARAGRAPHS } from '../lib/methodSections';
 import { MethodStory } from './story/PageStories';
 
@@ -18,7 +19,10 @@ export function Methodology() {
           <p>{t(`methodology.${k}`)}</p>
         </div>
       ))}
-      <div id="m-referral"><ReferralBlock /></div>
+      <div id="m-referral">
+        {/* 10 MB of referral list: fetched only when the reader gets here */}
+        <Deferred minHeight={400}><ReferralBlock /></Deferred>
+      </div>
       <h3 className="why__chain-title" id="m-embed">{t('methodology.embedTitle')}</h3>
       <p>{t('methodology.embedText')}</p>
       <pre className="embed-snippet"><code>{snippet}</code></pre>

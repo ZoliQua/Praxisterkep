@@ -1,5 +1,4 @@
 import hu from '../i18n/hu.json';
-import en from '../i18n/en.json';
 
 type Dict = { [key: string]: string | string[] | Dict };
 
@@ -25,7 +24,13 @@ export const locale: Locale = typeof window === 'undefined' ? 'hu' : detectLocal
 // translation offer read this
 if (typeof document !== 'undefined') document.documentElement.lang = locale;
 
-const dict: Dict = (locale === 'en' ? en : hu) as unknown as Dict;
+// Hungarian is the default and every lookup's fallback, so it ships with the
+// page; the English dictionary is fetched only by a reader who asked for it
+// (it is as large as the Hungarian one, and most visits never use it). The
+// top-level await holds every module that translates until it has arrived.
+const dict: Dict = (locale === 'en'
+  ? (await import('../i18n/en.json')).default
+  : hu) as unknown as Dict;
 const fallback: Dict = hu as unknown as Dict;
 
 function lookup(root: Dict, key: string): string | undefined {

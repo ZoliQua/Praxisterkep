@@ -7,6 +7,7 @@ import { t } from './i18n';
 import { formatNumber } from './format';
 import type { ColDef, Row } from './eesztTable';
 import type { PraxisKind } from '../types';
+import { dataUrl } from './dataUrl';
 
 export interface RiskWhy {
   factor: string;
@@ -73,7 +74,7 @@ let pending: Promise<RiskRaw | null> | null = null;
 
 export function loadRisk(): Promise<RiskRaw | null> {
   if (cache) return Promise.resolve(cache);
-  pending ??= fetch(`${import.meta.env.BASE_URL}data/risk.json`)
+  pending ??= fetch(dataUrl('risk.json'))
     .then((r) => (r.ok ? r.json() : null))
     .then((d: RiskRaw | null) => { cache = d; return d; })
     .catch(() => null);

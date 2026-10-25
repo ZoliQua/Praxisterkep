@@ -20,6 +20,7 @@ import {
   useAppStore, useHistoryEntries, useMapSnapshot, type MapMetric,
 } from '../store/useAppStore';
 import type { Praxis, PraxisType, Snapshot } from '../types';
+import { dataUrl } from '../lib/dataUrl';
 
 const HUNGARY_BOUNDS: [number, number, number, number] = [16.0, 45.6, 23.0, 48.7];
 const LABEL_OFFSET: Record<string, [number, number]> = {
@@ -202,7 +203,7 @@ interface CountyGeom {
 let geomPromise: Promise<Map<string, CountyGeom>> | null = null;
 
 function loadCountyGeoms(): Promise<Map<string, CountyGeom>> {
-  geomPromise ??= fetch(`${import.meta.env.BASE_URL}data/counties.geojson`)
+  geomPromise ??= fetch(dataUrl('counties.geojson'))
     .then((r) => r.json())
     .then((fc: GeoJSON.FeatureCollection) => {
       const out = new Map<string, CountyGeom>();
@@ -458,7 +459,7 @@ export function MapSection() {
     map.on('load', () => {
       map.addSource('counties', {
         type: 'geojson',
-        data: `${import.meta.env.BASE_URL}data/counties.geojson`,
+        data: dataUrl('counties.geojson'),
         attribution: '© OpenStreetMap contributors',
       });
       map.addLayer({
@@ -622,7 +623,7 @@ export function MapSection() {
     const apply = () => {
       if (level === 'jaras' && !jarasLoaded.current) {
         jarasLoaded.current = true;
-        void fetch(`${import.meta.env.BASE_URL}data/jaras.geojson`)
+        void fetch(dataUrl('jaras.geojson'))
           .then((r) => r.json())
           .then((fc: GeoJSON.GeoJSON) => {
             (mapRef.current?.getSource('jaras') as GeoJSONSource | undefined)

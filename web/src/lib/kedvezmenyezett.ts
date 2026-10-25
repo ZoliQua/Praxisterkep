@@ -4,6 +4,7 @@
 // significant unemployment, and which are beneficiary for the time being.
 import { useEffect, useState } from 'react';
 import { t } from './i18n';
+import { dataUrl } from './dataUrl';
 
 export interface BenefitEntry {
   /** settlement name as the decree spells it */
@@ -32,7 +33,7 @@ let pending: Promise<BenefitRaw | null> | null = null;
 
 export function loadBenefit(): Promise<BenefitRaw | null> {
   if (cache) return Promise.resolve(cache);
-  pending ??= fetch(`${import.meta.env.BASE_URL}data/kedvezmenyezett.json`)
+  pending ??= fetch(dataUrl('kedvezmenyezett.json'))
     .then((r) => (r.ok ? r.json() : null))
     .then((d: BenefitRaw | null) => { cache = d; return d; })
     .catch(() => null);

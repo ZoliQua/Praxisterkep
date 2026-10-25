@@ -3240,11 +3240,26 @@ body:has(.tp-rail) .tp-map svg { margin-top: 0; }
 .topnav__group:hover > .topnav__submenu.is-grouped[hidden] { display: flex; }
 .topnav__subcol { display: flex; flex-direction: column; gap: 2px; min-width: 170px; }
 .topnav__submenu:not(.is-grouped) > .topnav__subcol { min-width: 0; }
+/* the map dropdown: the twenty counties under "Megye" and "Település" in
+   two narrow columns each, so the panel stays shorter than a laptop screen */
+.topnav__subcol--names { display: grid; grid-template-columns: repeat(2, auto); grid-template-rows: auto repeat(10, auto); grid-auto-flow: column; column-gap: 2px; row-gap: 0; min-width: 0; }
+.topnav__subcol--names > .topnav__subhead { grid-row: 1; grid-column: 1 / -1; }
+.topnav__subcol--names > a:not(.topnav__subhead) { padding: 4px 10px; font-size: 12.5px; }
+/* "Térkép" is the first entry: its wide panel is centred under it, so it
+   fits on a laptop screen instead of running off the right edge */
+.topnav__group--first > .topnav__submenu.is-grouped { left: 50%; transform: translateX(-50%); flex-wrap: nowrap; max-width: min(96vw, 1180px); }
+.topnav__group--first .topnav__subcol:not(.topnav__subcol--names) { min-width: 0; }
+@media (min-width: 721px) and (max-width: 1120px) {
+  /* too narrow to centre it under the entry: it spans the window instead */
+  .topnav__group--first > .topnav__submenu.is-grouped { position: fixed; top: var(--topnav-h, 56px); left: 2vw; right: 2vw; transform: none; width: auto; flex-wrap: wrap; max-width: none; }
+}
+.topnav__out { margin-left: 3px; font-size: 0.95em; opacity: 0.75; }
 .topnav__subhead { font-weight: 700 !important; color: var(--ink) !important; text-transform: uppercase !important; font-size: 11px !important; letter-spacing: .07em !important; padding-top: 10px !important; }
 @media (max-width: 720px) {
   .topnav__submenu.is-grouped { display: flex; flex-direction: column; left: 0; width: auto; max-width: none; padding: 4px 0 4px 12px; }
   .topnav__subcol { min-width: 0; }
   .topnav__group:hover > .topnav__submenu.is-grouped[hidden] { display: none; }
+  .topnav__group--first > .topnav__submenu.is-grouped { left: 0; transform: none; flex-wrap: wrap; max-width: none; }
 }
 /* the analysis page's group headings and grouped table of contents */
 .analysis-group { padding-top: 56px; padding-bottom: 0; border-top: 1px solid var(--line); margin-top: 32px; }

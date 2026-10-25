@@ -2,6 +2,7 @@
 // same counties.geojson the map uses — so they stay correct whenever the
 // worst county or the longest-vacant district changes.
 import { useEffect, useState } from 'react';
+import { dataUrl } from '../lib/dataUrl';
 
 const W = 520;
 const H = 330;
@@ -59,7 +60,7 @@ function buildShapes(fc: GeoJSON.FeatureCollection): Shapes {
 export function useCountryShapes(): Shapes | null {
   const [shapes, setShapes] = useState<Shapes | null>(null);
   useEffect(() => {
-    shapesPromise ??= fetch(`${import.meta.env.BASE_URL}data/counties.geojson`)
+    shapesPromise ??= fetch(dataUrl('counties.geojson'))
       .then((r) => r.json())
       .then(buildShapes);
     void shapesPromise.then(setShapes);

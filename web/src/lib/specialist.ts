@@ -6,6 +6,7 @@
 import { useEffect, useState } from 'react';
 import { t } from './i18n';
 import type { ColDef, Row } from './eesztTable';
+import { dataUrl } from './dataUrl';
 
 export type Care = 'inpatient' | 'outpatient';
 
@@ -115,7 +116,7 @@ let pending: Promise<SpecialistRaw | null> | null = null;
 
 export function loadSpecialist(): Promise<SpecialistRaw | null> {
   if (cache) return Promise.resolve(cache);
-  pending ??= fetch(`${import.meta.env.BASE_URL}data/specialist.json`)
+  pending ??= fetch(dataUrl('specialist.json'))
     .then((r) => (r.ok ? r.json() : null))
     .then((d: SpecialistRaw | null) => { cache = d; return d; })
     .catch(() => null);

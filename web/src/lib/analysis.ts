@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { t } from './i18n';
 import type { ColDef, Row } from './eesztTable';
 import type { PraxisKind } from '../types';
+import { dataUrl } from './dataUrl';
 
 /* ------------------------------ survival ------------------------------ */
 
@@ -174,7 +175,7 @@ function loader<T>(file: string): () => T | null {
   let pending: Promise<T | null> | null = null;
   const load = (): Promise<T | null> => {
     if (cache) return Promise.resolve(cache);
-    pending ??= fetch(`${import.meta.env.BASE_URL}data/${file}`)
+    pending ??= fetch(dataUrl(file))
       .then((r) => (r.ok ? r.json() : null))
       .then((d: T | null) => { cache = d; return d; })
       .catch(() => null);

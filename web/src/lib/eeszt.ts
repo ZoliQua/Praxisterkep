@@ -2,6 +2,7 @@
 // törzspublikáció, joined to NEAK districts by FIN code in the ETL
 // (etl/build_eeszt.py). Loaded lazily — the core map never waits for it.
 import { useEffect, useState } from 'react';
+import { dataUrl } from './dataUrl';
 
 export interface EesztRaw {
   schemaVersion: number;
@@ -74,7 +75,7 @@ let cache: EesztRaw | null = null;
 let promise: Promise<EesztRaw | null> | null = null;
 
 export function loadEeszt(): Promise<EesztRaw | null> {
-  promise ??= fetch(`${import.meta.env.BASE_URL}data/eeszt.json`)
+  promise ??= fetch(dataUrl('eeszt.json'))
     .then((r) => (r.ok ? (r.json() as Promise<EesztRaw>) : null))
     .then((d) => {
       cache = d;

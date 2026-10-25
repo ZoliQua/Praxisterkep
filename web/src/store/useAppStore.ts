@@ -4,6 +4,7 @@ import type { History, HistoryEntry, Persistence } from '../lib/statsSelectors';
 import type { TypeFilter } from '../lib/selectors';
 import { readMapState } from '../lib/mapState';
 import { useContextStore } from '../lib/context';
+import { dataUrl } from '../lib/dataUrl';
 
 const initialUrl = readMapState(window.location.search);
 
@@ -61,9 +62,8 @@ export const useAppStore = create<AppState>((set, get) => ({
   ensureMonth: async (month) => {
     const key = `${get().kind}/${month}`;
     if (get().monthCache[key]) return;
-    const base = import.meta.env.BASE_URL;
     try {
-      const snap = await fetch(`${base}data/months/${month}/${get().kind}.json`)
+      const snap = await fetch(dataUrl(`months/${month}/${get().kind}.json`))
         .then(assertOk<Snapshot>);
       set((s2) => ({ monthCache: { ...s2.monthCache, [key]: snap } }));
     } catch {
@@ -87,11 +87,10 @@ export const useAppStore = create<AppState>((set, get) => ({
   loadData: async () => {
     if (get().latest) return;
     try {
-      const base = import.meta.env.BASE_URL;
       const [latest, timeseries, history] = await Promise.all([
-        fetch(`${base}data/latest.json`).then(assertOk<LatestFile>),
-        fetch(`${base}data/timeseries.json`).then(assertOk<Timeseries>),
-        fetch(`${base}data/history.json`).then(assertOk<History>),
+        fetch(dataUrl('latest.json')).then(assertOk<LatestFile>),
+        fetch(dataUrl('timeseries.json')).then(assertOk<Timeseries>),
+        fetch(dataUrl('history.json')).then(assertOk<History>),
       ]);
       set({ latest, timeseries, history });
     } catch (err) {

@@ -9,6 +9,7 @@ import { districtStatus } from '../lib/eesztTable';
 import { formatNumber } from '../lib/format';
 import { DataTableModal } from './DataTableModal';
 import type { ColDef, Row } from '../lib/eesztTable';
+import { dataUrl } from '../lib/dataUrl';
 
 interface ReferralRow {
   period: string;
@@ -53,7 +54,7 @@ function useReferral(): ReferralRaw | null {
   const [data, setData] = useState<ReferralRaw | null>(cache);
   useEffect(() => {
     let alive = true;
-    pending ??= fetch(`${import.meta.env.BASE_URL}data/referral.json`)
+    pending ??= fetch(dataUrl('referral.json'))
       .then((r) => (r.ok ? r.json() : null))
       .then((d: ReferralRaw | null) => { cache = d; return d; })
       .catch(() => null);

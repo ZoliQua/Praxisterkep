@@ -4,6 +4,7 @@
 // county page shows — 265 KB instead of the 3.9 MB the full profiles weigh,
 // because a browser should not download 3177 towns to look at one county.
 import { useEffect, useState } from 'react';
+import { dataUrl } from './dataUrl';
 
 export type Branch = 'gp' | 'dental';
 export type State = 'filled' | 'partial' | 'vacantOnly' | 'absent' | '';
@@ -87,7 +88,7 @@ export function useCounties(): CountiesRaw | null {
   const [data, setData] = useState<CountiesRaw | null>(cache);
   useEffect(() => {
     let alive = true;
-    pending ??= fetch(`${import.meta.env.BASE_URL}data/counties.json`)
+    pending ??= fetch(dataUrl('counties.json'))
       .then((r) => (r.ok ? r.json() : null))
       .then((d: CountiesRaw | null) => { cache = d; return d; })
       .catch(() => null);

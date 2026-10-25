@@ -5,6 +5,11 @@
       "labelKey": "nav.map",
       "children": [
         [
+          "/",
+          "nav.highlights",
+          "group"
+        ],
+        [
           "/#allomany",
           "nav.stock"
         ],
@@ -15,17 +20,117 @@
         [
           "/#alapellatas",
           "nav.why"
-        ]
-      ]
-    },
-    {
-      "href": "/megye.html",
-      "labelKey": "nav.countyPage"
-    },
-    {
-      "href": "/jaras.html",
-      "labelKey": "nav.districtPage",
-      "children": [
+        ],
+        [
+          "/megye.html",
+          "nav.countyPage",
+          "group"
+        ],
+        [
+          "/megye.html?m=Budapest",
+          "Budapest",
+          "name"
+        ],
+        [
+          "/megye.html?m=B%C3%A1cs-Kiskun",
+          "Bács-Kiskun",
+          "name"
+        ],
+        [
+          "/megye.html?m=Baranya",
+          "Baranya",
+          "name"
+        ],
+        [
+          "/megye.html?m=B%C3%A9k%C3%A9s",
+          "Békés",
+          "name"
+        ],
+        [
+          "/megye.html?m=Borsod-Aba%C3%BAj-Zempl%C3%A9n",
+          "Borsod-Abaúj-Zemplén",
+          "name"
+        ],
+        [
+          "/megye.html?m=Csongr%C3%A1d-Csan%C3%A1d",
+          "Csongrád-Csanád",
+          "name"
+        ],
+        [
+          "/megye.html?m=Fej%C3%A9r",
+          "Fejér",
+          "name"
+        ],
+        [
+          "/megye.html?m=Gy%C5%91r-Moson-Sopron",
+          "Győr-Moson-Sopron",
+          "name"
+        ],
+        [
+          "/megye.html?m=Hajd%C3%BA-Bihar",
+          "Hajdú-Bihar",
+          "name"
+        ],
+        [
+          "/megye.html?m=Heves",
+          "Heves",
+          "name"
+        ],
+        [
+          "/megye.html?m=J%C3%A1sz-Nagykun-Szolnok",
+          "Jász-Nagykun-Szolnok",
+          "name"
+        ],
+        [
+          "/megye.html?m=Kom%C3%A1rom-Esztergom",
+          "Komárom-Esztergom",
+          "name"
+        ],
+        [
+          "/megye.html?m=N%C3%B3gr%C3%A1d",
+          "Nógrád",
+          "name"
+        ],
+        [
+          "/megye.html?m=Pest",
+          "Pest",
+          "name"
+        ],
+        [
+          "/megye.html?m=Somogy",
+          "Somogy",
+          "name"
+        ],
+        [
+          "/megye.html?m=Szabolcs-Szatm%C3%A1r-Bereg",
+          "Szabolcs-Szatmár-Bereg",
+          "name"
+        ],
+        [
+          "/megye.html?m=Tolna",
+          "Tolna",
+          "name"
+        ],
+        [
+          "/megye.html?m=Vas",
+          "Vas",
+          "name"
+        ],
+        [
+          "/megye.html?m=Veszpr%C3%A9m",
+          "Veszprém",
+          "name"
+        ],
+        [
+          "/megye.html?m=Zala",
+          "Zala",
+          "name"
+        ],
+        [
+          "/jaras.html",
+          "nav.districtPage",
+          "group"
+        ],
         [
           "/jaras.html",
           "nav.districtChoose"
@@ -33,12 +138,113 @@
         [
           "/jaras.html#veszelyeztetett",
           "nav.districtVulnerable"
+        ],
+        [
+          "/telepules/",
+          "nav.settlements",
+          "group"
+        ],
+        [
+          "/telepules/#m-budapest",
+          "Budapest",
+          "name"
+        ],
+        [
+          "/telepules/#m-bacs-kiskun",
+          "Bács-Kiskun",
+          "name"
+        ],
+        [
+          "/telepules/#m-baranya",
+          "Baranya",
+          "name"
+        ],
+        [
+          "/telepules/#m-bekes",
+          "Békés",
+          "name"
+        ],
+        [
+          "/telepules/#m-borsod-abauj-zemplen",
+          "Borsod-Abaúj-Zemplén",
+          "name"
+        ],
+        [
+          "/telepules/#m-csongrad-csanad",
+          "Csongrád-Csanád",
+          "name"
+        ],
+        [
+          "/telepules/#m-fejer",
+          "Fejér",
+          "name"
+        ],
+        [
+          "/telepules/#m-gyor-moson-sopron",
+          "Győr-Moson-Sopron",
+          "name"
+        ],
+        [
+          "/telepules/#m-hajdu-bihar",
+          "Hajdú-Bihar",
+          "name"
+        ],
+        [
+          "/telepules/#m-heves",
+          "Heves",
+          "name"
+        ],
+        [
+          "/telepules/#m-jasz-nagykun-szolnok",
+          "Jász-Nagykun-Szolnok",
+          "name"
+        ],
+        [
+          "/telepules/#m-komarom-esztergom",
+          "Komárom-Esztergom",
+          "name"
+        ],
+        [
+          "/telepules/#m-nograd",
+          "Nógrád",
+          "name"
+        ],
+        [
+          "/telepules/#m-pest",
+          "Pest",
+          "name"
+        ],
+        [
+          "/telepules/#m-somogy",
+          "Somogy",
+          "name"
+        ],
+        [
+          "/telepules/#m-szabolcs-szatmar-bereg",
+          "Szabolcs-Szatmár-Bereg",
+          "name"
+        ],
+        [
+          "/telepules/#m-tolna",
+          "Tolna",
+          "name"
+        ],
+        [
+          "/telepules/#m-vas",
+          "Vas",
+          "name"
+        ],
+        [
+          "/telepules/#m-veszprem",
+          "Veszprém",
+          "name"
+        ],
+        [
+          "/telepules/#m-zala",
+          "Zala",
+          "name"
         ]
       ]
-    },
-    {
-      "href": "/telepules/",
-      "labelKey": "nav.settlements"
     },
     {
       "href": "/elemzo.html",

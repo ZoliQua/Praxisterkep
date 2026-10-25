@@ -22,6 +22,7 @@
     }
   },
   "nav": {
+    "highlights": "Highlights",
     "map": "Map",
     "mine": "My town",
     "ranking": "Ranking",
@@ -2837,6 +2838,52 @@
     "source": "Sources: NEAK monthly data, OpenStreetMap road network, Volánbusz GTFS, NNGYK mortality database, KSH TIMEA, NFSZ."
   },
   "static": {
+    "story": {
+      "title": "{name} in half a minute",
+      "intro": "{name}: {pop} residents, {county} county, {district} district.",
+      "introCounty": "{name}: {pop} residents, {county} county.",
+      "introCapital": "{name}: {pop} residents, one of the capital's districts.",
+      "residents": "residents",
+      "age": "At the census: aged 0–14 {young}, 15–64 {working}, over 65 {old} ({national} nationally).",
+      "districts": "Districts serving it ({kind}): {filled} staffed, {vacant} vacant or dissolved.",
+      "districtsAllFilled": "Districts serving it ({kind}): {filled} staffed, none vacant or dissolved.",
+      "districtsNoneFilled": "Districts serving it ({kind}): {vacant} vacant or dissolved, none staffed.",
+      "filled": "staffed",
+      "vacant": "vacant or dissolved",
+      "dentalAbsent": "It is on no dental district's list; the nearest dental surgery: {where}, {min} by car.",
+      "dentalAbsentLabel": "by car to the nearest dental surgery",
+      "longest": "Of the vacant districts serving it, the oldest has been waiting to be filled since {since}.",
+      "longestOne": "The vacant {kind} district serving it has been waiting to be filled since {since}.",
+      "yearsUnit": "yrs",
+      "short": {
+        "gp": "GP",
+        "dental": "dentist"
+      },
+      "travel": "By car: GP {gp}, dentist {dental}, on-call {oncall}, hospital {inpatient}.",
+      "travelAllHere": "GP and dental surgery, on-call and hospital: all of them here.",
+      "care": {
+        "gp": "GP",
+        "dental": "dentist",
+        "oncall": "on-call",
+        "inpatient": "hospital"
+      },
+      "bus": "On an average Wednesday: {dep} scheduled bus departures; settlements reached without changing: {reach}.",
+      "busNoGp": "On an average Wednesday: {dep} bus departures, but no direct bus to the GP surgery.",
+      "busNone": "On an average Wednesday no scheduled bus leaves from here.",
+      "busLabel": "bus departures on an average Wednesday",
+      "pharmacyHere": "Contracted pharmacies in the settlement: {n}.",
+      "pharmacyLabel": "contracted pharmacies",
+      "pharmacyNone": "No contracted pharmacy here; the nearest: {where}, {min} by car.",
+      "pharmacyNoneLabel": "by car to the nearest pharmacy",
+      "index": "Composite care-risk index: {value}, {band}; rank {rank} of {of} (1 = worst off).",
+      "indexLabel": "0 = best off, 100 = worst off",
+      "cluster": "Part of a contiguous care desert: around {name}, {n} settlements, {pop} residents.",
+      "change": "Since {month}, vacant or dissolved {kind} districts serving it: {then} then, {now} now.",
+      "newDoctorsLabel": "districts with a new doctor in a year",
+      "income": "Income per resident ({year}): {value}; the median settlement: {median}.",
+      "districtCol": "{district} district",
+      "medianCol": "median settlement"
+    },
     "months": [
       "January",
       "February",

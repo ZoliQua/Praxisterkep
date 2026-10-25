@@ -11,6 +11,7 @@ import './index.css';
 import { t } from './lib/i18n';
 import { formatMonth, formatNumber } from './lib/format';
 import type { LatestFile, PraxisKind, Snapshot } from './types';
+import { dataUrl } from './lib/dataUrl';
 
 const HUNGARY_BOUNDS: [[number, number], [number, number]] =
   [[15.9, 45.6], [23.2, 48.7]];
@@ -39,7 +40,7 @@ function EmbedApp() {
 
   useEffect(() => {
     document.documentElement.dataset.kind = kind;
-    void fetch(`${import.meta.env.BASE_URL}data/latest.json`)
+    void fetch(dataUrl('latest.json'))
       .then((r) => r.json())
       // keep the first object: StrictMode runs this effect twice, and two
       // distinct snapshot objects would tear down the map mid-load
@@ -71,7 +72,7 @@ function EmbedApp() {
       if (map.getSource('praxes')) return;
       map.addSource('counties', {
         type: 'geojson',
-        data: `${import.meta.env.BASE_URL}data/counties.geojson`,
+        data: dataUrl('counties.geojson'),
         attribution: '© OpenStreetMap contributors',
       });
       map.addLayer({
@@ -95,7 +96,7 @@ function EmbedApp() {
         },
       });
       if (county) {
-        void fetch(`${import.meta.env.BASE_URL}data/counties.geojson`)
+        void fetch(dataUrl('counties.geojson'))
           .then((r) => r.json())
           .then((fc: GeoJSON.FeatureCollection) => {
             const f = fc.features.find((x) =>

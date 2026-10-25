@@ -7,6 +7,7 @@ import { t } from './i18n';
 import type { ColDef, Row } from './eesztTable';
 import { benefitLabel, benefitOf, type BenefitRaw } from './kedvezmenyezett';
 import type { PraxisKind } from '../types';
+import { dataUrl } from './dataUrl';
 
 export interface AccessDistrict {
   id: string;
@@ -60,7 +61,7 @@ let pending: Promise<AccessRaw | null> | null = null;
 
 export function loadAccess(): Promise<AccessRaw | null> {
   if (cache) return Promise.resolve(cache);
-  pending ??= fetch(`${import.meta.env.BASE_URL}data/access.json`)
+  pending ??= fetch(dataUrl('access.json'))
     .then((r) => (r.ok ? r.json() : null))
     .then((d: AccessRaw | null) => { cache = d; return d; })
     .catch(() => null);

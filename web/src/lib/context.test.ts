@@ -67,6 +67,14 @@ describe('site context', () => {
       .toBe('?ho=2026-08&k=dental#nalam');
   });
 
+  it('lets a link name its own county, dropping a settlement from another', () => {
+    const c = ctx({ kind: 'dental', county: 'Zala', settlement: 'zalaegerszeg', district: 'Zalaegerszegi' });
+    expect(contextHref('/megye.html?m=Pest', c)).toBe('/megye.html?m=Pest&k=dental');
+    // the same county keeps the reader's place in it
+    expect(contextHref('/megye.html?m=Zala', c))
+      .toBe('/megye.html?m=Zala&k=dental&tel=zalaegerszeg&jar=Zalaegerszegi');
+  });
+
   it('survives a round trip', () => {
     const c = ctx({ kind: 'dental', county: 'Zala', settlement: 'zalaegerszeg' });
     expect(readContext(writeContext('', c))).toEqual(c);

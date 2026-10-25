@@ -6,6 +6,7 @@
 import { useEffect, useState } from 'react';
 import { locale } from './i18n';
 import { formatDecimal, formatNumber } from './format';
+import { dataUrl } from './dataUrl';
 
 export type Better = 'higher' | 'lower' | 'neutral';
 export type Branch = 'gp' | 'dental' | 'both';
@@ -70,7 +71,7 @@ function loader<T>(file: string): () => T | null {
   let pending: Promise<T | null> | null = null;
   const load = (): Promise<T | null> => {
     if (cache) return Promise.resolve(cache);
-    pending ??= fetch(`${import.meta.env.BASE_URL}data/${file}`)
+    pending ??= fetch(dataUrl(file))
       .then((r) => (r.ok ? r.json() : null))
       .then((d: T | null) => { cache = d; return d; })
       .catch(() => null);

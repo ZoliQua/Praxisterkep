@@ -4,6 +4,7 @@
 // counts they imply for the current resident population.
 import { useEffect, useState } from 'react';
 import type { ColDef, Row } from './eesztTable';
+import { dataUrl } from './dataUrl';
 
 export interface AgeSettlement {
   kshId: string;
@@ -56,7 +57,7 @@ let pending: Promise<AgeRaw | null> | null = null;
 
 export function loadAge(): Promise<AgeRaw | null> {
   if (cache) return Promise.resolve(cache);
-  pending ??= fetch(`${import.meta.env.BASE_URL}data/age.json`)
+  pending ??= fetch(dataUrl('age.json'))
     .then((r) => (r.ok ? r.json() : null))
     .then((d: AgeRaw | null) => { cache = d; return d; })
     .catch(() => null);

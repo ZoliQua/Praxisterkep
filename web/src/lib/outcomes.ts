@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { locale } from './i18n';
 import { formatDecimal } from './format';
 import { contextHref, currentContext } from './context';
+import { dataUrl } from './dataUrl';
 
 export interface OutcomeDistrict {
   name: string;
@@ -251,7 +252,7 @@ export function useOutcomes(): OutcomesRaw | null {
   const [data, setData] = useState<OutcomesRaw | null>(cache);
   useEffect(() => {
     let alive = true;
-    pending ??= fetch(`${import.meta.env.BASE_URL}data/outcomes.json`)
+    pending ??= fetch(dataUrl('outcomes.json'))
       .then((r) => (r.ok ? r.json() : null))
       .then((d: OutcomesRaw | null) => { cache = d; return d; })
       .catch(() => null);

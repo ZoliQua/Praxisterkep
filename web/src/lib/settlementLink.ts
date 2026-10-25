@@ -3,6 +3,7 @@
 // the larger settlement keeps the plain slug and the others carry their
 // county), and the map of them is small enough to ship.
 import { useEffect, useState } from 'react';
+import { dataUrl } from './dataUrl';
 
 type Row = [name: string, county: string, slug: string, population?: number];
 
@@ -26,7 +27,7 @@ export function useSettlementIndex(): SettlementIndex | null {
   const [index, setIndex] = useState<SettlementIndex | null>(cache);
   useEffect(() => {
     let alive = true;
-    pending ??= fetch(`${import.meta.env.BASE_URL}data/settlement_slugs.json`)
+    pending ??= fetch(dataUrl('settlement_slugs.json'))
       .then((r) => (r.ok ? r.json() : null))
       .then((d: { settlements: Row[] } | null) => {
         const out = empty();

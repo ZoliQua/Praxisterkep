@@ -23,6 +23,7 @@ import {
   type EuropeSummaryInput, type HighlightsInput, type SpecialistInput,
 } from './stories';
 import type { PraxisKind } from '../../types';
+import { dataUrl } from '../../lib/dataUrl';
 
 function safe(build: () => Scene[]): Scene[] {
   try {
@@ -44,7 +45,7 @@ function useJson<T>(file: string): T | null {
   const [data, setData] = useState<T | null>(null);
   useEffect(() => {
     let alive = true;
-    void fetch(`${import.meta.env.BASE_URL}data/${file}`)
+    void fetch(dataUrl(file))
       .then((r) => (r.ok ? r.json() : null))
       .then((d: T | null) => { if (alive) setData(d); })
       .catch(() => {});

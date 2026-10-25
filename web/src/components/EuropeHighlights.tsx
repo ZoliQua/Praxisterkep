@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { t } from '../lib/i18n';
 import { contextHref } from '../lib/context';
 import { formatValue, type EuUnit } from '../lib/europe';
+import { dataUrl } from '../lib/dataUrl';
 
 interface Fact {
   key: string; unit: EuUnit; year: string; value: number; rank: number; of: number; median: number;
@@ -18,7 +19,7 @@ export function EuropeHighlights() {
   const [data, setData] = useState<Summary | null>(null);
   useEffect(() => {
     let alive = true;
-    void fetch(`${import.meta.env.BASE_URL}data/europe_summary.json`)
+    void fetch(dataUrl('europe_summary.json'))
       .then((r) => (r.ok ? r.json() : null))
       .then((d: Summary | null) => { if (alive) setData(d); })
       .catch(() => {});

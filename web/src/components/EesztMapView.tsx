@@ -1,0 +1,548 @@
+// Map of the EESZT-matched districts: one point per district at its
+// licensed premises (geocoded; settlement-centroid fallbacks are drawn
+// faded). Zoomable, county focus, clickable points with a side panel.
+// Used standalone in the EESZT section and above the data browser, where
+// it follows the table's filters (it simply renders the rows it is given).
+import {
+  Fragment, useEffect, useMemo, useRef, useState, useSyncExternalStore,
+} from 'react';
+import { Map as MLMap, Marker, NavigationControl } from 'maplibre-gl';
+import type { GeoJSONSource, MapLayerMouseEvent } from 'maplibre-gl';
+import 'maplibre-gl/dist/maplibre-gl.css';
+import { t } from '../lib/i18n';
+import { formatNumber } from '../lib/format';
+import { cellText, type Row } from '../lib/eesztTable';
+import { eesztLink } from '../lib/eeszt';
+import { useAppStore } from '../store/useAppStore';
+import { useContextStore } from '../lib/context';
+import { exportMapPng } from '../lib/mapExport';
+import { LAYER_KEYS, setLayer, type LayerChoice } from '../lib/mapLayers';
+import { useOrientationLayers } from './useOrientationLayers';
+import { mapColors } from '../lib/mapColors';
+import { resolveColor, useThemeTick } from '../lib/theme';
+import { dataUrl } from '../lib/dataUrl';
+
+const HUNGARY: [[number, number], [number, number]] = [[16.0, 45.7], [23.0, 48.65]];
+
+/** what the map needs from a row; both data browsers' rows satisfy it */
+export type MapRow = Row & {
+  fin: string;
+  settlement: string;
+  county: string;
+  type: string;
+  status: string;
+  lat: number | null;
+  lon: number | null;
+  geoApprox: boolean | null;
+  settlementMatch: boolean | null;
+  unitCode: string | null;
+  licenceId: string | null;
+  providerId: string | null;
+};
+
+/** colour-by-category mode: one colour per distinct row.type */
+export interface MapCategory { key: string; label: string; color: string }
+
+type Bbox = [[number, number], [number, number]];
+let bboxPromise: Promise<Map<string, Bbox>> | null = null;
+
+function loadCountyBboxes(): Promise<Map<string, Bbox>> {
+  bboxPromise ??= fetch(dataUrl('counties.geojson'))
+    .then((r) => r.json())
+    .then((fc: GeoJSON.FeatureCollection) => {
+      const out = new Map<string, Bbox>();
+      for (const f of fc.features) {
+        let minX = 180, minY = 90, maxX = -180, maxY = -90;
+        const walk = (c: unknown): void => {
+          if (Array.isArray(c) && typeof c[0] === 'number') {
+            const [x, y] = c as [number, number];
+            minX = Math.min(minX, x); maxX = Math.max(maxX, x);
+            minY = Math.min(minY, y); maxY = Math.max(maxY, y);
+          } else if (Array.isArray(c)) c.forEach(walk);
+        };
+        walk((f.geometry as GeoJSON.Polygon).coordinates);
+        out.set(String(f.properties?.name), [[minX, minY], [maxX, maxY]]);
+      }
+      return out;
+    });
+  return bboxPromise;
+}
+
+function toGeoJSON(rows: MapRow[], statusFilled: string, statusDissolved: string,
+  county = '') {
+  const features: GeoJSON.Feature[] = [];
+  rows.forEach((r, i) => {
+    if (r.lat === null || r.lon === null) return;
+    features.push({
+      type: 'Feature',
+      geometry: { type: 'Point', coordinates: [r.lon, r.lat] },
+      properties: {
+        i,
+        c: String(r.type ?? ''),
+        benefit: r.benefit === true,
+        s: r.status === statusFilled ? 'f' : r.status === statusDissolved ? 'd' : 'v',
+        approx: r.geoApprox === true,
+        mismatch: r.settlementMatch === false,
+        // outside the county in focus: drawn, but faint, so the chosen county
+        // reads as part of a country rather than as an island
+        dim: Boolean(county) && r.county !== county,
+      },
+    });
+  });
+  return { type: 'FeatureCollection', features } as GeoJSON.FeatureCollection;
+}
+
+// When several maps on one page open "on a county", they must open on the
+// same one — three maps showing three different counties reads as a bug, and
+// is one. The pick is made once per page load and shared.
+let sharedFallback = '';
+const fallbackListeners = new Set<() => void>();
+
+function setSharedFallback(county: string) {
+  sharedFallback = county;
+  fallbackListeners.forEach((fn) => fn());
+}
+
+function useSharedFallback(): string {
+  return useSyncExternalStore(
+    (fn) => { fallbackListeners.add(fn); return () => fallbackListeners.delete(fn); },
+    () => sharedFallback,
+    () => '',
+  );
+}
+
+export function EesztMap({
+  rows, height = 460, countyFilter = true, fitToRows = false, searchLink = true,
+  categories, detailRows, countKey = 'eeszt.mapCount', onCounty, exportName = 'terkep',
+  defaultLayers, siteLabelKey = 'eeszt.mapDistrictNames', openOnOneCounty = false,
+}: {
+  rows: MapRow[];
+  height?: number;
+  /** show the county selector (off inside the data browser, whose own
+   *  county filter already drives the rows) */
+  countyFilter?: boolean;
+  /** zoom to the given rows whenever they change (data-browser mode) */
+  fitToRows?: boolean;
+  /** show the "details in the search" link in the side panel */
+  searchLink?: boolean;
+  /** colour the points by row.type instead of by status, with this legend */
+  categories?: MapCategory[];
+  /** replace the side panel's field list (the districts' own list by default) */
+  detailRows?: (row: MapRow) => [string, string][];
+  /** i18n key of the "n / total on the map" line (districts by default) */
+  countKey?: string;
+  /** told whenever the county focus changes ('' = the whole country) */
+  onCounty?: (county: string) => void;
+  /** what this map shows unless the visitor has said otherwise */
+  defaultLayers?: LayerChoice;
+  /** the toggle that labels the rows' settlements ("Körzetnevek" by default) */
+  siteLabelKey?: string;
+  /**
+   * Open on a county rather than on all 3177 points at once. Which one is
+   * arbitrary — the point is that a reader sees a county-sized picture first
+   * and picks their own, not that this county matters.
+   */
+  openOnOneCounty?: boolean;
+  /** file name stem for the PNG export */
+  exportName?: string;
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<MLMap | null>(null);
+  const readyRef = useRef(false);
+  // the county filter is the site-wide context: a county picked here is the
+  // one the analyses and the county page open on, and the other way round
+  const chosenCounty = useContextStore((st) => st.county) ?? '';
+  const setCounty = (name: string) => {
+    setFallback('');
+    useContextStore.getState().setCounty(name || null);
+  };
+  // a county the page picked for itself, so that "no choice yet" does not
+  // mean "every point in the country at once"
+  const fallback = useSharedFallback();
+  const setFallback = setSharedFallback;
+  const county = chosenCounty || fallback;
+  const [selected, setSelected] = useState<MapRow | null>(null);
+  const requestSearch = useAppStore((s) => s.requestSearch);
+
+  const shown = useMemo(
+    () => (county ? rows.filter((r) => r.county === county) : rows),
+    [rows, county],
+  );
+  const counties = useMemo(
+    () => [...new Set(rows.map((r) => r.county).filter(Boolean))]
+      .sort((a, b) => a.localeCompare(b, 'hu')),
+    [rows],
+  );
+  useEffect(() => {
+    if (!openOnOneCounty || chosenCounty || fallback || counties.length < 2) return;
+    setFallback(counties[Math.floor(Math.random() * counties.length)]);
+  }, [openOnOneCounty, chosenCounty, fallback, counties]);
+  const located = shown.filter((r) => Number.isFinite(r.lat)).length;
+  // the source holds every row, so a click resolves against the full list
+  const rowsRef = useRef(rows);
+  rowsRef.current = rows;
+
+  const statusFilled = t('stats.statusFilled');
+  const statusDissolved = t('stats.statusDissolved');
+
+  // MapLibre paints with plain colours: read them off the theme, again on a change
+  const themeTick = useThemeTick();
+  const mc = useMemo(() => mapColors(themeTick), [themeTick]);
+  const mcRef = useRef(mc);
+  mcRef.current = mc;
+  const COLOR_FILLED = mc.filled;
+  const COLOR_VACANT = mc.vacant;
+  const COLOR_DISSOLVED = mc.dissolved;
+  const COLOR_MISMATCH = mc.mismatch;
+  const color = useMemo(() => (categories?.length
+    ? ['match', ['get', 'c'],
+      ...categories.flatMap((c) => [c.key, resolveColor(c.color)]), mc.vacant]
+    : ['match', ['get', 's'],
+      'f', mc.filled, 'd', mc.dissolved, mc.vacant]), [categories, mc]);
+  const colorRef = useRef(color);
+  colorRef.current = color;
+
+  // create the map once
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const map = new MLMap({
+      container: containerRef.current,
+      style: {
+        version: 8,
+        sources: {},
+        layers: [{ id: 'bg', type: 'background', paint: { 'background-color': mcRef.current.bg } }],
+      },
+      bounds: HUNGARY,
+      fitBoundsOptions: { padding: 16 },
+      attributionControl: { compact: true },
+      dragRotate: false,
+      // the PNG export reads the canvas back after the frame
+      canvasContextAttributes: { preserveDrawingBuffer: true },
+    });
+    mapRef.current = map;
+    map.addControl(new NavigationControl({ showCompass: false }), 'top-left');
+
+    let disposed = false;
+    const setup = () => {
+      if (disposed || map.getSource('pts')) return;
+      map.addSource('counties', {
+        type: 'geojson',
+        data: dataUrl('counties.geojson'),
+        attribution: '© OpenStreetMap contributors',
+      });
+      map.addLayer({
+        id: 'county-line', type: 'line', source: 'counties',
+        paint: { 'line-color': mcRef.current.line, 'line-width': 1 },
+      });
+      // the county in focus gets a heavier outline of its own
+      map.addLayer({
+        id: 'county-focus', type: 'line', source: 'counties',
+        filter: ['==', ['get', 'name'], ''],
+        paint: { 'line-color': '#5b7ba6', 'line-width': 2.6, 'line-opacity': 0.9 },
+      });
+      map.addSource('pts', {
+        type: 'geojson',
+        data: toGeoJSON(rowsRef.current, statusFilled, statusDissolved),
+      });
+      // settlements the decree lists get a halo, under the points themselves
+      map.addLayer({
+        id: 'benefit-ring', type: 'circle', source: 'pts',
+        filter: ['==', ['get', 'benefit'], true],
+        layout: { visibility: 'none' },
+        paint: {
+          'circle-radius': ['interpolate', ['linear'], ['zoom'], 6, 6, 9, 9, 12, 13],
+          'circle-color': mcRef.current.dissolved,
+          'circle-opacity': 0.22,
+          'circle-stroke-width': 1,
+          'circle-stroke-color': mcRef.current.dissolved,
+          'circle-stroke-opacity': 0.5,
+        },
+      });
+      map.addLayer({
+        id: 'pts', type: 'circle', source: 'pts',
+        paint: {
+          // "zoom" may only lead the expression, so the dimming goes inside each stop
+          'circle-radius': ['interpolate', ['linear'], ['zoom'],
+            6, ['case', ['get', 'dim'], 2, 2.6],
+            9, ['case', ['get', 'dim'], 2, 4.5],
+            12, ['case', ['get', 'dim'], 2, 7]],
+          'circle-color': colorRef.current as never,
+          'circle-opacity': ['case', ['get', 'dim'], 0.16,
+            ['get', 'approx'], 0.4, 0.9],
+          'circle-stroke-width': ['case', ['get', 'dim'], 0,
+            ['get', 'mismatch'], 1.6, 0.6],
+          'circle-stroke-color': ['case', ['get', 'mismatch'], mcRef.current.mismatch, mcRef.current.halo],
+        },
+      });
+      map.on('click', 'pts', (e: MapLayerMouseEvent) => {
+        const i = e.features?.[0]?.properties?.i;
+        if (typeof i === 'number') setSelected(rowsRef.current[i] ?? null);
+      });
+      map.on('mouseenter', 'pts', () => { map.getCanvas().style.cursor = 'pointer'; });
+      map.on('mouseleave', 'pts', () => { map.getCanvas().style.cursor = ''; });
+      readyRef.current = true;
+    };
+    // 'load' is not reliable after a StrictMode remount — retry until the
+    // inline style accepts sources
+    const trySetup = () => {
+      if (disposed) return;
+      try {
+        setup();
+      } catch {
+        setTimeout(trySetup, 120);
+      }
+    };
+    trySetup();
+    return () => {
+      disposed = true;
+      readyRef.current = false;
+      map.remove();
+      mapRef.current = null;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // push the (filtered) rows to the map
+  useEffect(() => {
+    let cancelled = false;
+    let timer = 0;
+    const apply = () => {
+      if (cancelled || !mapRef.current) return; // unmounted: stop retrying
+      const src = mapRef.current.getSource('pts') as GeoJSONSource | undefined;
+      if (!src) {
+        timer = window.setTimeout(apply, 150);
+        return;
+      }
+      // every point is in the source; the county decides which are faint
+      src.setData(toGeoJSON(rows, statusFilled, statusDissolved, county));
+      if (fitToRows) {
+        let minX = 180, minY = 90, maxX = -180, maxY = -90, n = 0;
+        for (const r of shown) {
+          if (r.lat === null || r.lon === null) continue;
+          n += 1;
+          minX = Math.min(minX, r.lon); maxX = Math.max(maxX, r.lon);
+          minY = Math.min(minY, r.lat); maxY = Math.max(maxY, r.lat);
+        }
+        mapRef.current?.fitBounds(n ? [[minX, minY], [maxX, maxY]] : HUNGARY,
+          { padding: 40, maxZoom: 12, duration: 600 });
+      }
+    };
+    apply();
+    setSelected((cur) => (cur && shown.includes(cur) ? cur : null));
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
+  }, [rows, shown, county, statusFilled, statusDissolved, fitToRows]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (map?.getLayer('pts')) {
+      map.setPaintProperty('pts', 'circle-color', color as never);
+      map.setPaintProperty('pts', 'circle-stroke-color', ['case', ['get', 'mismatch'], mc.mismatch, mc.halo]);
+      map.setPaintProperty('benefit-ring', 'circle-color', mc.dissolved);
+      map.setPaintProperty('benefit-ring', 'circle-stroke-color', mc.dissolved);
+      map.setPaintProperty('bg', 'background-color', mc.bg);
+      map.setPaintProperty('county-line', 'line-color', mc.line);
+    }
+  }, [color, mc]);
+
+  const layers = useOrientationLayers(mapRef, defaultLayers);
+  const [showDistricts, setShowDistricts] = useState(true);
+
+  // the halo around points in settlements the decree lists
+  useEffect(() => {
+    const map = mapRef.current;
+    if (map?.getLayer('benefit-ring')) {
+      map.setLayoutProperty('benefit-ring', 'visibility',
+        layers.benefit ? 'visible' : 'none');
+    }
+  }, [layers.benefit, rows]);
+  const districtMarkersRef = useRef<Marker[]>([]);
+
+  // district names only make sense once a county is in focus
+  useEffect(() => {
+    districtMarkersRef.current.forEach((m) => m.remove());
+    districtMarkersRef.current = [];
+    const map = mapRef.current;
+    if (!map || !county || !showDistricts) return;
+    // one label per settlement, not one per row: a county seat with forty
+    // sites used to print its name forty times on top of itself
+    const seen = new Set<string>();
+    const fold = (name: string) => name.normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+    districtMarkersRef.current = shown
+      .filter((r) => Number.isFinite(r.lat) && Number.isFinite(r.lon))
+      .filter((r) => {
+        const key = fold(String(r.settlement ?? ''));
+        if (!key || seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      })
+      .slice(0, 400)
+      .map((r) => {
+        const el = document.createElement('div');
+        el.className = 'map-city map-city--district';
+        const dot = document.createElement('i');
+        const label = document.createElement('span');
+        label.textContent = String(r.settlement ?? '');
+        el.append(dot, label);
+        return new Marker({ element: el, anchor: 'left' })
+          .setLngLat([r.lon as number, r.lat as number])
+          .addTo(map);
+      });
+    return () => {
+      districtMarkersRef.current.forEach((m) => m.remove());
+      districtMarkersRef.current = [];
+    };
+  }, [county, showDistricts, shown]);
+
+  // the heavier outline follows the selection
+  useEffect(() => {
+    const map = mapRef.current;
+    if (map?.getLayer('county-focus')) {
+      map.setFilter('county-focus', ['==', ['get', 'name'], county || '\u0000']);
+    }
+  }, [county]);
+
+  // county focus (standalone mode)
+  useEffect(() => {
+    if (fitToRows) return;
+    void loadCountyBboxes().then((b) => {
+      const map = mapRef.current;
+      if (!map) return;
+      const box = county ? b.get(county) : undefined;
+      map.fitBounds(box ?? HUNGARY, { padding: 24, duration: 700 });
+    });
+  }, [county, fitToRows]);
+
+  const text = (v: unknown) => cellText((v ?? null) as never) || '–';
+  const detail: [string, string][] = !selected ? []
+    : detailRows ? detailRows(selected) : [
+      [t('stats.thStatus'), text(selected.status)],
+      [t('stats.thType'), text(selected.type)],
+      [t('eeszt.thDistrictNo'), text(selected.districtNo)],
+      [t('eeszt.licence'), selected.licAddress
+        ? `${selected.licPostal ?? ''} ${selected.licSettlement ?? ''}, ${selected.licAddress}`
+        : '–'],
+      [t('eeszt.colSettlementMatch'), text(selected.settlementMatch)],
+      [t('eeszt.colProviderMatch'), text(selected.providerMatch)],
+      [t('eeszt.onCall'), text(selected.onCall)],
+      [t('eeszt.thFunded'), text(selected.publicFunded)],
+      [t('eeszt.colProfession'), text(selected.profession)],
+      // provider/institution exist only for filled districts (ETL guard)
+      ...(selected.provider ? [[t('eeszt.provider'), text(selected.provider)] as [string, string]] : []),
+      ...(selected.institutionCode
+        ? [[t('eeszt.institutionCode'), text(selected.institutionCode)] as [string, string]] : []),
+      [t('eeszt.colFin'), selected.fin],
+    ];
+
+  return (
+    <div className="eeszt-map">
+      <div className="eeszt-map__bar">
+        {countyFilter && (
+          <select value={county}
+            onChange={(e) => { setCounty(e.target.value); setSelected(null); onCounty?.(e.target.value); }}
+            aria-label={t('stats.thCounty')}>
+            <option value="">{t('stats.filterCountyAll')}</option>
+            {counties.map((c) => <option key={c} value={c}>{c}</option>)}
+          </select>
+        )}
+        <span className="eeszt-map__layers">
+          {LAYER_KEYS.map((key) => (
+            <button key={key} type="button" aria-pressed={layers[key]}
+              className={`map-layer${layers[key] ? ' is-on' : ''}`}
+              onClick={() => setLayer(key, !layers[key])}>
+              {layers[key] ? '◉' : '○'} {t(`map.layer.${key}`)}
+            </button>
+          ))}
+        </span>
+        {county && (
+          <button type="button" className={`map-layer${showDistricts ? ' is-on' : ''}`}
+            aria-pressed={showDistricts} onClick={() => setShowDistricts((v) => !v)}>
+            {showDistricts ? '◉' : '○'} {t(siteLabelKey)}
+          </button>
+        )}
+        <button type="button" className="eeszt-map__save"
+          onClick={() => mapRef.current && exportMapPng(mapRef.current, exportName)}>
+          ⤓ {t('eeszt.mapSavePng')}
+        </button>
+        <span className="eeszt-map__count">
+          {t(countKey, { n: formatNumber(located), total: formatNumber(shown.length) })}
+        </span>
+        <span className="eeszt-map__legend">
+          {categories?.length ? categories.map((c) => (
+            <Fragment key={c.key}>
+              <i style={{ background: c.color }} />{c.label}
+            </Fragment>
+          )) : (
+            <>
+              <i style={{ background: COLOR_FILLED }} />{t('stats.statusFilled')}
+              <i style={{ background: COLOR_VACANT }} />{t('stats.statusVacant')}
+              <i style={{ background: COLOR_DISSOLVED }} />{t('stats.statusDissolved')}
+            </>
+          )}
+          <i className="is-ring" style={{ borderColor: COLOR_MISMATCH }} />{t('eeszt.legendMismatch')}
+          <i style={{ background: mc.approx, opacity: 0.45 }} />{t('eeszt.legendApprox')}
+        </span>
+      </div>
+      <div className="eeszt-map__stage" style={{ height }}>
+        <div ref={containerRef} className="eeszt-map__canvas" />
+        {selected && (
+          <aside className="eeszt-map__panel">
+            <button className="county-panel__close" onClick={() => setSelected(null)}
+              aria-label={t('stats.tableClose')}>×</button>
+            <h4>{selected.settlement}</h4>
+            <p className="eeszt-map__panel-sub">{selected.county}</p>
+            <dl>
+              {detail.map(([k, v]) => (
+                <div key={k}><dt>{k}</dt><dd>{v}</dd></div>
+              ))}
+            </dl>
+            <div className="eeszt-trace">
+              <h5>{t('eeszt.traceTitle')}</h5>
+              <ul>
+                <li>
+                  <span>{t('eeszt.traceFin')}</span>
+                  <a href={eesztLink('finszolg', 'FINKOD', selected.fin)} target="_blank" rel="noopener">
+                    {selected.fin} ↗</a>
+                </li>
+                {selected.unitCode && (
+                  <li>
+                    <span>{t('eeszt.traceUnit')}</span>
+                    <a href={eesztLink('engedely', 'SZERVEZETI_EGYSEG_KOD', selected.unitCode.split(', ')[0])}
+                      target="_blank" rel="noopener">{selected.unitCode} ↗</a>
+                  </li>
+                )}
+                {selected.licenceId && (
+                  <li>
+                    <span>{t('eeszt.traceLicence')}</span>
+                    <a href={eesztLink('engedely', 'ENGEDELY_AZONOSITO', selected.licenceId)}
+                      target="_blank" rel="noopener">{selected.licenceId} ↗</a>
+                  </li>
+                )}
+                {/* provider id is only present for filled districts (ETL guard) */}
+                {selected.providerId && (
+                  <li>
+                    <span>{t('eeszt.traceProvider')}</span>
+                    <a href={eesztLink('euszolg', 'EUSZOLG_AZONOSITO', selected.providerId)}
+                      target="_blank" rel="noopener">{selected.providerId} ↗</a>
+                  </li>
+                )}
+              </ul>
+            </div>
+            {selected.geoApprox && (
+              <p className="praxis-line praxis-line--faint">{t('eeszt.approxNote')}</p>
+            )}
+            {searchLink && (
+              <a className="map-popup__link" href="#nalam"
+                onClick={() => requestSearch(selected.settlement)}>
+                {t('map.popupToSearch')}
+              </a>
+            )}
+          </aside>
+        )}
+      </div>
+    </div>
+  );
+}

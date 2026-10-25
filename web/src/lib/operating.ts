@@ -5,6 +5,7 @@
 import { useEffect, useState } from 'react';
 import { t } from './i18n';
 import type { ColDef, Row } from './eesztTable';
+import { dataUrl } from './dataUrl';
 
 export interface OperatingLicence {
   unit: string;
@@ -54,7 +55,7 @@ let pending: Promise<OperatingRaw | null> | null = null;
 
 export function loadOperating(): Promise<OperatingRaw | null> {
   if (cache) return Promise.resolve(cache);
-  pending ??= fetch(`${import.meta.env.BASE_URL}data/operating.json`)
+  pending ??= fetch(dataUrl('operating.json'))
     .then((r) => (r.ok ? r.json() : null))
     .then((d: OperatingRaw | null) => { cache = d; return d; })
     .catch(() => null);

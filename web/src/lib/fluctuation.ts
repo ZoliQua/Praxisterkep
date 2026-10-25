@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { t } from './i18n';
 import type { ColDef, Row } from './eesztTable';
 import type { PraxisKind } from '../types';
+import { dataUrl } from './dataUrl';
 
 export interface ChurnCounty {
   county: string;
@@ -39,7 +40,7 @@ export function useFluctuation(): FluctuationRaw | null {
   const [data, setData] = useState<FluctuationRaw | null>(cache);
   useEffect(() => {
     let alive = true;
-    pending ??= fetch(`${import.meta.env.BASE_URL}data/fluctuation.json`)
+    pending ??= fetch(dataUrl('fluctuation.json'))
       .then((r) => (r.ok ? r.json() : null))
       .then((d: FluctuationRaw | null) => { cache = d; return d; })
       .catch(() => null);

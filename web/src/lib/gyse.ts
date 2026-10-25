@@ -5,6 +5,7 @@
 import { useEffect, useState } from 'react';
 import { t } from './i18n';
 import type { ColDef, Row } from './eesztTable';
+import { dataUrl } from './dataUrl';
 
 export type GyseKind = 'shop' | 'branch' | 'workshop' | 'orthopaedic'
   | 'dentaltech' | 'rental' | 'repair' | 'other';
@@ -64,7 +65,7 @@ export function useGyse(): GyseRaw | null {
   const [data, setData] = useState<GyseRaw | null>(cache);
   useEffect(() => {
     let alive = true;
-    pending ??= fetch(`${import.meta.env.BASE_URL}data/gyse.json`)
+    pending ??= fetch(dataUrl('gyse.json'))
       .then((r) => (r.ok ? r.json() : null))
       .then((d: GyseRaw | null) => { cache = d; return d; })
       .catch(() => null);

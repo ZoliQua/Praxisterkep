@@ -5,6 +5,7 @@
 // and the limits travel with it.
 import { useEffect, useState } from 'react';
 import type { ColDef, Row } from './eesztTable';
+import { dataUrl } from './dataUrl';
 
 export interface Pharmacy {
   name: string;
@@ -39,7 +40,7 @@ export function usePharmacy(): PharmacyRaw | null {
   const [data, setData] = useState<PharmacyRaw | null>(cache);
   useEffect(() => {
     let alive = true;
-    pending ??= fetch(`${import.meta.env.BASE_URL}data/pharmacy.json`)
+    pending ??= fetch(dataUrl('pharmacy.json'))
       .then((r) => (r.ok ? r.json() : null))
       .then((d: PharmacyRaw | null) => { cache = d; return d; })
       .catch(() => null);

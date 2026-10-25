@@ -4,6 +4,7 @@
 // to the map's own default (the main map shows county names, the others do
 // not); once switched, the choice is shared by every map and remembered.
 import { useSyncExternalStore } from 'react';
+import { dataUrl } from './dataUrl';
 
 export type LayerKey =
   | 'counties' | 'seats' | 'county' | 'jarasSeats' | 'towns' | 'jaras' | 'budapest'
@@ -81,7 +82,7 @@ let citiesPromise: Promise<CityPoint[]> | null = null;
 const geoPromises = new Map<string, Promise<GeoJSON.FeatureCollection | null>>();
 
 export function loadCities(): Promise<CityPoint[]> {
-  citiesPromise ??= fetch(`${import.meta.env.BASE_URL}data/cities.geojson`)
+  citiesPromise ??= fetch(dataUrl('cities.geojson'))
     .then((r) => (r.ok ? r.json() : null))
     .then((fc: GeoJSON.FeatureCollection | null) => (fc?.features ?? []).map((f) => ({
       name: String(f.properties?.name ?? ''),
@@ -98,7 +99,7 @@ export function loadCities(): Promise<CityPoint[]> {
 export function loadGeo(name: string): Promise<GeoJSON.FeatureCollection | null> {
   let promise = geoPromises.get(name);
   if (!promise) {
-    promise = fetch(`${import.meta.env.BASE_URL}data/${name}.geojson`)
+    promise = fetch(dataUrl(`${name}.geojson`))
       .then((r) => (r.ok ? r.json() : null))
       .catch(() => null);
     geoPromises.set(name, promise);

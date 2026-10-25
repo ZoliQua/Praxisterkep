@@ -5,6 +5,7 @@
 // kerület — cut down to what a járás page shows, the same way counties.ts is.
 import { useEffect, useState } from 'react';
 import type { Band, EmergencyPoint, SettlementRow, State } from './counties';
+import { dataUrl } from './dataUrl';
 
 export type { Band, EmergencyPoint, SettlementRow, State };
 
@@ -103,7 +104,7 @@ export function useDistricts(): DistrictsRaw | null {
   const [data, setData] = useState<DistrictsRaw | null>(cache);
   useEffect(() => {
     let alive = true;
-    pending ??= fetch(`${import.meta.env.BASE_URL}data/districts.json`)
+    pending ??= fetch(dataUrl('districts.json'))
       .then((r) => (r.ok ? r.json() : null))
       .then((d: DistrictsRaw | null) => { cache = d; return d; })
       .catch(() => null);

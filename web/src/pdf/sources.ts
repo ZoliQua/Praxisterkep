@@ -8,6 +8,7 @@ import { rings, type ShapeFeature } from '../lib/projection';
 import type { EuropeRaw } from '../lib/europe';
 import type { AnalysisInput } from './analysisReport';
 import type { CountyInput, DistrictInput, SettlementInput } from './report';
+import { dataUrl } from '../lib/dataUrl';
 
 interface GeoFile { features: { properties: Record<string, unknown>;
   geometry: { type: string; coordinates: unknown } }[] }
@@ -16,7 +17,7 @@ const cache = new Map<string, Promise<unknown>>();
 
 function json<T>(name: string, optional = false): Promise<T | null> {
   if (!cache.has(name)) {
-    cache.set(name, fetch(`/data/${name}`).then((r) => {
+    cache.set(name, fetch(dataUrl(name)).then((r) => {
       if (!r.ok) throw new Error(`${name}: ${r.status}`);
       return r.json();
     }).catch((e) => {

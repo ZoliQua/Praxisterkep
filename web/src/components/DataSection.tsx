@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { t } from '../lib/i18n';
 import { SITE_URL } from '../lib/site';
 import { formatNumber } from '../lib/format';
+import { dataUrl } from '../lib/dataUrl';
 
 interface ManifestFile {
   path: string;
@@ -54,7 +55,7 @@ export function DataSection() {
   const [manifest, setManifest] = useState<Manifest | null>(null);
   useEffect(() => {
     let alive = true;
-    void fetch(`${import.meta.env.BASE_URL}data/manifest.json`)
+    void fetch(dataUrl('manifest.json'))
       .then((r) => (r.ok ? r.json() : null))
       .then((m: Manifest | null) => { if (alive) setManifest(m); })
       .catch(() => {});

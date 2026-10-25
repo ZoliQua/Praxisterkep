@@ -7,6 +7,7 @@ import { formatNumber, formatPercent } from '../lib/format';
 import { contextHref } from '../lib/context';
 import { EuropeHighlights } from './EuropeHighlights';
 import { HighlightsStory } from './story/PageStories';
+import { dataUrl } from '../lib/dataUrl';
 
 interface HighlightsData {
   month: string;
@@ -18,7 +19,7 @@ export function Highlights() {
   const [data, setData] = useState<HighlightsData | null>(null);
   useEffect(() => {
     let alive = true;
-    void fetch(`${import.meta.env.BASE_URL}data/highlights.json`)
+    void fetch(dataUrl('highlights.json'))
       .then((r) => (r.ok ? r.json() : null))
       .then((d: HighlightsData | null) => { if (alive) setData(d); })
       .catch(() => {});

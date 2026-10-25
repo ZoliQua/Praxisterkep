@@ -4,6 +4,7 @@
 import { useEffect, useState } from 'react';
 import { t } from './i18n';
 import type { ColDef, Row } from './eesztTable';
+import { dataUrl } from './dataUrl';
 
 export type ExtraGroup = 'oncall' | 'university' | 'specialist';
 
@@ -63,7 +64,7 @@ let pending: Promise<DentalExtraRaw | null> | null = null;
 
 export function loadDentalExtra(): Promise<DentalExtraRaw | null> {
   if (cache) return Promise.resolve(cache);
-  pending ??= fetch(`${import.meta.env.BASE_URL}data/dental_extra.json`)
+  pending ??= fetch(dataUrl('dental_extra.json'))
     .then((r) => (r.ok ? r.json() : null))
     .then((d: DentalExtraRaw | null) => {
       cache = d;

@@ -5,6 +5,7 @@
 import { useEffect, useState } from 'react';
 import { t } from './i18n';
 import type { ColDef, Row } from './eesztTable';
+import { dataUrl } from './dataUrl';
 
 export type Verdict =
   | 'otherUnitSameProfession' | 'ownUnitSameProfession' | 'providerTaxNumber'
@@ -83,7 +84,7 @@ let pending: Promise<CrosscheckRaw | null> | null = null;
 
 export function loadCrosscheck(): Promise<CrosscheckRaw | null> {
   if (cache) return Promise.resolve(cache);
-  pending ??= fetch(`${import.meta.env.BASE_URL}data/crosscheck.json`)
+  pending ??= fetch(dataUrl('crosscheck.json'))
     .then((r) => (r.ok ? r.json() : null))
     .then((d: CrosscheckRaw | null) => { cache = d; return d; })
     .catch(() => null);

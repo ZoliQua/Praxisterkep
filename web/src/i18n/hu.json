@@ -22,6 +22,7 @@
     }
   },
   "nav": {
+    "highlights": "Kiemelések",
     "map": "Térkép",
     "mine": "Nálam",
     "ranking": "Rangsor",
@@ -2837,6 +2838,52 @@
     "source": "Forrás: NEAK havi adatai, OpenStreetMap úthálózat, Volánbusz GTFS, NNGYK halandósági adatbázis, KSH TIMEA, NFSZ."
   },
   "static": {
+    "story": {
+      "title": "{name} fél percben",
+      "intro": "{name}: {pop} lakos, {county} megye, {district} járás.",
+      "introCounty": "{name}: {pop} lakos, {county} megye.",
+      "introCapital": "{name}: {pop} lakos, a főváros egyik kerülete.",
+      "residents": "lakos",
+      "age": "A népszámláláskor: 0–14 éves {young}, 15–64 éves {working}, 65 év feletti {old} (országosan {national}).",
+      "districts": "Ide tartozó {kind} körzetek: {filled} betöltött, {vacant} betöltetlen vagy megszűnt.",
+      "districtsAllFilled": "Ide tartozó {kind} körzetek: {filled} betöltött, betöltetlen vagy megszűnt nincs.",
+      "districtsNoneFilled": "Ide tartozó {kind} körzetek: {vacant} betöltetlen vagy megszűnt, betöltött nincs.",
+      "filled": "betöltött",
+      "vacant": "betöltetlen vagy megszűnt",
+      "dentalAbsent": "Egyetlen fogorvosi körzet listáján sem szerepel; a legközelebbi fogorvosi rendelő: {where}, {min} autóval.",
+      "dentalAbsentLabel": "autóval a legközelebbi fogorvosi rendelőig",
+      "longest": "Az ide tartozó betöltetlen körzetek közül a legrégebbi {since} óta vár betöltésre.",
+      "longestOne": "Az ide tartozó betöltetlen {kind} körzet {since} óta vár betöltésre.",
+      "yearsUnit": "év",
+      "short": {
+        "gp": "háziorvos",
+        "dental": "fogorvos"
+      },
+      "travel": "Autóval: háziorvos {gp}, fogorvos {dental}, ügyelet {oncall}, kórház {inpatient}.",
+      "travelAllHere": "Háziorvosi és fogorvosi rendelő, ügyelet és kórház: mind helyben van.",
+      "care": {
+        "gp": "háziorvos",
+        "dental": "fogorvos",
+        "oncall": "ügyelet",
+        "inpatient": "kórház"
+      },
+      "bus": "Egy átlagos szerdán {dep} menetrend szerinti buszindulás; átszállás nélkül {reach} település érhető el.",
+      "busNoGp": "Egy átlagos szerdán {dep} buszindulás van, de a háziorvosi rendelőhöz nincs közvetlen járat.",
+      "busNone": "Egy átlagos szerdán egyetlen menetrend szerinti busz sem indul innen.",
+      "busLabel": "buszindulás egy átlagos szerdán",
+      "pharmacyHere": "Szerződött gyógyszertár a településen: {n}.",
+      "pharmacyLabel": "szerződött gyógyszertár",
+      "pharmacyNone": "Szerződött gyógyszertár nincs a településen; a legközelebbi: {where}, {min} autóval.",
+      "pharmacyNoneLabel": "autóval a legközelebbi gyógyszertárig",
+      "index": "Összetett ellátási kockázati index: {value}, {band}; helyezés: {rank} / {of} (1 = a legrosszabb helyzetű).",
+      "indexLabel": "0 = a legjobb, 100 = a legrosszabb helyzet",
+      "cluster": "Egy összefüggő ellátási hiányterület része: {name} környéke, {n} település, {pop} lakos.",
+      "change": "{month} óta az ide tartozó betöltetlen vagy megszűnt {kind} körzetek száma {then} helyett {now}.",
+      "newDoctorsLabel": "körzetben kezdett új orvos egy év alatt",
+      "income": "Jövedelem egy lakosra ({year}): {value}; a medián településen {median}.",
+      "districtCol": "{district} járás",
+      "medianCol": "medián település"
+    },
     "months": [
       "január",
       "február",

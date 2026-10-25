@@ -5,6 +5,7 @@
 import { useEffect, useState } from 'react';
 import { t } from './i18n';
 import type { ColDef, Row } from './eesztTable';
+import { dataUrl } from './dataUrl';
 
 export type Layer = 'gp' | 'dental' | 'oncall' | 'ambulance' | 'inpatient'
   | 'outpatient' | 'gyse' | 'pharmacy';
@@ -92,7 +93,7 @@ function loader<T>(file: string): () => T | null {
     const [data, setData] = useState<T | null>(cache);
     useEffect(() => {
       let alive = true;
-      pending ??= fetch(`${import.meta.env.BASE_URL}data/${file}`)
+      pending ??= fetch(dataUrl(file))
         .then((r) => (r.ok ? r.json() : null))
         .then((d: T | null) => { cache = d; return d; })
         .catch(() => null);

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { locale, t } from './lib/i18n';
 import { useAppStore, useSnapshot } from './store/useAppStore';
 import { Hero } from './components/Hero';
@@ -10,7 +10,7 @@ import { NextSteps } from './components/NextSteps';
 import { SITE_NAV, withContext } from './lib/siteNav';
 import { contextHref } from './lib/context';
 import { useHashScroll } from './lib/useHashScroll';
-import { MapSection } from './components/MapSection';
+import { Deferred } from './components/Deferred';
 import { WhySection } from './components/WhySection';
 import { SearchSection } from './components/SearchSection';
 import { Footer } from './components/Footer';
@@ -20,6 +20,13 @@ import { LandingStory } from './components/story/PageStories';
 import { NavMenu } from './components/NavMenu';
 import { IconStethoscope, IconTooth } from './components/icons';
 import type { PraxisKind } from './types';
+
+// The map (and MapLibre with it, a megabyte of script, plus the EESZT file
+// its popups read) loads once the reader scrolls near it — or at once when the
+// address is a shared link to one praxis on it (?p=).
+const MapSection = lazy(() =>
+  import('./components/MapSection').then((m) => ({ default: m.MapSection })));
+const MAP_LINKED = new URLSearchParams(window.location.search).has('p');
 
 /** Where the landing hands the reader on, now that it is only the question. */
 const LANDING_NEXT = [
@@ -101,7 +108,9 @@ export default function App() {
           <SearchSection />
           {/* the search narrows the map, so it comes after the question it
               answers rather than before it */}
-      <MapSection />
+      <Deferred ids={['terkep']} minHeight={720} eager={MAP_LINKED}>
+        <Suspense fallback={<div style={{ minHeight: 720 }} />}><MapSection /></Suspense>
+      </Deferred>
       <WhySection />
       <div className="section container"><NextSteps items={LANDING_NEXT} /></div>
       <Footer />

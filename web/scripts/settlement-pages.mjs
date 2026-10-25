@@ -14,6 +14,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { loadEnv } from 'vite';
 import { countyMap, countyThumb } from './county-map.mjs';
+import { settlementStory } from './settlement-story.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const dist = join(here, '..', 'dist');
@@ -213,6 +214,43 @@ const PALETTE_KEYS = Object.keys(JSON.parse(
   readFileSync(join(here, '..', 'src', 'lib', 'palettes.json'), 'utf8'))).filter((k) => !k.startsWith('_'));
 const bootScript = () => `<script>${themeBoot}</script>`;
 const toolsScript = () => (toolsFile ? `\n<script type="module" src="/assets/${esc(toolsFile)}" defer></script>` : '');
+
+// the animated story (src/storyStatic.ts): a small entry that loads the canvas
+// half, its stylesheet and the hand font only when the story nears the
+// screen. Looked up by its entry name and confirmed by what it contains — a
+// hashed name alone has fooled this script before.
+const storyFile = readdirSync(join(dist, 'assets'))
+  .filter((f) => /^staticstory-[\w-]+\.js$/.test(f))
+  .find((f) => readFileSync(join(dist, 'assets', f), 'utf8').includes('[data-story]')) ?? null;
+if (!storyFile) throw new Error('no built staticstory entry (src/storyStatic.ts) mounts [data-story]');
+const storyScript = () => `\n<script type="module" src="/assets/${esc(storyFile)}" defer></script>`;
+
+/** The settlement's own story, above "Kik laknak itt?": the scenes as JSON
+ *  for the player, and their lines as a list for anyone without it. */
+function storyBlock(profile) {
+  let story;
+  try {
+    story = settlementStory(profile, {
+      lang: LANG, t: S, label, months: DICT.static.months, dataMonth: profiles.dataMonth,
+      nationalAge: profiles.national?.age,
+    });
+  } catch (e) {
+    throw new Error(`story of ${profile.slug}: ${e.message}`);
+  }
+  if (story.scenes.length < 2) return '';
+  // "<" escaped, so no line can close the script element early
+  const json = JSON.stringify({ locale: story.locale, mascot: story.mascot, ui: story.ui, scenes: story.scenes })
+    .replace(/</g, '\\u003c');
+  return `<div class="container">
+  <section class="cutstory" data-story data-export="skip" aria-label="${esc(story.ui.region)}">
+    <script type="application/json">${json}</script>
+    <details class="cutstory__script">
+      <summary>${esc(label('story.ui.script'))}</summary>
+      <ol>${story.scenes.map((sc) => `<li>${esc(sc.say)}</li>`).join('')}</ol>
+    </details>
+  </section>
+</div>`;
+}
 /** The host of the two buttons, with their labels in the page's language. */
 const navTools = () => `<div class="navtools" data-navtools="${esc(JSON.stringify({
   toLight: label('theme.toLight'), toDark: label('theme.toDark'),
@@ -335,12 +373,16 @@ const decSep = () => (LANG === 'en' ? '.' : ',');
 const pagePath = (slug) => `${LANG === 'en' ? '/en' : ''}/telepules/${slug ? `${slug}/` : ''}`;
 
 // the way back to the private analysis site, shown only to a reader who came
-// from there (THEME_BOOT marks <html data-internal>); Módszertan then makes
-// room and moves to the footer — the React twin is in components/NavMenu.tsx
+// from there (THEME_BOOT marks <html data-internal>), in the place of
+// Módszertan, which moves to the footer — the React twin is in
+// components/NavMenu.tsx
 const internalEntry = () => `<div class="topnav__group only-internal"><a href="${esc(INTERNAL_URL)}" title="${
-  esc(label('nav.internalTitle'))}">${esc(label('nav.internal'))}</a></div>`;
+  esc(label('nav.internalTitle'))}">${esc(label('nav.internal'))}<span class="topnav__out" aria-hidden="true">\u2197</span></a></div>`;
 
-const navBar = (profile) => [internalEntry()].concat(nav.entries.map((e) => {
+// a county in the menu is its own name in every language
+const childLabel = (key, kind) => (kind === 'name' ? key : label(key));
+
+const navBar = (profile) => nav.entries.map((e, i) => {
   const grouped = (e.children ?? []).some((c) => c[2] === 'group');
   // a heading and its links stay together in one column, as in the app
   const cols = [];
@@ -348,14 +390,17 @@ const navBar = (profile) => [internalEntry()].concat(nav.entries.map((e) => {
     if (c[2] === 'group' || !cols.length) cols.push([]);
     cols[cols.length - 1].push(c);
   }
-  const children = cols.map((col) => `<div class="topnav__subcol">${col.map(([href, key, kind]) =>
+  const children = cols.map((col) => `<div class="topnav__subcol${
+    col.some((c) => c[2] === 'name') ? ' topnav__subcol--names' : ''}">${col.map(([href, key, kind]) =>
     `<a href="${esc(ctx(href, profile))}"${kind === 'group' ? ' class="topnav__subhead"' : ''}>${
-      esc(label(key))}</a>`).join('')}</div>`).join('');
-  return `<div class="topnav__group${/modszertan\.html/.test(e.href) ? ' no-internal' : ''}"><a href="${esc(ctx(e.href, profile))}">${
+      esc(childLabel(key, kind))}</a>`).join('')}</div>`).join('');
+  const methodology = /modszertan\.html/.test(e.href);
+  return `${methodology ? internalEntry() : ''}<div class="topnav__group${methodology ? ' no-internal' : ''}${
+    i === 0 ? ' topnav__group--first' : ''}"><a href="${esc(ctx(e.href, profile))}">${
     esc(label(e.labelKey))}${children ? '<i class="topnav__caret" aria-hidden="true"></i>' : ''
   }</a>${children ? `<div class="topnav__submenu${grouped ? ' is-grouped' : ''}" hidden>${
     children}</div>` : ''}</div>`;
-}), [navTools()]).join('\n    ');
+}).concat([navTools()]).join('\n    ');
 
 const ctx = (href, profile) => {
   // the index page has no settlement of its own: its links carry no context
@@ -367,8 +412,12 @@ const ctx = (href, profile) => {
   // out as "?jar=X?m=…", and the járás page read "X?m=…" as the járás
   const [path, query = ''] = base.split('?');
   const q = new URLSearchParams(query);
-  q.set('m', profile.county);
-  q.set('tel', profile.slug);
+  // a link that names another county ("/megye.html?m=Pest" in the menu) goes
+  // there, without this settlement, which is not in it
+  if (!q.get('m') || q.get('m') === profile.county) {
+    q.set('m', profile.county);
+    q.set('tel', profile.slug);
+  }
   // an English page sends its reader on in English
   if (LANG === 'en') q.set('lang', 'en');
   return `${path}?${q}${hash}`;
@@ -1731,7 +1780,7 @@ ${bootScript()}
 <meta name="theme-color" content="#0D1117">${gaMeta}
 <link rel="canonical" href="${site}${esc(pagePath(profile.slug))}">
 ${alternates(profile.slug)}
-<link rel="stylesheet" href="/assets/${esc(cssFile)}">${toolsScript()}${streetFile ? `
+<link rel="stylesheet" href="/assets/${esc(cssFile)}">${toolsScript()}${storyScript()}${streetFile ? `
 <script type="module" src="/assets/${esc(streetFile)}" defer></script>` : ''}${pdfFile ? `
 <script type="module" src="/assets/${esc(pdfFile)}" defer></script>` : ''}
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1764,6 +1813,8 @@ ${sectionRail(present)}
   <h2 class="section__subheading">${esc(S('page.where'))}</h2>
   ${countyMap(profile, geo, (k, v) => S(`map.${k}`, v), LANG)}
 </section>
+
+${storyBlock(profile)}
 
 <section class="section container" id="lakossag">
   <h2 class="section__subheading">${esc(S('page.who'))}</h2>

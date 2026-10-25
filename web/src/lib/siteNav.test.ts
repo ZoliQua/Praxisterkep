@@ -17,15 +17,28 @@ const lookup = (dict: unknown, key: string): unknown =>
   );
 
 const allEntries = nav.entries;
-const allKeys = allEntries.flatMap((e) => [e.labelKey, ...(e.children ?? []).map(([, k]) => k)]);
+// a row marked "name" carries a proper name (a county), not an i18n key
+const allKeys = allEntries.flatMap((e) => [e.labelKey,
+  ...(e.children ?? []).filter((c) => c[2] !== 'name').map(([, k]) => k)]);
 const allHrefs = allEntries.flatMap((e) => [e.href, ...(e.children ?? []).map(([h]) => h)]);
 
 describe('site navigation', () => {
   it('names every page the site has, in the order of the zooms', () => {
     expect(allEntries.map((e) => e.href)).toEqual([
-      '/', '/megye.html', '/jaras.html', '/telepules/', '/elemzo.html', '/europa.html',
-      '/szakellato.html', '/modszertan.html',
+      '/', '/elemzo.html', '/europa.html', '/szakellato.html', '/modszertan.html',
     ]);
+    // the zooms live under Térkép: highlights, county, járás, settlement
+    const heads = allEntries[0].children?.filter((c) => c[2] === 'group').map(([h]) => h);
+    expect(heads).toEqual(['/', '/megye.html', '/jaras.html', '/telepules/']);
+  });
+
+  it('lists the twenty counties under Megye and under Település', () => {
+    const names = (prefix: string) => (allEntries[0].children ?? [])
+      .filter((c) => c[2] === 'name' && c[0].startsWith(prefix)).map(([, n]) => n);
+    const counties = new Set((JSON.parse(readFileSync(join(root, '..', 'data', 'counties.json'),
+      'utf8')).counties as { name: string }[]).map((c) => c.name));
+    expect(new Set(names('/megye.html?m='))).toEqual(counties);
+    expect(new Set(names('/telepules/#m-'))).toEqual(counties);
   });
 
   it('keeps the register comparison out of the menu', () => {

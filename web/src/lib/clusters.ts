@@ -3,6 +3,7 @@
 // forty villages one by one.
 import { useEffect, useState } from 'react';
 import type { ColDef, Row } from './eesztTable';
+import { dataUrl } from './dataUrl';
 
 export interface ClusterMember {
   kshId: string;
@@ -55,7 +56,7 @@ export function useClusters(): ClustersRaw | null {
   const [data, setData] = useState<ClustersRaw | null>(cache);
   useEffect(() => {
     let alive = true;
-    pending ??= fetch(`${import.meta.env.BASE_URL}data/clusters.json`)
+    pending ??= fetch(dataUrl('clusters.json'))
       .then((r) => (r.ok ? r.json() : null))
       .then((d: ClustersRaw | null) => { cache = d; return d; })
       .catch(() => null);

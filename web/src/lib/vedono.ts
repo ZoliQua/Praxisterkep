@@ -6,6 +6,7 @@
 import { useEffect, useState } from 'react';
 import { t } from './i18n';
 import type { ColDef, Row } from './eesztTable';
+import { dataUrl } from './dataUrl';
 
 export interface VedonoRow {
   fin: string;
@@ -92,7 +93,7 @@ let pending: Promise<VedonoRaw | null> | null = null;
 
 export function loadVedono(): Promise<VedonoRaw | null> {
   if (cache) return Promise.resolve(cache);
-  pending ??= fetch(`${import.meta.env.BASE_URL}data/vedono.json`)
+  pending ??= fetch(dataUrl('vedono.json'))
     .then((r) => (r.ok ? r.json() : null))
     .then((d: VedonoRaw | null) => { cache = d; return d; })
     .catch(() => null);

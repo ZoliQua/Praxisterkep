@@ -5,6 +5,7 @@
 import { useEffect, useState } from 'react';
 import { t } from './i18n';
 import type { ColDef, Row } from './eesztTable';
+import { dataUrl } from './dataUrl';
 
 export type Verdict = 'agree' | 'differ' | 'onlyOfficial' | 'onlyOurs' | 'neither';
 
@@ -60,7 +61,7 @@ export function useOfficialMap(): OfficialRaw | null {
   const [data, setData] = useState<OfficialRaw | null>(cache);
   useEffect(() => {
     let alive = true;
-    pending ??= fetch(`${import.meta.env.BASE_URL}data/officialmap.json`)
+    pending ??= fetch(dataUrl('officialmap.json'))
       .then((r) => (r.ok ? r.json() : null))
       .then((d: OfficialRaw | null) => { cache = d; return d; })
       .catch(() => null);
