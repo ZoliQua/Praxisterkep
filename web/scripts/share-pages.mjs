@@ -58,7 +58,7 @@ for (const county of counties) {
 <meta name="twitter:card" content="summary_large_image">
 <meta name="description" content="${esc(desc)}">
 <meta http-equiv="refresh" content="0;url=${esc(target)}">
-<link rel="canonical" href="/">
+<link rel="canonical" href="https://praxisterkep.hu${esc(target)}">
 </head>
 <body>
 <p><a href="${esc(target)}">${esc(title)}</a></p>

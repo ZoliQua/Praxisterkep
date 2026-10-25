@@ -2043,6 +2043,12 @@ DICT = hu;
 // a sitemap, so the pages are findable at all
 const urls = ['/', '/megye.html', '/jaras.html', '/elemzo.html', '/europa.html', '/szakellato.html',
   '/modszertan.html', '/eeszt.html', '/telepules/', '/en/telepules/']
+  // the county and the járás page under the one address each names as its
+  // canonical (lib/seo.ts): ?m= and ?jar=, nothing the menu carries along
+  .concat([...new Set([...districts.byName.values()].map((d) => d.county))].sort()
+    .map((c) => `/megye.html?m=${encodeURIComponent(c)}`))
+  .concat([...districts.byName.keys()].sort()
+    .map((n) => `/jaras.html?jar=${encodeURIComponent(n)}`))
   .concat(profiles.settlements.map((p) => `/telepules/${p.slug}/`))
   .concat(profiles.settlements.map((p) => `/en/telepules/${p.slug}/`));
 writeFileSync(join(dist, 'sitemap.xml'),
