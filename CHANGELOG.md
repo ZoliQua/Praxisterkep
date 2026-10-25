@@ -5,6 +5,32 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.55.0] - 2026-10-25
+
+### Hozzáadva
+- **Új Térkép-menü.** A Térkép alatt négy oszlop: Kiemelések, Megye (mind
+  a 20 megye, egy kattintással a megye oldalára), Járás és Település (a
+  településlista megyénként). A Megye, a Járás és a Település külön
+  menüpontja megszűnt. A belső oldalról érkezőknek a „Belső ↗” a Továbbiak
+  után áll, a Módszertan helyén.
+- **Animáció minden településoldalon.** Mind a 3177 település magyar és
+  angol oldalán a „Kik laknak itt?” fölött legfeljebb kilenc jelenet mondja
+  el a település adatait: lakosság és korösszetétel, háziorvosi és
+  fogorvosi körzetek, a betöltetlenség hossza, menetidő, busz,
+  gyógyszertár, kockázati index, változás, jövedelem. Ahol egy adat
+  hiányzik, a jelenet kimarad; orvos neve egyikben sincs. Csak akkor
+  töltődik be, amikor az olvasó odagörget.
+
+### Változott
+- **Gyorsabb betöltés, kevesebb adatforgalom.** A programfájlokat és az
+  adatfájlokat a böngésző egy évig tárolja; minden adatlekérés a fájl
+  tartalmából képzett azonosítót visel, így új adat esetén azonnal az
+  újat tölti le. Az angol szótár csak angol oldalon töltődik be; a
+  térképmotor, a főoldali térkép, a pontos térképek és az Elemző lejjebb
+  lévő részei akkor, amikor az olvasó a közelükbe ér. A főoldal első
+  betöltése 629 kB-ról 263 kB programkódra, az Elemzőé 658-ról 296 kB-ra
+  csökkent (tömörítve).
+
 ## [1.54.0] - 2026-10-24
 
 ### Hozzáadva
