@@ -52,14 +52,31 @@ def normalize_street(address: str) -> str:
     return out
 
 
+def _get(params: dict, attempts: int = 4) -> requests.Response:
+    """One Nominatim request; a 5xx or a timeout is retried with a growing
+    pause (the public server sheds load with 503s), anything else raises."""
+    for attempt in range(attempts):
+        try:
+            resp = requests.get(
+                NOMINATIM,
+                params={"countrycodes": "hu", "format": "json", "limit": 1, **params},
+                headers={"User-Agent": USER_AGENT},
+                timeout=30,
+            )
+            if resp.status_code < 500:
+                resp.raise_for_status()
+                return resp
+            error: Exception = requests.HTTPError(f"{resp.status_code} from Nominatim", response=resp)
+        except (requests.ConnectionError, requests.Timeout) as exc:
+            error = exc
+        if attempt == attempts - 1:
+            raise error
+        time.sleep(10 * 2 ** attempt)
+    raise AssertionError("unreachable")
+
+
 def _query(params: dict) -> dict | None:
-    resp = requests.get(
-        NOMINATIM,
-        params={"countrycodes": "hu", "format": "json", "limit": 1, **params},
-        headers={"User-Agent": USER_AGENT},
-        timeout=30,
-    )
-    resp.raise_for_status()
+    resp = _get(params)
     time.sleep(1.1)  # Nominatim usage policy: max 1 req/s
     hits = resp.json()
     if not hits:
