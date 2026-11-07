@@ -91,9 +91,25 @@ COUNTIES = 20
 UNASSIGNED = "Budapest kerületre nem bontható adatai"
 
 
+
+def api_version(prefix: str) -> str:
+    """The API's current dataflow version. The census is frozen in 2022 and
+    every version already read is archived, so when the server is too slow to
+    answer, the newest archived version stands in (said in the log)."""
+    try:
+        return requests.get(f"{API}/version", timeout=60, headers=HEADERS).json()["version"]
+    except requests.RequestException as exc:
+        have = sorted(RAW_DIR.glob(f"{prefix}_V*.json.gz"),
+                      key=lambda p: int(p.name[len(prefix) + 2:].split(".")[0]))
+        if not have:
+            raise
+        version = have[-1].name[len(prefix) + 1:].split(".")[0]
+        print(f"      WARNING: KSH version lookup failed ({exc}); using archived {version}")
+        return version
+
 def fetch(refresh: bool = False) -> tuple[str, list[dict], dict[str, str]]:
     """Observations of every request, and the geography names, archived."""
-    version = requests.get(f"{API}/version", timeout=60, headers=HEADERS).json()["version"]
+    version = api_version("census2022_living")
     target = RAW_DIR / f"census2022_living_{version}.json.gz"
     if target.exists() and not refresh:
         with gzip.open(target, "rt", encoding="utf-8") as fh:
