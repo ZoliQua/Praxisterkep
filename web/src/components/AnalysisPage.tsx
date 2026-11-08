@@ -31,6 +31,7 @@ import { CensusSection } from './CensusSection';
 import { SboSection } from './SboSection';
 import { GrantsSection } from './GrantsSection';
 import { ForecastSection } from './ForecastSection';
+import { MonthChanges, YearChanges } from './ChangesSection';
 import { SideNav, type SideGroup } from './SideNav';
 import { Deferred } from './Deferred';
 import sections from '../lib/pageSections.json';
@@ -91,6 +92,11 @@ export function AnalysisPage() {
       <StatsSection />
       <Deferred ids={['osszevetes']}><VersusSection /></Deferred>
       <Deferred ids={['lefedettseg']}><CoverageSection kind={kind} /></Deferred>
+
+      {/* the archive's months held against each other, code by code */}
+      <GroupHead id="changes" />
+      <Deferred ids={['valtozas-ev']}><YearChanges key={kind} kind={kind} /></Deferred>
+      <Deferred ids={['valtozas-ho']}><MonthChanges key={kind} kind={kind} /></Deferred>
 
       <GroupHead id="future" />
       <Deferred ids={['kockazat']}><RiskSection kind={kind} /></Deferred>

@@ -229,6 +229,7 @@
     "embedTitle": "Beágyazás",
     "embedText": "A térkép beágyazható bármely oldalba az alábbi kóddal (a k paraméter: dental vagy gp; opcionális m paraméter: megyenév):",
     "p9": "Az EESZT-kiegészítés (H forrás) az EESZT törzspublikáció három nyilvános törzséből épül: NEAK_FINSZOLG (finanszírozott szolgálatok), EUSZOLG_PUBLIKUS (egészségügyi szolgáltatók) és EUSZOLG_ENGEDELY_PUBLIKUS (működési engedélyek). Az illesztés kizárólag hivatalos kódokkal történik: a NEAK FIN-kódból a szervezeti egység kódján át a körzet saját szakmájú (háziorvosi 6301–6303, fogorvosi 1300/1304/1305) engedélyéhez. Ellenőrizzük, hogy az engedély telephelye a körzet településén van-e, és hogy az engedélyes adószáma egyezik-e a finanszírozott szolgáltatóéval; az eltéréseket jelöljük, az ellentmondó (több telephelyre mutató) eseteknél nem mutatunk telephelyet. A körzet sorszámát szigorú mintával nyerjük ki a hivatalos szolgálatnévből. A szolgáltató nevét csak betöltött körzetnél közöljük; betöltetlen körzetnél semmilyen szabad szöveges névmezőt nem veszünk át, mert a szervezeti egységek neve gyakran a korábbi orvos nevét hordozza. Az EESZT-térképen minden körzet az engedélyezett telephelyén jelenik meg; a címeket az OpenStreetMap Nominatim szolgáltatásával geokódoljuk (legfeljebb 1 kérés/másodperc, gyorsítótárral). Ahol a cím utcaszinten nem azonosítható, a település középpontját használjuk, és ezt a térképen halványabb ponttal, a táblázatban „hozzávetőleges hely” oszloppal jelöljük; koordináta nélküli körzet nem kerül a térképre.",
+    "p10": "A „Mi változott?” rész (Elemző) a saját archívumunk havi NEAK-pillanatképeit veti össze, FIN-kód szerint. Betöltetlen az a körzet, amelyet az adott havi lista betöltetlennek mond; a fogorvosi megszűnt szerződésű körzeteket külön számoljuk, ahogy a térképen is. Két hónap között minden körzet számot ad magáról: a záró hónap betöltetlenjei = a kezdő hónap betöltetlenjei − a kikerültek + az újak, országosan és megyénként is; ha ez bármelyik párnál nem teljesül, a havi futás megáll. Hogy egy kikerült körzetet betöltöttek-e, megszűnt listára került-e vagy kikerült a nyilvántartásból, azt a későbbi hónap teljes nyilvántartása mondja meg; hogy egy új betöltetlen korábban betöltött volt-e, vagy új körzet, azt a korábbié. Néhány régebbi hónapot csak a betöltetlen listából őriztünk meg, és a fogorvosi megszűnt lista sem került be minden hónapba: ezeknél a körzet sorsa „nem állapítható meg”, nem becsüljük. Az archívum nem egyenletes, ezért minden lépés mellett ott áll, hány hónapot fog át; ami két pillanatkép között üresedett meg és telt be újra, az nem látszik. Az évről évre összevetés minden év utolsó archivált hónapját használja, ami nem mindig december. Az orvosváltások száma a praxisfluktuációs elemzésből jön, ott, ahol az pontosan ugyanazt a két hónapot fogja át.",
     "titles": {
       "p1": "Honnan jönnek az adatok?",
       "p2": "Betöltetlen, megszűnt, tartósan betöltetlen",
@@ -238,7 +239,8 @@
       "p6": "Nyilvánosság és nevek",
       "p7": "Lakossági mutatók",
       "p8": "Tartósan betöltetlen körzetek (OKFŐ)",
-      "p9": "EESZT-kiegészítés"
+      "p9": "EESZT-kiegészítés",
+      "p10": "Mi változott? — hónapok és évek összevetése"
     }
   },
   "footer": {
@@ -1043,6 +1045,7 @@
       "counties_json": "Megyénkénti összesítő és a települései tömör sorokban (a településprofilokból)",
       "tenure_json": "Mióta tartja a mai orvos a körzetét, a saját havi archívumunkból",
       "fluctuation_json": "Praxisfluktuáció: hány körzetben cserélődött az orvos, megyénként és évenként",
+      "changes_json": "Mi változott: a betöltetlen körzetek kódonkénti összevetése hónapról hónapra (idén) és évről évre, megyénként",
       "districts_json": "Járási összesítő a 197 egységre (174 járás és 23 kerület), a település-profilokból",
       "district_development_json": "A járások fejlettségi besorolása a 290/2014. (XI. 26.) Korm. rendelet szerint",
       "outcomes_json": "Halálozás, jövedelem, álláskeresők, népmozgalom, népszámlálás, sürgősségi elérés, támogatások és előrejelzés járásonként és megyénként, korrelációkkal",
@@ -1254,12 +1257,15 @@
       "nepszamlalas": "Népszámlálás",
       "surgosseg": "Sürgősségi",
       "tamogatasok": "Támogatások",
-      "elorejelzes": "Egy év múlva"
+      "elorejelzes": "Egy év múlva",
+      "valtozas-ev": "Évről évre",
+      "valtozas-ho": "Hónapról hónapra"
     },
     "sideNav": "Tartalom",
     "groupKicker": "Elemző",
     "group": {
       "national": "Országos kép",
+      "changes": "Mi változott?",
       "future": "Mi várható?",
       "districts": "Járások és megyék",
       "access": "Elérhetőség",
@@ -1267,6 +1273,7 @@
     },
     "groupLead": {
       "national": "Hogyan alakult a betöltetlenség, és hogyan áll ma a háziorvosi és a fogorvosi ellátás egymáshoz képest, települési szinten olvasva.",
+      "changes": "Mi lett a körzetekkel két archivált hónap között, kódról kódra: melyik vált betöltetlenné, melyiket töltötték be, melyik került a megszűnt listára vagy ki a nyilvántartásból — évről évre, és az idei évben hónapról hónapra.",
       "future": "Mely körzetek üresedhetnek meg, mennyi ideig maradnak üresek, mi várható egy év múlva — és segített-e az állami letelepedési támogatás.",
       "districts": "A 197 járás egyenként: hol halnak meg többen elkerülhető okból, hol szegényebbek, hol nincs munka, honnan költöznek el — és mi függ össze mivel.",
       "access": "Milyen messze van az ügyelet, a mentő, a háziorvos, a kórház és a sürgősségi osztály — légvonalban, autóval és busszal.",
@@ -4574,5 +4581,69 @@
       "pinCheck": "ellenőrzés",
       "pinStop": "megállás"
     }
+  },
+  "changes": {
+    "monthHeading": "Hónapról hónapra, {year}",
+    "monthLead": "{from}: {vfrom} betöltetlen körzet; {to}: {vto}. Alább {pairs} egymást követő archivált hónappár, kódról kódra összevetve: melyik körzet vált betöltetlenné, és melyik került ki a betöltetlenek közül. Egy sorra kattintva megjelenik a részletezés, a megyék és a körzetek listája.",
+    "yearHeading": "Évről évre",
+    "spanLead": "{from}: {vfrom} betöltetlen körzet; {to}: {vto}. A két időpont között {added} körzet vált betöltetlenné, és {ended} került ki a betöltetlenek közül, ebből {filled} betöltéssel. Ez nem a teljes forgalom: ami közben üresedett meg és telt be újra, az két pillanatkép között nem látszik.",
+    "yearBar": "{month}: {n} betöltetlen körzet",
+    "yearNote": "Minden év az utolsó archivált hónapjával szerepel (az oszlop alatt), ami nem mindig december. A csillag a folyó, még le nem zárt évet jelöli.",
+    "yearPairsTitle": "Egyik évről a másikra",
+    "gap": "{n} hónapos lépés",
+    "flowShort": "{ended} kikerült · {added} új",
+    "legendOut": "Kikerült a betöltetlenek közül",
+    "legendIn": "Új betöltetlen körzet",
+    "outLine": "A betöltetlenek közül {list}.",
+    "inLine": "Új betöltetlen: {list}.",
+    "out": {
+      "filled": "{n} körzetet betöltöttek",
+      "toDissolved": "{n} a megszűnt szerződésű listára került",
+      "leftRegistry": "{n} kikerült a NEAK nyilvántartásából (megszűnt vagy összevonták)",
+      "unknownFate": "{n} sorsa ebből a két hónapból nem állapítható meg"
+    },
+    "in": {
+      "fromFilled": "{n} korábban betöltött körzet",
+      "fromDissolved": "{n} a megszűnt szerződésű listáról került vissza",
+      "newDistrict": "{n} új körzet, amely a korábbi hónapban még nem szerepelt",
+      "unknownOrigin": "{n} körzet előzménye nem állapítható meg"
+    },
+    "population": "Érintett lakosság: {from} → {to} fő ({delta}).",
+    "total": "Körzetek száma: {from} → {to} ({delta}).",
+    "dissolved": "Megszűnt szerződésű betöltetlen körzet: {from} → {to}.",
+    "longTerm": "Tartósan betöltetlen az OKFŐ listája szerint: {from} → {to}.",
+    "doctorChanges": "Orvosváltás a betöltött körzetekben ugyanebben az időszakban: {n}.",
+    "countiesTitle": "A legnagyobb megyei elmozdulások",
+    "countyFlows": "+{added} / −{ended}",
+    "openCounties": "Megyék táblázatban",
+    "openNew": "Új betöltetlen körzetek ({n})",
+    "openEnded": "A betöltetlenek közül kikerültek ({n})",
+    "countiesTableTitle": "Változás megyénként: {from} → {to}",
+    "newTableTitle": "Új betöltetlen körzetek: {from} → {to}",
+    "endedTableTitle": "A betöltetlenek közül kikerült körzetek: {from} → {to}",
+    "kind": {
+      "gp": "Háziorvosi körzetek",
+      "dental": "Fogorvosi körzetek"
+    },
+    "how": {
+      "filled": "betöltötték",
+      "toDissolved": "megszűnt listára került",
+      "leftRegistry": "kikerült a nyilvántartásból",
+      "unknownFate": "nem állapítható meg",
+      "fromFilled": "korábban betöltött",
+      "fromDissolved": "megszűnt listáról vissza",
+      "newDistrict": "új körzet",
+      "unknownOrigin": "nem állapítható meg"
+    },
+    "colFrom": "Kezdő hónap",
+    "colTo": "Záró hónap",
+    "colNet": "Változás",
+    "colNew": "Új betöltetlen",
+    "colEnded": "Kikerült",
+    "colSettlement": "Település",
+    "colPopulation": "Lakosság",
+    "colHow": "Mi történt",
+    "colFin": "FIN-kód",
+    "caveat": "Az összevetés a NEAK havi listáin, FIN-kód szerint készül. Ami két archivált hónap között üresedett meg és telt be újra, az nem látszik, ezért minden lépés mellett ott áll, hány hónapot fog át. Ahol egy hónapnak nincs teljes nyilvántartása, vagy a fogorvosi megszűnt lista nem került be, ott a körzet sorsa „nem állapítható meg” — nem találgatunk. Betöltetlen ≠ ellátatlan: a betöltetlen körzetek többségében helyettesítés folyik."
   }
 }

@@ -135,7 +135,8 @@ describe('the reports, from the real data', () => {
       { counties, outcomes, districts, name: 'Baranya' });
     // the data month closes every report, notes or not
     expect(r.sections.map((s) => s.id)).toEqual(['summary', 'ranking', 'notes']);
-    expect(r.sections[2].blocks).toEqual([{ kind: 'highlight', text: expect.stringContaining('2026. október') }]);
+    expect(r.sections[2].blocks).toEqual([{ kind: 'highlight',
+      text: expect.stringContaining(month('hu', counties.dataMonth)) }]);
     const all = texts(r).join('\n');
     expect(all).toContain('Fogorvosi körzetek');
     expect(all).not.toContain('Háziorvosi körzetek');

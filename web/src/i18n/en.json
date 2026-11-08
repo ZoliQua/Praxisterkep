@@ -229,6 +229,7 @@
     "embedTitle": "Embedding",
     "embedText": "The map can be embedded in any page with the code below (parameter k: dental or gp; optional parameter m: county name):",
     "p9": "The EESZT supplement (source H) is built from three public registers of the EESZT master-data publication: NEAK_FINSZOLG (financed services), EUSZOLG_PUBLIKUS (healthcare providers) and EUSZOLG_ENGEDELY_PUBLIKUS (operating licences). Matching uses official codes only: from the NEAK FIN code through the organisational-unit code to the licence of the district's own profession (GP 6301–6303, dental 1300/1304/1305). We check whether the licensed premises lie in the district's settlement and whether the licensee's tax number matches the financed provider; differences are flagged, and where a FIN points to several licences at different premises no premises are shown. The district number is extracted from the official service name with a strict pattern. The provider name is shown only for filled districts; for vacant districts no free-text name field is taken over, as organisational-unit names often carry the former physician's name. On the EESZT map each district is drawn at its licensed premises; addresses are geocoded with OpenStreetMap Nominatim (at most 1 request per second, cached). Where an address cannot be resolved at street level, the settlement centre is used — shown as a fainter point on the map and in the \"approximate location\" column; districts without coordinates are not drawn.",
+    "p10": "The “What changed?” part of the analyses holds our own archive of monthly NEAK snapshots against each other, by FIN code. A district is vacant when that month's list says so; dental districts whose contract was terminated are counted separately, as on the map. Between two months every district is accounted for: vacant at the end = vacant at the start − those that left + the new ones, for the country and for every county; if that fails for any pair, the monthly run stops. Whether a district that left was filled, moved to the dissolved list or left the registry is read from the later month's full registry; whether a new vacancy was filled before or is a new district, from the earlier one's. Some older months were kept from the vacancy list alone, and the dental dissolved list is not in every month: there the district's fate is “cannot be told”, never estimated. The archive is uneven, so every step shows how many months it spans; a district that fell vacant and was filled again between two snapshots is invisible. The year-by-year view uses the last archived month of each year, which is not always December. Physician changes are copied from the turnover analysis where it spans exactly the same two months.",
     "titles": {
       "p1": "Where the data comes from",
       "p2": "Vacant, dissolved, persistently vacant",
@@ -238,7 +239,8 @@
       "p6": "Openness and names",
       "p7": "Population measures",
       "p8": "Persistently vacant districts (OKFŐ)",
-      "p9": "The EESZT supplement"
+      "p9": "The EESZT supplement",
+      "p10": "What changed? — months and years compared"
     }
   },
   "footer": {
@@ -1043,6 +1045,7 @@
       "counties_json": "Per-county aggregates and their settlements in compact rows (from the settlement profiles)",
       "tenure_json": "How long the physician now holding a district has held it, from our own monthly archive",
       "fluctuation_json": "Physician turnover: how many districts changed doctor, by county and year",
+      "changes_json": "What changed: the vacant districts compared code by code, month by month (this year) and year by year, by county",
       "districts_json": "Summary of the 197 units (174 járás and 23 kerület), from the settlement profiles",
       "district_development_json": "The járás development ranking of Government Decree 290/2014",
       "outcomes_json": "Mortality, income, jobseekers, population change, census, emergency access, grants and the forecast by járás and county, with correlations",
@@ -1254,12 +1257,15 @@
       "nepszamlalas": "Census",
       "surgosseg": "Emergency",
       "tamogatasok": "Grants",
-      "elorejelzes": "A year from now"
+      "elorejelzes": "A year from now",
+      "valtozas-ev": "Year by year",
+      "valtozas-ho": "Month by month"
     },
     "sideNav": "Contents",
     "groupKicker": "Analysis",
     "group": {
       "national": "The national picture",
+      "changes": "What changed?",
       "future": "What comes next?",
       "districts": "Districts and counties",
       "access": "Access",
@@ -1267,6 +1273,7 @@
     },
     "groupLead": {
       "national": "How vacancy has developed, and how GP and dental care compare today, read at settlement level.",
+      "changes": "What became of the districts between two archived months, code by code: which fell vacant, which were filled, which went onto the dissolved list or left the registry — year by year, and month by month this year.",
       "future": "Which districts may fall vacant, how long vacancies last, what a year from now looks like — and whether the state's settlement grants helped.",
       "districts": "The 197 járás one by one: where more people die of avoidable causes, where they are poorer, where there is no work, where people leave — and what goes with what.",
       "access": "How far the on-call service, the ambulance, the GP, the hospital and the emergency department are — as the crow flies, by car and by bus.",
@@ -4574,5 +4581,69 @@
       "pinCheck": "check",
       "pinStop": "stop"
     }
+  },
+  "changes": {
+    "monthHeading": "Month by month, {year}",
+    "monthLead": "{from}: {vfrom} vacant districts; {to}: {vto}. Below, {pairs} consecutive archived months, compared code by code: which districts fell vacant and which stopped being vacant. Click a row for the details, the counties and the district lists.",
+    "yearHeading": "Year by year",
+    "spanLead": "{from}: {vfrom} vacant districts; {to}: {vto}. In between, {added} districts fell vacant and {ended} stopped being vacant, {filled} of them by being filled. This is not the whole traffic: a district that fell vacant and was filled again between two snapshots does not show.",
+    "yearBar": "{month}: {n} vacant districts",
+    "yearNote": "Each year is shown by its last archived month (under the bar), which is not always December. The asterisk marks the current, unfinished year.",
+    "yearPairsTitle": "From one year to the next",
+    "gap": "a {n}-month step",
+    "flowShort": "{ended} left · {added} new",
+    "legendOut": "No longer vacant",
+    "legendIn": "Newly vacant",
+    "outLine": "Of the vacant districts, {list}.",
+    "inLine": "Newly vacant: {list}.",
+    "out": {
+      "filled": "{n} were filled",
+      "toDissolved": "{n} moved to the terminated-contract list",
+      "leftRegistry": "{n} left the NEAK registry (dissolved or merged)",
+      "unknownFate": "the fate of {n} cannot be told from these two months"
+    },
+    "in": {
+      "fromFilled": "{n} previously filled",
+      "fromDissolved": "{n} back from the terminated-contract list",
+      "newDistrict": "{n} new districts not listed in the earlier month",
+      "unknownOrigin": "{n} whose earlier state cannot be told"
+    },
+    "population": "Population affected: {from} → {to} ({delta}).",
+    "total": "Number of districts: {from} → {to} ({delta}).",
+    "dissolved": "Vacant districts with a terminated contract: {from} → {to}.",
+    "longTerm": "Long-term vacant on OKFŐ's list: {from} → {to}.",
+    "doctorChanges": "Physician changes in filled districts over the same period: {n}.",
+    "countiesTitle": "The largest county movements",
+    "countyFlows": "+{added} / −{ended}",
+    "openCounties": "Counties as a table",
+    "openNew": "Newly vacant districts ({n})",
+    "openEnded": "No longer vacant ({n})",
+    "countiesTableTitle": "Change by county: {from} → {to}",
+    "newTableTitle": "Newly vacant districts: {from} → {to}",
+    "endedTableTitle": "Districts no longer vacant: {from} → {to}",
+    "kind": {
+      "gp": "GP districts",
+      "dental": "Dental districts"
+    },
+    "how": {
+      "filled": "filled",
+      "toDissolved": "to the terminated list",
+      "leftRegistry": "left the registry",
+      "unknownFate": "cannot be told",
+      "fromFilled": "previously filled",
+      "fromDissolved": "back from the terminated list",
+      "newDistrict": "new district",
+      "unknownOrigin": "cannot be told"
+    },
+    "colFrom": "Start month",
+    "colTo": "End month",
+    "colNet": "Change",
+    "colNew": "Newly vacant",
+    "colEnded": "Left",
+    "colSettlement": "Settlement",
+    "colPopulation": "Population",
+    "colHow": "What happened",
+    "colFin": "FIN code",
+    "caveat": "The comparison is made on NEAK's monthly lists, by FIN code. A district that fell vacant and was filled again between two archived months does not show, so every step says how many months it spans. Where a month has no full registry, or the dental terminated-contract list was not archived, the district's fate “cannot be told” — we do not guess. Vacant ≠ unserved: most vacant districts are covered by substitution."
   }
 }

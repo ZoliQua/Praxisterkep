@@ -1882,6 +1882,57 @@ html[data-internal] .no-internal { display: none !important; }
   .churn-bar__value { grid-column: 2; }
 }
 
+/* "Mi változott?": one row per pair of archived months — the vacancies
+   that ended to the left of the axis, the new ones to the right. */
+.change-legend { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 12px 0 6px;
+  font-size: 12.5px; color: var(--ink-dim); }
+.change-legend span::before { content: ''; display: inline-block; width: 10px; height: 10px;
+  border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+.change-legend .is-out::before { background: var(--good); }
+.change-legend .is-in::before { background: var(--bad); }
+.change-rows { display: grid; gap: 4px; margin: 6px 0 14px; }
+.change-row { display: grid; grid-template-columns: minmax(200px, 1.3fr) minmax(130px, auto) 2fr minmax(120px, auto);
+  gap: 12px; align-items: center; width: 100%; text-align: left; font: inherit; font-size: 13px;
+  color: var(--ink); background: transparent; border: 1px solid transparent; border-radius: 8px;
+  padding: 7px 10px; cursor: pointer; }
+.change-row:hover { border-color: var(--line); }
+.change-row.is-on { border-color: var(--accent); background: var(--bg-panel); }
+.change-row__when { color: var(--ink-dim); }
+.change-row.is-on .change-row__when { color: var(--ink); font-weight: 600; }
+.change-row__gap { display: block; font-size: 11.5px; color: var(--ink-faint); }
+.change-row__counts { white-space: nowrap; }
+.change-row__counts b, .change-county b { margin-left: 8px; font-weight: 700; }
+.change-row b.is-up, .change-county b.is-up { color: var(--bad); }
+.change-row b.is-down, .change-county b.is-down { color: var(--good); }
+.change-row__bars { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; height: 12px; }
+.change-row__half { display: flex; background: var(--line); border-radius: 3px; overflow: hidden; }
+.change-row__half.is-out { justify-content: flex-end; }
+.change-row__half i { display: block; height: 100%; }
+.change-row__half.is-out i { background: var(--good); }
+.change-row__half.is-in i { background: var(--bad); }
+.change-row__flows { color: var(--ink-faint); font-size: 12px; white-space: nowrap; }
+.change-detail { border-left: 3px solid var(--accent); padding: 4px 0 4px 14px; margin: 4px 0 12px; }
+.change-detail__facts { margin: 6px 0 10px; padding-left: 18px; color: var(--ink-dim); font-size: 13px; }
+.change-detail__sub { margin: 12px 0 6px; font-size: 13.5px; }
+.change-counties { display: flex; flex-wrap: wrap; gap: 6px; }
+.change-county { display: inline-flex; align-items: baseline; gap: 4px; font-size: 12.5px;
+  border: 1px solid var(--line); border-radius: 6px; padding: 4px 8px; }
+.change-county small { color: var(--ink-faint); margin-left: 4px; }
+.change-years { display: flex; align-items: flex-end; gap: 8px; height: 190px; margin: 16px 0 4px;
+  overflow-x: auto; padding-bottom: 2px; }
+.change-year { flex: 1 0 54px; display: flex; flex-direction: column; align-items: center; height: 100%;
+  font-size: 12px; }
+.change-year__value { color: var(--ink); font-weight: 600; }
+.change-year__bar { flex: 1; width: 60%; display: flex; align-items: flex-end; }
+.change-year__bar i { display: block; width: 100%; border-radius: 3px 3px 0 0; background: var(--accent); }
+.change-year__label { color: var(--ink); margin-top: 4px; }
+.change-year__month { color: var(--ink-faint); font-size: 10.5px; text-align: center; }
+@media (max-width: 640px) {
+  .change-row { grid-template-columns: 1fr auto; }
+  .change-row__bars { grid-column: 1 / -1; }
+  .change-row__flows { grid-column: 1 / -1; }
+}
+
 /* The settlement page's age split and its year-on-year change. */
 .tp-ages { display: flex; flex-wrap: wrap; gap: 26px; margin: 10px 0 6px; }
 .tp-age { margin: 0; display: flex; flex-direction: column; gap: 6px; min-width: 240px; }

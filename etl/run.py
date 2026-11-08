@@ -363,6 +363,13 @@ def main() -> None:
                                        f"{r['kinds']['dental']['recentChanges']} dental "
                                        "changes in the last year"),
              needs=("tenure",), output=ROOT / "data" / "fluctuation.json"),
+        # what changed between the archived months: month by month this
+        # year, year by year before it (elemzo.html, "Mi változott?")
+        Step("changes", "month-to-month and year-to-year changes",
+             simple("changes",
+                    describe=lambda r: f", {len(r['kinds']['gp']['monthly'])} GP and "
+                                       f"{len(r['kinds']['dental']['monthly'])} dental month pairs"),
+             needs=("fluctuation",), output=ROOT / "data" / "changes.json"),
         # outcomes and circumstances, from outside the health registers:
         # what a vacancy costs (deaths), and where it is hardest to fill
         # (income, work, people leaving)
