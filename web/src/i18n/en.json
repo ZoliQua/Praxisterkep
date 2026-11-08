@@ -1263,6 +1263,9 @@
     },
     "sideNav": "Contents",
     "groupKicker": "Analysis",
+    "pageTitle": "Praxistérkép — analysis",
+    "partTitle": "Praxistérkép — analysis: {part}",
+    "partsLabel": "Parts of the analysis",
     "group": {
       "national": "The national picture",
       "changes": "What changed?",
@@ -2676,6 +2679,36 @@
       "countyHeading": "By county",
       "caveat": "The groups do not differ at random: a granted district was chosen by a doctor who wanted to work there, so the gap is not the grant's effect alone. Matching is by surgery address; where one address hosts several districts and the monthly data cannot tell which one the winner took, it is not counted. Winners' names are not shown.",
       "source": "Source: NEAK, winners of the GP and dental settlement and practice-right grants (2019, 2021–2025; the 2020 list is not available), district outcomes from NEAK's monthly data.",
+      "table": {
+        "title": {
+          "settle": "Settlement grant winners",
+          "practice": "Practice-right grant winners"
+        },
+        "allYears": "all years",
+        "unknown": "district not identifiable",
+        "open": "The list of winners",
+        "hint": "Click a year, a county or a figure to open the winners behind it: settlement, the surgery address NEAK published, the district code and where it stands today. Winners’ names are not shown.",
+        "sources": "Source",
+        "sourcesText": "NEAK’s lists of winners (PDF):"
+      },
+      "col": {
+        "year": "Year",
+        "settlement": "Settlement",
+        "district": "District (járás)",
+        "address": "Surgery address (NEAK)",
+        "part": "Where the district stands today",
+        "vacantSince": "Vacant since",
+        "contract": "Signed a contract",
+        "matchedBy": "How it was matched",
+        "fins": "District code (FIN)",
+        "seq": "Number on NEAK’s list"
+      },
+      "matchedBy": {
+        "vacant": "on the list of vacant districts",
+        "registry": "in the provider registry",
+        "ambiguous": "shared surgery address, several possible districts",
+        "none": "not found"
+      },
       "matchedHeading": "Matched to similar districts",
       "matched": {
         "with": "filled with a grant",
@@ -2809,14 +2842,14 @@
     "heading": "What nobody had counted before",
     "vs": "vs.",
     "more": "How we counted →",
-    "gp": "Of GP districts filled with a settlement grant, this share has a doctor today — against this share of matched districts without a grant, vacant as long, in settlements of the same size ({pairs} pairs).",
-    "dental": "Of today's vacant dental districts, this many have been empty for ten years or more ({share}). A decade without a dentist of their own.",
+    "gp": "Of GP districts filled with a settlement grant, {a}% have a doctor today — against only {b}% of the matched districts without a grant, vacant as long, in settlements of the same size ({pairs} pairs).",
+    "dental": "Of today’s {vacant} vacant dental districts, {n} have been empty for ten years or more ({share}) — a decade without a dentist of their own.",
     "europe": {
       "heading": "Against the rest of Europe",
       "kicker": "Europe",
-      "gp": "practising GPs per 100,000 people in Hungary ({year}), against the regional median: rank {rank} of the {of} countries in the region that report it; the most: {best}, {bestValue}.",
-      "dental": "of adults saw a dentist within a year ({year}), only {rural} in rural areas — against this EU figure. Rank {rank} of {of} countries in the region.",
-      "dentalMedian": "of adults saw a dentist within a year ({year}), only {rural} in rural areas, against the regional median. Rank {rank} of {of} countries in the region.",
+      "gp": "Hungary has {value} practising GPs per 100,000 people ({year}); the regional median is {median}. Rank {rank} of the {of} countries in the region that report it; the most: {best}, {bestValue}.",
+      "dental": "The share of adults who saw a dentist within a year is {value} in Hungary ({year}), only {rural} in rural areas — {eu} in the EU. Rank {rank} of {of} countries in the region.",
+      "dentalMedian": "The share of adults who saw a dentist within a year is {value} in Hungary ({year}), only {rural} in rural areas — the regional median is {median}. Rank {rank} of {of} countries in the region.",
       "more": "The European comparison →"
     }
   },

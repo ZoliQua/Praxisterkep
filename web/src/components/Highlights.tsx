@@ -38,7 +38,12 @@ export function Highlights() {
             <span className="highlight__vs">{t('highlights.vs')}</span>
             <b className="is-dim">{formatPercent(gp.matchedFilled, 0)}</b>
           </span>
-          <span className="highlight__text">{t('highlights.gp', { pairs: formatNumber(gp.pairs) })}</span>
+          <span className="highlight__text">{t('highlights.gp', {
+            // the template carries the "%" itself, so its case ending never
+            // hangs on a number
+            a: formatNumber(Math.round(gp.grantsFilled * 100)),
+            b: formatNumber(Math.round(gp.matchedFilled * 100)),
+            pairs: formatNumber(gp.pairs) })}</span>
           <span className="highlight__more">{t('highlights.more')}</span>
         </a>
         <a className="highlight" href={contextHref('/elemzo.html#tulel')}>
@@ -48,6 +53,7 @@ export function Highlights() {
             <span className="highlight__vs">/ {formatNumber(dental.vacant)}</span>
           </span>
           <span className="highlight__text">{t('highlights.dental', {
+            vacant: formatNumber(dental.vacant), n: formatNumber(dental.tenYears),
             share: formatPercent(dental.tenYears / dental.vacant, 0) })}</span>
           <span className="highlight__more">{t('highlights.more')}</span>
         </a>

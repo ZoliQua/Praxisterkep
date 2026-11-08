@@ -40,7 +40,7 @@ export function EuropeHighlights() {
             <b className="is-dim">{f(gp, gp.median)}</b>
           </span>
           <span className="highlight__text">{t('highlights.europe.gp', {
-            year: gp.year, rank: gp.rank, of: gp.of,
+            value: f(gp, gp.value), median: f(gp, gp.median), year: gp.year, rank: gp.rank, of: gp.of,
             best: t(`europe.country.${gp.best.geo}`), bestValue: f(gp, gp.best.value) })}</span>
           <span className="highlight__more">{t('highlights.europe.more')}</span>
         </a>
@@ -52,7 +52,8 @@ export function EuropeHighlights() {
             <b className="is-dim">{dental.eu ? f(dental, dental.eu.value) : f(dental, dental.median)}</b>
           </span>
           <span className="highlight__text">{t(dental.eu ? 'highlights.europe.dental' : 'highlights.europe.dentalMedian', {
-            year: dental.year, rank: dental.rank, of: dental.of,
+            value: f(dental, dental.value), eu: dental.eu ? f(dental, dental.eu.value) : '–',
+            median: f(dental, dental.median), year: dental.year, rank: dental.rank, of: dental.of,
             rural: dental.rural ? f(dental, dental.rural.value) : '–' })}</span>
           <span className="highlight__more">{t('highlights.europe.more')}</span>
         </a>

@@ -345,6 +345,7 @@ function streetBlock(profile, opts = {}) {
 // the one menu (src/lib/siteNav.json) and its Hungarian labels, so these
 // 3177 static pages cannot disagree with the app about which pages exist
 const nav = JSON.parse(readFileSync(join(here, '..', 'src', 'lib', 'siteNav.json'), 'utf8'));
+const pageSections = JSON.parse(readFileSync(join(here, '..', 'src', 'lib', 'pageSections.json'), 'utf8'));
 const hu = JSON.parse(readFileSync(join(here, '..', 'src', 'i18n', 'hu.json'), 'utf8'));
 const en = JSON.parse(readFileSync(join(here, '..', 'src', 'i18n', 'en.json'), 'utf8'));
 const DICTS = { hu, en };
@@ -2049,6 +2050,8 @@ const urls = ['/', '/megye.html', '/jaras.html', '/elemzo.html', '/europa.html',
     .map((c) => `/megye.html?m=${encodeURIComponent(c)}`))
   .concat([...districts.byName.keys()].sort()
     .map((n) => `/jaras.html?jar=${encodeURIComponent(n)}`))
+  // the six parts of the analysis page, under ?resz= (lib/analysisParts.ts)
+  .concat(pageSections.analysis.map((p) => `/elemzo.html?resz=${p.slug}`))
   .concat(profiles.settlements.map((p) => `/telepules/${p.slug}/`))
   .concat(profiles.settlements.map((p) => `/en/telepules/${p.slug}/`));
 writeFileSync(join(dist, 'sitemap.xml'),

@@ -45,6 +45,8 @@ describe('canonical addresses', () => {
     expect(canonical('/jaras.html?m=B%C3%A9k%C3%A9s&tel=bekescsaba&jar=Devecseri'))
       .toBe('https://praxisterkep.hu/jaras.html?jar=Devecseri');
     expect(canonical('/megye.html')).toBe('https://praxisterkep.hu/megye.html');
+    expect(canonical('/elemzo.html?k=dental&resz=elerhetoseg&m=Vas'))
+      .toBe('https://praxisterkep.hu/elemzo.html?resz=elerhetoseg');
   });
 
   it('keeps the language, and names both', () => {

@@ -1263,6 +1263,9 @@
     },
     "sideNav": "Tartalom",
     "groupKicker": "Elemző",
+    "pageTitle": "Praxistérkép — elemző",
+    "partTitle": "Praxistérkép — elemző: {part}",
+    "partsLabel": "Az elemző részei",
     "group": {
       "national": "Országos kép",
       "changes": "Mi változott?",
@@ -2676,6 +2679,36 @@
       "countyHeading": "Megyénként",
       "caveat": "A két csoport nem véletlenül különbözik: a támogatott körzetet egy orvos választotta, mert ott akart dolgozni, így a különbség nem csak a támogatás hatása. A párosítás a rendelő címén alapul; ahol egy címen több körzet működik (egészségház), és a havi adatokból nem dönthető el, melyiket töltötte be a nyertes, ott nem számolunk. A nyertesek nevét nem közöljük.",
       "source": "Forrás: NEAK, háziorvosi és fogorvosi letelepedési, illetve praxisjog-vásárlási pályázatok nyertesei (2019, 2021–2025; a 2020-as lista nem elérhető), a körzetek sorsa a havi NEAK-adatokból.",
+      "table": {
+        "title": {
+          "settle": "A letelepedési támogatás nyertesei",
+          "practice": "A praxisjog-vásárlási támogatás nyertesei"
+        },
+        "allYears": "minden év",
+        "unknown": "nem azonosítható körzet",
+        "open": "A nyertesek listája",
+        "hint": "Egy évre, megyére vagy számra kattintva megnyílik a mögötte álló nyertesek listája: település, a NEAK által közölt rendelőcím, a körzet kódja és hogy hol tart ma. A nyertesek nevét nem közöljük.",
+        "sources": "Forrás",
+        "sourcesText": "A NEAK nyerteslistái (PDF):"
+      },
+      "col": {
+        "year": "Év",
+        "settlement": "Település",
+        "district": "Járás",
+        "address": "Rendelő címe (NEAK)",
+        "part": "Hol tart ma a körzet",
+        "vacantSince": "Betöltetlen volt ekkortól",
+        "contract": "Szerződést kötött",
+        "matchedBy": "Hogyan azonosítottuk",
+        "fins": "Körzetkód (FIN)",
+        "seq": "Sorszám a NEAK-listán"
+      },
+      "matchedBy": {
+        "vacant": "a betöltetlen körzetek listáján",
+        "registry": "a szolgáltatói nyilvántartásban",
+        "ambiguous": "közös rendelőcím, több lehetséges körzet",
+        "none": "nem találtuk meg"
+      },
       "matchedHeading": "Hasonló körzetekhez illesztve",
       "matched": {
         "with": "támogatással betöltött körzet",
@@ -2809,14 +2842,14 @@
     "heading": "Amit eddig senki nem számolt ki",
     "vs": "vs.",
     "more": "Hogyan számoltuk? →",
-    "gp": "A letelepedési támogatással betöltött háziorvosi körzetek ennyiében van ma is orvos — a hozzájuk illesztett, ugyanannyi ideje üres, hasonló méretű településen lévő, támogatás nélküli körzetekben csak ennyiben ({pairs} pár).",
-    "dental": "A ma betöltetlen fogorvosi körzetek közül ennyi már legalább tíz éve üres ({share}). Egy évtizede nincs saját fogorvosuk.",
+    "gp": "A letelepedési támogatással betöltött háziorvosi körzetek {a}%-ában ma is van orvos — a hozzájuk illesztett, ugyanannyi ideje üres, hasonló méretű településen lévő, támogatás nélküli körzetekben csak {b}%-ban ({pairs} pár).",
+    "dental": "A ma betöltetlen {vacant} fogorvosi körzet közül {n} már legalább tíz éve üres ({share}) — egy évtizede nincs saját fogorvosuk.",
     "europe": {
       "heading": "Európai összevetésben",
       "kicker": "Európa",
-      "gp": "praktizáló háziorvos jut 100 ezer lakosra Magyarországon ({year}), szemben a régió mediánjával. A régió {of} adatot közlő országa közül ez a {rank}. hely; a legtöbb: {best}, {bestValue}.",
-      "dental": "a felnőttek ennyi része volt fogorvosnál egy év alatt ({year}), vidéken csak {rural} — az EU-ban ennyi. A régió {of} országa közül ez a {rank}. hely.",
-      "dentalMedian": "a felnőttek ennyi része volt fogorvosnál egy év alatt ({year}), vidéken csak {rural}, szemben a régió mediánjával. A régió {of} országa közül ez a {rank}. hely.",
+      "gp": "Magyarországon {value} praktizáló háziorvos jut 100 ezer lakosra ({year}), a régió mediánja {median}. A régió {of} adatot közlő országa közül ez a {rank}. hely; a legtöbb: {best}, {bestValue}.",
+      "dental": "Az egy év alatt fogorvosnál járt felnőttek aránya Magyarországon {value} ({year}), vidéken csak {rural} — az EU-ban {eu}. A régió {of} országa közül ez a {rank}. hely.",
+      "dentalMedian": "Az egy év alatt fogorvosnál járt felnőttek aránya Magyarországon {value} ({year}), vidéken csak {rural} — a régió mediánja {median}. A régió {of} országa közül ez a {rank}. hely.",
       "more": "Az európai összevetés →"
     }
   },

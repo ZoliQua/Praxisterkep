@@ -1,11 +1,11 @@
 {
   "analysis": [
-    { "key": "national", "items": ["statisztika", "osszevetes", "lefedettseg"] },
-    { "key": "changes", "items": ["valtozas-ev", "valtozas-ho"] },
-    { "key": "future", "items": ["kockazat", "tulel", "elorejelzes", "tamogatasok"] },
-    { "key": "districts", "items": ["jarasok", "halalozas", "jovedelem", "allaskeresok", "nepesseg", "nepszamlalas", "osszefuggesek"] },
-    { "key": "access", "items": ["ugyelet", "tavolsag", "menetido", "surgosseg", "busz"] },
-    { "key": "settlements", "items": ["index", "keresztmetszet", "hianyteruletek"] }
+    { "key": "national", "slug": "orszagos", "items": ["statisztika", "osszevetes", "lefedettseg"] },
+    { "key": "changes", "slug": "valtozas", "items": ["valtozas-ev", "valtozas-ho"] },
+    { "key": "future", "slug": "varhato", "items": ["kockazat", "tulel", "elorejelzes", "tamogatasok"] },
+    { "key": "districts", "slug": "jarasok-megyek", "items": ["jarasok", "halalozas", "jovedelem", "allaskeresok", "nepesseg", "nepszamlalas", "osszefuggesek"] },
+    { "key": "access", "slug": "elerhetoseg", "items": ["ugyelet", "tavolsag", "menetido", "surgosseg", "busz"] },
+    { "key": "settlements", "slug": "telepulesek", "items": ["index", "keresztmetszet", "hianyteruletek"] }
   ],
   "europe": [
     { "key": "countries", "items": ["attekintes", "igeny", "munkaero", "vandorlas", "hozzaferes", "eredmeny", "kiadas", "berek", "ketmutato"] },

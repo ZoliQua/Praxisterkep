@@ -24,12 +24,16 @@ function revealAll() {
   listeners.forEach((fn) => fn());
 }
 
+// A part of elemzo.html opened at its top (#csoport-…) is not a jump into
+// the page: its heading is the first thing on it, and nothing below need wait.
+const jumps = () => window.location.hash.length > 1 && !window.location.hash.startsWith('#csoport-');
+
 if (typeof window !== 'undefined') {
   // no observer (an old browser, the test environment): nothing is deferred
-  if (typeof IntersectionObserver === 'undefined' || window.location.hash.length > 1) {
+  if (typeof IntersectionObserver === 'undefined' || jumps()) {
     everything = true;
   }
-  window.addEventListener('hashchange', revealAll);
+  window.addEventListener('hashchange', () => { if (jumps()) revealAll(); });
   window.addEventListener('beforeprint', revealAll);
 } else {
   everything = true;

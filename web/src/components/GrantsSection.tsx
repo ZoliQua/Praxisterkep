@@ -7,12 +7,19 @@
 // Shared health-centre addresses that cannot be told apart are shown as
 // their own colour and kept out of every share — "one of the five has a
 // doctor" would flatter the grant.
+//
+// Every count opens the winners behind it: a year, a county, a share — the
+// list NEAK published, matched to a district, without the doctor's name.
 import { useState } from 'react';
 import { t } from '../lib/i18n';
 import { formatNumber, formatPercent } from '../lib/format';
 import { districtHref, useOutcomes } from '../lib/outcomes';
 import { DistrictMap } from './charts/DistrictMap';
 import { StackedBars } from './charts/StackedBars';
+import { DataTableModal } from './DataTableModal';
+import {
+  GRANT_COLUMNS, grantFileKey, grantPart, grantRows, useGrantFile, type GrantWinner,
+} from '../lib/grants';
 
 const ORDER = ['filled', 'vacant', 'gone', 'ambiguous', 'unmatched', 'noContract'];
 const COLORS: Record<string, string> = {
@@ -37,11 +44,53 @@ function partsOf(list: Winner[]): Record<string, number> {
 }
 type Programme = 'settle' | 'practice';
 
+/** Which winners a table shows; every field left out means all of them. */
+interface Pick { year?: number; county?: string; parts?: string[]; labelKey?: string }
+
+function GrantTable({ pick, kind, prog, onClose }: {
+  pick: Pick | null; kind: Kind; prog: Programme; onClose: () => void;
+}) {
+  const file = useGrantFile(pick !== null);
+  const list: GrantWinner[] = (file?.kinds[kind].winners ?? []).filter((w) => w.programme === prog
+    && (pick?.year === undefined || w.year === pick.year)
+    && (pick?.county === undefined || w.county === pick.county)
+    && (!pick?.parts || pick.parts.includes(grantPart(w))));
+  const years = [...new Set(list.map((w) => w.year))].sort();
+  const where = [t(`outcomes.grants.kind.${kind}`),
+    pick?.year !== undefined ? String(pick.year) : t('outcomes.grants.table.allYears'),
+    ...(pick?.county ? [pick.county] : []),
+    ...(pick?.labelKey ? [t(pick.labelKey)] : [])];
+  const slug = [kind, prog, pick?.year ?? 'osszes', pick?.county, pick?.parts?.join('-')]
+    .filter(Boolean).join('-').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^\w-]+/g, '-');
+  return (
+    <DataTableModal open={pick !== null} onClose={onClose}
+      title={t(`outcomes.grants.table.title.${prog}`)} subtitle={where.join(' · ')}
+      rows={grantRows(list)} columns={GRANT_COLUMNS} countUnit="rows"
+      filename={`praxisterkep-tamogatasok-${slug}`}
+      above={file ? {
+        label: t('outcomes.grants.table.sources'),
+        render: () => (
+          <p className="section__explain">
+            {t('outcomes.grants.table.sourcesText')}{' '}
+            {years.map((y, i) => {
+              const f = file.files[grantFileKey({ programme: prog, kind, year: y })];
+              return f ? (
+                <span key={y}>{i > 0 && ' · '}
+                  <a href={f.url} target="_blank" rel="noopener noreferrer">{y}</a></span>
+              ) : null;
+            })}
+          </p>
+        ),
+      } : undefined} />
+  );
+}
+
 export function GrantsSection() {
   const o = useOutcomes();
   const [kind, setKind] = useState<Kind>('gp');
   const [programme, setProgramme] = useState<Programme>('settle');
   const [picked, setPicked] = useState<string | null>(null);
+  const [table, setTable] = useState<Pick | null>(null);
   if (!o) return null;
   const g = o.grants.kinds[kind];
   const prog: Programme = kind === 'dental' ? 'settle' : programme;
@@ -87,20 +136,28 @@ export function GrantsSection() {
       <p className="section__explain">{t(`outcomes.grants.programmeExplain.${prog}`)}</p>
 
       <div className="outcome__kpis">
-        <div><b>{formatNumber(total.winners)}</b><span>{t('outcomes.grants.kpi.winners')}</span></div>
-        <div><b>{decided ? formatPercent(total.filled / decided) : '–'}</b>
-          <span>{t('outcomes.grants.kpi.filled', { n: formatNumber(total.filled), of: formatNumber(decided) })}</span></div>
+        <button type="button" className="is-pickable" onClick={() => setTable({})}
+          title={t('outcomes.grants.table.open')}>
+          <b>{formatNumber(total.winners)}</b><span>{t('outcomes.grants.kpi.winners')}</span></button>
+        <button type="button" className="is-pickable" title={t('outcomes.grants.table.open')}
+          onClick={() => setTable({ parts: ['filled'], labelKey: 'outcomes.grants.part.filled' })}>
+          <b>{decided ? formatPercent(total.filled / decided) : '–'}</b>
+          <span>{t('outcomes.grants.kpi.filled', { n: formatNumber(total.filled), of: formatNumber(decided) })}</span></button>
         {prog === 'settle' && cmpShares.length > 0 && (
           <div><b>{formatPercent(Math.min(...cmpShares), 0)}–{formatPercent(Math.max(...cmpShares), 0)}</b>
             <span>{t('outcomes.grants.kpi.comparison')}</span></div>
         )}
-        <div><b>{formatNumber(total.ambiguous + total.unmatched)}</b>
-          <span>{t('outcomes.grants.kpi.unknown')}</span></div>
+        <button type="button" className="is-pickable" title={t('outcomes.grants.table.open')}
+          onClick={() => setTable({ parts: ['ambiguous', 'unmatched'], labelKey: 'outcomes.grants.table.unknown' })}>
+          <b>{formatNumber(total.ambiguous + total.unmatched)}</b>
+          <span>{t('outcomes.grants.kpi.unknown')}</span></button>
       </div>
 
       <h3 className="outcome__sub">{t('outcomes.grants.yearsHeading', { month: g.latestMonth })}</h3>
       <StackedBars rows={years.map((r) => ({ key: String(r.year), label: String(r.year), parts: parts(r) }))}
-        order={ORDER} colors={COLORS} labelPrefix="outcomes.grants.part" />
+        order={ORDER} colors={COLORS} labelPrefix="outcomes.grants.part"
+        onPick={(y) => setTable({ year: Number(y) })} />
+      <p className="extra-note">{t('outcomes.grants.table.hint')}</p>
 
       {prog === 'settle' && g.matched.pairs > 0 && (
         <div className="outcome__callout grant-matched">
@@ -132,7 +189,8 @@ export function GrantsSection() {
               const a = dec ? r.filled / dec : null;
               const b = c && c.districts ? (c.filled ?? 0) / c.districts : null;
               return (
-                <div key={r.year} className="grant-compare__row">
+                <button type="button" key={r.year} className="grant-compare__row is-pickable"
+                  onClick={() => setTable({ year: r.year })}>
                   <span className="grant-compare__year">{r.year}</span>
                   <span className="grant-compare__bars">
                     <span title={t('outcomes.grants.compareWith', { share: a === null ? '–' : formatPercent(a), n: dec })}>
@@ -144,7 +202,7 @@ export function GrantsSection() {
                       <b>{b === null ? '–' : formatPercent(b)}</b>
                     </span>
                   </span>
-                </div>
+                </button>
               );
             })}
             <div className="grant-compare__legend">
@@ -169,9 +227,10 @@ export function GrantsSection() {
             .sort((a, b) => Object.values(b.parts).reduce((x, y) => x + y, 0)
               - Object.values(a.parts).reduce((x, y) => x + y, 0))}
             order={ORDER} colors={COLORS} labelPrefix="outcomes.grants.part"
-            selected={picked} onPick={setPicked} />
+            selected={picked} onPick={(c) => { setPicked(c); setTable({ county: c }); }} />
         </div>
       </div>
+      <GrantTable pick={table} kind={kind} prog={prog} onClose={() => setTable(null)} />
       <p className="notice">{t('outcomes.grants.caveat')}</p>
       <p className="section__source">{t('outcomes.grants.source')}{' '}
         <a href={o.grants.sourceUrl} target="_blank" rel="noopener noreferrer">neak.gov.hu</a></p>
