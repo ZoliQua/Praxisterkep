@@ -7,8 +7,11 @@
 // nothing more: without storage the defaults simply come back).
 import { contentWidth, FONT_NAMES, renderPdf } from './render';
 import { translator } from './i18n';
+import { month } from './format';
 import { countyReport, districtReport, settlementReport, type Ctx } from './report';
-import { analysisInput, countyInput, districtInput, europeInput, settlementInput } from './sources';
+import {
+  analysisInput, changesInput, countyInput, districtInput, europeInput, settlementInput,
+} from './sources';
 import { PALETTES } from './charts';
 import {
   defaultOptions, SECTIONS, type BranchChoice, type Catalog, type Lang, type Level, type PdfOptions,
@@ -27,6 +30,9 @@ export interface ExportRequest {
   /** the European report: the group and the country the page has open */
   group?: 'all' | 'cee' | 'v4';
   focus?: string;
+  /** the "Mi változott?" report: the stretch the page has open */
+  from?: string;
+  to?: string;
 }
 
 const STORE = 'praxisterkep.pdf';
@@ -67,6 +73,10 @@ async function build(req: ExportRequest, o: PdfOptions): Promise<{ report: Repor
     const [{ analysisReport }, input] = await Promise.all([import('./analysisReport'), analysisInput()]);
     return { report: analysisReport(c, input), month: input.dataMonth };
   }
+  if (req.level === 'changes') {
+    const [{ changesReport }, input] = await Promise.all([import('./changesReport'), changesInput()]);
+    return { report: changesReport(c, input), month: input.changes.dataMonth };
+  }
   if (req.level === 'europe') {
     const [{ europeReport }, raw] = await Promise.all([import('./europeReport'), europeInput()]);
     return { report: europeReport(c, raw), month: raw.built.slice(0, 7) };
@@ -83,7 +93,8 @@ async function catalogOf(req: ExportRequest, T: (k: string, p?: Record<string, s
     return { catalog: europeCatalog(raw, T), defaults: europeDefaults(raw), groups: raw.groups };
   }
   const ids = SECTIONS[req.level].filter((s) => s !== 'notes');
-  const label = (s: string) => T(req.level === 'analysis' ? `pdf.analysis.section.${s}` : `pdf.section.${s}`);
+  const label = (s: string) => T(req.level === 'analysis' ? `pdf.analysis.section.${s}`
+    : req.level === 'changes' ? `pdf.changes.section.${s}` : `pdf.section.${s}`);
   return { catalog: { groups: [{ title: '', items: ids.map((id) => ({ id, label: label(id) })) }] }, defaults: ids };
 }
 
@@ -108,12 +119,22 @@ export async function openPdfDialog(req: ExportRequest): Promise<void> {
   const ids = catalog.groups.flatMap((g) => g.items.map((i) => i.id));
   const stored = remembered(level);
   const base = { ...defaultOptions(level, req.lang, req.branch ?? 'both'), sections: defaults,
-    ...(level === 'analysis' ? { settlementLimit: 20 } : {}) };
+    ...(level === 'analysis' ? { settlementLimit: 20 } : {}),
+    ...(level === 'changes' ? { settlementLimit: 50 } : {}) };
+  // the stretch a "Mi változott?" report may cover: the ends of the monthly pairs
+  const periodMonths = level === 'changes'
+    ? await Promise.all([import('./changesReport'), changesInput()]).then(([m, input]) => m.periodMonths(input.changes))
+    : [];
   const o: PdfOptions = { ...base, ...stored, lang: req.lang,
     // a section this level no longer offers is dropped, a new one is not
     sections: (stored.sections ?? base.sections).filter((s) => ids.includes(s)),
     // the European page's own choice of countries leads, not the last export's
-    ...(level === 'europe' ? { group: req.group ?? stored.group ?? 'cee', focus: req.focus ?? 'HU' } : {}) };
+    ...(level === 'europe' ? { group: req.group ?? stored.group ?? 'cee', focus: req.focus ?? 'HU' } : {}),
+    // and the stretch is the one the page has open, never the last export's
+    ...(level === 'changes' ? {
+      fromMonth: req.from && periodMonths.includes(req.from) ? req.from : periodMonths[periodMonths.length - 2],
+      toMonth: req.to && periodMonths.includes(req.to) ? req.to : periodMonths[periodMonths.length - 1],
+    } : { fromMonth: undefined, toMonth: undefined }) };
   const opener = document.activeElement as HTMLElement | null;
   let uid = 0;
   const id = () => `pdfx-${(uid += 1)}`;
@@ -173,6 +194,36 @@ export async function openPdfDialog(req: ExportRequest): Promise<void> {
       el('p', { class: 'pdfx__label' }, T('pdf.dialog.countryGroup')), groupRadios,
       el('p', { class: 'pdfx__label' }, T('pdf.dialog.focus')), focusSel));
   }
+  // the "Mi változott?" report: the first and last month of the stretch
+  const periodControls: Node[] = [];
+  if (level === 'changes' && periodMonths.length > 1) {
+    const fromSel = el('select', { class: 'pdfx__select' });
+    const toSel = el('select', { class: 'pdfx__select' });
+    const fill = () => {
+      fromSel.replaceChildren(...periodMonths.slice(0, -1).map((m) => {
+        const opt = el('option', { value: m }, month(req.lang, m));
+        opt.selected = m === o.fromMonth;
+        return opt;
+      }));
+      toSel.replaceChildren(...periodMonths.filter((m) => m > (o.fromMonth ?? '')).map((m) => {
+        const opt = el('option', { value: m }, month(req.lang, m));
+        opt.selected = m === o.toMonth;
+        return opt;
+      }));
+    };
+    fromSel.addEventListener('change', () => {
+      o.fromMonth = fromSel.value;
+      if (!o.toMonth || o.toMonth <= o.fromMonth) o.toMonth = periodMonths[periodMonths.indexOf(o.fromMonth) + 1];
+      fill();
+    });
+    toSel.addEventListener('change', () => { o.toMonth = toSel.value; });
+    fill();
+    periodControls.push(group(T('pdf.dialog.period'),
+      el('div', { class: 'pdfx__period' },
+        el('label', {}, el('span', { class: 'pdfx__label' }, T('pdf.dialog.periodFrom')), fromSel),
+        el('label', {}, el('span', { class: 'pdfx__label' }, T('pdf.dialog.periodTo')), toSel)),
+      el('p', { class: 'pdfx__hint' }, T('pdf.dialog.periodNote'))));
+  }
   const setAll = (on: boolean) => {
     boxes.forEach((b) => { b.input.checked = on; });
     o.sections = on ? boxes.map((b) => b.s) : [];
@@ -211,12 +262,16 @@ export async function openPdfDialog(req: ExportRequest): Promise<void> {
   const titleId = id();
 
   const form = el('form', { class: 'pdfx__form' },
+    ...periodControls,
     group(T('pdf.dialog.contents'),
       el('div', { class: 'pdfx__bulk' }, allBtn, noneBtn),
       sectionGrid,
       ...(level === 'county' || level === 'district' ? [el('p', { class: 'pdfx__label' }, T('pdf.dialog.settlementLimit')),
         radio('settlementLimit', [['25', T('pdf.dialog.top', { n: 25 })], ['50', T('pdf.dialog.top', { n: 50 })],
           ['0', T('pdf.dialog.allSettlements')]])] : []),
+      ...(level === 'changes' ? [el('p', { class: 'pdfx__label' }, T('pdf.dialog.listLimit')),
+        radio('settlementLimit', [['25', T('pdf.dialog.first', { n: 25 })], ['50', T('pdf.dialog.first', { n: 50 })],
+          ['0', T('pdf.dialog.allRows')]])] : []),
       ...(level === 'analysis' ? [el('p', { class: 'pdfx__label' }, T('pdf.dialog.rankLimit')),
         radio('settlementLimit', [['10', T('pdf.dialog.first', { n: 10 })], ['20', T('pdf.dialog.first', { n: 20 })],
           ['0', T('pdf.dialog.allRows')]])] : []),

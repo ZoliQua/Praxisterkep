@@ -2,7 +2,7 @@
 // produce before any PDF library sees it. The report is plain data, so the
 // builders can be tested without rendering a page.
 
-export type Level = 'county' | 'district' | 'settlement' | 'analysis' | 'europe';
+export type Level = 'county' | 'district' | 'settlement' | 'analysis' | 'europe' | 'changes';
 export type Lang = 'hu' | 'en';
 export type FontKey = 'plex' | 'serif' | 'roboto';
 export type SizeKey = 'small' | 'normal' | 'large';
@@ -32,6 +32,9 @@ export interface PdfOptions {
   /** the European report: which countries are compared, and which one leads */
   group?: 'all' | 'cee' | 'v4';
   focus?: string;
+  /** the "Mi változott?" report: the first and last archived month of the stretch */
+  fromMonth?: string;
+  toMonth?: string;
 }
 
 export type Block =
@@ -87,6 +90,7 @@ export const SECTIONS: Record<Level, string[]> = {
   // the European report's parts are its indicators, read from europe.json;
   // these are the ones around them
   europe: ['overview', 'migration', 'notes'],
+  changes: ['summary', 'context', 'months', 'flows', 'counties', 'types', 'lists', 'notes'],
 };
 
 /** A choice list the dialog shows when a level's parts come from its data. */

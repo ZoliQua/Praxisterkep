@@ -3697,3 +3697,6 @@ body:has(.tp-rail) section[id] { scroll-margin-top: calc(var(--topnav-h, 56px) +
 .pdfx__catgroup .pdfx__grid { grid-template-columns: 1fr; margin-bottom: 4px; }
 .pdfx__catgroup .pdfx__label { margin: 8px 0 2px; font-weight: 700; color: var(--ink); }
 .pdfx__select { padding: 6px 10px; border-radius: 8px; border: 1px solid var(--line-strong); background: var(--bg-raised); color: var(--ink); font: 13.5px var(--font-body); min-width: 220px; }
+.pdfx__period { display: flex; flex-wrap: wrap; gap: 10px 18px; }
+.pdfx__period label { display: flex; flex-direction: column; gap: 4px; }
+.pdfx__period .pdfx__select { min-width: 180px; }

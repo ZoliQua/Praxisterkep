@@ -14,6 +14,7 @@ import {
 } from '../lib/changes';
 import type { Row } from '../lib/eesztTable';
 import { DataTableModal } from './DataTableModal';
+import { PdfButton } from './PdfButton';
 
 type Kind = 'gp' | 'dental';
 
@@ -153,8 +154,14 @@ function PairDetail({ p, kind, slug }: { p: ChangePair; kind: Kind; slug: string
   );
 }
 
-function PairList({ pairs, kind, slug }: { pairs: ChangePair[]; kind: Kind; slug: string }) {
-  const [picked, setPicked] = useState(pairs.length - 1);
+function PairList({ pairs, kind, slug, picked: held, onPick }: {
+  pairs: ChangePair[]; kind: Kind; slug: string;
+  /** the chosen row, when the caller keeps it (the PDF button exports it) */
+  picked?: number; onPick?: (i: number) => void;
+}) {
+  const [own, setOwn] = useState(pairs.length - 1);
+  const picked = held ?? own;
+  const setPicked = onPick ?? setOwn;
   const max = Math.max(1, ...pairs.map((p) => Math.max(p.flows.ended, p.flows.newVacant)));
   const p = pairs[Math.min(picked, pairs.length - 1)];
   return (
@@ -176,20 +183,26 @@ function PairList({ pairs, kind, slug }: { pairs: ChangePair[]; kind: Kind; slug
 export function MonthChanges({ kind: initial }: { kind: Kind }) {
   const data = useChanges();
   const [kind, setKind] = useState<Kind>(initial);
+  const [picked, setPicked] = useState<number | null>(null);
   if (!data) return null;
   const k = data.kinds[kind];
+  const at = Math.min(picked ?? k.monthly.length - 1, k.monthly.length - 1);
   const first = k.monthly[0];
   const last = k.monthly[k.monthly.length - 1];
   return (
     <section className="section container" id="valtozas-ho">
-      <h2 className="section__heading">{t('changes.monthHeading', { year: data.year })}</h2>
-      <KindSwitch kind={kind} setKind={setKind} />
+      <div className="heading-row">
+        <h2 className="section__heading">{t('changes.monthHeading', { year: data.year })}</h2>
+        {/* the report starts on the pair the reader has open; the dialog widens it */}
+        <PdfButton level="changes" from={k.monthly[at].from} to={k.monthly[at].to} />
+      </div>
+      <KindSwitch kind={kind} setKind={(x) => { setKind(x); setPicked(null); }} />
       <p className="section__lead">{t('changes.monthLead', {
         from: formatMonth(first.from), to: formatMonth(last.to),
         vfrom: formatNumber(first.vacantFrom), vto: formatNumber(last.vacantTo),
         pairs: k.monthly.length,
       })}</p>
-      <PairList key={kind} pairs={k.monthly} kind={kind} slug="ho" />
+      <PairList key={kind} pairs={k.monthly} kind={kind} slug="ho" picked={at} onPick={setPicked} />
       <p className="extra-note">{t('changes.caveat')}</p>
     </section>
   );

@@ -7,6 +7,8 @@ import type { OutcomesRaw } from '../lib/outcomes';
 import { rings, type ShapeFeature } from '../lib/projection';
 import type { EuropeRaw } from '../lib/europe';
 import type { AnalysisInput } from './analysisReport';
+import type { ChangesInput } from './changesReport';
+import type { ChangesRaw } from '../lib/changes';
 import type { CountyInput, DistrictInput, SettlementInput } from './report';
 import { dataUrl } from '../lib/dataUrl';
 
@@ -82,4 +84,11 @@ export async function analysisInput(): Promise<AnalysisInput> {
 
 export async function europeInput(): Promise<EuropeRaw> {
   return (await json<EuropeRaw>('europe.json'))!;
+}
+
+/** What changed: the archive's months held against each other, and the long series. */
+export async function changesInput(): Promise<ChangesInput> {
+  const [changes, ts] = await Promise.all([json<ChangesRaw>('changes.json'),
+    json<{ kinds: ChangesInput['timeseries'] }>('timeseries.json')]);
+  return { changes: changes!, timeseries: ts!.kinds };
 }

@@ -2102,7 +2102,7 @@
   },
   "district": {
     "heading": "Járások",
-    "lead": "A megye húsz sor, a település háromezer: a járás az a szint, amiben az emberek élnek — itt van a körzetszékhely, itt van az ügyeleti pont, és innen indul „a legközelebbi város, ahol van fogorvos”. Az ország 174 járása és a főváros 23 kerülete, egyenként.",
+    "lead": "A megyei adatok túl általánosak, a településszintű elemzés pedig túlságosan széttagolt. A járás az a területi egység, ahol a fogászati ellátáshoz való hozzáférés valós különbségei már jól kirajzolódnak: hol érhető el fogorvos, milyen távolságra található a legközelebbi ellátóhely, és biztosított-e a sürgősségi ellátás. Ezért az ország 174 járását és Budapest 23 kerületét egyenként vizsgáljuk.",
     "mapNote": "A térkép a {kind} körzetek betöltetlenségét mutatja járásonként: minél sötétebb, annál nagyobb az arány. A skála teteje a 90. percentilis — ami fölötte van, az ugyanazt a legerősebb színt kapja. Vidd rá az egeret, vagy kattints rá.",
     "allCounties": "Mind a 20 megye",
     "pick": "Járás",
@@ -3846,7 +3846,8 @@
       "district": "Járási jelentés",
       "settlement": "Települési jelentés",
       "analysis": "Országos elemzés",
-      "europe": "Európai összevetés"
+      "europe": "Európai összevetés",
+      "changes": "Havi összevetés"
     },
     "title": {
       "jaras": "{name} járás",
@@ -3857,7 +3858,8 @@
       "district": "jaras",
       "settlement": "telepules",
       "analysis": "elemzes",
-      "europe": "europa"
+      "europe": "europa",
+      "changes": "valtozas"
     },
     "branchLine": {
       "both": "háziorvosi és fogorvosi alapellátás",
@@ -4225,7 +4227,8 @@
         "district": "{name}",
         "settlement": "{name}",
         "analysis": "Országos elemzés",
-        "europe": "Európai összevetés"
+        "europe": "Európai összevetés",
+        "changes": "Mi változott? — hónapról hónapra"
       },
       "contents": "Mi kerüljön bele?",
       "all": "Mind",
@@ -4282,7 +4285,12 @@
       "focus": "Középpontban",
       "rankLimit": "A rangsorok hossza",
       "first": "első {n}",
-      "allRows": "mind"
+      "allRows": "mind",
+      "period": "Időszak",
+      "periodFrom": "Kezdő hónap",
+      "periodTo": "Záró hónap",
+      "periodNote": "Az archivált hónapok közül választhatsz. A háziorvosi és a fogorvosi archívum nem ugyanazokat a hónapokat tartalmazza: egy ág csak azokat a hónappárokat kapja, amelyek teljesen az időszakon belülre esnek.",
+      "listLimit": "A körzetlisták hossza (lakosság szerint)"
     },
     "cards": {
       "gp": "településen nincs szerződött háziorvos",
@@ -4305,7 +4313,8 @@
     },
     "buttonTitleLevel": {
       "analysis": "PDF-jelentés az országos elemzésből",
-      "europe": "PDF-jelentés az európai összevetésből"
+      "europe": "PDF-jelentés az európai összevetésből",
+      "changes": "PDF-jelentés a havi változásokról"
     },
     "analysis": {
       "title": "Magyarország",
@@ -4441,6 +4450,114 @@
       "dataMonth": "Adatállapot: {month} — az Eurostat és az OECD adatbázisai szerint, mutatónként a saját legutóbbi évével.",
       "notesRules": "Egy ország idősora mindig egyetlen kiadótól származik; a praktizáló, a szakmailag aktív és az engedéllyel rendelkező orvos fogalmát nem keverjük; országok között korrelációt nem számolunk. A vándorlást a végzés helye szerint számoljuk, nem nemzetiség szerint, ezért nettó veszteséget nem számolunk.",
       "notesLicence": "Eurostat: újrafelhasználás a forrás megjelölésével. OECD: CC BY 4.0; a feldolgozás és az összevetés a szerző munkája, nem az OECD hivatalos álláspontja."
+    },
+    "changes": {
+      "title": "Mi változott? {from} – {to}",
+      "branch": {
+        "gp": "Háziorvosi körzetek",
+        "dental": "Fogorvosi körzetek"
+      },
+      "section": {
+        "summary": "Összefoglaló",
+        "context": "Tágabb kitekintés",
+        "months": "Hónappárok egyenként",
+        "flows": "Honnan és hová?",
+        "counties": "Megyénként",
+        "types": "Körzettípusonként",
+        "lists": "A körzetek listája"
+      },
+      "noPair": "Ebben az ágban nincs olyan archivált hónappár, amely teljesen {from} és {to} közé esne: a legközelebbi összevetés {a} → {b}. Válassz tágabb időszakot.",
+      "noPairAtAll": "Ebben az ágban nincs archivált hónappár {from} és {to} között.",
+      "summaryLead": "A jelentés a NEAK havi betöltetlenségi listáit veti össze körzetkód (FIN) szerint {from} és {to} között; az időszak {n} hónapot fog át. Minden körzetet végigkövet az időszak archivált hónapjain: ami az elején betöltetlen volt, a végén már nem, az lekerült a listáról; ami fordítva, az felkerült; ami közben mozgott, de a végére visszaállt, azt külön számoljuk.",
+      "summaryUp": "{from} és {to} között a betöltetlen körzetek száma nőtt: {vfrom} helyett {vto}, a változás {net} ({rel}). Az összevetés {pairs} archivált hónappáron alapul.",
+      "summaryDown": "{from} és {to} között a betöltetlen körzetek száma csökkent: {vfrom} helyett {vto}, a változás {net} ({rel}). Az összevetés {pairs} archivált hónappáron alapul.",
+      "summaryFlat": "{from} és {to} között a betöltetlen körzetek száma nem változott ({vfrom} → {vto}), bár körzetek mozogtak. Az összevetés {pairs} archivált hónappáron alapul.",
+      "summaryCodes": "Az időszak végére {added} körzet került fel a betöltetlenek listájára, és {ended} került le róla.",
+      "summaryBack": "Emellett {passing} körzet közben betöltetlenné vált, de a végére már nem volt az, {returned} pedig lekerült, majd visszakerült. Ezért a havi lépések összesen több mozgást mutatnak: {movesAdded} felkerülést és {movesEnded} lekerülést.",
+      "summaryFates": "A lekerült körzetek közül {filled} esetben betöltötték a körzetet, {dissolved} körzet a megszűnt szerződésű listára került, {left} kikerült a NEAK nyilvántartásából, {unknown} esetben pedig a sorsa az archívumból nem állapítható meg.",
+      "summaryOrigins": "A felkerült körzetek közül {filled} korábban betöltött volt, {dissolved} a megszűnt szerződésű listáról jött vissza, {fresh} új körzet volt (az időszak elején még nem szerepelt a nyilvántartásban), {unknown} esetben pedig az előzmény nem állapítható meg.",
+      "fact": {
+        "vacant": "Betöltetlen körzet",
+        "population": "Érintett lakosság (fő)",
+        "total": "Körzetek száma",
+        "rate": "Betöltetlenségi arány",
+        "longTerm": "Tartósan betöltetlen (OKFŐ)",
+        "doctorChanges": "Orvosváltás a betöltött körzetekben"
+      },
+      "contextLead": "Hová illeszkedik az időszak? Az összevetés alapja a Praxistérkép teljes havi archívuma 2019 óta, ugyanazzal a számolással: a betöltetlen körzetek listája, a megszűnt szerződésűek nélkül.",
+      "contextYearAgo": "{now}: {n} betöltetlen körzet; egy évvel korábban ({then}) {v}, a változás {d}.",
+      "contextMonthsAgo": "{now}: {n} betöltetlen körzet; az archívumban a legközelebbi, körülbelül egy évvel korábbi hónap {then}, amikor {v} volt, a változás {d} ({gap} hónap alatt).",
+      "contextYearEnd": "Az előző év utolsó archivált hónapjához ({then}: {v}) képest a változás {d}.",
+      "contextFirst": "Az archívum első hónapjához ({then}: {v}) képest {d}.",
+      "contextRange": "Az archívum {n} hónapja közül a csúcs: {hi} ({hiMonth}), a mélypont: {lo} ({loMonth}).",
+      "contextPace": "Havi átlagos változás az időszakban: {a} körzet; a hosszabb összevetésben ({gap} hónap): {b} körzet.",
+      "contextNote": "Az archívum hónapjai nem egyenletesen követik egymást (a kimaradt hónapokat a NEAK visszamenőleg nem teszi közzé), ezért az egy évvel korábbi összevetés a 12 hónaphoz legközelebbi archivált hónapot használja, és megmondja, hány hónapot fog át. A táblázatban a csillag a folyó, még le nem zárt évet jelöli.",
+      "chart": {
+        "trend": {
+          "gp": "Betöltetlen háziorvosi körzetek, havonta",
+          "dental": "Betöltetlen fogorvosi körzetek, havonta"
+        },
+        "trendCaption": "Forrás: a NEAK havi listái, Praxistérkép-archívum. A vonal az archivált hónapokat köti össze; a kimaradt hónapok nem látszanak.",
+        "net": {
+          "gp": "Nettó változás hónappáronként — háziorvosi körzetek",
+          "dental": "Nettó változás hónappáronként — fogorvosi körzetek"
+        },
+        "netCaption": "Pozitív érték: több körzet került fel a betöltetlenek listájára, mint amennyi lekerült róla.",
+        "counties": {
+          "gp": "A legnagyobb megyei változások — háziorvosi körzetek",
+          "dental": "A legnagyobb megyei változások — fogorvosi körzetek"
+        },
+        "countiesCaption": "A betöltetlen körzetek számának nettó változása az időszak elejétől a végéig."
+      },
+      "line": {
+        "vacant": "Betöltetlen körzet"
+      },
+      "col": {
+        "month": "Utolsó archivált hónap",
+        "vacant": "Betöltetlen",
+        "population": "Lakos",
+        "longTerm": "Tartósan betöltetlen",
+        "pair": "Hónappár",
+        "span": "Hónap",
+        "start": "Kezdet",
+        "end": "Vég",
+        "net": "Változás",
+        "new": "Felkerült",
+        "ended": "Lekerült",
+        "filled": "Betöltötték",
+        "toDissolved": "Megszűnt listára",
+        "left": "Nyilvántartásból ki",
+        "unknown": "Nem állapítható meg",
+        "doctors": "Orvosváltás",
+        "fate": "Hová került?",
+        "origin": "Honnan jött?",
+        "stretch": "Az időszak egészére",
+        "moves": "Havi lépések összege",
+        "what": "Mi történt?",
+        "when": "Mikor látszott",
+        "fin": "FIN-kód",
+        "firstMove": "Első lépés",
+        "lastMove": "Utolsó lépés"
+      },
+      "gap": "{n} hónapos lépés",
+      "monthsLead": "Minden archivált hónappár külön sorban: hány körzet volt betöltetlen az elején és a végén, hány került fel a listára és le róla, és a lekerültekkel mi történt. A több hónapot átfogó lépéseknél a közben betöltött és újra megüresedett körzetek nem látszanak.",
+      "monthsNote": "A hónappár év.hónap alakban szerepel. A „Hónap” oszlop azt mutatja, hány hónapot fog át a lépés: ahol egynél többet, ott a közben betöltött és újra megüresedett körzetek nem látszanak. A „Mikor látszott” mindig a lépés záró hónapja.",
+      "flowsLead": "A lekerült és a felkerült körzetek sorsa kétféleképpen: az időszak egészére nézve (a körzet első és utolsó lépése szerint), és a havi lépések összegeként, amelyben egy többször mozgó körzet többször szerepel.",
+      "endedTotal": "Összesen lekerült",
+      "addedTotal": "Összesen felkerült",
+      "flowsBack": "Közben mozgott, de a végére visszaállt: {passing} körzet átmenetileg vált betöltetlenné, {returned} körzet átmenetileg került le a listáról.",
+      "countiesLead": "A betöltetlen körzetek megyénként az időszak elején és végén, a felkerült és a lekerült körzetekkel; elöl a legnagyobb elmozdulás.",
+      "country": "Ország összesen",
+      "typesLead": "Felnőtt, gyermek, vegyes és iskolai körzetek: hány volt betöltetlen az időszak elején és végén.",
+      "listsLead": "Körzetenként, a körzet lakosságszáma szerint rendezve. A FIN a NEAK körzetkódja. Betöltetlen körzetnél orvosnév soha nem szerepel.",
+      "list": {
+        "added": "Felkerült a betöltetlenek listájára, és az időszak végén is rajta volt: {n} körzet.",
+        "ended": "Lekerült a betöltetlenek listájáról, és az időszak végén sem volt rajta: {n} körzet.",
+        "passing": "Átmenetileg betöltetlen (felkerült, majd lekerült): {n} körzet.",
+        "returned": "Átmenetileg lekerült (lekerült, majd visszakerült): {n} körzet."
+      },
+      "listCut": "A lista első {shown} sora látszik, összesen {all}; a teljes listához a PDF-ablakban válaszd a „mind” lehetőséget.",
+      "notesMethod": "Módszer: a jelentés a changes.json hónappárjait használja (etl/changes.py); mindegyikre igaz, hogy kezdő betöltetlen − lekerült + felkerült = záró betöltetlen, országosan és megyénként is. Az időszakra ugyanezt körzetkódonként újra ellenőrizzük, különben a jelentés nem készül el. A tágabb kitekintés a timeseries.json havi sorából készül. Részletes leírás: praxisterkep.hu/modszertan.html."
     }
   },
   "story": {

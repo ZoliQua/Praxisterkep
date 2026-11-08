@@ -12,6 +12,7 @@ import { rings } from '../lib/projection';
 import { defaultOptions, SECTIONS, type Lang, type Level, type Report } from './types';
 import { analysisReport } from './analysisReport';
 import { europeDefaults, europeReport } from './europeReport';
+import { changesReport, periodMonths, periodOf } from './changesReport';
 
 const style: ChartStyle = { width: 400, palette: PALETTES.site, font: 'PlexSans', grid: true,
   labels: true, size: 'normal' };
@@ -231,5 +232,49 @@ describe('the national reports, from the real data', () => {
     expect(r.title).toBe('Poland and Europe');
     expect(r.sections.map((s) => s.id)).toEqual(['workforce', 'notes']);
     expect(r.sections[0].blocks.filter((b) => b.kind === 'h3')).toHaveLength(1);
+  });
+});
+
+describe('the "Mi változott?" report, from the real data', () => {
+  const changes = data('changes.json');
+  const input = { changes, timeseries: data('timeseries.json').kinds };
+  const months = periodMonths(changes);
+
+  it('follows every code through a stretch and lands on the end month’s count', () => {
+    for (const kind of ['gp', 'dental'] as const) {
+      const pairs = changes.kinds[kind].monthly;
+      const p = periodOf(pairs, pairs[0].from, pairs[pairs.length - 1].to)!;
+      expect(p.vacantFrom - p.ended.length + p.added.length).toBe(p.vacantTo);
+      expect(p.vacantTo).toBe(pairs[pairs.length - 1].vacantTo);
+      // the monthly steps can only count a code more often, never less
+      expect(p.moves.added).toBeGreaterThanOrEqual(p.added.length);
+      expect(p.moves.added - p.moves.ended).toBe(p.added.length - p.ended.length);
+      // one pair alone is exactly that pair
+      const last = pairs[pairs.length - 1];
+      const one = periodOf(pairs, last.from, last.to)!;
+      expect([one.added.length, one.ended.length]).toEqual([last.flows.newVacant, last.flows.ended]);
+      expect(one.passing.length + one.returned.length).toBe(0);
+    }
+  });
+
+  it('says so when a branch has no pair inside the stretch', () => {
+    expect(periodOf(changes.kinds.gp.monthly, '2026-05', '2026-07')).toBeNull();
+  });
+
+  for (const lang of ['hu', 'en'] as const) {
+    it(`changes (${lang}): every section over the whole year, nothing left unfilled`, () => {
+      const r = changesReport(ctx('changes', lang, { fromMonth: months[0], toMonth: months[months.length - 1],
+        settlementLimit: 0 }), input);
+      expect(r.sections.map((s) => s.id)).toEqual(SECTIONS.changes);
+      expect(texts(r).filter((x) => /\{\w+\}|undefined|NaN|pdf\.|changes\.how|[vV]ármegy/.test(x))).toEqual([]);
+    });
+  }
+
+  it('reports a stretch one branch cannot cover, and keeps the lists to the chosen length', () => {
+    const r = changesReport(ctx('changes', 'hu', { fromMonth: '2026-05', toMonth: '2026-07', settlementLimit: 5 }), input);
+    const all = texts(r).join('\n');
+    expect(all).toContain('nincs olyan archivált hónappár');
+    const lists = r.sections.find((s) => s.id === 'lists')!;
+    for (const b of lists.blocks) if (b.kind === 'table') expect(b.rows.length).toBeLessThanOrEqual(5);
   });
 });

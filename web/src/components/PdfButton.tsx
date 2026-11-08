@@ -4,21 +4,24 @@ import { useState } from 'react';
 import { locale, t } from '../lib/i18n';
 
 interface Props {
-  level: 'county' | 'district' | 'analysis' | 'europe';
+  level: 'county' | 'district' | 'analysis' | 'europe' | 'changes';
   /** the county or district; the two national pages have none */
   name?: string;
   /** the European page's current choice of countries and focus */
   group?: 'all' | 'cee' | 'v4';
   focus?: string;
+  /** the "Mi változott?" report: the stretch the page has open */
+  from?: string;
+  to?: string;
 }
 
-export function PdfButton({ level, name, group, focus }: Props) {
+export function PdfButton({ level, name, group, focus, from, to }: Props) {
   const [busy, setBusy] = useState(false);
   const open = async () => {
     setBusy(true);
     try {
       const { openPdfDialog } = await import('../pdf/dialog');
-      await openPdfDialog({ level, name, lang: locale, group, focus });
+      await openPdfDialog({ level, name, lang: locale, group, focus, from, to });
     } finally {
       setBusy(false);
     }

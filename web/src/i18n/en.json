@@ -2102,7 +2102,7 @@
   },
   "district": {
     "heading": "Districts",
-    "lead": "A county is twenty rows and a settlement is one of three thousand; the jaras is the level people live in. Hungary's 174 districts and the capital's 23, one by one.",
+    "lead": "County figures are too general, and a settlement-level analysis is too fragmented. The járás is the unit where the real differences in access to dental care show clearly: where a dentist can be reached, how far the nearest provider is, and whether emergency care is available. So we look at Hungary's 174 járás and Budapest's 23 districts one by one.",
     "mapNote": "The map shows the vacancy of {kind} districts per district: the darker, the higher the share. The ramp tops out at the 90th percentile. Hover or click for the detail.",
     "allCounties": "All 20 counties",
     "pick": "District",
@@ -3846,7 +3846,8 @@
       "district": "District (járás) report",
       "settlement": "Settlement report",
       "analysis": "National analysis",
-      "europe": "European comparison"
+      "europe": "European comparison",
+      "changes": "Monthly comparison"
     },
     "title": {
       "jaras": "{name} district",
@@ -3857,7 +3858,8 @@
       "district": "district",
       "settlement": "settlement",
       "analysis": "analysis",
-      "europe": "europe"
+      "europe": "europe",
+      "changes": "changes"
     },
     "branchLine": {
       "both": "GP and dental primary care",
@@ -4225,7 +4227,8 @@
         "district": "{name}",
         "settlement": "{name}",
         "analysis": "National analysis",
-        "europe": "European comparison"
+        "europe": "European comparison",
+        "changes": "What changed? — month by month"
       },
       "contents": "What goes in?",
       "all": "All",
@@ -4282,7 +4285,12 @@
       "focus": "In focus",
       "rankLimit": "Length of the rankings",
       "first": "first {n}",
-      "allRows": "all"
+      "allRows": "all",
+      "period": "Stretch",
+      "periodFrom": "First month",
+      "periodTo": "Last month",
+      "periodNote": "Choose among the archived months. The GP and the dental archive do not hold the same months: a branch gets only the month pairs that fall wholly inside the stretch.",
+      "listLimit": "Length of the district lists (by population)"
     },
     "cards": {
       "gp": "settlements with no contracted GP",
@@ -4305,7 +4313,8 @@
     },
     "buttonTitleLevel": {
       "analysis": "Make a PDF report from the national analysis",
-      "europe": "Make a PDF report from the European comparison"
+      "europe": "Make a PDF report from the European comparison",
+      "changes": "PDF report on the monthly changes"
     },
     "analysis": {
       "title": "Hungary",
@@ -4441,6 +4450,114 @@
       "dataMonth": "Data as of {month} — from the Eurostat and OECD databases, each measure at its own latest year.",
       "notesRules": "Each country's series comes from one publisher; practising, professionally active and licensed doctors are never mixed; no correlation is computed across countries. Migration is counted by place of training, not nationality, so no net loss is computed.",
       "notesLicence": "Eurostat: re-use with the source credited. OECD: CC BY 4.0; the processing and comparison are the author's, not an official OECD view."
+    },
+    "changes": {
+      "title": "What changed? {from} – {to}",
+      "branch": {
+        "gp": "GP districts",
+        "dental": "Dental districts"
+      },
+      "section": {
+        "summary": "Summary",
+        "context": "The wider view",
+        "months": "Month pair by month pair",
+        "flows": "From where, to where?",
+        "counties": "By county",
+        "types": "By district type",
+        "lists": "The districts, one by one"
+      },
+      "noPair": "This branch has no archived month pair that falls wholly between {from} and {to}: the nearest comparison is {a} → {b}. Choose a wider stretch.",
+      "noPairAtAll": "This branch has no archived month pair between {from} and {to}.",
+      "summaryLead": "This report holds NEAK's monthly vacancy lists against each other by district code (FIN) between {from} and {to}, a stretch of {n} months. Every district is followed through the archived months inside: vacant at the start and not at the end means it left the list; the other way round, it joined; one that moved and was back by the end is counted apart.",
+      "summaryUp": "Between {from} and {to} the number of vacant districts rose from {vfrom} to {vto}, a change of {net} ({rel}). The comparison rests on {pairs} archived month pairs.",
+      "summaryDown": "Between {from} and {to} the number of vacant districts fell from {vfrom} to {vto}, a change of {net} ({rel}). The comparison rests on {pairs} archived month pairs.",
+      "summaryFlat": "Between {from} and {to} the number of vacant districts did not change ({vfrom} → {vto}), though districts moved. The comparison rests on {pairs} archived month pairs.",
+      "summaryCodes": "By the end of the stretch {added} districts had joined the vacancy list and {ended} had left it.",
+      "summaryBack": "Besides, {passing} fell vacant and were off the list again by the end, and {returned} left it and came back; so the monthly steps add up to more moves: {movesAdded} joins and {movesEnded} departures.",
+      "summaryFates": "Of the districts that left the list, {filled} were filled, {dissolved} went onto the dissolved-contract list, {left} left NEAK's registry, and for {unknown} the archive cannot say.",
+      "summaryOrigins": "Of the districts that joined, {filled} had been filled, {dissolved} came back from the dissolved-contract list, {fresh} were new districts (not in the registry at the start), and for {unknown} the archive cannot say.",
+      "fact": {
+        "vacant": "Vacant districts",
+        "population": "People affected",
+        "total": "Districts",
+        "rate": "Vacancy rate",
+        "longTerm": "Long-term vacant (OKFŐ)",
+        "doctorChanges": "Doctor changes in filled districts"
+      },
+      "contextLead": "Where does the stretch sit? The comparison uses Praxistérkép's whole monthly archive since 2019, counted the same way: the vacancy list, without the dissolved contracts.",
+      "contextYearAgo": "{now}: {n} vacant districts; a year earlier ({then}) {v}, a change of {d}.",
+      "contextMonthsAgo": "{now}: {n} vacant districts; the archive’s nearest month to a year earlier is {then}, with {v}, a change of {d} (over {gap} months).",
+      "contextYearEnd": "Against the previous year's last archived month ({then}: {v}) the change is {d}.",
+      "contextFirst": "Against the archive's first month ({then}: {v}): {d}.",
+      "contextRange": "Over the archive's {n} months the peak is {hi} ({hiMonth}), the low {lo} ({loMonth}).",
+      "contextPace": "Average change per month over the stretch: {a} districts; over the longer comparison ({gap} months): {b} districts.",
+      "contextNote": "The archive’s months are not evenly spaced (NEAK does not publish missed months afterwards), so the year-earlier comparison uses the archived month nearest to twelve months before and says how many months it spans. In the table an asterisk marks the current, unfinished year.",
+      "chart": {
+        "trend": {
+          "gp": "Vacant GP districts by month",
+          "dental": "Vacant dental districts by month"
+        },
+        "trendCaption": "Source: NEAK's monthly lists, the Praxistérkép archive. The line joins the archived months; missing months do not show.",
+        "net": {
+          "gp": "Net change by month pair — GP districts",
+          "dental": "Net change by month pair — dental districts"
+        },
+        "netCaption": "Positive: more districts joined the vacancy list than left it.",
+        "counties": {
+          "gp": "The largest county changes — GP districts",
+          "dental": "The largest county changes — dental districts"
+        },
+        "countiesCaption": "Net change in the number of vacant districts from the start of the stretch to its end."
+      },
+      "line": {
+        "vacant": "Vacant districts"
+      },
+      "col": {
+        "month": "Last archived month",
+        "vacant": "Vacant",
+        "population": "Residents",
+        "longTerm": "Long-term vacant",
+        "pair": "Month pair",
+        "span": "Months",
+        "start": "Start",
+        "end": "End",
+        "net": "Change",
+        "new": "Joined",
+        "ended": "Left",
+        "filled": "Filled",
+        "toDissolved": "To dissolved list",
+        "left": "Left registry",
+        "unknown": "Cannot say",
+        "doctors": "Doctor changes",
+        "fate": "Where did it go?",
+        "origin": "Where did it come from?",
+        "stretch": "Whole stretch",
+        "moves": "Monthly steps, summed",
+        "what": "What happened",
+        "when": "Seen in",
+        "fin": "FIN code",
+        "firstMove": "First move",
+        "lastMove": "Last move"
+      },
+      "gap": "{n}-month step",
+      "monthsLead": "Each archived month pair on its own row: how many districts were vacant at the start and the end, how many joined the list and left it, and what became of those that left. Where a step spans several months, districts filled and vacated again in between do not show.",
+      "monthsNote": "Month pairs are written year.month. “Months” is how many months a step spans: where more than one, districts filled and vacated again in between do not show. “Seen in” is always the closing month of the step.",
+      "flowsLead": "What became of the districts that left and joined, two ways: over the whole stretch (by a district's first and last move), and as the sum of the monthly steps, in which a district that moved more than once counts more than once.",
+      "endedTotal": "Left in all",
+      "addedTotal": "Joined in all",
+      "flowsBack": "Moved and back by the end: {passing} districts were vacant for a while, {returned} were off the list for a while.",
+      "countiesLead": "Vacant districts by county at the start and the end of the stretch, with those that joined and left; the largest movement first.",
+      "country": "Country",
+      "typesLead": "Adult, child, mixed and school districts: how many were vacant at the start and the end of the stretch.",
+      "listsLead": "District by district, sorted by the district's population. FIN is NEAK's district code. No doctor's name is ever shown for a vacant district.",
+      "list": {
+        "added": "Joined the vacancy list and still on it at the end: {n} districts.",
+        "ended": "Left the vacancy list and not back on it by the end: {n} districts.",
+        "passing": "Vacant for a while (joined, then left): {n} districts.",
+        "returned": "Off the list for a while (left, then came back): {n} districts."
+      },
+      "listCut": "The first {shown} rows of {all} are shown; choose “all” in the PDF dialog for the whole list.",
+      "notesMethod": "Method: the report uses the month pairs of changes.json (etl/changes.py); for each, vacant at the start − left + joined = vacant at the end, nationally and per county. Over the stretch the same is checked again district code by district code, or the report is not built. The wider view comes from the monthly series of timeseries.json. Full description: praxisterkep.hu/modszertan.html."
     }
   },
   "story": {
