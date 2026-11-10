@@ -5,6 +5,24 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.57.0] - 2026-11-10
+
+### Hozzáadva
+- **Pályázatnyertesek közös rendelőcímen.** Ahol egy rendelőcímen több körzet
+  működik, és a havi adatokból nem dönthető el, melyiket töltötte be a
+  nyertes (vagy a NEAK elírta a címet), a nyertes nevét a cím, illetve a
+  település jelölt körzeteinek orvosával vetjük össze — sosem országosan. A
+  név nem kerül ki; az így talált körzetek külön látszanak, és nem
+  számítanak bele az arányokba.
+
+### Változott
+- A főoldali körzetállomány-sor kifejti a rövidítést: „TEK (területi
+  ellátási kötelezettség) nélküli”.
+- A Praxistérkép név bal felül a főoldalon is a főoldal tetejére visz, mint
+  minden más oldalon.
+- A README felsorolja a TEK nélküli háziorvosok és a médiamegjelenések
+  oldalát.
+
 ## [1.56.0] - 2026-11-10
 
 ### Hozzáadva
