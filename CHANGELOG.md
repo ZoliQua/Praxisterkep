@@ -5,6 +5,42 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.56.0] - 2026-11-10
+
+### Hozzáadva
+- **TEK nélküli háziorvosi praxisok.** Új oldal (`tek-nelkul.html`, a
+  Térkép menüben): a területi ellátási kötelezettség nélküli praxisok
+  típusonként, ki működteti őket (állami szervek, egyetemek, cégek, egyéni
+  vállalkozó orvosok), hogyan fogytak 2019 óta (173 → 76), kik szűntek meg
+  és kik jöttek, mennyire állandó az orvosuk, és hol vannak. Az adat minden
+  archivált NEAK-nyilvántartásból készül (`etl/nonterritorial.py`), név
+  nélkül.
+- **A főoldali körzetállomány-táblázat** a 6281 TEK-es körzet mellett a TEK
+  nélküli praxisokat és az összesen 6357 praxist is mutatja, megmagyarázza
+  a különbséget, és az új oldalra visz.
+- **Médiamegjelenések.** Új oldal (`media.html`) a Praxistérkép adataiból
+  készült cikkekkel és műsorokkal, rövid szemlével; az M1 Híradó riportja
+  kis, kattintásra betöltődő lejátszóban. A láblécben a Médiamegjelenések és
+  a Facebook-oldal linkje.
+- **Mi változott?** Az elemző oldalon a betöltetlen körzetek kódonként
+  összevetve, idén hónapról hónapra, korábban évről évre, PDF-jelentéssel
+  bármely időszakra.
+- Az elemző oldal áttekintésre és hat, külön betöltődő részre bontva; a
+  pályázatnyertesek évenként, megyénként és ábránként nyithatók.
+- Kanonikus címek az alkalmazásoldalakon, a megye- és járásoldalak a
+  sitemapben, `robots.txt`.
+
+### Javítva
+- **Betöltés közbeni ugrálás (CLS).** A történetek, a megyeválasztó és a
+  járástérkép betöltés közben is fenntartja a helyét, így az oldal nem
+  ugrik le; a Speed Insights oldalanként mér.
+- A Nominatim 5xx-hibánál és időtúllépésnél újrapróbál; ha a KSH lassú, az
+  archivált népszámlálási változat lép be.
+
+### Adatvédelem
+- Az adatkezelési tájékoztató és a lábléc megnevezi a YouTube-ot (süti
+  nélküli lejátszó, csak kattintásra).
+
 ## [1.55.0] - 2026-10-25
 
 ### Hozzáadva
