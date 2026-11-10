@@ -44,6 +44,7 @@
     "whoElse": "Továbbiak",
     "menu": "Menü",
     "stock": "Körzetállomány",
+    "nonTerritorial": "TEK nélküli háziorvosok",
     "districtPage": "Járás",
     "districtChoose": "Járás kiválasztása",
     "districtVulnerable": "A legveszélyeztetettebb járások",
@@ -250,7 +251,7 @@
     "disclaimer": "A NEAK adatai saját közlése szerint tájékoztató jellegűek, a havi finanszírozási szerződésadatok alapján kerülnek közzétételre. Az itt közölt számok ellátásszervezési, hatósági vagy jogi döntés megalapozására nem alkalmasak.",
     "vacantNotUnserved": "A betöltetlen körzet nem jelenti azt, hogy ott nincs ellátás: a lakosokat jellemzően helyettesítő orvos látja el, ami a nyilvános adatokból nem látszik. Konkrét rendelési időt és ellátási helyet mindig a szolgáltatónál vagy az önkormányzatnál érdemes ellenőrizni.",
     "names": "Orvosnév kizárólag ott szerepel, ahol azt a NEAK maga is közzéteszi: a szerződött szolgáltatói listán szereplő, betöltött körzeteknél. Betöltetlen és megszűnt körzetnél, valamint helyettesítő orvosnál soha.",
-    "noPersonal": "Az oldal nem kér regisztrációt és nem tárol látogatói adatot a saját rendszereiben. Látogatói statisztika (Google Analytics) és sebességmérés (Vercel Speed Insights) kizárólag akkor indul, ha ehhez külön hozzájárulsz — hozzájárulás nélkül mérőkód sem töltődik be, és süti sem kerül a gépedre. A nyelvválasztást és a térképrétegeket a böngésződ saját tárolója őrzi, ez hozzánk nem jut el. A betűtípusokat a Google Fonts adja, az utcaszintű térképet — csak ha rákattintasz — a MapTiler és az OpenStreetMap. Részletek az adatkezelési tájékoztatóban.",
+    "noPersonal": "Az oldal nem kér regisztrációt és nem tárol látogatói adatot a saját rendszereiben. Látogatói statisztika (Google Analytics) és sebességmérés (Vercel Speed Insights) kizárólag akkor indul, ha ehhez külön hozzájárulsz — hozzájárulás nélkül mérőkód sem töltődik be, és süti sem kerül a gépedre. A nyelvválasztást és a térképrétegeket a böngésződ saját tárolója őrzi, ez hozzánk nem jut el. A betűtípusokat a Google Fonts adja, az utcaszintű térképet — csak ha rákattintasz — a MapTiler és az OpenStreetMap, a médiaoldal videóit — szintén csak kattintásra — a YouTube. Részletek az adatkezelési tájékoztatóban.",
     "notOfficial": "Magánkezdeményezés: nem a NEAK, az OKFŐ, az NNGYK vagy bármely más hatóság hivatalos kiadványa, és nem minősül hivatalos állásfoglalásnak. A szerző szakmai beosztása azonosítási célú, nem jelent intézményi jóváhagyást.",
     "correction": "Hibás vagy elavult adatot találtál? A forrás javítását a kibocsátónál érdemes kezdeményezni; az oldal hibáját a GitHubon (@ZoliQua) lehet jelezni, és a következő havi frissítéssel javítjuk.",
     "authorBy": "Készítette:",
@@ -2057,6 +2058,14 @@
     "cellNone": "{county}, {year}: nincs használható pillanatkép"
   },
   "balance": {
+    "thNon": "TEK nélküli praxis",
+    "thAllPractices": "Összes praxis",
+    "totalRow": "Összesen",
+    "totalGp": "területi ellátási kötelezettséggel rendelkező háziorvosi körzet az országban",
+    "tekFigureA": "háziorvosi és házi gyermekorvosi praxis összesen, ebből",
+    "tekFigureB": "TEK nélküli",
+    "tekClarify": "Miért {districts} és nem {all}? A térkép és a betöltetlenségi arány a {districts} körzetről szól: ezeknek van területi ellátási kötelezettségük (TEK), egy kijelölt terület lakóiért felelnek. Mellettük {tn} TEK nélküli praxis működik, amely csak a hozzá bejelentkezett betegeket látja el (például rendőrségi és egyetemi praxisok), ezért betöltetlenként sosem szerepel. A kettő együtt {all} praxis.",
+    "tekLink": "A TEK nélküli háziorvosi praxisok részletesen: ki működteti őket, és hogyan fogytak 2019 óta →",
     "heading": "Hogyan áll a {kind} körzetállomány?",
     "total": "{kind} körzet az országban",
     "thType": "Körzettípus",
@@ -2254,7 +2263,7 @@
     },
     "processors": {
       "title": "Kinek adjuk tovább",
-      "text": "Google Ireland Limited (Google Analytics) — csak hozzájárulás esetén; a Google az EU–USA adatvédelmi keret szerint tanúsított. Vercel Inc. — az oldal tárhelyszolgáltatója, amely technikai naplót vezet a kiszolgálásról, és hozzájárulás esetén a Speed Insights betöltési méréseit is fogadja. Google Fonts — a betűtípusok kiszolgálása. MapTiler és OpenStreetMap — csak akkor, ha megnyitod az utcaszintű térképet. Ezek megnyitásakor a böngésződ technikai okból kapcsolatba lép velük, így IP-címed számukra láthatóvá válik."
+      "text": "Google Ireland Limited (Google Analytics) — csak hozzájárulás esetén; a Google az EU–USA adatvédelmi keret szerint tanúsított. Vercel Inc. — az oldal tárhelyszolgáltatója, amely technikai naplót vezet a kiszolgálásról, és hozzájárulás esetén a Speed Insights betöltési méréseit is fogadja. Google Fonts — a betűtípusok kiszolgálása. MapTiler és OpenStreetMap — csak akkor, ha megnyitod az utcaszintű térképet. YouTube (Google, a süti nélküli youtube-nocookie.com címről) — csak akkor, ha a médiaoldalon elindítasz egy videót. Ezek megnyitásakor a böngésződ technikai okból kapcsolatba lép velük, így IP-címed számukra láthatóvá válik."
     },
     "storage": {
       "title": "Mit őriz a böngésződ",
@@ -4795,5 +4804,95 @@
     "colHow": "Mi történt",
     "colFin": "FIN-kód",
     "caveat": "Az összevetés a NEAK havi listáin, FIN-kód szerint készül. Ami két archivált hónap között üresedett meg és telt be újra, az nem látszik, ezért minden lépés mellett ott áll, hány hónapot fog át. Ahol egy hónapnak nincs teljes nyilvántartása, vagy a fogorvosi megszűnt lista nem került be, ott a körzet sorsa „nem állapítható meg” — nem találgatunk. Betöltetlen ≠ ellátatlan: a betöltetlen körzetek többségében helyettesítés folyik."
+  },
+  "media": {
+    "navLabel": "Médiamegjelenések",
+    "facebook": "Facebook",
+    "heading": "Médiamegjelenések",
+    "lead": "Cikkek és műsorok, amelyek a Praxistérkép adataiból dolgoztak. A cím az eredeti cikkre vagy felvételre mutat; alatta a mi rövid szemlénk arról, mit emelt ki az oldalból. A számok a cikk megjelenésekor érvényes adatok, azóta frissülhettek.",
+    "follow": "Az új adatokról és elemzésekről a Facebook-oldalunkon is írunk:",
+    "tv": "TV",
+    "start": "a riport kezdete a felvételen: {time}",
+    "play": "Videó lejátszása",
+    "videoNote": "Kattintásra a YouTube süti nélküli változata (youtube-nocookie.com) tölti be a felvételt, a riport kezdeténél.",
+    "items": {
+      "m1-hirado-2026-11-09": "Az M1 esti, 19:30-as híradójában a Praxistérkép is szerepelt. A link a riport kezdeténél indítja a felvételt.",
+      "telex-2026-11-09": "Az első nagy cikk az oldalról. Bemutatja a készítőt és az adatforrást, az októberi országos képet (1026 betöltetlen háziorvosi körzet, közel 1,4 millió érintett lakos), a 2004 óta üres ibafai körzetet, a megyék közti különbségeket és a sürgősségi osztályok elérhetőségét. Kitér az elkerülhető halálozással való összefüggésre is, hangsúlyozva, hogy ez nem ok-okozat.",
+      "nszo-2026-11-09": "A települések felől nézi a hiányt: 669 olyan település van, amelyhez csak betöltetlen háziorvosi körzet tartozik, mintegy 533 ezer lakossal. Borsod-Abaúj-Zemplénben 129 ilyen település van, a megye településeinek több mint harmada; utána Somogy és Vas következik. Közli a novemberi 1033-as számot és a szaktárca álláspontját is.",
+      "hazipatika-2026-11-09": "A novemberi adatokkal dolgozik: 1033 betöltetlen körzet (16,4%), több mint 1,4 millió érintett, a lakosság 14,8%-a. Kiemeli Nógrádot mint a legrosszabb helyzetű megyét és a 22 éve üres ibafai praxist, és elmagyarázza, hogy a betöltetlen körzet nem ellátatlan: a legtöbb helyen helyettesítő orvos rendel.",
+      "szeged365-2026-11-09": "Megyei szemmel: Csongrád-Csanádban a legkisebb a hiány, 264 körzetből 18 üres (6,8%), szemben Nógrád 29,8%-ával. Ismerteti az októberi országos számokat és az összetett kockázati indexet, amely szerint a tíz legveszélyeztetettebb településből kilenc Borsod-Abaúj-Zemplénben van."
+    }
+  },
+  "tek": {
+    "heading": "TEK nélküli háziorvosi praxisok",
+    "thTerritorial": "TEK-kel (körzet)",
+    "thNon": "TEK nélkül",
+    "thAll": "Összesen",
+    "thShare": "TEK nélküli arány",
+    "total": "Összes háziorvosi és házi gyermekorvosi praxis",
+    "note": "A felnőtt és a vegyes körzet háziorvosi (HO), a gyermekkörzet házi gyermekorvosi (HGYO) ellátás; a vegyes körzet felnőtteket és gyerekeket együtt lát el. A TEK nélküli praxisok nem részei a betöltetlenségi számításnak, ezért nincs betöltöttség-oszlopuk.",
+    "trendSpan": "A TEK nélküli praxisok száma: {start} ({from}) → {end} ({to}), {change}. A TEK-es körzeteké ugyanezen idő alatt: {tStart} → {tEnd}, {tChange}.",
+    "trendFlows": "A két időpont között praxiskódonként követve {left} TEK nélküli praxis kikerült a nyilvántartásból, {new} új jelent meg, és {kept} végig megmaradt.",
+    "noFormChange": "Egyetlen TEK nélküli praxis sem alakult át körzetté, és egyetlen körzet sem lett TEK nélkülivé.",
+    "formChange": "Körzetté alakult: {to}; körzetből lett TEK nélküli: {from}.",
+    "trendPairs": "Az egymást követő archivált nyilvántartásokat páronként összevetve ({n} pár) {left} kikerülés és {new} új megjelenés látszik; ebben a köztes időben feltűnt és eltűnt praxisok is benne vannak.",
+    "child": "Házi gyermekorvosi TEK nélküli praxis {from} még {start} volt. Az utolsó archivált lista, amelyen még szerepelt ilyen: {lastSeen}; a következőn ({month}) és azóta egy sincs.",
+    "unnamed": "A TEK nélküli praxisok közül {n} esetében a nyilvántartás nem nevez meg szerződött orvost.",
+    "thMonth": "Archivált hónap",
+    "short": {
+      "adult": "felnőtt",
+      "mixed": "vegyes",
+      "child": "gyermek"
+    },
+    "trendNote": "Az első archivált nyilvántartás, utána minden évből az utolsó.",
+    "gap": "Az archívum nem egyenletes: {a} és {b} között nincs archivált nyilvántartásunk.",
+    "source": "Forrás: NEAK, háziorvosi szolgálatok nyilvántartása, a szervezeti egység ellátási formája (T: területi ellátási kötelezettséggel, TN: anélkül); {n} archivált hónap."
+  },
+  "tekPage": {
+    "lead": "A háziorvosi praxisok egy kis része nem körzet: nincs kijelölt területe, csak a hozzá bejelentkezett betegeket látja el. Ezek a praxisok nem kerülnek a betöltetlen listára, és nem számítanak bele a térkép egyetlen számába sem. Ez az oldal azt mutatja meg, hányan vannak, ki működteti őket, és hogyan változott a számuk 2019 óta. (A TEK itt a területi ellátási kötelezettség rövidítése.)",
+    "kpi": {
+      "tn": "TEK nélküli háziorvosi praxis",
+      "share": "az összes ({all}) háziorvosi és házi gyermekorvosi praxisból",
+      "change": "{from} óta",
+      "institutions": "praxist állami szerv vagy egyetem működtet"
+    },
+    "typesHeading": "Körzetek és TEK nélküli praxisok típusonként",
+    "operatorsHeading": "Ki működteti őket?",
+    "operatorsLead": "A szolgáltató neve alapján ({month}): {state} praxist állami szerv (rendőrség, nemzetbiztonsági és büntetés-végrehajtási szervek, adóhatóság), {university} praxist egyetemi klinikai központ, {company} praxist gazdasági társaság, {sole} praxist egyéni vállalkozó orvos működtet. A TEK nélküli praxisok jó része tehát zárt kör ellátása: egyenruhások, egyetemi polgárok, egy-egy cég munkavállalói.",
+    "operatorsNote": "A besorolás a NEAK nyilvántartásában szereplő szolgáltatónévből készül. Egyetem által alapított, de cégként működő szolgáltató a gazdasági társaságok között szerepel. Személyneveket nem közlünk.",
+    "operator": {
+      "state": "állami szerv (rendőrség, nemzetbiztonság, büntetés-végrehajtás, NAV)",
+      "university": "egyetem",
+      "company": "gazdasági társaság",
+      "sole": "egyéni vállalkozó orvos",
+      "other": "egyéb (magánszemély)",
+      "unknown": "ismeretlen (a régi nyilvántartásban nincs szolgáltatónév)"
+    },
+    "timeline": {
+      "heading": "Hogyan változott a számuk?",
+      "aria": "A TEK nélküli háziorvosi praxisok száma archivált hónaponként (kezdetben {start}, most {end})."
+    },
+    "turnover": {
+      "heading": "Kik szűntek meg, és kik jöttek?",
+      "left": "megszűnt",
+      "new": "új"
+    },
+    "finding": "A cégek és egyéni orvosok TEK nélküli praxisaiból {leftBusiness} szűnt meg, és csak {newBusiness} új jött. Az állami szervek és egyetemek praxisaiból {leftInst} szűnt meg, és {newInst} új jött: a vállalkozói praxisok fogynak, az intézményiek tartják magukat.",
+    "unknownLeft": "A megszűntek közül {n} működtetője nem ismert, mert a korai nyilvántartásokban még nincs szolgáltatónév oszlop.",
+    "pairs": {
+      "heading": "Megszűnések és új praxisok két archivált nyilvántartás között",
+      "aria": "Megszűnt és új TEK nélküli praxisok az egymást követő archivált nyilvántartások között."
+    },
+    "stability": {
+      "heading": "Mennyire állandóak?",
+      "lead": "A mostani praxisok közül {since} már {from} is megvolt. Ahol mindkét időpontban szerepel orvos, ott a 2019-es orvos dolgozik ma is: a TEK nélküli praxisoknál az arány {tn}, a TEK-es körzeteknél {t}.",
+      "note": "Összevetés: {from} és {to}, ugyanazon a praxiskódon, ahol a nyilvántartás mindkét időpontban szerződött orvost nevez meg. Az orvosok nevét nem tároljuk és nem közöljük.",
+      "TN": "TEK nélküli praxis",
+      "T": "TEK-es körzet"
+    },
+    "whereHeading": "Hol vannak? ({month})",
+    "byCounty": "Megyénként",
+    "bySeat": "Budapesten kívül, településenként",
+    "tableHeading": "Az idősor számokban"
   }
 }

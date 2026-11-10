@@ -38,6 +38,8 @@ export default defineConfig({
         county: resolve(__dirname, 'megye.html'),
         district: resolve(__dirname, 'jaras.html'),
         privacy: resolve(__dirname, 'adatkezeles.html'),
+        media: resolve(__dirname, 'media.html'),
+        nonterritorial: resolve(__dirname, 'tek-nelkul.html'),
         // not a page: the lazy street map the static settlement pages load
         streetmap: resolve(__dirname, 'src/streetmap.ts'),
         // not a page either: the PDF export button of the static settlement pages

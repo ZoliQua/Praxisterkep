@@ -2001,7 +2001,7 @@ html[data-internal] .no-internal { display: none !important; }
   display: block; font: 800 34px var(--font-display); color: var(--ink);
   font-variant-numeric: tabular-nums; line-height: 1;
 }
-.balance__totalLabel { font-size: 12.5px; color: var(--ink-faint); }
+.balance__totalLabel { display: block; max-width: 30ch; font-size: 12.5px; color: var(--ink-faint); }
 .balance__barwrap { flex: 1 1 320px; min-width: 260px; }
 .balance-bar {
   display: flex; height: 16px; border-radius: 8px; overflow: hidden;
@@ -2038,8 +2038,100 @@ html[data-internal] .no-internal { display: none !important; }
 .balance__rateFill { display: block; height: 100%; background: var(--bad); }
 .balance__rateVal { color: var(--ink); font-variant-numeric: tabular-nums; }
 .balance__note { margin: 10px 0 0; font-size: 12.5px; color: var(--ink-faint); }
+
+/* "TEK nélküli háziorvosi praxisok" (NonTerritorial.tsx), under the stock */
+.balance__types tr.is-total td { font-weight: 600; color: var(--ink); border-bottom: 0;
+  border-top: 2px solid var(--line-strong); }
+.tek__facts { margin: 8px 0 14px; padding-left: 20px; color: var(--ink-dim); max-width: 86ch; }
+.tek__facts li { margin: 5px 0; }
+.tek__trendwrap { overflow-x: auto; }
+.tek__minihead { margin: 18px 0 8px; font-size: 14px; color: var(--ink-dim); font-weight: 600; }
+
+/* the landing's stock table, GP: districts and the practices without TEK */
+.balance__allPractices { margin: 14px 0 0; font-size: 14px; color: var(--ink-dim); }
+.balance__allPractices strong { color: var(--ink); font: 800 24px var(--font-display); font-variant-numeric: tabular-nums; }
+.balance__allPractices .balance__allPracticesTn { color: var(--accent); font-size: 20px; }
+.balance__types th.balance__tekcol, .balance__types td.balance__tekcol { border-left: 1px solid var(--line); padding-left: 10px; }
+.balance__tekclarify { margin: 12px 0 0; padding: 10px 12px; border-left: 3px solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent); color: var(--ink-dim); font-size: 13.5px; border-radius: 0 8px 8px 0; }
+.balance__teklink { margin: 12px 0 0; }
+.balance__tablewrap { overflow-x: auto; }
 @media (max-width: 560px) {
-  .balance__types th:nth-child(3), .balance__types td:nth-child(3) { display: none; }
+  .balance__tablewrap .balance__rateTrack { display: none; }
+  /* GP: the vacancy count gives way to the two TEK columns (the rate stays) */
+  .balance__tablewrap--gp .balance__types th:nth-child(4),
+  .balance__tablewrap--gp .balance__types td:nth-child(4) { display: none; }
+  .balance__tablewrap--gp .balance__types th { font-size: 10px; letter-spacing: 0; hyphens: auto; }
+  .balance__tablewrap--gp .balance__types th, .balance__tablewrap--gp .balance__types td { padding-right: 4px; }
+  .balance__tablewrap--gp .balance__types td:first-child { font-size: 11.5px; }
+  .balance__tablewrap .balance__types th, .balance__tablewrap .balance__types td { padding-right: 6px; font-size: 12px; }
+  .balance__types th.balance__tekcol, .balance__types td.balance__tekcol { padding-left: 6px; }
+}
+.balance__teklink a {
+  display: inline-block; padding: 9px 14px; border-radius: 999px; border: 1px solid var(--accent);
+  color: var(--accent); font-weight: 600; font-size: 14px; text-decoration: none;
+}
+.balance__teklink a:hover { background: var(--accent); color: var(--accent-ink); }
+
+/* tek-nelkul.html */
+.tekkpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin: 18px 0 4px; }
+.tekkpis > div { padding: 14px 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg-raised); }
+.tekkpis strong { display: block; font: 800 30px var(--font-display); color: var(--ink); font-variant-numeric: tabular-nums; line-height: 1.1; }
+.tekkpis span { font-size: 12.5px; color: var(--ink-faint); }
+.tekfinding { margin: 6px 0 14px; padding: 12px 14px; border-left: 3px solid var(--accent); max-width: 86ch;
+  background: color-mix(in srgb, var(--accent) 8%, transparent); color: var(--ink); border-radius: 0 8px 8px 0; }
+.tekchart, .tekpairs { overflow-x: auto; padding-bottom: 4px; }
+.tekchart__cols, .tekpairs__cols { display: flex; align-items: flex-end; gap: 6px; min-width: 620px; }
+.tekchart__cols { height: 230px; }
+.tekchart__col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; min-width: 0; }
+.tekchart__val { font-size: 11px; color: var(--ink-dim); font-variant-numeric: tabular-nums; margin-bottom: 3px; }
+.tekchart__stack { width: 100%; max-width: 34px; display: flex; flex-direction: column; border-radius: 4px 4px 0 0; overflow: hidden; }
+.tekchart__seg { display: block; min-height: 1px; }
+.tekchart__seg--adult { background: var(--type-adult); }
+.tekchart__seg--mixed { background: var(--type-mixed); }
+.tekchart__seg--child { background: var(--type-child); }
+.tekchart__label { margin-top: 5px; font-size: 10px; color: var(--ink-faint); white-space: nowrap; transform: rotate(-45deg); transform-origin: center; height: 26px; }
+.tekchart__legend { list-style: none; display: flex; gap: 14px; padding: 0; margin: 10px 0 0; font-size: 12.5px; color: var(--ink-dim); }
+.tekchart__legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+.tekbars { list-style: none; padding: 0; margin: 10px 0 0; max-width: 760px; }
+.tekbars li { display: grid; grid-template-columns: minmax(120px, 34%) 1fr auto; gap: 10px; align-items: center; margin: 7px 0; font-size: 13px; }
+.tekbars__label { color: var(--ink-dim); }
+.tekbars__track { height: 12px; border-radius: 6px; background: var(--line); overflow: hidden; }
+.tekbars__fill { display: block; height: 100%; border-radius: 6px; }
+.tekbars__fill--accent { background: var(--accent); }
+.tekbars__fill--mid { background: var(--gp); }
+.tekbars__val { color: var(--ink); font-variant-numeric: tabular-nums; min-width: 3ch; text-align: right; }
+.tekbars__val em { color: var(--ink-faint); font-style: normal; }
+.tekturn { max-width: 760px; margin: 6px 0 12px; font-size: 13px; }
+.tekturn__head, .tekturn__row { display: grid; grid-template-columns: 1fr minmax(120px, 30%) 1fr; gap: 10px; align-items: center; }
+.tekturn__head { color: var(--ink-faint); font-size: 11px; text-transform: uppercase; letter-spacing: .05em; }
+.tekturn__head span:first-child { text-align: right; }
+.tekturn__row { margin: 7px 0; }
+.tekturn__label { text-align: center; color: var(--ink-dim); }
+.tekturn__side { display: flex; align-items: center; gap: 6px; }
+.tekturn__side--left { justify-content: flex-end; }
+.tekturn__side em { font-style: normal; color: var(--ink); font-variant-numeric: tabular-nums; }
+.tekturn__bar { display: block; height: 12px; border-radius: 6px; min-width: 2px; }
+.tekturn__bar--left { background: var(--bad); }
+.tekturn__bar--new { background: var(--good); }
+.tekpairs__cols { height: 200px; align-items: stretch; }
+.tekpairs__col { flex: 1; display: flex; flex-direction: column; align-items: center; min-width: 0; }
+.tekpairs__up, .tekpairs__down { flex: 1; width: 100%; max-width: 30px; display: flex; position: relative; }
+.tekpairs__up { align-items: flex-end; border-bottom: 1px solid var(--line-strong); }
+.tekpairs__down { align-items: flex-start; }
+.tekpairs__up > span { width: 100%; background: var(--good); border-radius: 3px 3px 0 0; }
+.tekpairs__down > span { width: 100%; background: var(--bad); border-radius: 0 0 3px 3px; }
+.tekpairs__up em, .tekpairs__down em { position: absolute; left: 50%; transform: translateX(-50%); font-size: 10px; font-style: normal; color: var(--ink-dim); }
+.tekpairs__up em { top: 0; }
+.tekpairs__down em { bottom: 0; }
+.tekgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 10px 28px; }
+@media (max-width: 560px) {
+  .tekbars li { grid-template-columns: minmax(96px, 40%) 1fr auto; }
+  .tekturn__head, .tekturn__row { grid-template-columns: 1fr 34% 1fr; }
+}
+.tek__trend { min-width: 480px; }
+@media (max-width: 560px) {
+  .balance__types:not(.tek__table) th:nth-child(3), .balance__types:not(.tek__table) td:nth-child(3) { display: none; }
 }
 
 /* The travel-time dial: "how many minutes do you consider acceptable?" */
@@ -2801,6 +2893,33 @@ body:has(.tp-rail) .tp-map svg { margin-top: 0; }
 .privacy__block p { color: var(--ink-dim); }
 .privacy__consent { margin-top: 26px; }
 .privacy__consent a { color: var(--accent); }
+
+/* ---------- media.html ---------- */
+.media__list { list-style: none; padding: 0; margin: 22px 0 0; max-width: 80ch; }
+.media__item { padding: 18px 0; border-top: 1px solid var(--line); }
+.media__item:last-child { border-bottom: 1px solid var(--line); }
+.media__meta { margin: 0 0 4px; font-size: 13px; color: var(--ink-faint); }
+.media__meta strong { color: var(--ink-dim); }
+.media__tag { display: inline-block; margin-right: 6px; padding: 1px 6px; border-radius: 4px; font-size: 10.5px; font-weight: 700;
+  letter-spacing: .05em; background: var(--accent); color: var(--accent-ink); vertical-align: 1px; }
+.media__title { margin: 0 0 8px; font-size: 19px; line-height: 1.35; font-family: var(--font-display); }
+.media__title a { color: var(--ink); }
+.media__title a:hover { color: var(--accent); }
+.media__summary { margin: 0; color: var(--ink-dim); }
+.media__video { margin-top: 12px; max-width: 420px; }
+.media__video iframe, .media__videoPlay { display: block; width: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: 10px; }
+.media__videoPlay {
+  cursor: pointer; display: grid; place-items: center; align-content: center; gap: 8px;
+  background: linear-gradient(135deg, var(--bg-raised), var(--bg-panel)); border: 1px solid var(--line-strong);
+  color: var(--ink-dim); font: 600 13px var(--font-body);
+}
+.media__videoPlay svg { width: 58px; height: 41px; }
+.media__videoPlay svg rect { fill: var(--bad); }
+.media__videoPlay svg path { fill: var(--ink); }
+.media__videoPlay:hover svg rect, .media__videoPlay:focus-visible svg rect { fill: var(--accent); }
+.media__videoNote { margin: 6px 0 0; font-size: 12px; color: var(--ink-faint); }
+.media__follow { margin-top: 26px; }
+.media__follow a { color: var(--accent); }
 
 /* the footer: what the site is, and what it is not */
 .footer__lead {

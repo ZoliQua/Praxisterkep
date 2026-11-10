@@ -346,6 +346,7 @@ function streetBlock(profile, opts = {}) {
 // 3177 static pages cannot disagree with the app about which pages exist
 const nav = JSON.parse(readFileSync(join(here, '..', 'src', 'lib', 'siteNav.json'), 'utf8'));
 const pageSections = JSON.parse(readFileSync(join(here, '..', 'src', 'lib', 'pageSections.json'), 'utf8'));
+const media = JSON.parse(readFileSync(join(here, '..', 'src', 'lib', 'media.json'), 'utf8'));
 const hu = JSON.parse(readFileSync(join(here, '..', 'src', 'i18n', 'hu.json'), 'utf8'));
 const en = JSON.parse(readFileSync(join(here, '..', 'src', 'i18n', 'en.json'), 'utf8'));
 const DICTS = { hu, en };
@@ -1355,7 +1356,9 @@ function siteFooter(homeHref, analysisHref) {
     </ul></details>
     <p class="footer__privacy"><span class="only-internal"><a href="${esc(appHref('/modszertan.html'))}">${
   esc(label('nav.methodology'))}</a> · </span><a href="${esc(appHref('/adatkezeles.html'))}">${esc(DICT.privacy.navLabel)}</a>
-      · <a href="#" data-consent-reopen>${esc(DICT.privacy.reopen)}</a></p>
+      · <a href="#" data-consent-reopen>${esc(DICT.privacy.reopen)}</a>
+      · <a href="${esc(appHref('/media.html'))}">${esc(DICT.media.navLabel)}</a>
+      · <a href="${esc(media.facebook)}" rel="noopener">${esc(DICT.media.facebook)}</a></p>
     <p class="footer__author">${esc(f.authorBy)}
       <a href="https://dulzoltan.hu" rel="noopener">${esc(f.authorName)}</a>${
   esc(f.authorTitle)}</p>
@@ -2043,7 +2046,7 @@ DICT = hu;
 
 // a sitemap, so the pages are findable at all
 const urls = ['/', '/megye.html', '/jaras.html', '/elemzo.html', '/europa.html', '/szakellato.html',
-  '/modszertan.html', '/eeszt.html', '/telepules/', '/en/telepules/']
+  '/modszertan.html', '/eeszt.html', '/media.html', '/tek-nelkul.html', '/telepules/', '/en/telepules/']
   // the county and the járás page under the one address each names as its
   // canonical (lib/seo.ts): ?m= and ?jar=, nothing the menu carries along
   .concat([...new Set([...districts.byName.values()].map((d) => d.county))].sort()

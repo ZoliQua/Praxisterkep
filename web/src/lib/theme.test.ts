@@ -19,7 +19,7 @@ describe('theme', () => {
   });
 
   it('every page entry applies the stored theme before it paints', () => {
-    for (const page of ['index', 'elemzo', 'europa', 'eeszt', 'szakellato', 'modszertan', 'megye', 'jaras', 'adatkezeles']) {
+    for (const page of ['index', 'elemzo', 'europa', 'eeszt', 'szakellato', 'modszertan', 'megye', 'jaras', 'adatkezeles', 'media', 'tek-nelkul']) {
       expect(readFileSync(resolve(web, `${page}.html`), 'utf8'), page).toContain(`<script>${THEME_BOOT}</script>`);
     }
   });

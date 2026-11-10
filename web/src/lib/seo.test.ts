@@ -5,7 +5,7 @@ import { CANONICAL_BOOT } from './seo';
 
 const web = resolve(__dirname, '..', '..');
 // the pages a search engine should index; embed.html says noindex itself
-const PAGES = ['index', 'elemzo', 'europa', 'eeszt', 'szakellato', 'modszertan', 'megye', 'jaras', 'adatkezeles'];
+const PAGES = ['index', 'elemzo', 'europa', 'eeszt', 'szakellato', 'modszertan', 'megye', 'jaras', 'adatkezeles', 'media', 'tek-nelkul'];
 
 interface Link { rel: string; href: string; hreflang?: string }
 

@@ -163,6 +163,102 @@ def parse_registry(xls_path: Path) -> list[dict]:
     return entries
 
 
+_STATE_BODY = re.compile(
+    r"rendőr|\b(?:v?m?rfk|brfk|orfk|szszbmrfk)\b|terrorelhárítási|nemzeti védelmi"
+    r"|\bbvop\b|büntetés-végrehajt|\bnav\b|adó- és vámhivatal|katasztrófavédelm|honvéd", re.I)
+_COMPANY = re.compile(r"\b(?:kft|bt|zrt|nyrt|kkt)\b\.?|nonprofit|társaság", re.I)
+
+
+def operator_kind(provider: str) -> str:
+    """The kind of organisation behind a practice, from the provider's name.
+
+    state (police, national security, prison service, tax authority, armed
+    forces), university, company, a physician as sole trader, or unknown when
+    the registry of that month has no provider column. Only the kind leaves
+    this function: a sole trader's provider name is the physician's own.
+    """
+    name = provider.strip()
+    if not name or name.lower() == "nan":
+        return "unknown"
+    if _STATE_BODY.search(name):
+        return "state"
+    if "egyetem" in name.lower():
+        return "university"
+    if _COMPANY.search(name):
+        return "company"
+    if re.match(r"(?i)^dr\.?\s", name) or re.search(r"(?i)\bdr\.", name):
+        return "sole"
+    return "other"
+
+
+def parse_registry_forms(xls_path: Path) -> list[dict]:
+    """Every row of a GP registry with its form: territorial (T) and not (TN).
+
+    parse_registry keeps the T rows only, because they are the districts; this
+    reads both, for nonterritorial.py, which counts the practices that carry
+    no district obligation. Only code, form, type, county, settlement, the
+    provider's kind (operator_kind) and whether the registry names a contracted
+    physician are returned — never a name. To tell whether a practice kept its
+    physician, the name is reduced to a one-way digest (doctorKey) that is only
+    ever compared with the same code's digest in another month. An unknown form
+    or type is a hard error.
+    """
+    import hashlib
+
+    from parse_dental import _cell
+    from parse_registry import clean_doctor, locate_columns
+
+    header_map = {
+        "county": ("megye", "vármegye"),
+        "hsz": ("hsz kód",),
+        "type": ("szolgálat típusa", "egység típusa"),
+        "form": ("ellátási formája",),
+        "postal": ("irányítószám",),
+        "settlement": ("székhelye",),
+        "doctor": ("háziorvos neve", "szolgálat orvosa"),
+    }
+    df = pd.read_excel(xls_path, header=None, dtype=object)
+    header_idx = next(
+        (i for i, row in enumerate(df.head(5).values.tolist())
+         if any("HSZ" in _clean(c) for c in row)),
+        None,
+    )
+    if header_idx is None:
+        raise ParseError(f"{xls_path.name}: GP registry header row not found")
+    cols = locate_columns(df.iloc[header_idx].tolist(), header_map,
+                          {"provider": ("szolgáltató neve",)}, "GP registry")
+
+    rows: list[dict] = []
+    seen: set[str] = set()
+    for row in df.iloc[header_idx + 1:].values.tolist():
+        raw = _clean(row[cols["hsz"]])
+        hsz = raw.removesuffix(".0").zfill(9)
+        if not raw or not hsz.isdigit() or len(hsz) != 9 or hsz in seen:
+            continue
+        form = _clean(row[cols["form"]])
+        if form not in ("T", "TN"):
+            raise ParseError(f"unknown GP form {form!r} for HSZ {hsz}")
+        type_letter = _clean(row[cols["type"]])
+        if type_letter not in GP_TYPE_MAP:
+            raise ParseError(f"unknown GP type {type_letter!r} for HSZ {hsz}")
+        seen.add(hsz)
+        rows.append({
+            "id": hsz,
+            "form": form,
+            "type": GP_TYPE_MAP[type_letter],
+            "county": canonical_county(_cell(row[cols["county"]])),
+            "settlement": resolve_capital(_clean(row[cols["settlement"]]),
+                                          _clean(row[cols["postal"]])),
+            "named": (doctor := clean_doctor(row[cols["doctor"]])) is not None,
+            "doctorKey": hashlib.sha256(" ".join(doctor.casefold().split()).encode()).hexdigest()[:16]
+            if doctor else None,
+            "operator": operator_kind(_clean(row[cols["provider"]])) if "provider" in cols else "unknown",
+        })
+    if not rows:
+        raise ParseError(f"no registry rows parsed from {xls_path.name}")
+    return rows
+
+
 def parse_vacant_xlsx(xlsx_path: Path) -> list[VacantPraxis]:
     """Parse a vacant-GP XLSX.
 

@@ -11,6 +11,7 @@
 import { t } from '../lib/i18n';
 import sources from '../lib/sources.json';
 import { formatMonth } from '../lib/format';
+import media from '../lib/media.json';
 import { useSnapshot } from '../store/useAppStore';
 
 const AUTHOR_URL = 'https://dulzoltan.hu';
@@ -77,6 +78,10 @@ export function Footer({ month }: { month?: string }) {
           {' · '}
           {/* consent.js finds this and reopens the bar */}
           <a href="#" data-consent-reopen>{t('privacy.reopen')}</a>
+          {' · '}
+          <a href="/media.html">{t('media.navLabel')}</a>
+          {' · '}
+          <a href={media.facebook} rel="noopener">{t('media.facebook')}</a>
         </p>
         <p className="footer__author">
           {t('footer.authorBy')}{' '}

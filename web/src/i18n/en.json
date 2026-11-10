@@ -44,6 +44,7 @@
     "whoElse": "More",
     "menu": "Menu",
     "stock": "District stock",
+    "nonTerritorial": "GPs without a district",
     "districtPage": "District",
     "districtChoose": "Choose a district",
     "districtVulnerable": "The most vulnerable districts",
@@ -250,7 +251,7 @@
     "disclaimer": "NEAK states its own data to be informational, published from the monthly financing contract records. The figures here are not a basis for administrative, legal or care-planning decisions.",
     "vacantNotUnserved": "A vacant district does not mean there is no care: residents are usually seen by a substitute physician, which the public data does not show. Check opening hours and the place of care with the provider.",
     "names": "A physician's name appears only where NEAK itself publishes it: on filled districts in the contracted provider list. Never for vacant or dissolved districts, nor for substitutes.",
-    "noPersonal": "The site asks for no registration and stores no visitor data in its own systems. Visitor statistics (Google Analytics) and speed measurement (Vercel Speed Insights) start only if you separately consent — without consent no measurement code is loaded and no cookie is set. Your language choice and map layers are kept in your own browser and never reach us. Google Fonts serves the typefaces; MapTiler and OpenStreetMap serve the street map, only if you open it. Details in the privacy notice.",
+    "noPersonal": "The site asks for no registration and stores no visitor data in its own systems. Visitor statistics (Google Analytics) and speed measurement (Vercel Speed Insights) start only if you separately consent — without consent no measurement code is loaded and no cookie is set. Your language choice and map layers are kept in your own browser and never reach us. Google Fonts serves the typefaces; MapTiler and OpenStreetMap serve the street map, only if you open it, and YouTube the videos on the press page, only if you start one. Details in the privacy notice.",
     "notOfficial": "A private initiative: not an official publication of NEAK, OKFŐ, NNGYK or any other authority, and not an official position. The author's professional role is given for identification, not as institutional endorsement.",
     "correction": "Found something wrong or out of date? Corrections are best raised with the publisher of the source; errors on this site can be reported on GitHub (@ZoliQua) and are fixed with the next monthly update.",
     "authorBy": "Made by",
@@ -2057,6 +2058,14 @@
     "cellNone": "{county}, {year}: no usable snapshot"
   },
   "balance": {
+    "thNon": "Practices without TEK",
+    "thAllPractices": "All practices",
+    "totalRow": "Total",
+    "totalGp": "GP districts with a territorial care obligation in the country",
+    "tekFigureA": "adult GP and paediatric practices in all,",
+    "tekFigureB": "of them without TEK",
+    "tekClarify": "Why {districts} and not {all}? The map and the vacancy rate are about the {districts} districts: they carry a territorial care obligation (TEK) and answer for the residents of a set area. Beside them work {tn} practices without TEK, which take only the patients who register with them (police and university practices, for example), so they are never listed as vacant. Together they make {all} practices.",
+    "tekLink": "GP practices without TEK in detail: who runs them, and how they dwindled since 2019 →",
     "heading": "How the {kind} district stock stands",
     "total": "{kind} districts in the country",
     "thType": "District type",
@@ -2254,7 +2263,7 @@
     },
     "processors": {
       "title": "Who else is involved",
-      "text": "Google Ireland Limited (Analytics, only with consent; Google is certified under the EU–US Data Privacy Framework), Vercel Inc. (hosting, and with consent the Speed Insights measurements), Google Fonts (typefaces), and MapTiler with OpenStreetMap only if you open the street map. Your browser contacts these for technical reasons, which makes your IP address visible to them."
+      "text": "Google Ireland Limited (Analytics, only with consent; Google is certified under the EU–US Data Privacy Framework), Vercel Inc. (hosting, and with consent the Speed Insights measurements), Google Fonts (typefaces), MapTiler with OpenStreetMap only if you open the street map, and YouTube (Google, from the cookieless youtube-nocookie.com) only if you start a video on the press page. Your browser contacts these for technical reasons, which makes your IP address visible to them."
     },
     "storage": {
       "title": "What your browser keeps",
@@ -4795,5 +4804,95 @@
     "colHow": "What happened",
     "colFin": "FIN code",
     "caveat": "The comparison is made on NEAK's monthly lists, by FIN code. A district that fell vacant and was filled again between two archived months does not show, so every step says how many months it spans. Where a month has no full registry, or the dental terminated-contract list was not archived, the district's fate “cannot be told” — we do not guess. Vacant ≠ unserved: most vacant districts are covered by substitution."
+  },
+  "media": {
+    "navLabel": "In the press",
+    "facebook": "Facebook",
+    "heading": "In the press",
+    "lead": "Articles and broadcasts made from Praxistérkép's data. Each headline links to the original article or recording (in Hungarian); under it is our short review of what it took from the site. The numbers are those valid when the article ran and may have been updated since.",
+    "follow": "We also post new data and analyses on our Facebook page:",
+    "tv": "TV",
+    "start": "the report starts at {time} in the recording",
+    "play": "Play video",
+    "videoNote": "On a click, YouTube's cookieless player (youtube-nocookie.com) loads the recording at the start of the report.",
+    "items": {
+      "m1-hirado-2026-11-09": "The Praxistérkép featured in M1's 19:30 evening news. The link starts the recording where the report begins.",
+      "telex-2026-11-09": "The first major article about the site. It introduces its author and data source, the national picture in October (1,026 vacant GP districts, nearly 1.4 million residents affected), the district in Ibafa empty since 2004, the gaps between counties and the distance to emergency departments. It also covers the link with avoidable mortality, stressing that it is not cause and effect.",
+      "nszo-2026-11-09": "Looks at the shortage from the settlements: 669 of them are served only by vacant GP districts, home to some 533,000 people. Borsod-Abaúj-Zemplén has 129 such settlements, more than a third of the county, followed by Somogy and Vas. It reports November's figure of 1,033 and the ministry's response.",
+      "hazipatika-2026-11-09": "Works with the November data: 1,033 vacant districts (16.4%), more than 1.4 million people affected, 14.8% of the population. It singles out Nógrád as the worst-off county and Ibafa's practice, vacant for 22 years, and explains that vacant is not unserved: most districts have a substitute doctor.",
+      "szeged365-2026-11-09": "A county view: Csongrád-Csanád has the smallest shortage, 18 of 264 districts vacant (6.8%), against Nógrád's 29.8%. It sets out October's national figures and the composite risk index, by which nine of the ten most exposed settlements are in Borsod-Abaúj-Zemplén."
+    }
+  },
+  "tek": {
+    "heading": "GP practices without a district obligation",
+    "thTerritorial": "With TEK (district)",
+    "thNon": "Without TEK",
+    "thAll": "Total",
+    "thShare": "Share without TEK",
+    "total": "All GP and paediatric practices",
+    "note": "Adult and mixed districts are general practice; child districts are paediatric primary care; a mixed district serves adults and children together. Practices without TEK are not part of the vacancy count, so they have no filled/vacant column.",
+    "trendSpan": "Practices without TEK: {start} ({from}) → {end} ({to}), {change}. Districts over the same time: {tStart} → {tEnd}, {tChange}.",
+    "trendFlows": "Followed code by code between the two dates, {left} practices without TEK left the registry, {new} new ones appeared and {kept} stayed throughout.",
+    "noFormChange": "Not one practice became a district, and not one district lost its obligation.",
+    "formChange": "Became a district: {to}; district turned practice without TEK: {from}.",
+    "trendPairs": "Comparing each pair of consecutive archived registries ({n} pairs) shows {left} exits and {new} arrivals, including practices that came and went in between.",
+    "child": "In {from} there were {start} paediatric practices without TEK. The {lastSeen} registry was the last to list one; none since the next archived list ({month}).",
+    "unnamed": "For {n} of the practices without TEK the registry names no contracted physician.",
+    "thMonth": "Archived month",
+    "short": {
+      "adult": "adult",
+      "mixed": "mixed",
+      "child": "child"
+    },
+    "trendNote": "The first archived registry, then the last of each year.",
+    "gap": "The archive is uneven: there is no archived registry between {a} and {b}.",
+    "source": "Source: NEAK GP service registry, the unit's form of care (T: with a territorial obligation, TN: without); {n} archived months."
+  },
+  "tekPage": {
+    "lead": "A small share of GP practices are not districts: they have no area of their own and take only the patients who register with them. They never go on the vacancy list and are in none of the map's numbers. This page shows how many there are, who runs them, and how their number has changed since 2019. (TEK stands for the territorial care obligation.)",
+    "kpi": {
+      "tn": "GP practices without TEK",
+      "share": "of all {all} adult GP and paediatric practices",
+      "change": "since {from}",
+      "institutions": "run by a state body or a university"
+    },
+    "typesHeading": "Districts and practices without TEK, by type",
+    "operatorsHeading": "Who runs them?",
+    "operatorsLead": "By the provider's name ({month}): {state} practices are run by a state body (police, national security and prison services, the tax authority), {university} by a university clinical centre, {company} by a company and {sole} by a physician as a sole trader. Many of them, then, serve a closed group: uniformed staff, a university's people, one firm's employees.",
+    "operatorsNote": "The grouping is made from the provider name in NEAK's registry. A provider founded by a university but run as a company counts as a company. Personal names are not shown.",
+    "operator": {
+      "state": "state body (police, national security, prisons, tax authority)",
+      "university": "university",
+      "company": "company",
+      "sole": "physician as sole trader",
+      "other": "other (private person)",
+      "unknown": "unknown (no provider name in the old registry)"
+    },
+    "timeline": {
+      "heading": "How has their number changed?",
+      "aria": "GP practices without TEK per archived month, from {start} to {end}."
+    },
+    "turnover": {
+      "heading": "Who left, and who came?",
+      "left": "left",
+      "new": "new"
+    },
+    "finding": "Of the practices without TEK run by companies and sole traders, {leftBusiness} closed and only {newBusiness} new ones came. Of those run by state bodies and universities, {leftInst} closed and {newInst} new ones came: the business-run practices are dwindling, the institutional ones are holding.",
+    "unknownLeft": "For {n} of those that left the operator is unknown: the early registries have no provider column.",
+    "pairs": {
+      "heading": "Exits and arrivals between two archived registries",
+      "aria": "Practices without TEK that left or appeared between consecutive archived registries."
+    },
+    "stability": {
+      "heading": "How settled are they?",
+      "lead": "Of today's practices, {since} were already there in {from}. Where a physician is named at both dates, {tn} of practices without TEK have the same physician as in 2019; among districts the share is {t}.",
+      "note": "Compared: {from} and {to}, on the same practice code, where the registry names a contracted physician at both dates. Physicians' names are neither stored nor shown.",
+      "TN": "practice without TEK",
+      "T": "district with TEK"
+    },
+    "whereHeading": "Where are they? ({month})",
+    "byCounty": "By county",
+    "bySeat": "Outside Budapest, by settlement",
+    "tableHeading": "The series in numbers"
   }
 }

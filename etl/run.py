@@ -370,6 +370,13 @@ def main() -> None:
                     describe=lambda r: f", {len(r['kinds']['gp']['monthly'])} GP and "
                                        f"{len(r['kinds']['dental']['monthly'])} dental month pairs"),
              needs=("fluctuation",), output=ROOT / "data" / "changes.json"),
+        # the GP practices without a district obligation (TN), which the
+        # district denominator leaves out, counted in every archived registry
+        Step("nonterritorial", "GP practices without a district obligation",
+             simple("nonterritorial",
+                    describe=lambda r: f", TN {r['span']['start']} -> {r['span']['end']} "
+                                       f"({r['span']['from']} -> {r['span']['to']})"),
+             output=ROOT / "data" / "nonterritorial.json"),
         # outcomes and circumstances, from outside the health registers:
         # what a vacancy costs (deaths), and where it is hardest to fill
         # (income, work, people leaving)

@@ -1,0 +1,50 @@
+{
+  "facebook": "https://www.facebook.com/praxisterkep/",
+  "articles": [
+    {
+      "id": "m1-hirado-2026-11-09",
+      "outlet": "M1 Híradó",
+      "medium": "tv",
+      "date": "2026-11-09",
+      "time": "19:30",
+      "author": null,
+      "title": "Híradó, 2026. november 9. 19:30",
+      "start": "10:36",
+      "url": "https://www.youtube.com/watch?v=RJPQH3asdHM&t=636s",
+      "youtube": "RJPQH3asdHM",
+      "startSeconds": 636
+    },
+    {
+      "id": "telex-2026-11-09",
+      "outlet": "Telex",
+      "date": "2026-11-09",
+      "author": "Németh-Halász Nikolett",
+      "title": "Térképen a háziorvoshiány: van, ahol 22 éve nincs orvos, kétszázhúsz településtől fél óra az út a sürgősségire",
+      "url": "https://telex.hu/belfold/2026/11/09/praxisterkep-haziorvosok-korzetek-szama-betoltetlen-orvoshiany-adatok"
+    },
+    {
+      "id": "nszo-2026-11-09",
+      "outlet": "Népszabadság",
+      "date": "2026-11-09",
+      "author": "Danó Anna",
+      "title": "Térképre vitték a háziorvoshiányt, a borsodi települések egyharmadában nincs saját gyógyító",
+      "url": "https://nszo.hu/2026/11/09/belfold/terkepre-vittek-a-haziorvoshianyt-a-borsodi-telepulesek-egyharmadaban-nincs-sajat-gyogyito/"
+    },
+    {
+      "id": "hazipatika-2026-11-09",
+      "outlet": "Házipatika",
+      "date": "2026-11-09",
+      "author": "Polgári Lilla",
+      "title": "Több mint 1,4 millió magyarnak nincs állandó háziorvosa: van, ahol 22 éve betöltetlen a praxis",
+      "url": "https://www.hazipatika.com/tarsadalom/egeszsegugy/cikkek/haziorvoshiany-betoltetlen-praxisok-magyarorszag-praxisterkep"
+    },
+    {
+      "id": "szeged365-2026-11-09",
+      "outlet": "Szeged365",
+      "date": "2026-11-09",
+      "author": "Bartok Zsófia",
+      "title": "Közel 1,4 millió ember él olyan helyen, ahol nincs állandó háziorvos hazánkban, Csongrád-Csanádban a legjobb a helyzet",
+      "url": "https://szeged365.hu/2026/11/09/kozel-14-millio-ember-el-olyan-helyen-ahol-nincs-allando-haziorvos-hazankban-csongrad-csanadban-a-legjobb-a-helyzet/"
+    }
+  ]
+}
