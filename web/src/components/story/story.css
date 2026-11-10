@@ -48,7 +48,15 @@
   box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
 }
 :root[data-theme='light'] .cutstory__frame { box-shadow: 0 10px 30px rgba(30, 50, 80, 0.16); }
-.cutstory__frame canvas { display: block; width: 100%; cursor: pointer; }
+/* the canvas height before the script measures it: the same curve as
+   storyHeight() in player.ts, so the first measurement changes nothing */
+.cutstory__frame { container-type: inline-size; }
+.cutstory__frame canvas, .cutstory__stage { display: block; width: 100%; height: clamp(330px, 105cqw, 460px); }
+@container (min-width: 560px) {
+  .cutstory__frame canvas, .cutstory__stage { height: clamp(330px, 42cqw, 460px); }
+}
+.cutstory__frame canvas { cursor: pointer; }
+.cutstory--pending .cutstory__controls { min-height: 49px; box-sizing: border-box; }
 .cutstory__controls {
   display: flex; align-items: center; gap: 10px; padding: 8px 12px;
   background: color-mix(in srgb, var(--bg) 88%, transparent); border-top: 1px solid var(--line);

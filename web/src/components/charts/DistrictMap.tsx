@@ -151,7 +151,8 @@ export function DistrictMap({
   const country = useMemo(() => COUNTRY, []);
   const { shapes, capital } = useDistrictShapes(W, H, inset, country);
   const [hover, setHover] = useState<string | null>(null);
-  if (!shapes.length) return null;
+  // hold the map's place while the outlines load, so the pickers under it stay put
+  if (!shapes.length) return <div className="district-map" aria-hidden="true"><div style={{ aspectRatio: `${W} / ${H}` }} /></div>;
   const sorted = [...values.values()].sort((a, b) => a - b);
   // the ramp tops out at the 90th percentile, not at the single worst járás:
   // a lone 75% would squash every other shape into the background, and the

@@ -24,6 +24,7 @@ import { SideNav } from './SideNav';
 import { sideGroups } from '../lib/sideGroups';
 import { Footer } from './Footer';
 import { VedonoSection } from './VedonoSection';
+import { useVedono } from '../lib/vedono';
 import { SpecialistStory } from './story/PageStories';
 import { useHashScroll } from '../lib/useHashScroll';
 import { renderExtraCell } from './EesztCells';
@@ -47,6 +48,7 @@ type Modal = 'sites' | 'rows' | 'counties' | 'professions' | 'institutions'
 export function SpecialistPage() {
   useHashScroll();
   const data = useSpecialist();
+  const vedono = useVedono();
   const [care, setCare] = useState<Care | 'all'>('all');
   const [open, setOpen] = useState<Modal>(null);
 
@@ -90,7 +92,9 @@ export function SpecialistPage() {
       key: t(`specialist.care.${c}`), label: t(`specialist.care.${c}`), color: CARE_COLORS[c],
     })), [care]);
 
-  if (!data) return (<><PageNav /><div className="loading">…</div></>);
+  // the health-visitor section opens the page: wait for it too, or it lands
+  // above everything else after the rest is already drawn
+  if (!data || !vedono) return (<><PageNav /><div className="loading">…</div></>);
   const inp = data.stats.inpatient;
   const outp = data.stats.outpatient;
   const worst = coverage[coverage.length - 1];

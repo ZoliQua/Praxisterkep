@@ -85,7 +85,7 @@ export function Story({ title, mascot, scenes }: { title: string; mascot: Mascot
   return (
     <section className="cutstory" data-export="skip" aria-label={t('story.ui.region', { title })}>
       <div className="cutstory__frame" ref={wrap}>
-        <canvas ref={canvas} style={{ width: size.w || '100%', height: size.h || 330 }} role="img"
+        <canvas ref={canvas} style={size.w ? { width: size.w, height: size.h } : undefined} role="img"
           aria-label={t('story.ui.aria', { title, n: scenes.length })}
           onClick={toggle} />
         <div className="cutstory__controls">
@@ -118,6 +118,25 @@ export function Story({ title, mascot, scenes }: { title: string; mascot: Mascot
         <summary>{t('story.ui.script')}</summary>
         <ol>{scenes.map((s, i) => <li key={i}>{s.say}</li>)}</ol>
       </details>
+    </section>
+  );
+}
+
+/** The story's place, held while its data is still on the way: the same frame,
+ *  controls and script line, empty, so the page under it does not jump when
+ *  the story arrives. */
+export function StoryPending() {
+  return (
+    <section className="cutstory cutstory--pending" data-export="skip" aria-hidden="true">
+      <div className="cutstory__frame">
+        <div className="cutstory__stage" />
+        <div className="cutstory__controls">
+          <span className="cutstory__play" />
+          <span className="cutstory__play" />
+          <div className="cutstory__track" />
+        </div>
+      </div>
+      <div className="cutstory__script">&nbsp;</div>
     </section>
   );
 }

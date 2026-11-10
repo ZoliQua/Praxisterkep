@@ -19,7 +19,8 @@ export function CountyPicker({ onPick }: { onPick?: (county: string) => void }) 
   const shapes = useCountyShapes(W, H);
   const [hover, setHover] = useState<string | null>(null);
 
-  if (!shapes.length) return null;
+  // hold the map's place while the outlines load, so nothing under it jumps
+  if (!shapes.length) return <div className="countypicker" aria-hidden="true"><div style={{ aspectRatio: `${W} / ${H}` }} /></div>;
   const pick = (name: string) => {
     setCounty(name === county ? null : name);
     onPick?.(name);

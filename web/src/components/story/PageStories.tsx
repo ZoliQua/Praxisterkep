@@ -1,7 +1,9 @@
 // One story per page, each fed by the data that page already loads (the same
 // stores and cached loaders, so nothing is fetched twice). A story whose data
-// has not arrived yet is not drawn; a story that cannot be built is left out
-// rather than taking the page down with it.
+// has not arrived yet holds its place with an empty frame of the same size (a
+// story that popped in later pushed the whole page down — the worst layout
+// shift the site had); a story that cannot be built is left out rather than
+// taking the page down with it.
 import { useEffect, useMemo, useState, type ReactElement } from 'react';
 import { t } from '../../lib/i18n';
 import { useContextStore } from '../../lib/context';
@@ -16,7 +18,7 @@ import { useSpecialist } from '../../lib/specialist';
 import { usePharmacy } from '../../lib/pharmacy';
 import { useGyse } from '../../lib/gyse';
 import sources from '../../lib/sources.json';
-import { Story, type Mascot, type Scene } from './Story';
+import { Story, StoryPending, type Mascot, type Scene } from './Story';
 import {
   analysisScenes, countyOverviewScenes, countyScenes, districtOverviewScenes, districtScenes,
   europeScenes, highlightsScenes, landingScenes, methodScenes, specialistScenes,
@@ -33,7 +35,8 @@ function safe(build: () => Scene[]): Scene[] {
   }
 }
 
-function Shown({ title, mascot, scenes }: { title: string; mascot: Mascot; scenes: Scene[] }) {
+function Shown({ title, mascot, scenes, pending = false }: { title: string; mascot: Mascot; scenes: Scene[]; pending?: boolean }) {
+  if (pending) return <StoryPending />;
   if (!scenes.length) return null;
   return <Story title={title} mascot={mascot} scenes={scenes} />;
 }
@@ -63,7 +66,7 @@ export function LandingStory(): ReactElement | null {
   const scenes = useMemo(() => (snapshot ? safe(() => landingScenes({ kind, snapshot, months, mode })) : []),
     [kind, snapshot, months, mode]);
   return (
-    <Shown key={`${kind}-${mode}`} mascot={mascotOf(kind)} scenes={scenes}
+    <Shown key={`${kind}-${mode}`} mascot={mascotOf(kind)} scenes={scenes} pending={!snapshot}
       title={t('story.landing.title', { label: t(`kinds.${kind}.label`) })} />
   );
 }
@@ -73,7 +76,7 @@ export function HighlightsStory({ data }: { data: HighlightsInput }): ReactEleme
   const eu = useJson<EuropeSummaryInput>('europe_summary.json');
   const scenes = useMemo(() => safe(() => highlightsScenes(data, eu)), [data, eu]);
   // wait for the European half, so the story does not change length mid-play
-  if (!eu) return null;
+  if (!eu) return <StoryPending />;
   return (
     <Story mascot="house" scenes={scenes}
       title={t('story.highlights.title', { heading: t('highlights.heading') })} />
@@ -93,6 +96,7 @@ export function CountyStory(): ReactElement | null {
     return snapshot ? safe(() => countyOverviewScenes(snapshot, kind, mode)) : [];
   }, [picked, data, kind, snapshot, mode]);
   const title = picked ? t('story.area.title', { name: picked }) : t('story.countyOverview.title');
+  if (!snapshot && !scenes.length) return <StoryPending />;
   return <Story key={`${picked ?? ''}-${kind}-${mode}`} title={title} mascot={mascotOf(kind)} scenes={scenes} />;
 }
 
@@ -107,7 +111,7 @@ export function DistrictStory(): ReactElement | null {
     if (!data) return [];
     return safe(() => (picked ? districtScenes(data, picked, kind, snapshot) : districtOverviewScenes(data, kind)));
   }, [picked, data, kind, snapshot]);
-  if (!data) return null;
+  if (!data) return <StoryPending />;
   const title = picked ? t('story.area.title', { name: picked }) : t('story.districtOverview.title');
   return <Story key={`${picked ?? ''}-${kind}`} title={title} mascot={mascotOf(kind)} scenes={scenes} />;
 }
@@ -118,14 +122,15 @@ export function AnalysisStory({ kind }: { kind: PraxisKind }): ReactElement | nu
   const outcomes = useOutcomes();
   const scenes = useMemo(() => (survival && outcomes
     ? safe(() => analysisScenes(kind, survival.kinds[kind] ?? null, outcomes)) : []), [kind, survival, outcomes]);
-  return <Shown key={kind} title={t('story.analysis.title')} mascot={mascotOf(kind)} scenes={scenes} />;
+  return <Shown key={kind} title={t('story.analysis.title')} mascot={mascotOf(kind)} scenes={scenes}
+    pending={!survival || !outcomes} />;
 }
 
 /** europa.html: Hungary against the chosen group, for the chosen branch. */
 export function EuropeStory({ kind, group }: { kind: PraxisKind; group: GroupKey }): ReactElement | null {
   const raw = useEurope();
   const scenes = useMemo(() => (raw ? safe(() => europeScenes(raw, kind, group)) : []), [raw, kind, group]);
-  return <Shown key={`${kind}-${group}`} title={t('story.europe.title')} mascot={mascotOf(kind)} scenes={scenes} />;
+  return <Shown key={`${kind}-${group}`} title={t('story.europe.title')} mascot={mascotOf(kind)} scenes={scenes} pending={!raw} />;
 }
 
 /** szakellato.html: health visitors, specialist care, pharmacies and medical aids. */
@@ -137,7 +142,8 @@ export function SpecialistStory(): ReactElement | null {
   const scenes = useMemo(() => (vedono && specialist && pharmacy && gyse
     ? safe(() => specialistScenes({ vedono, specialist, pharmacy, gyse } as unknown as SpecialistInput)) : []),
   [vedono, specialist, pharmacy, gyse]);
-  return <Shown title={t('story.specialist.title')} mascot="house" scenes={scenes} />;
+  return <Shown title={t('story.specialist.title')} mascot="house" scenes={scenes}
+    pending={!vedono || !specialist || !pharmacy || !gyse} />;
 }
 
 /** modszertan.html: the data pipeline itself. */
@@ -155,5 +161,6 @@ export function MethodStory(): ReactElement | null {
       sources, timeseries: timeseries.kinds, latest: latest.kinds, month: latest.month, pipeline, settlementPages: pages,
     }));
   }, [latest, timeseries, pipeline, slugs]);
-  return <Shown title={t('story.method.title')} mascot={mascotOf(kind)} scenes={scenes} />;
+  return <Shown title={t('story.method.title')} mascot={mascotOf(kind)} scenes={scenes}
+    pending={!latest || !timeseries || !pipeline || !slugs} />;
 }
