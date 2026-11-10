@@ -14,9 +14,17 @@ end signed no contract. The lists are PDFs on neak.gov.hu, one per year and
 programme; the URLs are below and every file is archived under
 data/raw/neak_grants/ with its SHA-256 in the manifest beside it.
 
-The winner's name is read past and never kept: the site shows a physician's
-name only from the NEAK registry of contracted providers (CLAUDE.md rule 3),
-and a grant list is not that registry.
+The winner's name is never kept: the site shows a physician's name only
+from the NEAK registry of contracted providers (CLAUDE.md rule 3), and a
+grant list is not that registry. It is read once, in memory, for one job
+only: where the address leaves a winner ambiguous (several districts at one
+surgery) or unmatched (an address NEAK misspelt), the name is held against
+the doctor the registry lists in those few districts — the candidates at
+the address, or the same settlement — and a single hit gives the district
+(matchedBy "name"). Never across the country: two doctors with a common
+name cannot be told apart. A name can only be found where the winner took
+the district up, so these districts would all count as filled; they are
+kept out of every share (summarise) and shown apart.
 
 What this module adds is the follow-up NEAK does not publish. Each winner's
 address is matched to a district (FIN code) through the monthly archive:
@@ -27,7 +35,8 @@ address is matched to a district (FIN code) through the monthly archive:
      for;
   2. failing that, a filled district at that address in a registry snapshot
      from the grant year on — the district the winner went on to run;
-  3. failing both, the winner stays unmatched and is counted as such.
+  3. failing both, the winner stays unmatched and is counted as such;
+  4. an ambiguous or unmatched winner is then looked up by name, as above.
 
 Then each matched district's status in the latest month: filled, vacant
 again, or gone from the registry (dissolved or merged). The comparison
@@ -247,6 +256,69 @@ def parse(path: Path, programme: str, kind: str, year: int, places: Places) -> l
     return winners
 
 
+def winner_names(path: Path) -> dict[int, str]:
+    """The name column of a list, by row number — kept in memory by build()
+    for match_by_name() and never written anywhere."""
+    with pdfplumber.open(path) as pdf:
+        rows = [r for page in pdf.pages for t in page.extract_tables() for r in t]
+    out = {}
+    for r in rows:
+        cells = [c for c in r if c not in (None, "")]
+        if len(cells) == 5 and re.fullmatch(r"\d+\.?", str(cells[0]).strip()):
+            out[int(str(cells[0]).strip(". "))] = " ".join(str(cells[1]).split())
+    return out
+
+
+def _name_tokens(name: str) -> frozenset[str]:
+    """A doctor's name as a set of words: accents, titles and the no-contract
+    asterisk off, so "Dr. Kovács-Nagy Éva*" and "dr. Kovács Nagy Éva" agree."""
+    s = unicodedata.normalize("NFD", name or "")
+    s = "".join(ch for ch in s if unicodedata.category(ch) != "Mn").casefold()
+    s = re.sub(r"\bdr\.?|\b(?:med|univ|habil|phd|dent)\b\.?|\*", " ", s)
+    s = re.sub(r"[^a-z\s]", " ", s.replace("-", " "))
+    return frozenset(t for t in s.split() if len(t) > 1)
+
+
+def same_doctor(a: str, b: str) -> bool:
+    """One name inside the other, at least two words each: a married name
+    written with or without the maiden one still agrees."""
+    x, y = _name_tokens(a), _name_tokens(b)
+    return len(x) >= 2 and len(y) >= 2 and (x <= y or y <= x)
+
+
+def match_by_name(w: dict, name: str | None, snaps: list[dict],
+                  candidates: list[str] | None) -> str | None:
+    """The one district, among the address's candidates (or, with none, the
+    settlement's districts), whose registered doctor from the grant year on
+    is the winner. None unless exactly one fits."""
+    if not name:
+        return None
+    hits = set()
+    for s in snaps:
+        if s["month"] < f"{w['year']}-01":
+            continue
+        for p in s["filled"]:
+            if candidates is not None and p["id"] not in candidates:
+                continue
+            if candidates is None and not _here(p.get("settlement"), w):
+                continue
+            if same_doctor(name, p.get("doctor", "")):
+                hits.add(p["id"])
+    return hits.pop() if len(hits) == 1 else None
+
+
+def _vacant_since(fin: str, snaps: list[dict], last: str) -> str | None:
+    """Since when the district was vacant, as the last vacant list up to `last` says."""
+    since = None
+    for s in snaps:
+        if s["month"] > last:
+            break
+        for p in s["vacant"]:
+            if p["id"] == fin:
+                since = p.get("vacantSince")
+    return since
+
+
 def snapshots(kind: str) -> list[dict]:
     out = []
     for month_dir in sorted(p for p in DATA.iterdir() if re.fullmatch(r"\d{4}-\d{2}", p.name)):
@@ -454,11 +526,15 @@ def matched_comparison(rows: list[dict], snaps: list[dict], latest: dict,
 
 
 def summarise(rows: list[dict]) -> dict:
-    c = collections.Counter(r["status"] for r in rows if r["contract"] and r["status"])
+    # a district found by name is a district taken up: counting its outcome
+    # would flatter the grant, so it is counted apart
+    c = collections.Counter(r["status"] for r in rows
+                            if r["contract"] and r["status"] and r["matchedBy"] != "name")
     return {
         "winners": len(rows),
         "noContract": sum(1 for r in rows if not r["contract"]),
-        "matched": sum(1 for r in rows if r["status"]),
+        "matched": sum(1 for r in rows if r["status"] and r["matchedBy"] != "name"),
+        "byName": sum(1 for r in rows if r["contract"] and r["matchedBy"] == "name"),
         "ambiguous": sum(1 for r in rows if r["matchedBy"] == "ambiguous"),
         "unmatched": sum(1 for r in rows if r["matchedBy"] == "none"),
         "filled": c["filled"], "vacant": c["vacant"], "gone": c["gone"],
@@ -469,8 +545,10 @@ def build(refresh: bool = False) -> dict:
     manifest = archive(refresh)
     places = Places()
     winners: list[dict] = []
+    names: dict[tuple, dict[int, str]] = {}
     for key in FILES:
         winners += parse(RAW / _file_name(key), *key, places)
+        names[key] = winner_names(RAW / _file_name(key))
 
     out_kinds: dict[str, dict] = {}
     for kind in ("gp", "dental"):
@@ -484,14 +562,25 @@ def build(refresh: bool = False) -> dict:
                   "filledIds": {p["id"] for p in latest_filled["filled"]},
                   "vacantIds": {p["id"] for p in latest_vacant["vacant"]}}
         rows = []
+        # every district an address pointed at, before any name decided
+        # between them: none of them can stand in the comparison group
+        at_address: set[str] = set()
         for w in (w for w in winners if w["kind"] == kind):
             fins, how, since = match(w, snaps)
+            if w["programme"] == "settle":
+                at_address.update(fins)
+            if how in ("ambiguous", "none"):
+                name = names[(w["programme"], kind, w["year"])].get(w["seq"])
+                found = match_by_name(w, name, snaps, fins if how == "ambiguous" else None)
+                if found:
+                    fins, how = [found], "name"
+                    since = _vacant_since(found, snaps, f"{w['year']}-12")
             rows.append({**w, "fins": fins, "matchedBy": how, "vacantSince": since,
                          "status": (status_now(fins, latest)
                                     if fins and how != "ambiguous" else None)})
         settle = [r for r in rows if r["programme"] == "settle"]
         years = sorted({r["year"] for r in settle})
-        granted = {f for r in settle for f in r["fins"]}
+        granted = at_address | {f for r in settle for f in r["fins"]}
         out_kinds[kind] = {
             "latestMonth": latest["month"],
             "years": years,

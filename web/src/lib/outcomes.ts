@@ -94,6 +94,8 @@ export type GrantStatus = 'filled' | 'vacant' | 'gone' | null;
 export interface GrantSummary {
   winners: number; noContract: number; matched: number; ambiguous: number;
   unmatched: number; filled: number; vacant: number; gone: number;
+  /** found by the winner's name, kept out of every share (neak_grants.summarise) */
+  byName?: number;
 }
 
 export interface GrantKind {

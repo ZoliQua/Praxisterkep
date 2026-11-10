@@ -2667,13 +2667,16 @@
         "winners": "winners over all years",
         "filled": "still have a doctor ({n} of {of} unambiguously matched winners with a contract)",
         "comparison": "of districts vacant 12+ months without a grant have filled since, depending on the year",
-        "unknown": "winners whose district cannot be identified unambiguously (shared surgery address or no match)"
+        "unknown": "winners whose district neither the address nor the name identifies"
       },
+      "byNameNote": "For {n} winners the address did not decide the district and the name did (the winner is the district’s doctor in NEAK’s registry). These districts stay out of the shares, because a name can only be found where the winner actually took the district up.",
+      "byNameOpen": "Open the list →",
       "yearsHeading": "Winners by year — and where their district stands in {month}",
       "part": {
         "filled": "still filled",
         "vacant": "vacant again",
         "gone": "district dissolved",
+        "byName": "identified by name (not in the shares)",
         "ambiguous": "ambiguous (shared address)",
         "unmatched": "not identified",
         "noContract": "no contract signed"
@@ -2686,7 +2689,7 @@
       "without": "vacant 12+ months, no grant",
       "mapHeading": "Winning districts per járás",
       "countyHeading": "By county",
-      "caveat": "The groups do not differ at random: a granted district was chosen by a doctor who wanted to work there, so the gap is not the grant's effect alone. Matching is by surgery address; where one address hosts several districts and the monthly data cannot tell which one the winner took, it is not counted. Winners' names are not shown.",
+      "caveat": "The two groups do not differ by chance: a doctor chose the granted district because they wanted to work there, so the gap is not the grant’s effect alone. Matching rests on the surgery address; where one address hosts several districts (a health centre) and the monthly data cannot tell which one the winner filled, the winner’s name is held against the doctor NEAK’s registry lists in those districts. Districts found that way are shown apart and left out of the shares. Winners’ names are neither stored nor shown.",
       "source": "Source: NEAK, winners of the GP and dental settlement and practice-right grants (2019, 2021–2025; the 2020 list is not available), district outcomes from NEAK's monthly data.",
       "table": {
         "title": {
@@ -2716,7 +2719,8 @@
         "vacant": "on the list of vacant districts",
         "registry": "in the provider registry",
         "ambiguous": "shared surgery address, several possible districts",
-        "none": "not found"
+        "none": "not found",
+        "name": "by the winner’s name, among the address’s candidates"
       },
       "matchedHeading": "Matched to similar districts",
       "matched": {
@@ -2824,7 +2828,7 @@
     },
     "grants": {
       "title": "Settlement and practice-right grants — NEAK",
-      "text": "NEAK publishes each year's winners of the GP and dental settlement grants and the GP practice-right grant: county, settlement, surgery address (2019, 2021–2025; the 2020 list is not on NEAK's site). Winners' names are neither stored nor shown. Each winner's address is matched to a district (FIN) in NEAK's monthly data: first a district listed vacant at that address in the grant year or the two before; where one address has several, the one that left the vacant list in the grant year or the next; where that does not decide, the winner is marked ambiguous and left out of every share. Obvious slips in NEAK's lists (wrong county, misspelt settlement) are corrected by rule or by a flagged hand correction. Comparison group: districts vacant 12+ months at the end of the year without a grant. The groups do not differ at random — a doctor chose the granted district — so the gap is not the grant's pure effect. On top of this, a matched comparison: each granted district is set against up to five districts without a grant from the month it was itself still vacant, same branch, same vacancy band (12–24 months, 2–5 years, over 5 years) and same settlement-size band (cut at 1,000, 3,000 and 10,000), in the same county where possible; selection is deterministic (nearest vacancy length, then FIN)."
+      "text": "NEAK publishes each year's winners of the GP and dental settlement grants and the GP practice-right grant: county, settlement, surgery address (2019, 2021–2025; the 2020 list is not on NEAK's site). Winners' names are neither stored nor shown; they are read for one purpose only, while the data is processed. Each winner's address is matched to a district (FIN) in NEAK's monthly data: first a district listed vacant at that address in the grant year or the two before; where one address has several, the one that left the vacant list in the grant year or the next; where that does not decide, or no district sits at the address (NEAK's slips), the winner's name is held against the doctor NEAK's registry lists in the address's candidate districts (with none, the settlement's), from the grant year on; exactly one hit gives the district. A name is never searched for across the country — two doctors with the same name cannot be told apart. Districts found this way are flagged and left out of every share — a name can only be found where the winner took the district up, which would bias the share upward — and every candidate at the address stays out of the comparison group. What still does not decide is marked ambiguous and left out as well. Obvious slips in NEAK's lists (wrong county, misspelt settlement) are corrected by rule or by a flagged hand correction. Comparison group: districts vacant 12+ months at the end of the year without a grant. The groups do not differ at random — a doctor chose the granted district — so the gap is not the grant's pure effect. On top of this, a matched comparison: each granted district is set against up to five districts without a grant from the month it was itself still vacant, same branch, same vacancy band (12–24 months, 2–5 years, over 5 years) and same settlement-size band (cut at 1,000, 3,000 and 10,000), in the same county where possible; selection is deterministic (nearest vacancy length, then FIN)."
     },
     "forecast": {
       "title": "Forecast: a year from now",

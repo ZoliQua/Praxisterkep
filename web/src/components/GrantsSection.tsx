@@ -21,22 +21,26 @@ import {
   GRANT_COLUMNS, grantFileKey, grantPart, grantRows, useGrantFile, type GrantWinner,
 } from '../lib/grants';
 
-const ORDER = ['filled', 'vacant', 'gone', 'ambiguous', 'unmatched', 'noContract'];
+const ORDER = ['filled', 'vacant', 'gone', 'byName', 'ambiguous', 'unmatched', 'noContract'];
 const COLORS: Record<string, string> = {
-  filled: 'var(--calm)', vacant: 'var(--bad)', gone: 'var(--approx)', ambiguous: 'var(--amber)',
+  filled: 'var(--calm)', vacant: 'var(--bad)', gone: 'var(--approx)', byName: 'var(--accent)',
+  ambiguous: 'var(--amber)',
   unmatched: 'var(--ink-faint)', noContract: 'var(--line-strong)',
 };
 
 type Kind = 'gp' | 'dental';
 type Winner = { contract: boolean; status: string | null; matchedBy: string };
 
-/** the six parts of a set of winners, as the ETL summary counts them */
+/** the parts of a set of winners, as the ETL summary counts them: a district
+ *  found only by the winner's name is its own part, outside the outcomes */
 function partsOf(list: Winner[]): Record<string, number> {
   const signed = list.filter((w) => w.contract);
+  const byAddress = signed.filter((w) => w.matchedBy !== 'name');
   return {
-    filled: signed.filter((w) => w.status === 'filled').length,
-    vacant: signed.filter((w) => w.status === 'vacant').length,
-    gone: signed.filter((w) => w.status === 'gone').length,
+    filled: byAddress.filter((w) => w.status === 'filled').length,
+    vacant: byAddress.filter((w) => w.status === 'vacant').length,
+    gone: byAddress.filter((w) => w.status === 'gone').length,
+    byName: signed.length - byAddress.length,
     ambiguous: signed.filter((w) => w.matchedBy === 'ambiguous').length,
     unmatched: signed.filter((w) => w.matchedBy === 'none').length,
     noContract: list.length - signed.length,
@@ -152,6 +156,14 @@ export function GrantsSection() {
           <b>{formatNumber(total.ambiguous + total.unmatched)}</b>
           <span>{t('outcomes.grants.kpi.unknown')}</span></button>
       </div>
+      {(total.byName ?? 0) > 0 && (
+        <p className="extra-note">
+          {t('outcomes.grants.byNameNote', { n: formatNumber(total.byName ?? 0) })}{' '}
+          <button type="button" className="pdfx__link"
+            onClick={() => setTable({ parts: ['byName'], labelKey: 'outcomes.grants.part.byName' })}>
+            {t('outcomes.grants.byNameOpen')}</button>
+        </p>
+      )}
 
       <h3 className="outcome__sub">{t('outcomes.grants.yearsHeading', { month: g.latestMonth })}</h3>
       <StackedBars rows={years.map((r) => ({ key: String(r.year), label: String(r.year), parts: parts(r) }))}

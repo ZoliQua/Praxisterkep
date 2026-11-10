@@ -2667,13 +2667,16 @@
         "winners": "nyertes az összes évben",
         "filled": "körzetében ma is van orvos ({n} / {of} egyértelműen azonosított, szerződött nyertes)",
         "comparison": "a támogatás nélküli, legalább egy éve üres körzetekből töltődött be azóta, évtől függően",
-        "unknown": "nyertes körzete nem azonosítható egyértelműen (közös rendelőcím vagy cím nélküli egyezés)"
+        "unknown": "nyertes körzete sem a cím, sem a név alapján nem azonosítható egyértelműen"
       },
+      "byNameNote": "{n} nyertes körzetét a cím nem döntötte el, a nyertes neve igen (a NEAK nyilvántartásában a körzet orvosaként szerepel). Ezek a körzetek nem számítanak bele az arányokba, mert név szerinti egyezést csak ott találunk, ahol a nyertes ténylegesen átvette a körzetet.",
+      "byNameOpen": "A lista megnyitása →",
       "yearsHeading": "A nyertesek évenként — és hol tart ma a körzetük ({month})",
       "part": {
         "filled": "ma is betöltött",
         "vacant": "újra betöltetlen",
         "gone": "a körzet megszűnt",
+        "byName": "név alapján azonosítva (nem számít bele az arányba)",
         "ambiguous": "nem egyértelmű (közös rendelőcím)",
         "unmatched": "nem azonosított",
         "noContract": "nem kötött szerződést"
@@ -2686,7 +2689,7 @@
       "without": "támogatás nélkül, legalább egy éve üres körzetek",
       "mapHeading": "Hány nyertes körzet jutott egy-egy járásba",
       "countyHeading": "Megyénként",
-      "caveat": "A két csoport nem véletlenül különbözik: a támogatott körzetet egy orvos választotta, mert ott akart dolgozni, így a különbség nem csak a támogatás hatása. A párosítás a rendelő címén alapul; ahol egy címen több körzet működik (egészségház), és a havi adatokból nem dönthető el, melyiket töltötte be a nyertes, ott nem számolunk. A nyertesek nevét nem közöljük.",
+      "caveat": "A két csoport nem véletlenül különbözik: a támogatott körzetet egy orvos választotta, mert ott akart dolgozni, így a különbség nem csak a támogatás hatása. A párosítás a rendelő címén alapul; ahol egy címen több körzet működik (egészségház), és a havi adatokból nem dönthető el, melyiket töltötte be a nyertes, ott a nyertes nevét vetjük össze a NEAK nyilvántartásában az adott körzetek orvosával. Az így azonosított körzeteket külön mutatjuk, és nem számoljuk bele az arányokba. A nyertesek nevét nem tároljuk és nem közöljük.",
       "source": "Forrás: NEAK, háziorvosi és fogorvosi letelepedési, illetve praxisjog-vásárlási pályázatok nyertesei (2019, 2021–2025; a 2020-as lista nem elérhető), a körzetek sorsa a havi NEAK-adatokból.",
       "table": {
         "title": {
@@ -2716,7 +2719,8 @@
         "vacant": "a betöltetlen körzetek listáján",
         "registry": "a szolgáltatói nyilvántartásban",
         "ambiguous": "közös rendelőcím, több lehetséges körzet",
-        "none": "nem találtuk meg"
+        "none": "nem találtuk meg",
+        "name": "a nyertes neve alapján, a cím jelöltjei közül"
       },
       "matchedHeading": "Hasonló körzetekhez illesztve",
       "matched": {
@@ -2824,7 +2828,7 @@
     },
     "grants": {
       "title": "Letelepedési és praxisjog-támogatások — NEAK",
-      "text": "A NEAK évente közzéteszi a háziorvosi és fogorvosi letelepedési, valamint a háziorvosi praxisjog-vásárlási pályázat nyerteseit: megye, település, a rendelő címe (2019, 2021–2025; a 2020-as lista a NEAK oldalán nem érhető el). A nyertesek nevét nem tároljuk és nem közöljük. Minden nyertes címét a havi NEAK-adatokban egy körzethez (FIN-kódhoz) kötjük: elsőként a nyertes évében és az azt megelőző két évben betöltetlenként listázott, azonos című körzethez; ha egy címen több ilyen körzet van, azt választjuk, amelyik a támogatás évében vagy az azt követőben lekerült az üres listáról; ha ez sem dönt, a nyertest nem egyértelműként jelöljük és kihagyjuk minden arányból. A NEAK listáinak nyilvánvaló elírásait (rossz megye, elgépelt településnév) szabállyal vagy jelölt kézi javítással igazítjuk. Összehasonlító csoport: az adott év végén legalább 12 hónapja betöltetlen, támogatást nem kapott körzetek. A két csoport nem véletlenszerűen különbözik — a támogatott körzetet egy orvos választotta —, ezért a különbség nem a támogatás tiszta hatása. Ezen felül illesztett összevetés: minden támogatott körzet mellé legfeljebb öt, támogatást nem kapott körzetet választunk abból a hónapból, amikor a támogatott még üres volt, azonos ágban, azonos üresedési sávban (12–24 hónap, 2–5 év, 5 év fölött) és azonos településméret-sávban (1000, 3000, 10 000 lakos határokkal), lehetőség szerint ugyanabban a megyében; a választás determinisztikus (a legközelebbi üresedési hossz, majd a FIN-kód)."
+      "text": "A NEAK évente közzéteszi a háziorvosi és fogorvosi letelepedési, valamint a háziorvosi praxisjog-vásárlási pályázat nyerteseit: megye, település, a rendelő címe (2019, 2021–2025; a 2020-as lista a NEAK oldalán nem érhető el). A nyertesek nevét nem tároljuk és nem közöljük; egyetlen célra olvassuk be, a feldolgozás idejére. Minden nyertes címét a havi NEAK-adatokban egy körzethez (FIN-kódhoz) kötjük: elsőként a nyertes évében és az azt megelőző két évben betöltetlenként listázott, azonos című körzethez; ha egy címen több ilyen körzet van, azt választjuk, amelyik a támogatás évében vagy az azt követőben lekerült az üres listáról; ha ez sem dönt, vagy a címen nincs körzet (a NEAK listáinak elírásai), a nyertes nevét vetjük össze a NEAK nyilvántartásában a cím jelölt körzeteinek (cím híján a település körzeteinek) orvosával, a támogatás évétől kezdve; ha pontosan egy körzet egyezik, az a nyertesé. Név szerint soha nem keresünk országosan, mert két azonos nevű orvos nem különböztethető meg. Az így azonosított körzeteket külön jelöljük és kihagyjuk minden arányból — név szerinti egyezés csak ott van, ahol a nyertes átvette a körzetet, ami felfelé torzítana —, és az összehasonlító csoportból a cím minden jelöltjét kizárjuk. Ami így sem dönthető el, azt nem egyértelműként jelöljük és szintén kihagyjuk. A NEAK listáinak nyilvánvaló elírásait (rossz megye, elgépelt településnév) szabállyal vagy jelölt kézi javítással igazítjuk. Összehasonlító csoport: az adott év végén legalább 12 hónapja betöltetlen, támogatást nem kapott körzetek. A két csoport nem véletlenszerűen különbözik — a támogatott körzetet egy orvos választotta —, ezért a különbség nem a támogatás tiszta hatása. Ezen felül illesztett összevetés: minden támogatott körzet mellé legfeljebb öt, támogatást nem kapott körzetet választunk abból a hónapból, amikor a támogatott még üres volt, azonos ágban, azonos üresedési sávban (12–24 hónap, 2–5 év, 5 év fölött) és azonos településméret-sávban (1000, 3000, 10 000 lakos határokkal), lehetőség szerint ugyanabban a megyében; a választás determinisztikus (a legközelebbi üresedési hossz, majd a FIN-kód)."
     },
     "forecast": {
       "title": "Előrejelzés: egy év múlva",

@@ -288,3 +288,35 @@ def test_eurostat_guard_refuses_halves_that_do_not_add_up():
                       "eu": {"avoidable": {"2023": 240.0}, "treatable": {}, "preventable": {}}}}
     with pytest.raises(ParseError):
         eu.guard(bad)
+
+
+def doc(month, filled):
+    return {"month": month, "vacant": [],
+            "filled": [{"id": f, "settlement": "Falu", "address": a, "doctor": d} for f, a, d in filled]}
+
+
+def test_the_same_doctor_with_and_without_title_maiden_name_or_accents():
+    assert neak_grants.same_doctor("Dr. Kovács-Nagy Éva*", "dr. Kovacs Nagy Eva")
+    assert neak_grants.same_doctor("Dr. Szabó Péterné Kiss Anna", "Dr. Kiss Anna")
+    assert not neak_grants.same_doctor("Dr. Kiss Anna", "Dr. Kiss Péter")
+    # one word is not a name
+    assert not neak_grants.same_doctor("Kiss", "Dr. Kiss Anna")
+
+
+def test_a_name_decides_only_among_the_candidates_and_only_once():
+    snaps = [doc("2021-06", [("A", "Fő u. 1.", "Dr. Kiss Anna"), ("C", "Fő u. 1.", "Dr. Nagy Béla"),
+                             ("D", "Kert u. 2.", "Dr. Kiss Anna")])]
+    assert neak_grants.match_by_name(WINNER, "Dr. Kiss Anna", snaps, ["A", "C"]) == "A"
+    # with no candidates the whole settlement is searched: two hits decide nothing
+    assert neak_grants.match_by_name(WINNER, "Dr. Kiss Anna", snaps, None) is None
+    assert neak_grants.match_by_name(WINNER, "Dr. Tóth Ede", snaps, ["A", "C"]) is None
+    # a registry from before the grant year does not count
+    assert neak_grants.match_by_name({**WINNER, "year": 2022}, "Dr. Kiss Anna", snaps, ["A", "C"]) is None
+
+
+def test_a_district_found_by_name_stays_out_of_the_shares():
+    rows = [{"contract": True, "status": "filled", "matchedBy": "vacant"},
+            {"contract": True, "status": "filled", "matchedBy": "name"},
+            {"contract": True, "status": None, "matchedBy": "ambiguous"}]
+    s = neak_grants.summarise(rows)
+    assert (s["filled"], s["matched"], s["byName"], s["ambiguous"]) == (1, 1, 1, 1)

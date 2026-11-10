@@ -13,7 +13,7 @@ import type { ColDef, Row } from './eesztTable';
 export interface GrantWinner {
   programme: 'settle' | 'practice'; kind: 'gp' | 'dental'; year: number; seq: number;
   county: string; settlement: string; district: string; address: string;
-  contract: boolean; fins: string[]; matchedBy: 'vacant' | 'registry' | 'ambiguous' | 'none';
+  contract: boolean; fins: string[]; matchedBy: 'vacant' | 'registry' | 'ambiguous' | 'none' | 'name';
   vacantSince: string | null; status: 'filled' | 'vacant' | 'gone' | null;
 }
 
@@ -41,11 +41,12 @@ export function useGrantFile(wanted: boolean): GrantFile | null {
   return data;
 }
 
-/** The part of the charts a winner falls in — the same six partsOf() counts. */
+/** The part of the charts a winner falls in — the same parts partsOf() counts. */
 export function grantPart(w: Pick<GrantWinner, 'contract' | 'matchedBy' | 'status'>): string {
   if (!w.contract) return 'noContract';
   if (w.matchedBy === 'ambiguous') return 'ambiguous';
   if (w.matchedBy === 'none') return 'unmatched';
+  if (w.matchedBy === 'name') return 'byName';
   return w.status ?? 'unmatched';
 }
 
@@ -72,7 +73,11 @@ export function grantRows(list: GrantWinner[]): Row[] {
   return list.map((w) => ({
     year: w.year, seq: w.seq, county: w.county, settlement: w.settlement, district: w.district,
     address: w.address, contract: w.contract,
-    part: t(`outcomes.grants.part.${grantPart(w)}`),
+    // a district found by name still says where it stands, beside why it is
+    // not counted
+    part: grantPart(w) === 'byName' && w.status
+      ? `${t(`outcomes.grants.part.${w.status}`)} (${t('outcomes.grants.part.byName')})`
+      : t(`outcomes.grants.part.${grantPart(w)}`),
     matchedBy: t(`outcomes.grants.matchedBy.${w.matchedBy}`),
     vacantSince: w.vacantSince ? formatMonth(w.vacantSince) : null,
     fins: w.fins.join(', '),
