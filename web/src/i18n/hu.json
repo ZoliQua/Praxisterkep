@@ -2063,7 +2063,7 @@
     "totalRow": "Összesen",
     "totalGp": "területi ellátási kötelezettséggel rendelkező háziorvosi körzet az országban",
     "tekFigureA": "háziorvosi és házi gyermekorvosi praxis összesen, ebből",
-    "tekFigureB": "TEK nélküli",
+    "tekFigureB": "TEK (területi ellátási kötelezettség) nélküli",
     "tekClarify": "Miért {districts} és nem {all}? A térkép és a betöltetlenségi arány a {districts} körzetről szól: ezeknek van területi ellátási kötelezettségük (TEK), egy kijelölt terület lakóiért felelnek. Mellettük {tn} TEK nélküli praxis működik, amely csak a hozzá bejelentkezett betegeket látja el (például rendőrségi és egyetemi praxisok), ezért betöltetlenként sosem szerepel. A kettő együtt {all} praxis.",
     "tekLink": "A TEK nélküli háziorvosi praxisok részletesen: ki működteti őket, és hogyan fogytak 2019 óta →",
     "heading": "Hogyan áll a {kind} körzetállomány?",

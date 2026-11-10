@@ -2063,7 +2063,7 @@
     "totalRow": "Total",
     "totalGp": "GP districts with a territorial care obligation in the country",
     "tekFigureA": "adult GP and paediatric practices in all,",
-    "tekFigureB": "of them without TEK",
+    "tekFigureB": "of them without TEK (territorial care obligation)",
     "tekClarify": "Why {districts} and not {all}? The map and the vacancy rate are about the {districts} districts: they carry a territorial care obligation (TEK) and answer for the residents of a set area. Beside them work {tn} practices without TEK, which take only the patients who register with them (police and university practices, for example), so they are never listed as vacant. Together they make {all} practices.",
     "tekLink": "GP practices without TEK in detail: who runs them, and how they dwindled since 2019 →",
     "heading": "How the {kind} district stock stands",

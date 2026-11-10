@@ -81,7 +81,9 @@ export default function App() {
     <>
       <nav className="topnav">
         <div className="topnav__inner">
-          <span className="topnav__brand">{t('site.title')}</span>
+          {/* the landing too: every page's brand leads home, and here it is the
+              way back to the top with the reader's place kept */}
+          <a className="topnav__brand" href={contextHref(import.meta.env.BASE_URL)}>{t('site.title')}</a>
           <div className="topnav__kind" role="group">
             <button aria-pressed={kind === 'dental'}
               title={t('kinds.dental.label')} aria-label={t('kinds.dental.label')}
