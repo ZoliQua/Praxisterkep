@@ -4816,10 +4816,13 @@
     "lead": "Cikkek és műsorok, amelyek a Praxistérkép adataiból dolgoztak. A cím az eredeti cikkre vagy felvételre mutat; alatta a mi rövid szemlénk arról, mit emelt ki az oldalból. A számok a cikk megjelenésekor érvényes adatok, azóta frissülhettek.",
     "follow": "Az új adatokról és elemzésekről a Facebook-oldalunkon is írunk:",
     "tv": "TV",
+    "radio": "Rádió",
     "start": "a riport kezdete a felvételen: {time}",
     "play": "Videó lejátszása",
     "videoNote": "Kattintásra a YouTube süti nélküli változata (youtube-nocookie.com) tölti be a felvételt, a riport kezdeténél.",
     "items": {
+      "klubradio-2026-11-10": "Dul Zoltán a Klubrádió Reggeli gyors című műsorában beszélt az oldalról (a felvétel a cikk oldalán hallgatható meg). Szóba kerül a novemberi 1033 betöltetlen háziorvosi körzet (előző hónapban 1026), a 22 éve üres ibafai praxis, a csaknem másfél millió érintett és az, hogy a betöltetlen körzet nem ellátatlan, de az ellátás nehezebben érhető el. A beszélgetés a háziorvosok elöregedéséről, a leszakadó megyék ellátási sivatagairól és a lehetséges megoldásokról is szól.",
+      "medicalonline-2026-11-10": "A Népszabadság cikkének rövidített átvétele a Medical Online egészségügy-gazdasági rovatában: 669 település, amelyhez csak betöltetlen háziorvosi körzet tartozik, mintegy 533 ezer lakossal, élen Borsod-Abaúj-Zemplénnel. Átveszi a minisztérium válaszát is a helyettesítés heti óraszámairól.",
       "m1-hirado-2026-11-09": "Az M1 esti, 19:30-as híradójában a Praxistérkép is szerepelt. A link a riport kezdeténél indítja a felvételt.",
       "telex-2026-11-09": "Az első nagy cikk az oldalról. Bemutatja a készítőt és az adatforrást, az októberi országos képet (1026 betöltetlen háziorvosi körzet, közel 1,4 millió érintett lakos), a 2004 óta üres ibafai körzetet, a megyék közti különbségeket és a sürgősségi osztályok elérhetőségét. Kitér az elkerülhető halálozással való összefüggésre is, hangsúlyozva, hogy ez nem ok-okozat.",
       "nszo-2026-11-09": "A települések felől nézi a hiányt: 669 olyan település van, amelyhez csak betöltetlen háziorvosi körzet tartozik, mintegy 533 ezer lakossal. Borsod-Abaúj-Zemplénben 129 ilyen település van, a megye településeinek több mint harmada; utána Somogy és Vas következik. Közli a novemberi 1033-as számot és a szaktárca álláspontját is.",

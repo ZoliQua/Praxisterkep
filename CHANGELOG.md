@@ -5,6 +5,13 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.57.1] - 2026-11-13
+
+### Hozzáadva
+- Két új médiamegjelenés: a Klubrádió Reggeli gyors című műsora és a
+  Medical Online átvétele a Népszabadság cikkéből (mindkettő 2026.
+  november 10.). A rádióadás „Rádió” címkét kap, mint a tévéadás a „TV”-t.
+
 ## [1.57.0] - 2026-11-10
 
 ### Hozzáadva

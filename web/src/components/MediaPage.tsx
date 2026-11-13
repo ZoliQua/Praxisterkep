@@ -3,7 +3,7 @@
 // The headline, outlet, author and date are the article's own (lib/media.json);
 // the short review under each is ours, in the i18n files, and says what the
 // article took from the site — its numbers are the ones valid when it ran.
-// A broadcast (medium "tv") carries its air time and where in the recording
+// A broadcast (medium "tv" or "radio") carries its air time and where in the recording
 // the report starts; its link jumps there.
 import { useState } from 'react';
 import { t, locale } from '../lib/i18n';
@@ -49,7 +49,7 @@ export function MediaPage() {
           {articles.map((a) => (
             <li key={a.id} className="media__item">
               <p className="media__meta">
-                {a.medium === 'tv' && <span className="media__tag">{t('media.tv')}</span>}
+                {a.medium && <span className="media__tag">{t(`media.${a.medium}`)}</span>}
                 <strong>{a.outlet}</strong> · {dateOf(a.date)}{a.time && ` ${a.time}`}
                 {a.author && ` · ${a.author}`}
                 {a.start && ` · ${t('media.start', { time: a.start })}`}

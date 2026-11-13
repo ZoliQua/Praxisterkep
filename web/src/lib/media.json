@@ -2,6 +2,24 @@
   "facebook": "https://www.facebook.com/praxisterkep/",
   "articles": [
     {
+      "id": "klubradio-2026-11-10",
+      "outlet": "Klubrádió – Reggeli gyors",
+      "medium": "radio",
+      "date": "2026-11-10",
+      "author": null,
+      "title": "Csaknem másfél millió ember él olyan helyen, ahol nincs állandó háziorvos",
+      "url": "https://www.klubradio.hu/adasok/csaknem-masfel-millio-ember-el-olyan-helyen-ahol-nincs-allando-haziorvos-165375"
+    },
+    {
+      "id": "medicalonline-2026-11-10",
+      "outlet": "Medical Online",
+      "date": "2026-11-10",
+      "time": "08:13",
+      "author": null,
+      "title": "Térképre vitték a háziorvoshiányt",
+      "url": "https://medicalonline.hu/eu_gazdasag/cikk/terkepre_vittek_a_haziorvoshianyt"
+    },
+    {
       "id": "m1-hirado-2026-11-09",
       "outlet": "M1 Híradó",
       "medium": "tv",
