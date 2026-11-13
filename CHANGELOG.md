@@ -5,6 +5,12 @@ A projekt nevezetes változásai. A formátum a
 verziószámozás a [Semantic Versioning](https://semver.org/lang/hu/) szerint
 történik. Minden verzióhoz git-címke (`vX.Y.Z`) tartozik.
 
+## [1.57.2] - 2026-11-13
+
+### Hozzáadva
+- Új médiamegjelenés: az Infostart cikke Dul Zoltán InfoRádiós
+  interjújáról (2026. november 11.).
+
 ## [1.57.1] - 2026-11-13
 
 ### Hozzáadva

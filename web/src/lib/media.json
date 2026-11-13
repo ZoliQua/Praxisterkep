@@ -2,6 +2,16 @@
   "facebook": "https://www.facebook.com/praxisterkep/",
   "articles": [
     {
+      "id": "infostart-2026-11-11",
+      "outlet": "Infostart / InfoRádió",
+      "medium": "radio",
+      "date": "2026-11-11",
+      "time": "07:41",
+      "author": null,
+      "title": "Dul Zoltán: minden hetedik embert érint az üres háziorvosi praxisok problémája",
+      "url": "https://infostart.hu/belfold/2026/11/11/dul-zoltan-minden-hetedik-embert-erint-az-ures-haziorvosi-praxisok-problemaja"
+    },
+    {
       "id": "klubradio-2026-11-10",
       "outlet": "Klubrádió – Reggeli gyors",
       "medium": "radio",
